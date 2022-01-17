@@ -1,10 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css' // progress bar style
 import { useSettingsOutsideStore } from '@/store/modules/settings'
 import { useKeepAliveOutsideStore } from '@/store/modules/keepAlive'
 import { useUserOutsideStore } from '@/store/modules/user'
 import { useMenuOutsideStore } from '@/store/modules/menu'
+
+import '@/assets/styles/nprogress.scss'
+import { useNProgress } from '@vueuse/integrations/useNProgress'
+const { isLoading } = useNProgress()
 
 // 固定路由
 const constantRoutes = [
@@ -28,8 +30,31 @@ const constantRoutes = [
                 meta: {
                     title: () => {
                         const settingsOutsideStore = useSettingsOutsideStore()
-                        return settingsOutsideStore.dashboardTitle
+                        return settingsOutsideStore.dashboard.title
                     }
+                }
+            },
+            {
+                path: 'personal/setting',
+                name: 'personalSetting',
+                component: () => import('@/views/personal/setting.vue'),
+                meta: {
+                    title: '个人设置',
+                    cache: 'personalEditPassword',
+                    breadcrumbNeste: [
+                        { title: '个人设置', path: '/personal/setting' }
+                    ]
+                }
+            },
+            {
+                path: 'personal/edit/password',
+                name: 'personalEditPassword',
+                component: () => import('@/views/personal/edit.password.vue'),
+                meta: {
+                    title: '修改密码',
+                    breadcrumbNeste: [
+                        { title: '修改密码', path: '/personal/edit/password' }
+                    ]
                 }
             },
             {
@@ -41,11 +66,36 @@ const constantRoutes = [
     }
 ]
 
-import text from './modules/text'
+import MultilevelMenuExample from './modules/multilevel.menu.example'
+import BreadcrumbExample from './modules/breadcrumb.example'
+import KeepAliveExample from './modules/keep.alive.example'
+import ComponentBasicExample from './modules/component.basic.example'
+import ComponentExtendExample from './modules/component.extend.example'
+import PermissionExample from './modules/permission.example'
+import MockExample from './modules/mock.example'
+import ExternalLinkExample from './modules/external.link.example'
+// import VideosExample from './modules/videos.example'
+import EcologyExample from './modules/ecology.example'
+import CooperationExample from './modules/cooperation.example'
 
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [
-
+    {
+        meta: {
+            title: '演示',
+            icon: 'sidebar-default'
+        },
+        children: [
+            MultilevelMenuExample,
+            BreadcrumbExample,
+            KeepAliveExample,
+            ComponentBasicExample,
+            ComponentExtendExample,
+            PermissionExample,
+            MockExample,
+            ExternalLinkExample
+        ]
+    },
     // {
     //     meta: {
     //         title: '教程',
@@ -57,11 +107,20 @@ const asyncRoutes = [
     // },
     {
         meta: {
-            title: '测试',
+            title: '生态',
             icon: 'sidebar-ecology'
         },
         children: [
-            text
+            ...EcologyExample
+        ]
+    },
+    {
+        meta: {
+            title: '战略合作',
+            icon: 'sidebar-cooperation'
+        },
+        children: [
+            ...CooperationExample
         ]
     }
 ]
@@ -83,13 +142,13 @@ router.beforeEach(async(to, from, next) => {
     const settingsOutsideStore = useSettingsOutsideStore()
     const userOutsideStore = useUserOutsideStore()
     const menuOutsideStore = useMenuOutsideStore()
-    settingsOutsideStore.enableProgress && NProgress.start()
+    settingsOutsideStore.app.enableProgress && (isLoading.value = true)
     // 是否已登录
     if (userOutsideStore.isLogin) {
         // 是否已根据权限动态生成并挂载路由
         if (menuOutsideStore.isGenerate) {
             // 导航栏如果不是 single 模式，则需要根据 path 定位主导航的选中状态
-            settingsOutsideStore.menuMode !== 'single' && menuOutsideStore.setHeaderActived(to.path)
+            settingsOutsideStore.menu.menuMode !== 'single' && menuOutsideStore.setHeaderActived(to.path)
             if (to.name) {
                 if (to.matched.length !== 0) {
                     // 如果已登录状态下，进入登录页会强制跳转到控制台页面
@@ -98,7 +157,7 @@ router.beforeEach(async(to, from, next) => {
                             name: 'dashboard',
                             replace: true
                         })
-                    } else if (!settingsOutsideStore.enableDashboard && to.name == 'dashboard') {
+                    } else if (!settingsOutsideStore.dashboard.enable && to.name == 'dashboard') {
                         // 如果未开启控制台页面，则默认进入侧边栏导航第一个模块
                         if (menuOutsideStore.sidebarRoutes.length > 0) {
                             next({
@@ -122,7 +181,7 @@ router.beforeEach(async(to, from, next) => {
             }
         } else {
             let accessRoutes = []
-            if (!settingsOutsideStore.enableBackendReturnRoute) {
+            if (!settingsOutsideStore.app.enableBackendReturnRoute) {
                 accessRoutes = await menuOutsideStore.generateRoutesAtFront(asyncRoutes)
             } else {
                 accessRoutes = await menuOutsideStore.generateRoutesAtBack()
@@ -155,7 +214,7 @@ router.beforeEach(async(to, from, next) => {
 router.afterEach((to, from) => {
     const settingsOutsideStore = useSettingsOutsideStore()
     const keepAliveOutsideStore = useKeepAliveOutsideStore()
-    settingsOutsideStore.enableProgress && NProgress.done()
+    settingsOutsideStore.app.enableProgress && (isLoading.value = false)
     // 设置页面 title
     to.meta.title && settingsOutsideStore.setTitle(typeof to.meta.title === 'function' ? to.meta.title() : to.meta.title)
     // 判断当前页面是否开启缓存，如果开启，则将当前页面的 name 信息存入 keep-alive 全局状态

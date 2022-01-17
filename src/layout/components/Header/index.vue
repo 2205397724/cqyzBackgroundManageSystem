@@ -1,6 +1,6 @@
 <template>
     <transition name="header">
-        <header v-if="settingsStore.mode === 'pc' && settingsStore.menuMode === 'head'">
+        <header v-if="settingsStore.mode === 'pc' && settingsStore.menu.menuMode === 'head'">
             <div class="header-container">
                 <div class="main">
                     <Logo />
@@ -14,7 +14,7 @@
                         </template>
                     </div>
                 </div>
-                <UserMenu />
+                <Tools />
             </div>
         </header>
     </transition>
@@ -22,7 +22,7 @@
 
 <script setup>
 import Logo from '../Logo/index.vue'
-import UserMenu from '../UserMenu/index.vue'
+import Tools from '../Tools/index.vue'
 
 import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
@@ -119,7 +119,7 @@ header {
             }
         }
     }
-    :deep(.user) {
+    :deep(.tools) {
         padding: 0;
         .user-container {
             font-size: 16px;

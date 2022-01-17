@@ -3,17 +3,18 @@
         <div id="app-main">
             <Header />
             <div class="wrapper">
-                <div class="sidebar-container" :class="{'show': settingsStore.mode === 'mobile' && !settingsStore.sidebarCollapse}">
+                <div class="sidebar-container" :class="{'show': settingsStore.mode === 'mobile' && !settingsStore.menu.subMenuCollapse}">
                     <MainSidebar />
                     <SubSidebar />
                 </div>
-                <div class="sidebar-mask" :class="{'show': settingsStore.mode === 'mobile' && !settingsStore.sidebarCollapse}" @click="settingsStore.toggleSidebarCollapse()" />
+                <div class="sidebar-mask" :class="{'show': settingsStore.mode === 'mobile' && !settingsStore.menu.subMenuCollapse}" @click="settingsStore.toggleSidebarCollapse()" />
                 <div class="main-container" :style="{'padding-bottom': $route.meta.paddingBottom}">
-                    <Topbar v-if="!(settingsStore.menuMode === 'head' && !settingsStore.enableSidebarCollapse && !settingsStore.enableBreadcrumb)" />
+                    <Topbar v-if="!(settingsStore.menu.menuMode === 'head' && !settingsStore.topbar.enableSidebarCollapse && !settingsStore.topbar.enableBreadcrumb)" />
                     <div class="main">
                         <router-view v-slot="{ Component, route }">
                             <transition name="main" mode="out-in" appear>
-                                <keep-alive :include="keepAliveStore.list">
+                                <!-- BUG https://github.com/vuejs/vue-next/issues/4984 -->
+                                <keep-alive :include="[...keepAliveStore.list]">
                                     <component :is="Component" :key="route.fullPath" />
                                 </keep-alive>
                             </transition>
@@ -24,6 +25,9 @@
             </div>
             <el-backtop :right="20" :bottom="20" title="回到顶部" />
         </div>
+        <Search />
+        <AppSetting />
+        <BuyIt />
     </div>
 </template>
 
@@ -32,8 +36,9 @@ import Header from './components/Header/index.vue'
 import MainSidebar from './components/MainSidebar/index.vue'
 import SubSidebar from './components/SubSidebar/index.vue'
 import Topbar from './components/Topbar/index.vue'
-// import Search from './components/Search/index.vue'
-// import ThemeSetting from './components/ThemeSetting/index.vue'
+import Search from './components/Search/index.vue'
+import AppSetting from './components/AppSetting/index.vue'
+import BuyIt from './components/BuyIt/index.vue'
 import { isExternalLink } from '@/util'
 
 const { proxy } = getCurrentInstance()
@@ -47,10 +52,10 @@ import { useMenuStore } from '@/store/modules/menu'
 const menuStore = useMenuStore()
 
 const showCopyright = computed(() => {
-    return typeof routeInfo.meta.copyright !== 'undefined' ? routeInfo.meta.copyright : settingsStore.showCopyright
+    return typeof routeInfo.meta.copyright !== 'undefined' ? routeInfo.meta.copyright : settingsStore.copyright.enable
 })
 
-watch(() => settingsStore.sidebarCollapse, val => {
+watch(() => settingsStore.menu.subMenuCollapse, val => {
     if (settingsStore.mode === 'mobile') {
         if (!val) {
             document.querySelector('body').classList.add('hidden')
@@ -62,15 +67,15 @@ watch(() => settingsStore.sidebarCollapse, val => {
 
 watch(() => routeInfo.path, () => {
     if (settingsStore.mode === 'mobile') {
-        settingsStore.updateThemeSetting({
-            sidebarCollapse: true
+        settingsStore.$patch(state => {
+            state.menu.subMenuCollapse = true
         })
     }
 })
 
 onMounted(() => {
     proxy.$hotkeys('f5', e => {
-        if (settingsStore.enablePageReload) {
+        if (settingsStore.topbar.enablePageReload) {
             e.preventDefault()
             reload()
         }
@@ -86,7 +91,7 @@ function reload() {
 provide('switchMenu', switchMenu)
 function switchMenu(index) {
     menuStore.switchHeaderActived(index)
-    if (settingsStore.switchSidebarAndPageJump) {
+    if (settingsStore.menu.switchMainMenuAndPageJump) {
         if (isExternalLink(menuStore.sidebarRoutesFirstDeepestPath)) {
             window.open(menuStore.sidebarRoutesFirstDeepestPath, '_blank')
         } else {
@@ -198,7 +203,7 @@ header + .wrapper {
     .main-container {
         .topbar-container {
             top: $g-header-height;
-            :deep(.user) {
+            :deep(.tools) {
                 display: none;
             }
         }
