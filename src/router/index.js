@@ -66,19 +66,123 @@ const constantRoutes = [
     }
 ]
 
-import MultilevelMenuExample from './modules/multilevel.menu.example'
-import BreadcrumbExample from './modules/breadcrumb.example'
+// 管理
+import superviseHome from './modules/supervise/home.js'
+import superviseWorkbench from './modules/supervise/workbench.js'
+// 统计
+import statisticsComplaint from './modules/statistics/complaint.js'
+import statisticsEnterprise from './modules/statistics/enterprise.js'
+import statisticsEquipment from './modules/statistics/equipment.js'
+import statisticsEvent from './modules/statistics/event.js'
+import statisticsHouse from './modules/statistics/house.js'
+import statisticsRepair from './modules/statistics/repair.js'
+// 房源
+import houseArchives from './modules/house/archives.js'
+import houseEnterprise from './modules/house/enterprise.js'
+import houseProperty from './modules/house/property.js'
+import houseResidential from './modules/house/residential.js'
+import houseRoutine from './modules/house/routine.js'
+// 用户
+import userRegister from './modules/user/register.js'
+import userSetup from './modules/user/setup.js'
+// 企业
+import enterpriseManage from './modules/enterprise/manage.js'
+import enterpriseSetup from './modules/enterprise/setup.js'
+// 事件
+import eventManage from './modules/event/manage.js'
+import eventSetup from './modules/event/setup.js'
+// 设置
+import setupManage from './modules/setup/authorize.js'
+import setupNote from './modules/setup/note.js'
+import setupOther from './modules/setup/other_site.js'
+import setupPush from './modules/setup/push.js'
+import setupRegion from './modules/setup/region.js'
+import setupSystem from './modules/setup/system.js'
+import setupUpload from './modules/setup/upload.js'
 
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [
     {
         meta: {
-            title: '演示',
-            icon: 'sidebar-default'
+            title: '管理',
+            // icon: 'sidebar-default'
         },
         children: [
-            MultilevelMenuExample,
-            BreadcrumbExample
+            superviseHome,
+            superviseWorkbench
+        ]
+    },
+    {
+        meta: {
+            title: '统计',
+            // icon: 'sidebar-default'
+        },
+        children: [
+            statisticsHouse,
+            statisticsEvent,
+            statisticsComplaint,
+            statisticsRepair,
+            statisticsEnterprise,
+            statisticsEquipment,
+        ]
+    },
+    {
+        meta: {
+            title: '房源',
+            // icon: 'sidebar-default'
+        },
+        children: [
+            houseResidential,
+            houseProperty,
+            houseArchives,
+            houseEnterprise,
+            houseRoutine,
+        ]
+    },
+    {
+        meta: {
+            title: '用户',
+            // icon: 'sidebar-default'
+        },
+        children: [
+            userRegister,
+            userSetup
+        ]
+    },
+    {
+        meta: {
+            title: '企业',
+            // icon: 'sidebar-default'
+        },
+        children: [
+            enterpriseManage,
+            enterpriseSetup
+        ]
+    },
+    {
+        meta: {
+            title: '事件',
+            // icon: 'sidebar-default'
+        },
+        children: [
+            eventManage,
+            eventSetup
+        ]
+    },
+    {
+        meta: {
+            title: '设置',
+            // icon: 'sidebar-default'
+        },
+        children: [
+            setupRegion,
+            setupOther,
+            setupManage,
+            setupUpload,
+            setupPush,
+            setupNote,
+            setupSystem,
+
         ]
     }
 ]
