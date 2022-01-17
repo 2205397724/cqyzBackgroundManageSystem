@@ -27,7 +27,6 @@
         </div>
         <Search />
         <AppSetting />
-        <BuyIt />
     </div>
 </template>
 
@@ -38,7 +37,6 @@ import SubSidebar from './components/SubSidebar/index.vue'
 import Topbar from './components/Topbar/index.vue'
 import Search from './components/Search/index.vue'
 import AppSetting from './components/AppSetting/index.vue'
-import BuyIt from './components/BuyIt/index.vue'
 import { isExternalLink } from '@/util'
 
 const { proxy } = getCurrentInstance()

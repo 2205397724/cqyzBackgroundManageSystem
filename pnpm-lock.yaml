@@ -17,10 +17,8 @@ specifiers:
   husky: ^7.0.4
   js-cookie: ^3.0.1
   lint-staged: ^12.1.7
-  mavon-editor: ^3.0.0-beta
   mitt: ^3.0.0
   mockjs: ^1.1.0
-  naming-style: ^1.0.1
   path-browserify: ^1.0.1
   path-to-regexp: ^6.2.0
   pinia: ^2.0.9
@@ -63,10 +61,8 @@ dependencies:
   element-plus: 1.3.0-beta.5_vue@3.2.26
   hotkeys-js: 3.8.7
   js-cookie: 3.0.1
-  mavon-editor: 3.0.0-beta
   mitt: 3.0.0
   mockjs: 1.1.0
-  naming-style: 1.0.1
   path-browserify: 1.0.1
   path-to-regexp: 6.2.0
   pinia: 2.0.9_vue@3.2.26
@@ -334,7 +330,7 @@ packages:
   /@types/resolve/1.17.1:
     resolution: {integrity: sha1-Ov1q2JZ8d+Q3bFmKgt3Vj0bsRdY=, tarball: '@types/resolve/download/@types/resolve-1.17.1.tgz'}
     dependencies:
-      '@types/node': 16.11.12
+      '@types/node': 16.11.11
     dev: true
 
   /@types/svgo/2.6.0:
@@ -501,12 +497,26 @@ packages:
       vue-demi: 0.12.1_vue@3.2.26
     dev: false
 
+  /acorn-jsx/5.3.2_acorn@8.5.0:
+    resolution: {integrity: sha1-ftW7VZCLOy8bxVxq8WU7rafweTc=, tarball: acorn-jsx/download/acorn-jsx-5.3.2.tgz}
+    peerDependencies:
+      acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      acorn: 8.5.0
+    dev: true
+
   /acorn-jsx/5.3.2_acorn@8.7.0:
     resolution: {integrity: sha1-ftW7VZCLOy8bxVxq8WU7rafweTc=, tarball: acorn-jsx/download/acorn-jsx-5.3.2.tgz}
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
       acorn: 8.7.0
+    dev: true
+
+  /acorn/8.5.0:
+    resolution: {integrity: sha1-RRLMuZs2mMdSWR6btEcuOK1DzuI=, tarball: acorn/download/acorn-8.5.0.tgz}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
     dev: true
 
   /acorn/8.7.0:
@@ -524,7 +534,7 @@ packages:
     dev: true
 
   /ajv/6.12.6:
-    resolution: {integrity: sha1-uvWmLoArB9l3A0WG+MO69a3ybfQ=, tarball: ajv/download/ajv-6.12.6.tgz}
+    resolution: {integrity: sha1-uvWmLoArB9l3A0WG+MO69a3ybfQ=, tarball: ajv/download/ajv-6.12.6.tgz?cache=0&sync_timestamp=1632820927549&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fajv%2Fdownload%2Fajv-6.12.6.tgz}
     dependencies:
       fast-deep-equal: 3.1.3
       fast-json-stable-stringify: 2.1.0
@@ -672,6 +682,10 @@ packages:
     resolution: {integrity: sha1-A0oP0hA6ay6/AQ2nUYO+wpkkev4=, tarball: async-validator/download/async-validator-4.0.7.tgz?cache=0&sync_timestamp=1634529774878&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fasync-validator%2Fdownload%2Fasync-validator-4.0.7.tgz}
     dev: false
 
+  /async/0.9.2:
+    resolution: {integrity: sha1-rqdNXmHB+JlhO/ZL2mbUx48v0X0=, tarball: async/download/async-0.9.2.tgz}
+    dev: true
+
   /asynckit/0.4.0:
     resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=, tarball: asynckit/download/asynckit-0.4.0.tgz}
     dev: true
@@ -691,7 +705,7 @@ packages:
     dev: true
 
   /axios/0.24.0:
-    resolution: {integrity: sha1-gE5voeS5xSiFAd2d/1anoJQNINY=, tarball: axios/download/axios-0.24.0.tgz?cache=0&sync_timestamp=1635214243043&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Faxios%2Fdownload%2Faxios-0.24.0.tgz}
+    resolution: {integrity: sha1-gE5voeS5xSiFAd2d/1anoJQNINY=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/axios/download/axios-0.24.0.tgz?cache=0&sync_timestamp=1635214243043&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Faxios%2Fdownload%2Faxios-0.24.0.tgz}
     dependencies:
       follow-redirects: registry.nlark.com/follow-redirects/1.14.4
     transitivePeerDependencies:
@@ -759,7 +773,7 @@ packages:
     dev: true
 
   /bluebird/3.7.2:
-    resolution: {integrity: sha1-nyKcFb4nJFT/qXOs4NvueaGww28=, tarball: bluebird/download/bluebird-3.7.2.tgz?cache=0&sync_timestamp=1634135117892&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fbluebird%2Fdownload%2Fbluebird-3.7.2.tgz}
+    resolution: {integrity: sha1-nyKcFb4nJFT/qXOs4NvueaGww28=, tarball: bluebird/download/bluebird-3.7.2.tgz}
     dev: true
 
   /boolbase/1.0.0:
@@ -868,7 +882,7 @@ packages:
     dev: true
 
   /camelcase/5.3.1:
-    resolution: {integrity: sha1-48mzFWnhBoEd8kL3FXJaH0xJQyA=, tarball: camelcase/download/camelcase-5.3.1.tgz?cache=0&sync_timestamp=1632825560555&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fcamelcase%2Fdownload%2Fcamelcase-5.3.1.tgz}
+    resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==, tarball: camelcase/download/camelcase-5.3.1.tgz}
     engines: {node: '>=6'}
 
   /capital-case/1.0.4:
@@ -1088,6 +1102,7 @@ packages:
 
   /commander/2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==, tarball: commander/download/commander-2.20.3.tgz}
+    dev: true
 
   /commander/7.2.0:
     resolution: {integrity: sha1-o2y1fQtQHOEI5NIFWaFQo5HZerc=, tarball: commander/download/commander-7.2.0.tgz}
@@ -1222,10 +1237,6 @@ packages:
     hasBin: true
     dev: true
 
-  /cssfilter/0.0.10:
-    resolution: {integrity: sha1-xtJnJjKi5cg+AT5oZKQs6N79IK4=, tarball: cssfilter/download/cssfilter-0.0.10.tgz}
-    dev: false
-
   /csso/4.2.0:
     resolution: {integrity: sha1-6jpWE0bo3J9UbW/r7dUBh884lSk=, tarball: csso/download/csso-4.2.0.tgz}
     engines: {node: '>=8.0.0'}
@@ -1265,13 +1276,13 @@ packages:
     dev: true
 
   /debug/3.2.7:
-    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==, tarball: debug/download/debug-3.2.7.tgz}
+    resolution: {integrity: sha1-clgLfpFF+zm2Z2+cXl+xALk0F5o=, tarball: debug/download/debug-3.2.7.tgz?cache=0&sync_timestamp=1636334993712&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fdebug%2Fdownload%2Fdebug-3.2.7.tgz}
     dependencies:
       ms: 2.1.3
     dev: true
 
   /debug/4.3.2:
-    resolution: {integrity: sha1-8KScGKyHeeMdSgxgKd+3aHPHQos=, tarball: debug/download/debug-4.3.2.tgz}
+    resolution: {integrity: sha1-8KScGKyHeeMdSgxgKd+3aHPHQos=, tarball: debug/download/debug-4.3.2.tgz?cache=0&sync_timestamp=1636334993712&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fdebug%2Fdownload%2Fdebug-4.3.2.tgz}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -1329,7 +1340,7 @@ packages:
     dev: true
 
   /deepmerge/4.2.2:
-    resolution: {integrity: sha1-RNLqNnm49NT/ujPwPYZfwee/SVU=, tarball: deepmerge/download/deepmerge-4.2.2.tgz?cache=0&sync_timestamp=1632825560302&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fdeepmerge%2Fdownload%2Fdeepmerge-4.2.2.tgz}
+    resolution: {integrity: sha1-RNLqNnm49NT/ujPwPYZfwee/SVU=, tarball: deepmerge/download/deepmerge-4.2.2.tgz}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -1491,7 +1502,7 @@ packages:
     dev: true
 
   /ejs/3.1.6:
-    resolution: {integrity: sha1-W/0KBol0O7UmizVQzO7rvBcCgio=, tarball: ejs/download/ejs-3.1.6.tgz?cache=0&sync_timestamp=1634183876835&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fejs%2Fdownload%2Fejs-3.1.6.tgz}
+    resolution: {integrity: sha1-W/0KBol0O7UmizVQzO7rvBcCgio=, tarball: ejs/download/ejs-3.1.6.tgz}
     engines: {node: '>=0.10.0'}
     hasBin: true
     dependencies:
@@ -1741,7 +1752,7 @@ packages:
     dev: true
 
   /escape-string-regexp/4.0.0:
-    resolution: {integrity: sha1-FLqDpdNz49MR5a/KKc9b+tllvzQ=, tarball: escape-string-regexp/download/escape-string-regexp-4.0.0.tgz?cache=0&sync_timestamp=1632883286702&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fescape-string-regexp%2Fdownload%2Fescape-string-regexp-4.0.0.tgz}
+    resolution: {integrity: sha1-FLqDpdNz49MR5a/KKc9b+tllvzQ=, tarball: escape-string-regexp/download/escape-string-regexp-4.0.0.tgz}
     engines: {node: '>=10'}
     dev: true
 
@@ -1852,8 +1863,8 @@ packages:
     resolution: {integrity: sha1-6QopZWmCKFAudxx6WEibGp0QcJA=, tarball: espree/download/espree-9.0.0.tgz}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
-      acorn: 8.7.0
-      acorn-jsx: 5.3.2_acorn@8.7.0
+      acorn: 8.5.0
+      acorn-jsx: 5.3.2_acorn@8.5.0
       eslint-visitor-keys: 3.0.0
     dev: true
 
@@ -1992,7 +2003,7 @@ packages:
     dev: true
 
   /fast-deep-equal/3.1.3:
-    resolution: {integrity: sha1-On1WtVnWy8PrUSMlJE5hmmXGxSU=, tarball: fast-deep-equal/download/fast-deep-equal-3.1.3.tgz?cache=0&sync_timestamp=1632883289464&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ffast-deep-equal%2Fdownload%2Ffast-deep-equal-3.1.3.tgz}
+    resolution: {integrity: sha1-On1WtVnWy8PrUSMlJE5hmmXGxSU=, tarball: fast-deep-equal/download/fast-deep-equal-3.1.3.tgz}
     dev: true
 
   /fast-glob/3.2.7:
@@ -2007,7 +2018,7 @@ packages:
     dev: true
 
   /fast-json-stable-stringify/2.1.0:
-    resolution: {integrity: sha1-h0v2nG9ATCtdmcSBNBOZ/VWJJjM=, tarball: fast-json-stable-stringify/download/fast-json-stable-stringify-2.1.0.tgz?cache=0&sync_timestamp=1632883644068&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ffast-json-stable-stringify%2Fdownload%2Ffast-json-stable-stringify-2.1.0.tgz}
+    resolution: {integrity: sha1-h0v2nG9ATCtdmcSBNBOZ/VWJJjM=, tarball: fast-json-stable-stringify/download/fast-json-stable-stringify-2.1.0.tgz}
     dev: true
 
   /fast-levenshtein/2.0.6:
@@ -2494,16 +2505,6 @@ packages:
       tslib: 2.3.1
     dev: true
 
-  /highlight.js-async-webpack/1.0.4:
-    resolution: {integrity: sha1-wGtnv5nwSQRdYrdW5YVbCRLsYWw=, tarball: highlight.js-async-webpack/download/highlight.js-async-webpack-1.0.4.tgz}
-    dev: false
-
-  /highlight.js/9.18.5:
-    resolution: {integrity: sha1-0Yo1mGfzeME41oGe38KorNXymCU=, tarball: highlight.js/download/highlight.js-9.18.5.tgz}
-    deprecated: Support has ended for 9.x series. Upgrade to @latest
-    requiresBuild: true
-    dev: false
-
   /homedir-polyfill/1.0.3:
     resolution: {integrity: sha1-dDKYzvTlrz4ZQWH7rcwhUdOgWOg=, tarball: homedir-polyfill/download/homedir-polyfill-1.0.3.tgz}
     engines: {node: '>=0.10.0'}
@@ -2757,12 +2758,6 @@ packages:
     resolution: {integrity: sha1-76ouqdqg16suoTqXsritUf776L4=, tarball: is-buffer/download/is-buffer-1.1.6.tgz}
     dev: true
 
-  /is-core-module/2.8.0:
-    resolution: {integrity: sha1-AyEzbD0JJeSX/Zf12VyxFKXM1Ug=, tarball: is-core-module/download/is-core-module-2.8.0.tgz}
-    dependencies:
-      has: 1.0.3
-    dev: true
-
   /is-core-module/2.8.1:
     resolution: {integrity: sha512-SdNCUs284hr40hFTFP6l0IfZ/RSrMXF3qgoRHd3/79unUTvrFO/JoXwkGm+5J/Oe3E/b5GsnG330uUNgRpu1PA==, tarball: is-core-module/download/is-core-module-2.8.1.tgz}
     dependencies:
@@ -2971,7 +2966,7 @@ packages:
     resolution: {integrity: sha1-68nehVgWCmbYLQ6txqLlj7xQCns=, tarball: jake/download/jake-10.8.2.tgz}
     hasBin: true
     dependencies:
-      async: registry.nlark.com/async/0.9.2
+      async: 0.9.2
       chalk: 2.4.2
       filelist: 1.0.2
       minimatch: 3.0.4
@@ -3119,7 +3114,7 @@ packages:
       is-plain-object: 5.0.0
       object.map: 1.0.1
       rechoir: 0.8.0
-      resolve: 1.20.0
+      resolve: 1.21.0
     dev: true
 
   /lilconfig/2.0.4:
@@ -3291,14 +3286,6 @@ packages:
     resolution: {integrity: sha1-TdrdZzCOeAzxakdoWHjuJ7c2oKM=, tarball: mathml-tag-names/download/mathml-tag-names-2.1.3.tgz}
     dev: true
 
-  /mavon-editor/3.0.0-beta:
-    resolution: {integrity: sha512-cmGKbkgrlvFtrhEVyEUIO2X30R+0p0cWpWcYZ97p2E7zn5flKakgv3gq/4mrzjb6UTmhUiHis38k+a6fP6XUEQ==, tarball: mavon-editor/download/mavon-editor-3.0.0-beta.tgz}
-    dependencies:
-      highlight.js: 9.18.5
-      highlight.js-async-webpack: 1.0.4
-      xss: 1.0.10
-    dev: false
-
   /mdn-data/2.0.14:
     resolution: {integrity: sha1-cRP8QoGRfWPOKbQ0RvcB5owlulA=, tarball: mdn-data/download/mdn-data-2.0.14.tgz}
     dev: true
@@ -3456,12 +3443,8 @@ packages:
     resolution: {integrity: sha1-FjDEKyJR/4HiooPelqVJfqkuXg0=, tarball: mute-stream/download/mute-stream-0.0.8.tgz}
     dev: true
 
-  /naming-style/1.0.1:
-    resolution: {integrity: sha1-LIHzeKnk0nhhjCyKpVBrCyozA00=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/naming-style/download/naming-style-1.0.1.tgz}
-    dev: false
-
   /nanoid/3.1.30:
-    resolution: {integrity: sha1-Y/k8xUjSoRPcXfvGO/oJ4rm2Q2I=, tarball: nanoid/download/nanoid-3.1.30.tgz}
+    resolution: {integrity: sha512-zJpuPDwOv8D2zq2WRoMe1HsfZthVewpel9CAvTfc/2mBD1uUT/agc5f7GHGWXlYkFvi1mVxe4IjvP2HNrop7nQ==, tarball: nanoid/download/nanoid-3.1.30.tgz}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -3536,7 +3519,7 @@ packages:
       lodash.get: 4.4.2
       lower-case: 2.0.2
       mkdirp: 1.0.4
-      resolve: 1.20.0
+      resolve: 1.21.0
       title-case: 3.0.3
       upper-case: 2.0.2
     dev: true
@@ -3895,7 +3878,7 @@ packages:
     resolution: {integrity: sha1-ez5SLgjqh3vXC63xWb3D7Ffh6EE=, tarball: pixelsmith/download/pixelsmith-2.5.0.tgz}
     engines: {node: '>= 8.0.0'}
     dependencies:
-      async: registry.nlark.com/async/0.9.2
+      async: 0.9.2
       concat-stream: 1.5.2
       get-pixels: 3.3.3
       mime-types: 2.1.33
@@ -4229,7 +4212,7 @@ packages:
     resolution: {integrity: sha1-Sfhm4NMhRhQto62PDv81KzIV/yI=, tarball: rechoir/download/rechoir-0.8.0.tgz}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      resolve: 1.20.0
+      resolve: 1.21.0
     dev: true
 
   /redent/3.0.0:
@@ -4342,7 +4325,7 @@ packages:
   /resolve/1.20.0:
     resolution: {integrity: sha1-YpoBP7P3B1XW8LeTXMHCxTeLGXU=, tarball: resolve/download/resolve-1.20.0.tgz}
     dependencies:
-      is-core-module: 2.8.0
+      is-core-module: 2.8.1
       path-parse: 1.0.7
     dev: true
 
@@ -4842,7 +4825,7 @@ packages:
     dev: true
 
   /stylelint-config-html/1.0.0_2d1bcf73d0f2e8e613ccd6d821b0344f:
-    resolution: {integrity: sha1-FyrLmW7kyFToxnD8/3f/DZjTvsI=, tarball: stylelint-config-html/download/stylelint-config-html-1.0.0.tgz}
+    resolution: {integrity: sha1-FyrLmW7kyFToxnD8/3f/DZjTvsI=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/stylelint-config-html/download/stylelint-config-html-1.0.0.tgz}
     engines: {node: ^12 || >=14}
     peerDependencies:
       postcss-html: ^1.0.0
@@ -5162,12 +5145,12 @@ packages:
     dev: true
 
   /type-fest/0.18.1:
-    resolution: {integrity: sha1-20vBUaSiz07r+a3V23VQjbbMhB8=, tarball: type-fest/download/type-fest-0.18.1.tgz}
+    resolution: {integrity: sha1-20vBUaSiz07r+a3V23VQjbbMhB8=, tarball: type-fest/download/type-fest-0.18.1.tgz?cache=0&sync_timestamp=1636464669592&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ftype-fest%2Fdownload%2Ftype-fest-0.18.1.tgz}
     engines: {node: '>=10'}
     dev: true
 
   /type-fest/0.20.2:
-    resolution: {integrity: sha1-G/IH9LKPkVg2ZstfvTJ4hzAc1fQ=, tarball: type-fest/download/type-fest-0.20.2.tgz}
+    resolution: {integrity: sha1-G/IH9LKPkVg2ZstfvTJ4hzAc1fQ=, tarball: type-fest/download/type-fest-0.20.2.tgz?cache=0&sync_timestamp=1636464669592&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ftype-fest%2Fdownload%2Ftype-fest-0.20.2.tgz}
     engines: {node: '>=10'}
     dev: true
 
@@ -5694,15 +5677,6 @@ packages:
       typedarray-to-buffer: 3.1.5
     dev: true
 
-  /xss/1.0.10:
-    resolution: {integrity: sha1-XNY6mxR6dVoUywRVx9uIZhIOtNI=, tarball: xss/download/xss-1.0.10.tgz}
-    engines: {node: '>= 0.10.0'}
-    hasBin: true
-    dependencies:
-      commander: 2.20.3
-      cssfilter: 0.0.10
-    dev: false
-
   /xtend/4.0.2:
     resolution: {integrity: sha1-u3J3n1+kZRhrH0OPZ0+jR/2121Q=, tarball: xtend/download/xtend-4.0.2.tgz}
     engines: {node: '>=0.4'}
@@ -5754,12 +5728,6 @@ packages:
     dev: false
     optional: true
 
-  registry.nlark.com/async/0.9.2:
-    resolution: {integrity: sha1-rqdNXmHB+JlhO/ZL2mbUx48v0X0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/async/download/async-0.9.2.tgz}
-    name: async
-    version: 0.9.2
-    dev: true
-
   registry.nlark.com/async/2.6.3:
     resolution: {integrity: sha1-1yYl4jRKNlbjo61Pp0n6gymdgv8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/async/download/async-2.6.3.tgz}
     name: async
@@ -5782,14 +5750,6 @@ packages:
     name: corser
     version: 2.0.1
     engines: {node: '>= 0.4.0'}
-    dev: true
-
-  registry.nlark.com/cssesc/3.0.0:
-    resolution: {integrity: sha1-N3QZGZA7hoVl4cCep0dEXNGJg+4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/cssesc/download/cssesc-3.0.0.tgz}
-    name: cssesc
-    version: 3.0.0
-    engines: {node: '>=4'}
-    hasBin: true
     dev: true
 
   registry.nlark.com/eventemitter3/4.0.7:
@@ -5903,7 +5863,7 @@ packages:
     version: 6.0.6
     engines: {node: '>=4'}
     dependencies:
-      cssesc: registry.nlark.com/cssesc/3.0.0
+      cssesc: 3.0.0
       util-deprecate: 1.0.2
     dev: true
 

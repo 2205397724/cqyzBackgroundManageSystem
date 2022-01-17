@@ -76,14 +76,4 @@ let globalSettings = {
 import settingsCustom from './settings.custom.json'
 Object.assign(globalSettings, settingsCustom)
 
-// 演示&开发环境开启全部功能（这部分代码可删除，仅方便作者打包演示环境）
-if (import.meta.env.VITE_APP_MODE === 'example' || import.meta.env.MODE === 'development') {
-    globalSettings.app.enablePermission = true
-    globalSettings.app.enableDynamicTitle = true
-    globalSettings.topbar.enableSidebarCollapse = true
-    globalSettings.topbar.enableFullscreen = true
-    globalSettings.topbar.enablePageReload = true
-    globalSettings.topbar.enableAppSetting = true
-}
-
 export default globalSettings
