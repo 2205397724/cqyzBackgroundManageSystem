@@ -28,14 +28,14 @@
                 </div>
                 <div class="flex-bar">
                     <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
-                    <el-button type="text" @click="formType = 'reset'">忘记密码</el-button>
+                    <!-- <el-button type="text" @click="formType = 'reset'">忘记密码</el-button> -->
                 </div>
                 <el-button :loading="loading" type="primary" size="large" style="width: 100%;" @click.prevent="handleLogin">登 录</el-button>
-                <div style="margin-top: 20px; margin-bottom: -10px; color: #666; font-size: 14px; text-align: center; font-weight: bold;">
+                <!-- <div style="margin-top: 20px; margin-bottom: -10px; color: #666; font-size: 14px; text-align: center; font-weight: bold;">
                     <span style="margin-right: 5px;">演示帐号一键登录：</span>
                     <el-button type="danger" size="small" @click="testAccount('admin')">admin</el-button>
                     <el-button type="danger" size="small" plain @click="testAccount('test')">test</el-button>
-                </div>
+                </div> -->
             </el-form>
             <el-form v-show="formType == 'reset'" ref="resetFormRef" :model="resetForm" :rules="resetRules" class="login-form" auto-complete="on" label-position="left">
                 <div class="title-container">
