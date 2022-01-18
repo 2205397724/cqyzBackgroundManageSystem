@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '企业管理',
         icon: 'el-icon-mic',
-        auth: ['enterprise.manage']
+        auth: ['enterprise.manage', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/enterprise-manage',
-                auth: ['enterprise.manage.manage']
+                auth: ['enterprise.manage.manage', '*']
             }
         }
     ]

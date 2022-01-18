@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '常规设置',
         icon: 'el-icon-set-up',
-        auth: ['house.routine']
+        auth: ['house.routine', '*']
     },
     children: [
         {
@@ -17,7 +17,7 @@ export default {
             component: () => import('@/views/house/routine/archives_category.vue'),
             meta: {
                 title: '档案类别',
-                auth: ['house.routine.archives']
+                auth: ['house.routine.archives', '*']
             }
         },
         {
@@ -26,7 +26,7 @@ export default {
             component: () => import('@/views/house/routine/residential.vue'),
             meta: {
                 title: '小区字段',
-                auth: ['house.routine.residential']
+                auth: ['house.routine.residential', '*']
             }
         },
         {
@@ -35,7 +35,7 @@ export default {
             component: () => import('@/views/house/routine/house.vue'),
             meta: {
                 title: '房屋字段',
-                auth: ['house.routine.house']
+                auth: ['house.routine.house', '*']
             }
         },
         {
@@ -44,7 +44,7 @@ export default {
             component: () => import('@/views/house/routine/category.vue'),
             meta: {
                 title: '类别配置',
-                auth: ['house.routine.category']
+                auth: ['house.routine.category', '*']
             }
         },
         {
@@ -53,9 +53,9 @@ export default {
             component: () => import('@/views/house/routine/news.vue'),
             meta: {
                 title: '消息模板',
-                auth: ['house.routine.news']
+                auth: ['house.routine.news', '*']
             }
         },
-        
+
     ]
 }

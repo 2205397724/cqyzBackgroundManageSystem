@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '企业备案',
         icon: 'el-icon-postcard',
-        auth: ['house.enterprise']
+        auth: ['house.enterprise', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-enterprise',
-                auth: ['house.enterprise.enterprise']
+                auth: ['house.enterprise.enterprise', '*']
             }
         }
     ]

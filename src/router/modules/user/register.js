@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '注册用户管理',
         icon: 'el-icon-postcard',
-        auth: ['user.register']
+        auth: ['user.register', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/user-register',
-                auth: ['user.register.register']
+                auth: ['user.register.register', '*']
             }
         }
     ]

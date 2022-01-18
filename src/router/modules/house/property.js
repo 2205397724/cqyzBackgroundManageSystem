@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '产权管理',
         icon: 'el-icon-collection',
-        auth: ['house.property']
+        auth: ['house.property', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-property',
-                auth: ['house.property.property']
+                auth: ['house.property.property', '*']
             }
         }
     ]

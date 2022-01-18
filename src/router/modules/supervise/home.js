@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '控制台首页',
         icon: 'el-icon-set-up',
-        auth: ['supervise.home']
+        auth: ['supervise.home', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/supervise-home',
-                auth: ['supervise.home.home']
+                auth: ['supervise.home.home', '*']
             }
         }
     ]

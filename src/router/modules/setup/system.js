@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '系统设置',
         icon: 'el-icon-set-up',
-        auth: ['setup.system']
+        auth: ['setup.system', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-system',
-                auth: ['setup.system.system']
+                auth: ['setup.system.system', '*']
             }
         }
     ]

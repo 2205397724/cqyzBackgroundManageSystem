@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '设备统计',
         icon: 'el-icon-timer',
-        auth: ['statistics.equipment']
+        auth: ['statistics.equipment', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-equipment',
-                auth: ['statistics.equipment.equipment']
+                auth: ['statistics.equipment.equipment', '*']
             }
         }
     ]

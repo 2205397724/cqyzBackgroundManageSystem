@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '事件管理',
         icon: 'el-icon-document',
-        auth: ['event.manage']
+        auth: ['event.manage', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/event-manage',
-                auth: ['event.manage.manage']
+                auth: ['event.manage.manage', '*']
             }
         }
     ]

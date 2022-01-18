@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '事件设置',
         icon: 'el-icon-set-up',
-        auth: ['event.setup']
+        auth: ['event.setup', '*']
     },
     children: [
         {
@@ -17,7 +17,7 @@ export default {
             component: () => import('@/views/event/setup/group.vue'),
             meta: {
                 title: ' 类别设置',
-                auth: ['event.setup.group']
+                auth: ['event.setup.group', '*']
             }
         },
         {
@@ -26,7 +26,7 @@ export default {
             component: () => import('@/views/event/setup/process.vue'),
             meta: {
                 title: '流程设置',
-                auth: ['event.setup.process']
+                auth: ['event.setup.process', '*']
             }
         },
         {
@@ -35,7 +35,7 @@ export default {
             component: () => import('@/views/event/setup/news.vue'),
             meta: {
                 title: '消息模板',
-                auth: ['event.setup.news']
+                auth: ['event.setup.news', '*']
             }
         },
     ]

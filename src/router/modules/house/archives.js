@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '档案管理',
         icon: 'el-icon-message-box',
-        auth: ['house.archives']
+        auth: ['house.archives', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-archives',
-                auth: ['house.archives.archives']
+                auth: ['house.archives.archives', '*']
             }
         }
     ]

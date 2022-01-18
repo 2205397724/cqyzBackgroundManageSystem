@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '用户设置',
         icon: 'el-icon-set-up',
-        auth: ['user.setup']
+        auth: ['user.setup', '*']
     },
     children: [
         {
@@ -17,7 +17,7 @@ export default {
             component: () => import('@/views/user/setup/basics.vue'),
             meta: {
                 title: '基础设置',
-                auth: ['user.setup.basics']
+                auth: ['user.setup.basics', '*']
             }
         },
         {
@@ -26,7 +26,7 @@ export default {
             component: () => import('@/views/user/setup/data.vue'),
             meta: {
                 title: '用户资料',
-                auth: ['user.setup.data']
+                auth: ['user.setup.data', '*']
             }
         },
         {
@@ -35,7 +35,7 @@ export default {
             component: () => import('@/views/user/setup/group.vue'),
             meta: {
                 title: '分组设置',
-                auth: ['user.setup.group']
+                auth: ['user.setup.group', '*']
             }
         },
         {
@@ -44,7 +44,7 @@ export default {
             component: () => import('@/views/user/setup/news.vue'),
             meta: {
                 title: '消息模板',
-                auth: ['user.setup.news']
+                auth: ['user.setup.news', '*']
             }
         },
     ]

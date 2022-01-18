@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '报修统计',
         icon: 'el-icon-warning',
-        auth: ['statistics.repair']
+        auth: ['statistics.repair', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-repair',
-                auth: ['statistics.repair.repair']
+                auth: ['statistics.repair.repair', '*']
             }
         }
     ]

@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '企业统计',
         icon: 'el-icon-data-line',
-        auth: ['statistics.enterprise']
+        auth: ['statistics.enterprise', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-enterprise',
-                auth: ['statistics.enterprise.enterprise']
+                auth: ['statistics.enterprise.enterprise', '*']
             }
         }
     ]

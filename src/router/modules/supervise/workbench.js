@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '管理工作台',
         icon: 'el-icon-brush',
-        auth: ['supervise.workbench']
+        auth: ['supervise.workbench', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/supervise-workbench',
-                auth: ['supervise.workbench.workbench']
+                auth: ['supervise.workbench.workbench', '*']
             }
         }
     ]

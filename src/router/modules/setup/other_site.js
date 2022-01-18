@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '分站设置',
         icon: 'el-icon-connection',
-        auth: ['setup.other']
+        auth: ['setup.other', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-other',
-                auth: ['setup.other.other']
+                auth: ['setup.other.other', '*']
             }
         }
     ]

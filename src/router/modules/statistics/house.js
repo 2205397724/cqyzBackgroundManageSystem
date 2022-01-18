@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '小区房屋统计',
         icon: 'el-icon-office-building',
-        auth: ['statistics.house']
+        auth: ['statistics.house', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-house',
-                auth: ['statistics.house.house']
+                auth: ['statistics.house.house', '*']
             }
         }
     ]

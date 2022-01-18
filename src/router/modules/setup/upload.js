@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '上传设置',
         icon: 'el-icon-delete-location',
-        auth: ['setup.upload']
+        auth: ['setup.upload', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-upload',
-                auth: ['setup.upload.upload']
+                auth: ['setup.upload.upload', '*']
             }
         }
     ]

@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '事件统计',
         icon: 'el-icon-calendar',
-        auth: ['statistics.event']
+        auth: ['statistics.event', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-event',
-                auth: ['statistics.event.event']
+                auth: ['statistics.event.event', '*']
             }
         }
     ]

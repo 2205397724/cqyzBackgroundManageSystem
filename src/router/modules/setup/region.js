@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '区域设置',
         icon: 'el-icon-guide',
-        auth: ['setup.region']
+        auth: ['setup.region', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-region',
-                auth: ['setup.region.region']
+                auth: ['setup.region.region', '*']
             }
         }
     ]

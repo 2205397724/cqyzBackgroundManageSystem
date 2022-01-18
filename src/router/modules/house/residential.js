@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '小区管理',
         icon: 'el-icon-office-building',
-        auth: ['house.residential']
+        auth: ['house.residential', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-residential',
-                auth: ['house.residential.residential']
+                auth: ['house.residential.residential', '*']
             }
         }
     ]

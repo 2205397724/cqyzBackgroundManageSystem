@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '短信设置',
         icon: 'el-icon-chat-dot-round',
-        auth: ['setup.note']
+        auth: ['setup.note', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-note',
-                auth: ['setup.note.note']
+                auth: ['setup.note.note', '*']
             }
         }
     ]

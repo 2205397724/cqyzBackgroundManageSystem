@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '推送设置',
         icon: 'el-icon-position',
-        auth: ['setup.push']
+        auth: ['setup.push', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-push',
-                auth: ['setup.push.push']
+                auth: ['setup.push.push', '*']
             }
         }
     ]

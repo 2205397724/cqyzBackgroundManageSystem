@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '权限设置',
         icon: 'el-icon-key',
-        auth: ['setup.authorize']
+        auth: ['setup.authorize', '*']
     },
     children: [
         {
@@ -17,7 +17,7 @@ export default {
             component: () => import('@/views/setup/authorize/group.vue'),
             meta: {
                 title: ' 角色分组',
-                auth: ['setup.authorize.group']
+                auth: ['setup.authorize.group', '*']
             }
         },
         {
@@ -26,7 +26,7 @@ export default {
             component: () => import('@/views/setup/authorize/menu.vue'),
             meta: {
                 title: ' 后台菜单',
-                auth: ['setup.authorize.menu']
+                auth: ['setup.authorize.menu', '*']
             }
         },
         {
@@ -35,7 +35,7 @@ export default {
             component: () => import('@/views/setup/authorize/admin.vue'),
             meta: {
                 title: ' 管理员设置',
-                auth: ['setup.authorize.admin']
+                auth: ['setup.authorize.admin', '*']
             }
         }
     ]

@@ -105,7 +105,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '管理',
-            icon: 'supervise'
+            icon: 'supervise',
+            auth: ['supervise', '*']
         },
         children: [
             superviseHome,
@@ -115,7 +116,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '统计',
-            icon: 'statistics'
+            icon: 'statistics',
+            auth: ['statistics', '*']
         },
         children: [
             statisticsHouse,
@@ -129,7 +131,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '房源',
-            icon: 'house'
+            icon: 'house',
+            auth: ['house', '*']
         },
         children: [
             houseResidential,
@@ -142,7 +145,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '用户',
-            icon: 'users'
+            icon: 'users',
+            auth: ['users', '*']
         },
         children: [
             userRegister,
@@ -152,7 +156,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '企业',
-            icon: 'enterprise'
+            icon: 'enterprise',
+            auth: ['enterprise', '*']
         },
         children: [
             enterpriseManage,
@@ -162,7 +167,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '事件',
-            icon: 'event'
+            icon: 'event',
+            auth: ['event', '*']
         },
         children: [
             eventManage,
@@ -172,7 +178,8 @@ const asyncRoutes = [
     {
         meta: {
             title: '设置',
-            icon: 'setup'
+            icon: 'setup',
+            auth: ['setup', '*']
         },
         children: [
             setupRegion,

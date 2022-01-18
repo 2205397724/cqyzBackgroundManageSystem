@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '投诉统计',
         icon: 'el-icon-phone',
-        auth: ['statistics.complaint']
+        auth: ['statistics.complaint', '*']
     },
     children: [
         {
@@ -20,7 +20,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-complaint',
-                auth: ['statistics.complaint.complaint']
+                auth: ['statistics.complaint.complaint', '*']
             }
         }
     ]
