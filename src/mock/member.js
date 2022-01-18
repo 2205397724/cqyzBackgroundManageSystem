@@ -21,14 +21,15 @@ export default [
             let permissions = []
             if (option.query.account == 'admin') {
                 permissions = [
-                    'permission.browse',
-                    'permission.create',
-                    'permission.edit',
-                    'permission.remove'
+                    '*',
                 ]
             } else if (option.query.account == 'test') {
                 permissions = [
-                    'permission.browse'
+                    'supervise',
+                    'supervise.home',
+                    'supervise.home.home',
+                    'supervise.workbench',
+                    'supervise.workbench.workbench'
                 ]
             }
             return {
