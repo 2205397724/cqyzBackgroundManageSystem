@@ -14,7 +14,7 @@ export default {
         {
             path: 'home',
             name: 'superviseHome',
-            component: () => import('@/views/supervise/home.vue'),
+            component: () => import('@/views/index.vue'),
             meta: {
                 title: '',
                 sidebar: false,
