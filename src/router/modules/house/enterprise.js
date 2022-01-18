@@ -7,7 +7,7 @@ export default {
     name: 'houseEnterpriseBox',
     meta: {
         title: '企业备案',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-postcard',
         auth: ['house.enterprise']
     },
     children: [

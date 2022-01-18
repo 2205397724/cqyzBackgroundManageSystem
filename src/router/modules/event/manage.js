@@ -7,7 +7,7 @@ export default {
     name: 'eventManageBox',
     meta: {
         title: '事件管理',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-document',
         auth: ['event.manage']
     },
     children: [

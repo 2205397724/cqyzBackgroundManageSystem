@@ -50,13 +50,13 @@ let globalSettings = {
         // 是否固定
         fixed: true,
         // 是否开启侧边栏展开收起按钮
-        enableSidebarCollapse: false,
+        enableSidebarCollapse: true,
         // 是否开启面包屑导航
         enableBreadcrumb: true,
         // 是否开启导航搜索
         enableNavSearch: true,
         // 是否开启全屏
-        enableFullscreen: false,
+        enableFullscreen: true,
         // 是否开启页面刷新
         enablePageReload: false,
         // 是否开启应用配置（建议在生产环境关闭）
@@ -68,8 +68,8 @@ let globalSettings = {
         enable: true,
         // 版权信息配置，格式为：Copyright © [dates] <company>, All Rights Reserved
         dates: '2020-2022',
-        company: 'Fantastic-admin',
-        website: 'https://hooray.github.io/fantastic-admin'
+        company: '智慧物业',
+        website: 'http://720.wzok.cn/'
     }
 }
 

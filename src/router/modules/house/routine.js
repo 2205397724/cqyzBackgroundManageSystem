@@ -7,7 +7,7 @@ export default {
     name: 'houseRoutineBox',
     meta: {
         title: '常规设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-set-up',
         auth: ['house.routine']
     },
     children: [

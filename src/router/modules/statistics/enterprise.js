@@ -7,7 +7,7 @@ export default {
     name: 'statisticsEnterpriseBox',
     meta: {
         title: '企业统计',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-data-line',
         auth: ['statistics.enterprise']
     },
     children: [

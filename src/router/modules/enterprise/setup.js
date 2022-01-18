@@ -7,7 +7,7 @@ export default {
     name: 'enterpriseSetupBox',
     meta: {
         title: '企业设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-set-up',
         auth: ['enterprise.setup']
     },
     children: [

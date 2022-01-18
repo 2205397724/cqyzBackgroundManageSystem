@@ -7,7 +7,7 @@ export default {
     name: 'statisticsComplaintBox',
     meta: {
         title: '投诉统计',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-phone',
         auth: ['statistics.complaint']
     },
     children: [

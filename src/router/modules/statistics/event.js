@@ -7,7 +7,7 @@ export default {
     name: 'statisticsEventBox',
     meta: {
         title: '事件统计',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-calendar',
         auth: ['statistics.event']
     },
     children: [

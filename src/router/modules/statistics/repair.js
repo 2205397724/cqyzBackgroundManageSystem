@@ -7,7 +7,7 @@ export default {
     name: 'statisticsRepairBox',
     meta: {
         title: '报修统计',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-warning',
         auth: ['statistics.repair']
     },
     children: [

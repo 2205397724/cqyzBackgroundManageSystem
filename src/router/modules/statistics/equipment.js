@@ -7,7 +7,7 @@ export default {
     name: 'statisticsEquipmentBox',
     meta: {
         title: '设备统计',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-timer',
         auth: ['statistics.equipment']
     },
     children: [

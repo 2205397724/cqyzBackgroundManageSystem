@@ -7,7 +7,7 @@ export default {
     name: 'setupUploadBox',
     meta: {
         title: '上传设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-delete-location',
         auth: ['setup.upload']
     },
     children: [

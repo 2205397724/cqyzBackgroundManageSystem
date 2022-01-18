@@ -7,7 +7,7 @@ export default {
     name: 'setupAuthorizeBox',
     meta: {
         title: '权限设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-key',
         auth: ['setup.authorize']
     },
     children: [

@@ -6,8 +6,8 @@ export default {
     redirect: '/supervise-workbench/workbench',
     name: 'superviseWorkbenchBox',
     meta: {
-        title: '控制台首页',
-        // icon: 'el-icon-star-on'
+        title: '管理工作台',
+        icon: 'el-icon-brush',
         auth: ['supervise.workbench']
     },
     children: [

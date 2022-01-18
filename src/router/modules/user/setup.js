@@ -7,7 +7,7 @@ export default {
     name: 'userSetupBox',
     meta: {
         title: '用户设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-set-up',
         auth: ['user.setup']
     },
     children: [

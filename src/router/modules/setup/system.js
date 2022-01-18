@@ -7,7 +7,7 @@ export default {
     name: 'setupSystemBox',
     meta: {
         title: '系统设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-set-up',
         auth: ['setup.system']
     },
     children: [

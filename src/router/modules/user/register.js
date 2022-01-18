@@ -7,7 +7,7 @@ export default {
     name: 'userRegisterBox',
     meta: {
         title: '注册用户管理',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-postcard',
         auth: ['user.register']
     },
     children: [

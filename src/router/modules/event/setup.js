@@ -7,7 +7,7 @@ export default {
     name: 'eventSetupBox',
     meta: {
         title: '事件设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-set-up',
         auth: ['event.setup']
     },
     children: [

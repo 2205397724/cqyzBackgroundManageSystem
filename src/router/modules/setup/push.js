@@ -7,7 +7,7 @@ export default {
     name: 'setupPushBox',
     meta: {
         title: '推送设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-position',
         auth: ['setup.push']
     },
     children: [

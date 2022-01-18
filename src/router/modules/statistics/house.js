@@ -7,7 +7,7 @@ export default {
     name: 'statisticsHouseBox',
     meta: {
         title: '小区房屋统计',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-office-building',
         auth: ['statistics.house']
     },
     children: [

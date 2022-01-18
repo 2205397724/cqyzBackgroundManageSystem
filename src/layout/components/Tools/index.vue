@@ -3,7 +3,7 @@
         <div class="buttons">
             <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">
                 <svg-icon name="pro" />
-                <span class="title">查看专业版</span>
+                <span class="title">智慧物业</span>
             </span>
             <span v-if="settingsStore.topbar.enableNavSearch" class="item" @click="$eventBus.emit('global-search-toggle')">
                 <svg-icon name="search" />
@@ -71,7 +71,7 @@ function userCommand(command) {
     }
 }
 function pro() {
-    window.open(`https://hooray.${location.origin.includes('gitee') ? 'gitee' : 'github'}.io/fantastic-admin/vue3/pro`, 'top')
+    window.open(`https://app.cqyezhuapp.com/edatachart/`, 'top')
 }
 </script>
 

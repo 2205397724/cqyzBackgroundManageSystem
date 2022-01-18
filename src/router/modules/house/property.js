@@ -7,7 +7,7 @@ export default {
     name: 'housePropertyBox',
     meta: {
         title: '产权管理',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-collection',
         auth: ['house.property']
     },
     children: [

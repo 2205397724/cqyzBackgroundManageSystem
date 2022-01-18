@@ -7,7 +7,7 @@ export default {
     name: 'houseArchivesBox',
     meta: {
         title: '档案管理',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-message-box',
         auth: ['house.archives']
     },
     children: [

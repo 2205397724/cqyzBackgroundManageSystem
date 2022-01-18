@@ -7,7 +7,7 @@ export default {
     name: 'setupOtherBox',
     meta: {
         title: '分站设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-connection',
         auth: ['setup.other']
     },
     children: [

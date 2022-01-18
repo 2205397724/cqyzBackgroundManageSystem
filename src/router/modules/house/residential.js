@@ -7,7 +7,7 @@ export default {
     name: 'houseResidentialBox',
     meta: {
         title: '小区管理',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-office-building',
         auth: ['house.residential']
     },
     children: [

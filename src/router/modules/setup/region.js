@@ -7,7 +7,7 @@ export default {
     name: 'setupRegionBox',
     meta: {
         title: '区域设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-guide',
         auth: ['setup.region']
     },
     children: [

@@ -7,7 +7,7 @@ export default {
     name: 'enterpriseManageBox',
     meta: {
         title: '企业管理',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-mic',
         auth: ['enterprise.manage']
     },
     children: [

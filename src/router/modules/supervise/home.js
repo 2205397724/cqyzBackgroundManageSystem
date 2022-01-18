@@ -7,7 +7,7 @@ export default {
     name: 'superviseHomeBox',
     meta: {
         title: '控制台首页',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-set-up',
         auth: ['supervise.home']
     },
     children: [

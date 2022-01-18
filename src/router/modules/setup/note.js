@@ -7,7 +7,7 @@ export default {
     name: 'setupNoteBox',
     meta: {
         title: '短信设置',
-        // icon: 'el-icon-star-on'
+        icon: 'el-icon-chat-dot-round',
         auth: ['setup.note']
     },
     children: [
