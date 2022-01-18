@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
 import path from 'path-browserify'
 import { deepClone, resolveRoutePath } from '@/util'
-import api from '@/api'
+import { APIgenerateRoutesAtBack } from '@/api/custom/custom.js'
 
 import { useSettingsStore } from './settings'
 import { useUserStore } from './user'
@@ -223,9 +223,7 @@ export const useMenuStore = defineStore(
             // 生成路由（后端获取）
             generateRoutesAtBack() {
                 return new Promise(resolve => {
-                    api.get('route/list', {
-                        baseURL: '/mock/'
-                    }).then(async res => {
+                    APIgenerateRoutesAtBack().then(async res => {
                         const settingsStore = useSettingsStore()
                         const userStore = useUserStore()
                         let asyncRoutes = formatBackRoutes(res.data)

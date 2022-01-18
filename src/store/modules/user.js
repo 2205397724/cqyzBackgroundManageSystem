@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
-import api from '@/api'
+
+import { APIlogin, APIgetPermissions, APIeditPassword } from '@/api/custom/custom.js'
 
 import { useMenuStore } from './menu'
 
@@ -29,9 +30,7 @@ export const useUserStore = defineStore(
             login(data) {
                 return new Promise((resolve, reject) => {
                     // 通过 mock 进行登录
-                    api.post('member/login', data, {
-                        baseURL: '/mock/'
-                    }).then(res => {
+                    APIlogin(data).then(res => {
                         localStorage.setItem('account', res.data.account)
                         localStorage.setItem('token', res.data.token)
                         localStorage.setItem('failure_time', res.data.failure_time)
@@ -62,12 +61,7 @@ export const useUserStore = defineStore(
             getPermissions() {
                 return new Promise(resolve => {
                     // 通过 mock 获取权限
-                    api.get('member/permission', {
-                        baseURL: '/mock/',
-                        params: {
-                            account: this.account
-                        }
-                    }).then(res => {
+                    APIgetPermissions({ account: this.account }).then(res => {
                         this.permissions = res.data.permissions
                         resolve(res.data.permissions)
                     })
@@ -75,13 +69,7 @@ export const useUserStore = defineStore(
             },
             editPassword(data) {
                 return new Promise(resolve => {
-                    api.post('member/edit/password', {
-                        account: this.account,
-                        password: data.password,
-                        newpassword: data.newpassword
-                    }, {
-                        baseURL: '/mock/'
-                    }).then(() => {
+                    APIeditPassword({ account: this.account, password: data.password, newpassword: data.newpassword }).then(() => {
                         resolve()
                     })
                 })
