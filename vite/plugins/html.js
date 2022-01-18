@@ -13,8 +13,8 @@ export default function createHtml(env, isBuild) {
                 debugTool: VITE_APP_DEBUG_TOOL,
                 copyrightScript: `
 <script>
-console.info('%c由%cFantastic-admin%c提供技术支持', '${copyright_sub_style}', '${copyright_main_style}', '${copyright_sub_style}', '\\nhttps://hooray.gitee.io/fantastic-admin/');
-console.info('%cPowered by%cFantastic-admin', '${copyright_sub_style}', '${copyright_main_style}', '\\nhttps://hooray.github.io/fantastic-admin/');
+console.info('%c由%c哪屋优%c提供技术支持', '${copyright_sub_style}', '${copyright_main_style}', '${copyright_sub_style}', '\\nhttp://720.wzok.cn/');
+console.info('%cPowered by%c哪屋优', '${copyright_sub_style}', '${copyright_main_style}', '\\nhttps://app.cqyezhuapp.com/edatachart/');
 </script>
                 `
             }
