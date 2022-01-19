@@ -11,6 +11,9 @@
 
 <script setup>
 import { useSettingsStore } from '@/store/modules/settings'
+import * as echarts from 'echarts'
+import { provide } from 'vue'
+provide('ec',echarts)
 const settingsStore = useSettingsStore()
 
 // 侧边栏主导航当前实际宽度
