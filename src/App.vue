@@ -11,11 +11,12 @@
 
 <script setup>
 import { useSettingsStore } from '@/store/modules/settings'
-import * as echarts from 'echarts'
+
+// 图表
 import { provide } from 'vue'
+import * as echarts from 'echarts'
 provide('ec',echarts)
 const settingsStore = useSettingsStore()
-
 // 侧边栏主导航当前实际宽度
 const mainSidebarActualWidth = computed(() => {
     let actualWidth = getComputedStyle(document.documentElement).getPropertyValue('--g-main-sidebar-width')
@@ -77,4 +78,5 @@ onMounted(() => {
     }
     window.onresize()
 })
+
 </script>
