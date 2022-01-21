@@ -38,7 +38,7 @@
                         <el-button class="head-btn" type="primary">添加小区</el-button>
                     </el-col>
                     <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                        <el-button class="head-btn" type="success">跟新缓存</el-button>
+                        <el-button class="head-btn" type="success">更新缓存</el-button>
                     </el-col>
                     <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                         <el-button class="head-btn" type="warning">导出数据</el-button>

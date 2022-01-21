@@ -56,7 +56,7 @@
                                 <el-button class="head-btn" type="warning">添加小区</el-button>
                             </el-col>
                             <el-col :xs="12" :sm="8" :md="8" :lg="5" :xl="2">
-                                <el-button class="head-btn" type="primary">跟新缓存</el-button>
+                                <el-button class="head-btn" type="primary">更新缓存</el-button>
                             </el-col>
                             <el-col :xs="12" :sm="8" :md="8" :lg="5" :xl="2">
                                 <el-button class="head-btn" type="success">导出数据</el-button>
@@ -114,7 +114,7 @@
         table_list: ''
     })
 
-    // 统计数据
+    // 区域
     import {
         APIgetHousePlace,
         APIgetHouseHouse
