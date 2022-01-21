@@ -1,7 +1,7 @@
 <template>
     <div class="diytree">
         <div class="tit">
-            {{props.data.tit}}
+            {{props.tit}}
         </div>
         <div class="tree-box">
             <el-tree
@@ -18,7 +18,7 @@
 
 <script setup>
     import {reactive, defineProps, defineEmits} from 'vue'
-    const props = defineProps(['data']);
+    const props = defineProps(['data','tit']);
     const emit = defineEmits(['myClick','nullClick'])
     const handleNodeClick = (item,e) => {
         if(!item.children||item.children.length<=0){

@@ -1,5 +1,23 @@
 import api from '@/api/index.js'
 
+// 统计
+// 图表
+export function APIgetEchartsStatistics() {
+    return api.get('/member/statistics/echarts', { baseURL: '/mock/' })
+}
+// 总数
+export function APIgetHouseNums(params) {
+    return api.get('/member/statistics/nums', { baseURL: '/mock/', params: params })
+}
+// 区域
+export function APIgetHousePlace(params) {
+    return api.get('/member/statistics/place', { baseURL: '/mock/', params: params })
+}
+// 小区
+export function APIgetHouseHouse(params) {
+    return api.get('/member/statistics/house', { baseURL: '/mock/', params: params })
+}
+
 // 控制台首页
 // 个人信息
 export function APIgetUserinfo(params) {
@@ -14,7 +32,7 @@ export function APIgetEventnum(params) {
     return api.get('/member/home/eventnum', { baseURL: '/mock/', params: params })
 }
 // 统计图表 用户注册统计 用户实名认证 用户活跃统计
-export function APIgetEcharts(params) {
+export function APIgetEchartsHome(params) {
     return api.get('/member/home/echarts', { baseURL: '/mock/', params: params })
 }
 

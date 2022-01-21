@@ -3,31 +3,40 @@
         <page-main style="padding: 0;">
             <div class="tree-box">
                 <div class="tree-item">
-                    <position-tree :data="place_list" @myClick="placeClick" @nullClick="placeNullClick"></position-tree>
+                    <position-tree tit="选择区域" :data="data.place_list" @myClick="placeClick" @nullClick="placeNullClick"></position-tree>
                 </div>
                 <div class="tree-item">
-                    <position-tree :data="house_list" @myClick="houseClick" @nullClick="houseNullClick"></position-tree>
+                    <position-tree tit="选择小区" :data="data.house_list" @myClick="houseClick" @nullClick="houseNullClick"></position-tree>
                 </div>
                 <div class="tree-details">
                     <div class="tit">
                         <div style="min-width: 80px;">你选择的是：</div>
-                        <div class="breadCrumb" v-if="(BreadCrumb.house&&BreadCrumb.house.length>0)&&(BreadCrumb.place&&BreadCrumb.place.length>0)">
-                            <span v-for="(item,i) in BreadCrumb.place" :key="'BreadCrumbPlace'+i">{{item}}</span>
-                            <span v-for="(item,i) in BreadCrumb.house" :key="'BreadCrumbPlace'+i">{{item}}</span>
+                        <div class="breadCrumb"
+                            v-if="(breadCrumb.house&&breadCrumb.house.length>0)&&(breadCrumb.place&&breadCrumb.place.length>0)">
+                            <span v-for="(item,i) in breadCrumb.place" :key="'breadCrumbPlace'+i">{{item}}</span>
+                            <span v-for="(item,i) in breadCrumb.house" :key="'breadCrumbPlace'+i">{{item}}</span>
                         </div>
                         <div class="breadCrumb" v-else>
                             <span>左边选择“区域”“小区”！</span>
                         </div>
                     </div>
+                    <div v-if="!data.nums_arr||!data.nums_arr.length>0" style="color: #909399;font-size: 14px;text-align: center;height: 60px;line-height: 60px;">
+                        暂无数据
+                    </div>
                     <div class="num-box">
-                        <div class="num-box-item" v-for="i in 2">
-                            <div class="box-tit">数量统计：</div>
+                        <div class="num-box-item" v-for="(item,i) in data.nums_arr" :key="'nums_arr'+i">
+                            <div class="box-tit">{{item.tit}}</div>
                             <div class="flexs">
-                                <div class="flex-item" v-for="j in 2">
-                                    <div class="item-num">26</div>
-                                    <div class="item-tit">小区总数</div>
+                                <div class="flex-item" v-for="(child,j) in item.data" :key="'nums_arrchild'+j">
+                                    <div class="item-num">{{child.num}}</div>
+                                    <div class="item-tit">{{child.name}}</div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="houseechart">
+                        <div v-for="(item,i) in data.echarts_arr" :key="'houseechart'+i">
+                            <my-echarts :data="item"></my-echarts>
                         </div>
                     </div>
                 </div>
@@ -39,63 +48,111 @@
     import {
         reactive
     } from 'vue'
-    const place_list = reactive({
-        tit: '选择区域',
-        default_expanded: ['50', '5001'],
-        data: [{
-                id: '50',
-                label: '重庆市',
-                children: [{
-                    id: '5001',
-                    label: '万州区',
-                }, ],
-            }
-        ]
+    const data = reactive({
+        echarts_arr: '',
+        place_list: '',
+        house_list: '',
+        nums_arr: ''
     })
-    const house_list = reactive({
-        tit: '选择小区',
-        default_expanded: ['50', '5001'],
-        data: [
-            {
-                id: '30',
-                label: '安徽省',
+
+    // 图表
+    import {
+        APIgetEchartsStatistics
+    } from '@/api/custom/custom.js'
+    const getEchartsFunc = (params)=>{
+        APIgetEchartsStatistics(params).then(res => {
+            if (res.status == 1) {
+                data.echarts_arr = res.data
             }
-        ]
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    // 总数统计
+    import {
+        APIgetHouseNums
+    } from '@/api/custom/custom.js'
+    const getNumsFunc = (params) =>{
+        APIgetHouseNums(params).then(res => {
+            if (res.status == 1) {
+                data.nums_arr = res.data
+            }
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    // 统计数据
+    import {
+        APIgetHousePlace,
+        APIgetHouseHouse
+    } from '@/api/custom/custom.js'
+    APIgetHousePlace().then(res => {
+        if (res.status == 1) {
+            data.place_list = res.data
+        }
+    }).catch(error => {
+        console.log(error)
     })
-    const BreadCrumb = reactive({place:'',house:''})
-    const clickData = reactive({place:'',house:''})
-    const placeClick = (data)=>{
-        BreadCrumb.place = data.breadCrumb
-        clickData.place = data.item
-        placeNullClick()
-        house_list.data = [{
-                id: '30',
-                label: '安徽省',
-            }]
+    const getHouseFunc = (params) => {
+        APIgetHouseHouse(params).then(res => {
+            if (res.status == 1) {
+                data.house_list = res.data
+            }
+        }).catch(error => {
+            console.log(error)
+        })
     }
-    const houseClick = (data)=>{
-        BreadCrumb.house = data.breadCrumb
-        clickData.house = data.item
-    }
-    const placeNullClick = (data)=>{
-        house_list.data = []
+
+    const breadCrumb = reactive({
+        place: '',
+        house: ''
+    })
+    const clickData = reactive({
+        place: '',
+        house: ''
+    })
+    const placeClick = (res) => {
+        console.log(res)
+        breadCrumb.place = res.breadCrumb
+        clickData.place = res.item
+        getHouseFunc({id:res.item.id})
         houseNullClick()
     }
-    const houseNullClick = (data)=>{
-
+    const placeNullClick = () => {
+        data.house_list = ''
+        breadCrumb.place = ''
+        clickData.place = ''
+        houseNullClick()
     }
-
+    const houseClick = (res) => {
+        console.log(res)
+        breadCrumb.house = res.breadCrumb
+        clickData.house = res.item
+        getNumsFunc({id:res.item.id})
+        getEchartsFunc({id:res.item.id})
+    }
+    const houseNullClick = () => {
+        breadCrumb.house = ''
+        clickData.house = ''
+        data.nums_arr = ''
+        data.echarts_arr = ''
+    }
 </script>
 <style lang="scss" scoped>
-    .tree-box{
+    .tree-box {
         display: flex;
-        .tree-item{
+
+        .tree-item {
             min-width: 200px;
             width: 200px;
         }
-        .tree-details{
+
+        .tree-details {
             flex-grow: 1;
-            .tit{
+
+            .tit {
                 height: 60px;
                 box-sizing: border-box;
                 border-bottom: 1px solid rgba(233, 233, 233, 1);
@@ -107,43 +164,69 @@
                 display: flex;
                 justify-content: left;
                 align-items: center;
-                span{
+
+                span {
                     color: #333333;
                     font-size: 14px;
                 }
-                span::after{
+
+                span::after {
                     content: '>';
                     display: inline-block;
                     margin: 0 6px;
                 }
-                span:last-child::after{
+
+                span:last-child::after {
                     display: none;
                 }
             }
 
-            .num-box{
+            .num-box {
                 padding: 20px;
                 box-sizing: border-box;
-                .num-box-item{
-                    .box-tit{
-                        border-bottom: 1px solid rgba(233, 233, 233, 1);
+
+                .num-box-item {
+                    border-bottom: 1px solid rgba(233, 233, 233, 1);
+                    box-sizing: border-box;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+
+                    .box-tit {
                         box-sizing: border-box;
+                        padding-bottom: 40px;
+                        color: #999999;
+                        font-size: 12px;
                     }
-                    .flexs{
-                        .flex-item{
-                            .item-num{
 
+                    .flexs {
+                        display: flex;
+
+                        .flex-item {
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+
+                            .item-num {
+                                color: #333333;
+                                font-size: 24px;
                             }
-                            .item-tit{
 
+                            .item-tit {
+                                color: #999999;
+                                font-size: 14px;
                             }
                         }
                     }
                 }
             }
+
+            .houseechart {
+                box-sizing: border-box;
+                padding: 20px;
+            }
         }
     }
-    .num-box{
 
-    }
+    .num-box {}
 </style>

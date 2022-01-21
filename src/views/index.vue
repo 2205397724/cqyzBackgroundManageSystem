@@ -72,10 +72,7 @@
 		<page-main class="picbox" v-if="alldata.echarts.length>0">
 			<el-row :gutter="20">
 				<el-col :sm="24" :md="alldata.echarts.length==1?24:12" :lg="alldata.echarts.length==1?24:alldata.echarts.length==2?12:8" v-for="(item,i) in alldata.echarts" :key="'echarts'+i">
-					<div class="pic-item">
-						<div class="pictit">{{item.tit}}</div>
-						<div class="pic" :id="item.dom_id" style="height: 300px;"></div>
-					</div>
+                    <my-echarts :data="item"></my-echarts>
 				</el-col>
 			</el-row>
 		</page-main>
@@ -113,28 +110,18 @@
 	}).catch(error => {
 		console.log(error)
 	})
+
 	// 图表
 	import {
-		APIgetEcharts
+		APIgetEchartsHome
 	} from '@/api/custom/custom.js'
-	const echarts = inject("ec");
-	onMounted(() => {
-		APIgetEcharts().then(res => {
-			if (res.status == 1) {
-				alldata.echarts = res.data
-                nextTick(()=>{
-                    for(let i in alldata.echarts){
-                        let item = alldata.echarts[i]
-                        let myChart = echarts.init(document.getElementById(item.dom_id))
-                        myChart.setOption(item.options);
-                    }
-                })
-			}
-		}).catch(error => {
-			console.log(error)
-		})
-
-	});
+    APIgetEchartsHome().then(res => {
+        if (res.status == 1) {
+            alldata.echarts = res.data
+        }
+    }).catch(error => {
+        console.log(error)
+    })
 </script>
 
 <style lang="scss" scoped>

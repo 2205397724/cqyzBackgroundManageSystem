@@ -208,6 +208,7 @@ export default [{
         data: [{
             tit: '用户注册统计',
             dom_id: 'echarts1',
+            height: '300px',
             options: {
                 tooltip: {},
                 xAxis: {
@@ -224,6 +225,7 @@ export default [{
         {
             tit: '用户实名认证',
             dom_id: 'echarts2',
+            height: '300px',
             options: {
                 tooltip: {},
                 series: [{
@@ -245,6 +247,7 @@ export default [{
         {
             tit: '用户活跃统计',
             dom_id: 'echarts3',
+            height: '300px',
             options: {
                 tooltip: {},
                 xAxis: {
@@ -260,6 +263,132 @@ export default [{
         }
         ]
     }
+},
+// // 业主年龄分布统计：柱状图 区域内小区业主绑定率：列表
+{
+    url: '/mock/member/statistics/echarts',
+    method: 'get',
+    response: {
+        error: '',
+        status: 1,
+        data: [{
+            tit: '业主年龄分布统计：',
+            dom_id: 'echarts1',
+            height: '300px',
+            options: {
+                tooltip: {},
+                xAxis: {
+                    data: ['1', '5', '10', '15', '20', '25', '30']
+                },
+                yAxis: {},
+                series: [{
+                    name: '用户量',
+                    type: 'line',
+                    data: [5, 20, 36, 10, 10, 20, 30]
+                }]
+            }
+        },
+        {
+            tit: '区域内小区业主绑定率：',
+            dom_id: 'echarts3',
+            height: '300px',
+            options: {
+                tooltip: {},
+                xAxis: {
+                    data: ['1', '5', '10', '15', '20', '25', '30']
+                },
+                yAxis: {},
+                series: [{
+                    name: '用户量',
+                    type: 'line',
+                    data: [5, 20, 36, 10, 10, 20, 30]
+                }]
+            }
+        }
+        ]
+    }
+},
+// 统计小区右边总数
+{
+    url: '/mock/member/statistics/nums',
+    method: 'get',
+    response: {
+        error: '',
+        status: 1,
+        data: [{
+            tit: '数量统计：',
+            data: [{
+                name: '小区总数',
+                num: 26
+            },
+            {
+                name: '楼栋总数',
+                num: 126
+            }
+            ]
+        },
+        {
+            tit: '业主统计：',
+            data: [{
+                name: '业主总数',
+                num: 1126
+            },
+            {
+                name: '绑定总数',
+                num: 126
+            },
+            {
+                name: '未绑定数',
+                num: 1000
+            }
+            ]
+        }
+        ]
+    }
+},
+// 统计小区区域区域
+{
+    url: '/mock/member/statistics/place',
+    method: 'get',
+    response: {
+        error: '',
+        status: 1,
+        data: {
+            default_expanded: ['50', '5001'],
+            data: [{
+                id: '50',
+                label: '重庆市',
+                children: [{
+                    id: '5001',
+                    label: '万州区'
+                } ]
+            },
+            {
+                id: '40',
+                label: '重庆2市'
+            }
+            ]
+        }
+    }
+},
+// 统计小区区域小区
+{
+    url: '/mock/member/statistics/house',
+    method: 'get',
+    response: {
+        error: '',
+        status: 1,
+        data: {
+            default_expanded: ['50', '5001'],
+            data: [{
+                id: '30',
+                label: '安徽省',
+                children: [{
+                    id: '5009',
+                    label: '万州区'
+                }]
+            }]
+        }
+    }
 }
-
 ]
