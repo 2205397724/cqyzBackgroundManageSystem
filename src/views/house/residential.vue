@@ -26,7 +26,7 @@
                             <el-option label="按地址" :value="2"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
                         <el-input class="head-btn" v-model="data.search.keyword" placeholder="关键字" clearable />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
@@ -63,7 +63,7 @@
                         </div>
                     </el-col>
                 </el-row>
-                <div style="padding-top: 10px;">
+                <div style="padding-top: 20px;">
                     <el-pagination
                     layout="total,prev,pager,next,jumper,"
                     :total="150"

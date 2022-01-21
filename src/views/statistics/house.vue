@@ -114,7 +114,6 @@
         house: ''
     })
     const placeClick = (res) => {
-        console.log(res)
         breadCrumb.place = res.breadCrumb
         clickData.place = res.item
         getHouseFunc({id:res.item.id})
@@ -127,7 +126,6 @@
         houseNullClick()
     }
     const houseClick = (res) => {
-        console.log(res)
         breadCrumb.house = res.breadCrumb
         clickData.house = res.item
         getNumsFunc({id:res.item.id})
