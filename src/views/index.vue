@@ -6,16 +6,16 @@
 					<el-row>
 						<el-col :xs="24" :sm="24" :lg="4"
 							style="display: flex;justify-content: center;align-items: center;box-sizing: border-box;padding-right: 20px;min-width: 135px;">
-							<image-preview :src="alldata.userinfo.avatar" width="90px" height="90px"
+							<image-preview v-if='data.userinfo' :src="data.userinfo.avatar" width="90px" height="90px"
 								style="border-radius: 50%;" />
 						</el-col>
 						<el-col :xs="24" :sm="24" :lg="18"
 							style="display: flex;flex-direction: column;justify-content:space-between;">
-							<div style="color: #333333;font-weight: 650;font-size: 24px;">欢迎你 {{alldata.userinfo.nickname}}</div>
+							<div style="color: #333333;font-weight: 650;font-size: 24px;">欢迎你 {{data.userinfo.nickname}}</div>
 							<div style="color: #666666;font-weight: 400;">
-								<div style="font-size: 14px;">{{alldata.userinfo.address}} {{alldata.userinfo.department}} {{alldata.userinfo.job}}</div>
-								<div style="font-size: 12px;">手机号码：{{alldata.userinfo.tel}} 最后登录：{{alldata.userinfo.lasttime}}
-									登录IP：{{alldata.userinfo.ip}}</div>
+								<div style="font-size: 14px;">{{data.userinfo.address}} {{data.userinfo.department}} {{data.userinfo.job}}</div>
+								<div style="font-size: 12px;">手机号码：{{data.userinfo.tel}} 最后登录：{{data.userinfo.lasttime}}
+									登录IP：{{data.userinfo.ip}}</div>
 							</div>
 						</el-col>
 					</el-row>
@@ -34,7 +34,7 @@
 			</el-row>
 		</page-main>
 		<el-row :gutter="20" style="margin: -10px 10px;" class="icontitbox">
-			<el-col class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}" v-for="(item,i) in alldata.tipsnum" :key="'tipsnum'+i">
+			<el-col class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}" v-for="(item,i) in data.tipsnum" :key="'tipsnum'+i">
 				<page-main style="margin: 10px 0;">
 					<div class="icontit">
 						<div class="img">
@@ -58,7 +58,7 @@
 			</el-col>
 		</el-row>
 		<el-row :gutter="20" style="margin: 10px 10px -10px 10px;">
-			<el-col :xs="24" :sm="12" :md="12" :lg="8" v-for="(item,i) in alldata.eventnum" :key="'eventnum'+i">
+			<el-col :xs="24" :sm="12" :md="12" :lg="8" v-for="(item,i) in data.eventnum" :key="'eventnum'+i">
 				<page-main style="margin: 10px 0;" :title="item.name">
 					<div class="numname">
 						<div v-for="(child,j) in item.nums" :key="'titnum'+j">
@@ -69,9 +69,9 @@
 				</page-main>
 			</el-col>
 		</el-row>
-		<page-main class="picbox" v-if="alldata.echarts.length>0">
+		<page-main class="picbox" v-if="data.echarts.length>0">
 			<el-row :gutter="20">
-				<el-col :sm="24" :md="alldata.echarts.length==1?24:12" :lg="alldata.echarts.length==1?24:alldata.echarts.length==2?12:8" v-for="(item,i) in alldata.echarts" :key="'echarts'+i">
+				<el-col :sm="24" :md="data.echarts.length==1?24:12" :lg="data.echarts.length==1?24:data.echarts.length==2?12:8" v-for="(item,i) in data.echarts" :key="'echarts'+i">
                     <my-echarts :data="item"></my-echarts>
 				</el-col>
 			</el-row>
@@ -88,24 +88,24 @@
 		APIgetTipsnum,
 		APIgetEventnum
 	} from '@/api/custom/custom.js'
-	const alldata = reactive({userinfo:'',tipsnum:'',eventnum:'',echarts:''})
+	const data = reactive({userinfo:'',tipsnum:'',eventnum:'',echarts:''})
 	APIgetUserinfo().then(res => {
 		if (res.status == 1) {
-			alldata.userinfo = res.data
+			data.userinfo = res.data
 		}
 	}).catch(error => {
 		console.log(error)
 	})
 	APIgetTipsnum().then(res => {
 		if (res.status == 1) {
-			alldata.tipsnum = res.data
+			data.tipsnum = res.data
 		}
 	}).catch(error => {
 		console.log(error)
 	})
 	APIgetEventnum().then(res => {
 		if (res.status == 1) {
-			alldata.eventnum = res.data
+			data.eventnum = res.data
 		}
 	}).catch(error => {
 		console.log(error)
@@ -117,7 +117,7 @@
 	} from '@/api/custom/custom.js'
     APIgetEchartsHome().then(res => {
         if (res.status == 1) {
-            alldata.echarts = res.data
+            data.echarts = res.data
         }
     }).catch(error => {
         console.log(error)
