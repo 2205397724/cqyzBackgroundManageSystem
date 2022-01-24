@@ -86,11 +86,11 @@
                     <div style="padding-top: 20px;">
                         <el-pagination
                         layout="total,prev,pager,next,jumper,"
-                        :total="150"
-                        :page-size="15"
+                        :total="data.pagination.total"
+                        :page-size="data.pagination.page_size"
+                        v-model:current-page="data.pagination.current_page"
                         background
-                        hide-on-single-page
-                        ></el-pagination>
+                            hide-on-single-page></el-pagination>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,12 @@
             type: '',
             keyword: ''
         },
-        table_list: ''
+        table_list: '',
+		pagination:{
+		    total:150,
+		    page_size:15,
+		    current_page:2
+		}
     })
 
     // 区域

@@ -1,11 +1,15 @@
 <template>
     <div class="keep-on-record">
-        <page-main style="padding: 0;">
-            <div class="tit-box">
-                <div class="tit">企业备案</div>
+        <page-main class="tit-box-box">
+            <div class="tit-box" :class="{'on':data.tit_on==0}" @click="data.tit_on=0">
+                <div class="tit">
+                    <div>企业备案</div>
+                    <div class="tips" v-if="data.tit_tips&&data.tit_tips.record>0">{{data.tit_tips.record}}</div>
+                </div>
             </div>
-            <div class="tit-box">
+            <div class="tit-box" :class="{'on':data.tit_on==1}" @click="data.tit_on=1">
                 <div class="tit">待审备案</div>
+                <div class="tips" v-if="data.tit_tips&&data.tit_tips.pending>0">{{data.tit_tips.pending}}</div>
             </div>
         </page-main>
         <page-main>
@@ -19,33 +23,21 @@
                             </el-cascader>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select class="head-btn" v-model="data.search.committee" placeholder="业委会" clearable>
-                                <el-option label="未成立" :value="0"></el-option>
-                                <el-option label="已成立" :value="1"></el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select class="head-btn" v-model="data.search.company" placeholder="物业公司" clearable>
-                                <el-option label="无" :value="0"></el-option>
-                                <el-option label="有" :value="1"></el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select class="head-btn" v-model="data.search.type" placeholder="类别" clearable>
                                 <el-option label="按ID" :value="0"></el-option>
-                                <el-option label="按名称" :value="1"></el-option>
-                                <el-option label="按地址" :value="2"></el-option>
+                                <el-option label="按企业名称" :value="1"></el-option>
+                                <el-option label="按小区地址" :value="2"></el-option>
                             </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                             <el-input class="head-btn" v-model="data.search.keyword" placeholder="关键字" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary">搜索</el-button>
                         </el-col>
                     </el-row>
                 </div>
-                <div>
+                <div v-if="data.tit_on==0">
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                             <el-button class="head-btn" type="primary">添加小区</el-button>
@@ -58,7 +50,7 @@
                         </el-col>
                     </el-row>
                 </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                <div :style="data.tit_on!=0?'margin-top:10px':''" style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table :data="data.table_list"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%">
@@ -79,7 +71,12 @@
                     </el-table>
                 </div>
                 <div style="padding-top: 20px;">
-                    <el-pagination layout="total,prev,pager,next,jumper," :total="150" :page-size="15" background
+                    <el-pagination
+                    layout="total,prev,pager,next,jumper,"
+                    :total="data.pagination.total"
+                    :page-size="data.pagination.page_size"
+                    v-model:current-page="data.pagination.current_page"
+                    background
                         hide-on-single-page></el-pagination>
                 </div>
             </div>
@@ -96,11 +93,34 @@
             property: '',
             binding: '',
             type: '',
-            keyword: ''
+            keyword: '',
+            options:''
         },
-        table_list: ''
+        table_list: '',
+        tit_on: 0,
+        tit_tips: {
+            record: 0,
+            pending: 3
+        },
+		pagination:{
+		    total:150,
+		    page_size:15,
+		    current_page:2
+		}
     })
-
+    data.search.options = [{
+        value: '0',
+        label: 'Guide',
+        children: [{
+                value: '001',
+                label: 'Disciplines',
+            },
+            {
+                value: '002',
+                label: '11111',
+            }
+        ]
+    }]
     // 表格
     data.table_list = [{
             name: '重庆经典物业管理有限公司',
@@ -261,10 +281,41 @@
                 margin: 10px 0 10px 0;
             }
         }
-        
-        .tit-box{
-            height: 60px;
-            line-height: 60px;
+        .tit-box-box{
+            display: flex;
+            padding: 0;
+            .tit-box{
+                height: 60px;
+                box-sizing: border-box;
+                margin-right: 30px;
+                padding: 0 20px;
+                font-size: 13px;
+                color: #8c8c8c;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+                position: relative;
+
+                .tips{
+                    position: absolute;
+                    right: 0;
+                    top: 8px;
+                    box-sizing: border-box;
+                    padding: 0 8px;
+                    border-radius: 14px;
+                    font-size: 12px;
+                    color: #FFFFFF;
+                    background-color: #e55055;
+                }
+            }
+            .tit-box.on{
+                border-bottom: 2px solid rgba(2, 167, 240, 1);
+            }
+            .tit-box:last-child{
+                margin-right: 0;
+            }
         }
     }
 </style>

@@ -66,11 +66,11 @@
                 <div style="padding-top: 20px;">
                     <el-pagination
                     layout="total,prev,pager,next,jumper,"
-                    :total="150"
-                    :page-size="12"
+                    :total="data.pagination.total"
+                    :page-size="data.pagination.page_size"
+                    v-model:current-page="data.pagination.current_page"
                     background
-                    hide-on-single-page
-                    ></el-pagination>
+                        hide-on-single-page></el-pagination>
                 </div>
             </div>
         </page-main>
@@ -89,7 +89,12 @@
             company: '',
             keyword:''
         },
-        house_list: ''
+        house_list: '',
+		pagination:{
+		    total:150,
+		    page_size:15,
+		    current_page:2
+		}
     })
     data.search.value = ['0', '002']
     data.search.options = [{

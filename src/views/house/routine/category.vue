@@ -1,19 +1,76 @@
 <template>
-    <div>
-        <page-header title="欢迎使用 Fantastic-admin（基础版）">
-            <template #content>
-                <div>
-                    <div style="margin-bottom: 5px;">这是一款<b class="text-emphasis">开箱即用</b>的中后台框架，同时它也经历过数十个真实项目的技术沉淀，确保框架在开发中可落地、可使用、可维护</div>
-                    <div>注：在作者就职的公司，本框架已在电商、直播、OA、ERP等多个不同领域的中后台系统中应用并稳定运行</div>
+    <div class="routine-category">
+        <page-main>
+            <div>
+                <div style="margin-bottom: 20px;margin-left: 0;">
+                    <el-button class="head-btn" type="primary">添加分类</el-button>
                 </div>
-            </template>
-        </page-header>
+                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                    <el-table :data="data.table_list"
+                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                        style="width: 100%" border>
+                        <el-table-column prop="type" label="配置类别" width="400" />
+                        <el-table-column prop="choice" label="类型" width="90" />
+                        <el-table-column prop="state" label="状态" width="90" />
+                        <!-- <el-table-column fixed="right" label="操作" width="140">
+                            <template #default>
+                                <el-button type="success" size="small">产权</el-button>
+                                <el-button type="primary" size="small">修改</el-button>
+                            </template>
+                        </el-table-column> -->
+                        <el-table-column />
+                    </el-table>
+                </div>
+                <div style="padding-top: 20px;">
+                    <el-pagination layout="total,prev,pager,next,jumper," :total="data.pagination.total"
+                        :page-size="data.pagination.page_size" v-model:current-page="data.pagination.current_page"
+                        background hide-on-single-page></el-pagination>
+                </div>
+            </div>
+        </page-main>
     </div>
 </template>
-
+<script setup>
+    import {
+        reactive
+    } from 'vue'
+    const data = reactive({
+        table_list: '',
+        pagination: {
+            total: 150,
+            page_size: 15,
+            current_page: 2
+        }
+    })
+    // 表格
+    data.table_list = [{
+            type: '房屋类型',
+            choice: '单选',
+            state: 1
+        },
+        {
+            type: '房屋特色',
+            choice: '单选',
+            state: 1
+        },
+        {
+            type: '装修程度',
+            choice: '单选',
+            state: 1
+        }
+    ]
+</script>
 <style lang="scss" scoped>
-.text-emphasis {
-    /* stylelint-disable-next-line property-no-vendor-prefix */
-    -webkit-text-emphasis-style: "❤";
-}
+    .routine-category {
+
+        .bottom-btn-box-2 {
+            margin-bottom: 10px;
+
+            .head-btn {
+                // width: 100%;
+
+            }
+        }
+
+    }
 </style>
