@@ -79,7 +79,7 @@
 	</div>
 </template>
 <script setup>
-    // 公共导入 cs
+    // 公共导入 cscs
     import {reactive, inject, onMounted, nextTick} from 'vue'
 
 	// 数据
