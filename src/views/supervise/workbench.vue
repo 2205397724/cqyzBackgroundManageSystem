@@ -1,44 +1,31 @@
 <template>
     <div class="bmap-page-container" style="height: 500px;">
         <el-bmap
-            ref="map"
-            :min-zoom="10"
-            :max-zoom="22"
-            :tilt="tilt"
-            :heading="heading"
-            :center="center"
-            :zoom="zoom"
-            @init="init"
+            :min-zoom="data.min_zoom"
+            :max-zoom="data.max_zoom"
+            :zoom="data. zoom"
+            :center="data.center"
+            :enable-double-click-zoom="data.dblclick"
+            @init="initFunc"
         />
-    </div>
-    <div class="control-container">
-        <button @click="getMap()">
-            获取地图示例
-        </button>
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import {
+    reactive
+} from 'vue'
 
-export default defineComponent({
-    data() {
-        return {
-            zoom: 16,
-            center: [121.59996, 31.197646],
-            tilt: 60,
-            heading: 0
-        }
-    },
-    methods: {
-        init(map) {
-            this.map = map
-        },
-        getMap() {
-            // bmap vue component
-            console.log('events init: ', this.map)
-            console.log('$refs: ', this.$refs.map.$$getInstance())
-        }
-    }
+const data = reactive({
+    map_init: null,
+    min_zoom: 5,
+    max_zoom: 25,
+    zoom: 16,
+    center: [121.5273285, 31.21515044],
+    dblclick: false
 })
+
+const initFunc = res => {
+    data.map_init = res
+}
 </script>
