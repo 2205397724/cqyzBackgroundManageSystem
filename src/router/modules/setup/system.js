@@ -16,7 +16,7 @@ export default {
             name: 'setupSystem',
             component: () => import('@/views/setup/system.vue'),
             meta: {
-                title: '',
+                title: '系统设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-system',

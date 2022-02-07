@@ -16,7 +16,7 @@ export default {
             name: 'userRegister',
             component: () => import('@/views/user/register.vue'),
             meta: {
-                title: '',
+                title: '注册用户管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/user-register',

@@ -16,7 +16,7 @@ export default {
             name: 'statisticsRepair',
             component: () => import('@/views/statistics/repair.vue'),
             meta: {
-                title: '',
+                title: '报修统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-repair',

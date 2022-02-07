@@ -16,7 +16,7 @@ export default {
             name: 'setupNote',
             component: () => import('@/views/setup/note.vue'),
             meta: {
-                title: '',
+                title: '短信设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-note',

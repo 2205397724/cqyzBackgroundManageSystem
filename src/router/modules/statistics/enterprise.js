@@ -16,7 +16,7 @@ export default {
             name: 'statisticsEnterprise',
             component: () => import('@/views/statistics/enterprise.vue'),
             meta: {
-                title: '',
+                title: '企业统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-enterprise',

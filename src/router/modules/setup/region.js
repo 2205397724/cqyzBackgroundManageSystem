@@ -16,7 +16,7 @@ export default {
             name: 'setupRegion',
             component: () => import('@/views/setup/region.vue'),
             meta: {
-                title: '',
+                title: '区域设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-region',

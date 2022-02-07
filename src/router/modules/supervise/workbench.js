@@ -17,7 +17,7 @@ export default {
             component: () => import('@/views/supervise/workbench.vue'),
             meta: {
                 copyright: false,
-                title: '',
+                title: '管理工作台',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/supervise-workbench',

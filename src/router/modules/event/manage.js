@@ -16,7 +16,7 @@ export default {
             name: 'eventManage',
             component: () => import('@/views/event/manage.vue'),
             meta: {
-                title: '',
+                title: '事件管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/event-manage',

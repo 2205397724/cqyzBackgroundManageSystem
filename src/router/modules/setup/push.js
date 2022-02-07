@@ -16,7 +16,7 @@ export default {
             name: 'setupPush',
             component: () => import('@/views/setup/push.vue'),
             meta: {
-                title: '',
+                title: '推送设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-push',

@@ -16,7 +16,7 @@ export default {
             name: 'statisticsComplaint',
             component: () => import('@/views/statistics/complaint.vue'),
             meta: {
-                title: '',
+                title: '投诉统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-complaint',

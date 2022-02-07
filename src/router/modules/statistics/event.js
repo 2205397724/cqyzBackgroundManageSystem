@@ -16,7 +16,7 @@ export default {
             name: 'statisticsEvent',
             component: () => import('@/views/statistics/event.vue'),
             meta: {
-                title: '',
+                title: '事件统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-event',

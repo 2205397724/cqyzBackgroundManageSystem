@@ -16,7 +16,7 @@ export default {
             name: 'statisticsEquipment',
             component: () => import('@/views/statistics/equipment.vue'),
             meta: {
-                title: '',
+                title: '设备统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-equipment',

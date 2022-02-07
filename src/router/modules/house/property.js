@@ -16,7 +16,7 @@ export default {
             name: 'houseProperty',
             component: () => import('@/views/house/property.vue'),
             meta: {
-                title: '',
+                title: '产权管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-property',

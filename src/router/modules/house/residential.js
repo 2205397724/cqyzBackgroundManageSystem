@@ -16,7 +16,7 @@ export default {
             name: 'houseResidential',
             component: () => import('@/views/house/residential.vue'),
             meta: {
-                title: '',
+                title: '小区管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-residential',

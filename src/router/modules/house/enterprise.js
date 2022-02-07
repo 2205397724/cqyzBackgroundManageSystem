@@ -16,7 +16,7 @@ export default {
             name: 'houseEnterprise',
             component: () => import('@/views/house/enterprise.vue'),
             meta: {
-                title: '',
+                title: '企业备案',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-enterprise',

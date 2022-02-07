@@ -16,7 +16,7 @@ export default {
             name: 'setupUpload',
             component: () => import('@/views/setup/upload.vue'),
             meta: {
-                title: '',
+                title: '上传设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-upload',

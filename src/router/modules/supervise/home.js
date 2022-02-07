@@ -16,7 +16,7 @@ export default {
             name: 'superviseHome',
             component: () => import('@/views/index.vue'),
             meta: {
-                title: '',
+                title: '控制台首页',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/supervise-home',

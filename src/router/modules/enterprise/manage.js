@@ -16,7 +16,7 @@ export default {
             name: 'enterpriseManage',
             component: () => import('@/views/enterprise/manage.vue'),
             meta: {
-                title: '',
+                title: '企业管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/enterprise-manage',

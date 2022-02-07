@@ -16,7 +16,7 @@ export default {
             name: 'statisticsHouse',
             component: () => import('@/views/statistics/house.vue'),
             meta: {
-                title: '',
+                title: '小区房屋统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics-house',

@@ -16,7 +16,7 @@ export default {
             name: 'houseArchives',
             component: () => import('@/views/house/archives.vue'),
             meta: {
-                title: '',
+                title: '档案管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house-archives',

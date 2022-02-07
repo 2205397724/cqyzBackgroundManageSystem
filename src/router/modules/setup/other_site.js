@@ -16,7 +16,7 @@ export default {
             name: 'setupOther',
             component: () => import('@/views/setup/other_site.vue'),
             meta: {
-                title: '',
+                title: '分站设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup-other',
