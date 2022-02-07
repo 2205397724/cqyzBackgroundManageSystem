@@ -16,6 +16,7 @@ export default {
             name: 'superviseWorkbench',
             component: () => import('@/views/supervise/workbench.vue'),
             meta: {
+                copyright: false,
                 title: '',
                 sidebar: false,
                 breadcrumb: false,
