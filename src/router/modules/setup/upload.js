@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-upload',
+    path: '/setup_upload',
     component: Layout,
-    redirect: '/setup-upload/upload',
+    redirect: '/setup_upload/upload',
     name: 'setupUploadBox',
     meta: {
         title: '上传设置',
@@ -19,7 +19,7 @@ export default {
                 title: '上传设置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup-upload',
+                activeMenu: '/setup_upload',
                 auth: ['setup.upload.upload', '*']
             }
         }

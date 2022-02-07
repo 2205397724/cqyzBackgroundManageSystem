@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/user-register',
+    path: '/user_register',
     component: Layout,
-    redirect: '/user-register/register',
+    redirect: '/user_register/register',
     name: 'userRegisterBox',
     meta: {
         title: '注册用户管理',
@@ -19,7 +19,7 @@ export default {
                 title: '注册用户管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/user-register',
+                activeMenu: '/user_register',
                 auth: ['user.register.register', '*']
             }
         }

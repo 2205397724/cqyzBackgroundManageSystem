@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/house-residential',
+    path: '/house_residential',
     component: Layout,
-    redirect: '/house-residential/residential',
+    redirect: '/house_residential/residential',
     name: 'houseResidentialBox',
     meta: {
         title: '小区管理',
@@ -19,7 +19,7 @@ export default {
                 title: '小区管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/house-residential',
+                activeMenu: '/house_residential',
                 auth: ['house.residential.residential', '*']
             }
         }

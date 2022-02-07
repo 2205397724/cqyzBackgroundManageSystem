@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/enterprise-setup',
+    path: '/enterprise_setup',
     component: Layout,
-    redirect: '/enterprise-setup/register',
+    redirect: '/enterprise_setup/register',
     name: 'enterpriseSetupBox',
     meta: {
         title: '企业设置',
@@ -37,6 +37,6 @@ export default {
                 title: '消息模板',
                 auth: ['enterprise.setup.news', '*']
             }
-        },
+        }
     ]
 }

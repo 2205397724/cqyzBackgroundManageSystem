@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/event-setup',
+    path: '/event_setup',
     component: Layout,
-    redirect: '/event-setup/process',
+    redirect: '/event_setup/process',
     name: 'eventSetupBox',
     meta: {
         title: '事件设置',
@@ -37,6 +37,6 @@ export default {
                 title: '消息模板',
                 auth: ['event.setup.news', '*']
             }
-        },
+        }
     ]
 }

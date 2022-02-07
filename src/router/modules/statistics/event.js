@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/statistics-event',
+    path: '/statistics_event',
     component: Layout,
-    redirect: '/statistics-event/event',
+    redirect: '/statistics_event/event',
     name: 'statisticsEventBox',
     meta: {
         title: '事件统计',
@@ -19,7 +19,7 @@ export default {
                 title: '事件统计',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/statistics-event',
+                activeMenu: '/statistics_event',
                 auth: ['statistics.event.event', '*']
             }
         }

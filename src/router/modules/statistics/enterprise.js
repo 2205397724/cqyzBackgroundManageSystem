@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/statistics-enterprise',
+    path: '/statistics_enterprise',
     component: Layout,
-    redirect: '/statistics-enterprise/enterprise',
+    redirect: '/statistics_enterprise/enterprise',
     name: 'statisticsEnterpriseBox',
     meta: {
         title: '企业统计',
@@ -19,7 +19,7 @@ export default {
                 title: '企业统计',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/statistics-enterprise',
+                activeMenu: '/statistics_enterprise',
                 auth: ['statistics.enterprise.enterprise', '*']
             }
         }

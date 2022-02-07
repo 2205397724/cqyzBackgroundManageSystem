@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-push',
+    path: '/setup_push',
     component: Layout,
-    redirect: '/setup-push/push',
+    redirect: '/setup_push/push',
     name: 'setupPushBox',
     meta: {
         title: '推送设置',
@@ -19,7 +19,7 @@ export default {
                 title: '推送设置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup-push',
+                activeMenu: '/setup_push',
                 auth: ['setup.push.push', '*']
             }
         }

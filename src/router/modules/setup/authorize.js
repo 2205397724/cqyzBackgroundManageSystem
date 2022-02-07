@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-authorize',
+    path: '/setup_authorize',
     component: Layout,
-    redirect: '/setup-authorize/group',
+    redirect: '/setup_authorize/group',
     name: 'setupAuthorizeBox',
     meta: {
         title: '权限设置',

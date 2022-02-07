@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-region',
+    path: '/setup_region',
     component: Layout,
-    redirect: '/setup-region/region',
+    redirect: '/setup_region/region',
     name: 'setupRegionBox',
     meta: {
         title: '区域设置',
@@ -19,7 +19,7 @@ export default {
                 title: '区域设置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup-region',
+                activeMenu: '/setup_region',
                 auth: ['setup.region.region', '*']
             }
         }

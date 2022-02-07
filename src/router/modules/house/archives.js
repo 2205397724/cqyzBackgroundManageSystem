@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/house-archives',
+    path: '/house_archives',
     component: Layout,
-    redirect: '/house-archives/archives',
+    redirect: '/house_archives/archives',
     name: 'houseArchivesBox',
     meta: {
         title: '档案管理',
@@ -19,7 +19,7 @@ export default {
                 title: '档案管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/house-archives',
+                activeMenu: '/house_archives',
                 auth: ['house.archives.archives', '*']
             }
         }

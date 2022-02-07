@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/house-property',
+    path: '/house_property',
     component: Layout,
-    redirect: '/house-property/property',
+    redirect: '/house_property/property',
     name: 'housePropertyBox',
     meta: {
         title: '产权管理',
@@ -19,7 +19,7 @@ export default {
                 title: '产权管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/house-property',
+                activeMenu: '/house_property',
                 auth: ['house.property.property', '*']
             }
         }

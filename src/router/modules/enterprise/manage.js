@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/enterprise-manage',
+    path: '/enterprise_manage',
     component: Layout,
-    redirect: '/enterprise-manage/manage',
+    redirect: '/enterprise_manage/manage',
     name: 'enterpriseManageBox',
     meta: {
         title: '企业管理',
@@ -19,7 +19,7 @@ export default {
                 title: '企业管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/enterprise-manage',
+                activeMenu: '/enterprise_manage',
                 auth: ['enterprise.manage.manage', '*']
             }
         }

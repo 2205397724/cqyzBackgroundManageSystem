@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/event-manage',
+    path: '/event_manage',
     component: Layout,
-    redirect: '/event-manage/manage',
+    redirect: '/event_manage/manage',
     name: 'eventManageBox',
     meta: {
         title: '事件管理',
@@ -19,7 +19,7 @@ export default {
                 title: '事件管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/event-manage',
+                activeMenu: '/event_manage',
                 auth: ['event.manage.manage', '*']
             }
         }

@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/house-routine',
+    path: '/house_routine',
     component: Layout,
-    redirect: '/house-routine/archives-category',
+    redirect: '/house_routine/archives-category',
     name: 'houseRoutineBox',
     meta: {
         title: '常规设置',
@@ -55,7 +55,7 @@ export default {
                 title: '消息模板',
                 auth: ['house.routine.news', '*']
             }
-        },
+        }
 
     ]
 }

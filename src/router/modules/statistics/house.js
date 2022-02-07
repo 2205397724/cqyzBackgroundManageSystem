@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/statistics-house',
+    path: '/statistics_house',
     component: Layout,
-    redirect: '/statistics-house/house',
+    redirect: '/statistics_house/house',
     name: 'statisticsHouseBox',
     meta: {
         title: '小区房屋统计',
@@ -19,7 +19,7 @@ export default {
                 title: '小区房屋统计',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/statistics-house',
+                activeMenu: '/statistics_house',
                 auth: ['statistics.house.house', '*']
             }
         }

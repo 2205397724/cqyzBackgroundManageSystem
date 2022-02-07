@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/statistics-equipment',
+    path: '/statistics_equipment',
     component: Layout,
-    redirect: '/statistics-equipment/equipment',
+    redirect: '/statistics_equipment/equipment',
     name: 'statisticsEquipmentBox',
     meta: {
         title: '设备统计',
@@ -19,7 +19,7 @@ export default {
                 title: '设备统计',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/statistics-equipment',
+                activeMenu: '/statistics_equipment',
                 auth: ['statistics.equipment.equipment', '*']
             }
         }

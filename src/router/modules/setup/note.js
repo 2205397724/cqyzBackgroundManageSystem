@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-note',
+    path: '/setup_note',
     component: Layout,
-    redirect: '/setup-note/note',
+    redirect: '/setup_note/note',
     name: 'setupNoteBox',
     meta: {
         title: '短信设置',
@@ -19,7 +19,7 @@ export default {
                 title: '短信设置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup-note',
+                activeMenu: '/setup_note',
                 auth: ['setup.note.note', '*']
             }
         }

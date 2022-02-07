@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/statistics-complaint',
+    path: '/statistics_complaint',
     component: Layout,
-    redirect: '/statistics-complaint/complaint',
+    redirect: '/statistics_complaint/complaint',
     name: 'statisticsComplaintBox',
     meta: {
         title: '投诉统计',
@@ -19,7 +19,7 @@ export default {
                 title: '投诉统计',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/statistics-complaint',
+                activeMenu: '/statistics_complaint',
                 auth: ['statistics.complaint.complaint', '*']
             }
         }

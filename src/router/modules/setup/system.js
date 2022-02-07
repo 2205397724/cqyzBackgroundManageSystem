@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-system',
+    path: '/setup_system',
     component: Layout,
-    redirect: '/setup-system/system',
+    redirect: '/setup_system/system',
     name: 'setupSystemBox',
     meta: {
         title: '系统设置',
@@ -19,7 +19,7 @@ export default {
                 title: '系统设置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup-system',
+                activeMenu: '/setup_system',
                 auth: ['setup.system.system', '*']
             }
         }

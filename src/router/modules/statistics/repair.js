@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/statistics-repair',
+    path: '/statistics_repair',
     component: Layout,
-    redirect: '/statistics-repair/repair',
+    redirect: '/statistics_repair/repair',
     name: 'statisticsRepairBox',
     meta: {
         title: '报修统计',
@@ -19,7 +19,7 @@ export default {
                 title: '报修统计',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/statistics-repair',
+                activeMenu: '/statistics_repair',
                 auth: ['statistics.repair.repair', '*']
             }
         }

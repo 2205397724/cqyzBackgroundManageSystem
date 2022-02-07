@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/supervise-workbench',
+    path: '/supervise_workbench',
     component: Layout,
-    redirect: '/supervise-workbench/workbench',
+    redirect: '/supervise_workbench/workbench',
     name: 'superviseWorkbenchBox',
     meta: {
         title: '管理工作台',
@@ -20,7 +20,7 @@ export default {
                 title: '管理工作台',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/supervise-workbench',
+                activeMenu: '/supervise_workbench',
                 auth: ['supervise.workbench.workbench', '*']
             }
         }

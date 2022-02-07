@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/supervise-home',
+    path: '/supervise_home',
     component: Layout,
-    redirect: '/supervise-home/home',
+    redirect: '/supervise_home/home',
     name: 'superviseHomeBox',
     meta: {
         title: '控制台首页',
@@ -19,7 +19,7 @@ export default {
                 title: '控制台首页',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/supervise-home',
+                activeMenu: '/supervise_home',
                 auth: ['supervise.home.home', '*']
             }
         }

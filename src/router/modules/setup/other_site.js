@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/setup-other',
+    path: '/setup_other',
     component: Layout,
-    redirect: '/setup-other/other',
+    redirect: '/setup_other/other',
     name: 'setupOtherBox',
     meta: {
         title: '分站设置',
@@ -19,7 +19,7 @@ export default {
                 title: '分站设置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup-other',
+                activeMenu: '/setup_other',
                 auth: ['setup.other.other', '*']
             }
         }

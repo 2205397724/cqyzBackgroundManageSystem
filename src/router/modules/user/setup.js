@@ -1,9 +1,9 @@
 const Layout = () => import('@/layout/index.vue')
 
 export default {
-    path: '/user-setup',
+    path: '/user_setup',
     component: Layout,
-    redirect: '/user-setup/basics',
+    redirect: '/user_setup/basics',
     name: 'userSetupBox',
     meta: {
         title: '用户设置',
@@ -46,6 +46,6 @@ export default {
                 title: '消息模板',
                 auth: ['user.setup.news', '*']
             }
-        },
+        }
     ]
 }
