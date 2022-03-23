@@ -22,6 +22,7 @@ export function APIgetHouseHouse(params) {
 // 个人信息
 export function APIgetUserinfo(params) {
     return api.get('/member/home/userinfo', { baseURL: '/mock/', params: params })
+    // return api.get('/user/me', { params: params })
 }
 // 统计
 export function APIgetTipsnum(params) {
@@ -39,7 +40,7 @@ export function APIgetEchartsHome(params) {
 // 登录
 // 登录
 export function APIlogin(data) {
-    return api.post('/member/login', data, { baseURL: '/mock/' })
+    return api.post('/user/local-login', data)
 }
 // 获取权限
 export function APIgetPermissions(params) {

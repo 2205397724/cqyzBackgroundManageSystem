@@ -9,12 +9,12 @@ export default [{
     method: 'post',
     response: option => {
         return {
-            error: '',
-            status: 1,
+            msg: '',
+            code: 0,
             data: {
                 account: option.body.account,
                 token: '@string',
-                failure_time: Math.ceil(new Date().getTime() / 1000) + 24 * 60 * 60
+                failure_time: Math.ceil(new Date().getTime() / 1000) + 24 * 60 * 60 + 110
             }
         }
     }
@@ -38,8 +38,8 @@ export default [{
             ]
         }
         return {
-            error: '',
-            status: 1,
+            msg: '',
+            code: 0,
             data: {
                 permissions
             }
@@ -50,8 +50,8 @@ export default [{
     url: '/mock/member/edit/password',
     method: 'post',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: {
             isSuccess: true
         }
@@ -64,8 +64,8 @@ export default [{
     url: '/mock/member/home/userinfo',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: {
             avatar: 'https://try8.cn/_asset/img/logo.png',
             nickname: '李白',
@@ -83,8 +83,8 @@ export default [{
     url: '/mock/member/home/tipsnum',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: {
             user: {
                 tit: '用户',
@@ -119,8 +119,8 @@ export default [{
     url: '/mock/member/home/eventnum',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: {
             complaint: {
                 name: '投诉',
@@ -203,8 +203,8 @@ export default [{
     url: '/mock/member/home/echarts',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: [{
             tit: '用户注册统计',
             dom_id: 'echarts1',
@@ -269,8 +269,8 @@ export default [{
     url: '/mock/member/statistics/echarts',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: [{
             tit: '业主年龄分布统计：',
             dom_id: 'echarts1',
@@ -313,8 +313,8 @@ export default [{
     url: '/mock/member/statistics/nums',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: [{
             tit: '数量统计：',
             data: [{
@@ -351,8 +351,8 @@ export default [{
     url: '/mock/member/statistics/place',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: {
             default_expanded: ['50', '5001'],
             data: [{
@@ -376,8 +376,8 @@ export default [{
     url: '/mock/member/statistics/house',
     method: 'get',
     response: {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 0,
         data: {
             default_expanded: ['50', '5001'],
             data: [{

@@ -4,30 +4,32 @@
             <div>
                 <el-row :gutter="10">
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                        <el-cascader v-model="data.search.place" :props="{value:'value',label:'label',children:'children'}"
-                            :options="data.search.options" @change="handleChange" size="default" placeholder="地区"></el-cascader>
+                        <el-cascader
+                            v-model="data.search.place" :props="{value:'value',label:'label',children:'children'}"
+                            :options="data.search.options" size="default" placeholder="地区" @change="handleChange"
+                        />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select class="head-btn" v-model="data.search.committee" placeholder="业委会" clearable>
-                            <el-option label="未成立" :value="0"></el-option>
-                            <el-option label="已成立" :value="1"></el-option>
+                        <el-select v-model="data.search.committee" class="head-btn" placeholder="业委会" clearable>
+                            <el-option label="未成立" :value="0" />
+                            <el-option label="已成立" :value="1" />
                         </el-select>
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select class="head-btn" v-model="data.search.company" placeholder="物业公司" clearable>
-                            <el-option label="无" :value="0"></el-option>
-                            <el-option label="有" :value="1"></el-option>
+                        <el-select v-model="data.search.company" class="head-btn" placeholder="物业公司" clearable>
+                            <el-option label="无" :value="0" />
+                            <el-option label="有" :value="1" />
                         </el-select>
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select class="head-btn" v-model="data.search.type" placeholder="类别" clearable>
-                            <el-option label="按ID" :value="0"></el-option>
-                            <el-option label="按名称" :value="1"></el-option>
-                            <el-option label="按地址" :value="2"></el-option>
+                        <el-select v-model="data.search.type" class="head-btn" placeholder="类别" clearable>
+                            <el-option label="按ID" :value="0" />
+                            <el-option label="按名称" :value="1" />
+                            <el-option label="按地址" :value="2" />
                         </el-select>
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
-                        <el-input class="head-btn" v-model="data.search.keyword" placeholder="关键字" clearable />
+                        <el-input v-model="data.search.keyword" class="head-btn" placeholder="关键字" clearable />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                         <el-button class="head-btn" type="primary">搜索</el-button>
@@ -47,7 +49,7 @@
             </div>
             <div class="list-box">
                 <el-row :gutter="20">
-                    <el-col :md="24" :lg="12" :xl="8" v-for="(item,i) in 12" :key="''+i">
+                    <el-col v-for="(item,i) in 12" :key="''+i" :md="24" :lg="12" :xl="8">
                         <div class="list-item">
                             <div class="tit">春天花园</div>
                             <div class="address">
@@ -55,7 +57,7 @@
                                 <div>ID：123454512</div>
                             </div>
                             <div class="bottom-btn">
-                                <div class="bottom-btn-tit" v-for="i in 6">
+                                <div v-for="i in 6" class="bottom-btn-tit">
                                     <div class="num">2222</div>
                                     <div class="name">物业公司</div>
                                 </div>
@@ -65,55 +67,56 @@
                 </el-row>
                 <div style="padding-top: 20px;">
                     <el-pagination
-                    layout="total,prev,pager,next,jumper,"
-                    :total="data.pagination.total"
-                    :page-size="data.pagination.page_size"
-                    v-model:current-page="data.pagination.current_page"
-                    background
-                        hide-on-single-page></el-pagination>
+                        v-model:current-page="data.pagination.current_page"
+                        layout="total,prev,pager,next,jumper,"
+                        :total="data.pagination.total"
+                        :page-size="data.pagination.page_size"
+                        background
+                        hide-on-single-page
+                    />
                 </div>
             </div>
         </page-main>
     </div>
 </template>
 <script setup>
-    import {
-        reactive
-    } from 'vue'
-    const data = reactive({
-        search: {
-            place: '',
-            options: '',
-            type: '',
-            committee: '',
-            company: '',
-            keyword:''
-        },
-        house_list: '',
-		pagination:{
-		    total:150,
-		    page_size:15,
-		    current_page:2
-		}
-    })
-    data.search.value = ['0', '002']
-    data.search.options = [{
-        value: '0',
-        label: 'Guide',
-        children: [{
-                value: '001',
-                label: 'Disciplines',
-            },
-            {
-                value: '002',
-                label: '11111',
-            }
-        ]
-    }]
-
-    const handleChange = (val) => {
-        // console.log(val)
+import {
+    reactive
+} from 'vue'
+const data = reactive({
+    search: {
+        place: '',
+        options: '',
+        type: '',
+        committee: '',
+        company: '',
+        keyword: ''
+    },
+    house_list: '',
+    pagination: {
+        total: 150,
+        page_size: 15,
+        current_page: 2
     }
+})
+data.search.value = ['0', '002']
+data.search.options = [{
+    value: '0',
+    label: 'Guide',
+    children: [{
+                   value: '001',
+                   label: 'Disciplines'
+               },
+               {
+                   value: '002',
+                   label: '11111'
+               }
+    ]
+}]
+
+const handleChange = val => {
+    // console.log(val)
+}
 </script>
 <style lang="scss">
     .residential-box{

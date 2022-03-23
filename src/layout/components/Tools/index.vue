@@ -71,7 +71,7 @@ function userCommand(command) {
     }
 }
 function pro() {
-    window.open(`https://app.cqyezhuapp.com/edatachart/`, 'top')
+    window.open('https://app.cqyezhuapp.com/edatachart/', 'top')
 }
 </script>
 

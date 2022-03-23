@@ -1,7 +1,7 @@
 <template>
     <div class="diytree">
         <div class="tit">
-            {{props.tit}}
+            {{ props.tit }}
         </div>
         <div class="tree-box">
             <el-tree
@@ -11,30 +11,31 @@
                 node-key="id"
                 accordion
                 :default-expanded-keys="props.data.default_expanded"
-                @node-click="handleNodeClick" />
+                @node-click="handleNodeClick"
+            />
         </div>
     </div>
 </template>
 
 <script setup>
-    import {reactive, defineProps, defineEmits} from 'vue'
-    const props = defineProps(['data','tit']);
-    const emit = defineEmits(['myClick','nullClick'])
-    const handleNodeClick = (item,e) => {
-        if(!item.children||item.children.length<=0){
-            const breadCrumb = [];
-            const getFName = (e)=>{
-                if(e.level > 0){
-                    breadCrumb.unshift(e.data.label)
-                    getFName(e.parent)
-                }
+import { reactive, defineProps, defineEmits } from 'vue'
+const props = defineProps(['data', 'tit'])
+const emit = defineEmits(['myClick', 'nullClick'])
+const handleNodeClick = (item, e) => {
+    if (!item.children || item.children.length <= 0) {
+        const breadCrumb = []
+        const getFName = e => {
+            if (e.level > 0) {
+                breadCrumb.unshift(e.data.label)
+                getFName(e.parent)
             }
-            getFName(e)
-            emit('myClick', {breadCrumb:breadCrumb,item:item})
-        }else{
-            emit('nullClick', '')
         }
+        getFName(e)
+        emit('myClick', { breadCrumb: breadCrumb, item: item })
+    } else {
+        emit('nullClick', '')
     }
+}
 </script>
 <style lang="scss">
     .diytree{

@@ -150,7 +150,12 @@ function handleLogin() {
     proxy.$refs.loginFormRef.validate(valid => {
         if (valid) {
             loading.value = true
-            userStore.login(loginForm.value).then(() => {
+            let data = {
+                'auth_type': 'pt',
+                'username': loginForm.value.account,
+                'password': loginForm.value.password
+            }
+            userStore.login(data).then(() => {
                 loading.value = false
                 if (loginForm.value.remember) {
                     localStorage.setItem('login_account', loginForm.value.account)
@@ -177,7 +182,7 @@ function handleFind() {
     })
 }
 
-function testAccount(account) {
+function testAccount(account) { 
     loginForm.value.account = account
     loginForm.value.password = '123456'
     handleLogin()

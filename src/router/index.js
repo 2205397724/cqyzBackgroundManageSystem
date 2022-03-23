@@ -125,7 +125,7 @@ const asyncRoutes = [
             statisticsComplaint,
             statisticsRepair,
             statisticsEnterprise,
-            statisticsEquipment,
+            statisticsEquipment
         ]
     },
     {
@@ -139,7 +139,7 @@ const asyncRoutes = [
             houseProperty,
             houseArchives,
             houseEnterprise,
-            houseRoutine,
+            houseRoutine
         ]
     },
     {
@@ -188,7 +188,7 @@ const asyncRoutes = [
             setupUpload,
             setupPush,
             setupNote,
-            setupSystem,
+            setupSystem
 
         ]
     }

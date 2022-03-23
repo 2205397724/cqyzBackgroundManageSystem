@@ -3,20 +3,22 @@
         <page-main style="padding: 0;">
             <div class="tree-box">
                 <div class="tree-item">
-                    <position-tree tit="选择区域" :data="data.place_list" @myClick="placeClick" @nullClick="placeNullClick"></position-tree>
+                    <position-tree tit="选择区域" :data="data.place_list" @myClick="placeClick" @nullClick="placeNullClick" />
                 </div>
                 <div class="tree-item">
-                    <position-tree tit="选择小区" :data="data.house_list" @myClick="houseClick" @nullClick="houseNullClick"></position-tree>
+                    <position-tree tit="选择小区" :data="data.house_list" @myClick="houseClick" @nullClick="houseNullClick" />
                 </div>
                 <div class="tree-details">
                     <div class="tit">
                         <div style="min-width: 80px;">你选择的是：</div>
-                        <div class="breadCrumb"
-                            v-if="(breadCrumb.house&&breadCrumb.house.length>0)&&(breadCrumb.place&&breadCrumb.place.length>0)">
-                            <span v-for="(item,i) in breadCrumb.place" :key="'breadCrumbPlace'+i">{{item}}</span>
-                            <span v-for="(item,i) in breadCrumb.house" :key="'breadCrumbPlace'+i">{{item}}</span>
+                        <div
+                            v-if="(breadCrumb.house&&breadCrumb.house.length>0)&&(breadCrumb.place&&breadCrumb.place.length>0)"
+                            class="breadCrumb"
+                        >
+                            <span v-for="(item,i) in breadCrumb.place" :key="'breadCrumbPlace'+i">{{ item }}</span>
+                            <span v-for="(item,i) in breadCrumb.house" :key="'breadCrumbPlace'+i">{{ item }}</span>
                         </div>
-                        <div class="breadCrumb" v-else>
+                        <div v-else class="breadCrumb">
                             <span>左边选择“区域”“小区”！</span>
                         </div>
                     </div>
@@ -24,19 +26,19 @@
                         暂无数据
                     </div>
                     <div class="num-box">
-                        <div class="num-box-item" v-for="(item,i) in data.nums_arr" :key="'nums_arr'+i">
-                            <div class="box-tit">{{item.tit}}</div>
+                        <div v-for="(item,i) in data.nums_arr" :key="'nums_arr'+i" class="num-box-item">
+                            <div class="box-tit">{{ item.tit }}</div>
                             <div class="flexs">
-                                <div class="flex-item" v-for="(child,j) in item.data" :key="'nums_arrchild'+j">
-                                    <div class="item-num">{{child.num}}</div>
-                                    <div class="item-tit">{{child.name}}</div>
+                                <div v-for="(child,j) in item.data" :key="'nums_arrchild'+j" class="flex-item">
+                                    <div class="item-num">{{ child.num }}</div>
+                                    <div class="item-tit">{{ child.name }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="houseechart">
                         <div v-for="(item,i) in data.echarts_arr" :key="'houseechart'+i">
-                            <my-echarts :data="item"></my-echarts>
+                            <my-echarts :data="item" />
                         </div>
                     </div>
                 </div>
@@ -45,98 +47,98 @@
     </div>
 </template>
 <script setup>
-    import {
-        reactive
-    } from 'vue'
-    const data = reactive({
-        echarts_arr: '',
-        place_list: '',
-        house_list: '',
-        nums_arr: ''
-    })
+import {
+    reactive
+} from 'vue'
+const data = reactive({
+    echarts_arr: '',
+    place_list: '',
+    house_list: '',
+    nums_arr: ''
+})
 
-    // 图表
-    import {
-        APIgetEchartsStatistics
-    } from '@/api/custom/custom.js'
-    const getEchartsFunc = (params)=>{
-        APIgetEchartsStatistics(params).then(res => {
-            if (res.status == 1) {
-                data.echarts_arr = res.data
-            }
-        }).catch(error => {
-            console.log(error)
-        })
-    }
-
-    // 总数统计
-    import {
-        APIgetHouseNums
-    } from '@/api/custom/custom.js'
-    const getNumsFunc = (params) =>{
-        APIgetHouseNums(params).then(res => {
-            if (res.status == 1) {
-                data.nums_arr = res.data
-            }
-        }).catch(error => {
-            console.log(error)
-        })
-    }
-
-    // 统计数据
-    import {
-        APIgetHousePlace,
-        APIgetHouseHouse
-    } from '@/api/custom/custom.js'
-    APIgetHousePlace().then(res => {
-        if (res.status == 1) {
-            data.place_list = res.data
+// 图表
+import {
+    APIgetEchartsStatistics
+} from '@/api/custom/custom.js'
+const getEchartsFunc = params => {
+    APIgetEchartsStatistics(params).then(res => {
+        if (res.code == 0) {
+            data.echarts_arr = res.data
         }
     }).catch(error => {
         console.log(error)
     })
-    const getHouseFunc = (params) => {
-        APIgetHouseHouse(params).then(res => {
-            if (res.status == 1) {
-                data.house_list = res.data
-            }
-        }).catch(error => {
-            console.log(error)
-        })
-    }
+}
 
-    const breadCrumb = reactive({
-        place: '',
-        house: ''
+// 总数统计
+import {
+    APIgetHouseNums
+} from '@/api/custom/custom.js'
+const getNumsFunc = params => {
+    APIgetHouseNums(params).then(res => {
+        if (res.code == 0) {
+            data.nums_arr = res.data
+        }
+    }).catch(error => {
+        console.log(error)
     })
-    const clickData = reactive({
-        place: '',
-        house: ''
+}
+
+// 统计数据
+import {
+    APIgetHousePlace,
+    APIgetHouseHouse
+} from '@/api/custom/custom.js'
+APIgetHousePlace().then(res => {
+    if (res.code == 0) {
+        data.place_list = res.data
+    }
+}).catch(error => {
+    console.log(error)
+})
+const getHouseFunc = params => {
+    APIgetHouseHouse(params).then(res => {
+        if (res.code == 0) {
+            data.house_list = res.data
+        }
+    }).catch(error => {
+        console.log(error)
     })
-    const placeClick = (res) => {
-        breadCrumb.place = res.breadCrumb
-        clickData.place = res.item
-        getHouseFunc({id:res.item.id})
-        houseNullClick()
-    }
-    const placeNullClick = () => {
-        data.house_list = ''
-        breadCrumb.place = ''
-        clickData.place = ''
-        houseNullClick()
-    }
-    const houseClick = (res) => {
-        breadCrumb.house = res.breadCrumb
-        clickData.house = res.item
-        getNumsFunc({id:res.item.id})
-        getEchartsFunc({id:res.item.id})
-    }
-    const houseNullClick = () => {
-        breadCrumb.house = ''
-        clickData.house = ''
-        data.nums_arr = ''
-        data.echarts_arr = ''
-    }
+}
+
+const breadCrumb = reactive({
+    place: '',
+    house: ''
+})
+const clickData = reactive({
+    place: '',
+    house: ''
+})
+const placeClick = res => {
+    breadCrumb.place = res.breadCrumb
+    clickData.place = res.item
+    getHouseFunc({ id: res.item.id })
+    houseNullClick()
+}
+const placeNullClick = () => {
+    data.house_list = ''
+    breadCrumb.place = ''
+    clickData.place = ''
+    houseNullClick()
+}
+const houseClick = res => {
+    breadCrumb.house = res.breadCrumb
+    clickData.house = res.item
+    getNumsFunc({ id: res.item.id })
+    getEchartsFunc({ id: res.item.id })
+}
+const houseNullClick = () => {
+    breadCrumb.house = ''
+    clickData.house = ''
+    data.nums_arr = ''
+    data.echarts_arr = ''
+}
 </script>
 <style lang="scss" scoped>
     .tree-box {

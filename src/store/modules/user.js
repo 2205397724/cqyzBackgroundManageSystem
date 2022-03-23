@@ -31,12 +31,15 @@ export const useUserStore = defineStore(
                 return new Promise((resolve, reject) => {
                     // 通过 mock 进行登录
                     APIlogin(data).then(res => {
-                        localStorage.setItem('account', res.data.account)
-                        localStorage.setItem('token', res.data.token)
-                        localStorage.setItem('failure_time', res.data.failure_time)
-                        this.account = res.data.account
-                        this.token = res.data.token
-                        this.failure_time = res.data.failure_time
+                        let name = data.username
+                        let time = res.data.expires_in + Date.now() / 1000
+                        let token = res.data.access_token
+                        localStorage.setItem('account', name)
+                        localStorage.setItem('token', token)
+                        localStorage.setItem('failure_time', time)
+                        this.account = name
+                        this.token = token
+                        this.failure_time = time
                         resolve()
                     }).catch(error => {
                         reject(error)

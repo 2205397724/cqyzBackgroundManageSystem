@@ -23,8 +23,8 @@ export default [
                 return index >= from && index < (from + limit)
             })
             return {
-                error: '',
-                status: 1,
+                msg: '',
+                code: 0,
                 data: {
                     list: pageList,
                     total: list.length
@@ -38,8 +38,8 @@ export default [
         response: option => {
             let info = AllList.filter(item => item.id == option.query.id)
             return {
-                error: '',
-                status: 1,
+                msg: '',
+                code: 0,
                 data: info[0]
             }
         }
@@ -48,8 +48,8 @@ export default [
         url: '/mock/{{#if relativePath}}{{ relativePath }}/{{/if}}{{ moduleName }}/create',
         method: 'post',
         response: {
-            error: '',
-            status: 1,
+            msg: '',
+            code: 0,
             data: {
                 isSuccess: true
             }
@@ -59,8 +59,8 @@ export default [
         url: '/mock/{{#if relativePath}}{{ relativePath }}/{{/if}}{{ moduleName }}/edit',
         method: 'post',
         response: {
-            error: '',
-            status: 1,
+            msg: '',
+            code: 0,
             data: {
                 isSuccess: true
             }
@@ -70,8 +70,8 @@ export default [
         url: '/mock/{{#if relativePath}}{{ relativePath }}/{{/if}}{{ moduleName }}/delete',
         method: 'post',
         response: {
-            error: '',
-            status: 1,
+            msg: '',
+            code: 0,
             data: {
                 isSuccess: true
             }
