@@ -182,11 +182,11 @@ function handleFind() {
     })
 }
 
-function testAccount(account) { 
-    loginForm.value.account = account
-    loginForm.value.password = '123456'
-    handleLogin()
-}
+// function testAccount(account) {
+//     loginForm.value.account = account
+//     loginForm.value.password = '123456'
+//     handleLogin()
+// }
 </script>
 
 <style lang="scss" scoped>
