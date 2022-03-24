@@ -1,4 +1,34 @@
 import api from '@/api/index.js'
+import api2 from '@/api/index2.js'
+
+// 申请 小区
+// 列表
+export function APIgetResidentialList(params) {
+    return api2.get('/zone-com-apply', { params: params })
+}
+// 详情
+export function APIgetResidentialDetails(id) {
+    return api2.get('/zone-com-apply/'+id)
+}
+// 审批
+export function APIputResidential(id, data) {
+    return api2.put('/zone-com-apply/'+id, data)
+}
+
+// 申请 平台
+// 列表
+export function APIgetPlatformList(params) {
+    return api.get('/pt/company-apply', { params: params })
+}
+// 详情
+export function APIgetPlatformDetails(id) {
+    return api.get('/pt/company-apply/'+id)
+}
+// 审批
+export function APIputPlatform(id, data) {
+    return api.put('/pt/company-apply/'+id, data)
+}
+
 
 // 统计
 // 图表
