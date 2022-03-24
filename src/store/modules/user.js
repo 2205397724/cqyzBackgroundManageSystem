@@ -72,8 +72,8 @@ export const useUserStore = defineStore(
             },
             editPassword(data) {
                 return new Promise(resolve => {
-                    APIeditPassword({ account: this.account, password: data.password, newpassword: data.newpassword }).then(() => {
-                        resolve()
+                    APIeditPassword({ password: data.password }).then((res) => {
+                        resolve(res)
                     })
                 })
             }

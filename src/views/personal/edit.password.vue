@@ -5,14 +5,17 @@
             <el-row>
                 <el-col :md="24" :lg="12">
                     <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-                        <el-form-item label="原密码" prop="password">
+                        <el-form-item label="新密码" prop="password">
+                            <el-input v-model="form.password" type="password" placeholder="请输入新密码" show-password/>
+                        </el-form-item>
+                        <!-- <el-form-item label="原密码" prop="password">
                             <el-input v-model="form.password" type="password" placeholder="请输入原密码" />
-                        </el-form-item>
-                        <el-form-item label="新密码" prop="newpassword">
-                            <el-input v-model="form.newpassword" type="password" placeholder="请输入原密码" />
-                        </el-form-item>
+                        </el-form-item> -->
+                        <!-- <el-form-item label="新密码" prop="newpassword">
+                            <el-input v-model="form.newpassword" type="password" placeholder="请输入新密码" />
+                        </el-form-item> -->
                         <el-form-item label="确认新密码" prop="checkpassword">
-                            <el-input v-model="form.checkpassword" type="password" placeholder="请输入原密码" />
+                            <el-input v-model="form.checkpassword" type="password" placeholder="请输入原密码" show-password/>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -32,8 +35,8 @@ import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 
 const validatePassword = (rule, value, callback) => {
-    if (value !== form.value.newpassword) {
-        callback(new Error('请确认新密码'))
+    if (value !== form.value.password) {
+        callback(new Error('确认密码不一致！'))
     } else {
         callback()
     }
@@ -47,7 +50,8 @@ const form = ref({
 
 const rules = ref({
     password: [
-        { required: true, message: '请输入原密码', trigger: 'blur' }
+        { required: true, message: '请输入新密码', trigger: 'blur' },
+        { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
     ],
     newpassword: [
         { required: true, message: '请输入新密码', trigger: 'blur' },
@@ -62,19 +66,22 @@ const rules = ref({
 function onSubmit() {
     proxy.$refs['formRef'].validate(valid => {
         if (valid) {
-            userStore.editPassword(form.value).then(() => {
-                proxy.$message({
-                    type: 'success',
-                    message: '模拟修改成功，请重新登录'
-                })
-                userStore.logout().then(() => {
-                    router.push({
-                        name: 'login',
-                        query: {
-                            redirect: route.fullPath
-                        }
+            userStore.editPassword(form.value).then((res) => {
+                console.log(res)
+                if(!res.code){
+                    proxy.$message({
+                        type: 'success',
+                        message: res.msg+'，请重新登录！'
                     })
-                })
+                    userStore.logout().then(() => {
+                        router.push({
+                            name: 'login',
+                            query: {
+                                redirect: route.fullPath
+                            }
+                        })
+                    })
+                }
             }).catch(() => {})
         }
     })

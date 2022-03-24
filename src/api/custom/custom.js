@@ -48,7 +48,7 @@ export function APIgetPermissions(params) {
 }
 // 修改密码？
 export function APIeditPassword(data) {
-    return api.post('/member/edit/password', data, { baseURL: '/mock/' })
+    return api.put('/user/password', data)
 }
 // 获取路由
 export function APIgenerateRoutesAtBack() {
