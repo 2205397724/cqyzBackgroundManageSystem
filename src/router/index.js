@@ -99,7 +99,9 @@ import setupPush from './modules/setup/push.js'
 import setupRegion from './modules/setup/region.js'
 import setupSystem from './modules/setup/system.js'
 import setupUpload from './modules/setup/upload.js'
-
+// 申请
+import joinPlatform from './modules/join/platform.js'
+import joinResidential from './modules/join/residential.js'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [
     {
@@ -151,6 +153,17 @@ const asyncRoutes = [
         children: [
             userRegister,
             userSetup
+        ]
+    },
+    {
+        meta: {
+            title: '申请',
+            icon: 'apply',
+            auth: ['join', '*']
+        },
+        children: [
+            joinPlatform,
+            joinResidential
         ]
     },
     {
