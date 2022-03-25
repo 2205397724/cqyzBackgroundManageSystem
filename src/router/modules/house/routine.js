@@ -30,6 +30,24 @@ export default {
             }
         },
         {
+            path: 'building',
+            name: 'houseRoutineBuilding',
+            component: () => import('@/views/house/routine/building.vue'),
+            meta: {
+                title: '楼栋字段',
+                auth: ['house.routine.building', '*']
+            }
+        },
+        {
+            path: 'unit',
+            name: 'houseRoutineUnit',
+            component: () => import('@/views/house/routine/unit.vue'),
+            meta: {
+                title: '单元字段',
+                auth: ['house.routine.unit', '*']
+            }
+        },
+        {
             path: 'house',
             name: 'houseRoutineHouse',
             component: () => import('@/views/house/routine/house.vue'),

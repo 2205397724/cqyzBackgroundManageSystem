@@ -1,43 +1,41 @@
 <template>
-    <div class="keep-on-record">
+    <div class="join-platform">
         <page-main>
             <div>
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-cascader
-                                v-model="data.search.place"
+                                :popper-append-to-body="false"
+                                v-model="data_search.place"
                                 :props="{value:'value',label:'label',children:'children'}"
-                                :options="data.opts.place" size="default" placeholder="地区" clearable
-                            />
+                                :options="opts_place" size="default" placeholder="地区" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data.search.type" class="head-btn" placeholder="类别" clearable>
+                            <el-select v-model="data_search.type" class="head-btn" placeholder="类别" clearable>
                                 <el-option label="按ID" :value="0" />
                                 <el-option label="按企业名称" :value="1" />
                                 <el-option label="按小区地址" :value="2" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data.search.keyword" class="head-btn" placeholder="关键字" clearable />
+                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="getListFunc">搜索</el-button>
+                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
                     </el-row>
                 </div>
-                <!-- <div  class="search-tips"> -->
-                <div v-show="search_tips" class="search-tips">
+                <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ data.table_list.length }}条。
+                    *搜索到相关结果共{{ data_tab.arr.length }}条。
                 </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
-                        v-loading="loading"
-                        :data="data.table_list"
+                        v-loading="loading_tab"
+                        :data="data_tab.arr"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
+                        style="width: 100%;min-height: 300px;">
                         <el-table-column prop="name" label="名称" width="220" />
                         <el-table-column prop="type" label="类型" width="90" />
                         <el-table-column prop="reply" label="理由" width="180" />
@@ -50,14 +48,12 @@
                             <template #default="scope">
                                 <el-button
                                     type="primary" size="small"
-                                    @click="()=>{dialogExamine=true;data.examine_item = scope.row}"
-                                >
+                                    @click="examineFunc(scope.row)">
                                     审批
                                 </el-button>
                                 <el-button
                                     type="primary" size="small"
-                                    @click="getDetailsFunc(scope.row)"
-                                >
+                                    @click="detailsFunc(scope.row)">
                                     详情
                                 </el-button>
                             </template>
@@ -72,36 +68,32 @@
                         :total="total"
                         :page-size="per_page"
                         background
-                        hide-on-single-page
-                    />
+                        hide-on-single-page />
                 </div>
             </div>
         </page-main>
         <!-- 审核 -->
         <el-dialog
-            v-model="dialogExamine"
+            v-model="switch_examine"
             title="审核"
-            width="50%"
-        >
+            width="50%">
             <div>
                 <el-form
                     ref="ruleFormRef"
-                    :model="ruleForm"
-                    :rules="rules"
-                    label-width="80px"
-                >
-                    <el-form-item label="审批理由" prop="examine_reply">
+                    :model="from_examine"
+                    :rules="rule_examine"
+                    label-width="80px">
+                    <el-form-item label="审批理由" prop="reply">
                         <el-input
-                            v-model="ruleForm.examine_reply"
+                            v-model="from_examine.reply"
                             :autosize="{ minRows: 2, maxRows: 10 }"
                             type="textarea"
-                            placeholder="请输入相关理由"
-                        />
+                            placeholder="请输入相关理由" />
                     </el-form-item>
                     <el-form-item>
                         <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                            <el-button @click="examineFunc(ruleFormRef,'200')">拒绝</el-button>
-                            <el-button type="primary" @click="examineFunc(ruleFormRef,'300')">同意</el-button>
+                            <el-button @click="dialogExamineCloseFunc(ruleFormRef,'200')">拒绝</el-button>
+                            <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,'300')">同意</el-button>
                         </div>
                     </el-form-item>
                 </el-form>
@@ -109,186 +101,213 @@
         </el-dialog>
         <!-- 详情 -->
         <el-dialog
-            v-model="dialogDetails"
+            v-model="switch_details"
             title="详情"
-            width="50%"
-        >
+            width="50%">
             <div class="details-box">
                 <div class="item">
                     <div class="left">名称</div>
-                    <div class="right">{{ details_item.item.name }}</div>
+                    <div class="right">{{ data_details.item.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">类型</div>
-                    <div class="right">{{ details_item.item.type }}</div>
+                    <div class="right">{{ data_details.item.type }}</div>
                 </div>
                 <div class="item">
                     <div class="left">理由</div>
-                    <div class="right">{{ details_item.item.reply }}</div>
+                    <div class="right">{{ data_details.item.reply }}</div>
                 </div>
                 <div class="item">
                     <div class="left">状态</div>
-                    <div class="right">{{ details_item.item.process_status }}</div>
+                    <div class="right">{{ data_details.item.process_status }}</div>
                 </div>
                 <div class="item">
                     <div class="left">商业编码</div>
-                    <div class="right">{{ details_item.item.content.biz_lic }}</div>
+                    <div class="right">{{ data_details.item.content.biz_lic }}</div>
                 </div>
                 <div class="item">
                     <div class="left">社会编码</div>
-                    <div class="right">{{ details_item.item.content.social_code }}</div>
+                    <div class="right">{{ data_details.item.content.social_code }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
-                    <div class="right">{{ details_item.item.created_at }}</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
                 </div>
                 <div class="item">
                     <div class="left">更新时间</div>
-                    <div class="right">{{ details_item.item.updated_at }}</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
             </div>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="dialogDetails = false">取消</el-button>
+                    <el-button @click="switch_details = false">取消</el-button>
                 </span>
             </template>
         </el-dialog>
     </div>
 </template>
 <script setup>
-import {
-    reactive,
-    watch
-} from 'vue'
-let loading = ref(true)
-let search_tips = ref(false)
-
-let total = ref(120)
-let per_page = ref(15)
-let page = ref(1)
-
-const data = reactive({
-    search: {
+    import {
+        APIgetPlatformList,
+        APIgetPlatformDetails,
+        APIputPlatform
+    } from '@/api/custom/custom.js'
+    import {
+        reactive,
+        ref,
+        watch
+    } from 'vue'
+    /* ----------------------------------------------------------------------------------------------------------------------- */
+    // 数据
+    // 搜索
+    let switch_search = ref(false)
+    let data_search = reactive({
         type: '',
         keyword: '',
         place: []
-    },
-    table_list: [],
-    opts: {
-        place: []
-    },
-    // 弹窗数据
-    examine_item: {}
-})
-data.opts.place = [{
-    value: '0',
-    label: 'Guide',
-    children: [{
-                   value: '001',
-                   label: 'Disciplines'
-               },
-               {
-                   value: '002',
-                   label: '11111'
-               }
-    ]
-}]
-// 列表
-import {
-    APIgetPlatformList,
-    APIgetPlatformDetails,
-    APIputPlatform
-} from '@/api/custom/custom.js'
-const getListFunc = () => {
-    var params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    for (let key in data.search) {
-        if (data.search[key]) {
-            if (data.search[key] instanceof Array && data.search[key].length <= 0) {
-                continue
+    })
+    let opts_place = [{
+        value: '0',
+        label: 'Guide',
+        children: [{
+                value: '001',
+                label: 'Disciplines'
+            },
+            {
+                value: '002',
+                label: '11111'
             }
-            params[key] = data.search[key]
-            search_tips.value = true
+        ]
+    }]
+    // 详情
+    let switch_details = ref(false)
+    // 列表
+    let ruleFormRef = ref('')
+    let loading_tab = ref(false)
+    let data_tab = reactive({
+        arr: []
+    })
+    // 操作事件 列表单个行数据
+    let data_dialog = reactive({
+        obj: {}
+    })
+    // 详情
+    const data_details = reactive({
+        item: ''
+    })
+    // 分页
+    let total = ref(100)
+    let per_page = ref(15)
+    let page = ref(1)
+    // 审核
+    let switch_examine = ref(false)
+    let from_examine = reactive({
+        reply: ''
+    })
+    let rule_examine = {
+        reply: [{
+            required: true,
+            message: '请输入理由！',
+            trigger: 'blur'
+        }]
+    }
+    /* ----------------------------------------------------------------------------------------------------------------------- */
+    // 方法
+    // 搜索
+    const searchFunc = () => {
+        switch_search.value = true
+        getTabListFunc()
+    }
+    // 刷新
+    const refreshFunc = () => {
+        page.value = 1
+        switch_search.value = false
+        data_search.type = ''
+        data_search.keyword = ''
+        data_search.place = []
+        getTabListFunc()
+    }
+    // 审核
+    const examineFunc = (val) => {
+        data_dialog.obj = val
+        switch_examine.value = true
+    }
+    // 详情
+    const detailsFunc = (val) => {
+        data_dialog.obj = val
+        APIgetPlatformDetails(val.id).then(res => {
+            if (!res.code) {
+                data_details.item = res.data
+                switch_details.value = true
+            }
+        })
+    }
+    // 监听分页
+    watch(page, () => {
+        getTabListFunc()
+    })
+    // 同意拒绝提交
+    const dialogExamineCloseFunc = (formEl, status) => {
+        if (!formEl) return
+        formEl.validate(valid => {
+            console.log(valid)
+            if (valid) {
+                let putdata = {
+                    process_status: status,
+                    reply: from_examine.reply
+                }
+                APIputPlatform(data_dialog.obj.id, putdata).then(res => {
+                    if (!res.code) {
+                        switch_examine = false
+                        refreshFunc()
+                    }
+                })
+            } else {
+                return false
+            }
+        })
+    }
+    // 获取列表api请求
+    const getTabListFunc = () => {
+        let params = {
+            page: page.value,
+            per_page: per_page.value,
         }
+        for (let key in data_search) {
+            if (data_search[key]) {
+                if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+                    continue
+                }
+                params[key] = data_search[key]
+            }
+        }
+        loading_tab.value = true
+        APIgetPlatformList(params).then((res) => {
+            if (res.code === 0) {
+                loading_tab.value = false
+                data_tab.arr = res.data.items
+                total.value = res.data.aggregation.total_cnt
+            }
+        })
     }
 
-    loading.value = true
-    APIgetPlatformList(params).then(res => {
-        if (res.code === 0) {
-            loading.value = false
-            data.table_list = res.data.items
-            total.value = 300
-            // data.pagination.total = res.data.aggregation.total_cnt
-        }
-    })
-}
-// 刷新列表
-const refreshFunc = () => {
-    for (let key in data.search) {
-        data.search[key] = ''
-    }
-    page.value = 1
-    search_tips.value = false
-    getListFunc()
-}
-refreshFunc()
-// 同意拒绝 审核弹窗
-let dialogExamine = ref(false)
-// 拒绝同意理由
-let ruleForm = reactive({
-    examine_reply: ''
-})
-let ruleFormRef = ref('')
-let rules = reactive({
-    examine_reply: [{
-        required: true,
-        message: '请输入理由！',
-        trigger: 'blur'
-    }]
-})
-const examineFunc = (formEl, status) => {
-    if (!formEl) return
-    formEl.validate(valid => {
-        console.log(valid)
-        if (valid) {
-            let putdata = {
-                process_status: status,
-                reply: ruleForm.examine_reply
-            }
-            APIputPlatform(data.examine_item.id, putdata).then(res => {
-                if (!res.code) {
-                    ruleForm.examine_reply = ''
-                    dialogExamine.value = false
-                    refreshFunc()
-                }
-            })
-        } else {
-            console.log('error submit!')
-            return false
-        }
-    })
-}
-// 详情
-let dialogDetails = ref(false)
-let details_item = reactive({})
-const getDetailsFunc = val => {
-    APIgetPlatformDetails(val.id).then(res => {
-        if (!res.code) {
-            details_item.item = res.data
-            dialogDetails.value = true
-        }
-    })
-}
-// 分页
-watch(page, () => {
+    /* ----------------------------------------------------------------------------------------------------------------------- */
+    // 执行
     refreshFunc()
-})
+
 </script>
-<style lang="scss">
-    // 不能加 scoped el-cascader样式需要覆盖
-    .keep-on-record {
+<style lang="scss" >
+    .join-platform {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100%!important;
+                margin-bottom: 10px;
+            }
+        }
+    }
+</style>
+<style lang="scss" scoped>
+    .join-platform {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100%;
