@@ -247,7 +247,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <div class="serve-box" v-for="(item,i) in from_examine.item.addition.extra.convenience">
+                            <div style="margin-bottom: 10px;">
+                                <el-button style="margin-right: 10px;" @click="addServiceFunc">添加服务名称和电话</el-button>
+                            </div>
+                            <div class="serve-box" v-for="(item,i) in from_examine.item.addition.extra.convenience" >
                                 <el-row :gutter="10">
                                     <el-col :xs="12" :sm="12">
                                         <el-form-item label="服务名称">
@@ -264,9 +267,9 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <div class="delete-service">
-                                    <el-icon :size="20">
-                                        <circle-close />
+                                <div class="delete-service" @click="deleteServiceFunc(i)">
+                                    <el-icon :size="20" color="#F56C6C">
+                                        <el-icon-circle-close />
                                     </el-icon>
                                 </div>
                             </div>
@@ -579,6 +582,18 @@
             }
         })
     }
+    // 删除 服务名称和联系方式
+    const deleteServiceFunc = (index) => {
+        from_examine.item.addition.extra.convenience.splice(index,1)
+    }
+    // 添加 服务名称和联系方式
+    const addServiceFunc = (index) => {
+        let data = {
+            "title": "",
+            "phone": ""
+        }
+        from_examine.item.addition.extra.convenience.push(data)
+    }
     /* ----------------------------------------------------------------------------------------------------------------------- */
     // 执行
     refreshFunc()
@@ -598,9 +613,19 @@
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
+            position: relative;
 
             .el-form-item {
                 margin: 0;
+            }
+
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #ffffff;
             }
         }
     }
