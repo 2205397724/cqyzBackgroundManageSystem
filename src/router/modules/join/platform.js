@@ -7,7 +7,7 @@ export default {
     name: 'joinPlatformBox',
     meta: {
         title: '入驻平台',
-        icon: 'el-icon-document',
+        icon: 'el-icon-grid',
         auth: ['join.platform', '*']
     },
     children: [

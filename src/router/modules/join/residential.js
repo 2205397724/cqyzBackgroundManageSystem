@@ -7,7 +7,7 @@ export default {
     name: 'joinResidentialBox',
     meta: {
         title: '入驻小区',
-        icon: 'el-icon-document',
+        icon: 'el-icon-office-building',
         auth: ['join.residential', '*']
     },
     children: [
