@@ -28,7 +28,7 @@
                 </div>
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ data_tab.arr.length }}条。
+                    *搜索到相关结果共{{ total }}条。
                 </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table

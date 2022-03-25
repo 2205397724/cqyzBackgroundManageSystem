@@ -1,6 +1,30 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 小区
+// 列表
+export function APIgetResidentialListHouse(params) {
+    return api2.get('/zones', { params: params })
+}
+// 详情
+export function APIgetResidentialDetailsHouse(id) {
+    return api2.get('/zones/'+id)
+}
+// 删除
+export function APIdeleteResidentialHouse(id) {
+    return api2.delete('/zones/'+id)
+}
+// 修改
+export function APIputResidentialHouse(id, data) {
+    return api2.put('/zones/'+id, data)
+}
+// 添加
+export function APIpostResidentialHouse(data) {
+    return api2.post('/zones', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 申请 小区
 // 列表
 export function APIgetResidentialList(params) {
@@ -15,6 +39,7 @@ export function APIputResidential(id, data) {
     return api2.put('/zone-com-apply/'+id, data)
 }
 
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 申请 平台
 // 列表
 export function APIgetPlatformList(params) {
@@ -29,6 +54,18 @@ export function APIputPlatform(id, data) {
     return api.put('/pt/company-apply/'+id, data)
 }
 
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 登录
+// 登录
+export function APIlogin(data) {
+    return api.post('/user/local-login', data)
+}
+// 修改密码？
+export function APIeditPassword(data) {
+    return api.put('/user/password', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 
 // 统计
 // 图表
@@ -67,19 +104,11 @@ export function APIgetEchartsHome(params) {
     return api.get('/member/home/echarts', { baseURL: '/mock/', params: params })
 }
 
-// 登录
-// 登录
-export function APIlogin(data) {
-    return api.post('/user/local-login', data)
-}
 // 获取权限
 export function APIgetPermissions(params) {
     return api.get('/member/permission', { baseURL: '/mock/', params: params })
 }
-// 修改密码？
-export function APIeditPassword(data) {
-    return api.put('/user/password', data)
-}
+
 // 获取路由
 export function APIgenerateRoutesAtBack() {
     return api.get('/route/list', { baseURL: '/mock/' })

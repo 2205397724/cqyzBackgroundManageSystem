@@ -1,5 +1,5 @@
 <template>
-    <div class="residential-box">
+    <div class="routine-residential">
         <page-main>
             <div>
                 <div>
@@ -28,7 +28,14 @@
                 </div>
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ data_tab.arr.length }}条。
+                    *搜索到相关结果共{{ total }}条。
+                </div>
+                <div>
+                    <el-row :gutter="20" class="bottom-btn-box-2">
+                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加小区</el-button>
+                        </el-col>
+                    </el-row>
                 </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
@@ -37,25 +44,58 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;">
                         <el-table-column prop="name" label="名称" width="220" />
-                        <el-table-column prop="type" label="类型" width="90" />
-                        <el-table-column prop="reply" label="理由" width="180" />
-                        <el-table-column prop="process_status" label="状态" width="90" />
-                        <el-table-column prop="content.biz_lic" label="商业编码" width="180" />
-                        <el-table-column prop="content.social_code" label="社会编码" width="180" />
-                        <el-table-column prop="created_at" label="创建时间" width="180" />
-                        <el-table-column prop="updated_at" label="更新时间" width="180" />
-                        <el-table-column fixed="right" label="操作" width="140">
+                        <el-table-column prop="addr" label="地址" width="180" />
+                        <el-table-column prop="area_floor" label="总占地面积" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.area_floor }} m²</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="area_build" label="总建筑面积" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="area_support" label="配套用房总面积" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.area_support }} m²</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_building" label="楼栋数" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.cnt_building }} 栋</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_live" label="住房总套数" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.cnt_live }} 套</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.cnt_support }} 套</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="company_build" label="建设单位名称" width="140" />
+                        <el-table-column prop="time_use" label="投用时间" width="140" />
+                        <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
                                     type="primary" size="small"
-                                    @click="examineFunc(scope.row)">
-                                    审批
+                                    @click="modifyResidentialFunc(scope.row)">
+                                    修改
                                 </el-button>
                                 <el-button
-                                    type="primary" size="small"
+                                    size="small"
                                     @click="detailsFunc(scope.row)">
                                     详情
                                 </el-button>
+                                <el-popconfirm title="确定要删除当前项么?" cancelButtonType="info" @confirm="deleteFunc">
+                                    <template #reference>
+                                        <el-button type="danger" size="small">
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -75,29 +115,171 @@
         <!-- 审核 -->
         <el-dialog
             v-model="switch_examine"
-            title="审核"
+            title="添加"
             width="50%">
             <div>
                 <el-form
                     ref="ruleFormRef"
-                    :model="from_examine"
-                    :rules="rule_examine"
-                    label-width="80px">
-                    <el-form-item label="审批理由" prop="reply">
-                        <el-input
-                            v-model="from_examine.reply"
-                            :autosize="{ minRows: 2, maxRows: 10 }"
-                            type="textarea"
-                            placeholder="请输入相关理由" />
-                    </el-form-item>
-                    <el-form-item>
-                        <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                            <el-button @click="dialogExamineCloseFunc(ruleFormRef,'200')">拒绝</el-button>
-                            <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,'300')">同意</el-button>
-                        </div>
-                    </el-form-item>
+                    :model="from_examine.item"
+                    :rules="rule_examine">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="名称" prop="name">
+                                <el-input
+                                    v-model="from_examine.item.name"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="地址" prop="addr">
+                                <el-input
+                                    v-model="from_examine.item.addr"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="总占地面积" prop="area_floor">
+                                <el-input
+                                    v-model="from_examine.item.area_floor"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="总建筑面积" prop="area_build">
+                                <el-input
+                                    v-model="from_examine.item.area_build"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="配套用房总面积" prop="area_support">
+                                <el-input
+                                    v-model="from_examine.item.area_support"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="楼栋数" prop="cnt_building">
+                                <el-input
+                                    v-model="from_examine.item.cnt_building"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="住房总套数" prop="cnt_live">
+                                <el-input
+                                    v-model="from_examine.item.cnt_live"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="配套用房总套数" prop="cnt_support">
+                                <el-input
+                                    v-model="from_examine.item.cnt_support"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="建设单位名称" prop="company_build">
+                                <el-input
+                                    v-model="from_examine.item.company_build"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="竣工时间" prop="time_build_end">
+                                <el-input
+                                    v-model="from_examine.item.time_build_end"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="开工时间" prop="time_build_start">
+                                <el-input
+                                    v-model="from_examine.item.time_build_start"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="立项时间" prop="time_pro_setup">
+                                <el-input
+                                    v-model="from_examine.item.time_pro_setup"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="移交时间" prop="time_turn">
+                                <el-input
+                                    v-model="from_examine.item.time_turn"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="投用时间" prop="time_use">
+                                <el-input
+                                    v-model="from_examine.item.time_use"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="所在区域code" prop="china_code">
+                                <el-input
+                                    v-model="from_examine.item.china_code"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item label="备注" prop="remark">
+                                <el-input
+                                    v-model="from_examine.item.remark"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item label="模型简介">
+                                <el-input
+                                    v-model="from_examine.item.addition.desc"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <div class="serve-box" v-for="(item,i) in from_examine.item.addition.extra.convenience">
+                                <el-row :gutter="10">
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item label="服务名称">
+                                            <el-input
+                                                v-model="item.title"
+                                                placeholder="" />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item label="联系方式">
+                                            <el-input
+                                                v-model="item.phone"
+                                                placeholder="" />
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div class="delete-service">
+                                    <el-icon :size="20">
+                                        <circle-close />
+                                    </el-icon>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </el-form>
             </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="dialogExamineCloseFunc(ruleFormRef)">拒绝</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">同意</el-button>
+                </div>
+            </template>
         </el-dialog>
         <!-- 详情 -->
         <el-dialog
@@ -110,32 +292,80 @@
                     <div class="right">{{ data_details.item.name }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">类型</div>
-                    <div class="right">{{ data_details.item.type }}</div>
+                    <div class="left">地址</div>
+                    <div class="right">{{ data_details.item.addr }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">理由</div>
-                    <div class="right">{{ data_details.item.reply }}</div>
+                    <div class="left">总占地面积</div>
+                    <div class="right">{{ data_details.item.area_floor }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">{{ data_details.item.process_status }}</div>
+                    <div class="left">总建筑面积</div>
+                    <div class="right">{{ data_details.item.area_build }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">商业编码</div>
-                    <div class="right">{{ data_details.item.content.biz_lic }}</div>
+                    <div class="left">配套用房总面积</div>
+                    <div class="right">{{ data_details.item.area_support }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">社会编码</div>
-                    <div class="right">{{ data_details.item.content.social_code }}</div>
+                    <div class="left">楼栋数</div>
+                    <div class="right">{{ data_details.item.cnt_building }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details.item.created_at }}</div>
+                    <div class="left">住房总套数</div>
+                    <div class="right">{{ data_details.item.cnt_live }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">更新时间</div>
-                    <div class="right">{{ data_details.item.updated_at }}</div>
+                    <div class="left">配套用房总套数</div>
+                    <div class="right">{{ data_details.item.cnt_support }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">建设单位名称</div>
+                    <div class="right">{{ data_details.item.company_build }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">竣工时间</div>
+                    <div class="right">{{ data_details.item.time_build_end }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">开工时间</div>
+                    <div class="right">{{ data_details.item.time_build_start }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">立项时间</div>
+                    <div class="right">{{ data_details.item.time_pro_setup }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">移交时间</div>
+                    <div class="right">{{ data_details.item.time_turn }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">投用时间</div>
+                    <div class="right">{{ data_details.item.time_use }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">所在区域code</div>
+                    <div class="right">{{ data_details.item.china_code }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">备注</div>
+                    <div class="right">{{ data_details.item.remark }}</div>
+                </div>
+                <div>
+                    <div class="item">
+                        <div class="left">便民服务</div>
+                        <div class="right">
+                            <div style="font-size: #666666;font-size: 14px;margin-bottom: 10px;">
+                                *{{data_details.item.addition.desc}}</div>
+                            <div class="convenience-item" style="display: flex;margin-bottom: 10px;"
+                                v-for="(item,i) in data_details.item.addition.extra.convenience">
+                                <div class="conve-left" style="flex:1;"><span
+                                        style="color: #000000;">服务名称：</span>{{item.title}}</div>
+                                <div class="conve-right" style="flex:1;"><span
+                                        style="color: #000000;">联系方式：</span>{{item.phone}}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <template #footer>
@@ -148,9 +378,11 @@
 </template>
 <script setup>
     import {
-        APIgetPlatformList,
-        APIgetPlatformDetails,
-        APIputPlatform
+        APIgetResidentialListHouse,
+        APIgetResidentialDetailsHouse,
+        APIdeleteResidentialHouse,
+        APIputResidentialHouse,
+        APIpostResidentialHouse,
     } from '@/api/custom/custom.js'
     import {
         reactive,
@@ -199,17 +431,43 @@
     let total = ref(100)
     let per_page = ref(15)
     let page = ref(1)
-    // 审核
+    // 添加，修改
     let switch_examine = ref(false)
     let from_examine = reactive({
-        reply: ''
+        item: {
+            "name": "",
+            "addr": "",
+            "area_floor": "",
+            "area_build": "",
+            "area_support": "",
+            "cnt_building": 0,
+            "cnt_live": 0,
+            "cnt_support": 0,
+            "company_build": "",
+            "time_build_end": "",
+            "time_build_start": "",
+            "time_pro_setup": "",
+            "time_turn": "",
+            "time_use": "",
+            "china_code": "",
+            "remark": "",
+            "addition": {
+                "extra": {
+                    "convenience": [{
+                        "title": "",
+                        "phone": ""
+                    }]
+                },
+                "desc": ""
+            }
+        }
     })
     let rule_examine = {
-        reply: [{
-            required: true,
-            message: '请输入理由！',
-            trigger: 'blur'
-        }]
+        // reply: [{
+        //     required: true,
+        //     message: '请输入理由！',
+        //     trigger: 'blur'
+        // }]
     }
     /* ----------------------------------------------------------------------------------------------------------------------- */
     // 方法
@@ -227,15 +485,11 @@
         data_search.place = []
         getTabListFunc()
     }
-    // 审核
-    const examineFunc = (val) => {
-        data_dialog.obj = val
-        switch_examine.value = true
-    }
+
     // 详情
     const detailsFunc = (val) => {
         data_dialog.obj = val
-        APIgetPlatformDetails(val.id).then(res => {
+        APIgetResidentialDetailsHouse(val.id).then(res => {
             if (!res.code) {
                 data_details.item = res.data
                 switch_details.value = true
@@ -247,21 +501,12 @@
         getTabListFunc()
     })
     // 同意拒绝提交
-    const dialogExamineCloseFunc = (formEl, status) => {
+    const dialogExamineCloseFunc = (formEl) => {
         if (!formEl) return
         formEl.validate(valid => {
             console.log(valid)
             if (valid) {
-                let putdata = {
-                    process_status: status,
-                    reply: from_examine.reply
-                }
-                APIputPlatform(data_dialog.obj.id, putdata).then(res => {
-                    if (!res.code) {
-                        switch_examine = false
-                        refreshFunc()
-                    }
-                })
+                console.log(132)
             } else {
                 return false
             }
@@ -282,7 +527,7 @@
             }
         }
         loading_tab.value = true
-        APIgetPlatformList(params).then((res) => {
+        APIgetResidentialListHouse(params).then((res) => {
             if (res.code === 0) {
                 loading_tab.value = false
                 data_tab.arr = res.data.items
@@ -290,24 +535,78 @@
             }
         })
     }
+    //删除
+    const deleteFunc = () => {
 
+    }
+    // 添加小区
+    const addResidentialFunc = () => {
+        from_examine.item = {
+            "name": "",
+            "addr": "",
+            "area_floor": "",
+            "area_build": "",
+            "area_support": "",
+            "cnt_building": 0,
+            "cnt_live": 0,
+            "cnt_support": 0,
+            "company_build": "",
+            "time_build_end": "",
+            "time_build_start": "",
+            "time_pro_setup": "",
+            "time_turn": "",
+            "time_use": "",
+            "china_code": "",
+            "remark": "",
+            "addition": {
+                "extra": {
+                    "convenience": [{
+                        "title": "",
+                        "phone": ""
+                    }]
+                },
+                "desc": ""
+            }
+        }
+        switch_examine.value = true
+    }
+    // 修改
+    const modifyResidentialFunc = (val) => {
+        APIgetResidentialDetailsHouse(val.id).then(res => {
+            if (!res.code) {
+                from_examine.item = res.data
+                switch_examine.value = true
+            }
+        })
+    }
     /* ----------------------------------------------------------------------------------------------------------------------- */
     // 执行
     refreshFunc()
-
 </script>
 <style lang="scss">
-    .residential-box {
+    .routine-residential {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
                 margin-bottom: 10px;
             }
         }
+
+        .serve-box {
+            border: 1px solid #eeeeee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+
+            .el-form-item {
+                margin: 0;
+            }
+        }
     }
 </style>
 <style lang="scss" scoped>
-    .residential-box {
+    .routine-residential {
         .head-btn {
             width: 100%;
             margin-bottom: 10px;
@@ -326,10 +625,12 @@
             color: #333333;
             font-size: 16px;
             margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
 
             .left {
                 box-sizing: border-box;
-                width: 100px;
+                width: 160px;
                 white-space: nowrap;
                 margin-right: 20px;
                 text-align: right;
