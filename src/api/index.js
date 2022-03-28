@@ -52,12 +52,9 @@ api.interceptors.response.use(
          * 请求出错时 error 会返回错误信息
          */
         if (response.status === 200) {
-            if(!response.data.code){
-                if (response.config.url == '/user/local-login') {
-                    ElMessage.success(response.data.msg)
-                }
+            if (!response.data.code) {
                 return Promise.resolve(response.data)
-            }else{
+            } else {
                 ElMessage.error(response.data.msg)
                 return Promise.reject(response.data)
             }

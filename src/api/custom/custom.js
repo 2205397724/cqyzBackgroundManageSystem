@@ -9,15 +9,15 @@ export function APIgetResidentialListHouse(params) {
 }
 // 详情
 export function APIgetResidentialDetailsHouse(id) {
-    return api2.get('/zones/'+id)
+    return api2.get('/zones/' + id)
 }
 // 删除
 export function APIdeleteResidentialHouse(id) {
-    return api2.delete('/zones/'+id)
+    return api2.delete('/zones/' + id)
 }
 // 修改
 export function APIputResidentialHouse(id, data) {
-    return api2.put('/zones/'+id, data)
+    return api2.put('/zones/' + id, data)
 }
 // 添加
 export function APIpostResidentialHouse(data) {
@@ -32,11 +32,11 @@ export function APIgetResidentialList(params) {
 }
 // 详情
 export function APIgetResidentialDetails(id) {
-    return api2.get('/zone-com-apply/'+id)
+    return api2.get('/zone-com-apply/' + id)
 }
 // 审批
 export function APIputResidential(id, data) {
-    return api2.put('/zone-com-apply/'+id, data)
+    return api2.put('/zone-com-apply/' + id, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -47,11 +47,11 @@ export function APIgetPlatformList(params) {
 }
 // 详情
 export function APIgetPlatformDetails(id) {
-    return api.get('/pt/company-apply/'+id)
+    return api.get('/pt/company-apply/' + id)
 }
 // 审批
 export function APIputPlatform(id, data) {
-    return api.put('/pt/company-apply/'+id, data)
+    return api.put('/pt/company-apply/' + id, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */

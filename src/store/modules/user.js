@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
-
+import { ElMessage } from 'element-plus'
 import { APIlogin, APIgetPermissions, APIeditPassword } from '@/api/custom/custom.js'
 
 import { useMenuStore } from './menu'
@@ -40,6 +40,7 @@ export const useUserStore = defineStore(
                         this.account = name
                         this.token = token
                         this.failure_time = time
+                        ElMessage.success(response.data.msg)
                         resolve()
                     }).catch(error => {
                         reject(error)
@@ -57,6 +58,7 @@ export const useUserStore = defineStore(
                     this.failure_time = ''
                     menuStore.invalidRoutes()
                     menuStore.removeRoutes()
+                    ElMessage.success(response.data.msg)
                     resolve()
                 })
             },
@@ -72,7 +74,8 @@ export const useUserStore = defineStore(
             },
             editPassword(data) {
                 return new Promise(resolve => {
-                    APIeditPassword({ password: data.password }).then((res) => {
+                    APIeditPassword({ password: data.password }).then(res => {
+                        ElMessage.success(response.data.msg)
                         resolve(res)
                     })
                 })
