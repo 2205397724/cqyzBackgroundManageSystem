@@ -45,8 +45,8 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="名称" width="220" />
-                        <el-table-column prop="addr" label="地址" width="180" />
+                        <el-table-column prop="name" label="名称" width="180" />
+                        <el-table-column prop="addr" label="地址" width="220" />
                         <el-table-column prop="area_floor" label="总占地面积" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.area_floor }} m²</span>

@@ -36,17 +36,23 @@
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                             <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
                         </el-col>
+                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                            <el-button :disabled="arr_selection.arr.length<=0" class="head-btn" type="warning" @click="modifyAllFunc">批量修改</el-button>
+                        </el-col>
                     </el-row>
                 </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
+                        ref="multipleTableRef"
                         v-loading="loading_tab"
                         :data="data_tab.arr"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
+                        @selection-change="handleSelectionChange"
                     >
+                        <el-table-column type="selection" width="55" />
                         <el-table-column prop="name" label="房屋名称" width="180" />
-                        <el-table-column prop="addr" label="地址" width="180" />
+                        <el-table-column prop="addr" label="地址" width="220" />
                         <el-table-column prop="floor_truth" label="物理层" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.floor_truth }} 层</span>
@@ -105,6 +111,7 @@
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
+                                    :disabled="arr_selection.arr.length>0"
                                     type="primary" size="small"
                                     @click="modifyResidentialFunc(scope.row)"
                                 >
@@ -468,6 +475,132 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 批量修改 -->
+        <el-dialog
+            v-model="switch_alldetails"
+            title="批量修改"
+            width="50%"
+        >
+            <div>
+                <div style="margin-bottom: 10px;font-size: 16px;font-weight: 600;">已选房屋：</div>
+                <div style="margin-bottom: 10px;">
+                    <span v-for="(item,i) in data_alldetails.list" style="display: inline-block;margin-right: 10px;box-sizing: border-box;padding: 8px 16px; font-size: 14px;border-radius: 6px;border: 1px solid #dcdfe6;color: #a8b3cd;">{{ item.name }}</span>
+                </div>
+                <el-form
+                    :model="data_alldetails.item"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房号" prop="house_num"
+                                :error="error_alldetails.msg&&error_alldetails.msg.house_num?error_alldetails.msg.house_num[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.house_num"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="建筑面积" prop="area_build"
+                                :error="error_alldetails.msg&&error_alldetails.msg.area_build?error_alldetails.msg.area_build[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.area_build"
+                                    placeholder=""
+                                >
+                                    <template #append>m²</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="户型" prop="type_model"
+                                :error="error_alldetails.msg&&error_alldetails.msg.type_model?error_alldetails.msg.type_model[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.type_model"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="产权性质" prop="type_property"
+                                :error="error_alldetails.msg&&error_alldetails.msg.type_property?error_alldetails.msg.type_property[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.type_property"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="楼栋性质" prop="type_building"
+                                :error="error_alldetails.msg&&error_alldetails.msg.type_building?error_alldetails.msg.type_building[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.type_building"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋使用状态" prop="status_use"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_use?error_alldetails.msg.status_use[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.status_use"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋安全状态" prop="status_safe"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_safe?error_alldetails.msg.status_safe[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.status_safe"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="规划用途" prop="status_plan"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_plan?error_alldetails.msg.status_plan[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.status_plan"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="实际用途" prop="status_fact"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_fact?error_alldetails.msg.status_fact[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.status_fact"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_alldetails=false">取消</el-button>
+                    <el-button type="primary" @click="alldetailsFunc()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -476,7 +609,8 @@ import {
     APIgetHouseDetailsHouse,
     APIdeleteHouseHouse,
     APIputHouseHouse,
-    APIpostHouseHouse
+    APIpostHouseHouse,
+    APIputAllHouseHouse
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -552,11 +686,71 @@ let rule_examine = {
     // }]
 }
 const str_title = ref('添加')
+// 添加修改表单错误信息
 const from_error = reactive({
+    msg: {}
+})
+// 批量修改多选项
+const multipleTableRef = ref('')
+const arr_selection = reactive({ arr: [] })
+const switch_alldetails = ref(false)
+const data_alldetails = reactive({
+    list: [],
+    item: {
+        'house_ids': [],
+        'type_model': 0,
+        'area_build': '',
+        'house_num': '',
+        'status_safe': 0,
+        'status_use': 0,
+        'type_building': 0,
+        'type_property': 0,
+        'status_fact': 0,
+        'status_plan': 0
+    }
+})
+const error_alldetails = reactive({
     msg: {}
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
+// 确认批量修改
+const alldetailsFunc = () => {
+    error_alldetails.msg = {}
+    data_alldetails.item.house_ids = []
+    for (let i in data_alldetails.list) {
+        data_alldetails.item.house_ids.push(data_alldetails.list[i].id)
+    }
+    APIputAllHouseHouse(data_alldetails.item).then(res => {
+        if (!res.code) {
+            switch_alldetails.value = true
+        }
+    }).catch(err => {
+        error_alldetails.msg = err.data
+    })
+}
+// 打开批量修改弹窗
+const modifyAllFunc = () => {
+    data_alldetails.item = {
+        'house_ids': [],
+        'type_model': 0,
+        'area_build': '',
+        'house_num': '',
+        'status_safe': 0,
+        'status_use': 0,
+        'type_building': 0,
+        'type_property': 0,
+        'status_fact': 0,
+        'status_plan': 0
+    }
+    data_alldetails.list = arr_selection.arr
+    multipleTableRef.value?.clearSelection()
+    switch_alldetails.value = true
+}
+// 批量修改多选后
+const handleSelectionChange = res => {
+    arr_selection.arr = res
+}
 // 搜索
 const searchFunc = () => {
     switch_search.value = true

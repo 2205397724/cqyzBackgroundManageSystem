@@ -46,7 +46,7 @@
                         style="width: 100%;min-height: 300px;"
                     >
                         <el-table-column prop="name" label="名称" width="180" />
-                        <el-table-column prop="addr" label="地址" width="180" />
+                        <el-table-column prop="addr" label="地址" width="220" />
                         <el-table-column prop="area_live" label="住宅总面积" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.area_live }} m²</span>

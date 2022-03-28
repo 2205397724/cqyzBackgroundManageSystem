@@ -23,7 +23,10 @@ export function APIputHouseHouse(id, data) {
 export function APIpostHouseHouse(data) {
     return api2.post('/houses', data)
 }
-
+// 批量修改
+export function APIputAllHouseHouse(data) {
+    return api2.put('/houses-batch', data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 单元
 // 列表
