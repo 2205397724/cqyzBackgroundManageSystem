@@ -2,6 +2,29 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 楼栋
+// 列表
+export function APIgetBuildListHouse(params) {
+    return api2.get('/buildings', { params: params })
+}
+// 详情
+export function APIgetBuildDetailsHouse(id) {
+    return api2.get('/buildings/' + id)
+}
+// 删除
+export function APIdeleteBuildHouse(id) {
+    return api2.delete('/buildings/' + id)
+}
+// 修改
+export function APIputBuildHouse(id, data) {
+    return api2.put('/buildings/' + id, data)
+}
+// 添加
+export function APIpostBuildHouse(data) {
+    return api2.post('/buildings', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 小区
 // 列表
 export function APIgetResidentialListHouse(params) {

@@ -40,7 +40,7 @@ export const useUserStore = defineStore(
                         this.account = name
                         this.token = token
                         this.failure_time = time
-                        ElMessage.success(response.data.msg)
+                        ElMessage.success(res.msg)
                         resolve()
                     }).catch(error => {
                         reject(error)
@@ -58,7 +58,6 @@ export const useUserStore = defineStore(
                     this.failure_time = ''
                     menuStore.invalidRoutes()
                     menuStore.removeRoutes()
-                    ElMessage.success(response.data.msg)
                     resolve()
                 })
             },
@@ -75,7 +74,7 @@ export const useUserStore = defineStore(
             editPassword(data) {
                 return new Promise(resolve => {
                     APIeditPassword({ password: data.password }).then(res => {
-                        ElMessage.success(response.data.msg)
+                        ElMessage.success(res.msg)
                         resolve(res)
                     })
                 })

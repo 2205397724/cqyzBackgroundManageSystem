@@ -131,7 +131,7 @@
                 >
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="名称" prop="name" :error="from_error.msg.name?from_error.msg.name[0]:''">
+                            <el-form-item label="名称" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                 <el-input
                                     v-model="from_examine.item.name"
                                     placeholder=""
@@ -139,7 +139,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="地址" prop="addr" :error="from_error.msg.addr?from_error.msg.addr[0]:''">
+                            <el-form-item label="地址" prop="addr" :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''">
                                 <el-input
                                     v-model="from_examine.item.addr"
                                     placeholder=""
@@ -147,7 +147,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="总占地面积" prop="area_floor" :error="from_error.msg.area_floor?from_error.msg.area_floor[0]:''">
+                            <el-form-item label="总占地面积" prop="area_floor" :error="from_error.msg&&from_error.msg.area_floor?from_error.msg.area_floor[0]:''">
                                 <el-input
                                     v-model="from_examine.item.area_floor"
                                     placeholder=""
@@ -157,7 +157,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="总建筑面积" prop="area_build" :error="from_error.msg.area_build?from_error.msg.area_build[0]:''">
+                            <el-form-item label="总建筑面积" prop="area_build" :error="from_error.msg&&from_error.msg.area_build?from_error.msg.area_build[0]:''">
                                 <el-input
                                     v-model="from_examine.item.area_build"
                                     placeholder=""
@@ -167,7 +167,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="配套用房总面积" prop="area_support" :error="from_error.msg.area_support?from_error.msg.area_support[0]:''">
+                            <el-form-item label="配套用房总面积" prop="area_support" :error="from_error.msg&&from_error.msg.area_support?from_error.msg.area_support[0]:''">
                                 <el-input
                                     v-model="from_examine.item.area_support"
                                     placeholder=""
@@ -177,7 +177,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="楼栋数" prop="cnt_building" :error="from_error.msg.cnt_building?from_error.msg.cnt_building[0]:''">
+                            <el-form-item label="楼栋数" prop="cnt_building" :error="from_error.msg&&from_error.msg.cnt_building?from_error.msg.cnt_building[0]:''">
                                 <el-input
                                     v-model="from_examine.item.cnt_building"
                                     placeholder=""
@@ -187,7 +187,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="住房总套数" prop="cnt_live" :error="from_error.msg.cnt_live?from_error.msg.cnt_live[0]:''">
+                            <el-form-item label="住房总套数" prop="cnt_live" :error="from_error.msg&&from_error.msg.cnt_live?from_error.msg.cnt_live[0]:''">
                                 <el-input
                                     v-model="from_examine.item.cnt_live"
                                     placeholder=""
@@ -197,7 +197,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="配套用房总套数" prop="cnt_support" :error="from_error.msg.cnt_support?from_error.msg.cnt_support[0]:''">
+                            <el-form-item label="配套用房总套数" prop="cnt_support" :error="from_error.msg&&from_error.msg.cnt_support?from_error.msg.cnt_support[0]:''">
                                 <el-input
                                     v-model="from_examine.item.cnt_support"
                                     placeholder=""
@@ -207,7 +207,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="建设单位名称" prop="company_build" :error="from_error.msg.company_build?from_error.msg.company_build[0]:''">
+                            <el-form-item label="建设单位名称" prop="company_build" :error="from_error.msg&&from_error.msg.company_build?from_error.msg.company_build[0]:''">
                                 <el-input
                                     v-model="from_examine.item.company_build"
                                     placeholder=""
@@ -215,7 +215,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="竣工时间" prop="time_build_end" :error="from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''">
+                            <el-form-item label="竣工时间" prop="time_build_end" :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''">
                                 <el-date-picker
                                     v-model="from_examine.item.time_build_end"
                                     type="date"
@@ -227,7 +227,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="开工时间" prop="time_build_start" :error="from_error.msg.time_build_start?from_error.msg.time_build_start[0]:''">
+                            <el-form-item label="开工时间" prop="time_build_start" :error="from_error.msg&&from_error.msg.time_build_start?from_error.msg.time_build_start[0]:''">
                                 <el-date-picker
                                     v-model="from_examine.item.time_build_start"
                                     type="date"
@@ -239,7 +239,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="立项时间" prop="time_pro_setup" :error="from_error.msg.time_pro_setup?from_error.msg.time_pro_setup[0]:''">
+                            <el-form-item label="立项时间" prop="time_pro_setup" :error="from_error.msg&&from_error.msg.time_pro_setup?from_error.msg.time_pro_setup[0]:''">
                                 <el-date-picker
                                     v-model="from_examine.item.time_pro_setup"
                                     type="date"
@@ -251,7 +251,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="移交时间" prop="time_turn" :error="from_error.msg.time_turn?from_error.msg.time_turn[0]:''">
+                            <el-form-item label="移交时间" prop="time_turn" :error="from_error.msg&&from_error.msg.time_turn?from_error.msg.time_turn[0]:''">
                                 <el-date-picker
                                     v-model="from_examine.item.time_turn"
                                     type="date"
@@ -263,7 +263,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="投用时间" prop="time_use" :error="from_error.msg.time_use?from_error.msg.time_use[0]:''">
+                            <el-form-item label="投用时间" prop="time_use" :error="from_error.msg&&from_error.msg.time_use?from_error.msg.time_use[0]:''">
                                 <el-date-picker
                                     v-model="from_examine.item.time_use"
                                     type="date"
@@ -275,7 +275,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="所在区域code" prop="china_code" :error="from_error.msg.china_code?from_error.msg.china_code[0]:''">
+                            <el-form-item label="所在区域code" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
                                 <el-input
                                     v-model="from_examine.item.china_code"
                                     placeholder=""
@@ -283,7 +283,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <el-form-item label="备注" prop="remark" :error="from_error.msg.remark?from_error.msg.remark[0]:''">
+                            <el-form-item label="备注" prop="remark" :error="from_error.msg&&from_error.msg.remark?from_error.msg.remark[0]:''">
                                 <el-input
                                     v-model="from_examine.item.remark"
                                     :autosize="{ minRows: 2, maxRows: 6 }"
@@ -293,7 +293,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <el-form-item label="模型简介" :error="from_error.msg.addition&&from_error.msg.addition.desc?from_error.msg.addition.desc[0]:''">
+                            <el-form-item label="模型简介" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
                                 <el-input
                                     v-model="from_examine.item.addition.desc"
                                     :autosize="{ minRows: 2, maxRows: 6 }"
