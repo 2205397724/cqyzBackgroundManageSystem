@@ -2,6 +2,52 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 房屋
+// 列表
+export function APIgetHouseListHouse(params) {
+    return api2.get('/houses', { params: params })
+}
+// 详情
+export function APIgetHouseDetailsHouse(id) {
+    return api2.get('/houses/' + id)
+}
+// 删除
+export function APIdeleteHouseHouse(id) {
+    return api2.delete('/houses/' + id)
+}
+// 修改
+export function APIputHouseHouse(id, data) {
+    return api2.put('/houses/' + id, data)
+}
+// 添加
+export function APIpostHouseHouse(data) {
+    return api2.post('/houses', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 单元
+// 列表
+export function APIgetUnitsListHouse(params) {
+    return api2.get('/units', { params: params })
+}
+// 详情
+export function APIgetUnitsDetailsHouse(id) {
+    return api2.get('/units/' + id)
+}
+// 删除
+export function APIdeleteUnitsHouse(id) {
+    return api2.delete('/units/' + id)
+}
+// 修改
+export function APIputUnitsHouse(id, data) {
+    return api2.put('/units/' + id, data)
+}
+// 添加
+export function APIpostUnitsHouse(data) {
+    return api2.post('/units', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 楼栋
 // 列表
 export function APIgetBuildListHouse(params) {

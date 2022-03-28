@@ -45,11 +45,11 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="名称" width="220" />
+                        <el-table-column prop="name" label="名称" width="180" />
                         <el-table-column prop="addr" label="地址" width="180" />
-                        <el-table-column prop="area_floor" label="总占地面积" width="140">
+                        <el-table-column prop="area_live" label="住宅总面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_floor }} m²</span>
+                                <span style="margin-left: 10px">{{ scope.row.area_live }} m²</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="area_build" label="总建筑面积" width="140">
@@ -57,28 +57,71 @@
                                 <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="area_support" label="配套用房总面积" width="140">
+                        <el-table-column prop="area_live_not" label="非住宅面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_support }} m²</span>
+                                <span style="margin-left: 10px">{{ scope.row.area_live_not }} m²</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cnt_building" label="楼栋数" width="140">
+                        <el-table-column prop="cnt_floor" label="楼层数" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_building }} 栋</span>
+                                <span style="margin-left: 10px">{{ scope.row.cnt_floor }} 层</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cnt_live" label="住房总套数" width="140">
+                        <el-table-column prop="cnt_unit" label="单元数" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.cnt_unit }} 个</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_live" label="住宅总套数" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.cnt_live }} 套</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
+                        <el-table-column prop="by_build_owner" label="建设业主单位" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_support }} 套</span>
+                                <span style="margin-left: 10px">{{ scope.row.by_build_owner }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="company_build" label="建设单位名称" width="140" />
-                        <el-table-column prop="time_use" label="投用时间" width="140" />
+                        <el-table-column prop="time_build_end" label="建成时间" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.time_build_end }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="time_turn" label="移交时间" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.time_turn }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="time_use" label="投用时间" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.time_use }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type_water" label="供水方式" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.type_water }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type_construct" label="结构形式" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.type_construct }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_lift" label="电梯数" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.cnt_lift }} 台</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_live_not" label="非住宅面积" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.cnt_live_not }} m²</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="by_build" label="建设单位" width="140">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ scope.row.by_build }} </span>
+                            </template>
+                        </el-table-column>
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
