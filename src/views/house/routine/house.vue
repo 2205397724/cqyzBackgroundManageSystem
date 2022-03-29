@@ -723,7 +723,9 @@ const alldetailsFunc = () => {
     }
     APIputAllHouseHouse(data_alldetails.item).then(res => {
         if (!res.code) {
-            switch_alldetails.value = true
+            switch_alldetails.value = false
+            ElMessage.success(res.msg)
+            refreshFunc()
         }
     }).catch(err => {
         error_alldetails.msg = err.data
