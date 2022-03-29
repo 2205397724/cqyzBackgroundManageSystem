@@ -5,22 +5,67 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-cascader
-                                v-model="data_search.place"
-                                :popper-append-to-body="false"
-                                :props="{value:'value',label:'label',children:'children'}"
-                                :options="opts_place" size="default" placeholder="地区" clearable
-                            />
+                            <el-input v-model="data_search.houseable_id" class="head-btn" placeholder="*楼栋或者单元对应的 ID，需配合 houseable_type 一起使用" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.type" class="head-btn" placeholder="类别" clearable>
-                                <el-option label="按ID" :value="0" />
-                                <el-option label="按企业名称" :value="1" />
-                                <el-option label="按单元地址" :value="2" />
-                            </el-select>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.houseable_type" class="head-btn" placeholder="*楼栋 buildings 或者 单元 units" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.floor_truth" class="head-btn" placeholder="*物理楼层" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.floor_alias" class="head-btn" placeholder="*名义层" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.house_num" class="head-btn" placeholder="*房号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.type_property" class="head-btn" placeholder="*产权性质" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.type_building" class="head-btn" placeholder="*楼栋性质" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.name" class="head-btn" placeholder="房屋名称" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.addr" class="head-btn" placeholder="地址" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.type_model" class="head-btn" placeholder="*户型" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.status_use" class="head-btn" placeholder="*房屋使用状态" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.status_safe" class="head-btn" placeholder="*房屋安全状态" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.status_plan" class="head-btn" placeholder="*规划用途" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.status_fact" class="head-btn" placeholder="*实际用途" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.created_at" class="head-btn" placeholder="创建时间" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.updated_at" class="head-btn" placeholder="更新时间" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.is_bind_property" class="head-btn" placeholder="是否绑定产权，1是，0否" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.sync_china_code" class="head-btn" placeholder="区域code" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.sync_zone_id" class="head-btn" placeholder="小区ID" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.sync_building_id" class="head-btn" placeholder="楼栋ID" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.sync_unit_id" class="head-btn" placeholder="单元ID" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -625,23 +670,29 @@ import {
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    type: '',
-    keyword: '',
-    place: []
+    houseable_id: '',
+    houseable_type: '',
+    floor_truth: '',
+    floor_alias: '',
+    house_num: '',
+    type_property: '',
+    type_building: '',
+    name: '',
+    addr: '',
+    type_model: '',
+    status_use: '',
+    status_safe: '',
+    status_plan: '',
+    status_fact: '',
+    created_at: '',
+    updated_at: '',
+    is_bind_property: '',
+    sync_china_code: '',
+    sync_zone_id: '',
+    sync_building_id: '',
+    sync_unit_id: ''
 })
-let opts_place = [{
-    value: '0',
-    label: 'Guide',
-    children: [{
-                   value: '001',
-                   label: 'Disciplines'
-               },
-               {
-                   value: '002',
-                   label: '11111'
-               }
-    ]
-}]
+
 // 详情
 let switch_details = ref(false)
 // 列表
@@ -762,9 +813,27 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.type = ''
-    data_search.keyword = ''
-    data_search.place = []
+    data_search.houseable_type = ''
+    data_search.houseable_id = ''
+    data_search.floor_truth = ''
+    data_search.floor_alias = ''
+    data_search.house_num = ''
+    data_search.type_property = ''
+    data_search.type_building = ''
+    data_search.name = ''
+    data_search.addr = ''
+    data_search.type_model = ''
+    data_search.status_use = ''
+    data_search.status_safe = ''
+    data_search.status_plan = ''
+    data_search.status_fact = ''
+    data_search.created_at = ''
+    data_search.updated_at = ''
+    data_search.is_bind_property = ''
+    data_search.sync_china_code = ''
+    data_search.sync_zone_id = ''
+    data_search.sync_building_id = ''
+    data_search.sync_unit_id = ''
     getTabListFunc()
 }
 

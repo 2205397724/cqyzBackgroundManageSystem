@@ -4,22 +4,11 @@
             <div>
                 <div>
                     <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-cascader
-                                :popper-append-to-body="false"
-                                v-model="data_search.place"
-                                :props="{value:'value',label:'label',children:'children'}"
-                                :options="opts_place" size="default" placeholder="地区" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.type" class="head-btn" placeholder="类别" clearable>
-                                <el-option label="按ID" :value="0" />
-                                <el-option label="按企业名称" :value="1" />
-                                <el-option label="按小区地址" :value="2" />
-                            </el-select>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+                            <el-input v-model="data_search.type" class="head-btn" placeholder="类型" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
+                            <el-input v-model="data_search.process_status" class="head-btn" placeholder="状态" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -35,7 +24,8 @@
                         v-loading="loading_tab"
                         :data="data_tab.arr"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;">
+                        style="width: 100%;min-height: 300px;"
+                    >
                         <el-table-column prop="name" label="名称" width="220" />
                         <el-table-column prop="type" label="类型" width="90" />
                         <el-table-column prop="reply" label="理由" width="180" />
@@ -48,12 +38,14 @@
                             <template #default="scope">
                                 <el-button
                                     type="primary" size="small"
-                                    @click="examineFunc(scope.row)">
+                                    @click="examineFunc(scope.row)"
+                                >
                                     审批
                                 </el-button>
                                 <el-button
                                     type="primary" size="small"
-                                    @click="detailsFunc(scope.row)">
+                                    @click="detailsFunc(scope.row)"
+                                >
                                     详情
                                 </el-button>
                             </template>
@@ -68,7 +60,8 @@
                         :total="total"
                         :page-size="per_page"
                         background
-                        hide-on-single-page />
+                        hide-on-single-page
+                    />
                 </div>
             </div>
         </page-main>
@@ -76,19 +69,22 @@
         <el-dialog
             v-model="switch_examine"
             title="审核"
-            width="50%">
+            width="50%"
+        >
             <div>
                 <el-form
                     ref="ruleFormRef"
                     :model="from_examine"
                     :rules="rule_examine"
-                    label-width="80px">
+                    label-width="80px"
+                >
                     <el-form-item label="审批理由" prop="reply">
                         <el-input
                             v-model="from_examine.reply"
                             :autosize="{ minRows: 2, maxRows: 10 }"
                             type="textarea"
-                            placeholder="请输入相关理由" />
+                            placeholder="请输入相关理由"
+                        />
                     </el-form-item>
                     <el-form-item>
                         <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
@@ -103,7 +99,8 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="50%">
+            width="50%"
+        >
             <div class="details-box">
                 <div class="item">
                     <div class="left">名称</div>
@@ -147,153 +144,139 @@
     </div>
 </template>
 <script setup>
-    import {
-        APIgetPlatformList,
-        APIgetPlatformDetails,
-        APIputPlatform
-    } from '@/api/custom/custom.js'
-    import {
-        reactive,
-        ref,
-        watch
-    } from 'vue'
-    /* ----------------------------------------------------------------------------------------------------------------------- */
-    // 数据
-    // 搜索
-    let switch_search = ref(false)
-    let data_search = reactive({
-        type: '',
-        keyword: '',
-        place: []
-    })
-    let opts_place = [{
-        value: '0',
-        label: 'Guide',
-        children: [{
-                value: '001',
-                label: 'Disciplines'
-            },
-            {
-                value: '002',
-                label: '11111'
-            }
-        ]
+import {
+    APIgetPlatformList,
+    APIgetPlatformDetails,
+    APIputPlatform
+} from '@/api/custom/custom.js'
+import {
+    reactive,
+    ref,
+    watch
+} from 'vue'
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 数据
+// 搜索
+let switch_search = ref(false)
+let data_search = reactive({
+    type: '',
+    process_status: ''
+})
+// 详情
+let switch_details = ref(false)
+// 列表
+let ruleFormRef = ref('')
+let loading_tab = ref(false)
+let data_tab = reactive({
+    arr: []
+})
+// 操作事件 列表单个行数据
+let data_dialog = reactive({
+    obj: {}
+})
+// 详情
+const data_details = reactive({
+    item: ''
+})
+// 分页
+let total = ref(100)
+let per_page = ref(15)
+let page = ref(1)
+// 审核
+let switch_examine = ref(false)
+let from_examine = reactive({
+    reply: ''
+})
+let rule_examine = {
+    reply: [{
+        required: true,
+        message: '请输入理由！',
+        trigger: 'blur'
     }]
-    // 详情
-    let switch_details = ref(false)
-    // 列表
-    let ruleFormRef = ref('')
-    let loading_tab = ref(false)
-    let data_tab = reactive({
-        arr: []
-    })
-    // 操作事件 列表单个行数据
-    let data_dialog = reactive({
-        obj: {}
-    })
-    // 详情
-    const data_details = reactive({
-        item: ''
-    })
-    // 分页
-    let total = ref(100)
-    let per_page = ref(15)
-    let page = ref(1)
-    // 审核
-    let switch_examine = ref(false)
-    let from_examine = reactive({
-        reply: ''
-    })
-    let rule_examine = {
-        reply: [{
-            required: true,
-            message: '请输入理由！',
-            trigger: 'blur'
-        }]
-    }
-    /* ----------------------------------------------------------------------------------------------------------------------- */
-    // 方法
-    // 搜索
-    const searchFunc = () => {
-        switch_search.value = true
-        getTabListFunc()
-    }
-    // 刷新
-    const refreshFunc = () => {
-        page.value = 1
-        switch_search.value = false
-        data_search.type = ''
-        data_search.keyword = ''
-        data_search.place = []
-        getTabListFunc()
-    }
-    // 审核
-    const examineFunc = (val) => {
-        data_dialog.obj = val
-        switch_examine.value = true
-    }
-    // 详情
-    const detailsFunc = (val) => {
-        data_dialog.obj = val
-        APIgetPlatformDetails(val.id).then(res => {
-            if (!res.code) {
-                data_details.item = res.data
-                switch_details.value = true
-            }
-        })
-    }
-    // 监听分页
-    watch(page, () => {
-        getTabListFunc()
-    })
-    // 同意拒绝提交
-    const dialogExamineCloseFunc = (formEl, status) => {
-        if (!formEl) return
-        formEl.validate(valid => {
-            console.log(valid)
-            if (valid) {
-                let putdata = {
-                    process_status: status,
-                    reply: from_examine.reply
-                }
-                APIputPlatform(data_dialog.obj.id, putdata).then(res => {
-                    if (!res.code) {
-                        switch_examine = false
-                        refreshFunc()
-                    }
-                })
-            } else {
-                return false
-            }
-        })
-    }
-    // 获取列表api请求
-    const getTabListFunc = () => {
-        let params = {
-            page: page.value,
-            per_page: per_page.value,
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 方法
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+}
+// 刷新
+const refreshFunc = () => {
+    page.value = 1
+    switch_search.value = false
+    data_search.type = ''
+    data_search.process_status = ''
+    getTabListFunc()
+}
+// 审核
+const examineFunc = val => {
+    data_dialog.obj = val
+    switch_examine.value = true
+}
+// 详情
+const detailsFunc = val => {
+    data_dialog.obj = val
+    APIgetPlatformDetails(val.id).then(res => {
+        if (!res.code) {
+            data_details.item = res.data
+            switch_details.value = true
         }
-        for (let key in data_search) {
-            if (data_search[key]) {
-                if (data_search[key] instanceof Array && data_search[key].length <= 0) {
-                    continue
+    })
+}
+// 监听分页
+watch(page, () => {
+    getTabListFunc()
+})
+// 同意拒绝提交
+const dialogExamineCloseFunc = (formEl, status) => {
+    if (!formEl) return
+    formEl.validate(valid => {
+        console.log(valid)
+        if (valid) {
+            let putdata = {
+                process_status: status,
+                reply: from_examine.reply
+            }
+            APIputPlatform(data_dialog.obj.id, putdata).then(res => {
+                if (!res.code) {
+                    switch_examine = false
+                    refreshFunc()
                 }
-                params[key] = data_search[key]
-            }
+            })
+        } else {
+            return false
         }
-        loading_tab.value = true
-        APIgetPlatformList(params).then((res) => {
-            if (res.code === 0) {
-                loading_tab.value = false
-                data_tab.arr = res.data.items
-                total.value = res.data.aggregation.total_cnt
-            }
-        })
+    })
+}
+// 获取列表api请求
+const getTabListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
     }
+    for (let key in data_search) {
+        if (data_search[key]) {
+            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+                continue
+            }
+            params[key] = data_search[key]
+        }
+    }
+    loading_tab.value = true
+    APIgetPlatformList(params).then(res => {
+        if (res.code === 0) {
+            loading_tab.value = false
+            data_tab.arr = res.data.items
+            total.value = res.data.aggregation.total_cnt
+        }
+    })
+}
 
-    /* ----------------------------------------------------------------------------------------------------------------------- */
-    // 执行
-    refreshFunc()
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 执行
+refreshFunc()
 
 </script>
 <style lang="scss" >

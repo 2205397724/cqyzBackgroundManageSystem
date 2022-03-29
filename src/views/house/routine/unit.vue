@@ -2,7 +2,7 @@
     <div class="routine-residential">
         <page-main>
             <div>
-                <div>
+                <!-- <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-cascader
@@ -26,7 +26,7 @@
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
                     </el-row>
-                </div>
+                </div> -->
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
@@ -299,9 +299,7 @@ import {
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    type: '',
-    keyword: '',
-    place: []
+    keyword: ''
 })
 let opts_place = [{
     value: '0',
@@ -374,9 +372,7 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.type = ''
     data_search.keyword = ''
-    data_search.place = []
     getTabListFunc()
 }
 
