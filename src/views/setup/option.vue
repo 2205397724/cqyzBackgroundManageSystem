@@ -5,22 +5,13 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-cascader
-                                v-model="data_search.place"
-                                :popper-append-to-body="false"
-                                :props="{value:'value',label:'label',children:'children'}"
-                                :options="opts_place" size="default" placeholder="地区" clearable
-                            />
+                            <el-input v-model="data_search.label" class="head-btn" placeholder="选项配置标签" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.type" class="head-btn" placeholder="类别" clearable>
-                                <el-option label="按ID" :value="0" />
-                                <el-option label="按企业名称" :value="1" />
-                                <el-option label="按单元地址" :value="2" />
-                            </el-select>
+                            <el-input v-model="data_search.is_sys" class="head-btn" placeholder="系统级别" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
+                            <el-input v-model="data_search.is_active" class="head-btn" placeholder="启用状态" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -34,7 +25,7 @@
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加单元</el-button>
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加配置</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -45,21 +36,17 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="单元名称" width="180" />
-                        <el-table-column prop="addr" label="地址" width="220" />
-                        <el-table-column prop="cnt_floor" label="楼层数" width="140">
+                        <el-table-column prop="name" label="配置名称" width="180" />
+                        <el-table-column prop="label" label="配置标签" width="180" />
+                        <el-table-column prop="desc" label="备注" width="220" />
+                        <el-table-column prop="is_sys" label="系统级别" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_floor }} 层</span>
+                                <span style="margin-left: 10px">{{ scope.row.is_sys }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cnt_house" label="户数" width="140">
+                        <el-table-column prop="is_active" label="启用状态" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_house }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="time_build_end" label="建成时间" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.time_build_end }} </span>
+                                <span style="margin-left: 10px">{{ scope.row.is_active }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -73,9 +60,9 @@
                                 </el-button>
                                 <el-button
                                     size="small"
-                                    @click="detailsFunc(scope.row)"
+                                    @click="optValFunc(scope.row)"
                                 >
-                                    详情
+                                    配置
                                 </el-button>
                                 <el-popconfirm
                                     title="确定要删除当前项么?" cancel-button-type="info"
@@ -118,7 +105,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="单元名称" prop="name"
+                                label="配置名称" prop="name"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -129,87 +116,44 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="所属楼栋ID" prop="building_id"
-                                :error="from_error.msg&&from_error.msg.building_id?from_error.msg.building_id[0]:''"
+                                label="配置标签" prop="label"
+                                :error="from_error.msg&&from_error.msg.label?from_error.msg.label[0]:''"
                             >
                                 <el-input
-                                    v-model="from_examine.item.building_id"
+                                    v-model="from_examine.item.label"
                                     placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="地址" prop="addr"
-                                :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''"
+                                label="系统级别" prop="is_sys"
+                                :error="from_error.msg&&from_error.msg.is_sys?from_error.msg.is_sys[0]:''"
                             >
                                 <el-input
-                                    v-model="from_examine.item.addr"
+                                    v-model="from_examine.item.is_sys"
                                     placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="楼层数" prop="cnt_floor"
-                                :error="from_error.msg&&from_error.msg.cnt_floor?from_error.msg.cnt_floor[0]:''"
+                                label="启用状态" prop="is_active"
+                                :error="from_error.msg&&from_error.msg.is_active?from_error.msg.is_active[0]:''"
                             >
                                 <el-input
-                                    v-model="from_examine.item.cnt_floor"
+                                    v-model="from_examine.item.is_active"
                                     placeholder=""
-                                >
-                                    <template #append>层</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="户数" prop="cnt_house"
-                                :error="from_error.msg&&from_error.msg.cnt_house?from_error.msg.cnt_house[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.cnt_house"
-                                    placeholder=""
-                                >
-                                    <template #append>户</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="建成时间" prop="time_build_end"
-                                :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''"
-                            >
-                                <el-date-picker
-                                    v-model="from_examine.item.time_build_end"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="备注" prop="remark"
-                                :error="from_error.msg&&from_error.msg.remark?from_error.msg.remark[0]:''"
+                                label="备注" prop="desc"
+                                :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
                             >
                                 <el-input
-                                    v-model="from_examine.item.remark"
-                                    :autosize="{ minRows: 2, maxRows: 6 }"
-                                    type="textarea"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col v-if="from_examine.item&&from_examine.item.addition" :md="24" :lg="24">
-                            <el-form-item
-                                label="模型简介" prop="addition.desc"
-                                :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.addition.desc"
+                                    v-model="from_examine.item.desc"
                                     :autosize="{ minRows: 2, maxRows: 6 }"
                                     type="textarea"
                                     placeholder=""
@@ -226,65 +170,189 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 详情 -->
+        <!-- 配置 -->
+        <!-- 修改添加 -->
         <el-dialog
-            v-model="switch_details"
-            title="详情"
+            v-model="switch_opt_val"
+            :title="`“${item_opt.obj.name}”配置项`"
+            width="70%"
+        >
+            <el-row :gutter="10">
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="opt_search.key" class="head-btn" placeholder="选项键值" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="opt_search.val" class="head-btn" placeholder="选项名称" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="opt_search.is_sys" class="head-btn" placeholder="系统级别" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+                    <el-input v-model="opt_search.is_active" class="head-btn" placeholder="启用状态" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                    <el-button class="head-btn" type="primary" @click="optValSearchFunc">搜索</el-button>
+                </el-col>
+            </el-row>
+            <div v-show="switch_opt_val_search" class="search-tips">
+                <el-button style="margin-right: 10px;" @click="optValRefreshFunc">重置</el-button>
+                *搜索到相关结果共{{ opt_total }}条。
+            </div>
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" type="primary" @click="optValAddFunc">添加配置项</el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                v-loading="opt_loading"
+                :data="opt_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;margin-bottom: 10px;"
+                max-height="400"
+            >
+                <el-table-column prop="sort" label="排序" width="60" />
+                <el-table-column prop="val" label="选项名称" width="180" />
+                <el-table-column prop="key" label="选项键值" width="120" />
+                <el-table-column prop="desc" label="备注" width="220" />
+                <el-table-column prop="is_sys" label="系统级别" width="100">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.is_sys }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="is_active" label="启用状态" width="100">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.is_active }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+                <el-table-column fixed="right" label="操作" width="160">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="optValModifyFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="optValDeleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                v-model:current-page="opt_page"
+                layout="total,prev,pager,next,jumper,"
+                :total="opt_total"
+                :page-size="opt_per_page"
+                background
+                hide-on-single-page
+            />
+        </el-dialog>
+        <!-- 配置项修改添加 -->
+        <el-dialog
+            v-model="switch_opt_val_add"
+            :title="str_opt_val_title"
             width="50%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">单元名称</div>
-                    <div class="right">{{ data_details.item.name }} 个</div>
-                </div>
-                <div class="item">
-                    <div class="left">所属楼栋ID</div>
-                    <div class="right">{{ data_details.item.building_id }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">地址</div>
-                    <div class="right">{{ data_details.item.addr }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼层数</div>
-                    <div class="right">{{ data_details.item.cnt_floor }} 层</div>
-                </div>
-                <div class="item">
-                    <div class="left">户数</div>
-                    <div class="right">{{ data_details.item.cnt_house }} 户</div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details.item.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">修改时间</div>
-                    <div class="right">{{ data_details.item.updated_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">备注</div>
-                    <div class="right">{{ data_details.item.remark }}</div>
-                </div>
-                <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
-                    <div class="left">模型简介</div>
-                    <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
-                </div>
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="from_opt_val.obj"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="选项键值" prop="key"
+                                :error="err_opt.msg&&err_opt.msg.key?err_opt.msg.key[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_opt_val.obj.key"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="选项名称" prop="val"
+                                :error="err_opt.msg&&err_opt.msg.val?err_opt.msg.val[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_opt_val.obj.val"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="系统级别" prop="is_sys"
+                                :error="err_opt.msg&&err_opt.msg.is_sys?err_opt.msg.is_sys[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_opt_val.obj.is_sys"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="启用状态" prop="is_active"
+                                :error="err_opt.msg&&err_opt.msg.is_active?err_opt.msg.is_active[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_opt_val.obj.is_active"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="排序" prop="sort"
+                                :error="err_opt.msg&&err_opt.msg.sort?err_opt.msg.sort[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_opt_val.obj.sort"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label="备注" prop="desc"
+                                :error="err_opt.msg&&err_opt.msg.desc?err_opt.msg.desc[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_opt_val.obj.desc"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
             </div>
             <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="switch_details = false">取消</el-button>
-                </span>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_opt_val_add=false">取消</el-button>
+                    <el-button type="primary" @click="dialogOptValFunc">确定</el-button>
+                </div>
             </template>
         </el-dialog>
     </div>
 </template>
 <script setup>
 import {
-    APIgetUnitsListHouse,
-    APIgetUnitsDetailsHouse,
-    APIdeleteUnitsHouse,
-    APIputUnitsHouse,
-    APIpostUnitsHouse
+    APIgetOptsList,
+    APIdeleteOpts,
+    APIputOpts,
+    APIpostOpts
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -299,9 +367,9 @@ import {
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    type: '',
-    keyword: '',
-    place: []
+    label: '',
+    is_sys: '',
+    is_active: ''
 })
 let opts_place = [{
     value: '0',
@@ -316,22 +384,14 @@ let opts_place = [{
                }
     ]
 }]
-// 详情
-let switch_details = ref(false)
+
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
 let data_tab = reactive({
     arr: []
 })
-// 操作事件 列表单个行数据
-let data_dialog = reactive({
-    obj: {}
-})
-// 详情
-const data_details = reactive({
-    item: ''
-})
+
 // 分页
 let total = ref(100)
 let per_page = ref(15)
@@ -340,16 +400,11 @@ let page = ref(1)
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        'building_id': '17',
-        'addr': '浙江省 杭州市 江干区',
-        'cnt_floor': 21,
-        'cnt_house': 15,
-        'time_build_end': '1980-04-26',
-        'name': '不片原济须',
-        'remark': '速',
-        'addition': {
-            'desc': '例火科准知根天且上了那他不。七社政于知克始术志线二计规在如。全认圆金值速权当二五且解平土办。话划西总确起该极叫可美原间不然生发四。'
-        }
+        'name': '',
+        'label': '',
+        'is_active': 0,
+        'is_sys': 0,
+        'desc': ''
     }
 })
 let rule_examine = {
@@ -363,10 +418,12 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
 const searchFunc = () => {
+    page.value = 1
     switch_search.value = true
     getTabListFunc()
 }
@@ -374,21 +431,10 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.type = ''
-    data_search.keyword = ''
-    data_search.place = []
+    data_search.label = ''
+    data_search.is_sys = ''
+    data_search.is_active = []
     getTabListFunc()
-}
-
-// 详情
-const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetUnitsDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
-    })
 }
 // 监听分页
 watch(page, () => {
@@ -401,7 +447,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputUnitsHouse(from_examine.item.id, from_examine.item).then(res => {
+                APIputOpts(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -411,7 +457,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostUnitsHouse(from_examine.item).then(res => {
+                APIpostOpts(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -441,7 +487,7 @@ const getTabListFunc = () => {
         }
     }
     loading_tab.value = true
-    APIgetUnitsListHouse(params).then(res => {
+    APIgetOptsList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -451,7 +497,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteUnitsHouse(val.id).then(res => {
+    APIdeleteOpts(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
@@ -463,16 +509,11 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        'building_id': '',
-        'addr': '',
-        'cnt_floor': 0,
-        'cnt_house': 0,
-        'time_build_end': '',
         'name': '',
-        'remark': '',
-        'addition': {
-            'desc': ''
-        }
+        'label': '',
+        'is_active': 0,
+        'is_sys': 0,
+        'desc': ''
     }
     switch_examine.value = true
 }
@@ -480,16 +521,158 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetUnitsDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
-    })
+    from_examine.item = {
+        ...val
+    }
+    switch_examine.value = true
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
+
+/* *********************************************************************************************************************** */
+/* *********************************************************************************************************************** */
+import {
+    APIgetOptsValList,
+    APIdeleteOptsVal,
+    APIputOptsVal,
+    APIpostOptsVal
+} from '@/api/custom/custom.js'
+// 配置选项
+const switch_opt_val = ref(false)
+const item_opt = reactive({
+    obj: {}
+})
+const opt_search = reactive({
+    'key': '',
+    'val': '',
+    'is_sys': '',
+    'is_active': ''
+})
+const opt_loading = ref(false)
+const opt_tab = reactive({
+    arr: []
+})
+const opt_page = ref(1)
+const opt_total = ref(120)
+const opt_per_page = ref(15)
+const switch_opt_val_add = ref(false)
+const str_opt_val_title = ref('添加')
+const from_opt_val = reactive({
+    obj: {}
+})
+const err_opt = reactive({
+    msg: {}
+})
+const switch_opt_val_search = ref(false)
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 提交
+const dialogOptValFunc = () => {
+    if (str_opt_val_title.value == '修改') {
+        APIputOptsVal(from_opt_val.obj.id, from_opt_val.obj).then(res => {
+            if (!res.code) {
+                optValRefreshFunc()
+                ElMessage.success(res.msg)
+                switch_opt_val_add.value = false
+            }
+        }).catch(err => {
+            err_opt.msg = err.data
+        })
+    } else {
+        APIpostOptsVal(from_opt_val.obj).then(res => {
+            if (!res.code) {
+                optValRefreshFunc()
+                ElMessage.success(res.msg)
+                switch_opt_val_add.value = false
+            }
+        }).catch(err => {
+            err_opt.msg = err.data
+        })
+    }
+}
+// 监听分页
+watch(opt_page, () => {
+    getOptValListFunc()
+})
+// 添加
+const optValAddFunc = () => {
+    err_opt.msg = {}
+    str_opt_val_title.value = '添加'
+    from_opt_val.obj = {
+        'name': '',
+        'label': '',
+        'is_active': 0,
+        'is_sys': 0,
+        'desc': '',
+        'sort': 0,
+        'opt_id': item_opt.obj.id
+    }
+    switch_opt_val_add.value = true
+}
+// 修改
+const optValModifyFunc = val => {
+    err_opt.msg = {}
+    str_opt_val_title.value = '修改'
+    from_opt_val.obj = {
+        ...val
+    }
+    switch_opt_val_add.value = true
+}
+// 删除
+const optValDeleteFunc = val => {
+    APIdeleteOptsVal(val.id).then(res => {
+        if (res.code === 0) {
+            optValRefreshFunc()
+            ElMessage.success(res.msg)
+        }
+    })
+}
+// 搜索
+const optValSearchFunc = () => {
+    opt_page.value = 1
+    switch_opt_val_search.value = true
+    getOptValListFunc()
+}
+// 重置
+const optValRefreshFunc = () => {
+    opt_page.value = 1
+    switch_opt_val_search.value = false
+    opt_search.key = ''
+    opt_search.val = ''
+    opt_search.is_sys = ''
+    opt_search.is_active = ''
+    getOptValListFunc()
+}
+// 获取列表
+const getOptValListFunc = () => {
+    let params = {
+        opt_id: item_opt.obj.id,
+        page: opt_page.value,
+        per_page: opt_per_page.value
+    }
+    for (let key in opt_search) {
+        if (opt_search[key]) {
+            if (opt_search[key] instanceof Array && opt_search[key].length <= 0) {
+                continue
+            }
+            params[key] = opt_search[key]
+        }
+    }
+    opt_loading.value = true
+    APIgetOptsValList(params).then(res => {
+        if (res.code === 0) {
+            opt_loading.value = false
+            opt_tab.arr = res.data.items
+            opt_total.value = res.data.aggregation.total_cnt
+        }
+    })
+}
+// 打开配置选项
+const optValFunc = val => {
+    item_opt.obj = val
+    switch_opt_val.value = true
+    optValRefreshFunc()
+}
 </script>
 <style lang="scss">
     .routine-residential {

@@ -2,6 +2,44 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 配置选项
+// 列表
+export function APIgetOptsValList(params) {
+    return api.get('/pt/sysoptitem', { params: params })
+}
+// 删除
+export function APIdeleteOptsVal(id) {
+    return api.delete('/pt/sysoptitem/' + id)
+}
+// 修改
+export function APIputOptsVal(id, data) {
+    return api.put('/pt/sysoptitem/' + id, data)
+}
+// 添加
+export function APIpostOptsVal(data) {
+    return api.post('/pt/sysoptitem', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 配置
+// 列表
+export function APIgetOptsList(params) {
+    return api.get('/pt/sysopt', { params: params })
+}
+// 删除
+export function APIdeleteOpts(id) {
+    return api.delete('/pt/sysopt/' + id)
+}
+// 修改
+export function APIputOpts(id, data) {
+    return api.put('/pt/sysopt/' + id, data)
+}
+// 添加
+export function APIpostOpts(data) {
+    return api.post('/pt/sysopt', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 房屋
 // 列表
 export function APIgetHouseListHouse(params) {
