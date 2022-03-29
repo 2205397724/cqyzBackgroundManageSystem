@@ -5,10 +5,10 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.houseable_id" class="head-btn" placeholder="*楼栋或者单元对应的 ID，需配合 houseable_type 一起使用" clearable />
+                            <el-input v-model="data_search.name" class="head-btn" placeholder="房屋名称" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.houseable_type" class="head-btn" placeholder="*楼栋 buildings 或者 单元 units" clearable />
+                            <el-input v-model="data_search.addr" class="head-btn" placeholder="地址" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-input v-model="data_search.floor_truth" class="head-btn" placeholder="*物理楼层" clearable />
@@ -26,12 +26,6 @@
                             <el-input v-model="data_search.type_building" class="head-btn" placeholder="*楼栋性质" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.name" class="head-btn" placeholder="房屋名称" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.addr" class="head-btn" placeholder="地址" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-input v-model="data_search.type_model" class="head-btn" placeholder="*户型" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
@@ -47,12 +41,6 @@
                             <el-input v-model="data_search.status_fact" class="head-btn" placeholder="*实际用途" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.created_at" class="head-btn" placeholder="创建时间" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.updated_at" class="head-btn" placeholder="更新时间" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-input v-model="data_search.is_bind_property" class="head-btn" placeholder="是否绑定产权，1是，0否" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
@@ -66,6 +54,38 @@
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-input v-model="data_search.sync_unit_id" class="head-btn" placeholder="单元ID" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.houseable_id" class="head-btn" placeholder="*楼栋或者单元对应的 ID，需配合 houseable_type 一起使用" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                            <el-input v-model="data_search.houseable_type" class="head-btn" placeholder="*楼栋 buildings 或者 单元 units" clearable />
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.created_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="创建时间"
+                                    end-placeholder="创建时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.updated_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="更新时间"
+                                    end-placeholder="更新时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -898,6 +918,20 @@ const getTabListFunc = () => {
         }
     }
     loading_tab.value = true
+    if (params.created_at) {
+        let created_str = ''
+        for (let i in params.created_at) {
+            created_str += ',' + params.created_at[i]
+        }
+        params.created_at = created_str.substring(1)
+    }
+    if (params.updated_at) {
+        let updated_str = ''
+        for (let i in params.updated_at) {
+            updated_str += ',' + params.updated_at[i]
+        }
+        params.updated_at = updated_str.substring(1)
+    }
     APIgetHouseListHouse(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
