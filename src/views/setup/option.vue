@@ -8,10 +8,14 @@
                             <el-input v-model="data_search.label" class="head-btn" placeholder="选项配置标签" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.is_sys" class="head-btn" placeholder="系统级别" clearable />
+                            <el-select v-model="data_search.is_sys" class="head-btn" placeholder="系统级别" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.is_active" class="head-btn" placeholder="启用状态" clearable />
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-select v-model="data_search.is_active" class="head-btn" placeholder="启用状态" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -41,12 +45,12 @@
                         <el-table-column prop="desc" label="备注" width="220" />
                         <el-table-column prop="is_sys" label="系统级别" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.is_sys }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="is_active" label="启用状态" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.is_active }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_sys,scope.row.is_active) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -130,10 +134,9 @@
                                 label="系统级别" prop="is_sys"
                                 :error="from_error.msg&&from_error.msg.is_sys?from_error.msg.is_sys[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.is_sys"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_examine.item.is_sys" class="head-btn" placeholder="系统级别" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -141,10 +144,9 @@
                                 label="启用状态" prop="is_active"
                                 :error="from_error.msg&&from_error.msg.is_active?from_error.msg.is_active[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.is_active"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_examine.item.is_active" class="head-btn" placeholder="启用状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
@@ -185,10 +187,14 @@
                     <el-input v-model="opt_search.val" class="head-btn" placeholder="选项名称" clearable />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="opt_search.is_sys" class="head-btn" placeholder="系统级别" clearable />
+                    <el-select v-model="opt_search.is_sys" class="head-btn" placeholder="系统级别" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                    <el-input v-model="opt_search.is_active" class="head-btn" placeholder="启用状态" clearable />
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-select v-model="opt_search.is_active" class="head-btn" placeholder="启用状态" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="optValSearchFunc">搜索</el-button>
@@ -216,12 +222,12 @@
                 <el-table-column prop="desc" label="备注" width="220" />
                 <el-table-column prop="is_sys" label="系统级别" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.is_sys }} </span>
+                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="is_active" label="启用状态" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.is_active }} </span>
+                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_active,scope.row.is_active) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -294,10 +300,9 @@
                                 label="系统级别" prop="is_sys"
                                 :error="err_opt.msg&&err_opt.msg.is_sys?err_opt.msg.is_sys[0]:''"
                             >
-                                <el-input
-                                    v-model="from_opt_val.obj.is_sys"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_opt_val.obj.is_sys" class="head-btn" placeholder="系统级别" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -305,10 +310,9 @@
                                 label="启用状态" prop="is_active"
                                 :error="err_opt.msg&&err_opt.msg.is_active?err_opt.msg.is_active[0]:''"
                             >
-                                <el-input
-                                    v-model="from_opt_val.obj.is_active"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_opt_val.obj.is_active" class="head-btn" placeholder="启用状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -371,19 +375,6 @@ let data_search = reactive({
     is_sys: '',
     is_active: ''
 })
-let opts_place = [{
-    value: '0',
-    label: 'Guide',
-    children: [{
-                   value: '001',
-                   label: 'Disciplines'
-               },
-               {
-                   value: '002',
-                   label: '11111'
-               }
-    ]
-}]
 
 // 列表
 let ruleFormRef = ref('')
@@ -479,7 +470,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     for (let key in data_search) {
-        if (data_search[key]) {
+        if (data_search[key] || data_search[key] === 0) {
             if (data_search[key] instanceof Array && data_search[key].length <= 0) {
                 continue
             }
@@ -651,7 +642,7 @@ const getOptValListFunc = () => {
         per_page: opt_per_page.value
     }
     for (let key in opt_search) {
-        if (opt_search[key]) {
+        if (opt_search[key] || opt_search[key] === 0) {
             if (opt_search[key] instanceof Array && opt_search[key].length <= 0) {
                 continue
             }
@@ -673,6 +664,27 @@ const optValFunc = val => {
     switch_opt_val.value = true
     optValRefreshFunc()
 }
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import {
+    APIpostGetOpts
+} from '@/api/custom/custom.js'
+const opts_all = reactive({
+    obj: {}
+})
+APIpostGetOpts({ lab: ['sys_is_sys', 'sys_is_active'] }).then(res => {
+    opts_all.obj = res.data
+})
+const getOptValFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].key == key) {
+            return arr[i].val
+        }
+    }
+    return ''
+}
+
 </script>
 <style lang="scss">
     .routine-residential {

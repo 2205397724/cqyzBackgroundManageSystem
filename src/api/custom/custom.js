@@ -2,6 +2,12 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 获取配置选项
+// 获取列表
+export function APIpostGetOpts(data) {
+    return api.post('/optitem', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 配置选项
 // 列表
 export function APIgetOptsValList(params) {

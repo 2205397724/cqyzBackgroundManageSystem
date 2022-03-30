@@ -38,9 +38,17 @@
                         style="width: 100%;min-height: 300px;"
                     >
                         <el-table-column prop="name" label="名称" width="220" />
-                        <el-table-column prop="type" label="类型" width="90" />
                         <el-table-column prop="reply" label="理由" width="180" />
-                        <el-table-column prop="process_status" label="状态" width="90" />
+                        <el-table-column prop="type" label="类型" width="90" >
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.apply_type,scope.row.type) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="process_status" label="状态" width="90" >
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.apply_process_status,scope.row.process_status) }} </span>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="content.biz_lic" label="商业编码" width="180" />
                         <el-table-column prop="content.social_code" label="社会编码" width="180" />
                         <el-table-column prop="created_at" label="创建时间" width="180" />
@@ -118,16 +126,16 @@
                     <div class="right">{{ data_details.item.name }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">类型</div>
-                    <div class="right">{{ data_details.item.type }}</div>
-                </div>
-                <div class="item">
                     <div class="left">理由</div>
                     <div class="right">{{ data_details.item.reply }}</div>
                 </div>
                 <div class="item">
+                    <div class="left">类型</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.apply_type, data_details.item.type) }}</div>
+                </div>
+                <div class="item">
                     <div class="left">状态</div>
-                    <div class="right">{{ data_details.item.process_status }}</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.apply_process_status, data_details.item.process_status)  }}</div>
                 </div>
                 <div class="item">
                     <div class="left">商业编码</div>
@@ -279,7 +287,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     for (let key in data_search) {
-        if (data_search[key]) {
+        if (data_search[key]||data_search[key]===0) {
             if (data_search[key] instanceof Array && data_search[key].length <= 0) {
                 continue
             }

@@ -99,12 +99,12 @@
                         </el-table-column>
                         <el-table-column prop="type_water" label="供水方式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.type_water }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_water,scope.row.type_water)  }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_construct" label="结构形式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.type_construct }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_construct,scope.row.type_construct)  }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_lift" label="电梯数" width="140">
@@ -364,10 +364,9 @@
                                 label="供水方式" prop="type_water"
                                 :error="from_error.msg&&from_error.msg.type_water?from_error.msg.type_water[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.type_water"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_examine.item.type_water" class="head-btn" placeholder="供水方式" clearable>
+                                	<el-option v-for="(item,i) in opts_all.obj.build_type_water" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -375,10 +374,9 @@
                                 label="结构形式" prop="type_construct"
                                 :error="from_error.msg&&from_error.msg.type_construct?from_error.msg.type_construct[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.type_construct"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_examine.item.type_construct" class="head-btn" placeholder="结构形式" clearable>
+                                	<el-option v-for="(item,i) in opts_all.obj.build_type_construct" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -523,11 +521,11 @@
                 </div>
                 <div class="item">
                     <div class="left">供水方式</div>
-                    <div class="right">{{ data_details.item.type_water }}</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_water,data_details.item.type_water)  }}</div>
                 </div>
                 <div class="item">
                     <div class="left">结构形式</div>
-                    <div class="right">{{ data_details.item.type_construct }}</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_construct,data_details.item.type_construct)  }}</div>
                 </div>
                 <div class="item">
                     <div class="left">电梯数</div>
@@ -724,7 +722,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     for (let key in data_search) {
-        if (data_search[key]) {
+        if (data_search[key] || data_search[key] === 0) {
             if (data_search[key] instanceof Array && data_search[key].length <= 0) {
                 continue
             }
@@ -807,6 +805,25 @@ const modifyResidentialFunc = val => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
+
+// 配置项
+import {
+    APIpostGetOpts
+} from '@/api/custom/custom.js'
+const opts_all = reactive({
+    obj: {}
+})
+APIpostGetOpts({ lab: ['build_type_water', 'build_type_construct'] }).then(res => {
+    opts_all.obj = res.data
+})
+const getOptValFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].key == key) {
+            return arr[i].val
+        }
+    }
+    return ''
+}
 </script>
 <style lang="scss">
     .routine-residential {

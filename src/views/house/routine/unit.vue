@@ -239,11 +239,11 @@
                 </div>
                 <div class="item">
                     <div class="left">所属楼栋ID</div>
-                    <div class="right">{{ data_details.item.building_id }} m²</div>
+                    <div class="right">{{ data_details.item.building_id }} </div>
                 </div>
                 <div class="item">
                     <div class="left">地址</div>
-                    <div class="right">{{ data_details.item.addr }} m²</div>
+                    <div class="right">{{ data_details.item.addr }} </div>
                 </div>
                 <div class="item">
                     <div class="left">楼层数</div>
@@ -429,7 +429,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     for (let key in data_search) {
-        if (data_search[key]) {
+        if (data_search[key] || data_search[key] === 0) {
             if (data_search[key] instanceof Array && data_search[key].length <= 0) {
                 continue
             }

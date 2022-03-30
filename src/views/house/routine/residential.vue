@@ -309,7 +309,7 @@
                             <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box">
                                 <el-row :gutter="10">
                                     <el-col :xs="12" :sm="12">
-                                        <el-form-item label="服务名称">
+                                        <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
                                             <el-input
                                                 v-model="item.title"
                                                 placeholder=""
@@ -317,7 +317,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="12" :sm="12">
-                                        <el-form-item label="联系方式">
+                                        <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.phone']?from_error.msg['addition.extra.convenience.'+i+'.phone'][0]:''">
                                             <el-input
                                                 v-model="item.phone"
                                                 placeholder=""
@@ -359,27 +359,27 @@
                 </div>
                 <div class="item">
                     <div class="left">总占地面积</div>
-                    <div class="right">{{ data_details.item.area_floor }}</div>
+                    <div class="right">{{ data_details.item.area_floor }} m²</div>
                 </div>
                 <div class="item">
                     <div class="left">总建筑面积</div>
-                    <div class="right">{{ data_details.item.area_build }}</div>
+                    <div class="right">{{ data_details.item.area_build }} m²</div>
                 </div>
                 <div class="item">
                     <div class="left">配套用房总面积</div>
-                    <div class="right">{{ data_details.item.area_support }}</div>
+                    <div class="right">{{ data_details.item.area_support }} m²</div>
                 </div>
                 <div class="item">
                     <div class="left">楼栋数</div>
-                    <div class="right">{{ data_details.item.cnt_building }}</div>
+                    <div class="right">{{ data_details.item.cnt_building }} 栋</div>
                 </div>
                 <div class="item">
                     <div class="left">住房总套数</div>
-                    <div class="right">{{ data_details.item.cnt_live }}</div>
+                    <div class="right">{{ data_details.item.cnt_live }} 套</div>
                 </div>
                 <div class="item">
                     <div class="left">配套用房总套数</div>
-                    <div class="right">{{ data_details.item.cnt_support }}</div>
+                    <div class="right">{{ data_details.item.cnt_support }} 套</div>
                 </div>
                 <div class="item">
                     <div class="left">建设单位名称</div>
@@ -608,7 +608,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     for (let key in data_search) {
-        if (data_search[key]) {
+        if (data_search[key] || data_search[key] === 0) {
             if (data_search[key] instanceof Array && data_search[key].length <= 0) {
                 continue
             }
