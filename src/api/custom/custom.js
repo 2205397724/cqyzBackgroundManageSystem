@@ -2,6 +2,75 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 产权
+// 列表
+export function APIgetPropertyList(params) {
+    return api2.get('/house-property', { params: params })
+}
+// 详情
+export function APIgetPropertyDetails(id) {
+    return api2.get('/house-property/' + id)
+}
+// 删除
+export function APIdeleteProperty(id) {
+    return api2.delete('/house-property/' + id)
+}
+// 修改
+export function APIputProperty(id, data) {
+    return api2.put('/house-property/' + id, data)
+}
+// 添加
+export function APIpostProperty(data) {
+    return api2.post('/house-property', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// china
+// 列表
+export function APIgetChinaList(params) {
+    return api.get('/pt/china', { params: params })
+}
+// 详情
+export function APIgetChinaDetails(id) {
+    return api.get('/pt/china/' + id)
+}
+// 删除
+export function APIdeleteChina(id) {
+    return api.delete('/pt/china/' + id)
+}
+// 修改
+export function APIputChina(id, data) {
+    return api.put('/pt/china/' + id, data)
+}
+// 添加
+export function APIpostChina(data) {
+    return api.post('/pt/china', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 单元
+// 列表
+export function APIgetCityList(params) {
+    return api.get('/pt/city-config', { params: params })
+}
+// 详情
+export function APIgetCityDetails(id) {
+    return api.get('/pt/city-config/' + id)
+}
+// 删除
+export function APIdeleteCity(id) {
+    return api.delete('/pt/city-config/' + id)
+}
+// 修改
+export function APIputCity(id, data) {
+    return api.put('/pt/city-config/' + id, data)
+}
+// 添加
+export function APIpostCity(data) {
+    return api.post('/pt/city-config', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 获取配置选项
 // 获取列表
 export function APIpostGetOpts(data) {

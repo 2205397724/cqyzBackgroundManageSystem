@@ -6,7 +6,7 @@ export default {
     redirect: '/user_register/register',
     name: 'userRegisterBox',
     meta: {
-        title: '注册用户管理',
+        title: '*注册用户管理',
         icon: 'el-icon-postcard',
         auth: ['user.register', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'userRegister',
             component: () => import('@/views/user/register.vue'),
             meta: {
-                title: '注册用户管理',
+                title: '*注册用户管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/user_register',

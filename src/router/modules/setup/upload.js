@@ -6,7 +6,7 @@ export default {
     redirect: '/setup_upload/upload',
     name: 'setupUploadBox',
     meta: {
-        title: '上传设置',
+        title: '*上传设置',
         icon: 'el-icon-delete-location',
         auth: ['setup.upload', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'setupUpload',
             component: () => import('@/views/setup/upload.vue'),
             meta: {
-                title: '上传设置',
+                title: '*上传设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup_upload',

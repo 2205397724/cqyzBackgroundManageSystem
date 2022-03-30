@@ -6,7 +6,7 @@ export default {
     redirect: '/event_manage/manage',
     name: 'eventManageBox',
     meta: {
-        title: '事件管理',
+        title: '*事件管理',
         icon: 'el-icon-document',
         auth: ['event.manage', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'eventManage',
             component: () => import('@/views/event/manage.vue'),
             meta: {
-                title: '事件管理',
+                title: '*事件管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/event_manage',

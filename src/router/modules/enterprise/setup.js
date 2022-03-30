@@ -6,7 +6,7 @@ export default {
     redirect: '/enterprise_setup/register',
     name: 'enterpriseSetupBox',
     meta: {
-        title: '企业设置',
+        title: '*企业设置',
         icon: 'el-icon-set-up',
         auth: ['enterprise.setup', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'enterpriseSetupRegister',
             component: () => import('@/views/enterprise/setup/register.vue'),
             meta: {
-                title: '注册设置',
+                title: '*注册设置',
                 auth: ['enterprise.setup.register', '*']
             }
         },
@@ -25,7 +25,7 @@ export default {
             name: 'enterpriseSetupGroup',
             component: () => import('@/views/enterprise/setup/group.vue'),
             meta: {
-                title: ' 企业类别',
+                title: '*企业类别',
                 auth: ['enterprise.setup.group', '*']
             }
         },
@@ -34,7 +34,7 @@ export default {
             name: 'enterpriseSetupNews',
             component: () => import('@/views/enterprise/setup/news.vue'),
             meta: {
-                title: '消息模板',
+                title: '*消息模板',
                 auth: ['enterprise.setup.news', '*']
             }
         }

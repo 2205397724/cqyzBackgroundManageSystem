@@ -6,7 +6,7 @@ export default {
     redirect: '/statistics_house/house',
     name: 'statisticsHouseBox',
     meta: {
-        title: '小区房屋统计',
+        title: '*小区房屋统计',
         icon: 'el-icon-office-building',
         auth: ['statistics.house', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'statisticsHouse',
             component: () => import('@/views/statistics/house.vue'),
             meta: {
-                title: '小区房屋统计',
+                title: '*小区房屋统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics_house',

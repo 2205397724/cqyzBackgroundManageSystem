@@ -6,7 +6,7 @@ export default {
     redirect: '/supervise_workbench/workbench',
     name: 'superviseWorkbenchBox',
     meta: {
-        title: '管理工作台',
+        title: '*管理工作台',
         icon: 'el-icon-brush',
         auth: ['supervise.workbench', '*']
     },
@@ -17,7 +17,7 @@ export default {
             component: () => import('@/views/supervise/workbench.vue'),
             meta: {
                 copyright: false,
-                title: '管理工作台',
+                title: '*管理工作台',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/supervise_workbench',

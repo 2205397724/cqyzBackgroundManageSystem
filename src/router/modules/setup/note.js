@@ -6,7 +6,7 @@ export default {
     redirect: '/setup_note/note',
     name: 'setupNoteBox',
     meta: {
-        title: '短信设置',
+        title: '*短信设置',
         icon: 'el-icon-chat-dot-round',
         auth: ['setup.note', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'setupNote',
             component: () => import('@/views/setup/note.vue'),
             meta: {
-                title: '短信设置',
+                title: '*短信设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup_note',

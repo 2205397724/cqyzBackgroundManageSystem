@@ -6,7 +6,7 @@ export default {
     redirect: '/statistics_complaint/complaint',
     name: 'statisticsComplaintBox',
     meta: {
-        title: '投诉统计',
+        title: '*投诉统计',
         icon: 'el-icon-phone',
         auth: ['statistics.complaint', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'statisticsComplaint',
             component: () => import('@/views/statistics/complaint.vue'),
             meta: {
-                title: '投诉统计',
+                title: '*投诉统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics_complaint',

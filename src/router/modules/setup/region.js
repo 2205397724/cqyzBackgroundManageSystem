@@ -3,7 +3,7 @@ const Layout = () => import('@/layout/index.vue')
 export default {
     path: '/setup_region',
     component: Layout,
-    redirect: '/setup_region/region',
+    redirect: '/setup_region/city',
     name: 'setupRegionBox',
     meta: {
         title: '区域设置',
@@ -12,15 +12,21 @@ export default {
     },
     children: [
         {
-            path: 'region',
-            name: 'setupRegion',
-            component: () => import('@/views/setup/region.vue'),
+            path: 'city',
+            name: 'setupRegionCity',
+            component: () => import('@/views/setup/region/city.vue'),
             meta: {
-                title: '区域设置',
-                sidebar: false,
-                breadcrumb: false,
-                activeMenu: '/setup_region',
-                auth: ['setup.region.region', '*']
+                title: '城市配置',
+                auth: ['setup.region.city', '*']
+            }
+        },
+        {
+            path: 'china',
+            name: 'setupRegionChina',
+            component: () => import('@/views/setup/region/china.vue'),
+            meta: {
+                title: 'CHINA',
+                auth: ['setup.region.china', '*']
             }
         }
     ]

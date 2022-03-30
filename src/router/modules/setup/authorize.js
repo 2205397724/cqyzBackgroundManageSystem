@@ -6,7 +6,7 @@ export default {
     redirect: '/setup_authorize/group',
     name: 'setupAuthorizeBox',
     meta: {
-        title: '权限设置',
+        title: '*权限设置',
         icon: 'el-icon-key',
         auth: ['setup.authorize', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'setupAuthorizeGroup',
             component: () => import('@/views/setup/authorize/group.vue'),
             meta: {
-                title: ' 角色分组',
+                title: '*角色分组',
                 auth: ['setup.authorize.group', '*']
             }
         },
@@ -25,7 +25,7 @@ export default {
             name: 'setupAuthorizeMenu',
             component: () => import('@/views/setup/authorize/menu.vue'),
             meta: {
-                title: ' 后台菜单',
+                title: '*后台菜单',
                 auth: ['setup.authorize.menu', '*']
             }
         },
@@ -34,7 +34,7 @@ export default {
             name: 'setupAuthorizeAdmin',
             component: () => import('@/views/setup/authorize/admin.vue'),
             meta: {
-                title: ' 管理员设置',
+                title: '*管理员设置',
                 auth: ['setup.authorize.admin', '*']
             }
         }

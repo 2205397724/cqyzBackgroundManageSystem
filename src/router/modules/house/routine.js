@@ -16,7 +16,7 @@ export default {
             name: 'houseRoutineArchivesCategory',
             component: () => import('@/views/house/routine/archives_category.vue'),
             meta: {
-                title: '档案类别',
+                title: '*档案类别',
                 auth: ['house.routine.archives', '*']
             }
         },
@@ -61,7 +61,7 @@ export default {
             name: 'houseRoutineCategory',
             component: () => import('@/views/house/routine/category.vue'),
             meta: {
-                title: '类别配置',
+                title: '*类别配置',
                 auth: ['house.routine.category', '*']
             }
         },
@@ -70,7 +70,7 @@ export default {
             name: 'houseRoutineNews',
             component: () => import('@/views/house/routine/news.vue'),
             meta: {
-                title: '消息模板',
+                title: '*消息模板',
                 auth: ['house.routine.news', '*']
             }
         }

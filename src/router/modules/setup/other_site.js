@@ -6,7 +6,7 @@ export default {
     redirect: '/setup_other/other',
     name: 'setupOtherBox',
     meta: {
-        title: '分站设置',
+        title: '*分站设置',
         icon: 'el-icon-connection',
         auth: ['setup.other', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'setupOther',
             component: () => import('@/views/setup/other_site.vue'),
             meta: {
-                title: '分站设置',
+                title: '*分站设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup_other',

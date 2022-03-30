@@ -6,7 +6,7 @@ export default {
     redirect: '/event_setup/process',
     name: 'eventSetupBox',
     meta: {
-        title: '事件设置',
+        title: '*事件设置',
         icon: 'el-icon-set-up',
         auth: ['event.setup', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'eventSetupGroup',
             component: () => import('@/views/event/setup/group.vue'),
             meta: {
-                title: ' 类别设置',
+                title: '*类别设置',
                 auth: ['event.setup.group', '*']
             }
         },
@@ -25,7 +25,7 @@ export default {
             name: 'eventSetupProcess',
             component: () => import('@/views/event/setup/process.vue'),
             meta: {
-                title: '流程设置',
+                title: '*流程设置',
                 auth: ['event.setup.process', '*']
             }
         },
@@ -34,7 +34,7 @@ export default {
             name: 'eventSetupNews',
             component: () => import('@/views/event/setup/news.vue'),
             meta: {
-                title: '消息模板',
+                title: '*消息模板',
                 auth: ['event.setup.news', '*']
             }
         }

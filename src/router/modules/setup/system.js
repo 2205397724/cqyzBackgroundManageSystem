@@ -6,7 +6,7 @@ export default {
     redirect: '/setup_system/system',
     name: 'setupSystemBox',
     meta: {
-        title: '系统设置',
+        title: '*系统设置',
         icon: 'el-icon-set-up',
         auth: ['setup.system', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'setupSystem',
             component: () => import('@/views/setup/system.vue'),
             meta: {
-                title: '系统设置',
+                title: '*系统设置',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/setup_system',

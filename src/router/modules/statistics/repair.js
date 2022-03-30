@@ -6,7 +6,7 @@ export default {
     redirect: '/statistics_repair/repair',
     name: 'statisticsRepairBox',
     meta: {
-        title: '报修统计',
+        title: '*报修统计',
         icon: 'el-icon-warning',
         auth: ['statistics.repair', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'statisticsRepair',
             component: () => import('@/views/statistics/repair.vue'),
             meta: {
-                title: '报修统计',
+                title: '*报修统计',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/statistics_repair',
