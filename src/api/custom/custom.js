@@ -2,6 +2,29 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 用户
+// 列表
+export function APIgetUserList(params) {
+    return api.get('/pt/user-account', { params: params })
+}
+// 详情
+export function APIgetUserDetails(id) {
+    return api.get('/pt/user-account/' + id)
+}
+// 删除
+export function APIdeleteUser(id) {
+    return api.delete('/pt/user-account/' + id)
+}
+// 修改
+export function APIputUser(id, data) {
+    return api.put('/pt/user-account/' + id, data)
+}
+// 添加
+export function APIpostUser(data) {
+    return api.post('/pt/user-account', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 产权
 // 列表
 export function APIgetPropertyList(params) {
