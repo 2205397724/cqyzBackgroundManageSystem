@@ -70,7 +70,7 @@
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加产权</el-button>
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加用户</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -454,7 +454,7 @@ const deleteFunc = val => {
         }
     })
 }
-// 添加产权
+// 添加用户
 const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
