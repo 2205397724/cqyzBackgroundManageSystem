@@ -98,12 +98,12 @@
                         </el-table-column>
                         <el-table-column prop="gender" label="性别" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.gender }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_cert" label="认证状态" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.status_cert }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
                             </template>
                         </el-table-column>
 
@@ -258,11 +258,11 @@
                 </div>
                 <div class="item">
                     <div class="left">性别</div>
-                    <div class="right">{{ data_details.item.gender }}</div>
+                    <div class="right">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],data_details.item.gender) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">认证状态</div>
-                    <div class="right">{{ data_details.item.status_cert }}</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.status_cert,data_details.item.status_cert) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>

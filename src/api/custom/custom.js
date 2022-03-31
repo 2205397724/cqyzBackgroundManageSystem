@@ -2,6 +2,29 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 企业 
+// 列表
+export function APIgetEnterpriseList(params) {
+    return api.get('/pt/company', { params: params })
+}
+// 详情
+export function APIgetEnterpriseDetails(id) {
+    return api.get('/pt/company/' + id)
+}
+// 删除
+export function APIdeleteEnterprise(id) {
+    return api.delete('/pt/company/' + id)
+}
+// 修改
+export function APIputEnterprise(id, data) {
+    return api.put('/pt/company/' + id, data)
+}
+// 添加
+export function APIpostEnterprise(data) {
+    return api.post('/pt/company', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 用户
 // 列表
 export function APIgetUserList(params) {
