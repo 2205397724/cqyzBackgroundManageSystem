@@ -5,14 +5,67 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.keyword" class="head-btn" placeholder="类别" clearable>
-                                <el-option label="按ID" :value="0" />
-                                <el-option label="按企业名称" :value="1" />
-                                <el-option label="按区域地址" :value="2" />
-                            </el-select>
+                            <el-input v-model="data_search.house_id" class="head-btn" placeholder="*房屋ID" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
+                            <el-input v-model="data_search.code_property" class="head-btn" placeholder="产权证号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.code_room" class="head-btn" placeholder="地房籍号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.owner_name" class="head-btn" placeholder="产权人姓名" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.owner_id_card" class="head-btn" placeholder="产权人证件号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.owner_mobile" class="head-btn" placeholder="产权人手机号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-select v-model="data_search.is_bind_house" class="head-btn" placeholder="*是否绑定房屋" clearable>
+                                <el-option label="未绑定" value="0" />
+                                <el-option label="已绑定" value="1" />
+                            </el-select>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.time_deal"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="交易时间"
+                                    end-placeholder="交易时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.created_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="创建时间"
+                                    end-placeholder="创建时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.updated_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="更新时间"
+                                    end-placeholder="更新时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -52,12 +105,7 @@
                                 <span style="margin-left: 10px">{{ scope.row.code_room }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="should_bind_house" label="绑定房屋" width="90">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.should_bind_house }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="time_deal" label="交易时间" width="180">
+                        <el-table-column prop="time_deal" label="交易时间" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.time_deal }} </span>
                             </template>
@@ -78,10 +126,7 @@
                                 >
                                     详情
                                 </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
+                                <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
                                     <template #reference>
                                         <el-button type="danger" size="small">
                                             删除
@@ -90,6 +135,7 @@
                                 </el-popconfirm>
                             </template>
                         </el-table-column>
+                        <el-table-column />
                     </el-table>
                 </div>
                 <div style="padding-top: 20px;">
@@ -116,43 +162,99 @@
                     :model="from_examine.item"
                 >
                     <el-row :gutter="10">
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="区域名称" prop="name"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
-                            >
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="房屋ID" prop="house_id" :error="from_error.msg&&from_error.msg.house_id?from_error.msg.house_id[0]:''">
                                 <el-input
-                                    v-model="from_examine.item.name"
+                                    v-model="from_examine.item.house_id"
                                     placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="区域代码" prop="code"
-                                :error="from_error.msg&&from_error.msg.code?from_error.msg.code[0]:''"
-                            >
+                            <el-form-item label="交易时间" prop="time_deal" :error="from_error.msg&&from_error.msg.time_deal?from_error.msg.time_deal[0]:''">
                                 <el-input
-                                    v-model="from_examine.item.code"
+                                    v-model="from_examine.item.time_deal"
                                     placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="区域等级" prop="level"
-                                :error="from_error.msg&&from_error.msg.level?from_error.msg.level[0]:''"
-                            >
-                                <el-select
-                                    v-model="from_examine.item.level" class="head-btn" placeholder="*区域等级"
-                                    clearable
-                                >
-                                    <el-option
-                                        v-for="(item,i) in opts_all.obj.china_level" :key="item.key"
-                                        :label="item.val" :value="item.key"
-                                    />
+                            <el-form-item label="产权证号" prop="code_property" :error="from_error.msg&&from_error.msg.code_property?from_error.msg.code_property[0]:''">
+                                <el-input
+                                    v-model="from_examine.item.code_property"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="地房籍号" prop="code_room" :error="from_error.msg&&from_error.msg.code_room?from_error.msg.code_room[0]:''">
+                                <el-input
+                                    v-model="from_examine.item.code_room"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="绑定房屋" prop="should_bind_house" :error="from_error.msg&&from_error.msg.should_bind_house?from_error.msg.should_bind_house[0]:''">
+                                <el-select v-model="from_examine.item.should_bind_house" class="head-btn" placeholder="是否绑定房屋" clearable>
+                                    <el-option label="未绑定" value="0" />
+                                    <el-option label="已绑定" value="1" />
                                 </el-select>
                             </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <div style="margin-bottom: 10px;">
+                                <el-button style="margin-right: 10px;" @click="addServiceFunc">添加产权人</el-button>
+                            </div>
+                            <div v-for="(item,i) in from_examine.item.property_owners" class="serve-box">
+                                <el-row :gutter="10">
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label="姓名" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.name']?from_error.msg['property_owners.'+i+'.name'][0]:''">
+                                            <el-input
+                                                v-model="item.name"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label="证件类型" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.type_id_card']?from_error.msg['property_owners.'+i+'.type_id_card'][0]:''">
+                                            <el-input
+                                                v-model="item.type_id_card"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label="证件号" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.id_card']?from_error.msg['property_owners.'+i+'.id_card'][0]:''">
+                                            <el-input
+                                                v-model="item.id_card"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.mobile']?from_error.msg['property_owners.'+i+'.mobile'][0]:''">
+                                            <el-input
+                                                v-model="item.mobile"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label="面积" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.area']?from_error.msg['property_owners.'+i+'.area'][0]:''">
+                                            <el-input
+                                                v-model="item.area"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div class="delete-service" @click="deleteServiceFunc(i)">
+                                    <el-icon :size="20" color="#F56C6C">
+                                        <el-icon-circle-close />
+                                    </el-icon>
+                                </div>
+                            </div>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -173,23 +275,27 @@
             <div class="details-box">
                 <div class="item">
                     <div class="left">房屋ID</div>
-                    <div class="right">{{ data_details.item.house_id }} </div>
+                    <div class="right">{{ data_details.item.house_id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">产权证号</div>
-                    <div class="right">{{ data_details.item.code_property }} </div>
+                    <div class="right">{{ data_details.item.code_property }}</div>
                 </div>
                 <div class="item">
                     <div class="left">地房籍号</div>
-                    <div class="right">{{ data_details.item.code_room }} </div>
+                    <div class="right">{{ data_details.item.code_room }}</div>
                 </div>
-                <div class="item">
-                    <div class="left">绑定房屋</div>
-                    <div class="right">{{ data_details.item.should_bind_house }} </div>
+                <div v-if="data_details.item.house_bind" class="item">
+                    <div class="left">绑定的房屋名称</div>
+                    <div class="right">{{ data_details.item.house_bind.name }}</div>
+                </div>
+                <div v-if="data_details.item.house_bind" class="item">
+                    <div class="left">绑定的房屋地址</div>
+                    <div class="right">{{ data_details.item.house_bind.addr }}</div>
                 </div>
                 <div class="item">
                     <div class="left">交易时间</div>
-                    <div class="right">{{ data_details.item.time_deal }} </div>
+                    <div class="right">{{ data_details.item.time_deal }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -199,32 +305,44 @@
                     <div class="left">修改时间</div>
                     <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
-                <div v-for="(item,i) in data_details.item.property_owners">
+                <div v-if="data_details.item.property_owners">
                     <div class="item">
-                        <div class="left">权利人姓名</div>
-                        <div class="right">{{ item.name }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">证件类型</div>
-                        <div class="right">{{ item.type_id_card }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">证件号</div>
-                        <div class="right">{{ item.id_card }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">联系方式</div>
-                        <div class="right">{{ item.mobile }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">面积</div>
-                        <div class="right">{{ item.area }}</div>
+                        <div class="left">产权人</div>
+                        <div class="right">
+                            <div
+                                v-for="(item,i) in data_details.item.property_owners"
+                                class="convenience-item"
+                                style="display: flex;margin-bottom: 10px;border-bottom: 1px solid #eee;padding-bottom: 8px;flex-wrap: wrap;"
+                            >
+                                <div class="conve-left" style="width: 50%;">
+                                    <span
+                                        style="color: #000000;"
+                                    >姓名：</span>{{ item.name }}
+                                </div>
+                                <div class="conve-right" style="width: 50%;">
+                                    <span
+                                        style="color: #000000;"
+                                    >证件类型：</span>{{ item.type_id_card }}
+                                </div>
+                                <div class="conve-right" style="width: 50%;">
+                                    <span
+                                        style="color: #000000;"
+                                    >证件号：</span>{{ item.id_card }}
+                                </div>
+                                <div class="conve-right" style="width: 50%;">
+                                    <span
+                                        style="color: #000000;"
+                                    >联系方式：</span>{{ item.mobile }}
+                                </div>
+                                <div class="conve-right" style="width: 50%;">
+                                    <span
+                                        style="color: #000000;"
+                                    >面积：</span>{{ item.area }} ㎡
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!--                <div class="item">
-                    <div class="left">区域等级</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.china_level,data_details.item.level) }} </div>
-                </div> --> 
             </div>
             <template #footer>
                 <span class="dialog-footer">
@@ -247,9 +365,7 @@ import {
     ref,
     watch
 } from 'vue'
-import {
-    ElMessage
-} from 'element-plus'
+import { ElMessage } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -282,11 +398,8 @@ let switch_examine = ref(false)
 let from_examine = reactive({
     item: { }
 })
-
 const str_title = ref('添加')
-const from_error = reactive({
-    msg: {}
-})
+const from_error = reactive({ msg: {} })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -363,6 +476,27 @@ const getTabListFunc = () => {
             params[key] = data_search[key]
         }
     }
+    if (params.time_deal) {
+        let updated_str = ''
+        for (let i in params.time_deal) {
+            updated_str += ',' + params.time_deal[i]
+        }
+        params.time_deal = updated_str.substring(1)
+    }
+    if (params.created_at) {
+        let updated_str = ''
+        for (let i in params.created_at) {
+            updated_str += ',' + params.created_at[i]
+        }
+        params.created_at = updated_str.substring(1)
+    }
+    if (params.updated_at) {
+        let updated_str = ''
+        for (let i in params.updated_at) {
+            updated_str += ',' + params.updated_at[i]
+        }
+        params.updated_at = updated_str.substring(1)
+    }
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
         if (res.code === 0) {
@@ -381,11 +515,18 @@ const deleteFunc = val => {
         }
     })
 }
-// 添加楼栋
+// 添加产权
 const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
-    from_examine.item = {}
+    from_examine.item = {
+        property_owners: [],
+        house_id: '',
+        time_deal: '',
+        code_property: '',
+        code_room: '',
+        should_bind_house: ''
+    }
     switch_examine.value = true
 }
 // 修改
@@ -399,107 +540,97 @@ const modifyResidentialFunc = val => {
         }
     })
 }
+// 删除 服务名称和联系方式
+const deleteServiceFunc = index => {
+    from_examine.item.property_owners.splice(index, 1)
+}
+// 添加 服务名称和联系方式
+const addServiceFunc = index => {
+    let data = {
+        name: '',
+        type_id_card: '',
+        id_card: '',
+        mobile: '',
+        area: ''
+    }
+    from_examine.item.property_owners.push(data)
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
-/* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
-const opts_all = reactive({
-    obj: {}
-})
-APIpostGetOpts({
-    lab: ['china_level']
-}).then(res => {
-    opts_all.obj = res.data
-})
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 </script>
 <style lang="scss">
-	.routine-residential {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
+    .routine-residential {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
 
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
+        .serve-box {
+            border: 1px solid #eeeeee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
 
-			.el-form-item {
-				margin: 0;
-			}
-
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #ffffff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.routine-residential {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .routine-residential {
+        .head-btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
+    .search-tips {
+        color: #aaaaaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
 
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
+    .details-box {
+        .item {
+            display: flex;
+            color: #333333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
 
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
 
-			.left::after {
-				content: '：';
-			}
+            .left::after {
+                content: '：';
+            }
 
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
+            .right {
+                width: 100%;
+                color: #666666;
+            }
+        }
 
-		.item:last-child {
-			border-style: none;
-		}
-	}
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>
