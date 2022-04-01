@@ -3,7 +3,7 @@
         <page-main>
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加配置</el-button>
+                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加分类</el-button>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="main_type" class="head-btn" placeholder="分类种类" clearable>
@@ -227,10 +227,6 @@ const getTabListFunc = () => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data
-            // for (let i in data_tab.arr) {
-            //     data_tab.arr[i].child = []
-            //     data_tab.arr[i].has_child = true
-            // }
         }
     })
 }
@@ -277,7 +273,7 @@ const modifyResidentialFunc = val => {
 refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
+// 分类项
 import {
     APIpostGetOpts
 } from '@/api/custom/custom.js'

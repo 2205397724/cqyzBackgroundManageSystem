@@ -7,7 +7,7 @@ export default {
     name: 'setupTypeBox',
     meta: {
         title: '分类管理',
-        icon: 'el-icon-delete-location',
+        icon: 'el-icon-folder-opened',
         auth: ['setup.type', '*']
     },
     children: [
