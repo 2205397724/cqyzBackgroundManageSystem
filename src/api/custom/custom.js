@@ -2,6 +2,25 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 类别
+// 列表 
+export function APIgetTypeList(kind, params) {
+    return api2.get(`/kind/${kind}/cat`, { params: params })
+}
+// 删除
+export function APIdeleteType(kind, id) {
+    return api2.delete(`/kind/${kind}/cat/${id}`)
+}
+// 修改
+export function APIputType(kind, id, data) {
+    return api2.put(`/kind/${kind}/cat/${id}`, data)
+}
+// 添加
+export function APIpostType(kind, data) {
+    return api2.post(`/kind/${kind}/cat`, data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 企业 
 // 列表
 export function APIgetEnterpriseList(params) {
