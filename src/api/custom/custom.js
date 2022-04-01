@@ -2,6 +2,52 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 用户组成员 /api/ccgroup/{gid}/user
+// 列表 
+export function APIgetGroupUserList(gid, params) {
+    return api.get(`/ccgroup/${gid}/user`, { params: params })
+}
+// 删除
+export function APIdeleteGroupUser(gid, id) {
+    return api.delete(`/ccgroup/${gid}/user/${id}`)
+}
+// 修改
+export function APIputGroupUser(gid, id, data) {
+    return api.put(`/ccgroup/${gid}/user/${id}`, data)
+}
+// 添加
+export function APIpostGroupUser(gid, data) {
+    return api.post(`/ccgroup/${gid}/user`, data)
+}
+// 详情
+export function APIgetGroupUserDetails(gid, id) {
+    return api.get(`/ccgroup/${gid}/user/${id}`)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 用户组 /api/cc/{cc}/group
+// 列表 
+export function APIgetGroupList(cc, params) {
+    return api.get(`/cc/${cc}/group`, { params: params })
+}
+// 删除
+export function APIdeleteGroup(cc, id) {
+    return api.delete(`/cc/${cc}/group/${id}`)
+}
+// 修改
+export function APIputGroup(cc, id, data) {
+    return api.put(`/cc/${cc}/group/${id}`, data)
+}
+// 添加
+export function APIpostGroup(cc, data) {
+    return api.post(`/cc/${cc}/group`, data)
+}
+// 详情
+export function APIgetGroupDetails(cc, id) {
+    return api.get('/cc/${cc}/group/' + id)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 类别
 // 列表 
 export function APIgetTypeList(kind, params) {

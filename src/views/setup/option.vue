@@ -213,7 +213,7 @@
                 v-loading="opt_loading"
                 :data="opt_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;margin-bottom: 10px;"
+                style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
                 max-height="400"
             >
                 <el-table-column prop="sort" label="排序" width="60" />

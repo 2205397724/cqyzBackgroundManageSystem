@@ -85,6 +85,7 @@ import houseRoutine from './modules/house/routine.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userSetup from './modules/user/setup.js'
+import userGroup from './modules/user/group.js'
 // 企业
 import enterpriseManage from './modules/enterprise/manage.js'
 import enterpriseSetup from './modules/enterprise/setup.js'
@@ -154,6 +155,7 @@ const asyncRoutes = [
         },
         children: [
             userRegister,
+            userGroup,
             userSetup
         ]
     },
