@@ -2,8 +2,19 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 文件上传
+// 列表
+export function APIgetFilesList(params) {
+    return api2.get('/houseimptask', { params: params })
+}
+// 添加
+export function APIpostFiles(data) {
+    return api.post('/blob/form', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组成员 /api/ccgroup/{gid}/user
-// 列表 
+// 列表
 export function APIgetGroupUserList(gid, params) {
     return api.get(`/ccgroup/${gid}/user`, { params: params })
 }
@@ -26,7 +37,7 @@ export function APIgetGroupUserDetails(gid, id) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
-// 列表 
+// 列表
 export function APIgetGroupList(cc, params) {
     return api.get(`/cc/${cc}/group`, { params: params })
 }
@@ -49,7 +60,7 @@ export function APIgetGroupDetails(cc, id) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 类别
-// 列表 
+// 列表
 export function APIgetTypeList(kind, params) {
     return api2.get(`/kind/${kind}/cat`, { params: params })
 }
@@ -67,7 +78,7 @@ export function APIpostType(kind, data) {
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 企业 
+// 企业
 // 列表
 export function APIgetEnterpriseList(params) {
     return api.get('/pt/company', { params: params })
