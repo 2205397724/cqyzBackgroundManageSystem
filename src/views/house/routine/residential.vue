@@ -127,7 +127,6 @@
                 <el-form
                     ref="ruleFormRef"
                     :model="from_examine.item"
-                    :rules="rule_examine"
                 >
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -530,13 +529,7 @@ let from_examine = reactive({
         }
     }
 })
-let rule_examine = {
-    // reply: [{
-    //     required: true,
-    //     message: '请输入理由！',
-    //     trigger: 'blur'
-    // }]
-}
+
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
 /* ----------------------------------------------------------------------------------------------------------------------- */

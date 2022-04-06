@@ -62,23 +62,37 @@
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-input v-model="data_search.sync_china_code" class="head-btn" placeholder="区域code" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.sync_zone_id" class="head-btn" placeholder="小区ID" clearable />
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                            <!-- <el-input v-model="data_search.sync_zone_id" class="head-btn" placeholder="小区ID" clearable /> -->
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchResidential v-model:str="data_search.sync_zone_id" />
+                            </div>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                            <!-- <el-input v-model="data_search.sync_building_id" class="head-btn" placeholder="楼栋ID" clearable /> -->
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchBuilding v-model:str="data_search.sync_building_id" />
+                            </div>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                            <!-- <el-input v-model="data_search.sync_unit_id" class="head-btn" placeholder="单元ID" clearable /> -->
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchUnit v-model:str="data_search.sync_unit_id" />
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.sync_building_id" class="head-btn" placeholder="楼栋ID" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.sync_unit_id" class="head-btn" placeholder="单元ID" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.houseable_id" class="head-btn" placeholder="*楼栋或单元对应ID，配合houseable_type使用" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-select v-model="data_search.houseable_type" class="head-btn" placeholder="直属上级类型" clearable>
+                            <el-select v-model="data_search.houseable_type" class="head-btn" placeholder="直属上级类型" clearable @change="data_search.houseable_id=''">
                                 <el-option label="楼栋" value="buildings" />
                                 <el-option label="单元" value="units" />
                             </el-select>
+                        </el-col>
+                        <el-col v-if="data_search.houseable_type" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                            <div v-if="data_search.houseable_type=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchBuilding v-model:str="data_search.houseable_id" />
+                            </div>
+                            <div v-else-if="data_search.houseable_type=='units'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchUnit v-model:str="data_search.houseable_id" />
+                            </div>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
@@ -265,24 +279,33 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="直属类型ID" prop="houseable_id"
-                                :error="from_error.msg&&from_error.msg.houseable_id?from_error.msg.houseable_id[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.houseable_id"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="直属于的上级类型" prop="houseable_type"
+                                label="直属楼栋/单元类型" prop="houseable_type"
                                 :error="from_error.msg&&from_error.msg.houseable_type?from_error.msg.houseable_type[0]:''"
                             >
-                                <el-select v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable>
+                                <el-select
+                                    v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable
+                                    @change="from_examine.item.houseable_id = ''"
+                                >
                                     <el-option label="楼栋" value="buildings" />
                                     <el-option label="单元" value="units" />
                                 </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col v-if="from_examine.item.houseable_type" :md="24" :lg="12">
+                            <el-form-item
+                                label="直属楼栋/单元ID" prop="houseable_id"
+                                :error="from_error.msg&&from_error.msg.houseable_id?from_error.msg.houseable_id[0]:''"
+                            >
+                                <!-- <el-input
+                                    v-model="from_examine.item.houseable_id"
+                                    placeholder=""
+                                /> -->
+                                <div v-if="from_examine.item.houseable_type=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchBuilding v-model:str="from_examine.item.houseable_id" />
+                                </div>
+                                <div v-else-if="from_examine.item.houseable_type=='units'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchUnit v-model:str="from_examine.item.houseable_id" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -432,10 +455,13 @@
                                 label="当前产权ID" prop="curr_property_id"
                                 :error="from_error.msg&&from_error.msg.curr_property_id?from_error.msg.curr_property_id[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.curr_property_id"
+                                <!-- <el-input
+                                    v-model=""
                                     placeholder=""
-                                />
+                                /> -->
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchProperty v-model:str="from_examine.item.curr_property_id" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
@@ -482,11 +508,11 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">直属类型ID</div>
+                    <div class="left">直属楼栋/单元ID</div>
                     <div class="right">{{ data_details.item.houseable_id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">直属上级类型</div>
+                    <div class="left">直属楼栋/单元类型</div>
                     <div class="right">{{ getOptValFunc([{key:'buildings',val:'楼栋'},{key:'units',val:'单元'}],data_details.item.houseable_type) }}</div>
                 </div>
                 <div class="item">
@@ -804,6 +830,10 @@
     </div>
 </template>
 <script setup>
+import SearchBuilding from '@/components/SearchBuilding/index.vue'
+import SearchUnit from '@/components/SearchUnit/index.vue'
+import SearchResidential from '@/components/SearchResidential/index.vue'
+import SearchProperty from '@/components/SearchProperty/index.vue'
 import {
     APIgetHouseListHouse,
     APIgetHouseDetailsHouse,
@@ -1165,7 +1195,7 @@ const filesUpFunc = () => {
         // 发送 POST 请求
         console.log(files_obj.obj.file_src)
         console.log(typeof files_obj.obj.file_src)
-        const formData = new FormDate()
+        const formData = new FormData()
         formData.append('Policy', res.data.inputs.Policy)
         formData.append('X-Amz-Algorithm', res.data.inputs['X-Amz-Algorithm'])
         formData.append('X-Amz-Credential', res.data.inputs['X-Amz-Credential'])
@@ -1182,9 +1212,11 @@ const filesUpFunc = () => {
         })
         api[res.data.attrs.method.toLowerCase()]('', formData)
             .then(res => {
-                console.log(res)
+                ElMessage.success(res.statusText)
+                switch_files.value = false
+                refreshFilesListFunc()
             }).catch(err => {
-                console.log(err)
+                ElMessage.error(res.statusText)
             })
     })
 }
@@ -1203,7 +1235,7 @@ import {
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['status_cert'] }).then(res => {
+APIpostGetOpts({ lab: ['house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact'] }).then(res => {
     opts_all.obj = res.data
 })
 const getOptValFunc = (arr, key) => {

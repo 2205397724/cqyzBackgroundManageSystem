@@ -132,10 +132,13 @@
                                 label="所属楼栋ID" prop="building_id"
                                 :error="from_error.msg&&from_error.msg.building_id?from_error.msg.building_id[0]:''"
                             >
-                                <el-input
+                                <!-- <el-input
                                     v-model="from_examine.item.building_id"
                                     placeholder=""
-                                />
+                                /> -->
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchBuilding v-model:str="from_examine.item.building_id" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -279,6 +282,7 @@
     </div>
 </template>
 <script setup>
+import SearchBuilding from '@/components/SearchBuilding/index.vue'
 import {
     APIgetUnitsListHouse,
     APIgetUnitsDetailsHouse,

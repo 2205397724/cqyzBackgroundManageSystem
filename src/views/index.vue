@@ -87,8 +87,9 @@
     </div>
 </template>
 <script setup>
+
 // 公共导入 cscs
-import { reactive, inject, onMounted, nextTick } from 'vue'
+import { reactive } from 'vue'
 
 // 数据
 import {
@@ -134,6 +135,7 @@ APIgetEchartsHome().then(res => {
 }).catch(error => {
     console.log(error)
 })
+const aaa = ref()
 </script>
 
 <style lang="scss" scoped>

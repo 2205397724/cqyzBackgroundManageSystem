@@ -99,12 +99,12 @@
                         </el-table-column>
                         <el-table-column prop="type_water" label="供水方式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_water,scope.row.type_water)  }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_construct" label="结构形式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_construct,scope.row.type_construct)  }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_lift" label="电梯数" width="140">
@@ -181,10 +181,13 @@
                                 label="所属小区ID" prop="zone_id"
                                 :error="from_error.msg&&from_error.msg.zone_id?from_error.msg.zone_id[0]:''"
                             >
-                                <el-input
+                                <!-- <el-input
                                     v-model="from_examine.item.zone_id"
                                     placeholder=""
-                                />
+                                /> -->
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchResidential v-model:str="from_examine.item.zone_id" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -365,7 +368,7 @@
                                 :error="from_error.msg&&from_error.msg.type_water?from_error.msg.type_water[0]:''"
                             >
                                 <el-select v-model="from_examine.item.type_water" class="head-btn" placeholder="供水方式" clearable>
-                                	<el-option v-for="(item,i) in opts_all.obj.build_type_water" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.build_type_water" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -375,7 +378,7 @@
                                 :error="from_error.msg&&from_error.msg.type_construct?from_error.msg.type_construct[0]:''"
                             >
                                 <el-select v-model="from_examine.item.type_construct" class="head-btn" placeholder="结构形式" clearable>
-                                	<el-option v-for="(item,i) in opts_all.obj.build_type_construct" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.build_type_construct" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -521,11 +524,11 @@
                 </div>
                 <div class="item">
                     <div class="left">供水方式</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_water,data_details.item.type_water)  }}</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">结构形式</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_construct,data_details.item.type_construct)  }}</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">电梯数</div>
@@ -557,6 +560,7 @@
     </div>
 </template>
 <script setup>
+import SearchResidential from '@/components/SearchResidential/index.vue'
 import {
     APIgetBuildListHouse,
     APIgetBuildDetailsHouse,

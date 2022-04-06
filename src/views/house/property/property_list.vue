@@ -4,34 +4,35 @@
             <div>
                 <div>
                     <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.house_id" class="head-btn" placeholder="*房屋ID" clearable />
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchHouse v-model:str="data_search.obj.house_id" />
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.code_property" class="head-btn" placeholder="产权证号" clearable />
+                            <el-input v-model="data_search.obj.code_property" class="head-btn" placeholder="产权证号" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.code_room" class="head-btn" placeholder="地房籍号" clearable />
+                            <el-input v-model="data_search.obj.code_room" class="head-btn" placeholder="地房籍号" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.owner_name" class="head-btn" placeholder="产权人姓名" clearable />
+                            <el-input v-model="data_search.obj.owner_name" class="head-btn" placeholder="产权人姓名" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.owner_id_card" class="head-btn" placeholder="产权人证件号" clearable />
+                            <el-input v-model="data_search.obj.owner_id_card" class="head-btn" placeholder="产权人证件号" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.owner_mobile" class="head-btn" placeholder="产权人手机号" clearable />
+                            <el-input v-model="data_search.obj.owner_mobile" class="head-btn" placeholder="产权人手机号" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.is_bind_house" class="head-btn" placeholder="*是否绑定房屋" clearable>
-                                <el-option label="未绑定" value="0" />
-                                <el-option label="已绑定" value="1" />
+                            <el-select v-model="data_search.obj.is_bind_house" class="head-btn" placeholder="*是否绑定房屋" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
                                 <el-date-picker
-                                    v-model="data_search.time_deal"
+                                    v-model="data_search.obj.time_deal"
                                     type="daterange"
                                     range-separator="-"
                                     start-placeholder="交易时间"
@@ -44,7 +45,7 @@
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
                                 <el-date-picker
-                                    v-model="data_search.created_at"
+                                    v-model="data_search.obj.created_at"
                                     type="daterange"
                                     range-separator="-"
                                     start-placeholder="创建时间"
@@ -57,7 +58,7 @@
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
                                 <el-date-picker
-                                    v-model="data_search.updated_at"
+                                    v-model="data_search.obj.updated_at"
                                     type="daterange"
                                     range-separator="-"
                                     start-placeholder="更新时间"
@@ -164,10 +165,9 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label="房屋ID" prop="house_id" :error="from_error.msg&&from_error.msg.house_id?from_error.msg.house_id[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.house_id"
-                                    placeholder=""
-                                />
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchHouse v-model:str="from_examine.item.house_id" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -197,8 +197,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label="绑定房屋" prop="should_bind_house" :error="from_error.msg&&from_error.msg.should_bind_house?from_error.msg.should_bind_house[0]:''">
                                 <el-select v-model="from_examine.item.should_bind_house" class="head-btn" placeholder="是否绑定房屋" clearable>
-                                    <el-option label="未绑定" value="0" />
-                                    <el-option label="已绑定" value="1" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -353,6 +352,7 @@
     </div>
 </template>
 <script setup>
+import SearchHouse from '@/components/SearchHouse/index.vue'
 import {
     APIgetPropertyList,
     APIgetPropertyDetails,
@@ -371,7 +371,7 @@ import { ElMessage } from 'element-plus'
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    keyword: ''
+    obj: {}
 })
 // 详情
 let switch_details = ref(false)
@@ -412,7 +412,7 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.keyword = ''
+    data_search.obj = {}
     getTabListFunc()
 }
 
@@ -468,12 +468,12 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    for (let key in data_search) {
-        if (data_search[key] || data_search[key] === 0) {
-            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
                 continue
             }
-            params[key] = data_search[key]
+            params[key] = data_search.obj[key]
         }
     }
     if (params.time_deal) {
@@ -558,6 +558,26 @@ const addServiceFunc = index => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import {
+    APIpostGetOpts
+} from '@/api/custom/custom.js'
+const opts_all = reactive({
+    obj: {}
+})
+APIpostGetOpts({ lab: ['house_has_house'] }).then(res => {
+    opts_all.obj = res.data
+})
+const getOptValFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].key == key) {
+            return arr[i].val
+        }
+    }
+    return ''
+}
 </script>
 <style lang="scss">
     .routine-residential {
