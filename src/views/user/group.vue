@@ -6,7 +6,14 @@
                     <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加用户组</el-button>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="region_code" class="head-btn" placeholder="区域" clearable />
+                    <el-cascader
+                        v-model="region_code" class="head-btn"
+                        placeholder="区域"
+                        :props="cascader_props"
+                        collapse-tags
+                        collapse-tags-tooltip
+                        :show-all-levels="false"
+                    />
                 </el-col>
             </el-row>
             <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
@@ -291,7 +298,25 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-
+import {
+    APIgetChinaRegion
+} from '@/api/custom/custom.js'
+const cascader_props = {
+    multiple: false,
+    emitPath: false,
+    lazy: true,
+    value: 'code',
+    label: 'name',
+    checkStrictly: true,
+    lazyLoad(node, resolve) {
+        const {
+            data
+        } = node
+        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+            resolve(res.data)
+        })
+    }
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 监听类别
