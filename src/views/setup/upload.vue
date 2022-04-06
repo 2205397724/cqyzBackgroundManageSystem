@@ -1,6 +1,6 @@
 <template>
     <div>
-        <page-header title="欢迎使用 Fantastic-admin（基础版）">
+        <page-header title="欢迎使用 智慧物业（基础版）">
             123
         </page-header>
     </div>

@@ -172,9 +172,13 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label="交易时间" prop="time_deal" :error="from_error.msg&&from_error.msg.time_deal?from_error.msg.time_deal[0]:''">
-                                <el-input
+                                <el-date-picker
                                     v-model="from_examine.item.time_deal"
+                                    type="date"
+                                    value-format="YYYY-MM-DD"
                                     placeholder=""
+                                    style="width: 100%;"
+                                    :default-value="new Date()"
                                 />
                             </el-form-item>
                         </el-col>

@@ -2,6 +2,12 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 中国区域接口
+export function APIgetChinaRegion(params) {
+    return api.get('/china', { params: params })
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 文件上传
 // 列表
 export function APIgetFilesList(params) {

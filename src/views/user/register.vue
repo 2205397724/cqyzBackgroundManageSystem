@@ -43,7 +43,15 @@
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.region" class="head-btn" placeholder="区域" clearable />
+                            <el-cascader
+                                v-model="data_search.region" class="head-btn"
+                                placeholder="区域"
+                                :props="cascader_props"
+                                collapse-tags
+                                collapse-tags-tooltip
+                                clearable
+                                :show-all-levels="false"
+                            />
                         </el-col>
                         <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
@@ -213,9 +221,13 @@
                                 label="所属区域" prop="region"
                                 :error="from_error.msg&&from_error.msg.region?from_error.msg.region[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.region"
-                                    placeholder=""
+                                <el-cascader
+                                    v-model="from_examine.item.region" class="head-btn"
+                                    :props="cascader_props2"
+                                    collapse-tags
+                                    collapse-tags-tooltip
+                                    clearable
+                                    :show-all-levels="false"
                                 />
                             </el-form-item>
                         </el-col>
@@ -331,6 +343,41 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
+import {
+    APIgetChinaRegion
+} from '@/api/custom/custom.js'
+const cascader_props = {
+    multiple: false,
+    emitPath: false,
+    lazy: true,
+    value: 'code',
+    label: 'name',
+    checkStrictly: true,
+    lazyLoad(node, resolve) {
+        const {
+            data
+        } = node
+        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+            resolve(res.data)
+        })
+    }
+}
+const cascader_props2 = {
+    multiple: true,
+    emitPath: false,
+    lazy: true,
+    value: 'code',
+    label: 'name',
+    checkStrictly: true,
+    lazyLoad(node, resolve) {
+        const {
+            data
+        } = node
+        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+            resolve(res.data)
+        })
+    }
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
