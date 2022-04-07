@@ -1,8 +1,9 @@
 import axios from 'axios'
 // import qs from 'qs'
 import router from '@/router/index'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading  } from 'element-plus'
 import { useUserOutsideStore } from '@/store/modules/user'
+var loading = ''
 
 const toLogin = () => {
     const userOutsideStore = useUserOutsideStore()
@@ -24,6 +25,11 @@ const api = axios.create({
 
 api.interceptors.request.use(
     request => {
+        loading = ElLoading.service({
+            lock: true,
+            text: 'Loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+        })
         const userOutsideStore = useUserOutsideStore()
         /**
          * 全局拦截请求发送前提交的参数
@@ -45,6 +51,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
     response => {
+        loading.close()
         /**
          * 全局拦截请求发送后返回的数据，如果数据有报错则在这做全局的错误提示
          * 假设返回数据格式为：{ status: 1, error: '', data: '' }

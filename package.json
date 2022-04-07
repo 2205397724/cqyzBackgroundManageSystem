@@ -2,7 +2,7 @@
     "name": "fantastic-admin",
     "version": "0.1.0",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host 0.0.0.0",
         "build:test": "vite build --mode test",
         "build": "vite build",
         "serve:test": "http-server ./dist-test -o",
