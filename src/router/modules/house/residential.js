@@ -6,7 +6,7 @@ export default {
     redirect: '/house_residential/residential',
     name: 'houseResidentialBox',
     meta: {
-        title: '*小区管理',
+        title: '小区管理',
         icon: 'el-icon-office-building',
         auth: ['house.residential', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'houseResidential',
             component: () => import('@/views/house/residential.vue'),
             meta: {
-                title: '*小区管理',
+                title: '小区管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house_residential',

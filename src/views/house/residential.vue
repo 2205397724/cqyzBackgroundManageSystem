@@ -2,7 +2,7 @@
     <div class="residential-box">
         <page-main>
             <div>
-                <el-row :gutter="10">
+                <!-- <el-row :gutter="10">
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                         <el-cascader
                             v-model="data.search.place" :props="{value:'value',label:'label',children:'children'}"
@@ -34,32 +34,48 @@
                     <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                         <el-button class="head-btn" type="primary">搜索</el-button>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row :gutter="20" class="bottom-btn-box-2">
                     <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                         <el-button class="head-btn" type="primary">添加小区</el-button>
                     </el-col>
-                    <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <!-- <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                         <el-button class="head-btn" type="success">更新缓存</el-button>
                     </el-col>
                     <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                         <el-button class="head-btn" type="warning">导出数据</el-button>
-                    </el-col>
+                    </el-col> -->
                 </el-row>
             </div>
             <div class="list-box">
                 <el-row :gutter="20">
-                    <el-col v-for="(item,i) in 12" :key="''+i" :md="24" :lg="12" :xl="8">
+                    <el-col v-for="(item,i) in data_tab.arr" :key="''+i" :md="24" :lg="12" :xl="8">
                         <div class="list-item">
-                            <div class="tit">春天花园</div>
+                            <div class="tit">{{ item.name }}</div>
                             <div class="address">
-                                <div>地址：万州区乌龙池123号</div>
-                                <div>ID：123454512</div>
+                                <div class="arrd arrd1">地址：{{ item.addr }}</div>
+                                <div class="arrd arrd2">ID：{{ item.id }}</div>
                             </div>
                             <div class="bottom-btn">
-                                <div v-for="i in 6" class="bottom-btn-tit">
-                                    <div class="num">2222</div>
-                                    <div class="name">物业公司</div>
+                                <div class="bottom-btn-tit">
+                                    <div class="num">{{ item.cnt_building }}</div>
+                                    <div class="name">楼栋数</div>
+                                </div>
+                                <div class="bottom-btn-tit">
+                                    <div class="num">{{ item.cnt_live }}</div>
+                                    <div class="name">住房总套数</div>
+                                </div>
+                                <div class="bottom-btn-tit">
+                                    <div class="num">{{ item.cnt_support }}</div>
+                                    <div class="name">配套用房总套数</div>
+                                </div>
+                                <div class="bottom-btn-tit">
+                                    <div class="num">{{ item.area_floor }}㎡</div>
+                                    <div class="name">总占地面积</div>
+                                </div>
+                                <div class="bottom-btn-tit">
+                                    <div class="num">{{ item.area_build }}㎡</div>
+                                    <div class="name">总建筑面积</div>
                                 </div>
                             </div>
                         </div>
@@ -67,10 +83,10 @@
                 </el-row>
                 <div style="padding-top: 20px;">
                     <el-pagination
-                        v-model:current-page="data.pagination.current_page"
+                        v-model:current-page="page"
                         layout="total,prev,pager,next,jumper,"
-                        :total="data.pagination.total"
-                        :page-size="data.pagination.page_size"
+                        :total="total"
+                        :page-size="per_page"
                         background
                         hide-on-single-page
                     />
@@ -81,42 +97,38 @@
 </template>
 <script setup>
 import {
-    reactive
+    APIgetResidentialListHouse
+} from '@/api/custom/custom.js'
+import {
+    ref,
+    reactive,
+    watch
 } from 'vue'
-const data = reactive({
-    search: {
-        place: '',
-        options: '',
-        type: '',
-        committee: '',
-        company: '',
-        keyword: ''
-    },
-    house_list: '',
-    pagination: {
-        total: 150,
-        page_size: 15,
-        current_page: 2
-    }
+const data_tab = reactive({
+    arr: []
 })
-data.search.value = ['0', '002']
-data.search.options = [{
-    value: '0',
-    label: 'Guide',
-    children: [{
-                   value: '001',
-                   label: 'Disciplines'
-               },
-               {
-                   value: '002',
-                   label: '11111'
-               }
-    ]
-}]
-
-const handleChange = val => {
-    // console.log(val)
+// 分页
+let total = ref(100)
+let per_page = ref(15)
+let page = ref(1)
+// 监听分页
+watch(page, () => {
+    getTabListFunc()
+})
+// 获取列表
+const getTabListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetResidentialListHouse(params).then(res => {
+        if (res.code === 0) {
+            data_tab.arr = res.data.items
+            total.value = res.data.aggregation.total_cnt
+        }
+    })
 }
+getTabListFunc()
 </script>
 <style lang="scss">
     .residential-box{
@@ -147,18 +159,30 @@ const handleChange = val => {
                     font-size: 18px;
                     padding-bottom: 6px;
                     box-sizing: border-box;
+                    width: 100%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    box-sizing: border-box;
+                    text-overflow: ellipsis;
+                    -o-text-overflow:ellipsis;
                 }
                 .address{
                     color: #999999;
                     font-size: 14px;
                     display: flex;
-                    flex-wrap: wrap;
-                    >div{
-                        flex: 16;
+                    .arrd{
+                        flex: 1;
                         white-space: nowrap;
+                        overflow: hidden;
+                        box-sizing: border-box;
+                        text-overflow: ellipsis;
+                        -o-text-overflow:ellipsis;
                     }
-                    >div:last-child{
-                        flex: 8;
+                    .arrd1{
+                        padding-right: 20px;
+                    }
+                    .arrd2{
+                        padding-left: 20px;
                     }
                 }
                 .bottom-btn{
@@ -172,11 +196,25 @@ const handleChange = val => {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        max-width: 20%;
+                        overflow: hidden;
+                        box-sizing: border-box;
+                        padding: 0 6px;
                         .num{
                             color: #1890FF;
+                            width: 100%;
+                            text-align: center;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            -o-text-overflow:ellipsis;
                         }
                         .name{
+                            text-align: center;
+                            width: 100%;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            -o-text-overflow:ellipsis;
                         }
                     }
                 }
