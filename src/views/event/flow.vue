@@ -290,7 +290,7 @@
                             >
                                 <el-input
                                     v-model="from_examine2.item.for.group"
-                                    placeholder=""
+                                    placeholder="数组格式(英文)：['用户组集1','用户组集2']"
                                 />
                             </el-form-item>
                         </el-col>
@@ -591,6 +591,7 @@ const modifyFlowFunc = val => {
     APIgetFlowStepDetails(flow_id, val.id).then(res => {
         str_title2.value = '修改步骤'
         from_examine2.item = { ...res.data }
+        from_examine2.item.for.group = JSON.stringify(from_examine2.item.for.group)
         from_error2.obj = {}
         switch_examine2.value = true
     })
@@ -626,14 +627,14 @@ const refreshFunc2 = () => {
 }
 const addflowFunc = () => {
     str_title2.value = '添加步骤'
-    from_examine2.item = { for: {} }
+    from_examine2.item = { for: { group: [] } }
     from_error2.obj = {}
     switch_examine2.value = true
 }
 const flowUpdataFunc = () => {
     from_error2.msg = {}
     if (str_title2.value == '修改步骤') {
-        console.log(from_examine2.item)
+        from_examine2.item.for.group = JSON.parse(from_examine2.item.for.group)
         APIputFlowStep(flow_id, from_examine2.item.id, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
@@ -644,6 +645,7 @@ const flowUpdataFunc = () => {
             from_error2.msg = err.data
         })
     } else {
+        from_examine2.item.for.group = JSON.parse(from_examine2.item.for.group)
         APIpostFlowStep(flow_id, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
