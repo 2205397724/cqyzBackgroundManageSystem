@@ -1,8 +1,8 @@
 <template>
-    <div class="userregister">
+    <div class="articletplarticle">
         <page-main>
             <div>
-                <div>
+                <!-- <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-input v-model="data_search.mobile" class="head-btn" placeholder="手机号" clearable />
@@ -53,19 +53,6 @@
                                 :show-all-levels="false"
                             />
                         </el-col>
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.updated_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="更新时间"
-                                    end-placeholder="更新时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
@@ -74,7 +61,7 @@
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
-                </div>
+                </div> -->
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
@@ -89,9 +76,9 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="username" label="用户名" width="180">
+                        <el-table-column prop="title" label="名称" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.username }} </span>
+                                <span style="margin-left: 10px">{{ scope.row.title }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="mobile" label="手机号" width="180">
@@ -295,11 +282,11 @@
 </template>
 <script setup>
 import {
-    APIgetUserList,
-    APIgetUserDetails,
-    APIdeleteUser,
-    APIputUser,
-    APIpostUser
+    APIgetArticleList,
+    APIgetArticleDetails,
+    APIdeleteArticle,
+    APIputArticle,
+    APIpostArticle
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -405,7 +392,7 @@ const refreshFunc = () => {
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetUserDetails(val.id).then(res => {
+    APIgetArticleDetails(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -423,7 +410,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputUser(from_examine.item.id, from_examine.item).then(res => {
+                APIputArticle(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -433,7 +420,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostUser(from_examine.item).then(res => {
+                APIpostArticle(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -484,7 +471,7 @@ const getTabListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetUserList(params).then(res => {
+    APIgetArticleList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -494,7 +481,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteUser(val.id).then(res => {
+    APIdeleteArticle(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
@@ -519,28 +506,14 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetUserDetails(val.id).then(res => {
+    APIgetArticleDetails(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
         }
     })
 }
-// 删除 服务名称和联系方式
-const deleteServiceFunc = index => {
-    from_examine.item.property_owners.splice(index, 1)
-}
-// 添加 服务名称和联系方式
-const addServiceFunc = index => {
-    let data = {
-        name: '',
-        type_id_card: '',
-        id_card: '',
-        mobile: '',
-        area: ''
-    }
-    from_examine.item.property_owners.push(data)
-}
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -565,7 +538,7 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.userregister {
+	.articletplarticle {
 		.el-cascader-box-my {
 			.el-cascader {
 				width: 100% !important;
@@ -593,7 +566,7 @@ const getOptValFunc = (arr, key) => {
 	}
 </style>
 <style lang="scss" scoped>
-	.userregister {
+	.articletplarticle {
 		.head-btn {
 			width: 100%;
 			margin-bottom: 10px;

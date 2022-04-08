@@ -2,6 +2,117 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 流程步骤 Step
+// 列表
+export function APIgetFlowStepList(flow, params) {
+    return api2.get(`/flow/${flow}/step`, { params: params })
+}
+// 详情
+export function APIgetFlowStepDetails(flow, step) {
+    return api2.get(`/flow/${flow}/step/${step}`)
+}
+// 删除
+export function APIdeleteFlowStep(flow, step) {
+    return api2.delete(`/flow/${flow}/step/${step}`)
+}
+// 修改
+export function APIputFlowStep(flow, step, data) {
+    return api2.put(`/flow/${flow}/step/${step}`, data)
+}
+// 添加
+export function APIpostFlowStep(flow, data) {
+    return api2.post(`/flow/${flow}/step`, data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 流程 /api/
+// 列表
+export function APIgetFlowList(params) {
+    return api2.get('/flow', { params: params })
+}
+// 详情
+export function APIgetFlowDetails(id) {
+    return api2.get('/flow/' + id)
+}
+// 删除
+export function APIdeleteFlow(id) {
+    return api2.delete('/flow/' + id)
+}
+// 修改
+export function APIputFlow(id, data) {
+    return api2.put('/flow/' + id, data)
+}
+// 添加
+export function APIpostFlow(data) {
+    return api2.post('/flow', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 公示 模板 Articletpl /api/a/
+// 列表
+export function APIgetArticletplList(params) {
+    return api2.get('/a/articletpl', { params: params })
+}
+// 详情
+export function APIgetArticletplDetails(id) {
+    return api2.get('/a/articletpl/' + id)
+}
+// 删除
+export function APIdeleteArticletpl(id) {
+    return api2.delete('/a/articletpl/' + id)
+}
+// 修改
+export function APIputArticletpl(id, data) {
+    return api2.put('/a/articletpl/' + id, data)
+}
+// 添加
+export function APIpostArticletpl(data) {
+    return api2.post('/a/articletpl', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 公示 
+// 列表
+export function APIgetArticleList(params) {
+    return api2.get('/a/article', { params: params })
+}
+// 详情
+export function APIgetArticleDetails(id) {
+    return api2.get('/a/article' + id)
+}
+// 删除
+export function APIdeleteArticle(id) {
+    return api2.delete('/a/article' + id)
+}
+// 修改
+export function APIputArticle(id, data) {
+    return api2.put('/a/article' + id, data)
+}
+// 添加
+export function APIpostArticle(data) {
+    return api2.post('/a/article', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 档案
+// 列表
+export function APIgetArchiveList(params) {
+    return api2.get('/a/archive', { params: params })
+}
+// 删除
+export function APIdeleteArchive(id) {
+    return api2.delete('/a/archive/' + id)
+}
+// 修改
+export function APIputArchive(id, data) {
+    return api2.put('/a/archive/' + id, data)
+}
+// 添加
+export function APIpostArchive(data) {
+    return api2.post('/a/archive', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 中国区域接口
 export function APIgetChinaRegion(params) {
     return api.get('/china', { params: params })

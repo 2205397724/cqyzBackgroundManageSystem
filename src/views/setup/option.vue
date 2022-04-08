@@ -1,5 +1,5 @@
 <template>
-    <div class="routine-residential">
+    <div class="setupoption">
         <page-main>
             <div>
                 <div>
@@ -687,7 +687,7 @@ const getOptValFunc = (arr, key) => {
 
 </script>
 <style lang="scss">
-    .routine-residential {
+    .setupoption {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
@@ -719,7 +719,7 @@ const getOptValFunc = (arr, key) => {
     }
 </style>
 <style lang="scss" scoped>
-    .routine-residential {
+    .setupoption {
         .head-btn {
             width: 100%;
             margin-bottom: 10px;

@@ -1,5 +1,5 @@
 <template>
-    <div class="routine-residential">
+    <div class="regioncity">
         <page-main>
             <div>
                 <!-- <div>
@@ -364,7 +364,7 @@ const modifyResidentialFunc = val => {
 refreshFunc()
 </script>
 <style lang="scss">
-    .routine-residential {
+    .regioncity {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
@@ -396,7 +396,7 @@ refreshFunc()
     }
 </style>
 <style lang="scss" scoped>
-    .routine-residential {
+    .regioncity {
         .head-btn {
             width: 100%;
             margin-bottom: 10px;

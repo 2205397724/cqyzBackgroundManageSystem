@@ -1,5 +1,5 @@
 <template>
-    <div class="routine-residential">
+    <div class="usergroup">
         <page-main>
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
@@ -534,7 +534,7 @@ const getOptValFunc = (arr, key) => {
 
 </script>
 <style lang="scss">
-    .routine-residential {
+    .usergroup {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
@@ -566,7 +566,7 @@ const getOptValFunc = (arr, key) => {
     }
 </style>
 <style lang="scss" scoped>
-    .routine-residential {
+    .usergroup {
         .head-btn {
             width: 100%;
             margin-bottom: 10px;

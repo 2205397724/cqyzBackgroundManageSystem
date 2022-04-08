@@ -1,5 +1,5 @@
 <template>
-    <div class="userregister">
+    <div class="articletplaudit">
         <page-main>
             <div>
                 <div>
@@ -526,21 +526,7 @@ const modifyResidentialFunc = val => {
         }
     })
 }
-// 删除 服务名称和联系方式
-const deleteServiceFunc = index => {
-    from_examine.item.property_owners.splice(index, 1)
-}
-// 添加 服务名称和联系方式
-const addServiceFunc = index => {
-    let data = {
-        name: '',
-        type_id_card: '',
-        id_card: '',
-        mobile: '',
-        area: ''
-    }
-    from_examine.item.property_owners.push(data)
-}
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -565,7 +551,7 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.userregister {
+	.articletplaudit {
 		.el-cascader-box-my {
 			.el-cascader {
 				width: 100% !important;
@@ -593,7 +579,7 @@ const getOptValFunc = (arr, key) => {
 	}
 </style>
 <style lang="scss" scoped>
-	.userregister {
+	.articletplaudit {
 		.head-btn {
 			width: 100%;
 			margin-bottom: 10px;

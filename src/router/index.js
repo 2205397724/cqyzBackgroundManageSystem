@@ -90,8 +90,10 @@ import userGroup from './modules/user/group.js'
 import enterpriseManage from './modules/enterprise/manage.js'
 import enterpriseSetup from './modules/enterprise/setup.js'
 // 事件
-import eventManage from './modules/event/manage.js'
+import eventFlow from './modules/event/flow.js'
 import eventSetup from './modules/event/setup.js'
+import eventArticletpl from './modules/event/articletpl.js'
+
 // 设置
 import setupManage from './modules/setup/authorize.js'
 import setupNote from './modules/setup/note.js'
@@ -188,7 +190,8 @@ const asyncRoutes = [
             auth: ['event', '*']
         },
         children: [
-            eventManage,
+            eventArticletpl,
+            eventFlow,
             eventSetup
         ]
     },

@@ -1,5 +1,5 @@
 <template>
-    <div class="routine-residential">
+    <div class="routinebuilding">
         <page-main>
             <div>
                 <!-- <div>
@@ -830,7 +830,7 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-    .routine-residential {
+    .routinebuilding {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
@@ -862,7 +862,7 @@ const getOptValFunc = (arr, key) => {
     }
 </style>
 <style lang="scss" scoped>
-    .routine-residential {
+    .routinebuilding {
         .head-btn {
             width: 100%;
             margin-bottom: 10px;

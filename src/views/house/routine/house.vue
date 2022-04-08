@@ -1,5 +1,5 @@
 <template>
-    <div class="routine-residential">
+    <div class="routine-house">
         <page-main>
             <div>
                 <div>
@@ -148,7 +148,7 @@
                                         effect="dark"
                                     >
                                         <template #reference>
-                                            <el-link :underline="false" href="https://www.baidu.com" target="_blank"><el-button style="width: 100%;"><el-icon><el-icon-download /></el-icon></el-button></el-link>
+                                            <el-link :underline="false" href="http://192.168.110.37:10090/excels/house_import_tpl.xlsx" target="_blank"><el-button style="width: 100%;"><el-icon><el-icon-download /></el-icon></el-button></el-link>
                                         </template>
                                     </el-popover>
                                 </div>
@@ -1248,7 +1248,7 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-    .routine-residential {
+    .routine-house {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
@@ -1280,7 +1280,7 @@ const getOptValFunc = (arr, key) => {
     }
 </style>
 <style lang="scss" scoped>
-    .routine-residential {
+    .routine-house {
         .head-btn {
             width: 100%;
             margin-bottom: 10px;
