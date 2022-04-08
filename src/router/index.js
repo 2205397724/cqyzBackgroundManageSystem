@@ -101,7 +101,7 @@ import setupOther from './modules/setup/other_site.js'
 import setupPush from './modules/setup/push.js'
 import setupRegion from './modules/setup/region.js'
 import setupSystem from './modules/setup/system.js'
-import setupUpload from './modules/setup/upload.js'
+import setupFile from './modules/setup/file.js'
 import setupOption from './modules/setup/option.js'
 import setupType from './modules/setup/type.js'
 // 申请
@@ -205,7 +205,7 @@ const asyncRoutes = [
             setupRegion,
             setupOther,
             setupManage,
-            setupUpload,
+            setupFile,
             setupPush,
             setupNote,
             setupSystem,

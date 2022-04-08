@@ -2,6 +2,21 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 流程步骤 Step APIpostFiles
+// 列表
+export function APIgetFileList(params) {
+    return api2.get('/file', { params: params })
+}
+// 删除
+export function APIdeleteFile(id) {
+    return api2.delete(`/file/${id}`)
+}
+// 添加
+export function APIpostFileList(data) {
+    return api2.post('/file', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 流程步骤 Step
 // 列表
 export function APIgetFlowStepList(flow, params) {
@@ -71,7 +86,7 @@ export function APIpostArticletpl(data) {
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 公示 
+// 公示
 // 列表
 export function APIgetArticleList(params) {
     return api2.get('/a/article', { params: params })
@@ -119,12 +134,13 @@ export function APIgetChinaRegion(params) {
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 文件上传
-// 列表
+// 导入房屋任务列表
 export function APIgetFilesList(params) {
     return api2.get('/houseimptask', { params: params })
 }
-// 添加
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 文件上传获取配置 { 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }
 export function APIpostFiles(data) {
     return api.post('/blob/form', data)
 }

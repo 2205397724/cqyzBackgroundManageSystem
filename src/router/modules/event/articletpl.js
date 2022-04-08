@@ -6,7 +6,7 @@ export default {
     redirect: '/event_articletpl/archive',
     name: 'eventArticletplBox',
     meta: {
-        title: '公示',
+        title: '*公示',
         icon: 'el-icon-set-up',
         auth: ['event.articletpl', '*']
     },
@@ -25,7 +25,7 @@ export default {
             name: 'eventArticletplArticle',
             component: () => import('@/views/event/articletpl/article.vue'),
             meta: {
-                title: '公示',
+                title: '*公示',
                 auth: ['event.articletpl.article', '*']
             }
         },
@@ -34,7 +34,7 @@ export default {
             name: 'eventArticletplAudit',
             component: () => import('@/views/event/articletpl/audit.vue'),
             meta: {
-                title: '公示审核',
+                title: '*公示审核',
                 auth: ['event.articletpl.audit', '*']
             }
         },
@@ -43,7 +43,7 @@ export default {
             name: 'eventArticletplPlaceonfile',
             component: () => import('@/views/event/articletpl/placeonfile.vue'),
             meta: {
-                title: '归档公示',
+                title: '*归档公示',
                 auth: ['event.articletpl.placeonfile', '*']
             }
         },
