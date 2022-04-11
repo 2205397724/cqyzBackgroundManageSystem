@@ -2,31 +2,120 @@
     <div class="routineresidential">
         <page-main>
             <div>
-                <!-- <div>
+                <div>
                     <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-cascader
-                                v-model="data_search.place"
-                                :popper-append-to-body="false"
-                                :props="{value:'value',label:'label',children:'children'}"
-                                :options="opts_place" size="default" placeholder="地区" clearable
-                            />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.type" class="head-btn" placeholder="类别" clearable>
-                                <el-option label="按ID" :value="0" />
-                                <el-option label="按企业名称" :value="1" />
-                                <el-option label="按小区地址" :value="2" />
-                            </el-select>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+                            <el-input v-model="data_search.obj.name" class="head-btn" placeholder="小区名称" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
+                            <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+                            <el-input v-model="data_search.obj.china_code" class="head-btn" placeholder="所在区域code" clearable />
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.time_pro_setup" class="head-btn" placeholder="立项时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.time_pro_setup"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="立项时间"
+                                    end-placeholder="立项时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.time_build_start" class="head-btn" placeholder="开工时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.time_build_start"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="开工时间"
+                                    end-placeholder="开工时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.time_build_end" class="head-btn" placeholder="竣工时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.time_build_end"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="竣工时间"
+                                    end-placeholder="竣工时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.time_use" class="head-btn" placeholder="投用时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.time_use"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="投用时间"
+                                    end-placeholder="投用时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.time_turn" class="head-btn" placeholder="移交时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.time_turn"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="移交时间"
+                                    end-placeholder="移交时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.created_at" class="head-btn" placeholder="创建时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.created_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="创建时间"
+                                    end-placeholder="创建时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                            <!-- <el-input v-model="data_search.obj.updated_at" class="head-btn" placeholder="更新时间" clearable /> -->
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.obj.updated_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="更新时间"
+                                    end-placeholder="更新时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
                     </el-row>
-                </div> -->
+                </div>
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
@@ -466,7 +555,7 @@ import { ElMessage } from 'element-plus'
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    keyword: ''
+    obj: ''
 })
 let opts_place = [{
     value: '0',
@@ -544,7 +633,7 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.keyword = ''
+    data_search.obj = {}
     getTabListFunc()
 }
 
@@ -600,13 +689,62 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    for (let key in data_search) {
-        if (data_search[key] || data_search[key] === 0) {
-            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
                 continue
             }
-            params[key] = data_search[key]
+            params[key] = data_search.obj[key]
         }
+    }
+    if (params.time_pro_setup) {
+        let created_str = ''
+        for (let i in params.time_pro_setup) {
+            created_str += ',' + params.time_pro_setup[i]
+        }
+        params.time_pro_setup = created_str.substring(1)
+    }
+    if (params.time_build_start) {
+        let created_str = ''
+        for (let i in params.time_build_start) {
+            created_str += ',' + params.time_build_start[i]
+        }
+        params.time_build_start = created_str.substring(1)
+    }
+    if (params.time_build_end) {
+        let created_str = ''
+        for (let i in params.time_build_end) {
+            created_str += ',' + params.time_build_end[i]
+        }
+        params.time_build_end = created_str.substring(1)
+    }
+    if (params.time_use) {
+        let created_str = ''
+        for (let i in params.time_use) {
+            created_str += ',' + params.time_use[i]
+        }
+        params.time_use = created_str.substring(1)
+    }
+    if (params.time_turn) {
+        let created_str = ''
+        for (let i in params.time_turn) {
+            created_str += ',' + params.time_turn[i]
+        }
+        params.time_turn = created_str.substring(1)
+    }
+    if (params.created_at) {
+        let created_str = ''
+        for (let i in params.created_at) {
+            created_str += ',' + params.created_at[i]
+        }
+        params.created_at = created_str.substring(1)
+    }
+    if (params.updated_at) {
+        let created_str = ''
+        for (let i in params.updated_at) {
+            created_str += ',' + params.updated_at[i]
+        }
+        params.updated_at = created_str.substring(1)
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
