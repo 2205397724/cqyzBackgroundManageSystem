@@ -4,7 +4,8 @@
             <div class="tree-box">
                 <div class="tree-item">
                     <position-tree
-                        :tree_item="{id:50,name:'总title',type:'region'}"
+                        :tree_item="aaa"
+                        @checkFunc="checkFunc"
                     />
                 </div>
                 <div class="tree-details">
@@ -138,12 +139,16 @@
 <script setup>
 import {
     reactive,
-    ref
+    ref,
+    watch
 } from 'vue'
-const aaa = ref(123)
-setTimeout(() => {
-    aaa.value = 312
-}, 2000)
+const aaa = ref({ name: '名称', type: 'region', next_type: 'region', id: '50' })
+const checkFunc = val => {
+    console.log(6666666)
+}
+// setTimeout(() => {
+//     aaa.value = 312
+// }, 2000)
 const switch_search = ref(false)
 // 分页
 const total = ref(74751)
