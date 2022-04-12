@@ -78,6 +78,7 @@ import statisticsHouse from './modules/statistics/house.js'
 import statisticsRepair from './modules/statistics/repair.js'
 // 房源
 import houseArchives from './modules/house/archives.js'
+import houseHousingManagement from './modules/house/housing_management.js'
 import houseEnterprise from './modules/house/enterprise.js'
 import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
@@ -143,6 +144,7 @@ const asyncRoutes = [
         },
         children: [
             houseResidential,
+            houseHousingManagement,
             houseProperty,
             houseArchives,
             houseEnterprise,

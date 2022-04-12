@@ -3,10 +3,10 @@
         <page-main style="padding: 0;">
             <div class="tree-box">
                 <div class="tree-item">
-                    <position-tree tit="选择区域" :data="data.place_list" @myClick="placeClick" @nullClick="placeNullClick" />
+                    <!-- <position-tree tit="选择区域" :data="data.place_list" @myClick="placeClick" @nullClick="placeNullClick" /> -->
                 </div>
                 <div class="tree-item">
-                    <position-tree tit="选择小区" :data="data.house_list" @myClick="houseClick" @nullClick="houseNullClick" />
+                    <!-- <position-tree tit="选择小区" :data="data.house_list" @myClick="houseClick" @nullClick="houseNullClick" /> -->
                 </div>
                 <div class="tree-details">
                     <div class="tit">

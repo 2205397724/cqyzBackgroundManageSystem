@@ -2,7 +2,7 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 流程步骤 Step APIpostFiles
+// 资源 Step APIpostFiles
 // 列表
 export function APIgetFileList(params) {
     return api2.get('/file', { params: params })
