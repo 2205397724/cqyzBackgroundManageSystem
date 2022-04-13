@@ -372,6 +372,10 @@ export function APIpostOpts(data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 房屋
 // 列表
+export function APIgetHouseListSort(params) {
+    return api2.get('/houses-able', { params: params })
+}
+// 列表
 export function APIgetHouseListHouse(params) {
     return api2.get('/houses', { params: params })
 }

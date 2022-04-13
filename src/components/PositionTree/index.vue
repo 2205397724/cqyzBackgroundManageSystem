@@ -11,7 +11,7 @@
             :check-strictly="true"
             :accordion="true"
             :default-checked-keys="[tree_item.id]"
-            @check-change="handleCheckChange"
+            @check="handleCheck"
         />
     </div>
 </template>
@@ -43,14 +43,12 @@ import {
     APIgetUnitsListHouse
 } from '@/api/custom/custom.js'
 let nodeCopy = ''
-// type: region区域 zone小区 building楼栋 unit单元
+// type: region区域 zone小区 building楼栋 units单元
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
         nodeCopy = node
         resolve([tree_item.value])
-        if (tree_item.value.type && tree_item.value.type != 'region') {
-            emit('checkFunc', tree_item.value)
-        }
+        emit('checkFunc', tree_item.value)
         return false
     }
     switch (node.data.next_type) {
@@ -85,18 +83,18 @@ const loadNode = (node, resolve) => {
                 let tree_arr = []
                 if (!res.data.code) {
                     for (let i in res.data.items) {
-                        tree_arr.push({ name: res.data.items[i].name, type: 'building', next_type: 'unit', id: res.data.items[i].id })
+                        tree_arr.push({ name: res.data.items[i].name, type: 'building', next_type: 'units', id: res.data.items[i].id })
                     }
                 }
                 resolve(tree_arr)
             })
             break
-        case 'unit':
+        case 'units':
             APIgetUnitsListHouse({ page: 1, per_page: 500, building_id: node.data.id }).then(res => {
                 let tree_arr = []
                 if (!res.data.code) {
                     for (let i in res.data.items) {
-                        tree_arr.push({ name: res.data.items[i].name, leaf: true, id: res.data.items[i].id, type: 'unit', next_type: 'house' })
+                        tree_arr.push({ name: res.data.items[i].name, leaf: true, id: res.data.items[i].id, type: 'units', next_type: 'house' })
                     }
                 }
                 resolve(tree_arr)
@@ -111,8 +109,8 @@ watch(tree_item, new_val => {
         nodeCopy.loadData()
     }
 }, { immediate: true, deep: true })
-const handleCheckChange = (data, checked, node) => {
-    if (checked) {
+const handleCheck = (data, checked) => {
+    if (checked.checkedKeys.length > 0) {
         treeRef.value.setCheckedNodes([data])
         emit('checkFunc', data)
         return false
