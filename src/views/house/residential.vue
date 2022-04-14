@@ -10,10 +10,10 @@
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                             <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+                        <!-- <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                             <el-input v-model="data_search.obj.china_code" class="head-btn" placeholder="所在区域code" clearable />
-                        </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.time_pro_setup"
@@ -25,8 +25,8 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.time_build_start"
@@ -38,7 +38,7 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </div>
-                        </el-col>
+                        </el-col> -->
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
@@ -52,7 +52,7 @@
                                 />
                             </div>
                         </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.time_use"
@@ -64,8 +64,8 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.time_turn"
@@ -77,8 +77,8 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.created_at"
@@ -90,8 +90,8 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.updated_at"
@@ -103,7 +103,7 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </div>
-                        </el-col>
+                        </el-col> -->
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
@@ -536,8 +536,9 @@
             v-model="edit_house"
             title="房屋"
             width="70%"
+            center
         >
-            <div style="overflow: auto;">
+            <div style="width: 100%;height: 60vh;overflow: auto;">
                 <House :tree_item="tree_item.obj" />
             </div>
         </el-dialog>

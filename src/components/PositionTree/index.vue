@@ -1,18 +1,20 @@
 <template>
     <div class="main-box">
-        <el-tree
-            ref="treeRef"
-            class="el-tree-box"
-            node-key="id"
-            :props="tree_props"
-            :load="loadNode"
-            lazy
-            show-checkbox
-            :check-strictly="true"
-            :accordion="true"
-            :default-checked-keys="[tree_item.id]"
-            @check="handleCheck"
-        />
+        <el-scrollbar max-height="100%">
+            <el-tree
+                ref="treeRef"
+                class="el-tree-box"
+                node-key="id"
+                :props="tree_props"
+                :load="loadNode"
+                lazy
+                show-checkbox
+                :check-strictly="true"
+                :accordion="true"
+                :default-checked-keys="[tree_item.id]"
+                @check="handleCheck"
+            />
+        </el-scrollbar>
     </div>
 </template>
 
@@ -121,11 +123,10 @@ const handleCheck = (data, checked) => {
 <style lang="scss">
     .main-box {
         height: 100%;
-        max-height: 100vh;
-        overflow: auto;
+        // overflow: auto;
         .el-tree-box{
-            width: max-content;
-            min-width: 100%;
+            // width: max-content;
+            // min-width: 100%;
         }
     }
 </style>
