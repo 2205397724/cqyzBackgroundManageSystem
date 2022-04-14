@@ -1,5 +1,5 @@
 <template>
-    <div class="housing-management" style="height: 100vh;">
+    <div style="height: 100vh;">
         <page-main style="padding: 0;height: 100%;">
             <div class="tree-box" style="height: 100%;">
                 <div class="tree-item">
@@ -143,6 +143,13 @@
                                             />
                                         </el-select>
                                     </el-col>
+                                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                                        <el-input
+                                            v-model="data_search.obj.sync_china_code" class="head-btn"
+                                            placeholder="区域code"
+                                            clearable
+                                        />
+                                    </el-col>
                                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                                         <div class="head-btn">
                                             <el-date-picker
@@ -280,30 +287,7 @@
                                                         v-model="checkFH.all[child.floor_truth][item.house_num].val"
                                                         @change="(val)=>{checkFH.all[child.floor_truth][item.house_num].val= val;allClickFunc(child.floor_truth,item.house_num,val)}"
                                                     />
-                                                    <el-popover
-                                                        :width="200"
-                                                        trigger="hover"
-
-                                                        placement="top"
-                                                    >
-                                                        <template #reference>
-                                                            <div class="row-item-check">{{ item.house_num }}#</div>
-                                                        </template>
-                                                        <div style="box-sizing: border-box;padding: 4px;">
-                                                            <div class="tip-title">房屋：{{ item.name }}</div>
-                                                            <!-- <div class="tip-title">使用状态：{{ getOptValFunc(opts_all.obj.house_status_use,item.status_use) }}</div>
-                                                            <div class="tip-title">安全状态：{{ getOptValFunc(opts_all.obj.house_status_safe,item.status_safe) }}</div>
-                                                            <div class="tip-title">产权性质：{{ getOptValFunc(opts_all.obj.house_type_property,item.type_property) }}</div>
-                                                            <div class="tip-title">户型：{{ getOptValFunc(opts_all.obj.house_type_model,item.type_model) }}</div> -->
-                                                            <div class="tip-title">使用状态：</div>
-                                                            <div class="tip-title">安全状态：</div>
-                                                            <div class="tip-title">产权性质：</div>
-                                                            <div class="tip-title">户型：</div>
-                                                            <div>
-                                                                <el-button type="primary" plain @click="modifyResidentialFunc(item)">修改</el-button>
-                                                            </div>
-                                                        </div>
-                                                    </el-popover>
+                                                    <div class="row-item-check">{{ item.house_num }}#</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -346,6 +330,10 @@
                                 label="直属楼栋/单元ID" prop="houseable_id"
                                 :error="from_error.msg&&from_error.msg.houseable_id?from_error.msg.houseable_id[0]:''"
                             >
+                                <!-- <el-input
+                                    v-model="from_examine.item.houseable_id"
+                                    placeholder=""
+                                /> -->
                                 <div v-if="from_examine.item.houseable_type=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                                     <SearchBuilding v-model:str="from_examine.item.houseable_id" />
                                 </div>
@@ -590,9 +578,10 @@
                                 label="户型" prop="type_model"
                                 :error="error_alldetails.msg&&error_alldetails.msg.type_model?error_alldetails.msg.type_model[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.type_model" class="head-btn" placeholder="户型" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.type_model"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -600,9 +589,10 @@
                                 label="产权性质" prop="type_property"
                                 :error="error_alldetails.msg&&error_alldetails.msg.type_property?error_alldetails.msg.type_property[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.type_property" class="head-btn" placeholder="产权性质" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.type_property"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -610,9 +600,10 @@
                                 label="楼栋性质" prop="type_building"
                                 :error="error_alldetails.msg&&error_alldetails.msg.type_building?error_alldetails.msg.type_building[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.type_building" class="head-btn" placeholder="楼栋性质" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.type_building"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -620,9 +611,10 @@
                                 label="房屋使用状态" prop="status_use"
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_use?error_alldetails.msg.status_use[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.status_use" class="head-btn" placeholder="房屋使用状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.status_use"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -630,9 +622,10 @@
                                 label="房屋安全状态" prop="status_safe"
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_safe?error_alldetails.msg.status_safe[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.status_safe" class="head-btn" placeholder="房屋安全状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.status_safe"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -640,9 +633,10 @@
                                 label="规划用途" prop="status_plan"
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_plan?error_alldetails.msg.status_plan[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.status_plan" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.status_plan"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
@@ -650,9 +644,10 @@
                                 label="实际用途" prop="status_fact"
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_fact?error_alldetails.msg.status_fact[0]:''"
                             >
-                                <el-select v-model="piliangxiugai.obj.status_fact" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                <el-input
+                                    v-model="piliangxiugai.obj.status_fact"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -779,24 +774,14 @@
 import {
     reactive,
     ref,
-    watch
+    watch,
+    defineProps
 } from 'vue'
 import {
     ElMessage
 } from 'element-plus'
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
-})
-import { APIgetChinaRegion } from '@/api/custom/custom.js'
-APIgetChinaRegion().then(res => {
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
-})
+const props = defineProps(['tree_item'])
+const { tree_item } = toRefs(props)
 const active_obj = reactive({
     obj: {}
 })
@@ -820,14 +805,12 @@ const data_search = reactive({
 // 搜索
 const searchFunc = () => {
     switch_search.value = true
-    getHouseListFunc()
 }
 // 刷新
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
     data_search.obj = {}
-    getHouseListFunc()
 }
 import {
     APIgetHouseListSort,
@@ -884,37 +867,13 @@ const getStateFunc = () => {
 }
 
 const getHouseListFunc = () => {
-    choseIDs.arr = []
     getUnitBuildFunc()
     let params = {
         houseable_type: active_obj.obj.type,
         houseable_id: active_obj.obj.id
     }
-    for (let key in data_search.obj) {
-        if (data_search.obj[key] || data_search.obj[key] === 0) {
-            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
-                continue
-            }
-            params[key] = data_search.obj[key]
-        }
-    }
-    if (params.created_at) {
-        let created_str = ''
-        for (let i in params.created_at) {
-            created_str += ',' + params.created_at[i]
-        }
-        params.created_at = created_str.substring(1)
-    }
-    if (params.updated_at) {
-        let updated_str = ''
-        for (let i in params.updated_at) {
-            updated_str += ',' + params.updated_at[i]
-        }
-        params.updated_at = updated_str.substring(1)
-    }
     APIgetHouseListSort(params).then(res => {
         if (!res.code) {
-            total.value = 0
             // 处理空白格
             let nums = res.data.house_nums
             let list = res.data.houses
@@ -943,7 +902,6 @@ const getHouseListFunc = () => {
                 checkFH.all[house_list.arr[i].floor_truth] = {}
                 for (let j in house_list.arr[i].houses) {
                     if (house_list.arr[i].houses[j].house_num) {
-                        total.value++
                         checkFH.all[house_list.arr[i].floor_truth][house_list.arr[i].houses[j]
                             .house_num] = {
                             val: false,
@@ -1229,7 +1187,7 @@ const getOptValFunc = (arr, key) => {
 </script>
 
 <style lang="scss">
-    .housing-management {
+    .tree-box {
         .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
@@ -1259,50 +1217,46 @@ const getOptValFunc = (arr, key) => {
             }
         }
     }
-
 </style>
 <style lang="scss" scoped>
-    .housing-management{
-        .tree-box {
-            display: flex;
-             }
+    .tree-box {
+        display: flex;
 
-            .head-btn {
-                width: 100%;
+        .head-btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .tree-item {
+            min-width: 200px;
+            width: 200px;
+            border-right: 1px solid #e9e9e9;
+
+            .tree-title {
+                height: 60px;
+                line-height: 60px;
+                padding-left: 20px;
+                color: #aaaaaa;
+                font-size: 14px;
+                border-bottom: 1px solid #e9e9e9;
+            }
+        }
+
+        .tree-details {
+            flex-grow: 1;
+            max-width: calc(100% - 200px);
+
+            .el-cascader-box-my {}
+
+            .bottom-btn-box-2 {
                 margin-bottom: 10px;
-            }
 
-            .tree-item {
-                min-width: 200px;
-                width: 200px;
-                border-right: 1px solid #e9e9e9;
-
-                .tree-title {
-                    height: 60px;
-                    line-height: 60px;
-                    padding-left: 20px;
-                    color: #aaaaaa;
-                    font-size: 14px;
-                    border-bottom: 1px solid #e9e9e9;
+                .head-btn {
+                    width: 100%;
+                    margin: 10px 0 10px 0;
                 }
             }
-
-            .tree-details {
-                flex-grow: 1;
-                max-width: calc(100% - 200px);
-
-                .el-cascader-box-my {}
-
-                .bottom-btn-box-2 {
-                    margin-bottom: 10px;
-
-                    .head-btn {
-                        width: 100%;
-                        margin: 10px 0 10px 0;
-                    }
-                }
-            }
-
+        }
     }
 
     .row-box {
@@ -1398,12 +1352,5 @@ const getOptValFunc = (arr, key) => {
         background: #CCCCCC;
         color: #FFFFFF;
          border:1px solid #CCCCCC
-    }
-    .tip-title{
-        font-size: 14px;
-        margin-bottom: 4px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 </style>

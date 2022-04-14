@@ -146,8 +146,8 @@
                         </el-table-column>
                         <el-table-column prop="cnt_live" label="住宅总套数" width="140">
                             <template #default="scope">
-                                <el-link style="margin-left: 10px" type="primary">
-                                    <router-link style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_building_id: scope.row.id, houseable_type: 'buildings' }}">{{ scope.row.cnt_live }} 套</router-link>
+                                <el-link style="margin-left: 10px" type="primary" @click="showHouseFunc(scope.row)">
+                                    {{ scope.row.cnt_live }} 套
                                 </el-link>
                             </template>
                         </el-table-column>
@@ -631,9 +631,33 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 房屋 -->
+        <el-dialog
+            v-model="edit_house"
+            title="房屋"
+            width="70%"
+        >
+            <div style="overflow: auto;">
+                <House :tree_item="tree_item.obj" />
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script setup>
+import House from '@/components/House/index.vue'
+const tree_item = reactive({
+    obj: {}
+})
+const edit_house = ref(false)
+const showHouseFunc = val => {
+    tree_item.obj = {
+        id: val.id,
+        name: val.name,
+        next_type: 'units',
+        type: 'building'
+    }
+    edit_house.value = true
+}
 import SearchResidential from '@/components/SearchResidential/index.vue'
 import {
     APIgetBuildListHouse,
