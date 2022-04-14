@@ -288,16 +288,13 @@
                                                         </template>
                                                         <div style="box-sizing: border-box;padding: 4px;">
                                                             <div class="tip-title">房屋：{{ item.name }}</div>
-                                                            <!-- <div class="tip-title">使用状态：{{ getOptValFunc(opts_all.obj.house_status_use,item.status_use) }}</div>
-                                                                    <div class="tip-title">安全状态：{{ getOptValFunc(opts_all.obj.house_status_safe,item.status_safe) }}</div>
-                                                                    <div class="tip-title">产权性质：{{ getOptValFunc(opts_all.obj.house_type_property,item.type_property) }}</div>
-                                                                    <div class="tip-title">户型：{{ getOptValFunc(opts_all.obj.house_type_model,item.type_model) }}</div> -->
-                                                            <div class="tip-title">使用状态：</div>
-                                                            <div class="tip-title">安全状态：</div>
-                                                            <div class="tip-title">产权性质：</div>
-                                                            <div class="tip-title">户型：</div>
+                                                            <div class="tip-title">使用状态：{{ getOptValFunc(opts_all.obj.house_status_use,item.status_use) }}</div>
+                                                            <div class="tip-title">安全状态：{{ getOptValFunc(opts_all.obj.house_status_safe,item.status_safe) }}</div>
+                                                            <div class="tip-title">产权性质：{{ getOptValFunc(opts_all.obj.house_type_property,item.type_property) }}</div>
+                                                            <div class="tip-title">户型：{{ getOptValFunc(opts_all.obj.house_type_model,item.type_model) }}</div>
                                                             <div>
                                                                 <el-button type="primary" plain @click="modifyResidentialFunc(item)">修改</el-button>
+                                                                <el-button type="warning" plain @click="showPropertyFunc(item)">产权</el-button>
                                                             </div>
                                                         </div>
                                                     </el-popover>
@@ -787,6 +784,147 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 产权 -->
+        <el-dialog
+            v-model="switch_property"
+            :title="read_state?'产权详情':add_state?'变更产权':'修改产权'"
+            width="70%"
+        >
+            <div style="margin-bottom: 20px;">
+                <el-button :disabled="!(read_state||!add_state)" type="primary" @click="modifyPropertyFunc(true)">变更</el-button>
+                <el-button :disabled="!(read_state||add_state)" type="primary" @click="modifyPropertyFunc(false)">修改</el-button>
+            </div>
+            <div style="height: 60vh;width: 100%;overflow-y: auto; overflow-x: hidden;">
+                <el-form
+                    ref="ruleFormRef"
+                    :model="property_form.obj"
+                >
+                    <el-row :gutter="10">
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label-width="80px" label="房屋ID" prop="house_id" :error="from_error_property.msg&&from_error_property.msg.house_id?from_error_property.msg.house_id[0]:''">
+                                <div v-if="!read_state" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchHouse v-model:str="property_form.obj.house_id" />
+                                </div>
+                                <span v-else>{{ property_form.obj.house_id }}</span>
+                            </el-form-item>
+                        </el-col> -->
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label-width="80px" label="交易时间" prop="time_deal" :error="from_error_property.msg&&from_error_property.msg.time_deal?from_error_property.msg.time_deal[0]:''">
+                                <el-date-picker
+                                    v-if="!read_state"
+                                    v-model="property_form.obj.time_deal"
+                                    type="date"
+                                    value-format="YYYY-MM-DD"
+                                    placeholder=""
+                                    style="width: 100%;"
+                                    :default-value="new Date()"
+                                />
+                                <span v-else>{{ property_form.obj.time_deal }}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label-width="80px" label="产权证号" prop="code_property" :error="from_error_property.msg&&from_error_property.msg.code_property?from_error_property.msg.code_property[0]:''">
+                                <el-input
+                                    v-if="!read_state"
+                                    v-model="property_form.obj.code_property"
+                                    placeholder=""
+                                />
+                                <span v-else>{{ property_form.obj.code_property }}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label-width="80px" label="地房籍号" prop="code_room" :error="from_error_property.msg&&from_error_property.msg.code_room?from_error_property.msg.code_room[0]:''">
+                                <el-input
+                                    v-if="!read_state"
+                                    v-model="property_form.obj.code_room"
+                                    placeholder=""
+                                />
+                                <span v-else>{{ property_form.obj.code_room }}</span>
+                            </el-form-item>
+                        </el-col>
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label-width="80px" label="绑定房屋" prop="should_bind_house" :error="from_error_property.msg&&from_error_property.msg.should_bind_house?from_error_property.msg.should_bind_house[0]:''">
+                                <el-select v-if="!read_state" v-model="property_form.obj.should_bind_house" class="head-btn" placeholder="是否绑定房屋" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                                <span v-else>{{ getOptValFunc(opts_all.obj.house_has_house,property_form.obj.should_bind_house) }}</span>
+                            </el-form-item>
+                        </el-col> -->
+                        <el-col :md="24" :lg="24">
+                            <div style="margin-bottom: 10px;">
+                                <el-button v-if="!read_state" style="margin-right: 10px;" @click="addServiceFunc">添加产权人</el-button>
+                                <span v-else>产权人：</span>
+                            </div>
+                            <div v-for="(item,i) in property_form.obj.property_owners" class="serve-box">
+                                <el-row :gutter="10">
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label-width="80px" label="姓名" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.name']?from_error_property.msg['property_owners.'+i+'.name'][0]:''">
+                                            <el-input
+                                                v-if="!read_state"
+                                                v-model="item.name"
+                                                placeholder=""
+                                            />
+                                            <span v-else>{{ item.name }}</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label-width="80px" label="证件类型" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.type_id_card']?from_error_property.msg['property_owners.'+i+'.type_id_card'][0]:''">
+                                            <el-input
+                                                v-if="!read_state"
+                                                v-model="item.type_id_card"
+                                                placeholder=""
+                                            />
+                                            <span v-else>{{ item.type_id_card }}</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label-width="80px" label="证件号" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.id_card']?from_error_property.msg['property_owners.'+i+'.id_card'][0]:''">
+                                            <el-input
+                                                v-if="!read_state"
+                                                v-model="item.id_card"
+                                                placeholder=""
+                                            />
+                                            <span v-else>{{ item.id_card }}</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label-width="80px" label="联系方式" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.mobile']?from_error_property.msg['property_owners.'+i+'.mobile'][0]:''">
+                                            <el-input
+                                                v-if="!read_state"
+                                                v-model="item.mobile"
+                                                placeholder=""
+                                            />
+                                            <span v-else>{{ item.mobile }}</span>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                        <el-form-item label-width="80px" label="面积" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.area']?from_error_property.msg['property_owners.'+i+'.area'][0]:''">
+                                            <el-input
+                                                v-if="!read_state"
+                                                v-model="item.area"
+                                                placeholder=""
+                                            />
+                                            <span v-else>{{ item.area }}</span>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div v-if="!read_state" class="delete-service" @click="deleteServiceFunc(i)">
+                                    <el-icon :size="20" color="#F56C6C">
+                                        <el-icon-circle-close />
+                                    </el-icon>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div v-if="!read_state" style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_property=false">取消</el-button>
+                    <el-button type="primary" @click="postPropertyFunc">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -1217,6 +1355,91 @@ const modifyResidentialFunc = val => {
         }
     })
 }
+// 产权
+const switch_property = ref(false)
+const property_obj = reactive({
+    obj: {}
+})
+const property_form = reactive({
+    obj: {}
+})
+const copy_property = reactive({
+    obj: {}
+})
+import { APIgetPropertyDetails } from '@/api/custom/custom.js'
+const showPropertyFunc = val => {
+    from_error_property.msg = {}
+    property_obj.obj = val
+    APIgetPropertyDetails(property_obj.obj.curr_property_id).then(res => {
+        property_form.obj = res.data
+        copy_property.obj = JSON.parse(JSON.stringify(res.data))
+        read_state.value = true
+        switch_property.value = true
+    })
+}
+// 删除 服务名称和联系方式
+const deleteServiceFunc = index => {
+    property_form.obj.property_owners.splice(index, 1)
+}
+// 添加 服务名称和联系方式
+const addServiceFunc = index => {
+    let data = {
+        name: '',
+        type_id_card: '',
+        id_card: '',
+        mobile: '',
+        area: ''
+    }
+    property_form.obj.property_owners.push(data)
+}
+const from_error_property = reactive({
+    msg: {}
+})
+const read_state = ref(true)
+const add_state = ref(false)
+const modifyPropertyFunc = val => {
+    if (val) {
+        from_error_property.msg = {}
+        property_form.obj = {
+            property_owners: [],
+            house_id: copy_property.obj.house_id,
+            should_bind_house: 1
+        }
+        read_state.value = false
+        add_state.value = true
+    } else {
+        from_error_property.msg = {}
+        property_form.obj =  JSON.parse(JSON.stringify(copy_property.obj))
+        read_state.value = false
+        add_state.value = false
+    }
+}
+// 同意拒绝提交
+import { APIputProperty, APIpostProperty } from '@/api/custom/custom.js'
+const postPropertyFunc = () => {
+    from_error_property.msg = {}
+    if (!add_state.value) {
+        APIputProperty(property_form.obj.id, property_form.obj).then(res => {
+            if (!res.code) {
+                refreshFunc()
+                ElMessage.success(res.msg)
+                switch_property.value = false
+            }
+        }).catch(err => {
+            from_error_property.msg = err.data
+        })
+    } else {
+        APIpostProperty(property_form.obj).then(res => {
+            if (!res.code) {
+                refreshFunc()
+                ElMessage.success(res.msg)
+                switch_property.value = false
+            }
+        }).catch(err => {
+            from_error_property.msg = err.data
+        })
+    }
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import {
@@ -1226,7 +1449,7 @@ const opts_all = reactive({
     obj: {}
 })
 APIpostGetOpts({
-    lab: ['house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact']
+    lab: ['house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact']
 }).then(res => {
     opts_all.obj = res.data
 })
@@ -1258,7 +1481,7 @@ const getOptValFunc = (arr, key) => {
             position: relative;
 
             .el-form-item {
-                margin: 0;
+                // margin: 0;
             }
 
             .delete-service {
@@ -1276,14 +1499,13 @@ const getOptValFunc = (arr, key) => {
 <style lang="scss" scoped>
     .components-house{
         background-color: #ffffff;
+        .head-btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
         .tree-box {
             display: flex;
              }
-
-            .head-btn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
 
             .tree-item {
                 min-width: 300px;
