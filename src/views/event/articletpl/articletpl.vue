@@ -9,9 +9,9 @@
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-cascader
-                                v-model="data_search.obj.cat_art" class="head-btn"
-                                placeholder="类别分类"
-                                :options="options1.arr2"
+                                v-model="data_search.obj.cid" class="head-btn"
+                                placeholder="分类ID"
+                                :options="options.arr"
                                 :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
                                 :show-all-levels="false"
                                 clearable
@@ -50,14 +50,9 @@
                                 <span style="margin-left: 10px">{{ scope.row.id }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cat_dep" label="部门分类ID" width="250">
+                        <el-table-column prop="cid" label="分类ID" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cat_dep }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cat_art" label="类别分类ID" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cat_art }} </span>
+                                <span style="margin-left: 10px">{{ scope.row.cid }} </span>
                             </template>
                         </el-table-column>
 
@@ -128,13 +123,13 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="部门分类" prop="cat_depcat_dep"
-                                :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cat_dep[0]:''"
+                                label="分类ID"
+                                :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cid[0]:''"
                             >
                                 <el-cascader
-                                    v-model="from_examine.item.cat_dep" class="head-btn"
+                                    v-model="from_examine.item.cid" class="head-btn"
                                     placeholder="部门分类"
-                                    :options="options1.arr1"
+                                    :options="options.arr"
                                     :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
                                     :show-all-levels="false"
                                     clearable
@@ -143,16 +138,20 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="类别分类" prop="cat_art"
-                                :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.cat_art[0]:''"
+                                label="类别分类"
+                                :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.fid[0]:''"
                             >
-                                <el-cascader
-                                    v-model="from_examine.item.cat_art" class="head-btn"
+                                <!-- <el-cascader
+                                    v-model="from_examine.item.fid" class="head-btn"
                                     placeholder="类别分类"
-                                    :options="options1.arr2"
+                                    :options="options.arr"
                                     :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
                                     :show-all-levels="false"
                                     clearable
+                                /> -->
+                                <el-input
+                                    v-model="from_examine.item.fid"
+                                    placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
@@ -238,12 +237,12 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">部门分类ID</div>
-                    <div class="right">{{ data_details.item.cat_dep }}</div>
+                    <div class="left">分类ID</div>
+                    <div class="right">{{ data_details.item.cid }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">类别分类ID</div>
-                    <div class="right">{{ data_details.item.cat_art }}</div>
+                    <div class="left">流程ID</div>
+                    <div class="right">{{ data_details.item.fid }}</div>
                 </div>
                 <div class="item">
                     <div class="left">模板字段</div>
@@ -361,10 +360,10 @@ const addServiceOptFunc = index => {
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-const options1 = reactive({ arr2: [] })
-APIgetTypeList(102).then(res => {
+const options = reactive({ arr: [] })
+APIgetTypeList(101).then(res => {
     if (!res.code) {
-        options1.arr2 = res.data
+        options.arr = res.data
     }
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
