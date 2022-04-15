@@ -794,7 +794,7 @@
                 <el-button :disabled="!(read_state||!add_state)" type="primary" @click="modifyPropertyFunc(true)">变更</el-button>
                 <el-button :disabled="!(read_state||add_state)" type="primary" @click="modifyPropertyFunc(false)">修改</el-button>
             </div>
-            <div style="height: 60vh;width: 100%;overflow-y: auto; overflow-x: hidden;">
+            <div :class="{'property-read-state':read_state}" style="height: 60vh;width: 100%;overflow-y: auto; overflow-x: hidden;">
                 <el-form
                     ref="ruleFormRef"
                     :model="property_form.obj"
@@ -1491,6 +1491,11 @@ const getOptValFunc = (arr, key) => {
                 z-index: 999999;
                 cursor: pointer;
                 background-color: #ffffff;
+            }
+        }
+        .property-read-state{
+            .el-form-item {
+                margin: 0;
             }
         }
     }
