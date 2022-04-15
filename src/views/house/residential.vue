@@ -129,6 +129,7 @@
                     >
                         <el-table-column prop="name" label="名称" width="180" />
                         <el-table-column prop="addr" label="地址" width="220" />
+                        <el-table-column prop="id" label="小区ID" width="250" />
                         <el-table-column prop="area_floor" label="总占地面积" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.area_floor }} m²</span>
@@ -441,6 +442,10 @@
                 <div class="item">
                     <div class="left">地址</div>
                     <div class="right">{{ data_details.item.addr }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">小区ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">总占地面积</div>

@@ -2,6 +2,86 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 公示阅读 /api/a/ Articleread
+// 列表
+export function APIgetArticlereadList(params) {
+    return api2.get('/a/articleread', { params: params })
+}
+// 添加
+export function APIpostArticleread(data) {
+    return api2.post('/a/articleread', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 公示任务 
+// 列表
+export function APIgetTaskList(params) {
+    return api2.get('/a/task', { params: params })
+}
+// 详情
+export function APIgetTaskDetails(id) {
+    return api2.get('/a/task/' + id)
+}
+// 删除
+export function APIdeleteTask(id) {
+    return api2.delete('/a/task/' + id)
+}
+// 修改
+export function APIputTask(id, data) {
+    return api2.put('/a/task/' + id, data)
+}
+// 添加
+export function APIpostTask(data) {
+    return api2.post('/a/task', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 任务派发 /api/a/tasksd
+// 列表
+export function APIgetTasksdList(params) {
+    return api2.get('/a/tasksd', { params: params })
+}
+// 详情
+export function APIgetTasksdDetails(id) {
+    return api2.get('/a/tasksd/' + id)
+}
+// 删除
+export function APIdeleteTasksd(id) {
+    return api2.delete('/a/tasksd/' + id)
+}
+// 修改
+export function APIputTasksd(id, data) {
+    return api2.put('/a/tasksd/' + id, data)
+}
+// 添加
+export function APIpostTasksd(data) {
+    return api2.post('/a/tasksd', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 公示
+// 列表
+export function APIgetEventArticleList(params) {
+    return api2.get('/a/article', { params: params })
+}
+// 详情
+export function APIgetEventArticleDetails(id) {
+    return api2.get('/a/article/' + id)
+}
+// 删除
+export function APIdeleteEventArticle(id) {
+    return api2.delete('/a/article/' + id)
+}
+// 修改
+export function APIputEventArticle(id, data) {
+    return api2.put('/a/article/' + id, data)
+}
+// 添加
+export function APIpostEventArticle(data) {
+    return api2.post('/a/article', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 资源 Step APIpostFiles
 // 列表
 export function APIgetFileList(params) {

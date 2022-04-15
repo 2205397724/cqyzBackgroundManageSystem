@@ -168,6 +168,7 @@
                         <el-table-column type="selection" width="55" />
                         <el-table-column prop="name" label="房屋名称" width="180" />
                         <el-table-column prop="addr" label="地址" width="220" />
+                        <el-table-column prop="id" label="房屋ID" width="250" />
                         <el-table-column prop="floor_truth" label="物理层" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.floor_truth }} 层</span>
@@ -507,6 +508,10 @@
             width="50%"
         >
             <div class="details-box">
+                <div class="item">
+                    <div class="left">小区ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
+                </div>
                 <div class="item">
                     <div class="left">直属楼栋/单元ID</div>
                     <div class="right">{{ data_details.item.houseable_id }}</div>

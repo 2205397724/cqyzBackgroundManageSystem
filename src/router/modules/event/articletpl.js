@@ -6,7 +6,7 @@ export default {
     redirect: '/event_articletpl/archive',
     name: 'eventArticletplBox',
     meta: {
-        title: '*公示',
+        title: '公示',
         icon: 'el-icon-set-up',
         auth: ['event.articletpl', '*']
     },
@@ -25,7 +25,7 @@ export default {
             name: 'eventArticletplArticle',
             component: () => import('@/views/event/articletpl/article.vue'),
             meta: {
-                title: '*公示',
+                title: '公示',
                 auth: ['event.articletpl.article', '*']
             }
         },

@@ -1,161 +1,130 @@
 <template>
-    <div class="articletplaudit">
+    <div class="articletpltask">
         <page-main>
-            <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.mobile" class="head-btn" placeholder="手机号" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.username" class="head-btn" placeholder="用户名" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.id_card" class="head-btn" placeholder="身份证号" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.name" class="head-btn" placeholder="真实姓名" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.gender" class="head-btn" placeholder="性别" clearable>
-                                <el-option label="男" value="F" />
-                                <el-option label="女" value="M" />
-                                <el-option label="未设置" value="U" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.house_id" class="head-btn" placeholder="终端类型" clearable>
-                                <el-option label="总平台" value="pt" />
-                                <el-option label="区域平台" value="ptr" />
-                                <el-option label="企业端" value="pm" />
-                                <el-option label="行政管理端" value="gov" />
-                                <el-option label="业主端" value="mbr" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.oauth_type" class="head-btn" placeholder="第三方登录类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.other_auth" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-cascader
-                                v-model="data_search.region" class="head-btn"
-                                placeholder="区域"
-                                :props="cascader_props"
-                                collapse-tags
-                                collapse-tags-tooltip
-                                clearable
-                                :show-all-levels="false"
+            <el-row :gutter="10">
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.from" class="head-btn" placeholder="派发对象" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.tolv" class="head-btn" placeholder="接收对象等级" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.to" class="head-btn" placeholder="接收对象" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="类型ID" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.iscpt" class="head-btn" placeholder="是否完成" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.created_at" class="head-btn" placeholder="创建时间" clearable />
+                </el-col>
+                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col> -->
+                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                        <div class="head-btn">
+                            <el-date-picker
+                                v-model="data_search.updated_at"
+                                type="daterange"
+                                range-separator="-"
+                                start-placeholder="更新时间"
+                                end-placeholder="更新时间"
+                                style="width: 100%;"
+                                value-format="YYYY-MM-DD"
                             />
-                        </el-col>
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.updated_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="更新时间"
-                                    end-placeholder="更新时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加用户</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="username" label="用户名" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.username }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="mobile" label="手机号" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.mobile }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id_card" label="身份证号" width="220">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.id_card }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="gender" label="性别" width="90">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="status_cert" label="认证状态" width="120">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                        </div>
+                    </el-col> -->
+                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                </el-col>
+            </el-row>
+            <div v-show="switch_search" class="search-tips">
+                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
+                *搜索到相关结果共{{ total }}条。
             </div>
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加任务</el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <el-table-column label="已完成公示ID" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.aid }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="类型ID" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.cid }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="派发对象" width="120">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.from }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否完成" width="90">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.iscpt }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="接收对象" width="120">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.to }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="接收对象等级" width="120">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.tolv }} </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="200">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyResidentialFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page"
+                style="padding-top: 20px;"
+                layout="total,prev,pager,next,jumper,"
+                :total="total"
+                :page-size="per_page"
+                background
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -163,77 +132,61 @@
             :title="str_title"
             width="50%"
         >
-            <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="终端类型" prop="auth_type"
-                                :error="from_error.msg&&from_error.msg.auth_type?from_error.msg.auth_type[0]:''"
-                            >
-                                <el-select v-model="from_examine.item.auth_type" class="head-btn" placeholder="终端类型" clearable>
-                                    <el-option label="总平台" value="pt" />
-                                    <el-option label="区域平台" value="ptr" />
-                                    <el-option label="企业端" value="pm" />
-                                    <el-option label="行政管理端" value="gov" />
-                                    <el-option label="业主端" value="mbr" />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="手机号" prop="mobile"
-                                :error="from_error.msg&&from_error.msg.mobile?from_error.msg.mobile[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.mobile"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="用户名" prop="username"
-                                :error="from_error.msg&&from_error.msg.username?from_error.msg.username[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.username"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="密码" prop="password"
-                                :error="from_error.msg&&from_error.msg.password?from_error.msg.password[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.password"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="所属区域" prop="region"
-                                :error="from_error.msg&&from_error.msg.region?from_error.msg.region[0]:''"
-                            >
-                                <el-cascader
-                                    v-model="from_examine.item.region" class="head-btn"
-                                    :props="cascader_props2"
-                                    collapse-tags
-                                    collapse-tags-tooltip
-                                    clearable
-                                    :show-all-levels="false"
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
+            <el-form
+                ref="ruleFormRef"
+                :model="from_examine.item"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="派发对象"
+                            label-width="100px"
+                            :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.from"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="接收对象等级"
+                            label-width="100px"
+                            :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.tolv"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="接收对象"
+                            label-width="100px"
+                            :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.to"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="类型ID"
+                            label-width="100px"
+                            :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.cid"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_examine=false">取消</el-button>
@@ -249,32 +202,32 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">用户ID</div>
+                    <div class="left">任务ID</div>
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">用户名</div>
-                    <div class="right">{{ data_details.item.username }}</div>
+                    <div class="left">派发对象</div>
+                    <div class="right">{{ data_details.item.from }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">真实姓名</div>
-                    <div class="right">{{ data_details.item.name }}</div>
+                    <div class="left">接收对象等级</div>
+                    <div class="right">{{ data_details.item.tolv }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">手机号</div>
-                    <div class="right">{{ data_details.item.mobile }}</div>
+                    <div class="left">接收对象</div>
+                    <div class="right">{{ data_details.item.to }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">身份证号</div>
-                    <div class="right">{{ data_details.item.id_card }}</div>
+                    <div class="left">类型ID</div>
+                    <div class="right">{{ data_details.item.cid }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">性别</div>
-                    <div class="right">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],data_details.item.gender) }}</div>
+                    <div class="left">是否完成</div>
+                    <div class="right">{{ data_details.item.iscpt }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">认证状态</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.status_cert,data_details.item.status_cert) }}</div>
+                    <div class="left">已完成公示ID</div>
+                    <div class="right">{{ data_details.item.aid }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -295,11 +248,11 @@
 </template>
 <script setup>
 import {
-    APIgetUserList,
-    APIgetUserDetails,
-    APIdeleteUser,
-    APIputUser,
-    APIpostUser
+    APIgetTaskList,
+    APIgetTaskDetails,
+    APIdeleteTask,
+    APIputTask,
+    APIpostTask
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -313,7 +266,9 @@ import {
 // 数据
 // 搜索
 let switch_search = ref(false)
-let data_search = reactive({ })
+let data_search = reactive({
+    obj: {}
+})
 // 详情
 let switch_details = ref(false)
 // 列表
@@ -390,22 +345,14 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.mobile = ''
-    data_search.username = ''
-    data_search.id_card = ''
-    data_search.name = ''
-    data_search.gender = ''
-    data_search.status_cert = ''
-    data_search.house_id = ''
-    data_search.oauth_type = ''
-    data_search.region = ''
+    data_search.obj = {}
     getTabListFunc()
 }
 
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetUserDetails(val.id).then(res => {
+    APIgetTaskDetails(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -423,7 +370,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputUser(from_examine.item.id, from_examine.item).then(res => {
+                APIputTask(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -433,7 +380,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostUser(from_examine.item).then(res => {
+                APIpostTask(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -454,37 +401,16 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    for (let key in data_search) {
-        if (data_search[key] || data_search[key] === 0) {
-            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
                 continue
             }
-            params[key] = data_search[key]
+            params[key] = data_search.obj[key]
         }
-    }
-    if (params.time_deal) {
-        let updated_str = ''
-        for (let i in params.time_deal) {
-            updated_str += ',' + params.time_deal[i]
-        }
-        params.time_deal = updated_str.substring(1)
-    }
-    if (params.created_at) {
-        let updated_str = ''
-        for (let i in params.created_at) {
-            updated_str += ',' + params.created_at[i]
-        }
-        params.created_at = updated_str.substring(1)
-    }
-    if (params.updated_at) {
-        let updated_str = ''
-        for (let i in params.updated_at) {
-            updated_str += ',' + params.updated_at[i]
-        }
-        params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetUserList(params).then(res => {
+    APIgetTaskList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -494,14 +420,14 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteUser(val.id).then(res => {
+    APIdeleteTask(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
         }
     })
 }
-// 添加用户
+// 添加
 const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
@@ -519,7 +445,7 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetUserDetails(val.id).then(res => {
+    APIgetTaskDetails(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
@@ -551,7 +477,7 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.articletplaudit {
+	.articletpltask {
 		.el-cascader-box-my {
 			.el-cascader {
 				width: 100% !important;
@@ -579,7 +505,7 @@ const getOptValFunc = (arr, key) => {
 	}
 </style>
 <style lang="scss" scoped>
-	.articletplaudit {
+	.articletpltask {
 		.head-btn {
 			width: 100%;
 			margin-bottom: 10px;
