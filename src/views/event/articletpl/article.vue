@@ -93,7 +93,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="200">
+                <el-table-column fixed="right" label="操作" width="260">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -117,6 +117,13 @@
                                 </el-button>
                             </template>
                         </el-popconfirm>
+                        <el-button
+                            size="small"
+                            type="info"
+                            @click="addArchiveFunc(scope.row)"
+                        >
+                            审核
+                        </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -337,6 +344,10 @@
                     <div class="right">{{ data_details.item.title }}</div>
                 </div>
                 <div class="item">
+                    <div class="left">公示ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
+                </div>
+                <div class="item">
                     <div class="left">公示分类ID</div>
                     <div class="right">{{ data_details.item.cid }}</div>
                 </div>
@@ -394,6 +405,65 @@
                     <el-button @click="switch_details = false">取消</el-button>
                 </span>
             </template>
+        </el-dialog>
+        <!-- 档案下的公示 -->
+        <el-dialog
+            v-model="switch_article"
+            title="审核"
+            width="70%"
+        >
+            <el-table
+                :data="article_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <el-table-column label="名称" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.title }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="ID" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="状态" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.status }} </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="160">
+                    <template #default="scope">
+                        <el-button
+                            size="small"
+                            @click="lookDetails(scope.row)"
+                        >
+                            审核
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFuncDialog(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page2"
+                layout="total,prev,pager,next,jumper,"
+                :total="total2"
+                :page-size="per_page2"
+                background
+                hide-on-single-page
+                style="padding-top: 20px;"
+            />
         </el-dialog>
     </div>
 </template>
@@ -601,6 +671,49 @@ const modifyResidentialFunc = val => {
             from_examine.item = res.data
             switch_examine.value = true
         }
+    })
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 审核
+const switch_article = ref(false)
+const article_item = reactive({
+    obj: {}
+})
+const article_tab = reactive({
+    obj: {}
+})
+const page2 = ref(1)
+const total2 = ref(74751)
+const per_page2 = ref(15)
+const addArchiveFunc = () => {
+    switch_article.value = true
+    refreshFuncArticle()
+}
+const refreshFuncArticle = () => {
+    page2.value = 1
+    getListArchiveFunc()
+}
+import {
+// 写到这了api没写
+// APIgetListArchiveArticle,
+// APIgetDetailsArchiveArticle,
+// APIpostArchiveArticle,
+// APIdeleteArchiveArticle
+} from '@/api/custom/custom.js'
+const getListArchiveFunc = () => {
+    let params = {
+        page: page2.value,
+        per_page: per_page2.value
+    }
+    APIgetListArchiveArticle(article_item.obj.id, params).then(res => {
+        article_tab.arr = res.data.items
+        total2.value = res.data.aggregation.total_cnt
+    })
+}
+const lookDetails = val => {
+    APIgetDetailsArchiveArticle(article_item.obj.id, val.id).then(res => {
+        details_data.obj = res.data
+        switch_details.value = true
     })
 }
 

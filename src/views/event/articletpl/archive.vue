@@ -32,27 +32,27 @@
                     >
                         <el-table-column prop="name" label="档案名" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                                <span>{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="id" label="ID" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                                <span>{{ scope.row.id }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="created_at" label="创建时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.created_at }} </span>
+                                <span>{{ scope.row.created_at }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="updated_at" label="更新时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.updated_at }} </span>
+                                <span>{{ scope.row.updated_at }} </span>
                             </template>
                         </el-table-column>
 
                         <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="180">
+                        <el-table-column fixed="right" label="操作" width="230">
                             <template #default="scope">
                                 <el-button
                                     type="primary" size="small"
@@ -70,6 +70,12 @@
                                         </el-button>
                                     </template>
                                 </el-popconfirm>
+                                <el-button
+                                    type="info" size="small"
+                                    @click="openArticleFunc(scope.row)"
+                                >
+                                    归档
+                                </el-button>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -93,31 +99,158 @@
             :title="str_title"
             width="50%"
         >
-            <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="名称" prop="name"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.name"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
+            <el-form
+                ref="ruleFormRef"
+                :model="from_examine.item"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="名称" prop="name"
+                            :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.name"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
+            </template>
+        </el-dialog>
+        <!-- 档案下的公示 -->
+        <el-dialog
+            v-model="switch_article"
+            title="归档"
+            width="70%"
+        >
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" type="primary" @click="addArchiveFunc">添加公示</el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                :data="article_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <el-table-column label="名称" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.title }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="ID" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="状态" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.status }} </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="160">
+                    <template #default="scope">
+                        <el-button
+                            size="small"
+                            @click="lookDetails(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFuncDialog(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page2"
+                layout="total,prev,pager,next,jumper,"
+                :total="total2"
+                :page-size="per_page2"
+                background
+                hide-on-single-page
+                style="padding-top: 20px;"
+            />
+        </el-dialog>
+        <!-- 归档添加 -->
+        <el-dialog
+            v-model="switch_add"
+            title="添加公示"
+            width="50%"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="from_add.obj"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="公示ID"
+                            :error="err_msg.obj&&err_msg.obj.article_id?err_msg.obj.article_id[0]:''"
+                        >
+                            <el-input
+                                v-model="from_add.obj.article_id"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_add=false">取消</el-button>
+                    <el-button type="primary" @click="addPostFunc">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 归档公示详情 -->
+        <el-dialog
+            v-model="switch_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">公示ID</div>
+                    <div class="right">{{ details_data.obj.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">名称</div>
+                    <div class="right">{{ details_data.obj.title }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">内容</div>
+                    <div class="right">{{ details_data.obj.content }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ details_data.obj.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ details_data.obj.updated_at }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_details = false">取消</el-button>
+                </span>
             </template>
         </el-dialog>
     </div>
@@ -141,7 +274,7 @@ import {
 // 数据
 // 搜索
 let switch_search = ref(false)
-let data_search = reactive({ })
+let data_search = reactive({})
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
@@ -162,41 +295,6 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-import {
-    APIgetChinaRegion
-} from '@/api/custom/custom.js'
-const cascader_props = {
-    multiple: false,
-    emitPath: false,
-    lazy: true,
-    value: 'code',
-    label: 'name',
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-        const {
-            data
-        } = node
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
-        })
-    }
-}
-const cascader_props2 = {
-    multiple: true,
-    emitPath: false,
-    lazy: true,
-    value: 'code',
-    label: 'name',
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-        const {
-            data
-        } = node
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
-        })
-    }
-}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -328,9 +426,82 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    from_examine.item = { ...val }
+    from_examine.item = {
+        ...val
+    }
     switch_examine.value = true
 
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 归档
+const switch_article = ref(false)
+const article_item = reactive({
+    obj: {}
+})
+const article_tab = reactive({
+    obj: {}
+})
+const page2 = ref(1)
+const total2 = ref(74751)
+const per_page2 = ref(15)
+const openArticleFunc = val => {
+    article_item.obj = val
+    switch_article.value = true
+    refreshFuncArticle()
+}
+import {
+    APIgetListArchiveArticle,
+    APIgetDetailsArchiveArticle,
+    APIpostArchiveArticle,
+    APIdeleteArchiveArticle
+} from '@/api/custom/custom.js'
+const refreshFuncArticle = () => {
+    page2.value = 1
+    getListArchiveFunc()
+}
+const getListArchiveFunc = () => {
+    let params = {
+        page: page2.value,
+        per_page: per_page2.value
+    }
+    APIgetListArchiveArticle(article_item.obj.id, params).then(res => {
+        article_tab.arr = res.data.items
+        total2.value = res.data.aggregation.total_cnt
+    })
+}
+const switch_add = ref(false)
+const err_msg = reactive({
+    obj: {}
+})
+const from_add = reactive({
+    obj: {}
+})
+const addArchiveFunc = () => {
+    switch_add.value = true
+    from_add.obj = {}
+}
+const addPostFunc = () => {
+    APIpostArchiveArticle(article_item.obj.id, from_add.obj).then(res => {
+        refreshFuncArticle()
+        switch_add.value = false
+    }).catch(err => {
+        err_msg.obj = err.data
+    })
+}
+const switch_details = ref(false)
+const details_data = reactive({
+    obj: {}
+})
+const lookDetails = val => {
+    APIgetDetailsArchiveArticle(article_item.obj.id, val.id).then(res => {
+        details_data.obj = res.data
+        switch_details.value = true
+    })
+}
+const deleteFuncDialog = val => {
+    APIdeleteArchiveArticle(article_item.obj.id, val.id).then(res => {
+        refreshFuncArticle()
+    })
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -344,7 +515,9 @@ import {
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
+APIpostGetOpts({
+    lab: ['status_cert', 'other_auth']
+}).then(res => {
     opts_all.obj = res.data
 })
 const getOptValFunc = (arr, key) => {
@@ -357,77 +530,77 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.articletplarchive {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
+    .articletplarchive {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
 
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
+        .serve-box {
+            border: 1px solid #eeeeee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
 
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #ffffff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.articletplarchive {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .articletplarchive {
+        .head-btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
+    .search-tips {
+        color: #aaaaaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
 
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
+    .details-box {
+        .item {
+            display: flex;
+            color: #333333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
 
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
 
-			.left::after {
-				content: '：';
-			}
+            .left::after {
+                content: '：';
+            }
 
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
+            .right {
+                width: 100%;
+                color: #666666;
+            }
+        }
 
-		.item:last-child {
-			border-style: none;
-		}
-	}
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

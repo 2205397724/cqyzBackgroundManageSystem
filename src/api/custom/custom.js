@@ -1,5 +1,23 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 公示归档 
+// 列表
+export function APIgetListArchiveArticle(archive, params) {
+    return api2.get(`/a/archive/${archive}/article`, { params: params })
+}
+// 详情
+export function APIgetDetailsArchiveArticle(archive, article) {
+    return api2.get(`/a/archive/${archive}/article/${article}`)
+}
+// 添加
+export function APIpostArchiveArticle(archive, data) {
+    return api2.post(`/a/archive/${archive}/article`, data)
+}
+// 删除
+export function APIdeleteArchiveArticle(archive, article) {
+    return api2.delete(`/a/archive/${archive}/article/${article}`)
+}
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示阅读 /api/a/ Articleread
