@@ -30,30 +30,39 @@ export default {
             }
         },
         {
-            path: 'audit',
-            name: 'eventArticletplAudit',
-            component: () => import('@/views/event/articletpl/audit.vue'),
-            meta: {
-                title: '*公示审核',
-                auth: ['event.articletpl.audit', '*']
-            }
-        },
-        {
-            path: 'placeonfile',
-            name: 'eventArticletplPlaceonfile',
-            component: () => import('@/views/event/articletpl/placeonfile.vue'),
-            meta: {
-                title: '*归档公示',
-                auth: ['event.articletpl.placeonfile', '*']
-            }
-        },
-        {
             path: 'articletpl',
             name: 'eventArticletplArticletpl',
             component: () => import('@/views/event/articletpl/articletpl.vue'),
             meta: {
                 title: '公示模板',
                 auth: ['event.articletpl.articletpl', '*']
+            }
+        },
+        {
+            path: 'tasksd',
+            name: 'eventArticletplTasksd',
+            component: () => import('@/views/event/articletpl/tasksd.vue'),
+            meta: {
+                title: '任务派发',
+                auth: ['event.articletpl.tasksd', '*']
+            }
+        },
+        {
+            path: 'task',
+            name: 'eventArticletplTask',
+            component: () => import('@/views/event/articletpl/task.vue'),
+            meta: {
+                title: '公示任务',
+                auth: ['event.articletpl.task', '*']
+            }
+        },
+        {
+            path: 'articleread',
+            name: 'eventArticletplArticleread',
+            component: () => import('@/views/event/articletpl/articleread.vue'),
+            meta: {
+                title: '公示阅读',
+                auth: ['event.articletpl.articleread', '*']
             }
         }
     ]

@@ -1,5 +1,5 @@
 <template>
-    <div class="articletplplaceonfile">
+    <div class="articletplaudit">
         <page-main>
             <div>
                 <div>
@@ -551,7 +551,7 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.articletplplaceonfile {
+	.articletplaudit {
 		.el-cascader-box-my {
 			.el-cascader {
 				width: 100% !important;
@@ -579,7 +579,7 @@ const getOptValFunc = (arr, key) => {
 	}
 </style>
 <style lang="scss" scoped>
-	.articletplplaceonfile {
+	.articletplaudit {
 		.head-btn {
 			width: 100%;
 			margin-bottom: 10px;

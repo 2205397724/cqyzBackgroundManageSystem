@@ -1,22 +1,71 @@
 <template>
-    <div class="articletparticletpl">
+    <div class="articletplaudit">
         <page-main>
             <div>
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.obj.name" class="head-btn" placeholder="名称" clearable />
+                            <el-input v-model="data_search.mobile" class="head-btn" placeholder="手机号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.username" class="head-btn" placeholder="用户名" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.id_card" class="head-btn" placeholder="身份证号" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-input v-model="data_search.name" class="head-btn" placeholder="真实姓名" clearable />
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-select v-model="data_search.gender" class="head-btn" placeholder="性别" clearable>
+                                <el-option label="男" value="F" />
+                                <el-option label="女" value="M" />
+                                <el-option label="未设置" value="U" />
+                            </el-select>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-select v-model="data_search.house_id" class="head-btn" placeholder="终端类型" clearable>
+                                <el-option label="总平台" value="pt" />
+                                <el-option label="区域平台" value="ptr" />
+                                <el-option label="企业端" value="pm" />
+                                <el-option label="行政管理端" value="gov" />
+                                <el-option label="业主端" value="mbr" />
+                            </el-select>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                            <el-select v-model="data_search.oauth_type" class="head-btn" placeholder="第三方登录类型" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.other_auth" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-cascader
-                                v-model="data_search.obj.cat_art" class="head-btn"
-                                placeholder="类别分类"
-                                :options="options1.arr2"
-                                :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
-                                :show-all-levels="false"
+                                v-model="data_search.region" class="head-btn"
+                                placeholder="区域"
+                                :props="cascader_props"
+                                collapse-tags
+                                collapse-tags-tooltip
                                 clearable
+                                :show-all-levels="false"
                             />
                         </el-col>
+                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                            <div class="head-btn">
+                                <el-date-picker
+                                    v-model="data_search.updated_at"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="更新时间"
+                                    end-placeholder="更新时间"
+                                    style="width: 100%;"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col> -->
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
@@ -29,7 +78,7 @@
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加模板</el-button>
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加用户</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -40,24 +89,29 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="名称" width="180">
+                        <el-table-column prop="username" label="用户名" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                                <span style="margin-left: 10px">{{ scope.row.username }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="ID" width="250">
+                        <el-table-column prop="mobile" label="手机号" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                                <span style="margin-left: 10px">{{ scope.row.mobile }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cat_dep" label="部门分类ID" width="250">
+                        <el-table-column prop="id_card" label="身份证号" width="220">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cat_dep }} </span>
+                                <span style="margin-left: 10px">{{ scope.row.id_card }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cat_art" label="类别分类ID" width="250">
+                        <el-table-column prop="gender" label="性别" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cat_art }} </span>
+                                <span style="margin-left: 10px">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="status_cert" label="认证状态" width="120">
+                            <template #default="scope">
+                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
                             </template>
                         </el-table-column>
 
@@ -117,104 +171,65 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="模板名称" prop="name"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                                label="终端类型" prop="auth_type"
+                                :error="from_error.msg&&from_error.msg.auth_type?from_error.msg.auth_type[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.auth_type" class="head-btn" placeholder="终端类型" clearable>
+                                    <el-option label="总平台" value="pt" />
+                                    <el-option label="区域平台" value="ptr" />
+                                    <el-option label="企业端" value="pm" />
+                                    <el-option label="行政管理端" value="gov" />
+                                    <el-option label="业主端" value="mbr" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="手机号" prop="mobile"
+                                :error="from_error.msg&&from_error.msg.mobile?from_error.msg.mobile[0]:''"
                             >
                                 <el-input
-                                    v-model="from_examine.item.name"
+                                    v-model="from_examine.item.mobile"
                                     placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="部门分类" prop="cat_depcat_dep"
-                                :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cat_dep[0]:''"
+                                label="用户名" prop="username"
+                                :error="from_error.msg&&from_error.msg.username?from_error.msg.username[0]:''"
                             >
-                                <el-cascader
-                                    v-model="from_examine.item.cat_dep" class="head-btn"
-                                    placeholder="部门分类"
-                                    :options="options1.arr1"
-                                    :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
-                                    :show-all-levels="false"
-                                    clearable
+                                <el-input
+                                    v-model="from_examine.item.username"
+                                    placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="类别分类" prop="cat_art"
-                                :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.cat_art[0]:''"
+                                label="密码" prop="password"
+                                :error="from_error.msg&&from_error.msg.password?from_error.msg.password[0]:''"
                             >
-                                <el-cascader
-                                    v-model="from_examine.item.cat_art" class="head-btn"
-                                    placeholder="类别分类"
-                                    :options="options1.arr2"
-                                    :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
-                                    :show-all-levels="false"
-                                    clearable
+                                <el-input
+                                    v-model="from_examine.item.password"
+                                    placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="24">
-                            <div style="margin-bottom: 10px;">
-                                <el-button style="margin-right: 10px;" @click="addServiceFunc">添加模板字段</el-button>
-                            </div>
-                            <div v-for="(item,i) in from_examine.item.fields" class="serve-box">
-                                <el-row :gutter="10">
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="字段名称" :error="from_error.msg&&from_error.msg['fields.'+i+'.label']?from_error.msg['fields.'+i+'.label'][0]:''">
-                                            <el-input
-                                                v-model="item.label"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="字段类型" :error="from_error.msg&&from_error.msg['fields.'+i+'.type']?from_error.msg['fields.'+i+'.type'][0]:''">
-                                            <el-input
-                                                v-model="item.type"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <div style="margin-bottom: 10px;">
-                                    <el-button style="margin-right: 10px;" @click="addServiceOptFunc(i)">添加选项字段</el-button>
-                                </div>
-                                <template v-if="from_examine.item.fields[i].prop&&from_examine.item.fields[i].prop.arr">
-                                    <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" style="position: relative;width: 100%;">
-                                        <el-row :gutter="10">
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item :label="'键Key'+j">
-                                                    <el-input
-                                                        v-model="child.key"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item :label="'值Val'+j">
-                                                    <el-input
-                                                        v-model="child.val"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                        </el-row>
-                                        <div style="position: absolute;top: -10px;right: -10px;z-index: 1;cursor: pointer;" @click="deleteServiceOptFunc(i,j)">
-                                            <el-icon :size="20" color="#aaaaaa">
-                                                <el-icon-circle-close />
-                                            </el-icon>
-                                        </div>
-                                    </div>
-                                </template>
-                                <div class="delete-service" @click="deleteServiceFunc(i)">
-                                    <el-icon :size="20" color="#F56C6C">
-                                        <el-icon-circle-close />
-                                    </el-icon>
-                                </div>
-                            </div>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="所属区域" prop="region"
+                                :error="from_error.msg&&from_error.msg.region?from_error.msg.region[0]:''"
+                            >
+                                <el-cascader
+                                    v-model="from_examine.item.region" class="head-btn"
+                                    :props="cascader_props2"
+                                    collapse-tags
+                                    collapse-tags-tooltip
+                                    clearable
+                                    :show-all-levels="false"
+                                />
+                            </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -234,37 +249,40 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">模板ID</div>
+                    <div class="left">用户ID</div>
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">部门分类ID</div>
-                    <div class="right">{{ data_details.item.cat_dep }}</div>
+                    <div class="left">用户名</div>
+                    <div class="right">{{ data_details.item.username }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">类别分类ID</div>
-                    <div class="right">{{ data_details.item.cat_art }}</div>
+                    <div class="left">真实姓名</div>
+                    <div class="right">{{ data_details.item.name }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">模板字段</div>
-                    <div class="right">
-                        <div v-for="(item,i) in data_details.item.fields" style="border-bottom: 1px solid #eee;margin-bottom: 8px;">
-                            <div>
-                                字段名称：{{ item.label }}
-                            </div>
-                            <div>
-                                字段类别：{{ item.type }}
-                            </div>
-                            <div v-for="(child,j) in item.prop.arr" style="display: flex;">
-                                <div style="flex: 1;">
-                                    键Key：{{ child.key }}
-                                </div>
-                                <div style="flex: 1;">
-                                    值Val：{{ child.val }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="left">手机号</div>
+                    <div class="right">{{ data_details.item.mobile }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">身份证号</div>
+                    <div class="right">{{ data_details.item.id_card }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">性别</div>
+                    <div class="right">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],data_details.item.gender) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">认证状态</div>
+                    <div class="right">{{ getOptValFunc(opts_all.obj.status_cert,data_details.item.status_cert) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
             </div>
             <template #footer>
@@ -277,11 +295,11 @@
 </template>
 <script setup>
 import {
-    APIgetArticletplList,
-    APIgetArticletplDetails,
-    APIdeleteArticletpl,
-    APIputArticletpl,
-    APIpostArticletpl
+    APIgetUserList,
+    APIgetUserDetails,
+    APIdeleteUser,
+    APIputUser,
+    APIpostUser
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -295,7 +313,7 @@ import {
 // 数据
 // 搜索
 let switch_search = ref(false)
-let data_search = reactive({ obj: {} })
+let data_search = reactive({ })
 // 详情
 let switch_details = ref(false)
 // 列表
@@ -319,54 +337,47 @@ let page = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
-    item: {
-        fields: []
-    }
+    item: {}
 })
 const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-// 删除 服务名称和联系方式
-const deleteServiceFunc = index => {
-    from_examine.item.fields.splice(index, 1)
-}
-// 添加 服务名称和联系方式
-const addServiceFunc = index => {
-    let data = {
-        label: '',
-        type: '',
-        prop: {
-            arr: []
-        }
-    }
-    from_examine.item.fields.push(data)
-}
-// 删除 选项字段
-const deleteServiceOptFunc = (i, j) => {
-    from_examine.item.fields[i].prop.arr.splice(j, 1)
-}
-// 添加 选项字段
-const addServiceOptFunc = index => {
-    let data = {
-        key: '',
-        val: ''
-    }
-    if (!from_examine.item.fields[index].prop || !from_examine.item.fields[index].prop.arr) {
-        from_examine.item.fields[index].prop = { arr: [] }
-    }
-    from_examine.item.fields[index].prop.arr.push(data)
-}
-
 import {
-    APIgetTypeList
+    APIgetChinaRegion
 } from '@/api/custom/custom.js'
-const options1 = reactive({ arr2: [] })
-APIgetTypeList(102).then(res => {
-    if (!res.code) {
-        options1.arr2 = res.data
+const cascader_props = {
+    multiple: false,
+    emitPath: false,
+    lazy: true,
+    value: 'code',
+    label: 'name',
+    checkStrictly: true,
+    lazyLoad(node, resolve) {
+        const {
+            data
+        } = node
+        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+            resolve(res.data)
+        })
     }
-})
+}
+const cascader_props2 = {
+    multiple: true,
+    emitPath: false,
+    lazy: true,
+    value: 'code',
+    label: 'name',
+    checkStrictly: true,
+    lazyLoad(node, resolve) {
+        const {
+            data
+        } = node
+        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+            resolve(res.data)
+        })
+    }
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -379,14 +390,22 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.obj = {}
+    data_search.mobile = ''
+    data_search.username = ''
+    data_search.id_card = ''
+    data_search.name = ''
+    data_search.gender = ''
+    data_search.status_cert = ''
+    data_search.house_id = ''
+    data_search.oauth_type = ''
+    data_search.region = ''
     getTabListFunc()
 }
 
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetArticletplDetails(val.id).then(res => {
+    APIgetUserDetails(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -404,7 +423,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputArticletpl(from_examine.item.id, from_examine.item).then(res => {
+                APIputUser(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -414,7 +433,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostArticletpl(from_examine.item).then(res => {
+                APIpostUser(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -435,12 +454,12 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    for (let key in data_search.obj) {
-        if (data_search.obj[key] || data_search.obj[key] === 0) {
-            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
+    for (let key in data_search) {
+        if (data_search[key] || data_search[key] === 0) {
+            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
                 continue
             }
-            params[key] = data_search.obj[key]
+            params[key] = data_search[key]
         }
     }
     if (params.time_deal) {
@@ -465,7 +484,7 @@ const getTabListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetArticletplList(params).then(res => {
+    APIgetUserList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -475,19 +494,24 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteArticletpl(val.id).then(res => {
+    APIdeleteUser(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
         }
     })
 }
-// 添加模板
+// 添加用户
 const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        fields: []
+        property_owners: [],
+        house_id: '',
+        time_deal: '',
+        code_property: '',
+        code_room: '',
+        should_bind_house: ''
     }
     switch_examine.value = true
 }
@@ -495,7 +519,7 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetArticletplDetails(val.id).then(res => {
+    APIgetUserDetails(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
@@ -527,12 +551,13 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.articletparticletpl {
-
+	.articletplaudit {
+		.el-cascader-box-my {
 			.el-cascader {
 				width: 100% !important;
 				margin-bottom: 10px;
 			}
+		}
 
 		.serve-box {
 			border: 1px solid #eeeeee;
@@ -554,7 +579,7 @@ const getOptValFunc = (arr, key) => {
 	}
 </style>
 <style lang="scss" scoped>
-	.articletparticletpl {
+	.articletplaudit {
 		.head-btn {
 			width: 100%;
 			margin-bottom: 10px;
