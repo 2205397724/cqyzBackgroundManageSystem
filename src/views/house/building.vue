@@ -26,7 +26,7 @@
                         <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.sync_china_code" class="head-btn" placeholder="区域code" clearable />
+                        <Cascaders v-model="data_search.obj.sync_china_code" />
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                         <div class="head-btn">
@@ -173,12 +173,12 @@
                         </el-table-column>
                         <el-table-column prop="type_water" label="供水方式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_construct" label="结构形式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_lift" label="电梯数" width="140">
@@ -247,7 +247,6 @@
                 <el-form
                     ref="ruleFormRef"
                     :model="from_examine.item"
-                    :rules="rule_examine"
                 >
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -598,11 +597,11 @@
                 </div>
                 <div class="item">
                     <div class="left">供水方式</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">结构形式</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">电梯数</div>
@@ -644,6 +643,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import House from '@/components/House/index.vue'
 const tree_item = reactive({
     obj: {}
@@ -732,13 +732,6 @@ let from_examine = reactive({
         }
     }
 })
-let rule_examine = {
-    // reply: [{
-    //     required: true,
-    //     message: '请输入理由！',
-    //     trigger: 'blur'
-    // }]
-}
 const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
@@ -925,24 +918,15 @@ const modifyResidentialFunc = val => {
 // 执行
 refreshFunc()
 
+/* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['build_type_water', 'build_type_construct'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['build_type_water', 'build_type_construct']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 </script>
 <style lang="scss">
     .routinebuilding {

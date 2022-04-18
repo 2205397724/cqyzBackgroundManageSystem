@@ -1,13 +1,13 @@
 // // 配置项
 // import { getOpts, getOptVal } from '@/util/opts.js'
-// const opts_alls = reactive({
+// const opts_all = reactive({
 //     obj: {}
 // })
 // getOpts(['status_cert', 'other_auth']).then(res => {
-//     opts_alls.obj = res
+//     opts_all.obj = res
 // })
 
-import api2 from '@/api/index.js'
+import api2 from '@/api/index2.js'
 const opts = {
     // 性别
     gender: [{

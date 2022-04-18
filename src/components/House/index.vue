@@ -206,7 +206,7 @@
                                                 <template #reference>
                                                     <el-link
                                                         :underline="false"
-                                                        href="http://192.168.110.37:10090/excels/house_import_tpl.xlsx"
+                                                        href="http://192.168.110.37:10090/zgj/excels/house_import_tpl.xlsx"
                                                         target="_blank"
                                                     >
                                                         <el-button style="width: 100%;">

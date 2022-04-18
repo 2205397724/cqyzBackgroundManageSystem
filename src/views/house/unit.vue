@@ -17,7 +17,7 @@
                             <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.sync_china_code" class="head-btn" placeholder="区域code" clearable />
+                            <Cascaders v-model="data_search.obj.sync_china_code" />
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <!-- <el-input v-model="data_search.obj.time_pro_setup" class="head-btn" placeholder="立项时间" clearable /> -->
@@ -333,6 +333,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import House from '@/components/House/index.vue'
 const tree_item = reactive({
     obj: {}

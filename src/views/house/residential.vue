@@ -362,10 +362,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item label="所在区域code" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.china_code"
-                                    placeholder=""
-                                />
+                                <Cascaders v-model="from_examine.item.china_code" />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
@@ -550,6 +547,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import {
     APIgetResidentialListHouse,
     APIgetResidentialDetailsHouse,
@@ -832,18 +830,17 @@ const addServiceFunc = index => {
     }
     from_examine.item.addition.extra.convenience.push(data)
 }
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
 </script>
 <style lang="scss">
     .routineresidentialhouse {
-        .el-cascader-box-my {
             .el-cascader {
                 width: 100% !important;
                 margin-bottom: 10px;
             }
-        }
 
         .serve-box {
             border: 1px solid #eeeeee;
