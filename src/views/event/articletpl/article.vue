@@ -125,6 +125,7 @@
                             审核记录
                         </el-button>
                         <el-button
+                            :disabled="scope.row.status==200"
                             size="small"
                             type="danger"
                             @click="passAudit(scope.row)"
@@ -523,7 +524,13 @@
                 ref="ruleFormRef"
                 :model="from_pass.obj"
             >
-                <el-row :gutter="10">
+                <el-steps :active="gongshixiangqing.obj.status == 200?99:active_bzt" finish-status="success" :align-center="true" style="margin-bottom: 20px;">
+                    <el-step v-for="(item,i) in buzhoutiao.arr" :title="item.name" />
+                </el-steps>
+                <div v-if="gongshixiangqing.obj.status == 200" style="width: 100%;text-align: center;font-size: 16px;color: #aaaaaa;">
+                    当前公示已审核完成
+                </div>
+                <el-row v-else :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label="审核"
@@ -555,7 +562,7 @@
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_pass=false">取消</el-button>
-                    <el-button type="primary" @click="passToAuditFunc">确定</el-button>
+                    <el-button v-if="gongshixiangqing.obj.status != 200" type="primary" @click="passToAuditFunc">确定</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -572,7 +579,8 @@ import {
 import {
     reactive,
     ref,
-    watch
+    watch,
+    nextTick
 } from 'vue'
 import {
     ElMessage
@@ -613,41 +621,6 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-import {
-    APIgetChinaRegion
-} from '@/api/custom/custom.js'
-const cascader_props = {
-    multiple: false,
-    emitPath: false,
-    lazy: true,
-    value: 'code',
-    label: 'name',
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-        const {
-            data
-        } = node
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
-        })
-    }
-}
-const cascader_props2 = {
-    multiple: true,
-    emitPath: false,
-    lazy: true,
-    value: 'code',
-    label: 'name',
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-        const {
-            data
-        } = node
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
-        })
-    }
-}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -820,44 +793,59 @@ const from_pass = reactive({
 const err_msg = reactive({
     obj: {}
 })
-let gongshiItem = {}
+const gongshixiangqing = reactive({
+    obj: {}
+})
+const buzhoutiao = reactive({
+    arr: []
+})
+const active_bzt = ref(99)
+import { APIgetFlowStepList } from '@/api/custom/custom.js'
 const passAudit = val => {
+    from_pass.obj = {}
+    err_msg.obj = {}
+    // 获取详情
+    APIgetEventArticleDetails(val.id).then(res => {
+        gongshixiangqing.obj = res.data
+        // 获取步骤条
+        APIgetFlowStepList(res.data.flowstep.fid).then(res2 => {
+            buzhoutiao.arr = res2.data
+            for (let i in res2.data) {
+                if (res.data.flowstep.id == res2.data[i].id) {
+                    nextTick(() => {
+                        active_bzt.value = i * 1
+                    })
+                    break
+                }
+            }
+        })
+    })
     switch_pass.value = true
-    gongshiItem = val
 }
 const passToAuditFunc = () => {
-    APIpostArchiveAudit(gongshiItem.id, from_pass.obj).then(res => {
+    APIpostArchiveAudit(gongshixiangqing.obj.id, from_pass.obj).then(res => {
         if (!res.code) {
-            refreshFunc()
             ElMessage.success(res.msg)
-            switch_pass.value = false
+            refreshFunc()
+            passAudit(gongshixiangqing.obj)
         }
     }).catch(err => {
         err_msg.obj = err.data
     })
 }
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['status_cert', 'other_auth']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 </script>
 <style lang="scss">
 	.articletplarticle {
