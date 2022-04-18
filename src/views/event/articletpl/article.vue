@@ -92,6 +92,11 @@
                         <span style="margin-left: 10px">{{ scope.row.reltype }} </span>
                     </template>
                 </el-table-column>
+                <el-table-column label="审核状态" width="90">
+                    <template #default="scope">
+                        <span style="margin-left: 10px">{{ scope.row.status }} </span>
+                    </template>
+                </el-table-column>
 
                 <el-table-column fixed="right" label="操作" width="340">
                     <template #default="scope">
