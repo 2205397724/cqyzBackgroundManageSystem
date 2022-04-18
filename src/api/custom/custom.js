@@ -1,7 +1,22 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
+
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 公示归档 
+// 公示审核  /api/a/article/{article}/audit
+// 列表
+export function APIgetListArchiveAudit(archive, params) {
+    return api2.get(`/a/article/${archive}/audit`, { params: params })
+}
+// 详情
+export function APIgetDetailsArchiveAudit(archive, article) {
+    return api2.get(`/a/article/${archive}/audit/${article}`)
+}
+// 审核
+export function APIpostArchiveAudit(archive, data) {
+    return api2.post(`/a/article/${archive}/audit`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 公示归档
 // 列表
 export function APIgetListArchiveArticle(archive, params) {
     return api2.get(`/a/archive/${archive}/article`, { params: params })
@@ -31,7 +46,7 @@ export function APIpostArticleread(data) {
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 公示任务 
+// 公示任务
 // 列表
 export function APIgetTaskList(params) {
     return api2.get('/a/task', { params: params })

@@ -93,7 +93,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="260">
+                <el-table-column fixed="right" label="操作" width="340">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -121,6 +121,13 @@
                             size="small"
                             type="info"
                             @click="addArchiveFunc(scope.row)"
+                        >
+                            审核记录
+                        </el-button>
+                        <el-button
+                            size="small"
+                            type="danger"
+                            @click="passAudit(scope.row)"
                         >
                             审核
                         </el-button>
@@ -417,40 +424,39 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="名称" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.title }} </span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="ID" width="250">
                     <template #default="scope">
                         <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="180">
+                <el-table-column label="公示ID" width="250">
                     <template #default="scope">
-                        <span>{{ scope.row.status }} </span>
+                        <span>{{ scope.row.aid }} </span>
                     </template>
                 </el-table-column>
-
-                <el-table-column fixed="right" label="操作" width="160">
+                <el-table-column label="通过" width="90">
+                    <template #default="scope">
+                        <span>{{ scope.row.pass }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="答复" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.reply }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="流程" width="90">
+                    <template #default="scope">
+                        <span>{{ scope.row.step }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="120">
                     <template #default="scope">
                         <el-button
                             size="small"
                             @click="lookDetails(scope.row)"
                         >
-                            审核
+                            详情
                         </el-button>
-                        <el-popconfirm
-                            title="确定要删除当前项么?" cancel-button-type="info"
-                            @confirm="deleteFuncDialog(scope.row)"
-                        >
-                            <template #reference>
-                                <el-button type="danger" size="small">
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-popconfirm>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -464,6 +470,94 @@
                 hide-on-single-page
                 style="padding-top: 20px;"
             />
+        </el-dialog>
+        <!-- 详情 -->
+        <el-dialog
+            v-model="switch_audit"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">ID</div>
+                    <div class="right">{{ details_audit.obj.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">公示ID</div>
+                    <div class="right">{{ details_audit.obj.aid }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">发布人ID</div>
+                    <div class="right">{{ details_audit.obj.uid }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">通过</div>
+                    <div class="right">{{ details_audit.obj.pass }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">答复</div>
+                    <div class="right">{{ details_audit.obj.reply }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">流程</div>
+                    <div class="right">{{ details_audit.obj.step }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">发布人用户端</div>
+                    <div class="right">{{ details_audit.obj.utype }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_audit = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 修改添加 -->
+        <el-dialog
+            v-model="switch_pass"
+            title="审核"
+            width="50%"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="from_pass.obj"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="审核"
+                            label-width="100px"
+                            :error="err_msg.obj&&err_msg.obj.cid?err_msg.obj.cid[0]:''"
+                        >
+                            <el-select v-model="from_pass.obj.pass" class="head-btn" placeholder="" clearable>
+                                <el-option label="审核通过" value="1" />
+                                <el-option label="不通过" value="0" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="100px"
+                            label="审核回执内容"
+                            :error="err_msg.obj&&err_msg.obj.title?err_msg.obj.title[0]:''"
+                        >
+                            <el-input
+                                v-model="from_pass.obj.reply"
+                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                type="textarea"
+                                placeholder="审核回执内容"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_pass=false">取消</el-button>
+                    <el-button type="primary" @click="passToAuditFunc">确定</el-button>
+                </div>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -685,7 +779,8 @@ const article_tab = reactive({
 const page2 = ref(1)
 const total2 = ref(74751)
 const per_page2 = ref(15)
-const addArchiveFunc = () => {
+const addArchiveFunc = val => {
+    article_item.obj = val
     switch_article.value = true
     refreshFuncArticle()
 }
@@ -694,29 +789,53 @@ const refreshFuncArticle = () => {
     getListArchiveFunc()
 }
 import {
-// 写到这了api没写
-// APIgetListArchiveArticle,
-// APIgetDetailsArchiveArticle,
-// APIpostArchiveArticle,
-// APIdeleteArchiveArticle
+    APIgetListArchiveAudit,
+    APIgetDetailsArchiveAudit,
+    APIpostArchiveAudit
 } from '@/api/custom/custom.js'
 const getListArchiveFunc = () => {
     let params = {
         page: page2.value,
         per_page: per_page2.value
     }
-    APIgetListArchiveArticle(article_item.obj.id, params).then(res => {
+    APIgetListArchiveAudit(article_item.obj.id, params).then(res => {
         article_tab.arr = res.data.items
         total2.value = res.data.aggregation.total_cnt
     })
 }
+const switch_audit = ref(false)
+const details_audit = reactive({
+    obj: {}
+})
 const lookDetails = val => {
-    APIgetDetailsArchiveArticle(article_item.obj.id, val.id).then(res => {
-        details_data.obj = res.data
-        switch_details.value = true
+    APIgetDetailsArchiveAudit(article_item.obj.id, val.id).then(res => {
+        details_audit.obj = res.data
+        switch_audit.value = true
     })
 }
-
+const switch_pass = ref(false)
+const from_pass = reactive({
+    obj: {}
+})
+const err_msg = reactive({
+    obj: {}
+})
+let gongshiItem = {}
+const passAudit = val => {
+    switch_pass.value = true
+    gongshiItem = val
+}
+const passToAuditFunc = () => {
+    APIpostArchiveAudit(gongshiItem.id, from_pass.obj).then(res => {
+        if (!res.code) {
+            refreshFunc()
+            ElMessage.success(res.msg)
+            switch_pass.value = false
+        }
+    }).catch(err => {
+        err_msg.obj = err.data
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
