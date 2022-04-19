@@ -38,7 +38,7 @@
                                 <span style="margin-left: 10px">{{ scope.row.legal }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="contact" label="contact" width="140">
+                        <el-table-column prop="contact" label="联系方式" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.contact }} </span>
                             </template>
@@ -115,7 +115,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="contact" prop="contact"
+                                label="联系方式" prop="contact"
                                 :error="from_error.msg&&from_error.msg.contact?from_error.msg.contact[0]:''"
                             >
                                 <el-input
@@ -124,13 +124,15 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="24">
                             <el-form-item
                                 label="简介" prop="desc"
                                 :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
                             >
                                 <el-input
                                     v-model="from_examine.item.desc"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
                                     placeholder=""
                                 />
                             </el-form-item>
@@ -181,7 +183,7 @@
                     <div class="right">{{ data_details.item.legal }} </div>
                 </div>
                 <div class="item">
-                    <div class="left">contact</div>
+                    <div class="left">联系方式</div>
                     <div class="right">{{ data_details.item.contact }} </div>
                 </div>
                 <div class="item">

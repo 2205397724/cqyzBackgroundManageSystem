@@ -5,13 +5,13 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-select v-model="data_search.type" class="head-btn" placeholder="类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.apply_type" :key="item.key" :label="item.val" :value="item.key" />
+                            <el-select v-model="data_search.obj.type" class="head-btn" placeholder="类型" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.enterprise_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-select v-model="data_search.process_status" class="head-btn" placeholder="状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.apply_process_status" :key="item.key" :label="item.val" :value="item.key" />
+                            <el-select v-model="data_search.obj.process_status" class="head-btn" placeholder="状态" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
@@ -32,14 +32,14 @@
                     >
                         <el-table-column prop="name" label="名称" width="220" />
                         <el-table-column prop="reply" label="理由" width="180" />
-                        <el-table-column prop="type" label="类型" width="120" >
+                        <el-table-column prop="type" label="类型" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.apply_type,scope.row.type) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="process_status" label="状态" width="90" >
+                        <el-table-column prop="process_status" label="状态" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.apply_process_status,scope.row.process_status) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="content.biz_lic" label="商业编码" width="180" />
@@ -85,12 +85,21 @@
         >
             <div>
                 <el-form
-                    ref="ruleFormRef"
                     :model="from_examine"
-                    :rules="rule_examine"
                     label-width="80px"
                 >
-                    <el-form-item label="审批理由" prop="reply">
+                    <el-form-item
+                        label="审批"
+                        :error="err_msg.obj&&err_msg.obj['process_status']?err_msg.obj['process_status'][0]:''"
+                    >
+                        <el-select v-model="from_examine.process_status" class="head-btn" placeholder="同意或拒绝" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.process_status" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item
+                        label="审批理由"
+                        :error="err_msg.obj&&err_msg.obj['reply']?err_msg.obj['reply'][0]:''"
+                    >
                         <el-input
                             v-model="from_examine.reply"
                             :autosize="{ minRows: 2, maxRows: 10 }"
@@ -98,14 +107,14 @@
                             placeholder="请输入相关理由"
                         />
                     </el-form-item>
-                    <el-form-item>
-                        <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                            <el-button @click="dialogExamineCloseFunc(ruleFormRef,'200')">拒绝</el-button>
-                            <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,'300')">同意</el-button>
-                        </div>
-                    </el-form-item>
                 </el-form>
             </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_examine = false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc">提交</el-button>
+                </span>
+            </template>
         </el-dialog>
         <!-- 详情 -->
         <el-dialog
@@ -124,11 +133,11 @@
                 </div>
                 <div class="item">
                     <div class="left">类型</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.apply_type, data_details.item.type)  }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.enterprise_type, data_details.item.type) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">状态</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.apply_process_status, data_details.item.process_status)  }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.status_all, data_details.item.process_status) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">商业编码</div>
@@ -171,8 +180,7 @@ import {
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    type: '',
-    process_status: ''
+    obj: {}
 })
 // 详情
 let switch_details = ref(false)
@@ -197,15 +205,9 @@ let page = ref(1)
 // 审核
 let switch_examine = ref(false)
 let from_examine = reactive({
-    reply: ''
+    reply: '',
+    process_status: ''
 })
-let rule_examine = {
-    reply: [{
-        required: true,
-        message: '请输入理由！',
-        trigger: 'blur'
-    }]
-}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -218,12 +220,14 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.type = ''
-    data_search.process_status = ''
+    data_search.obj = {}
     getTabListFunc()
 }
 // 审核
 const examineFunc = val => {
+    from_examine.reply = ''
+    from_examine.process_status = ''
+    err_msg.obj = {}
     data_dialog.obj = val
     switch_examine.value = true
 }
@@ -241,25 +245,22 @@ const detailsFunc = val => {
 watch(page, () => {
     getTabListFunc()
 })
+const err_msg = reactive({
+    obj: {}
+})
 // 同意拒绝提交
-const dialogExamineCloseFunc = (formEl, status) => {
-    if (!formEl) return
-    formEl.validate(valid => {
-        console.log(valid)
-        if (valid) {
-            let putdata = {
-                process_status: status,
-                reply: from_examine.reply
-            }
-            APIputPlatform(data_dialog.obj.id, putdata).then(res => {
-                if (!res.code) {
-                    switch_examine = false
-                    refreshFunc()
-                }
-            })
-        } else {
-            return false
+const dialogExamineCloseFunc = () => {
+    let putdata = {
+        process_status: from_examine.process_status,
+        reply: from_examine.reply
+    }
+    APIputPlatform(data_dialog.obj.id, putdata).then(res => {
+        if (!res.code) {
+            switch_examine = false
+            refreshFunc()
         }
+    }).catch(err => {
+        err_msg.obj = err.data
     })
 }
 // 获取列表api请求
@@ -268,12 +269,12 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    for (let key in data_search) {
-        if (data_search[key] || data_search[key] === 0) {
-            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
                 continue
             }
-            params[key] = data_search[key]
+            params[key] = data_search.obj[key]
         }
     }
     loading_tab.value = true
@@ -290,24 +291,15 @@ const getTabListFunc = () => {
 // 执行
 refreshFunc()
 
+/* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['apply_type', 'apply_process_status'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['enterprise_type', 'status_all', 'process_status']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 
 </script>
 <style lang="scss" >

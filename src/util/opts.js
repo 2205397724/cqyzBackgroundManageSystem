@@ -122,6 +122,11 @@ const opts = {
         key: 1, val: '已绑定'
     }, {
         key: 0, val: '未绑定'
+    }],
+    process_status: [{
+        key: 200, val: '拒绝'
+    }, {
+        key: 300, val: '同意'
     }]
 }
 

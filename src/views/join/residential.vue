@@ -1,31 +1,34 @@
 <template>
-    <div class="join-residential">
+    <div class="join-platform">
+        待完成，不知道数据结构
         <page-main>
             <div>
-                <!-- <div>
+                <div>
                     <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-cascader
-                                :popper-append-to-body="false"
-                                v-model="data_search.place"
-                                :props="{value:'value',label:'label',children:'children'}"
-                                :options="opts_place" size="default" placeholder="地区" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.type" class="head-btn" placeholder="类别" clearable>
-                                <el-option label="按ID" :value="0" />
-                                <el-option label="按企业名称" :value="1" />
-                                <el-option label="按小区地址" :value="2" />
+                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
+                            <el-select v-model="data_search.obj.type" class="head-btn" placeholder="类型" clearable>
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.enterprise_type" :key="item.key"
+                                    :label="item.val" :value="item.key"
+                                />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.keyword" class="head-btn" placeholder="关键字" clearable />
+                            <el-select
+                                v-model="data_search.obj.process_status" class="head-btn" placeholder="状态"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val"
+                                    :value="item.key"
+                                />
+                            </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
                     </el-row>
-                </div> -->
+                </div>
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
@@ -39,14 +42,20 @@
                     >
                         <el-table-column prop="name" label="名称" width="220" />
                         <el-table-column prop="reply" label="理由" width="180" />
-                        <el-table-column prop="type" label="类型" width="90" >
+                        <el-table-column prop="type" label="类型" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.apply_type,scope.row.type) }} </span>
+                                <span
+                                    style="margin-left: 10px"
+                                >{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
+                                </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="process_status" label="状态" width="90" >
+                        <el-table-column prop="process_status" label="状态" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.apply_process_status,scope.row.process_status) }} </span>
+                                <span
+                                    style="margin-left: 10px"
+                                >{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }}
+                                </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="content.biz_lic" label="商业编码" width="180" />
@@ -92,12 +101,24 @@
         >
             <div>
                 <el-form
-                    ref="ruleFormRef"
                     :model="from_examine"
-                    :rules="rule_examine"
                     label-width="80px"
                 >
-                    <el-form-item label="审批理由" prop="reply">
+                    <el-form-item
+                        label="审批"
+                        :error="err_msg.obj&&err_msg.obj['process_status']?err_msg.obj['process_status'][0]:''"
+                    >
+                        <el-select v-model="from_examine.process_status" class="head-btn" placeholder="同意或拒绝" clearable>
+                            <el-option
+                                v-for="(item,i) in opts_all.obj.process_status" :key="item.key" :label="item.val"
+                                :value="item.key"
+                            />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item
+                        label="审批理由"
+                        :error="err_msg.obj&&err_msg.obj['reply']?err_msg.obj['reply'][0]:''"
+                    >
                         <el-input
                             v-model="from_examine.reply"
                             :autosize="{ minRows: 2, maxRows: 10 }"
@@ -105,14 +126,14 @@
                             placeholder="请输入相关理由"
                         />
                     </el-form-item>
-                    <el-form-item>
-                        <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                            <el-button @click="dialogExamineCloseFunc(ruleFormRef,'200')">拒绝</el-button>
-                            <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,'300')">同意</el-button>
-                        </div>
-                    </el-form-item>
                 </el-form>
             </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_examine = false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc">提交</el-button>
+                </span>
+            </template>
         </el-dialog>
         <!-- 详情 -->
         <el-dialog
@@ -131,11 +152,11 @@
                 </div>
                 <div class="item">
                     <div class="left">类型</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.apply_type, data_details.item.type) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.enterprise_type, data_details.item.type) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">状态</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.apply_process_status, data_details.item.process_status)  }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.status_all, data_details.item.process_status) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">商业编码</div>
@@ -164,9 +185,9 @@
 </template>
 <script setup>
 import {
-    APIgetResidentialList,
-    APIgetResidentialDetails,
-    APIputResidential
+    APIgetPlatformList,
+    APIgetPlatformDetails,
+    APIputPlatform
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -178,21 +199,8 @@ import {
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
-    keyword: ''
+    obj: {}
 })
-let opts_place = [{
-    value: '0',
-    label: 'Guide',
-    children: [{
-                   value: '001',
-                   label: 'Disciplines'
-               },
-               {
-                   value: '002',
-                   label: '11111'
-               }
-    ]
-}]
 // 详情
 let switch_details = ref(false)
 // 列表
@@ -216,15 +224,9 @@ let page = ref(1)
 // 审核
 let switch_examine = ref(false)
 let from_examine = reactive({
-    reply: ''
+    reply: '',
+    process_status: ''
 })
-let rule_examine = {
-    reply: [{
-        required: true,
-        message: '请输入理由！',
-        trigger: 'blur'
-    }]
-}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -237,18 +239,21 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.keyword = ''
+    data_search.obj = {}
     getTabListFunc()
 }
 // 审核
 const examineFunc = val => {
+    from_examine.reply = ''
+    from_examine.process_status = ''
+    err_msg.obj = {}
     data_dialog.obj = val
     switch_examine.value = true
 }
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetResidentialDetails(val.id).then(res => {
+    APIgetPlatformDetails(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -259,25 +264,22 @@ const detailsFunc = val => {
 watch(page, () => {
     getTabListFunc()
 })
+const err_msg = reactive({
+    obj: {}
+})
 // 同意拒绝提交
-const dialogExamineCloseFunc = (formEl, status) => {
-    if (!formEl) return
-    formEl.validate(valid => {
-        console.log(valid)
-        if (valid) {
-            let putdata = {
-                process_status: status,
-                reply: from_examine.reply
-            }
-            APIputResidential(data_dialog.obj.id, putdata).then(res => {
-                if (!res.code) {
-                    switch_examine = false
-                    refreshFunc()
-                }
-            })
-        } else {
-            return false
+const dialogExamineCloseFunc = () => {
+    let putdata = {
+        process_status: from_examine.process_status,
+        reply: from_examine.reply
+    }
+    APIputPlatform(data_dialog.obj.id, putdata).then(res => {
+        if (!res.code) {
+            switch_examine = false
+            refreshFunc()
         }
+    }).catch(err => {
+        err_msg.obj = err.data
     })
 }
 // 获取列表api请求
@@ -286,16 +288,16 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    for (let key in data_search) {
-        if (data_search[key]||data_search[key]===0) {
-            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
                 continue
             }
-            params[key] = data_search[key]
+            params[key] = data_search.obj[key]
         }
     }
     loading_tab.value = true
-    APIgetResidentialList(params).then(res => {
+    APIgetPlatformList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -307,55 +309,75 @@ const getTabListFunc = () => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import {
+    getOpts,
+    getOptVal
+} from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['enterprise_type', 'status_all', 'process_status']).then(res => {
+    opts_all.obj = res
+})
 </script>
 <style lang="scss">
-    .join-residential {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-    }
+	.join-platform {
+		.el-cascader-box-my {
+			.el-cascader {
+				width: 100% !important;
+				margin-bottom: 10px;
+			}
+		}
+	}
 </style>
 <style lang="scss" scoped>
-    .join-residential {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
+	.join-platform {
+		.el-cascader-box-my {
+			.el-cascader {
+				width: 100%;
+				margin-bottom: 10px;
+			}
+		}
 
-    .search-tips {
-        color: #aaaaaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
+		.head-btn {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+	}
 
-    .details-box {
-        .item {
-            display: flex;
-            color: #333333;
-            font-size: 16px;
-            margin-bottom: 20px;
+	.search-tips {
+		color: #aaaaaa;
+		font-size: 14px;
+		margin-bottom: 20px;
+	}
 
-            .left {
-                box-sizing: border-box;
-                width: 100px;
-                white-space: nowrap;
-                margin-right: 20px;
-                text-align: right;
-                font-weight: 600;
-            }
+	.details-box {
+		.item {
+			display: flex;
+			color: #333333;
+			font-size: 16px;
+			margin-bottom: 20px;
 
-            .left::after {
-                content: '：';
-            }
+			.left {
+				box-sizing: border-box;
+				width: 100px;
+				white-space: nowrap;
+				margin-right: 20px;
+				text-align: right;
+				font-weight: 600;
+			}
 
-            .right {
-                width: 100%;
-                color: #666666;
-            }
-        }
-    }
+			.left::after {
+				content: '：';
+			}
+
+			.right {
+				width: 100%;
+				color: #666666;
+			}
+		}
+	}
 </style>

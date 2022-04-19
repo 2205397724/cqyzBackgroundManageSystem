@@ -14,26 +14,26 @@
 
 <script setup>
 import {
-    toRefs,
     defineProps,
     defineEmits,
     watch,
     ref
 } from 'vue'
-const props = defineProps(['modelValue'])
+const props = defineProps({ modelValue: { type: [String, Array], default: '' }, checkbox: { type: Boolean, default: false } })
 const emits = defineEmits(['update:modelValue'])
 const code = ref('')
 watch(props, new_val => {
     code.value = new_val.modelValue
 }, { immediate: true, deep: true })
 watch(code, new_val => {
+    console.log(new_val)
     emits('update:modelValue', new_val)
 })
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
 const cascader_props = {
-    multiple: false,
+    multiple: props.checkbox,
     emitPath: false,
     lazy: true,
     value: 'code',

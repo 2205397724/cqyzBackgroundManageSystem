@@ -18,54 +18,27 @@
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.gender" class="head-btn" placeholder="性别" clearable>
-                                <el-option label="男" value="F" />
-                                <el-option label="女" value="M" />
-                                <el-option label="未设置" value="U" />
+                                <el-option v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.house_id" class="head-btn" placeholder="终端类型" clearable>
-                                <el-option label="总平台" value="pt" />
-                                <el-option label="区域平台" value="ptr" />
-                                <el-option label="企业端" value="pm" />
-                                <el-option label="行政管理端" value="gov" />
-                                <el-option label="业主端" value="mbr" />
+                                <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.oauth_type" class="head-btn" placeholder="第三方登录类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.other_auth" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option v-for="(item,i) in opts_all.obj.login_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-cascader
-                                v-model="data_search.region" class="head-btn"
-                                placeholder="区域"
-                                :props="cascader_props"
-                                collapse-tags
-                                collapse-tags-tooltip
-                                clearable
-                                :show-all-levels="false"
-                            />
+                            <Cascaders v-model="data_search.region" />
                         </el-col>
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.updated_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="更新时间"
-                                    end-placeholder="更新时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
@@ -106,12 +79,12 @@
                         </el-table-column>
                         <el-table-column prop="gender" label="性别" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_cert" label="认证状态" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
                             </template>
                         </el-table-column>
 
@@ -175,11 +148,7 @@
                                 :error="from_error.msg&&from_error.msg.auth_type?from_error.msg.auth_type[0]:''"
                             >
                                 <el-select v-model="from_examine.item.auth_type" class="head-btn" placeholder="终端类型" clearable>
-                                    <el-option label="总平台" value="pt" />
-                                    <el-option label="区域平台" value="ptr" />
-                                    <el-option label="企业端" value="pm" />
-                                    <el-option label="行政管理端" value="gov" />
-                                    <el-option label="业主端" value="mbr" />
+                                    <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -221,14 +190,7 @@
                                 label="所属区域" prop="region"
                                 :error="from_error.msg&&from_error.msg.region?from_error.msg.region[0]:''"
                             >
-                                <el-cascader
-                                    v-model="from_examine.item.region" class="head-btn"
-                                    :props="cascader_props2"
-                                    collapse-tags
-                                    collapse-tags-tooltip
-                                    clearable
-                                    :show-all-levels="false"
-                                />
+                                <Cascaders v-model="from_examine.item.region" :checkbox="true" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -270,11 +232,11 @@
                 </div>
                 <div class="item">
                     <div class="left">性别</div>
-                    <div class="right">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],data_details.item.gender) }}</div>
+                    <div class="right">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],data_details.item.gender) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">认证状态</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.status_cert,data_details.item.status_cert) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.status_all,data_details.item.status_cert) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -294,6 +256,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import {
     APIgetUserList,
     APIgetUserDetails,
@@ -546,23 +509,13 @@ const addServiceFunc = index => {
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 </script>
 <style lang="scss">
 	.userregister {
