@@ -467,7 +467,7 @@ export function APIpostOptsVal(data) {
 // 配置
 // 列表
 export function APIgetOptsList(params) {
-    return api.get('/pt/sysopt', { params: params })
+    return api2.get('/sysopt', { params: params })
 }
 // 删除
 export function APIdeleteOpts(id) {

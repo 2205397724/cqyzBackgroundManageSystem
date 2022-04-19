@@ -104,6 +104,24 @@ const opts = {
         key: 3, val: '每半年'
     }, {
         key: 4, val: '每年'
+    }],
+    // 是否绑定产权
+    house_has_property: [{
+        key: 1, val: '已绑定'
+    }, {
+        key: 0, val: '未绑定'
+    }],
+    // 房屋上级类型
+    houseable_type: [{
+        key: 'buildings', val: '楼栋'
+    }, {
+        key: 'units', val: '单元'
+    }],
+    // 产权是否绑定房屋
+    house_has_house: [{
+        key: 1, val: '已绑定'
+    }, {
+        key: 0, val: '未绑定'
     }]
 }
 

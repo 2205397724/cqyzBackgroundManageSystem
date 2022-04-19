@@ -221,10 +221,9 @@
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                         <el-form-item label="证件类型" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.type_id_card']?from_error.msg['property_owners.'+i+'.type_id_card'][0]:''">
-                                            <el-input
-                                                v-model="item.type_id_card"
-                                                placeholder=""
-                                            />
+                                            <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
+                                                <el-option v-for="(item,i) in opts_all.obj.type_id_card" :key="item.key" :label="item.val" :value="item.key" />
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">

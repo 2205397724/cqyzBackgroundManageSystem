@@ -4,13 +4,21 @@
             <div>
                 <el-row :gutter="10">
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.zone_id" class="head-btn" placeholder="所属小区ID" clearable />
+                        <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                <SearchResidential v-model:str="data_search.obj.zone_id" />
+                            </div>
+                        </div>
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.type_construct" class="head-btn" placeholder="结构形式" clearable />
+                        <el-select v-model="data_search.obj.type_construct" class="head-btn" placeholder="结构形式" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.build_type_construct" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.type_water" class="head-btn" placeholder="供水方式" clearable />
+                        <el-select v-model="data_search.obj.type_water" class="head-btn" placeholder="供水方式" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.build_type_water" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                         <el-input v-model="data_search.obj.sno" class="head-btn" placeholder="楼栋编号号" clearable />
@@ -25,7 +33,7 @@
                         <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.sync_china_code" class="head-btn" placeholder="区域code" clearable />
+                        <Cascaders v-model="data_search.obj.sync_china_code" />
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                         <!-- <el-input v-model="data_search.obj.time_build_end" class="head-btn" placeholder="竣工时间" clearable /> -->
@@ -173,12 +181,12 @@
                         </el-table-column>
                         <el-table-column prop="type_water" label="供水方式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_construct" label="结构形式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_lift" label="电梯数" width="140">
@@ -598,11 +606,11 @@
                 </div>
                 <div class="item">
                     <div class="left">供水方式</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">结构形式</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">电梯数</div>
@@ -634,6 +642,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import SearchResidential from '@/components/SearchResidential/index.vue'
 import {
     APIgetBuildListHouse,
@@ -858,20 +867,20 @@ const addResidentialFunc = () => {
         'area_live': '',
         'area_build': '',
         'area_live_not': '',
-        'cnt_floor': 0,
-        'cnt_unit': 0,
-        'cnt_live': 0,
+        'cnt_floor': '',
+        'cnt_unit': '',
+        'cnt_live': '',
         'by_build_owner': '',
         'time_build_end': '',
         'time_turn': '',
         'time_use': '',
-        'sno': 0,
+        'sno': '',
         'report_name': '',
         'name': '',
         'type_water': '',
         'type_construct': '',
-        'cnt_lift': 0,
-        'cnt_live_not': 0,
+        'cnt_lift': '',
+        'cnt_live_not': '',
         'by_build': '',
         'remark': '',
         'addition': {
@@ -907,24 +916,16 @@ const modifyResidentialFunc = val => {
 // 执行
 refreshFunc()
 
+/* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['build_type_water', 'build_type_construct'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['build_type_water', 'build_type_construct']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .routinebuilding {

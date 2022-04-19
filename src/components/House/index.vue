@@ -116,7 +116,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key"
+                                            v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -127,7 +127,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key"
+                                            v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -288,10 +288,10 @@
                                                         </template>
                                                         <div style="box-sizing: border-box;padding: 4px;">
                                                             <div class="tip-title">房屋：{{ item.name }}</div>
-                                                            <div class="tip-title">使用状态：{{ getOptValFunc(opts_all.obj.house_status_use,item.status_use) }}</div>
-                                                            <div class="tip-title">安全状态：{{ getOptValFunc(opts_all.obj.house_status_safe,item.status_safe) }}</div>
-                                                            <div class="tip-title">产权性质：{{ getOptValFunc(opts_all.obj.house_type_property,item.type_property) }}</div>
-                                                            <div class="tip-title">户型：{{ getOptValFunc(opts_all.obj.house_type_model,item.type_model) }}</div>
+                                                            <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
+                                                            <div class="tip-title">安全状态：{{ getOptVal(opts_all.obj.house_status_safe,item.status_safe) }}</div>
+                                                            <div class="tip-title">产权性质：{{ getOptVal(opts_all.obj.house_type_property,item.type_property) }}</div>
+                                                            <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div>
                                                             <div>
                                                                 <el-button type="primary" plain @click="modifyResidentialFunc(item)">修改</el-button>
                                                                 <el-button type="warning" plain @click="showPropertyFunc(item)">产权</el-button>
@@ -327,12 +327,8 @@
                                 :error="from_error.msg&&from_error.msg.houseable_type?from_error.msg.houseable_type[0]:''"
                                 label-width="140px"
                             >
-                                <el-select
-                                    v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable
-                                    @change="from_examine.item.houseable_id = ''"
-                                >
-                                    <el-option label="楼栋" value="buildings" />
-                                    <el-option label="单元" value="units" />
+                                <el-select v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable @change="from_examine.item.houseable_id = ''">
+                                    <el-option v-for="(item,i) in opts_all.obj.houseable_type" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -490,7 +486,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.status_plan" class="head-btn" placeholder="规划用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -501,7 +497,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.status_fact" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -653,7 +649,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_plan?error_alldetails.msg.status_plan[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.status_plan" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -663,7 +659,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_fact?error_alldetails.msg.status_fact[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.status_fact" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -702,7 +698,7 @@
                 <el-table-column prop="desc" label="备注" width="280" />
                 <el-table-column prop="status" label="状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status) }} </span>
+                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_cert,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="file_err" label="错误信息" width="280" />
@@ -847,7 +843,7 @@
                                 <el-select v-if="!read_state" v-model="property_form.obj.should_bind_house" class="head-btn" placeholder="是否绑定房屋" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
-                                <span v-else>{{ getOptValFunc(opts_all.obj.house_has_house,property_form.obj.should_bind_house) }}</span>
+                                <span v-else>{{ getOptVal(opts_all.obj.house_has_house,property_form.obj.should_bind_house) }}</span>
                             </el-form-item>
                         </el-col> -->
                         <el-col :md="24" :lg="24">
@@ -869,11 +865,16 @@
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                         <el-form-item label-width="80px" label="证件类型" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.type_id_card']?from_error_property.msg['property_owners.'+i+'.type_id_card'][0]:''">
-                                            <el-input
+                                            <el-select
                                                 v-if="!read_state"
-                                                v-model="item.type_id_card"
-                                                placeholder=""
-                                            />
+                                                v-model="item.type_id_card" class="head-btn" placeholder=""
+                                                clearable
+                                            >
+                                                <el-option
+                                                    v-for="(item,i) in opts_all.obj.type_id_card" :key="item.key"
+                                                    :label="item.val" :value="item.key"
+                                                />
+                                            </el-select>
                                             <span v-else>{{ item.type_id_card }}</span>
                                         </el-form-item>
                                     </el-col>
@@ -1442,25 +1443,14 @@ const postPropertyFunc = () => {
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({
-    lab: ['house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact']
-}).then(res => {
-    opts_all.obj = res.data
+getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 
 <style lang="scss">

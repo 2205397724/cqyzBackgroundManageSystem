@@ -46,12 +46,12 @@
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-select v-model="data_search.status_plan" class="head-btn" placeholder="*规划用途" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                             <el-select v-model="data_search.status_fact" class="head-btn" placeholder="*实际用途" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
@@ -60,7 +60,7 @@
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.sync_china_code" class="head-btn" placeholder="区域code" clearable />
+                            <Cascaders v-model="data_search.sync_china_code" />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
                             <!-- <el-input v-model="data_search.sync_zone_id" class="head-btn" placeholder="小区ID" clearable /> -->
@@ -81,9 +81,8 @@
                             </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-select v-model="data_search.houseable_type" class="head-btn" placeholder="直属上级类型" clearable @change="data_search.houseable_id=''">
-                                <el-option label="楼栋" value="buildings" />
-                                <el-option label="单元" value="units" />
+                            <el-select v-model="data_search.houseable_type" class="head-btn" placeholder="直属上级类型" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.houseable_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col v-if="data_search.houseable_type" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
@@ -191,37 +190,37 @@
                         </el-table-column>
                         <el-table-column prop="type_model" label="户型" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_property" label="产权性质" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_building" label="楼栋性质" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_use" label="房屋使用状态" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_safe" label="房屋安全状态" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_plan" label="规划用途" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_plan_fact,scope.row.status_plan) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_plan) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_fact" label="实际用途" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.house_plan_fact,scope.row.status_fact) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_fact) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="200">
@@ -283,12 +282,8 @@
                                 label="直属楼栋/单元类型" prop="houseable_type"
                                 :error="from_error.msg&&from_error.msg.houseable_type?from_error.msg.houseable_type[0]:''"
                             >
-                                <el-select
-                                    v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable
-                                    @change="from_examine.item.houseable_id = ''"
-                                >
-                                    <el-option label="楼栋" value="buildings" />
-                                    <el-option label="单元" value="units" />
+                                <el-select v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable @change="from_examine.item.houseable_id = ''">
+                                    <el-option v-for="(item,i) in opts_all.obj.houseable_type" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -437,7 +432,7 @@
                                 :error="from_error.msg&&from_error.msg.status_plan?from_error.msg.status_plan[0]:''"
                             >
                                 <el-select v-model="from_examine.item.status_plan" class="head-btn" placeholder="规划用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -447,7 +442,7 @@
                                 :error="from_error.msg&&from_error.msg.status_fact?from_error.msg.status_fact[0]:''"
                             >
                                 <el-select v-model="from_examine.item.status_fact" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -518,7 +513,7 @@
                 </div>
                 <div class="item">
                     <div class="left">直属楼栋/单元类型</div>
-                    <div class="right">{{ getOptValFunc([{key:'buildings',val:'楼栋'},{key:'units',val:'单元'}],data_details.item.houseable_type) }}</div>
+                    <div class="right">{{ getOptVal([{key:'buildings',val:'楼栋'},{key:'units',val:'单元'}],data_details.item.houseable_type) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">物理楼层</div>
@@ -546,31 +541,31 @@
                 </div>
                 <div class="item">
                     <div class="left">户型</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_type_model,data_details.item.type_model) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_type_model,data_details.item.type_model) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">产权性质</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_type_property,data_details.item.type_property) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_type_property,data_details.item.type_property) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">楼栋性质</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_type_building,data_details.item.type_building) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_type_building,data_details.item.type_building) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">房屋使用状态</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_status_use,data_details.item.status_use) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_use,data_details.item.status_use) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">房屋安全状态</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_status_safe,data_details.item.status_safe) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_safe,data_details.item.status_safe) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">规划用途</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_plan_fact,data_details.item.status_plan) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_plan_fact,data_details.item.status_plan) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">实际用途</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.house_plan_fact,data_details.item.status_fact) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_plan_fact,data_details.item.status_fact) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">当前产权ID</div>
@@ -750,7 +745,7 @@
                 <el-table-column prop="desc" label="备注" width="280" />
                 <el-table-column prop="status" label="状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status) }} </span>
+                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_cert,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="file_err" label="错误信息" width="280" />
@@ -835,6 +830,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import SearchBuilding from '@/components/SearchBuilding/index.vue'
 import SearchUnit from '@/components/SearchUnit/index.vue'
 import SearchResidential from '@/components/SearchResidential/index.vue'
@@ -1234,23 +1230,14 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['houseable_type', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .routine-house {

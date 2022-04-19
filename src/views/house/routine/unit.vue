@@ -5,10 +5,18 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.building_id" class="head-btn" placeholder="所属楼栋ID" clearable />
+                            <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchBuilding v-model:str="data_search.obj.building_id" />
+                                </div>
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.sync_zone_id" class="head-btn" placeholder="所属小区ID" clearable />
+                            <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchResidential v-model:str="data_search.obj.sync_zone_id" />
+                                </div>
+                            </div>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                             <el-input v-model="data_search.obj.name" class="head-btn" placeholder="单元名称" clearable />
@@ -17,7 +25,7 @@
                             <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.sync_china_code" class="head-btn" placeholder="区域code" clearable />
+                            <Cascaders v-model="data_search.obj.sync_china_code" />
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                             <!-- <el-input v-model="data_search.obj.time_pro_setup" class="head-btn" placeholder="立项时间" clearable /> -->
@@ -321,6 +329,8 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
+import SearchResidential from '@/components/SearchResidential/index.vue'
 import SearchBuilding from '@/components/SearchBuilding/index.vue'
 import {
     APIgetUnitsListHouse,
