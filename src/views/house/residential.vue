@@ -105,7 +105,7 @@
                             </div>
                         </el-col> -->
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                            <el-button type="primary" @click="searchFunc">搜索</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -113,10 +113,10 @@
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
                 </div>
-                <div>
+                <div style="margin: 10px 0 20px;">
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加小区</el-button>
+                            <el-button type="primary" size="large" @click="addResidentialFunc">添加小区</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -132,40 +132,40 @@
                         <el-table-column prop="id" label="小区ID" width="250" />
                         <el-table-column prop="area_floor" label="总占地面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_floor }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.area_floor }} m²</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="area_build" label="总建筑面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="area_support" label="配套用房总面积" width="140">
+                        <!-- <el-table-column prop="area_support" label="配套用房总面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_support }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.area_support }} m²</span>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column prop="cnt_building" label="楼栋数" width="140">
                             <template #default="scope">
-                                <el-link style="margin-left: 10px" type="primary">
-                                    <router-link style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
+                                <el-link :underline="false" type="primary">
+                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
                                 </el-link>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_live" label="住房总套数" width="140">
                             <template #default="scope">
-                                <el-link style="margin-left: 10px" type="primary" @click="showHouseFunc(scope.row)">
+                                <el-link style="padding: 0 10px;" :underline="false" class="el-button" type="primary" @click="showHouseFunc(scope.row)">
                                     {{ scope.row.cnt_live }} 套
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
+                        <!-- <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px">{{ scope.row.cnt_support }} 套</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="company_build" label="建设单位名称" width="140" />
-                        <el-table-column prop="time_use" label="投用时间" width="140" />
+                        <el-table-column prop="time_use" label="投用时间" width="140" /> -->
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -504,7 +504,7 @@
                     <div class="item">
                         <div class="left">便民服务</div>
                         <div class="right">
-                            <div style="font-size: #666666;font-size: 14px;margin-bottom: 10px;">
+                            <div style="font-size: #666;font-size: 14px;margin-bottom: 10px;">
                                 *{{ data_details.item.addition.desc }}
                             </div>
                             <div
@@ -512,14 +512,14 @@
                                 class="convenience-item"
                                 style="display: flex;margin-bottom: 10px;border-bottom: 1px solid #eee;padding-bottom: 8px;"
                             >
-                                <div class="conve-left" style="flex:1;">
+                                <div class="conve-left" style="flex: 1;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >服务名称：</span>{{ item.title }}
                                 </div>
-                                <div class="conve-right" style="flex:1;">
+                                <div class="conve-right" style="flex: 1;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >联系方式：</span>{{ item.phone }}
                                 </div>
                             </div>
@@ -780,7 +780,7 @@ const deleteFunc = val => {
 // 添加小区
 const addResidentialFunc = () => {
     from_error.msg = {}
-    str_title.value = '添加'
+    str_title.value = '添加小区'
     from_examine.item = {
         'name': '',
         'addr': '',
@@ -837,30 +837,27 @@ refreshFunc()
 </script>
 <style lang="scss">
     .routineresidentialhouse {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-
+        .el-cascader {
+            width: 100% !important;
+            margin-bottom: 10px;
+        }
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .el-form-item {
                 margin: 0;
             }
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
@@ -872,22 +869,19 @@ refreshFunc()
             margin-bottom: 10px;
         }
     }
-
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -896,17 +890,14 @@ refreshFunc()
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }

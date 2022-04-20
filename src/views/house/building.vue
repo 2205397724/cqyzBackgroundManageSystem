@@ -4,29 +4,19 @@
             <div>
                 <el-row :gutter="10">
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-select v-model="data_search.obj.type_construct" class="head-btn" placeholder="结构形式" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.build_type_construct" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-select v-model="data_search.obj.type_water" class="head-btn" placeholder="供水方式" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.build_type_water" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.sno" class="head-btn" placeholder="楼栋编号号" clearable />
+                        <el-input v-model="data_search.obj.sno" class="head-btn" placeholder="楼栋编号" clearable />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                         <el-input v-model="data_search.obj.name" class="head-btn" placeholder="楼栋名称" clearable />
                     </el-col>
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <el-input v-model="data_search.obj.report_name" class="head-btn" placeholder="楼栋报建名" clearable />
+                        <el-select v-model="data_search.obj.type_construct" class="head-btn" placeholder="结构形式" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.build_type_construct" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
                     </el-col>
+
                     <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                         <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
-                    </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                        <Cascaders v-model="data_search.obj.sync_china_code" />
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                         <div class="head-btn">
@@ -41,70 +31,18 @@
                             />
                         </div>
                     </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.obj.time_use"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="投用时间"
-                                end-placeholder="投用时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.obj.time_turn"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="移交时间"
-                                end-placeholder="移交时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.obj.created_at"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="创建时间"
-                                end-placeholder="创建时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.obj.updated_at"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="更新时间"
-                                end-placeholder="更新时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                        <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                    <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="2">
+                        <el-button type="primary" @click="searchFunc">搜索</el-button>
                     </el-col>
                 </el-row>
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
                 </div>
-                <div>
+                <div style="margin: 10px 0 20px;">
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加楼栋</el-button>
+                            <el-button size="large" type="primary" @click="addResidentialFunc">添加楼栋</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -119,83 +57,83 @@
                         <el-table-column prop="addr" label="地址" width="220" />
                         <el-table-column prop="area_live" label="住宅总面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_live }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.area_live }} m²</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="area_build" label="总建筑面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="area_live_not" label="非住宅面积" width="140">
+                        <!-- <el-table-column prop="area_live_not" label="非住宅面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.area_live_not }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.area_live_not }} m²</span>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column prop="cnt_floor" label="楼层数" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_floor }} 层</span>
+                                <span style="margin-left: 10px;">{{ scope.row.cnt_floor }} 层</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_unit" label="单元数" width="140">
                             <template #default="scope">
-                                <el-link style="margin-left: 10px" type="primary">
-                                    <router-link style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuildingUnit',query:{ building_id: scope.row.id }}">{{ scope.row.cnt_unit }} 个</router-link>
+                                <el-link :underline="false" type="primary">
+                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuildingUnit',query:{ building_id: scope.row.id }}">{{ scope.row.cnt_unit }} 个</router-link>
                                 </el-link>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_live" label="住宅总套数" width="140">
                             <template #default="scope">
-                                <el-link style="margin-left: 10px" type="primary" @click="showHouseFunc(scope.row)">
+                                <el-link class="el-button" :underline="false" style="padding: 0 10px;" type="primary" @click="showHouseFunc(scope.row)">
                                     {{ scope.row.cnt_live }} 套
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="by_build_owner" label="建设业主单位" width="140">
+                        <!-- <el-table-column prop="by_build_owner" label="建设业主单位" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.by_build_owner }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.by_build_owner }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="time_build_end" label="建成时间" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.time_build_end }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.time_build_end }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="time_turn" label="移交时间" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.time_turn }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.time_turn }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="time_use" label="投用时间" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.time_use }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.time_use }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_water" label="供水方式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type_construct" label="结构形式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_lift" label="电梯数" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_lift }} 台</span>
+                                <span style="margin-left: 10px;">{{ scope.row.cnt_lift }} 台</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cnt_live_not" label="非住宅面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_live_not }} m²</span>
+                                <span style="margin-left: 10px;">{{ scope.row.cnt_live_not }} m²</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="by_build" label="建设单位" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.by_build }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.by_build }} </span>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -936,26 +874,23 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .el-form-item {
                 margin: 0;
             }
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
@@ -967,22 +902,19 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
             margin-bottom: 10px;
         }
     }
-
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -991,17 +923,14 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }
