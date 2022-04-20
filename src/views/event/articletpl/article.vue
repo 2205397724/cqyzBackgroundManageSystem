@@ -3,56 +3,60 @@
         <page-main>
             <el-row :gutter="10">
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="公示分类ID" clearable />
+                    <CascaderType v-model="data_search.obj.cid" />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.totype" class="head-btn" placeholder="公示对象类型" clearable />
+                    <el-select v-model="data_search.obj.totype" class="head-btn" placeholder="公示对象类型" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.reltype" class="head-btn" placeholder="关联对象类型" clearable />
+                    <el-select v-model="data_search.obj.reltype" class="head-btn" placeholder="关联对象类型" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.article_type" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.dep_id" class="head-btn" placeholder="发布人用户组ID" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.depcc" class="head-btn" placeholder="depcc" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.depcclv" class="head-btn" placeholder="depcclv" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.uid" class="head-btn" placeholder="发布人ID" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.utype" class="head-btn" placeholder="发布人用户端" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.lv" class="head-btn" placeholder="等级" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.status" class="head-btn" placeholder="状态" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.step" class="head-btn" placeholder="流程" clearable />
+                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <SearchUserGroup v-model:str="data_search.obj.dep_id" />
+                        </div>
+                    </div>
                 </el-col>
                 <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-col> -->
-                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.updated_at"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="更新时间"
-                                end-placeholder="更新时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
+                    <el-input v-model="data_search.obj.depcc" class="head-btn" placeholder="depcc" clearable />
+                </el-col> -->
+                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.obj.depcclv" class="head-btn" placeholder="depcclv" clearable />
+                </el-col> -->
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <SearchUser v-model:str="data_search.obj.uid" />
                         </div>
-                    </el-col> -->
+                    </div>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-select v-model="data_search.obj.utype" class="head-btn" placeholder="发布人用户端" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-select v-model="data_search.obj.lv" class="head-btn" placeholder="接收等级" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-select v-model="data_search.obj.status" class="head-btn" placeholder="状态" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <SearchFlow v-model:str="data_search.obj.step" />
+                        </div>
+                    </div>
+                </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                 </el-col>
@@ -172,9 +176,6 @@
                                 v-model="from_examine.item.title"
                                 placeholder=""
                             />
-                            <!-- <el-select v-model="from_examine.item.auth_type" class="head-btn" placeholder="终端类型" clearable>
-                                <el-option label="总平台" value="pt" />
-                            </el-select> -->
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -183,10 +184,7 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.cid"
-                                placeholder=""
-                            />
+                            <CascaderType v-model="from_examine.item.cid" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -195,23 +193,22 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.totype?from_error.msg.totype[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.totype"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col v-if="from_examine.item.totype||from_examine.item.totype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="公示对象ID"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.toval"
-                                placeholder=""
-                            />
+                            <div v-if="from_examine.item.totype==6" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchResidential v-model:str="from_examine.item.toval" />
+                            </div>
+                            <Cascaders v-else v-model="from_examine.item.toval" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -220,14 +217,13 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.reltype?from_error.msg.reltype[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.reltype"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.reltype" placeholder="" clearable style="width: 100%;">
+                                <el-option v-for="(item,i) in opts_all.obj.article_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="关联对象ID"
                             label-width="120px"
@@ -246,9 +242,13 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.start_at?from_error.msg.start_at[0]:''"
                         >
-                            <el-input
+                            <el-date-picker
                                 v-model="from_examine.item.start_at"
+                                type="datetime"
+                                value-format="YYYY-MM-DD HH:mm:ss"
                                 placeholder=""
+                                style="width: 100%;"
+                                :default-value="new Date()"
                             />
                         </el-form-item>
                     </el-col>
@@ -258,9 +258,13 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.end_at?from_error.msg.end_at[0]:''"
                         >
-                            <el-input
+                            <el-date-picker
                                 v-model="from_examine.item.end_at"
+                                type="datetime"
+                                value-format="YYYY-MM-DD HH:mm:ss"
                                 placeholder=""
+                                style="width: 100%;"
+                                :default-value="new Date()"
                             />
                         </el-form-item>
                     </el-col>
@@ -270,34 +274,22 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.dep_id?from_error.msg.dep_id[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.dep_id"
-                                placeholder=""
-                            />
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchUserGroup v-model:str="from_examine.item.dep_id" />
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="等级"
+                            label="接收等级"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.lv"
-                                placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="公示内容"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''"
-                        >
-                            <el-input
-                                v-model="from_examine.item.content"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.lv" placeholder="" clearable style="width: 100%;">
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -306,10 +298,11 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.step?from_error.msg.step[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.step"
-                                placeholder=""
-                            />
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchFlowStep v-model:str="from_examine.item.step" />
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -330,8 +323,21 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
                         >
+                            <el-select v-model="from_examine.item.status" placeholder="" clearable style="width: 100%;">
+                                <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="公示内容"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''"
+                        >
                             <el-input
-                                v-model="from_examine.item.status"
+                                v-model="from_examine.item.content"
+                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                type="textarea"
                                 placeholder=""
                             />
                         </el-form-item>
@@ -540,7 +546,7 @@
                         <el-form-item
                             label="审核"
                             label-width="100px"
-                            :error="err_msg.obj&&err_msg.obj.cid?err_msg.obj.cid[0]:''"
+                            :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
                         >
                             <el-select v-model="from_pass.obj.pass" class="head-btn" placeholder="" clearable>
                                 <el-option label="审核通过" value="1" />
@@ -552,7 +558,7 @@
                         <el-form-item
                             label-width="100px"
                             label="审核回执内容"
-                            :error="err_msg.obj&&err_msg.obj.title?err_msg.obj.title[0]:''"
+                            :error="err_msg.obj&&err_msg.obj.reply?err_msg.obj.reply[0]:''"
                         >
                             <el-input
                                 v-model="from_pass.obj.reply"
@@ -574,6 +580,12 @@
     </div>
 </template>
 <script setup>
+import SearchResidential from '@/components/SearchResidential/index.vue'
+import CascaderType from '@/components/CascaderType/index.vue'
+import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
+import SearchUser from '@/components/SearchUser/index.vue'
+import SearchFlowStep from '@/components/SearchFlowStep/index.vue'
+
 import {
     APIgetEventArticleList,
     APIgetEventArticleDetails,
@@ -848,7 +860,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['status_cert', 'other_auth']).then(res => {
+getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).then(res => {
     opts_all.obj = res
 })
 </script>

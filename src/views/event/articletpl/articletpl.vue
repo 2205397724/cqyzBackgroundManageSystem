@@ -8,14 +8,7 @@
                             <el-input v-model="data_search.obj.name" class="head-btn" placeholder="名称" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-cascader
-                                v-model="data_search.obj.cid" class="head-btn"
-                                placeholder="分类ID"
-                                :options="options.arr"
-                                :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
-                                :show-all-levels="false"
-                                clearable
-                            />
+                            <CascaderType v-model="data_search.obj.cid" />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -126,33 +119,19 @@
                                 label="分类ID"
                                 :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cid[0]:''"
                             >
-                                <el-cascader
-                                    v-model="from_examine.item.cid" class="head-btn"
-                                    placeholder="部门分类"
-                                    :options="options.arr"
-                                    :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
-                                    :show-all-levels="false"
-                                    clearable
-                                />
+                                <CascaderType v-model="from_examine.item.cid" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="类别分类"
+                                label="流程ID"
                                 :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.fid[0]:''"
                             >
-                                <!-- <el-cascader
-                                    v-model="from_examine.item.fid" class="head-btn"
-                                    placeholder="类别分类"
-                                    :options="options.arr"
-                                    :props="{checkStrictly:true,emitPath:false,value:'id',label:'name',children:'children'}"
-                                    :show-all-levels="false"
-                                    clearable
-                                /> -->
-                                <el-input
-                                    v-model="from_examine.item.fid"
-                                    placeholder=""
-                                />
+                                <div style="height: 100%;width: 100%;">
+                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                        <SearchFlow v-model:str="from_examine.item.fid" />
+                                    </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
@@ -275,6 +254,8 @@
     </div>
 </template>
 <script setup>
+import SearchFlow from '@/components/SearchFlow/index.vue'
+import CascaderType from '@/components/CascaderType/index.vue'
 import {
     APIgetArticletplList,
     APIgetArticletplDetails,

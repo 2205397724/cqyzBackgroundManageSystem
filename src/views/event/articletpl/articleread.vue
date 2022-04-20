@@ -112,10 +112,11 @@
                             label="公示ID"
                             :error="from_error.msg&&from_error.msg.aid?from_error.msg.aid[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.aid"
-                                placeholder=""
-                            />
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchArchive v-model:str="from_examine.item.aid" />
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -123,10 +124,11 @@
                             label="房屋ID"
                             :error="from_error.msg&&from_error.msg.hid?from_error.msg.hid[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.hid"
-                                placeholder=""
-                            />
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchHouse v-model:str="from_examine.item.hid" />
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -134,10 +136,11 @@
                             label="小区ID"
                             :error="from_error.msg&&from_error.msg.zid?from_error.msg.zid[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.zid"
-                                placeholder=""
-                            />
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchResidential v-model:str="from_examine.item.zid" />
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -170,6 +173,9 @@
     </div>
 </template>
 <script setup>
+import SearchResidential from '@/components/SearchResidential/index.vue'
+import SearchHouse from '@/components/SearchHouse/index.vue'
+import SearchArchive from '@/components/SearchArchive/index.vue'
 import {
     APIgetArticlereadList,
     APIgetUserDetails,

@@ -3,41 +3,39 @@
         <page-main>
             <el-row :gutter="10">
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.from" class="head-btn" placeholder="派发对象" clearable />
+                    <Cascaders v-model="data_search.obj.from" />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.tolv" class="head-btn" placeholder="接收对象等级" clearable />
+                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="接收对象等级" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.to" class="head-btn" placeholder="接收对象" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="类型ID" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.iscpt" class="head-btn" placeholder="是否完成" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.created_at" class="head-btn" placeholder="创建时间" clearable />
-                </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-col> -->
-                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.updated_at"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="更新时间"
-                                end-placeholder="更新时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
+                <el-col v-if="data_search.obj.tolv" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <div v-if="data_search.obj.tolv==6" style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <SearchResidential v-model:str="data_search.obj.to" />
                         </div>
-                    </el-col> -->
+                    </div>
+                    <Cascaders v-else v-model="data_search.obj.to" />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <CascaderType v-model="data_search.obj.cid" />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-select v-model="data_search.obj.iscpt" class="head-btn" placeholder="是否完成" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.task_ok" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-date-picker
+                        v-model="data_search.obj.created_at"
+                        type="date"
+                        value-format="YYYY-MM-DD"
+                        placeholder="创建时间"
+                        style="width: 100%;"
+                        :default-value="new Date()"
+                    />
+                </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                 </el-col>
@@ -143,10 +141,7 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.from"
-                                placeholder=""
-                            />
+                            <Cascaders v-model="from_examine.item.from" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -155,34 +150,32 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.tolv"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col v-if="from_examine.item.tolv" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收对象"
+                            label="接收对象ID"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.to"
-                                placeholder=""
-                            />
+                            <div v-if="from_examine.item.tolv==6" style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchResidential v-model:str="from_examine.item.to" />
+                                </div>
+                            </div>
+                            <Cascaders v-else v-model="from_examine.item.to" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="类型ID"
+                            label="分类ID"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.cid"
-                                placeholder=""
-                            />
+                            <CascaderType v-model="from_examine.item.cid" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -247,6 +240,9 @@
     </div>
 </template>
 <script setup>
+import SearchResidential from '@/components/SearchResidential/index.vue'
+import Cascaders from '@/components/Cascaders/index.vue'
+import CascaderType from '@/components/CascaderType/index.vue'
 import {
     APIgetTaskList,
     APIgetTaskDetails,
@@ -458,23 +454,14 @@ const modifyResidentialFunc = val => {
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['article_lv', 'task_ok']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
 	.articletpltask {

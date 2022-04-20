@@ -123,10 +123,27 @@ const opts = {
     }, {
         key: 0, val: '未绑定'
     }],
+    // 审批
     process_status: [{
         key: 200, val: '拒绝'
     }, {
         key: 300, val: '同意'
+    }],
+    // 关联对象类型
+    article_type: [{
+        key: 0, val: '无'
+    }],
+    // 任务派发是否使用
+    tasksd_use: [{
+        key: 0, val: '不启用'
+    }, {
+        key: 1, val: '启用'
+    }],
+    // 任务是否完成
+    task_ok: [{
+        key: 0, val: '未完成'
+    }, {
+        key: 1, val: '已完成'
     }]
 }
 

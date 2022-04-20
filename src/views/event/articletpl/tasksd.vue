@@ -3,44 +3,46 @@
         <page-main>
             <el-row :gutter="10">
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.from" class="head-btn" placeholder="区域代码" clearable />
+                    <Cascaders v-model="data_search.obj.from" />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.tolv" class="head-btn" placeholder="等级" clearable />
+                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="接收等级" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="公示类型ID" clearable />
+                    <CascaderType v-model="data_search.obj.cid" />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.isactive" class="head-btn" placeholder="是否启用" clearable />
+                    <el-select v-model="data_search.obj.isactive" class="head-btn" placeholder="是否启用" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.per" class="head-btn" placeholder="派发频率" clearable />
+                    <el-select v-model="data_search.obj.per" class="head-btn" placeholder="派发频率" clearable>
+                        <el-option v-for="(item,i) in opts_all.obj.article_rate" :key="item.key" :label="item.val" :value="item.key" />
+                    </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.runat" class="head-btn" placeholder="执行时间" clearable />
+                    <el-date-picker
+                        v-model="data_search.obj.runat"
+                        type="date"
+                        value-format="YYYY-MM-DD"
+                        placeholder="执行时间"
+                        style="width: 100%;"
+                        :default-value="new Date()"
+                    />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.created_at" class="head-btn" placeholder="创建时间" clearable />
+                    <el-date-picker
+                        v-model="data_search.obj.created_at"
+                        type="date"
+                        value-format="YYYY-MM-DD"
+                        placeholder="创建时间"
+                        style="width: 100%;"
+                        :default-value="new Date()"
+                    />
                 </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-col> -->
-                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.updated_at"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="更新时间"
-                                end-placeholder="更新时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col> -->
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                 </el-col>
@@ -151,10 +153,7 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.from"
-                                placeholder=""
-                            />
+                            <Cascaders v-model="from_examine.item.from" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -163,10 +162,9 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.tolv"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="接收等级" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -175,10 +173,7 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.cid"
-                                placeholder=""
-                            />
+                            <CascaderType v-model="from_examine.item.cid" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -187,10 +182,9 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.per?from_error.msg.per[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.per"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.per" class="head-btn" placeholder="派发频率" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.article_rate" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -199,9 +193,13 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.runat?from_error.msg.runat[0]:''"
                         >
-                            <el-input
+                            <el-date-picker
                                 v-model="from_examine.item.runat"
-                                placeholder=""
+                                type="date"
+                                value-format="YYYY-MM-DD"
+                                placeholder="执行时间"
+                                style="width: 100%;"
+                                :default-value="new Date()"
                             />
                         </el-form-item>
                     </el-col>
@@ -211,10 +209,9 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.isactive?from_error.msg.isactive[0]:''"
                         >
-                            <el-input
-                                v-model="from_examine.item.isactive"
-                                placeholder=""
-                            />
+                            <el-select v-model="from_examine.item.isactive" class="head-btn" placeholder="是否启用" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -279,6 +276,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import {
     APIgetTasksdList,
     APIgetTasksdDetails,
@@ -490,23 +488,14 @@ const modifyResidentialFunc = val => {
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['article_lv', 'tasksd_use', 'article_rate']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
 	.articletpletasksd {

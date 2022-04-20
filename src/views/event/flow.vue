@@ -288,10 +288,11 @@
                                 label="用户组集" prop="for."
                                 :error="from_error2.msg&&from_error2.msg['for.group']?from_error2.msg['for.group'][0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine2.item.for.group"
-                                    placeholder="数组格式(英文)：['用户组集1','用户组集2']"
-                                />
+                                <div style="height: 100%;width: 100%;">
+                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                        <SearchUserGroup v-model:str="from_examine2.item.for.group" :checkbox="true" />
+                                    </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -374,6 +375,7 @@
     </div>
 </template>
 <script setup>
+import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
 import {
     APIgetFlowList,
     APIgetFlowDetails,
@@ -591,7 +593,7 @@ const modifyFlowFunc = val => {
     APIgetFlowStepDetails(flow_id, val.id).then(res => {
         str_title2.value = '修改步骤'
         from_examine2.item = { ...res.data }
-        from_examine2.item.for.group = JSON.stringify(from_examine2.item.for.group)
+        from_examine2.item.for.group = from_examine2.item.for.group
         from_error2.obj = {}
         switch_examine2.value = true
     })
@@ -634,7 +636,6 @@ const addflowFunc = () => {
 const flowUpdataFunc = () => {
     from_error2.msg = {}
     if (str_title2.value == '修改步骤') {
-        from_examine2.item.for.group = JSON.parse(from_examine2.item.for.group)
         APIputFlowStep(flow_id, from_examine2.item.id, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
@@ -645,7 +646,6 @@ const flowUpdataFunc = () => {
             from_error2.msg = err.data
         })
     } else {
-        from_examine2.item.for.group = JSON.parse(from_examine2.item.for.group)
         APIpostFlowStep(flow_id, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
