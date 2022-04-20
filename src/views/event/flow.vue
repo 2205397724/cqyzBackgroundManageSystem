@@ -587,14 +587,14 @@ const tabloading = ref(false)
 const switch_examine2 = ref(false)
 const str_title2 = ref('')
 const from_examine2 = reactive({ item: { for: {} } })
-const from_error2 = reactive({ obj: {} })
+const from_error2 = reactive({ msg: {} })
 
 const modifyFlowFunc = val => {
     APIgetFlowStepDetails(flow_id, val.id).then(res => {
         str_title2.value = '修改步骤'
         from_examine2.item = { ...res.data }
         from_examine2.item.for.group = from_examine2.item.for.group
-        from_error2.obj = {}
+        from_error2.msg = {}
         switch_examine2.value = true
     })
 }
@@ -630,7 +630,7 @@ const refreshFunc2 = () => {
 const addflowFunc = () => {
     str_title2.value = '添加步骤'
     from_examine2.item = { for: { group: [] } }
-    from_error2.obj = {}
+    from_error2.msg = {}
     switch_examine2.value = true
 }
 const flowUpdataFunc = () => {

@@ -22,11 +22,12 @@
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;border-bottom: 0px solid #ffffff!important;"
                 :tree-props="{ children: 'children' }"
                 row-key="id"
                 default-expand-all
                 @row-click="rowClickFunc"
+                @selection-change="selectionChangeFunc"
             >
                 <el-table-column v-if="props.checkbox" type="selection" width="55" />
                 <el-table-column prop="name" label="名称" width="180">
@@ -61,6 +62,11 @@
                 </el-table-column>
                 <el-table-column />
             </el-table>
+            <template #footer>
+                <span v-if="props.checkbox" style="width: 100%;text-align: right;">
+                    <el-button type="primary" @click="getUsers">提交</el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -110,8 +116,18 @@ const rowClickFunc = row => {
         switch_list.value = false
     }
 }
-const rowClickFunc2 = row => {
-    emit('update:str', row.id)
+const users = reactive({
+    arr: []
+})
+const selectionChangeFunc = val => {
+    users.arr = val
+}
+const getUsers = () => {
+    let arr = []
+    for (let i in users.arr) {
+        arr.push(users.arr[i].id)
+    }
+    emit('update:str', arr)
     switch_list.value = false
 }
 const clearFunc = () => {
