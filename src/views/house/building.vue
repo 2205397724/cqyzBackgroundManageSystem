@@ -445,7 +445,7 @@
                         </el-col>
                         <el-col v-if="from_examine.item&&from_examine.item.addition" :md="24" :lg="24">
                             <el-form-item
-                                label="模型简介" prop="addition.desc"
+                                label="简介" prop="addition.desc"
                                 :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''"
                             >
                                 <el-input
@@ -558,7 +558,7 @@
                     <div class="right">{{ data_details.item.remark }}</div>
                 </div>
                 <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
-                    <div class="left">模型简介</div>
+                    <div class="left">简介</div>
                     <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
                 </div>
             </div>

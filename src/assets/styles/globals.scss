@@ -60,6 +60,10 @@ textarea {
         margin-left: 10px;
     }
 }
+// 覆盖样式
+.el-dialog__body {
+    padding: 20px !important;
+}
 
 /****************  自定义样式  *********************/
 .strong {
@@ -148,6 +152,9 @@ textarea {
 .size-xs {
     font-size: 10px;
 }
+.font-red {
+    color: #f56c6c;
+}
 .font-grey {
     color: #999;
 }
@@ -157,8 +164,31 @@ textarea {
 .font-dark {
     color: #333;
 }
+//行高
+.line-height-100 {
+    line-height: 100%;
+}
+.line-height-150 {
+    line-height: 150%;
+}
+.line-height-170 {
+    line-height: 170%;
+}
 //按钮公共样式
 .head-btn {
-    margin-right: 10px;
     margin-bottom: 10px;
+}
+.head-btn + .head-btn {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+// 块元素宽度
+.width-100 {
+    width: 100%;
+}
+.width-lg {
+    width: 200px;
+}
+.width-sm {
+    width: 120px;
 }

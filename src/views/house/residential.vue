@@ -376,7 +376,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <el-form-item label="模型简介" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
+                            <el-form-item label="简介" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
                                 <el-input
                                     v-model="from_examine.item.addition.desc"
                                     :autosize="{ minRows: 2, maxRows: 6 }"
