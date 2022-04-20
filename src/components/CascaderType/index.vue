@@ -72,6 +72,7 @@ const cascader_props = {
 <style lang="scss">
     .quyu-box{
         width: 100%;
+        display: inline-block;
         .el-cascader {
             width: 100% !important;
         }

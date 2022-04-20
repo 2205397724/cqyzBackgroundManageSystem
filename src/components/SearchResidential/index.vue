@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%;">
+    <div style="height: 100%;display: inline-block;width: 100%;">
         <!-- <el-tooltip
             effect="dark"
             :content="'ID：'+props.str"
