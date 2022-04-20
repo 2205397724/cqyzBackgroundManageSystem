@@ -36,11 +36,11 @@ import 'virtual:svg-icons-register'
 import '@/assets/styles/globals.scss'
 
 // 百度地图
-import VueBMap, { initBMapApiLoader } from 'vue-bmap-gl'
-import 'vue-bmap-gl/dist/style.css'
-initBMapApiLoader({
-    ak: 'MwiaVnyN3RP9WA5MQvSaYofTY9ysQxYy'
-})
-app.use(VueBMap)
+// import VueBMap, { initBMapApiLoader } from 'vue-bmap-gl'
+// import 'vue-bmap-gl/dist/style.css'
+// initBMapApiLoader({
+//     ak: 'MwiaVnyN3RP9WA5MQvSaYofTY9ysQxYy'
+// })
+// app.use(VueBMap)
 
 app.mount('#app')

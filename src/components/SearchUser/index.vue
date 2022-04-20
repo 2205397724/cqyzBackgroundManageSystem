@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%;">
+    <div style="height: 100%;display: inline-block;width: 100%;">
         <div
             class="tit-box"
             :class="{'nostr':!props.str}"
