@@ -2,7 +2,6 @@
     <div class="components-house" style="height: 100%;" :class="{'components-house-units':tree_item.type=='units'}">
         <div class="tree-box" style="height: 100%;">
             <div class="tree-item">
-                <div class="tree-title">请选择区域</div>
                 <div style="height: calc(100% - 60px);">
                     <position-tree
                         :tree_item="tree_item"
@@ -12,12 +11,6 @@
             </div>
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
-                    <div
-                        v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
-                        style="height: 60px;line-height: 20px;padding: 20px ;box-sizing: border-box;border-bottom: 1px solid #e9e9e9;color:#f56c6c;"
-                    >
-                        请选择楼栋或单元
-                    </div>
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;  }">
                         <div
                             v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
@@ -88,9 +81,10 @@
                                             />
                                         </el-select>
                                     </el-col> -->
-                                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                                <el-col :xs="24" class="el-cascader-box-my">
                                     <el-select
-                                        v-model="data_search.obj.status_use" class="head-btn" placeholder="*房屋使用状态"
+                                        v-model="data_search.obj.status_use"
+                                        class="head-btn" placeholder="*房屋使用状态"
                                         clearable
                                     >
                                         <el-option
@@ -98,10 +92,9 @@
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
-                                </el-col>
-                                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                                     <el-select
-                                        v-model="data_search.obj.status_safe" class="head-btn" placeholder="*房屋安全状态"
+                                        v-model="data_search.obj.status_safe"
+                                        class="head-btn" placeholder="*房屋安全状态"
                                         clearable
                                     >
                                         <el-option
@@ -109,10 +102,9 @@
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
-                                </el-col>
-                                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                                     <el-select
-                                        v-model="data_search.obj.status_plan" class="head-btn" placeholder="*规划用途"
+                                        v-model="data_search.obj.status_plan"
+                                        class="head-btn" placeholder="*规划用途"
                                         clearable
                                     >
                                         <el-option
@@ -120,10 +112,9 @@
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
-                                </el-col>
-                                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                                     <el-select
-                                        v-model="data_search.obj.status_fact" class="head-btn" placeholder="*实际用途"
+                                        v-model="data_search.obj.status_fact"
+                                        class="head-btn" placeholder="*实际用途"
                                         clearable
                                     >
                                         <el-option
@@ -131,11 +122,10 @@
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
-                                </el-col>
-                                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                                     <el-select
-                                        v-model="data_search.obj.is_bind_property" class="head-btn"
-                                        placeholder="是否绑定产权"
+                                        v-model="data_search.obj.is_bind_property"
+                                        class="head-btn"
+                                        placeholder="是否绑定"
                                         clearable
                                     >
                                         <el-option
@@ -143,82 +133,23 @@
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
-                                </el-col>
-                                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                                        <div class="head-btn">
-                                            <el-date-picker
-                                                v-model="data_search.obj.created_at"
-                                                type="daterange"
-                                                range-separator="-"
-                                                start-placeholder="创建时间"
-                                                end-placeholder="创建时间"
-                                                style="width: 100%;"
-                                                value-format="YYYY-MM-DD"
-                                            />
-                                        </div>
-                                    </el-col> -->
-                                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                                        <div class="head-btn">
-                                            <el-date-picker
-                                                v-model="data_search.obj.updated_at"
-                                                type="daterange"
-                                                range-separator="-"
-                                                start-placeholder="更新时间"
-                                                end-placeholder="更新时间"
-                                                style="width: 100%;"
-                                                value-format="YYYY-MM-DD"
-                                            />
-                                        </div>
-                                    </el-col> -->
-                                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                                    <el-button class="head-btn" @click="refreshFunc">重置</el-button>
+                                    <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
                                 </el-col>
                             </el-row>
-                            <div
-                                v-show="switch_search"
-                                style="color: #aaaaaa; font-size: 14px; margin-bottom: 20px;"
-                            >
-                                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
+                            <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
+                                <div class="font-grey size-base">户数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_house }} </strong>户</div>
                             </div>
-                            <el-row :gutter="10" class="bottom-btn-box-2">
-                                <el-col :xs="12" :sm="6" :md="4" :lg="3" :xl="2">
-                                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
-                                </el-col>
-                                <el-col :xs="12" :sm="6" :md="4" :lg="3" :xl="2">
-                                    <el-button :disabled="choseIDs.arr.length<=0" class="head-btn" type="warning" @click="modifyAllFunc">批量修改</el-button>
-                                </el-col>
-                                <el-col
-                                    :xs="12" :sm="{span: 7, offset: 5}" :md="{span: 7, offset: 9}"
-                                    :lg="{span: 6, offset: 12}" :xl="{span: 5, offset: 15}"
-                                >
-                                    <div
-                                        style="display: flex;align-items: center;height: 100%; box-sizing: border-box; padding-bottom: 10px;"
-                                    >
-                                        <el-button style="width: 100%;" type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
-                                        <div style="margin-left: 10px;cursor: pointer;">
-                                            <el-popover
-                                                :width="220"
-                                                trigger="hover"
-                                                content="点击下载导入房屋的模板文件"
-                                                effect="dark"
-                                            >
-                                                <template #reference>
-                                                    <el-link
-                                                        :underline="false"
-                                                        href="http://192.168.110.37:10090/zgj/excels/house_import_tpl.xlsx"
-                                                        target="_blank"
-                                                    >
-                                                        <el-button style="width: 100%;">
-                                                            <el-icon>
-                                                                <el-icon-download />
-                                                            </el-icon>
-                                                        </el-button>
-                                                    </el-link>
-                                                </template>
-                                            </el-popover>
-                                        </div>
-                                    </div>
+                            <div v-if="active_obj.obj.type=='building'" class="count p-t-10">
+                                <div class="font-grey size-base">住宅总面积：<strong class="font-darkgrey size-lg">{{ details_data.obj.area_live }}</strong>㎡，</div>
+                                <div class="font-grey size-base">住宅总套数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_live }}</strong>套</div>
+                            </div>
+                            <el-row :gutter="10" class="bottom-btn-box-2  p-t-10">
+                                <el-col :xs="24">
+                                    <el-button type="primary" @click="addResidentialFunc">添加房屋</el-button>
+                                    <el-button :disabled="choseIDs.arr.length<=0" type="warning" @click="modifyAllFunc">批量修改</el-button>
+                                    <el-button type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
                                 </el-col>
                             </el-row>
                             <!-- <div class="count">
@@ -227,13 +158,6 @@
                                     <div class="count-item count_item_i3">未配({{ finishBuild }})</div>
                                     <div class="count-item count_item_i4">闲置({{ otherHouse }})</div>
                                 </div> -->
-                            <div v-if="active_obj.obj.type=='units'" class="count">
-                                <div class="taosumianji">户数：{{ details_data.obj.cnt_house }}户</div>
-                            </div>
-                            <div v-if="active_obj.obj.type=='building'" class="count">
-                                <div class="taosumianji">住宅总面积：{{ details_data.obj.area_live }}㎡</div>
-                                <div class="taosumianji">住宅总套数：{{ details_data.obj.cnt_live }}套</div>
-                            </div>
                         </div>
                         <div
                             style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);"
@@ -685,6 +609,29 @@
                 </el-col>
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                     <el-button type="success" @click="()=>{upload_str='请点击此处或拖拽需要上传的文件';switch_files=true;files_obj.obj={};}">导入房屋</el-button>
+                </el-col>
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-popover
+                        :width="220"
+                        trigger="hover"
+                        content="点击下载导入房屋的模板文件"
+                        effect="dark"
+                    >
+                        <template #reference>
+                            <el-link
+                                :underline="false"
+                                href="http://192.168.110.37:10090/zgj/excels/house_import_tpl.xlsx"
+                                target="_blank"
+                            >
+                                <el-button style="width: 100%;">
+                                    <el-icon>
+                                        <el-icon-download />
+                                    </el-icon>
+                                    下载导入示例
+                                </el-button>
+                            </el-link>
+                        </template>
+                    </el-popover>
                 </el-col>
             </el-row>
             <el-table
@@ -1489,15 +1436,16 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
             }
         }
     }
-
+    // 覆盖样式
+    .el-tree-node__content{
+        padding-top:20px;
+        padding-bottom: 20px;
+    }
 </style>
 <style lang="scss" scoped>
     .components-house{
         background-color: #ffffff;
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
+
         .tree-box {
             display: flex;
              }
@@ -1526,10 +1474,6 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
                 .bottom-btn-box-2 {
                     margin-bottom: 10px;
 
-                    .head-btn {
-                        width: 100%;
-                        margin: 10px 0 10px 0;
-                    }
                 }
             }
 
@@ -1595,12 +1539,8 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
         display: flex;
         width: 100%;
         flex-wrap: wrap;
-    }
-    .taosumianji{
-        font-size: 16px;
-        color: #333333;
-        padding: 0 10px 10px 10px;
-        box-sizing: border-box;
+        font-size: 14px;
+        color:#666666;
     }
     .count-item{
         padding: 0 20px;
@@ -1645,4 +1585,5 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
             max-width: 100%;
         }
     }
+
 </style>

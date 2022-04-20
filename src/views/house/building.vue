@@ -897,10 +897,7 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
 </style>
 <style lang="scss" scoped>
     .routinebuilding {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
+
     }
     .search-tips {
         color: #aaa;

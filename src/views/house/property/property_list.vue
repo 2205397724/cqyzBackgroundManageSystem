@@ -93,22 +93,22 @@
                     >
                         <el-table-column prop="house_id" label="房屋ID" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.house_id }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.house_id }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="code_property" label="产权证号" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.code_property }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.code_property }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="code_room" label="地房籍号" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.code_room }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.code_room }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="time_deal" label="交易时间" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.time_deal }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.time_deal }} </span>
                             </template>
                         </el-table-column>
 
@@ -318,27 +318,27 @@
                             >
                                 <div class="conve-left" style="width: 50%;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >姓名：</span>{{ item.name }}
                                 </div>
                                 <div class="conve-right" style="width: 50%;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >证件类型：</span>{{ item.type_id_card }}
                                 </div>
                                 <div class="conve-right" style="width: 50%;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >证件号：</span>{{ item.id_card }}
                                 </div>
                                 <div class="conve-right" style="width: 50%;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >联系方式：</span>{{ item.mobile }}
                                 </div>
                                 <div class="conve-right" style="width: 50%;">
                                     <span
-                                        style="color: #000000;"
+                                        style="color: #000;"
                                     >面积：</span>{{ item.area }} ㎡
                                 </div>
                             </div>
@@ -590,49 +590,41 @@ const getOptValFunc = (arr, key) => {
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
 </style>
 <style lang="scss" scoped>
     .propertypropertylist {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
 
+    }
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -641,17 +633,14 @@ const getOptValFunc = (arr, key) => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }

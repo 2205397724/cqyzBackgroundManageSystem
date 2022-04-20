@@ -34,12 +34,12 @@
                         <el-table-column prop="reply" label="理由" width="180" />
                         <el-table-column prop="type" label="类型" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="process_status" label="状态" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="content.biz_lic" label="商业编码" width="180" />
@@ -306,7 +306,7 @@ getOpts(['enterprise_type', 'status_all', 'process_status']).then(res => {
     .join-platform {
         .el-cascader-box-my {
             .el-cascader {
-                width: 100%!important;
+                width: 100% !important;
                 margin-bottom: 10px;
             }
         }
@@ -320,26 +320,18 @@ getOpts(['enterprise_type', 'status_all', 'process_status']).then(res => {
                 margin-bottom: 10px;
             }
         }
-
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
     }
-
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
-
             .left {
                 box-sizing: border-box;
                 width: 100px;
@@ -348,14 +340,12 @@ getOpts(['enterprise_type', 'status_all', 'process_status']).then(res => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
     }

@@ -64,37 +64,37 @@
             >
                 <el-table-column label="任务ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="派发对象" width="160">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.from }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.from }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="接收对象等级" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.tolv }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.tolv }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="类型ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cid }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.cid }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="派发频率" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.per }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.per }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="执行时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.runat }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.runat }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否启用" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.isactive }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.isactive }} </span>
                     </template>
                 </el-table-column>
 
@@ -498,77 +498,66 @@ getOpts(['article_lv', 'tasksd_use', 'article_rate']).then(res => {
 
 </script>
 <style lang="scss">
-	.articletpletasksd {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
-
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
-
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+    .articletpletasksd {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
+        .serve-box {
+            border: 1px solid #eee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #fff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.articletpletasksd {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .articletpletasksd {
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
-
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
-
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
-
-			.left::after {
-				content: '：';
-			}
-
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
-
-		.item:last-child {
-			border-style: none;
-		}
-	}
+    }
+    .search-tips {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .details-box {
+        .item {
+            display: flex;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
+            .left::after {
+                content: "：";
+            }
+            .right {
+                width: 100%;
+                color: #666;
+            }
+        }
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

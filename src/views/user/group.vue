@@ -28,32 +28,32 @@
                 >
                     <el-table-column prop="name" label="名称" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="ID" width="250">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                            <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="上级ID" width="250">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ scope.row.pid }} </span>
+                            <span style="margin-left: 10px;">{{ scope.row.pid }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="等级" width="90">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ scope.row.level }} </span>
+                            <span style="margin-left: 10px;">{{ scope.row.level }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="created_at" label="创建时间" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ scope.row.created_at }} </span>
+                            <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="updated_at" label="更新时间" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ scope.row.updated_at }} </span>
+                            <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column />
@@ -158,32 +158,32 @@
             >
                 <el-table-column prop="username" label="用户名" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.username }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.username }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="gender" label="性别" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="pivot.lv" label="等级" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.pivot.lv }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.pivot.lv }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="mobile" label="电话" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.mobile }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id_card" label="身份证号" width="210">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.id_card }} 500101111111111111</span>
+                        <span style="margin-left: 10px;">{{ scope.row.id_card }} 500101111111111111</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="status_cert" label="认证状态" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
                     </template>
                 </el-table-column>
 
@@ -541,53 +541,44 @@ const getOptValFunc = (arr, key) => {
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .el-form-item {
                 margin: 0;
             }
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
 </style>
 <style lang="scss" scoped>
     .usergroup {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
 
+    }
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -596,17 +587,14 @@ const getOptValFunc = (arr, key) => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }

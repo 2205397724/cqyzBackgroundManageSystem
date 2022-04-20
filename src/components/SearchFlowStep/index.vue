@@ -28,31 +28,31 @@
                 <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                 *搜索到相关结果共{{ total }}条。
             </div>
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;padding-top: 8px;">*点击流程后面的步骤</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击流程后面的步骤</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
             >
                 <el-table-column prop="name" label="流程名称" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="流程ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="created_at" label="创建时间" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.created_at }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="updated_at" label="更新时间" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.updated_at }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
                     </template>
                 </el-table-column>
 
@@ -86,7 +86,7 @@
             title="步骤"
             width="70%"
         >
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;padding-top: 8px;">*点击步骤所在行选择步骤</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击步骤所在行选择步骤</div>
             <el-table
                 v-loading="tabloading"
                 :data="flow_data.arr"
@@ -96,22 +96,22 @@
             >
                 <el-table-column prop="name" label="步骤名称" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="prev" label="前一个步骤节点" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.prev }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.prev }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="step" label="当前步骤节点" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.step }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.step }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="next" label="下一个步骤节点" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.next }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.next }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -228,23 +228,20 @@ getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(r
 })
 </script>
 <style lang="scss" scoped>
-    .head-btn{
-        margin-bottom: 10px;
-    }
-    .tit-box{
+    .tit-box {
         position: relative;
-        .tit-icon{
+        .tit-icon {
             position: absolute;
             right: 10px;
             top: calc(50% - 10px);
-            background-color: #ffffff;
+            background-color: #fff;
             z-index: 1;
         }
-        .tit-icon-on{
+        .tit-icon-on {
             display: none;
         }
     }
-    .nostr{
-        color: #aaaaaa;
+    .nostr {
+        color: #aaa;
     }
 </style>

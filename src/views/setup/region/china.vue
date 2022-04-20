@@ -47,27 +47,27 @@
                     >
                         <el-table-column prop="name" label="区域名称" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="code" label="区域代码" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.code }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.code }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="level" label="区域等级" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.china_level,scope.row.level) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptValFunc(opts_all.obj.china_level,scope.row.level) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="created_at" label="创建时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.created_at }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="updated_at" label="修改时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.updated_at }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
                             </template>
                         </el-table-column>
 
@@ -409,53 +409,44 @@ const getOptValFunc = (arr, key) => {
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .el-form-item {
                 margin: 0;
             }
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
 </style>
 <style lang="scss" scoped>
     .regionchina {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
 
+    }
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -464,17 +455,14 @@ const getOptValFunc = (arr, key) => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }

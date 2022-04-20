@@ -32,22 +32,22 @@
                     >
                         <el-table-column prop="name" label="流程名称" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="id" label="流程ID" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="created_at" label="创建时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.created_at }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="updated_at" label="更新时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.updated_at }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
                             </template>
                         </el-table-column>
 
@@ -182,22 +182,22 @@
             >
                 <el-table-column prop="name" label="步骤名称" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.name }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="prev" label="前一个步骤节点" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.prev }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.prev }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="step" label="当前步骤节点" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.step }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.step }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="next" label="下一个步骤节点" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.next }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.next }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="220">
@@ -678,77 +678,66 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss">
-	.setupgroup {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
-
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
-
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+    .setupgroup {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
+        .serve-box {
+            border: 1px solid #eee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #fff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.setupgroup {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .setupgroup {
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
-
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
-
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
-
-			.left::after {
-				content: '：';
-			}
-
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
-
-		.item:last-child {
-			border-style: none;
-		}
-	}
+    }
+    .search-tips {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .details-box {
+        .item {
+            display: flex;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
+            .left::after {
+                content: "：";
+            }
+            .right {
+                width: 100%;
+                color: #666;
+            }
+        }
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

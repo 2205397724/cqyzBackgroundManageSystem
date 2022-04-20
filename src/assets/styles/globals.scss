@@ -131,3 +131,34 @@ textarea {
 .p-tb-20 { padding-top: 20px; padding-bottom: 20px; }
 .p-tb-30 { padding-top: 30px; padding-bottom: 30px; }
 .p-tb-40 { padding-top: 40px; padding-bottom: 40px; }
+
+//文字大小
+.size-lx {
+    font-size: 20px;
+}
+.size-lg {
+    font-size: 16px;
+}
+.size-base {
+    font-size: 14px;
+}
+.size-sm {
+    font-size: 12px;
+}
+.size-xs {
+    font-size: 10px;
+}
+.font-grey {
+    color: #999;
+}
+.font-darkgrey {
+    color: #666;
+}
+.font-dark {
+    color: #333;
+}
+//按钮公共样式
+.head-btn {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}

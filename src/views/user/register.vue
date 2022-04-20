@@ -64,27 +64,27 @@
                     >
                         <el-table-column prop="username" label="用户名" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.username }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.username }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="mobile" label="手机号" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.mobile }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="id_card" label="身份证号" width="220">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.id_card }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="gender" label="性别" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="status_cert" label="认证状态" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
                             </template>
                         </el-table-column>
 
@@ -518,77 +518,66 @@ getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(r
 })
 </script>
 <style lang="scss">
-	.userregister {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
-
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
-
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+    .userregister {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
+        .serve-box {
+            border: 1px solid #eee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #fff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.userregister {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .userregister {
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
-
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
-
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
-
-			.left::after {
-				content: '：';
-			}
-
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
-
-		.item:last-child {
-			border-style: none;
-		}
-	}
+    }
+    .search-tips {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .details-box {
+        .item {
+            display: flex;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
+            .left::after {
+                content: "：";
+            }
+            .right {
+                width: 100%;
+                color: #666;
+            }
+        }
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

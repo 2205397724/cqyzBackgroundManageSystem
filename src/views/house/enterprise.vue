@@ -20,32 +20,32 @@
                         <el-table-column prop="user_id" label="user_id" width="250" />
                         <el-table-column prop="social_code" label="社会责任代码" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.social_code }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.social_code }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type" label="企业类型" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.enterprise_type,scope.row.type) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptValFunc(opts_all.obj.enterprise_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="logo" label="企业图标" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.logo }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.logo }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="legal" label="legal" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.legal }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.legal }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="contact" label="联系方式" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.contact }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.contact }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="desc" label="简介" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.desc }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -435,53 +435,44 @@ const getOptValFunc = (arr, key) => {
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .el-form-item {
                 margin: 0;
             }
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
 </style>
 <style lang="scss" scoped>
     .enterprise_manage {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
 
+    }
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -490,17 +481,14 @@ const getOptValFunc = (arr, key) => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }

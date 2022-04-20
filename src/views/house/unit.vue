@@ -546,10 +546,7 @@ refreshFunc()
 </style>
 <style lang="scss" scoped>
     .routineunit {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
+
     }
     .search-tips {
         color: #aaa;
