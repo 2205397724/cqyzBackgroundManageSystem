@@ -65,7 +65,13 @@ const constantRoutes = [
         ]
     }
 ]
-
+// 公示
+import articletplArchive from './modules/articletpl/archive.js'
+import articletplArticle from './modules/articletpl/article.js'
+import articletplArticleread from './modules/articletpl/articleread.js'
+import articletplArticletpl from './modules/articletpl/articletpl.js'
+import articletplTask from './modules/articletpl/task.js'
+import articletplTasksd from './modules/articletpl/tasksd.js'
 // 管理
 import superviseHome from './modules/supervise/home.js'
 import superviseWorkbench from './modules/supervise/workbench.js'
@@ -77,31 +83,18 @@ import statisticsEvent from './modules/statistics/event.js'
 import statisticsHouse from './modules/statistics/house.js'
 import statisticsRepair from './modules/statistics/repair.js'
 // 房源
-import houseArchives from './modules/house/archives.js'
 import houseHousingManagement from './modules/house/housing_management.js'
 import houseEnterprise from './modules/house/enterprise.js'
 import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
-import houseRoutine from './modules/house/routine.js'
 // 用户
 import userRegister from './modules/user/register.js'
-import userSetup from './modules/user/setup.js'
 import userGroup from './modules/user/group.js'
-// 企业
-import enterpriseManage from './modules/enterprise/manage.js'
-import enterpriseSetup from './modules/enterprise/setup.js'
 // 事件
 import eventFlow from './modules/event/flow.js'
-import eventSetup from './modules/event/setup.js'
-import eventArticletpl from './modules/event/articletpl.js'
 
 // 设置
-import setupManage from './modules/setup/authorize.js'
-import setupNote from './modules/setup/note.js'
-import setupOther from './modules/setup/other_site.js'
-import setupPush from './modules/setup/push.js'
 import setupRegion from './modules/setup/region.js'
-import setupSystem from './modules/setup/system.js'
 import setupFile from './modules/setup/file.js'
 import setupOption from './modules/setup/option.js'
 import setupType from './modules/setup/type.js'
@@ -123,19 +116,34 @@ const asyncRoutes = [
     },
     {
         meta: {
-            title: '统计',
-            icon: 'statistics',
-            auth: ['statistics', '*']
+            title: '公示',
+            icon: 'el-icon-set-up',
+            auth: ['articletpl', '*']
         },
         children: [
-            statisticsHouse,
-            statisticsEvent,
-            statisticsComplaint,
-            statisticsRepair,
-            statisticsEnterprise,
-            statisticsEquipment
+            articletplArticle,
+            articletplArchive,
+            articletplArticleread,
+            articletplArticletpl,
+            articletplTask,
+            articletplTasksd
         ]
     },
+    // {
+    //     meta: {
+    //         title: '统计',
+    //         icon: 'statistics',
+    //         auth: ['statistics', '*']
+    //     },
+    //     children: [
+    //         statisticsHouse,
+    //         statisticsEvent,
+    //         statisticsComplaint,
+    //         statisticsRepair,
+    //         statisticsEnterprise,
+    //         statisticsEquipment
+    //     ]
+    // },
     {
         meta: {
             title: '房源',
@@ -146,9 +154,7 @@ const asyncRoutes = [
             houseResidential,
             houseHousingManagement,
             houseProperty,
-            houseArchives,
-            houseEnterprise,
-            houseRoutine
+            houseEnterprise
         ]
     },
     {
@@ -159,8 +165,7 @@ const asyncRoutes = [
         },
         children: [
             userRegister,
-            userGroup,
-            userSetup
+            userGroup
         ]
     },
     {
@@ -176,25 +181,12 @@ const asyncRoutes = [
     },
     {
         meta: {
-            title: '企业',
-            icon: 'enterprise',
-            auth: ['enterprise', '*']
-        },
-        children: [
-            enterpriseManage,
-            enterpriseSetup
-        ]
-    },
-    {
-        meta: {
-            title: '事件',
+            title: '议事',
             icon: 'event',
             auth: ['event', '*']
         },
         children: [
-            eventArticletpl,
-            eventFlow,
-            eventSetup
+            eventFlow
         ]
     },
     {
@@ -205,12 +197,7 @@ const asyncRoutes = [
         },
         children: [
             setupRegion,
-            setupOther,
-            setupManage,
             setupFile,
-            setupPush,
-            setupNote,
-            setupSystem,
             setupOption,
             setupType
         ]
