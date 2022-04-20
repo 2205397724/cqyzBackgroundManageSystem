@@ -93,6 +93,9 @@ import {
 } from 'vue'
 const data = reactive({
     search: {
+        application: '',
+        property: '',
+        binding: '',
         type: '',
         keyword: '',
         options: ''
@@ -260,8 +263,7 @@ data.table_list = [{
                    }
 ]
 </script>
-<style lang="scss" >
-    // 不能加 scoped el-cascader样式需要覆盖
+<style lang="scss">
     .keep-on-record {
         .el-cascader-box-my {
             .el-cascader {

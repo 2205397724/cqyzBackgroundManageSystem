@@ -6,7 +6,7 @@ export default {
     redirect: '/house_enterprise/enterprise',
     name: 'houseEnterpriseBox',
     meta: {
-        title: '*企业备案',
+        title: '企业',
         icon: 'el-icon-postcard',
         auth: ['house.enterprise', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'houseEnterprise',
             component: () => import('@/views/house/enterprise.vue'),
             meta: {
-                title: '*企业备案',
+                title: '企业',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/house_enterprise',
