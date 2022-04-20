@@ -180,7 +180,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="公示分类ID"
+                            label="公示分类"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
@@ -188,6 +188,15 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="公示对象"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
+                        >
+                            <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" />
+                        </el-form-item>
+                    </el-col>
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="公示对象类型"
                             label-width="120px"
@@ -197,9 +206,8 @@
                                 <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
-                    </el-col>
-
-                    <el-col v-if="from_examine.item.totype||from_examine.item.totype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    </el-col> -->
+                    <!-- <el-col v-if="from_examine.item.totype||from_examine.item.totype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="公示对象ID"
                             label-width="120px"
@@ -210,7 +218,7 @@
                             </div>
                             <Cascaders v-else v-model="from_examine.item.toval" />
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="关联对象类型"
@@ -225,7 +233,7 @@
 
                     <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="关联对象ID"
+                            label="关联对象"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.relval?from_error.msg.relval[0]:''"
                         >
@@ -270,7 +278,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="发布人用户组ID"
+                            label="发布人用户组"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.dep_id?from_error.msg.dep_id[0]:''"
                         >
@@ -307,7 +315,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="未完成任务ID"
+                            label="未完成任务"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.taskid?from_error.msg.taskid[0]:''"
                         >
@@ -580,6 +588,7 @@
     </div>
 </template>
 <script setup>
+import CascaderTypeAndID from '@/components/CascaderTypeAndID/index.vue'
 import SearchResidential from '@/components/SearchResidential/index.vue'
 import CascaderType from '@/components/CascaderType/index.vue'
 import SearchUserGroup from '@/components/SearchUserGroup/index.vue'

@@ -7,7 +7,7 @@
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ props.str?props.str:'请点击选择用户组ID' }}</span>
+            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ props.str?props.str:'请点击选择用户组' }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
 
@@ -17,7 +17,7 @@
             width="70%"
         >
             <Cascaders v-model="code" style="max-width: 200px;margin-bottom: 10px;" />
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;">*点击列表选择用户组ID</div>
+            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;">*点击列表选择用户组</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"

@@ -2,7 +2,7 @@
     <div class="quyu-box">
         <el-cascader
             v-model="code"
-            placeholder="分类ID"
+            placeholder="分类"
             :props="cascader_props"
             collapse-tags
             collapse-tags-tooltip
