@@ -146,12 +146,12 @@
                 <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                 *搜索到相关结果共{{ total }}条。
             </div>
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;padding-top: 8px;">*点击房屋所在行选择该房屋</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击房屋所在行选择该房屋</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
                 @row-click="rowClickFunc"
             >
                 <el-table-column prop="name" label="房屋名称" width="180" />
@@ -159,22 +159,22 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="floor_truth" label="物理层" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.floor_truth }} 层</span>
+                        <span style="margin-left: 10px;">{{ scope.row.floor_truth }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="floor_alias" label="名义层" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.floor_alias }} 层</span>
+                        <span style="margin-left: 10px;">{{ scope.row.floor_alias }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="house_num" label="房号" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.house_num }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.house_num }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -308,23 +308,20 @@ const getOptValFunc = (arr, key) => {
 }
 </script>
 <style lang="scss" scoped>
-    .head-btn{
-        margin-bottom: 10px;
-    }
-    .tit-box{
+    .tit-box {
         position: relative;
-        .tit-icon{
+        .tit-icon {
             position: absolute;
             right: 10px;
             top: calc(50% - 10px);
-            background-color: #ffffff;
+            background-color: #fff;
             z-index: 1;
         }
-        .tit-icon-on{
+        .tit-icon-on {
             display: none;
         }
     }
-    .nostr{
-        color: #aaaaaa;
+    .nostr {
+        color: #aaa;
     }
 </style>

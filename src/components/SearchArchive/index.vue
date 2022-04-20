@@ -80,42 +80,42 @@
                 <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                 *搜索到相关结果共{{ total }}条。
             </div>
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;padding-top: 8px;">*点击公示行选择该公示ID</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击公示行选择该公示ID</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
                 @row-click="rowClickFunc"
             >
                 <el-table-column label="标题" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.title }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="等级" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.lv }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.lv }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="公示对象类型" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.totype }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.totype }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="关联对象类型" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.reltype }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.reltype }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="审核状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.status }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.status }} </span>
                     </template>
                 </el-table-column>
 
@@ -222,23 +222,20 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).
 })
 </script>
 <style lang="scss" scoped>
-    .head-btn{
-        margin-bottom: 10px;
-    }
-    .tit-box{
+    .tit-box {
         position: relative;
-        .tit-icon{
+        .tit-icon {
             position: absolute;
             right: 10px;
             top: calc(50% - 10px);
-            background-color: #ffffff;
+            background-color: #fff;
             z-index: 1;
         }
-        .tit-icon-on{
+        .tit-icon-on {
             display: none;
         }
     }
-    .nostr{
-        color: #aaaaaa;
+    .nostr {
+        color: #aaa;
     }
 </style>

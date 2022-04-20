@@ -537,49 +537,41 @@ const getOptValFunc = (arr, key) => {
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
     }
 </style>
 <style lang="scss" scoped>
     .articletplarchive {
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
 
+    }
     .search-tips {
-        color: #aaaaaa;
+        color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
     .details-box {
         .item {
             display: flex;
-            color: #333333;
+            color: #333;
             font-size: 16px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-
             .left {
                 box-sizing: border-box;
                 width: 160px;
@@ -588,17 +580,14 @@ const getOptValFunc = (arr, key) => {
                 text-align: right;
                 font-weight: 600;
             }
-
             .left::after {
-                content: '：';
+                content: "：";
             }
-
             .right {
                 width: 100%;
-                color: #666666;
+                color: #666;
             }
         }
-
         .item:last-child {
             border-style: none;
         }

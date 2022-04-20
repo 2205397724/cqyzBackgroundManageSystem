@@ -83,7 +83,8 @@
                                     </el-col> -->
                                 <el-col :xs="24" class="el-cascader-box-my">
                                     <el-select
-                                        v-model="data_search.obj.status_use" placeholder="*房屋使用状态"
+                                        v-model="data_search.obj.status_use"
+                                        class="head-btn" placeholder="*房屋使用状态"
                                         clearable
                                     >
                                         <el-option
@@ -92,7 +93,8 @@
                                         />
                                     </el-select>
                                     <el-select
-                                        v-model="data_search.obj.status_safe" placeholder="*房屋安全状态"
+                                        v-model="data_search.obj.status_safe"
+                                        class="head-btn" placeholder="*房屋安全状态"
                                         clearable
                                     >
                                         <el-option
@@ -101,7 +103,8 @@
                                         />
                                     </el-select>
                                     <el-select
-                                        v-model="data_search.obj.status_plan" placeholder="*规划用途"
+                                        v-model="data_search.obj.status_plan"
+                                        class="head-btn" placeholder="*规划用途"
                                         clearable
                                     >
                                         <el-option
@@ -110,7 +113,8 @@
                                         />
                                     </el-select>
                                     <el-select
-                                        v-model="data_search.obj.status_fact" placeholder="*实际用途"
+                                        v-model="data_search.obj.status_fact"
+                                        class="head-btn" placeholder="*实际用途"
                                         clearable
                                     >
                                         <el-option
@@ -120,6 +124,7 @@
                                     </el-select>
                                     <el-select
                                         v-model="data_search.obj.is_bind_property"
+                                        class="head-btn"
                                         placeholder="是否绑定"
                                         clearable
                                     >
@@ -128,12 +133,19 @@
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
-                                    <el-button type="primary" @click="searchFunc">搜索</el-button><el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                                    *搜索到相关结果共{{ total }}条。
+                                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                                    <el-button class="head-btn" @click="refreshFunc">重置</el-button>
+                                    <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
                                 </el-col>
                             </el-row>
-                            <div>fdasfd</div>
-                            <el-row :gutter="10" class="bottom-btn-box-2">
+                            <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
+                                <div class="font-grey size-base">户数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_house }} </strong>户</div>
+                            </div>
+                            <div v-if="active_obj.obj.type=='building'" class="count p-t-10">
+                                <div class="font-grey size-base">住宅总面积：<strong class="font-darkgrey size-lg">{{ details_data.obj.area_live }}</strong>㎡，</div>
+                                <div class="font-grey size-base">住宅总套数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_live }}</strong>套</div>
+                            </div>
+                            <el-row :gutter="10" class="bottom-btn-box-2  p-t-10">
                                 <el-col :xs="24">
                                     <el-button type="primary" @click="addResidentialFunc">添加房屋</el-button>
                                     <el-button :disabled="choseIDs.arr.length<=0" type="warning" @click="modifyAllFunc">批量修改</el-button>
@@ -146,13 +158,6 @@
                                     <div class="count-item count_item_i3">未配({{ finishBuild }})</div>
                                     <div class="count-item count_item_i4">闲置({{ otherHouse }})</div>
                                 </div> -->
-                            <div v-if="active_obj.obj.type=='units'" class="count">
-                                <div class="taosumianji">户数：{{ details_data.obj.cnt_house }}户</div>
-                            </div>
-                            <div v-if="active_obj.obj.type=='building'" class="count">
-                                <div class="taosumianji">住宅总面积：{{ details_data.obj.area_live }}㎡</div>
-                                <div class="taosumianji">住宅总套数：{{ details_data.obj.cnt_live }}套</div>
-                            </div>
                         </div>
                         <div
                             style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);"
@@ -1440,10 +1445,7 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
 <style lang="scss" scoped>
     .components-house{
         background-color: #ffffff;
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
+
         .tree-box {
             display: flex;
              }
@@ -1472,10 +1474,6 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
                 .bottom-btn-box-2 {
                     margin-bottom: 10px;
 
-                    .head-btn {
-                        width: 100%;
-                        margin: 10px 0 10px 0;
-                    }
                 }
             }
 
@@ -1541,12 +1539,8 @@ getOpts(['type_id_card', 'houseable_type', 'house_has_house', 'house_has_propert
         display: flex;
         width: 100%;
         flex-wrap: wrap;
-    }
-    .taosumianji{
-        font-size: 16px;
-        color: #333333;
-        padding: 0 10px 10px 10px;
-        box-sizing: border-box;
+        font-size: 14px;
+        color:#666666;
     }
     .count-item{
         padding: 0 20px;

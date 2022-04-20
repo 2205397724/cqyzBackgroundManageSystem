@@ -78,27 +78,27 @@
             >
                 <el-table-column label="标题" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.title }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="等级" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.lv }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.lv }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="公示对象类型" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.totype }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.totype }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="关联对象类型" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.reltype }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.reltype }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="审核状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.status }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.status }} </span>
                     </template>
                 </el-table-column>
 
@@ -538,7 +538,7 @@
                 <el-steps :active="gongshixiangqing.obj.status == 200?99:active_bzt" finish-status="success" :align-center="true" style="margin-bottom: 20px;">
                     <el-step v-for="(item,i) in buzhoutiao.arr" :title="item.name" />
                 </el-steps>
-                <div v-if="gongshixiangqing.obj.status == 200" style="width: 100%;text-align: center;font-size: 16px;color: #aaaaaa;">
+                <div v-if="gongshixiangqing.obj.status == 200" style="width: 100%;text-align: center;font-size: 16px;color: #aaa;">
                     当前公示已审核完成
                 </div>
                 <el-row v-else :gutter="10">
@@ -865,77 +865,66 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).
 })
 </script>
 <style lang="scss">
-	.articletplarticle {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
-
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
-
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+    .articletplarticle {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
+        .serve-box {
+            border: 1px solid #eee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #fff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.articletplarticle {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .articletplarticle {
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
-
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
-
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
-
-			.left::after {
-				content: '：';
-			}
-
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
-
-		.item:last-child {
-			border-style: none;
-		}
-	}
+    }
+    .search-tips {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .details-box {
+        .item {
+            display: flex;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
+            .left::after {
+                content: "：";
+            }
+            .right {
+                width: 100%;
+                color: #666;
+            }
+        }
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

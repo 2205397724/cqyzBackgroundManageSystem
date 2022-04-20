@@ -60,42 +60,42 @@
                 <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                 *搜索到相关结果共{{ total }}条。
             </div>
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;padding-top: 8px;">*点击用户所在行选择该用户</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击用户所在行选择该用户</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
                 @row-click="rowClickFunc"
             >
                 <el-table-column prop="username" label="用户名" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.username }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.username }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="mobile" label="手机号" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.mobile }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="用户ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.id }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id_card" label="身份证号" width="220">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.id_card }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="gender" label="性别" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.gender,scope.row.gender) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.gender,scope.row.gender) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="status_cert" label="认证状态" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -203,23 +203,20 @@ getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(r
 })
 </script>
 <style lang="scss" scoped>
-    .head-btn{
-        margin-bottom: 10px;
-    }
-    .tit-box{
+    .tit-box {
         position: relative;
-        .tit-icon{
+        .tit-icon {
             position: absolute;
             right: 10px;
             top: calc(50% - 10px);
-            background-color: #ffffff;
+            background-color: #fff;
             z-index: 1;
         }
-        .tit-icon-on{
+        .tit-icon-on {
             display: none;
         }
     }
-    .nostr{
-        color: #aaaaaa;
+    .nostr {
+        color: #aaa;
     }
 </style>

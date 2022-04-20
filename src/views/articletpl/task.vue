@@ -57,32 +57,32 @@
             >
                 <el-table-column label="已完成公示ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.aid }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.aid }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="类型ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cid }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.cid }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="派发对象" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.from }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.from }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否完成" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.iscpt }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.iscpt }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="接收对象" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.to }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.to }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="接收对象等级" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.tolv }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.tolv }} </span>
                     </template>
                 </el-table-column>
 
@@ -464,77 +464,66 @@ getOpts(['article_lv', 'task_ok']).then(res => {
 
 </script>
 <style lang="scss">
-	.articletpltask {
-		.el-cascader-box-my {
-			.el-cascader {
-				width: 100% !important;
-				margin-bottom: 10px;
-			}
-		}
-
-		.serve-box {
-			border: 1px solid #eeeeee;
-			box-sizing: border-box;
-			padding: 10px;
-			margin-bottom: 10px;
-			border-radius: 6px;
-			position: relative;
-
-			.delete-service {
-				position: absolute;
-				right: 0;
-				top: 0;
-				z-index: 999999;
-				cursor: pointer;
-				background-color: #ffffff;
-			}
-		}
-	}
+    .articletpltask {
+        .el-cascader-box-my {
+            .el-cascader {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+        }
+        .serve-box {
+            border: 1px solid #eee;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            .delete-service {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 999999;
+                cursor: pointer;
+                background-color: #fff;
+            }
+        }
+    }
 </style>
 <style lang="scss" scoped>
-	.articletpltask {
-		.head-btn {
-			width: 100%;
-			margin-bottom: 10px;
-		}
-	}
+    .articletpltask {
 
-	.search-tips {
-		color: #aaaaaa;
-		font-size: 14px;
-		margin-bottom: 20px;
-	}
-
-	.details-box {
-		.item {
-			display: flex;
-			color: #333333;
-			font-size: 16px;
-			margin-bottom: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 10px;
-
-			.left {
-				box-sizing: border-box;
-				width: 160px;
-				white-space: nowrap;
-				margin-right: 20px;
-				text-align: right;
-				font-weight: 600;
-			}
-
-			.left::after {
-				content: '：';
-			}
-
-			.right {
-				width: 100%;
-				color: #666666;
-			}
-		}
-
-		.item:last-child {
-			border-style: none;
-		}
-	}
+    }
+    .search-tips {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .details-box {
+        .item {
+            display: flex;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
+            .left::after {
+                content: "：";
+            }
+            .right {
+                width: 100%;
+                color: #666;
+            }
+        }
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

@@ -55,7 +55,7 @@
                     <el-table
                         :data="data.table_list"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%"
+                        style="width: 100%;"
                     >
                         <el-table-column prop="name" label="备案企业" width="220" />
                         <el-table-column prop="residential" label="备案小区" width="180" />
@@ -271,24 +271,13 @@ data.table_list = [{
                 margin-bottom: 10px;
             }
         }
-
-        .head-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
         .bottom-btn-box-2 {
             margin-bottom: 10px;
-
-            .head-btn {
-                width: 100%;
-                margin: 10px 0 10px 0;
-            }
         }
-        .tit-box-box{
+        .tit-box-box {
             display: flex;
             padding: 0;
-            .tit-box{
+            .tit-box {
                 height: 60px;
                 box-sizing: border-box;
                 margin-right: 30px;
@@ -301,8 +290,7 @@ data.table_list = [{
                 cursor: pointer;
                 border-bottom: 2px solid transparent;
                 position: relative;
-
-                .tips{
+                .tips {
                     position: absolute;
                     right: 0;
                     top: 8px;
@@ -310,14 +298,14 @@ data.table_list = [{
                     padding: 0 8px;
                     border-radius: 14px;
                     font-size: 12px;
-                    color: #FFFFFF;
+                    color: #fff;
                     background-color: #e55055;
                 }
             }
-            .tit-box.on{
-                border-bottom: 2px solid rgba(2, 167, 240, 1);
+            .tit-box.on {
+                border-bottom: 2px solid rgb(2 167 240 / 100%);
             }
-            .tit-box:last-child{
+            .tit-box:last-child {
                 margin-right: 0;
             }
         }
