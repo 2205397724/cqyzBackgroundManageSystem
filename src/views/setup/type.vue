@@ -8,7 +8,7 @@
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="main_type" class="head-btn" placeholder="分类种类" clearable>
                         <el-option
-                            v-for="(item,i) in opts_all.obj.main_type" :key="item.key" :label="item.val"
+                            v-for="(item,i) in opts_all.obj.type_type" :key="item.key" :label="item.val"
                             :value="item.key"
                         />
                     </el-select>
@@ -41,7 +41,7 @@
                     </el-table-column>
                     <el-table-column prop="kind" label="分类种类" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.main_type,scope.row.kind) }} </span>
+                            <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.type_type,scope.row.kind) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="pid" label="上级ID" width="250">
@@ -273,26 +273,14 @@ const modifyResidentialFunc = val => {
 refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 分类项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({
-    lab: ['main_type']
-}).then(res => {
-    opts_all.obj = res.data
+getOpts(['type_type']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 
 </script>
 <style lang="scss">

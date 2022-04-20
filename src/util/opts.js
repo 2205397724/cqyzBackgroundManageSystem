@@ -144,6 +144,42 @@ const opts = {
         key: 0, val: '未完成'
     }, {
         key: 1, val: '已完成'
+    }],
+    // 文件资源类型
+    resources_type: [{
+        key: 100, val: '资源类型一'
+    }, {
+        key: 200, val: '资源类型二'
+    }],
+    // 文件分类
+    file_type: [{
+        key: 100, val: '文件分类一'
+    }, {
+        key: 200, val: '文件分类二'
+    }],
+    // 系统级别
+    sys_is_sys: [{
+        key: 0, val: '关闭'
+    }, {
+        key: 1, val: '开启'
+    }],
+    // 启用状态
+    sys_is_active: [{
+        key: 0, val: '关闭'
+    }, {
+        key: 1, val: '开启'
+    }],
+    // 供水方式
+    build_type_water: [{
+        key: 100, val: '供水方式一'
+    }],
+    // 结构形式
+    build_type_construct: [{
+        key: 100, val: '结构形式一'
+    }],
+    // 证件类型
+    type_id_card: [{
+        key: 100, val: '证件类型一'
     }]
 }
 

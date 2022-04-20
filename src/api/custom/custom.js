@@ -448,19 +448,19 @@ export function APIpostGetOpts(data) {
 // 配置选项
 // 列表
 export function APIgetOptsValList(params) {
-    return api.get('/pt/sysoptitem', { params: params })
+    return api2.get('/sysoptitem', { params: params })
 }
 // 删除
 export function APIdeleteOptsVal(id) {
-    return api.delete('/pt/sysoptitem/' + id)
+    return api2.delete('/sysoptitem/' + id)
 }
 // 修改
 export function APIputOptsVal(id, data) {
-    return api.put('/pt/sysoptitem/' + id, data)
+    return api2.put('/sysoptitem/' + id, data)
 }
 // 添加
 export function APIpostOptsVal(data) {
-    return api.post('/pt/sysoptitem', data)
+    return api2.post('/sysoptitem', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -471,15 +471,15 @@ export function APIgetOptsList(params) {
 }
 // 删除
 export function APIdeleteOpts(id) {
-    return api.delete('/pt/sysopt/' + id)
+    return api2.delete('/sysopt/' + id)
 }
 // 修改
 export function APIputOpts(id, data) {
-    return api.put('/pt/sysopt/' + id, data)
+    return api2.put('/sysopt/' + id, data)
 }
 // 添加
 export function APIpostOpts(data) {
-    return api.post('/pt/sysopt', data)
+    return api2.post('/sysopt', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */

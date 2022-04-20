@@ -124,10 +124,7 @@
                                 label="区域代码" prop="china_code"
                                 :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.china_code"
-                                    placeholder=""
-                                />
+                                <Cascaders v-model="from_examine.item.china_code" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -184,6 +181,7 @@
     </div>
 </template>
 <script setup>
+import Cascaders from '@/components/Cascaders/index.vue'
 import {
     APIgetCityList,
     APIgetCityDetails,

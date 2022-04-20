@@ -61,12 +61,12 @@
                         </el-table-column>
                         <el-table-column prop="rtype" label="资源类型" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.resources_type,scope.row.rtype) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.resources_type,scope.row.rtype) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="ftype" label="文件分类" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.file_type,scope.row.ftype) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.file_type,scope.row.ftype) }} </span>
                             </template>
                         </el-table-column>
 
@@ -192,25 +192,16 @@ const deleteFunc = val => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['file_type', 'resources_type'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['file_type', 'resources_type']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 </script>
 <style lang="scss">
 	.userregister {

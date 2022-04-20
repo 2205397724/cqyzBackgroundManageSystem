@@ -45,12 +45,12 @@
                         <el-table-column prop="desc" label="备注" width="220" />
                         <el-table-column prop="is_sys" label="系统级别" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="is_active" label="启用状态" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_sys,scope.row.is_active) }} </span>
+                                <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.sys_is_sys,scope.row.is_active) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -222,12 +222,12 @@
                 <el-table-column prop="desc" label="备注" width="220" />
                 <el-table-column prop="is_sys" label="系统级别" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
+                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="is_active" label="启用状态" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptValFunc(opts_all.obj.sys_is_active,scope.row.is_active) }} </span>
+                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.sys_is_active,scope.row.is_active) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -667,23 +667,13 @@ const optValFunc = val => {
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['sys_is_sys', 'sys_is_active'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['sys_is_sys', 'sys_is_active']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 
 </script>
 <style lang="scss">
