@@ -71,8 +71,10 @@
                                         />
                                     </el-select>
                                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                                    <el-button class="head-btn" @click="refreshFunc">重置</el-button>
-                                    <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
+                                    <div v-if="switch_search">
+                                        <el-button class="head-btn" @click="refreshFunc">重置</el-button>
+                                        <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
+                                    </div>
                                 </el-col>
                             </el-row>
                             <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
@@ -542,7 +544,7 @@
         >
             <div>
                 <el-button class="head-btn" @click="refreshFilesListFunc">刷新</el-button>
-                <el-button class="head-btn" type="success" @click="()=>{upload_str='请点击此处或拖拽需要上传的文件';switch_files=true;files_obj.obj={};}">导入房屋</el-button>
+                <el-button class="head-btn" type="success" @click="openFileFunc">导入房屋</el-button>
                 <el-popover
                     :width="220"
                     trigger="hover"
@@ -607,7 +609,7 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <!-- <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="直属上级类型" prop="loc"
                                 :error="err_files.obj&&err_files.obj.loc?err_files.obj.loc[0]:''"
@@ -628,7 +630,7 @@
                                     placeholder=""
                                 />
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :md="24">
                             <el-form-item
                                 label="选择文件" prop="file_src"
@@ -1122,6 +1124,7 @@ const filesUpFunc = () => {
         })
         api[res.data.attrs.method.toLowerCase()]('', formData)
             .then(res => {
+                console.log(res)
                 ElMessage.success(res.statusText)
                 switch_files.value = false
                 refreshFilesListFunc()
@@ -1129,6 +1132,7 @@ const filesUpFunc = () => {
                 ElMessage.error(res.statusText)
             })
     })
+
 }
 const switch_files_list = ref(false)
 const files_loading = ref(true)
@@ -1316,6 +1320,16 @@ const postPropertyFunc = () => {
         }).catch(err => {
             from_error_property.msg = err.data
         })
+    }
+}
+
+// 打开导入房屋from
+const openFileFunc = () => {
+    upload_str.value = '请点击此处或拖拽需要上传的文件'
+    switch_files.value = true
+    files_obj.obj = {
+        loc: active_obj.obj.type,
+        loc_id: active_obj.obj.id
     }
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
