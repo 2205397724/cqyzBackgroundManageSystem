@@ -114,6 +114,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="logo"
+                                label-width="70px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <el-input
@@ -125,6 +126,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="联系方式"
+                                label-width="70px"
                                 :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
                             >
                                 <el-input

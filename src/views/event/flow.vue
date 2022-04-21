@@ -243,6 +243,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="步骤名称" prop="name"
+                                label-width="110px"
                                 :error="from_error2.msg&&from_error2.msg.name?from_error2.msg.name[0]:''"
                             >
                                 <el-input
@@ -254,6 +255,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="前一个步骤节点" prop="prev"
+                                label-width="110px"
                                 :error="from_error2.msg&&from_error2.msg.prev?from_error2.msg.prev[0]:''"
                             >
                                 <el-input
@@ -265,6 +267,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="当前步骤节点" prop="step"
+                                label-width="110px"
                                 :error="from_error2.msg&&from_error2.msg.step?from_error2.msg.step[0]:''"
                             >
                                 <el-input
@@ -276,6 +279,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="步骤动作代码" prop="do"
+                                label-width="110px"
                                 :error="from_error2.msg&&from_error2.msg.do?from_error2.msg.do[0]:''"
                             >
                                 <el-select v-model="from_examine2.item.do" class="head-btn" placeholder="步骤动作代码" clearable>
@@ -286,6 +290,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="用户组集" prop="for."
+                                label-width="110px"
                                 :error="from_error2.msg&&from_error2.msg['for.group']?from_error2.msg['for.group'][0]:''"
                             >
                                 <div style="height: 100%;width: 100%;">

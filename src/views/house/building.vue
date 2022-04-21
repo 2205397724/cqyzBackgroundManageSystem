@@ -189,7 +189,8 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="所属小区ID" prop="zone_id"
+                                label="所属小区" prop="zone_id"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.zone_id?from_error.msg.zone_id[0]:''"
                             >
                                 <!-- <el-input
@@ -202,7 +203,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="地址" prop="addr" :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''">
+                            <el-form-item label-width="100px" label="地址" prop="addr" :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''">
                                 <el-input
                                     v-model="from_examine.item.addr"
                                     placeholder=""
@@ -212,6 +213,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="住宅总面积" prop="area_live"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.area_live?from_error.msg.area_live[0]:''"
                             >
                                 <el-input
@@ -225,6 +227,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="总建筑面积" prop="area_build"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.area_build?from_error.msg.area_build[0]:''"
                             >
                                 <el-input
@@ -238,6 +241,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="非住宅面积" prop="area_live_not"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.area_live_not?from_error.msg.area_live_not[0]:''"
                             >
                                 <el-input
@@ -251,6 +255,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="楼层数" prop="cnt_floor"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.cnt_floor?from_error.msg.cnt_floor[0]:''"
                             >
                                 <el-input
@@ -264,6 +269,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="单元数" prop="cnt_unit"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.cnt_unit?from_error.msg.cnt_unit[0]:''"
                             >
                                 <el-input
@@ -277,6 +283,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="住宅总套数" prop="cnt_live"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.cnt_live?from_error.msg.cnt_live[0]:''"
                             >
                                 <el-input
@@ -290,6 +297,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="建设业主单位" prop="by_build_owner"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.by_build_owner?from_error.msg.by_build_owner[0]:''"
                             >
                                 <el-input
@@ -301,6 +309,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="建成时间" prop="time_build_end"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''"
                             >
                                 <el-date-picker
@@ -316,6 +325,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="移交时间" prop="time_turn"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.time_turn?from_error.msg.time_turn[0]:''"
                             >
                                 <el-date-picker
@@ -331,6 +341,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="投用时间" prop="time_use"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.time_use?from_error.msg.time_use[0]:''"
                             >
                                 <el-date-picker
@@ -344,7 +355,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
-                            <el-form-item label="楼栋编号" prop="sno" :error="from_error.msg&&from_error.msg.sno?from_error.msg.sno[0]:''">
+                            <el-form-item label-width="100px" label="楼栋编号" prop="sno" :error="from_error.msg&&from_error.msg.sno?from_error.msg.sno[0]:''">
                                 <el-input
                                     v-model="from_examine.item.sno"
                                     placeholder=""
@@ -354,6 +365,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="楼栋报建名" prop="report_name"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.report_name?from_error.msg.report_name[0]:''"
                             >
                                 <el-input
@@ -365,6 +377,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="楼栋名称" prop="name"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -376,6 +389,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="供水方式" prop="type_water"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.type_water?from_error.msg.type_water[0]:''"
                             >
                                 <el-select v-model="from_examine.item.type_water" class="head-btn" placeholder="供水方式" clearable>
@@ -386,6 +400,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="结构形式" prop="type_construct"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.type_construct?from_error.msg.type_construct[0]:''"
                             >
                                 <el-select v-model="from_examine.item.type_construct" class="head-btn" placeholder="结构形式" clearable>
@@ -396,6 +411,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="电梯数" prop="cnt_lift"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.cnt_lift?from_error.msg.cnt_lift[0]:''"
                             >
                                 <el-input
@@ -409,6 +425,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="非住宅面积" prop="cnt_live_not"
+                                label-width="100px"
                                 :error="from_error.msg&&from_error.msg.cnt_live_not?from_error.msg.cnt_live_not[0]:''"
                             >
                                 <el-input
@@ -421,6 +438,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
+                                label-width="100px"
                                 label="建设单位" prop="by_build"
                                 :error="from_error.msg&&from_error.msg.by_build?from_error.msg.by_build[0]:''"
                             >

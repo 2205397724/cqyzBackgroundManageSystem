@@ -109,7 +109,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="公示ID"
+                            label="公示"
                             :error="from_error.msg&&from_error.msg.aid?from_error.msg.aid[0]:''"
                         >
                             <div style="height: 100%;width: 100%;">
@@ -121,7 +121,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="房屋ID"
+                            label="房屋"
                             :error="from_error.msg&&from_error.msg.hid?from_error.msg.hid[0]:''"
                         >
                             <div style="height: 100%;width: 100%;">
@@ -133,7 +133,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="小区ID"
+                            label="小区"
                             :error="from_error.msg&&from_error.msg.zid?from_error.msg.zid[0]:''"
                         >
                             <div style="height: 100%;width: 100%;">
