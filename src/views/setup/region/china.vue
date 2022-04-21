@@ -57,7 +57,7 @@
                         </el-table-column>
                         <el-table-column prop="level" label="区域等级" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptValFunc(opts_all.obj.china_level,scope.row.level) }} </span>
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.china_level,scope.row.level) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="created_at" label="创建时间" width="180">
@@ -183,7 +183,7 @@
                 </div>
                 <div class="item">
                     <div class="left">区域等级</div>
-                    <div class="right">{{ getOptValFunc(opts_all.obj.china_level,data_details.item.level) }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.china_level,data_details.item.level) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -383,23 +383,14 @@ const modifyResidentialFunc = val => {
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['china_level'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['china_level']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .regionchina {

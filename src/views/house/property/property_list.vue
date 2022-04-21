@@ -564,23 +564,14 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['house_has_house'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['house_has_house']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .propertypropertylist {

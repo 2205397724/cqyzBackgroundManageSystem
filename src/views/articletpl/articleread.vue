@@ -1,36 +1,6 @@
 <template>
     <div class="articletarticleread">
         <page-main>
-            <el-row :gutter="10">
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="分类ID" clearable />
-                </el-col> -->
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.status_cert" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-col> -->
-                <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                        <div class="head-btn">
-                            <el-date-picker
-                                v-model="data_search.updated_at"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="更新时间"
-                                end-placeholder="更新时间"
-                                style="width: 100%;"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col> -->
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                </el-col> -->
-            </el-row>
-            <!-- <div v-show="switch_search" class="search-tips">
-                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                *搜索到相关结果共{{ total }}条。
-            </div> -->
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                     <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加阅读</el-button>
@@ -379,24 +349,7 @@ const modifyResidentialFunc = val => {
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
-const opts_all = reactive({
-    obj: {}
-})
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
-    opts_all.obj = res.data
-})
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .articletarticleread {

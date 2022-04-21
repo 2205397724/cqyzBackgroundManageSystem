@@ -510,26 +510,7 @@ const deleteFuncDialog = val => {
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
-const opts_all = reactive({
-    obj: {}
-})
-APIpostGetOpts({
-    lab: ['status_cert', 'other_auth']
-}).then(res => {
-    opts_all.obj = res.data
-})
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .articletplarchive {

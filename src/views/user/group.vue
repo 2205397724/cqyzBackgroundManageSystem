@@ -118,13 +118,14 @@
                         </el-col>
                         <el-col v-if="show_pid" :md="24" :lg="12">
                             <el-form-item
-                                label="上级ID" prop="pid"
+                                label="上级" prop="pid"
                                 :error="from_error.msg&&from_error.msg.pid?from_error.msg.pid[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.pid"
-                                    placeholder=""
-                                />
+                                <div style="height: 100%;width: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                        <SearchUserGroup v-model:str="from_examine.item.pid" />
+                                    </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -163,7 +164,7 @@
                 </el-table-column>
                 <el-table-column prop="gender" label="性别" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptValFunc([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="pivot.lv" label="等级" width="90">
@@ -183,7 +184,7 @@
                 </el-table-column>
                 <el-table-column prop="status_cert" label="认证状态" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptValFunc(opts_all.obj.status_cert,scope.row.status_cert) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
                     </template>
                 </el-table-column>
 
@@ -232,13 +233,14 @@
                     <el-row :gutter="10">
                         <el-col v-if="!hide_uid" :md="24" :lg="12">
                             <el-form-item
-                                label="用户ID" prop="uid"
+                                label="用户" prop="uid"
                                 :error="err_opt.msg&&err_opt.msg.uid?err_opt.msg.uid[0]:''"
                             >
-                                <el-input
-                                    v-model="from_opt_val.obj.uid"
-                                    placeholder=""
-                                />
+                                <div style="height: 100%;width: 100%;box-sizing: border-box;padding-bottom: 10px;">
+                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                        <SearchUser v-model:str="from_opt_val.obj.uid" />
+                                    </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -265,6 +267,8 @@
     </div>
 </template>
 <script setup>
+import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
+import SearchUser from '@/components/SearchUser/index.vue'
 import {
     APIgetGroupList,
     APIdeleteGroup,
@@ -511,26 +515,14 @@ const optValFunc = val => {
     optValRefreshFunc()
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 分类项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({
-    lab: ['status_cert']
-}).then(res => {
-    opts_all.obj = res.data
+getOpts(['status_all']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
 
 </script>
 <style lang="scss">

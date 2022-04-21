@@ -132,23 +132,23 @@
                         <el-table-column prop="id" label="小区ID" width="250" />
                         <el-table-column prop="area_floor" label="总占地面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.area_floor }} m²</span>
+                                <span>{{ scope.row.area_floor }} m²</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="area_build" label="总建筑面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                                <span>{{ scope.row.area_build }} m²</span>
                             </template>
                         </el-table-column>
                         <!-- <el-table-column prop="area_support" label="配套用房总面积" width="140">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.area_support }} m²</span>
+                                <span>{{ scope.row.area_support }} m²</span>
                             </template>
                         </el-table-column> -->
                         <el-table-column prop="cnt_building" label="楼栋数" width="140">
                             <template #default="scope">
                                 <el-link :underline="false" type="primary">
-                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
+                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0px 10px;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
                                 </el-link>
                             </template>
                         </el-table-column>
@@ -156,6 +156,13 @@
                             <template #default="scope">
                                 <el-link style="padding: 0 10px;" :underline="false" class="el-button" type="primary" @click="showHouseFunc(scope.row)">
                                     {{ scope.row.cnt_live }} 套
+                                </el-link>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="cnt_live" label="业委会" width="140">
+                            <template #default="scope">
+                                <el-link :underline="false" type="primary">
+                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0px 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id }}">业委会</router-link>
                                 </el-link>
                             </template>
                         </el-table-column>

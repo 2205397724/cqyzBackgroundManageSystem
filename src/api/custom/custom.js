@@ -2,6 +2,29 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 公示任务
+// 列表
+export function APIgetListYwh(params) {
+    return api2.get('/ywh', { params: params })
+}
+// 详情
+export function APIgetDetailsYwh(id) {
+    return api2.get('/ywh/' + id)
+}
+// 删除
+export function APIdeleteYwh(id) {
+    return api2.delete('/ywh/' + id)
+}
+// 修改
+export function APIputYwh(id, data) {
+    return api2.put('/ywh/' + id, data)
+}
+// 添加
+export function APIpostYwh(data) {
+    return api2.post('/ywh', data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 公示审核  /api/a/article/{article}/audit
 // 列表
 export function APIgetListArchiveAudit(archive, params) {
