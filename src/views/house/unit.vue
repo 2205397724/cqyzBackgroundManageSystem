@@ -221,44 +221,58 @@
             title="详情"
             width="50%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">单元名称</div>
-                    <div class="right">{{ data_details.item.name }} 个</div>
-                </div>
-                <div class="item">
-                    <div class="left">所属楼栋ID</div>
-                    <div class="right">{{ data_details.item.building_id }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">地址</div>
-                    <div class="right">{{ data_details.item.addr }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">楼层数</div>
-                    <div class="right">{{ data_details.item.cnt_floor }} 层</div>
-                </div>
-                <div class="item">
-                    <div class="left">户数</div>
-                    <div class="right">{{ data_details.item.cnt_house }} 户</div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details.item.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">修改时间</div>
-                    <div class="right">{{ data_details.item.updated_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">备注</div>
-                    <div class="right">{{ data_details.item.remark }}</div>
-                </div>
-                <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
-                    <div class="left">简介</div>
-                    <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
-                </div>
-            </div>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="基础信息" name="1">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="item">
+                                <div class="left">单元名称</div>
+                                <div class="right">{{ data_details.item.name }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">所属楼栋</div>
+                                <div class="right">{{ data_details.item.building_id }} </div>
+                            </div>
+                            <div class="item">
+                                <div class="left">地址</div>
+                                <div class="right">{{ data_details.item.addr }} </div>
+                            </div>
+                            <div class="item">
+                                <div class="left">楼层数</div>
+                                <div class="right">{{ data_details.item.cnt_floor }} 层</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">户数</div>
+                                <div class="right">{{ data_details.item.cnt_house }} 户</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">总专有面积</div>
+                                <div class="right">{{ data_details.item.area_exc }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">创建时间</div>
+                                <div class="right">{{ data_details.item.created_at }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">修改时间</div>
+                                <div class="right">{{ data_details.item.updated_at }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">备注</div>
+                                <div class="right">{{ data_details.item.remark }}</div>
+                            </div>
+                            <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
+                                <div class="left">简介</div>
+                                <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="档案信息" name="2">
+                    <el-scrollbar height="400px" />
+                </el-tab-pane>
+            </el-tabs>
+
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
@@ -283,6 +297,7 @@ import House from '@/components/House/index.vue'
 const tree_item = reactive({
     obj: {}
 })
+const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
     tree_item.obj = {
@@ -552,33 +567,5 @@ refreshFunc()
         color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
-    }
-    .details-box {
-        .item {
-            display: flex;
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            .left {
-                box-sizing: border-box;
-                width: 160px;
-                white-space: nowrap;
-                margin-right: 20px;
-                text-align: right;
-                font-weight: 600;
-            }
-            .left::after {
-                content: "：";
-            }
-            .right {
-                width: 100%;
-                color: #666;
-            }
-        }
-        .item:last-child {
-            border-style: none;
-        }
     }
 </style>

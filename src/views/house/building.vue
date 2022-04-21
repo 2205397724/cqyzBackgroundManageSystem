@@ -89,51 +89,7 @@
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column prop="by_build_owner" label="建设业主单位" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.by_build_owner }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="time_build_end" label="建成时间" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.time_build_end }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="time_turn" label="移交时间" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.time_turn }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="time_use" label="投用时间" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.time_use }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="type_water" label="供水方式" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.build_type_water,scope.row.type_water) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="type_construct" label="结构形式" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.build_type_construct,scope.row.type_construct) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cnt_lift" label="电梯数" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.cnt_lift }} 台</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cnt_live_not" label="非住宅面积" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.cnt_live_not }} m²</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="by_build" label="建设单位" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.by_build }} </span>
-                            </template>
-                        </el-table-column> -->
+
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -472,98 +428,113 @@
             title="详情"
             width="50%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">所属小区ID</div>
-                    <div class="right">{{ data_details.item.zone_id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">地址</div>
-                    <div class="right">{{ data_details.item.addr }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">住宅总面积</div>
-                    <div class="right">{{ data_details.item.area_live }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">总建筑面积</div>
-                    <div class="right">{{ data_details.item.area_build }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">非住宅面积</div>
-                    <div class="right">{{ data_details.item.area_live_not }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼栋数</div>
-                    <div class="right">{{ data_details.item.cnt_building }} 栋</div>
-                </div>
-                <div class="item">
-                    <div class="left">单元数</div>
-                    <div class="right">{{ data_details.item.cnt_unit }} 个</div>
-                </div>
-                <div class="item">
-                    <div class="left">住宅总套数</div>
-                    <div class="right">{{ data_details.item.cnt_live }} 套</div>
-                </div>
-                <div class="item">
-                    <div class="left">建设业主单位</div>
-                    <div class="right">{{ data_details.item.by_build_owner }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">建成时间</div>
-                    <div class="right">{{ data_details.item.time_build_end }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">移交时间</div>
-                    <div class="right">{{ data_details.item.time_turn }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">投用时间</div>
-                    <div class="right">{{ data_details.item.time_use }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼栋编号</div>
-                    <div class="right">{{ data_details.item.sno }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼栋报建名</div>
-                    <div class="right">{{ data_details.item.report_name }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼栋名称</div>
-                    <div class="right">{{ data_details.item.name }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">供水方式</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">结构形式</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">电梯数</div>
-                    <div class="right">{{ data_details.item.cnt_lift }} 台</div>
-                </div>
-                <div class="item">
-                    <div class="left">非住宅面积</div>
-                    <div class="right">{{ data_details.item.cnt_live_not }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">建设单位</div>
-                    <div class="right">{{ data_details.item.by_build }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">备注</div>
-                    <div class="right">{{ data_details.item.remark }}</div>
-                </div>
-                <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
-                    <div class="left">简介</div>
-                    <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
-                </div>
-            </div>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="基础信息" name="1">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="details-tit-sm">楼栋信息</div>
+                            <div class="item">
+                                <div class="left">楼栋名称</div>
+                                <div class="right">{{ data_details.item.name }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">楼栋编号</div>
+                                <div class="right">{{ data_details.item.sno }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">所属小区</div>
+                                <div class="right">{{ data_details.item.zone_id }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">楼栋地址</div>
+                                <div class="right">{{ data_details.item.addr }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">供水方式</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">结构形式</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
+                            </div>
+
+                            <div class="details-tit-sm">数量/面积信息</div>
+                            <div class="item">
+                                <div class="left">单元个数</div>
+                                <div class="right">{{ data_details.item.cnt_unit }} 个</div>
+                            </div>
+
+                            <div class="item">
+                                <div class="left">电梯数</div>
+                                <div class="right">{{ data_details.item.cnt_lift }} 台</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">总建筑面积</div>
+                                <div class="right">{{ data_details.item.area_build }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">总专有面积</div>
+                                <div class="right">{{ data_details.item.area_exc }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">住宅总套数</div>
+                                <div class="right">{{ data_details.item.cnt_live }} 套</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">住宅总面积</div>
+                                <div class="right">{{ data_details.item.area_live }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">非住宅套数</div>
+                                <div class="right">{{ data_details.item.cnt_live_not }} 套</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">非住宅面积</div>
+                                <div class="right">{{ data_details.item.area_live_not }} m²</div>
+                            </div>
+                            <div class="details-tit-sm">建设信息</div>
+                            <div class="item">
+                                <div class="left">楼栋报建名</div>
+                                <div class="right">{{ data_details.item.report_name }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">建设业主单位</div>
+                                <div class="right">{{ data_details.item.by_build_owner }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">建设单位</div>
+                                <div class="right">{{ data_details.item.by_build }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">建成时间</div>
+                                <div class="right">{{ data_details.item.time_build_end }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">移交时间</div>
+                                <div class="right">{{ data_details.item.time_turn }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">投用时间</div>
+                                <div class="right">{{ data_details.item.time_use }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">备注</div>
+                                <div class="right">{{ data_details.item.remark }}</div>
+                            </div>
+                            <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
+                                <div class="left">简介</div>
+                                <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="档案信息" name="2">
+                    <el-scrollbar height="400px" />
+                </el-tab-pane>
+            </el-tabs>
             <template #footer>
                 <span class="dialog-footer">
+                    <el-button type="primary" @click="modifyResidentialFunc(data_details.item)">修改</el-button>
                     <el-button @click="switch_details = false">取消</el-button>
                 </span>
             </template>
@@ -586,6 +557,7 @@ import House from '@/components/House/index.vue'
 const tree_item = reactive({
     obj: {}
 })
+const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
     tree_item.obj = {
@@ -903,33 +875,5 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
         color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
-    }
-    .details-box {
-        .item {
-            display: flex;
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            .left {
-                box-sizing: border-box;
-                width: 160px;
-                white-space: nowrap;
-                margin-right: 20px;
-                text-align: right;
-                font-weight: 600;
-            }
-            .left::after {
-                content: "：";
-            }
-            .right {
-                width: 100%;
-                color: #666;
-            }
-        }
-        .item:last-child {
-            border-style: none;
-        }
     }
 </style>
