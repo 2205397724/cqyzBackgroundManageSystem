@@ -251,6 +251,9 @@ export function APIgetChinaRegion(params) {
 export function APIgetFilesList(params) {
     return api2.get('/houseimptask', { params: params })
 }
+export function APIpostFilesList(data) {
+    return api2.post('/houseimptask', data)
+}
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 文件上传获取配置 { 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }

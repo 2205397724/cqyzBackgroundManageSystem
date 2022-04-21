@@ -1079,7 +1079,7 @@ const files_obj = reactive({
 const err_files = reactive({
     obj: {}
 })
-import { APIpostFiles } from '@/api/custom/custom.js'
+import { APIpostFiles, APIpostFilesList } from '@/api/custom/custom.js'
 import axios from 'axios'
 const filesUpFunc = () => {
     err_files.obj = {}
@@ -1108,6 +1108,7 @@ const filesUpFunc = () => {
         console.log(files_obj.obj.file_src)
         console.log(typeof files_obj.obj.file_src)
         const formData = new FormData()
+        const files_keys = `${import.meta.env.VITE_APP_FOLDER_ADDHOUSE}/${res.data.keys[0]}`
         formData.append('Policy', res.data.inputs.Policy)
         formData.append('X-Amz-Algorithm', res.data.inputs['X-Amz-Algorithm'])
         formData.append('X-Amz-Credential', res.data.inputs['X-Amz-Credential'])
@@ -1124,10 +1125,12 @@ const filesUpFunc = () => {
         })
         api[res.data.attrs.method.toLowerCase()]('', formData)
             .then(res => {
-                console.log(res)
-                ElMessage.success(res.statusText)
-                switch_files.value = false
-                refreshFilesListFunc()
+                files_obj.obj.file_src = files_keys
+                APIpostFilesList(files_obj.obj).then(res => {
+                    console.log(res)
+                    switch_files.value = false
+                    refreshFilesListFunc()
+                })
             }).catch(err => {
                 ElMessage.error(res.statusText)
             })
