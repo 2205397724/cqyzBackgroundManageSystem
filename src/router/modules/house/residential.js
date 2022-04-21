@@ -75,6 +75,16 @@ export default {
                         sidebar: false,
                         activeMenu: '/house_residential'
                     }
+                },
+                {
+                    path: 'ywh',
+                    name: 'houseResidentialYwh',
+                    component: () => import('@/views/house/ywh.vue'),
+                    meta: {
+                        title: '业委会',
+                        sidebar: false,
+                        activeMenu: '/house_residential'
+                    }
                 }
             ]
         }

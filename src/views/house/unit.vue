@@ -105,6 +105,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="单元名称" prop="name"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -113,23 +114,10 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="所属楼栋ID" prop="building_id"
-                                :error="from_error.msg&&from_error.msg.building_id?from_error.msg.building_id[0]:''"
-                            >
-                                <!-- <el-input
-                                    v-model="from_examine.item.building_id"
-                                    placeholder=""
-                                /> -->
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                    <SearchBuilding v-model:str="from_examine.item.building_id" />
-                                </div>
-                            </el-form-item>
-                        </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="地址" prop="addr"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''"
                             >
                                 <el-input
@@ -141,6 +129,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="楼层数" prop="cnt_floor"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg.cnt_floor?from_error.msg.cnt_floor[0]:''"
                             >
                                 <el-input
@@ -154,6 +143,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="户数" prop="cnt_house"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg.cnt_house?from_error.msg.cnt_house[0]:''"
                             >
                                 <el-input
@@ -167,6 +157,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="建成时间" prop="time_build_end"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''"
                             >
                                 <el-date-picker
@@ -182,6 +173,7 @@
                         <el-col :md="24" :lg="24">
                             <el-form-item
                                 label="备注" prop="remark"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg.remark?from_error.msg.remark[0]:''"
                             >
                                 <el-input
@@ -195,6 +187,7 @@
                         <el-col v-if="from_examine.item&&from_examine.item.addition" :md="24" :lg="24">
                             <el-form-item
                                 label="简介" prop="addition.desc"
+                                label-width="90px"
                                 :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''"
                             >
                                 <el-input
@@ -413,6 +406,7 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            from_examine.item.building_id = route.query.building_id
             if (str_title.value == '修改') {
                 APIputUnitsHouse(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {

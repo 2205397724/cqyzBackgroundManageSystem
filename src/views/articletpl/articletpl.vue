@@ -106,6 +106,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="模板名称" prop="name"
+                                label-width="70px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -116,7 +117,8 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="分类ID"
+                                label="分类"
+                                label-width="70px"
                                 :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cid[0]:''"
                             >
                                 <CascaderType v-model="from_examine.item.cid" />
@@ -124,7 +126,8 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="流程ID"
+                                label="流程"
+                                label-width="70px"
                                 :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.fid[0]:''"
                             >
                                 <div style="height: 100%;width: 100%;">
@@ -487,24 +490,7 @@ const modifyResidentialFunc = val => {
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
-const opts_all = reactive({
-    obj: {}
-})
-APIpostGetOpts({ lab: ['status_cert', 'other_auth'] }).then(res => {
-    opts_all.obj = res.data
-})
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .articletparticletpl {

@@ -201,13 +201,14 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="公示ID"
+                            label="公示"
                             :error="err_msg.obj&&err_msg.obj.article_id?err_msg.obj.article_id[0]:''"
                         >
-                            <el-input
-                                v-model="from_add.obj.article_id"
-                                placeholder=""
-                            />
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchArchive v-model:str="from_add.obj.article_id" />
+                                </div>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -256,6 +257,7 @@
     </div>
 </template>
 <script setup>
+import SearchArchive from '@/components/SearchArchive/index.vue'
 import {
     APIgetArchiveList,
     APIdeleteArchive,
@@ -508,26 +510,7 @@ const deleteFuncDialog = val => {
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
-const opts_all = reactive({
-    obj: {}
-})
-APIpostGetOpts({
-    lab: ['status_cert', 'other_auth']
-}).then(res => {
-    opts_all.obj = res.data
-})
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .articletplarchive {

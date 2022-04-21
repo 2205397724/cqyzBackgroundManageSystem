@@ -168,9 +168,9 @@ function handleLogin() {
             }
             userStore.login(data).then(() => {
                 loading.value = false
+                localStorage.setItem('domain', loginForm.value.domain)
                 if (loginForm.value.remember) {
                     localStorage.setItem('login_account', loginForm.value.account)
-                    localStorage.setItem('domain', loginForm.value.domain)
                 } else {
                     localStorage.removeItem('login_account')
                 }

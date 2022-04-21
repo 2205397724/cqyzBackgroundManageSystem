@@ -1,104 +1,100 @@
 <template>
     <div class="setupgroup">
         <page-main>
-            <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.name" class="head-btn" placeholder="名称" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加流程</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="name" label="流程名称" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="流程ID" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="created_at" label="创建时间" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="updated_at" label="更新时间" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="260">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                                <el-button
-                                    size="small"
-                                    type="info"
-                                    @click="openStepFunc(scope.row)"
-                                >
-                                    步骤
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+            <el-row :gutter="10">
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.name" class="head-btn" placeholder="名称" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                </el-col>
+            </el-row>
+            <div v-show="switch_search" class="search-tips">
+                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
+                *搜索到相关结果共{{ total }}条。
             </div>
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加业委会</el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <el-table-column prop="name" label="业委会名称" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="届次" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">第{{ scope.row.period }}届</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="业委会ID" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="创建时间" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="updated_at" label="更新时间" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column />
+                <el-table-column fixed="right" label="操作" width="260">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyResidentialFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                        <el-button
+                            size="small"
+                            type="info"
+                            @click="openStepFunc(scope.row)"
+                        >
+                            步骤
+                        </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page"
+                layout="total,prev,pager,next,jumper,"
+                :total="total"
+                :page-size="per_page"
+                background
+                hide-on-single-page
+                style="padding-top: 20px;"
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -106,26 +102,48 @@
             :title="str_title"
             width="50%"
         >
-            <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="流程名称" prop="name"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.name"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
+            <el-form
+                ref="ruleFormRef"
+                :model="from_examine.item"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="业委会名称" prop="name"
+                            :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.name"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="届次" prop="period"
+                            :error="from_error.msg&&from_error.msg.period?from_error.msg.period[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.period"
+                                placeholder="填整数类型"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="描述" prop="desc"
+                            :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.desc"
+                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                type="textarea"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_examine=false">取消</el-button>
@@ -141,12 +159,20 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">流程ID</div>
+                    <div class="left">业委会ID</div>
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">流程名称</div>
+                    <div class="left">业委会名称</div>
                     <div class="right">{{ data_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">届次</div>
+                    <div class="right">第{{ data_details.item.period }}届</div>
+                </div>
+                <div class="item">
+                    <div class="left">描述</div>
+                    <div class="right">{{ data_details.item.desc }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -171,7 +197,7 @@
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加流程</el-button>
+                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加业委会</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -283,7 +309,7 @@
                                 :error="from_error2.msg&&from_error2.msg.do?from_error2.msg.do[0]:''"
                             >
                                 <el-select v-model="from_examine2.item.do" class="head-btn" placeholder="步骤动作代码" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.step_type" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.type_type" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -318,13 +344,13 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">流程名称</div>
+                    <div class="left">业委会名称</div>
                     <div class="right">{{ data_details2.obj.name }}</div>
                 </div>
             </div>
             <div class="details-box">
                 <div class="item">
-                    <div class="left">流程ID</div>
+                    <div class="left">业委会ID</div>
                     <div class="right">{{ data_details2.obj.id }}</div>
                 </div>
             </div>
@@ -380,13 +406,15 @@
     </div>
 </template>
 <script setup>
+import { useRoute } from 'vue-router'
+const route = useRoute()
 import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
 import {
-    APIgetFlowList,
-    APIgetFlowDetails,
-    APIdeleteFlow,
-    APIputFlow,
-    APIpostFlow
+    APIgetListYwh,
+    APIgetDetailsYwh,
+    APIdeleteYwh,
+    APIputYwh,
+    APIpostYwh
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -449,7 +477,7 @@ const refreshFunc = () => {
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetFlowDetails(val.id).then(res => {
+    APIgetDetailsYwh(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -466,8 +494,9 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            from_examine.item.zid = route.query.zid
             if (str_title.value == '修改') {
-                APIputFlow(from_examine.item.id, from_examine.item).then(res => {
+                APIputYwh(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -477,7 +506,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostFlow(from_examine.item).then(res => {
+                APIpostYwh(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -496,7 +525,8 @@ const dialogExamineCloseFunc = formEl => {
 const getTabListFunc = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value
+        per_page: per_page.value,
+        zid: route.query.zid
     }
     for (let key in data_search) {
         if (data_search[key] || data_search[key] === 0) {
@@ -506,29 +536,8 @@ const getTabListFunc = () => {
             params[key] = data_search[key]
         }
     }
-    if (params.time_deal) {
-        let updated_str = ''
-        for (let i in params.time_deal) {
-            updated_str += ',' + params.time_deal[i]
-        }
-        params.time_deal = updated_str.substring(1)
-    }
-    if (params.created_at) {
-        let updated_str = ''
-        for (let i in params.created_at) {
-            updated_str += ',' + params.created_at[i]
-        }
-        params.created_at = updated_str.substring(1)
-    }
-    if (params.updated_at) {
-        let updated_str = ''
-        for (let i in params.updated_at) {
-            updated_str += ',' + params.updated_at[i]
-        }
-        params.updated_at = updated_str.substring(1)
-    }
     loading_tab.value = true
-    APIgetFlowList(params).then(res => {
+    APIgetListYwh(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -538,14 +547,14 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteFlow(val.id).then(res => {
+    APIdeleteYwh(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
         }
     })
 }
-// 添加流程
+// 添加
 const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
@@ -563,7 +572,7 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetFlowDetails(val.id).then(res => {
+    APIgetDetailsYwh(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
@@ -663,12 +672,12 @@ const flowUpdataFunc = () => {
     }
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// // 配置项
+// 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['step_type']).then(res => {
+getOpts(['type_type']).then(res => {
     opts_all.obj = res
 })
 </script>

@@ -180,6 +180,10 @@ const opts = {
     // 证件类型
     type_id_card: [{
         key: 100, val: '证件类型一'
+    }],
+    // china添加时候的区域等级
+    china_level: [{
+        key: 100, val: '区域等级一'
     }]
 }
 

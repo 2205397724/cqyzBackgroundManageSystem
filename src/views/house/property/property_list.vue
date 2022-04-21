@@ -164,14 +164,14 @@
                 >
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="房屋ID" prop="house_id" :error="from_error.msg&&from_error.msg.house_id?from_error.msg.house_id[0]:''">
+                            <el-form-item label-width="70px" label="房屋" prop="house_id" :error="from_error.msg&&from_error.msg.house_id?from_error.msg.house_id[0]:''">
                                 <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                                     <SearchHouse v-model:str="from_examine.item.house_id" />
                                 </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="交易时间" prop="time_deal" :error="from_error.msg&&from_error.msg.time_deal?from_error.msg.time_deal[0]:''">
+                            <el-form-item label-width="70px" label="交易时间" prop="time_deal" :error="from_error.msg&&from_error.msg.time_deal?from_error.msg.time_deal[0]:''">
                                 <el-date-picker
                                     v-model="from_examine.item.time_deal"
                                     type="date"
@@ -183,7 +183,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="产权证号" prop="code_property" :error="from_error.msg&&from_error.msg.code_property?from_error.msg.code_property[0]:''">
+                            <el-form-item label-width="70px" label="产权证号" prop="code_property" :error="from_error.msg&&from_error.msg.code_property?from_error.msg.code_property[0]:''">
                                 <el-input
                                     v-model="from_examine.item.code_property"
                                     placeholder=""
@@ -191,7 +191,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="地房籍号" prop="code_room" :error="from_error.msg&&from_error.msg.code_room?from_error.msg.code_room[0]:''">
+                            <el-form-item label-width="70px" label="地房籍号" prop="code_room" :error="from_error.msg&&from_error.msg.code_room?from_error.msg.code_room[0]:''">
                                 <el-input
                                     v-model="from_examine.item.code_room"
                                     placeholder=""
@@ -199,7 +199,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="绑定房屋" prop="should_bind_house" :error="from_error.msg&&from_error.msg.should_bind_house?from_error.msg.should_bind_house[0]:''">
+                            <el-form-item label-width="70px" label="绑定房屋" prop="should_bind_house" :error="from_error.msg&&from_error.msg.should_bind_house?from_error.msg.should_bind_house[0]:''">
                                 <el-select v-model="from_examine.item.should_bind_house" class="head-btn" placeholder="是否绑定房屋" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
@@ -212,7 +212,7 @@
                             <div v-for="(item,i) in from_examine.item.property_owners" class="serve-box">
                                 <el-row :gutter="10">
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="姓名" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.name']?from_error.msg['property_owners.'+i+'.name'][0]:''">
+                                        <el-form-item label-width="70px" label="姓名" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.name']?from_error.msg['property_owners.'+i+'.name'][0]:''">
                                             <el-input
                                                 v-model="item.name"
                                                 placeholder=""
@@ -220,14 +220,14 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="证件类型" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.type_id_card']?from_error.msg['property_owners.'+i+'.type_id_card'][0]:''">
+                                        <el-form-item label-width="70px" label="证件类型" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.type_id_card']?from_error.msg['property_owners.'+i+'.type_id_card'][0]:''">
                                             <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
                                                 <el-option v-for="(item,i) in opts_all.obj.type_id_card" :key="item.key" :label="item.val" :value="item.key" />
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="证件号" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.id_card']?from_error.msg['property_owners.'+i+'.id_card'][0]:''">
+                                        <el-form-item label-width="70px" label="证件号" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.id_card']?from_error.msg['property_owners.'+i+'.id_card'][0]:''">
                                             <el-input
                                                 v-model="item.id_card"
                                                 placeholder=""
@@ -235,7 +235,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.mobile']?from_error.msg['property_owners.'+i+'.mobile'][0]:''">
+                                        <el-form-item label-width="70px" label="联系方式" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.mobile']?from_error.msg['property_owners.'+i+'.mobile'][0]:''">
                                             <el-input
                                                 v-model="item.mobile"
                                                 placeholder=""
@@ -243,7 +243,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="面积" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.area']?from_error.msg['property_owners.'+i+'.area'][0]:''">
+                                        <el-form-item label-width="70px" label="面积" :error="from_error.msg&&from_error.msg['property_owners.'+i+'.area']?from_error.msg['property_owners.'+i+'.area'][0]:''">
                                             <el-input
                                                 v-model="item.area"
                                                 placeholder=""
@@ -564,23 +564,14 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import {
-    APIpostGetOpts
-} from '@/api/custom/custom.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-APIpostGetOpts({ lab: ['house_has_house'] }).then(res => {
-    opts_all.obj = res.data
+getOpts(['house_has_house']).then(res => {
+    opts_all.obj = res
 })
-const getOptValFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].key == key) {
-            return arr[i].val
-        }
-    }
-    return ''
-}
+
 </script>
 <style lang="scss">
     .propertypropertylist {

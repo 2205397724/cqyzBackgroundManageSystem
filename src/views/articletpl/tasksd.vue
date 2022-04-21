@@ -169,7 +169,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="类型ID"
+                            label="类型"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >

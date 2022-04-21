@@ -276,6 +276,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="选项键值" prop="key"
+                                label-width="70px"
                                 :error="err_opt.msg&&err_opt.msg.key?err_opt.msg.key[0]:''"
                             >
                                 <el-input
@@ -287,6 +288,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="选项名称" prop="val"
+                                label-width="70px"
                                 :error="err_opt.msg&&err_opt.msg.val?err_opt.msg.val[0]:''"
                             >
                                 <el-input
@@ -298,6 +300,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="系统级别" prop="is_sys"
+                                label-width="70px"
                                 :error="err_opt.msg&&err_opt.msg.is_sys?err_opt.msg.is_sys[0]:''"
                             >
                                 <el-select v-model="from_opt_val.obj.is_sys" class="head-btn" placeholder="系统级别" clearable>
@@ -308,6 +311,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="启用状态" prop="is_active"
+                                label-width="70px"
                                 :error="err_opt.msg&&err_opt.msg.is_active?err_opt.msg.is_active[0]:''"
                             >
                                 <el-select v-model="from_opt_val.obj.is_active" class="head-btn" placeholder="启用状态" clearable>
@@ -318,6 +322,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="排序" prop="sort"
+                                label-width="70px"
                                 :error="err_opt.msg&&err_opt.msg.sort?err_opt.msg.sort[0]:''"
                             >
                                 <el-input

@@ -157,7 +157,7 @@
                     </el-col>
                     <el-col v-if="from_examine.item.tolv" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收对象ID"
+                            label="接收对象"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
@@ -171,7 +171,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="分类ID"
+                            label="分类"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >

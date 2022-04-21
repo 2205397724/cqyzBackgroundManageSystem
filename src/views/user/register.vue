@@ -145,6 +145,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="终端类型" prop="auth_type"
+                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.auth_type?from_error.msg.auth_type[0]:''"
                             >
                                 <el-select v-model="from_examine.item.auth_type" class="head-btn" placeholder="终端类型" clearable>
@@ -155,6 +156,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="手机号" prop="mobile"
+                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.mobile?from_error.msg.mobile[0]:''"
                             >
                                 <el-input
@@ -166,6 +168,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="用户名" prop="username"
+                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.username?from_error.msg.username[0]:''"
                             >
                                 <el-input
@@ -177,6 +180,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="密码" prop="password"
+                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.password?from_error.msg.password[0]:''"
                             >
                                 <el-input
@@ -188,6 +192,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="所属区域" prop="region"
+                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.region?from_error.msg.region[0]:''"
                             >
                                 <Cascaders v-model="from_examine.item.region" :checkbox="true" />
