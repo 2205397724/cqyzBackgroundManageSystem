@@ -114,21 +114,6 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="所属楼栋" prop="building_id"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.building_id?from_error.msg.building_id[0]:''"
-                            >
-                                <!-- <el-input
-                                    v-model="from_examine.item.building_id"
-                                    placeholder=""
-                                /> -->
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                    <SearchBuilding v-model:str="from_examine.item.building_id" />
-                                </div>
-                            </el-form-item>
-                        </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="地址" prop="addr"
@@ -421,6 +406,7 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            from_examine.item.building_id = route.query.building_id
             if (str_title.value == '修改') {
                 APIputUnitsHouse(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {

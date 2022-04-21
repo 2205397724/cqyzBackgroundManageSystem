@@ -143,21 +143,6 @@
                     :model="from_examine.item"
                 >
                     <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="所属小区" prop="zone_id"
-                                label-width="100px"
-                                :error="from_error.msg&&from_error.msg.zone_id?from_error.msg.zone_id[0]:''"
-                            >
-                                <!-- <el-input
-                                    v-model="from_examine.item.zone_id"
-                                    placeholder=""
-                                /> -->
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                    <SearchResidential v-model:str="from_examine.item.zone_id" />
-                                </div>
-                            </el-form-item>
-                        </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item label-width="100px" label="地址" prop="addr" :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''">
                                 <el-input
@@ -700,6 +685,7 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            from_examine.item.zone_id = route.query.zone_id
             if (str_title.value == '修改') {
                 APIputBuildHouse(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {

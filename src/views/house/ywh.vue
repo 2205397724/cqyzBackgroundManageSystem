@@ -29,6 +29,11 @@
                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
+                <el-table-column prop="name" label="届次" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">第{{ scope.row.period }}届</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="id" label="业委会ID" width="250">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.id }} </span>
@@ -113,6 +118,30 @@
                             />
                         </el-form-item>
                     </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="届次" prop="period"
+                            :error="from_error.msg&&from_error.msg.period?from_error.msg.period[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.period"
+                                placeholder="填整数类型"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="描述" prop="desc"
+                            :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.desc"
+                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                type="textarea"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
             <template #footer>
@@ -136,6 +165,14 @@
                 <div class="item">
                     <div class="left">业委会名称</div>
                     <div class="right">{{ data_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">届次</div>
+                    <div class="right">第{{ data_details.item.period }}届</div>
+                </div>
+                <div class="item">
+                    <div class="left">描述</div>
+                    <div class="right">{{ data_details.item.desc }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
