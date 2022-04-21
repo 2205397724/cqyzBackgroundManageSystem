@@ -55,7 +55,6 @@
                                 </el-link>
                             </template>
                         </el-table-column>
-<<<<<<< HEAD
                         <el-table-column prop="cnt_live" label="业委会" width="140">
                             <template #default="scope">
                                 <el-link :underline="false" type="primary">
@@ -63,15 +62,6 @@
                                 </el-link>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px">{{ scope.row.cnt_support }} 套</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="company_build" label="建设单位名称" width="140" />
-                        <el-table-column prop="time_use" label="投用时间" width="140" /> -->
-=======
->>>>>>> 8530619657f09cdc52654aacd44f8d1f22e8d10e
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
