@@ -100,212 +100,268 @@
             width="50%"
         >
             <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="名称" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.name"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="地址" prop="addr" :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.addr"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="总占地面积" prop="area_floor" :error="from_error.msg&&from_error.msg.area_floor?from_error.msg.area_floor[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.area_floor"
-                                    placeholder=""
-                                >
-                                    <template #append>m²</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="总建筑面积" prop="area_build" :error="from_error.msg&&from_error.msg.area_build?from_error.msg.area_build[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.area_build"
-                                    placeholder=""
-                                >
-                                    <template #append>m²</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="配套用房总面积" prop="area_support" :error="from_error.msg&&from_error.msg.area_support?from_error.msg.area_support[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.area_support"
-                                    placeholder=""
-                                >
-                                    <template #append>m²</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="楼栋数" prop="cnt_building" :error="from_error.msg&&from_error.msg.cnt_building?from_error.msg.cnt_building[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.cnt_building"
-                                    placeholder=""
-                                >
-                                    <template #append>栋</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="住房总套数" prop="cnt_live" :error="from_error.msg&&from_error.msg.cnt_live?from_error.msg.cnt_live[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.cnt_live"
-                                    placeholder=""
-                                >
-                                    <template #append>套</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="配套用房总套数" prop="cnt_support" :error="from_error.msg&&from_error.msg.cnt_support?from_error.msg.cnt_support[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.cnt_support"
-                                    placeholder=""
-                                >
-                                    <template #append>套</template>
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="建设单位名称" prop="company_build" :error="from_error.msg&&from_error.msg.company_build?from_error.msg.company_build[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.company_build"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="竣工时间" prop="time_build_end" :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''">
-                                <el-date-picker
-                                    v-model="from_examine.item.time_build_end"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="开工时间" prop="time_build_start" :error="from_error.msg&&from_error.msg.time_build_start?from_error.msg.time_build_start[0]:''">
-                                <el-date-picker
-                                    v-model="from_examine.item.time_build_start"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="立项时间" prop="time_pro_setup" :error="from_error.msg&&from_error.msg.time_pro_setup?from_error.msg.time_pro_setup[0]:''">
-                                <el-date-picker
-                                    v-model="from_examine.item.time_pro_setup"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="移交时间" prop="time_turn" :error="from_error.msg&&from_error.msg.time_turn?from_error.msg.time_turn[0]:''">
-                                <el-date-picker
-                                    v-model="from_examine.item.time_turn"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="投用时间" prop="time_use" :error="from_error.msg&&from_error.msg.time_use?from_error.msg.time_use[0]:''">
-                                <el-date-picker
-                                    v-model="from_examine.item.time_use"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item label="所在区域code" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
-                                <Cascaders v-model="from_examine.item.china_code" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="24">
-                            <el-form-item label="备注" prop="remark" :error="from_error.msg&&from_error.msg.remark?from_error.msg.remark[0]:''">
-                                <el-input
-                                    v-model="from_examine.item.remark"
-                                    :autosize="{ minRows: 2, maxRows: 6 }"
-                                    type="textarea"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="24">
-                            <el-form-item label="简介" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
-                                <el-input
-                                    v-model="from_examine.item.addition.desc"
-                                    :autosize="{ minRows: 2, maxRows: 6 }"
-                                    type="textarea"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="24">
-                            <div style="margin-bottom: 10px;">
-                                <el-button style="margin-right: 10px;" @click="addServiceFunc">添加服务名称和电话</el-button>
-                            </div>
-                            <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box">
-                                <el-row :gutter="10">
-                                    <el-col :xs="12" :sm="12">
-                                        <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
-                                            <el-input
-                                                v-model="item.title"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="12" :sm="12">
-                                        <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.phone']?from_error.msg['addition.extra.convenience.'+i+'.phone'][0]:''">
-                                            <el-input
-                                                v-model="item.phone"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <div class="delete-service" @click="deleteServiceFunc(i)">
-                                    <el-icon :size="20" color="#F56C6C">
-                                        <el-icon-circle-close />
-                                    </el-icon>
-                                </div>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-form>
+                <el-scrollbar style="height: 400px;">
+                    <div class="details-box p-lr-10">
+                        <el-form
+                            ref="ruleFormRef"
+                            :model="from_examine.item"
+                        >
+                            <el-row :gutter="10">
+                                <el-col :xs="24"><div class="details-tit-sm m-b-10">基础信息</div></el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="小区名称" label-width="120px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.name"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="地址" label-width="120px" prop="addr" :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.addr"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="所在区域" label-width="120px" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
+                                        <Cascaders v-model="from_examine.item.china_code" />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="地图位置" label-width="120px" prop="">
+                                        <el-input
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24"><div class="details-tit-sm m-b-10">面积/数量</div></el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="楼栋数" label-width="120px" prop="cnt_building" :error="from_error.msg&&from_error.msg.cnt_building?from_error.msg.cnt_building[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.cnt_building"
+                                            placeholder=""
+                                        >
+                                            <template #append>栋</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总占地面积" label-width="120px" prop="area_floor" :error="from_error.msg&&from_error.msg.area_floor?from_error.msg.area_floor[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.area_floor"
+                                            placeholder=""
+                                        >
+                                            <template #append>m²</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总建筑面积" label-width="120px" prop="area_build" :error="from_error.msg&&from_error.msg.area_build?from_error.msg.area_build[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.area_build"
+                                            placeholder=""
+                                        >
+                                            <template #append>m²</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总专有面积" label-width="120px" prop="area_exc" :error="from_error.msg&&from_error.msg.area_exc?from_error.msg.area_exc[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.area_exc"
+                                            placeholder=""
+                                        >
+                                            <template #append>m²</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="配套用房总套数" label-width="120px" prop="cnt_support" :error="from_error.msg&&from_error.msg.cnt_support?from_error.msg.cnt_support[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.cnt_support"
+                                            placeholder=""
+                                        >
+                                            <template #append>套</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="配套用房总面积" label-width="120px" prop="area_support" :error="from_error.msg&&from_error.msg.area_support?from_error.msg.area_support[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.area_support"
+                                            placeholder=""
+                                        >
+                                            <template #append>m²</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="住房总套数" label-width="120px" prop="cnt_live" :error="from_error.msg&&from_error.msg.cnt_live?from_error.msg.cnt_live[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.cnt_live"
+                                            placeholder=""
+                                        >
+                                            <template #append>套</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="住房总面积" label-width="120px" prop="area_live" :error="from_error.msg&&from_error.msg.area_live?from_error.msg.area_live[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.area_live"
+                                            placeholder=""
+                                        >
+                                            <template #append>m²</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="车位总个数" label-width="120px" prop="cnt_part" :error="from_error.msg&&from_error.msg.cnt_part?from_error.msg.cnt_part[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.cnt_part"
+                                            placeholder=""
+                                        >
+                                            <template #append>个</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="车位总面积" label-width="120px" prop="area_part" :error="from_error.msg&&from_error.msg.area_part?from_error.msg.area_part[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.area_part"
+                                            placeholder=""
+                                        >
+                                            <template #append>m²</template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24"><div class="details-tit-sm m-b-10">其它</div></el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="建设单位名称" label-width="120px" prop="company_build" :error="from_error.msg&&from_error.msg.company_build?from_error.msg.company_build[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.company_build"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="立项时间" label-width="120px" prop="time_pro_setup" :error="from_error.msg&&from_error.msg.time_pro_setup?from_error.msg.time_pro_setup[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.time_pro_setup"
+                                            type="date"
+                                            value-format="YYYY-MM-DD"
+                                            placeholder=""
+                                            style="width: 100%;"
+                                            :default-value="new Date()"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="开工时间" label-width="120px" prop="time_build_start" :error="from_error.msg&&from_error.msg.time_build_start?from_error.msg.time_build_start[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.time_build_start"
+                                            type="date"
+                                            value-format="YYYY-MM-DD"
+                                            placeholder=""
+                                            style="width: 100%;"
+                                            :default-value="new Date()"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="竣工时间" label-width="120px" prop="time_build_end" :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.time_build_end"
+                                            type="date"
+                                            value-format="YYYY-MM-DD"
+                                            placeholder=""
+                                            style="width: 100%;"
+                                            :default-value="new Date()"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="移交时间" label-width="120px" prop="time_turn" :error="from_error.msg&&from_error.msg.time_turn?from_error.msg.time_turn[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.time_turn"
+                                            type="date"
+                                            value-format="YYYY-MM-DD"
+                                            placeholder=""
+                                            style="width: 100%;"
+                                            :default-value="new Date()"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="投用时间" label-width="120px" prop="time_use" :error="from_error.msg&&from_error.msg.time_use?from_error.msg.time_use[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.time_use"
+                                            type="date"
+                                            value-format="YYYY-MM-DD"
+                                            placeholder=""
+                                            style="width: 100%;"
+                                            :default-value="new Date()"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="24">
+                                    <el-form-item label="备注" label-width="120px" prop="remark" :error="from_error.msg&&from_error.msg.remark?from_error.msg.remark[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.remark"
+                                            :autosize="{ minRows: 2, maxRows: 6 }"
+                                            type="textarea"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="24">
+                                    <el-form-item label="简介" label-width="120px" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.addition.desc"
+                                            :autosize="{ minRows: 2, maxRows: 6 }"
+                                            type="textarea"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24"><div class="details-tit-sm m-b-10">便民信息</div></el-col>
+                                <el-col :md="24" :lg="24">
+                                    <div style="margin-bottom: 10px;">
+                                        <el-button type="primary" plain @click="addServiceFunc">添加服务名称和电话</el-button>
+                                    </div>
+                                    <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box">
+                                        <el-row :gutter="10">
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
+                                                    <el-input
+                                                        v-model="item.title"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.phone']?from_error.msg['addition.extra.convenience.'+i+'.phone'][0]:''">
+                                                    <el-input
+                                                        v-model="item.phone"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <div class="delete-service" @click="deleteServiceFunc(i)">
+                                            <el-icon :size="20" color="#F56C6C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </div>
+                </el-scrollbar>
             </div>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
