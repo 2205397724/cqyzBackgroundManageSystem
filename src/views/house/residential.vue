@@ -3,115 +3,11 @@
         <page-main>
             <div>
                 <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.name" class="head-btn" placeholder="小区名称" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
-                        </el-col>
-                        <!-- <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
-                            <el-input v-model="data_search.obj.china_code" class="head-btn" placeholder="所在区域code" clearable />
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.time_pro_setup"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="立项时间"
-                                    end-placeholder="立项时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.time_build_start"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="开工时间"
-                                    end-placeholder="开工时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.time_build_end"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="竣工时间"
-                                    end-placeholder="竣工时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col>
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.time_use"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="投用时间"
-                                    end-placeholder="投用时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.time_turn"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="移交时间"
-                                    end-placeholder="移交时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.created_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="创建时间"
-                                    end-placeholder="创建时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.updated_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="更新时间"
-                                    end-placeholder="更新时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col> -->
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
+                    <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
+                    <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
+                    <el-button type="primary" class="head-btn" @click="searchFunc">搜索</el-button>
+                    <el-button v-show="switch_search" class="head-btn" @click="refreshFunc">重置</el-button>
+                    <span v-show="switch_search" class="font-grey size-base">*搜索到相关结果共{{ total }}条。</span>
                 </div>
                 <div style="margin: 10px 0 20px;">
                     <el-row :gutter="20" class="bottom-btn-box-2">
@@ -159,6 +55,7 @@
                                 </el-link>
                             </template>
                         </el-table-column>
+<<<<<<< HEAD
                         <el-table-column prop="cnt_live" label="业委会" width="140">
                             <template #default="scope">
                                 <el-link :underline="false" type="primary">
@@ -173,6 +70,8 @@
                         </el-table-column>
                         <el-table-column prop="company_build" label="建设单位名称" width="140" />
                         <el-table-column prop="time_use" label="投用时间" width="140" /> -->
+=======
+>>>>>>> 8530619657f09cdc52654aacd44f8d1f22e8d10e
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -438,104 +337,127 @@
             title="详情"
             width="50%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">名称</div>
-                    <div class="right">{{ data_details.item.name }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">地址</div>
-                    <div class="right">{{ data_details.item.addr }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">小区ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">总占地面积</div>
-                    <div class="right">{{ data_details.item.area_floor }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">总建筑面积</div>
-                    <div class="right">{{ data_details.item.area_build }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">配套用房总面积</div>
-                    <div class="right">{{ data_details.item.area_support }} m²</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼栋数</div>
-                    <div class="right">{{ data_details.item.cnt_building }} 栋</div>
-                </div>
-                <div class="item">
-                    <div class="left">住房总套数</div>
-                    <div class="right">{{ data_details.item.cnt_live }} 套</div>
-                </div>
-                <div class="item">
-                    <div class="left">配套用房总套数</div>
-                    <div class="right">{{ data_details.item.cnt_support }} 套</div>
-                </div>
-                <div class="item">
-                    <div class="left">建设单位名称</div>
-                    <div class="right">{{ data_details.item.company_build }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">竣工时间</div>
-                    <div class="right">{{ data_details.item.time_build_end }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">开工时间</div>
-                    <div class="right">{{ data_details.item.time_build_start }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">立项时间</div>
-                    <div class="right">{{ data_details.item.time_pro_setup }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">移交时间</div>
-                    <div class="right">{{ data_details.item.time_turn }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">投用时间</div>
-                    <div class="right">{{ data_details.item.time_use }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">所在区域code</div>
-                    <div class="right">{{ data_details.item.china_code }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">备注</div>
-                    <div class="right">{{ data_details.item.remark }}</div>
-                </div>
-                <div>
-                    <div class="item">
-                        <div class="left">便民服务</div>
-                        <div class="right">
-                            <div style="font-size: #666;font-size: 14px;margin-bottom: 10px;">
-                                *{{ data_details.item.addition.desc }}
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="基础信息" name="1">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="details-tit-sm">小区信息</div>
+                            <div class="item">
+                                <div class="left">小区名称</div>
+                                <div class="right">{{ data_details.item.name }}</div>
                             </div>
-                            <div
-                                v-for="(item,i) in data_details.item.addition.extra.convenience"
-                                class="convenience-item"
-                                style="display: flex;margin-bottom: 10px;border-bottom: 1px solid #eee;padding-bottom: 8px;"
-                            >
-                                <div class="conve-left" style="flex: 1;">
-                                    <span
-                                        style="color: #000;"
-                                    >服务名称：</span>{{ item.title }}
-                                </div>
-                                <div class="conve-right" style="flex: 1;">
-                                    <span
-                                        style="color: #000;"
-                                    >联系方式：</span>{{ item.phone }}
+                            <div class="item">
+                                <div class="left">所在区域code</div>
+                                <div class="right">{{ data_details.item.china_code }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">小区地址</div>
+                                <div class="right">{{ data_details.item.addr }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">小区ID</div>
+                                <div class="right">{{ data_details.item.id }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">地图位置</div>
+                                <div class="right">无</div>
+                            </div>
+                            <div class="details-tit-sm">数量/面积信息</div>
+                            <div class="item">
+                                <div class="left">总占地面积</div>
+                                <div class="right">{{ data_details.item.area_floor }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">总建筑面积</div>
+                                <div class="right">{{ data_details.item.area_build }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">总专有面积</div>
+                                <div class="right">{{ data_details.item.area_exc }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">楼栋数</div>
+                                <div class="right">{{ data_details.item.cnt_building }} 栋</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">配套用房总套数</div>
+                                <div class="right">{{ data_details.item.cnt_support }} 套</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">配套用房总面积</div>
+                                <div class="right">{{ data_details.item.area_support }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">住房总套数</div>
+                                <div class="right">{{ data_details.item.cnt_live }} 套</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">住房总面积</div>
+                                <div class="right">{{ data_details.item.area_live }} m²</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">车位总个数</div>
+                                <div class="right">{{ data_details.item.cnt_part }} 个</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">车位总面积</div>
+                                <div class="right">{{ data_details.item.area_part }} m²</div>
+                            </div>
+                            <div class="details-tit-sm">其它信息</div>
+                            <div class="item">
+                                <div class="left">建设单位名称</div>
+                                <div class="right">{{ data_details.item.company_build }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">立项时间</div>
+                                <div class="right">{{ data_details.item.time_pro_setup }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">开工时间</div>
+                                <div class="right">{{ data_details.item.time_build_start }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">竣工时间</div>
+                                <div class="right">{{ data_details.item.time_build_end }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">移交时间</div>
+                                <div class="right">{{ data_details.item.time_turn }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">投用时间</div>
+                                <div class="right">{{ data_details.item.time_use }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">备注</div>
+                                <div class="right">{{ data_details.item.remark }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">简介</div>
+                                <div class="right">{{ data_details.item.addition.desc }}</div>
+                            </div>
+                            <div class="details-tit-sm">便民信息</div>
+                            <div class="item">
+                                <div class="right">
+                                    <div v-for="(item,i) in data_details.item.addition.extra.convenience" class="flex-row p-t-10">
+                                        <div>
+                                            <span>服务名称：</span>{{ item.title }} , <span>联系方式：</span>{{ item.phone }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="档案信息" name="2">
+                    <el-scrollbar height="400px">
+                        小区档案待完善
+                    </el-scrollbar>
+                </el-tab-pane>
+            </el-tabs>
             <template #footer>
                 <span class="dialog-footer">
+                    <el-button type="primary" @click="modifyResidentialFunc(data_details.item)">修改</el-button>
                     <el-button @click="switch_details = false">取消</el-button>
                 </span>
             </template>
@@ -574,6 +496,7 @@ import House from '@/components/House/index.vue'
 const tree_item = reactive({
     obj: {}
 })
+const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
     tree_item.obj = {
@@ -878,32 +801,5 @@ refreshFunc()
         font-size: 14px;
         margin-bottom: 20px;
     }
-    .details-box {
-        .item {
-            display: flex;
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            .left {
-                box-sizing: border-box;
-                width: 160px;
-                white-space: nowrap;
-                margin-right: 20px;
-                text-align: right;
-                font-weight: 600;
-            }
-            .left::after {
-                content: "：";
-            }
-            .right {
-                width: 100%;
-                color: #666;
-            }
-        }
-        .item:last-child {
-            border-style: none;
-        }
-    }
+
 </style>
