@@ -555,7 +555,7 @@
                         <el-link
                             class="head-btn"
                             :underline="false"
-                            href="http://192.168.110.37:10090/zgj/excels/house_import_tpl.xlsx"
+                            :href="VITE_APP_UPLOAD"
                             target="_blank"
                         >
                             <el-button>
@@ -813,6 +813,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
 const activeName = ref('first')
 const props = defineProps(['tree_item'])
 const { tree_item } = toRefs(props)
