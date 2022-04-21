@@ -80,7 +80,7 @@
                             type="info"
                             @click="openStepFunc(scope.row)"
                         >
-                            步骤
+                            成员
                         </el-button>
                     </template>
                 </el-table-column>
@@ -192,12 +192,12 @@
         <!-- 步骤 -->
         <el-dialog
             v-model="show_dialog_flow"
-            title="步骤"
+            title="成员"
             width="70%"
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加业委会</el-button>
+                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加业委会成员</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -206,39 +206,33 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;"
             >
-                <el-table-column prop="name" label="步骤名称" width="180">
+                <el-table-column label="用户名" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.user.username }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="prev" label="前一个步骤节点" width="180">
+                <el-table-column label="手机号" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.prev }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.user.mobile }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="step" label="当前步骤节点" width="180">
+                <el-table-column label="真实姓名" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.step }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="next" label="下一个步骤节点" width="180">
+                <el-table-column label="信息描述" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.next }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="220">
+                <el-table-column fixed="right" label="操作" width="160">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
                             @click="modifyFlowFunc(scope.row)"
                         >
                             修改
-                        </el-button>
-                        <el-button
-                            size="small"
-                            @click="detailsFlowFunc(scope.row)"
-                        >
-                            详情
                         </el-button>
                         <el-popconfirm
                             title="确定要删除当前项么?" cancel-button-type="info"
@@ -266,64 +260,29 @@
                     :model="from_examine2.obj"
                 >
                     <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-col v-if="!hide_id" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="步骤名称" prop="name"
-                                label-width="110px"
-                                :error="from_error2.msg&&from_error2.msg.name?from_error2.msg.name[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine2.item.name"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="前一个步骤节点" prop="prev"
-                                label-width="110px"
-                                :error="from_error2.msg&&from_error2.msg.prev?from_error2.msg.prev[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine2.item.prev"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="当前步骤节点" prop="step"
-                                label-width="110px"
-                                :error="from_error2.msg&&from_error2.msg.step?from_error2.msg.step[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine2.item.step"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="步骤动作代码" prop="do"
-                                label-width="110px"
-                                :error="from_error2.msg&&from_error2.msg.do?from_error2.msg.do[0]:''"
-                            >
-                                <el-select v-model="from_examine2.item.do" class="head-btn" placeholder="步骤动作代码" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.type_type" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="用户组集" prop="for."
-                                label-width="110px"
-                                :error="from_error2.msg&&from_error2.msg['for.group']?from_error2.msg['for.group'][0]:''"
+                                label="用户" prop="uid"
+                                :error="from_error2.msg&&from_error2.msg.uid?from_error2.msg.uid[0]:''"
                             >
                                 <div style="height: 100%;width: 100%;">
                                     <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                        <SearchUserGroup v-model:str="from_examine2.item.for.group" :checkbox="true" />
+                                        <SearchUser v-model:str="from_examine2.item.uid" />
                                     </div>
                                 </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            <el-form-item
+                                label="信息描述" prop="desc"
+                                :error="from_error2.msg&&from_error2.msg.desc?from_error2.msg.desc[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine2.item.desc"
+                                    :autosize="{ minRows: 2, maxRows: 10 }"
+                                    type="textarea"
+                                    placeholder="审核回执内容"
+                                />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -336,76 +295,10 @@
                 </div>
             </template>
         </el-dialog>
-        <!--步骤 详情 -->
-        <el-dialog
-            v-model="switch_details2"
-            title="详情"
-            width="50%"
-        >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">业委会名称</div>
-                    <div class="right">{{ data_details2.obj.name }}</div>
-                </div>
-            </div>
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">业委会ID</div>
-                    <div class="right">{{ data_details2.obj.id }}</div>
-                </div>
-            </div>
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">步骤动作代码</div>
-                    <div class="right">{{ data_details2.obj.do }}</div>
-                </div>
-            </div>
-            <div v-if="data_details2.obj.for" class="details-box">
-                <div class="item">
-                    <div class="left">用户组集</div>
-                    <div class="right">{{ data_details2.obj.for.group }}</div>
-                </div>
-            </div>
-
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">前一个步骤节点</div>
-                    <div class="right">{{ data_details2.obj.prev }}</div>
-                </div>
-            </div>
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">当前步骤节点</div>
-                    <div class="right">{{ data_details2.obj.step }}</div>
-                </div>
-            </div>
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">下一个步骤节点</div>
-                    <div class="right">{{ data_details2.obj.next }}</div>
-                </div>
-            </div>
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details2.obj.created_at }}</div>
-                </div>
-            </div>
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">更新实现</div>
-                    <div class="right">{{ data_details2.obj.updated_at }}</div>
-                </div>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="switch_details2 = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
     </div>
 </template>
 <script setup>
+import SearchUser from '@/components/SearchUser/index.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
@@ -586,11 +479,10 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
-    APIgetFlowStepList,
-    APIgetFlowStepDetails,
-    APIdeleteFlowStep,
-    APIputFlowStep,
-    APIpostFlowStep
+    APIgetListYwhUser,
+    APIdeleteYwhUser,
+    APIputYwhUser,
+    APIpostYwhUser
 } from '@/api/custom/custom.js'
 var flow_id = ''
 const flow_data = reactive({
@@ -600,31 +492,19 @@ const show_dialog_flow = ref(false)
 const tabloading = ref(false)
 const switch_examine2 = ref(false)
 const str_title2 = ref('')
-const from_examine2 = reactive({ item: { for: {} } })
+const from_examine2 = reactive({ item: {  } })
 const from_error2 = reactive({ msg: {} })
-
+const hide_id = ref(false)
 const modifyFlowFunc = val => {
-    APIgetFlowStepDetails(flow_id, val.id).then(res => {
-        str_title2.value = '修改步骤'
-        from_examine2.item = { ...res.data }
-        from_examine2.item.for.group = from_examine2.item.for.group
-        from_error2.msg = {}
-        switch_examine2.value = true
-    })
-}
-const data_details2 = reactive({
-    obj: {}
-})
-const switch_details2 = ref(false)
-const detailsFlowFunc = val => {
-    APIgetFlowStepDetails(flow_id, val.id).then(res => {
-        data_details2.obj = { ...res.data }
-        switch_details2.value = true
-    })
+    hide_id.value = true
+    str_title2.value = '修改'
+    from_examine2.item = { ...val }
+    from_error2.msg = {}
+    switch_examine2.value = true
 }
 
 const deleteFunc2 = val => {
-    APIdeleteFlowStep(flow_id, val.id).then(res => {
+    APIdeleteYwhUser(flow_id, val.uid).then(res => {
         refreshFunc2()
         ElMessage.success(res.msg)
     })
@@ -636,21 +516,22 @@ const openStepFunc = val => {
 }
 const refreshFunc2 = () => {
     tabloading.value = true
-    APIgetFlowStepList(flow_id).then(res => {
+    APIgetListYwhUser(flow_id).then(res => {
         flow_data.arr = res.data
         tabloading.value = false
     })
 }
 const addflowFunc = () => {
-    str_title2.value = '添加步骤'
-    from_examine2.item = { for: { group: [] } }
+    hide_id.value = false
+    str_title2.value = '添加'
+    from_examine2.item = { }
     from_error2.msg = {}
     switch_examine2.value = true
 }
 const flowUpdataFunc = () => {
     from_error2.msg = {}
-    if (str_title2.value == '修改步骤') {
-        APIputFlowStep(flow_id, from_examine2.item.id, from_examine2.item).then(res => {
+    if (str_title2.value == '修改') {
+        APIputYwhUser(flow_id, from_examine2.item.uid, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
                 ElMessage.success(res.msg)
@@ -660,7 +541,7 @@ const flowUpdataFunc = () => {
             from_error2.msg = err.data
         })
     } else {
-        APIpostFlowStep(flow_id, from_examine2.item).then(res => {
+        APIpostYwhUser(flow_id, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
                 ElMessage.success(res.msg)
