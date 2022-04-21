@@ -65,7 +65,43 @@ textarea {
     padding: 20px !important;
 }
 
-/****************  自定义样式  *********************/
+/*******************  自定义通用样式模板 ***********************/
+//详细列表
+.details-box {
+    .details-tit-sm {
+        font-weight: 800;
+        font-size: 14px;
+        width: 100%;
+        padding: 10px 0;
+        border-bottom: 1px solid #efefef;
+    }
+    .item {
+        display: flex;
+        color: #333;
+        font-size: 14px;
+        padding: 10px 0;
+        .left {
+            color: #999;
+            box-sizing: border-box;
+            width: 160px;
+            white-space: nowrap;
+            margin-right: 20px;
+            text-align: right;
+        }
+        .left::after {
+            content: "：";
+        }
+        .right {
+            width: 100%;
+            color: #666;
+        }
+    }
+    .item:last-child {
+        border-style: none;
+    }
+}
+
+/****************  自定义基础样式  *********************/
 .strong {
     font-weight: 800;
 }
@@ -191,4 +227,34 @@ textarea {
 }
 .width-sm {
     width: 120px;
+}
+//布局
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+.flex-start {
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.flex-end {
+    text-align: right;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+.flex-between {
+    justify-content: space-between;
+}
+.flex-around {
+    justify-content: space-around;
 }
