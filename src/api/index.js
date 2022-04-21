@@ -18,6 +18,7 @@ const toLogin = () => {
 }
 
 const api = axios.create({
+    // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
     baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
     timeout: 10000,
     responseType: 'json'
@@ -28,7 +29,7 @@ api.interceptors.request.use(
         loading = ElLoading.service({
             lock: true,
             text: 'Loading',
-            background: 'rgba(0, 0, 0, 0.7)',
+            background: 'rgba(0, 0, 0, 0.7)'
         })
         const userOutsideStore = useUserOutsideStore()
         /**

@@ -25,6 +25,13 @@
                             </template>
                         </el-input>
                     </el-form-item>
+                    <el-form-item prop="domain">
+                        <el-input ref="password" v-model="loginForm.domain" type="text" placeholder="主域名" tabindex="2">
+                            <template #prefix>
+                                <el-icon :size="14" color="#c0c4cc"><el-icon-mostly-cloudy /></el-icon>
+                            </template>
+                        </el-input>
+                    </el-form-item>
                 </div>
                 <div class="flex-bar">
                     <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
@@ -101,7 +108,8 @@ const formType = ref('login')
 const loginForm = ref({
     account: localStorage.login_account || '',
     password: '',
-    remember: !!localStorage.login_account
+    remember: !!localStorage.login_account,
+    domain: localStorage.domain || ''
 })
 const loginRules = ref({
     account: [
@@ -110,6 +118,9 @@ const loginRules = ref({
     password: [
         { required: true, trigger: 'blur', message: '请输入密码' },
         { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
+    ],
+    domain: [
+        { required: true, trigger: 'blur', message: '请输入主域名' }
     ]
 })
 
@@ -159,6 +170,7 @@ function handleLogin() {
                 loading.value = false
                 if (loginForm.value.remember) {
                     localStorage.setItem('login_account', loginForm.value.account)
+                    localStorage.setItem('domain', loginForm.value.domain)
                 } else {
                     localStorage.removeItem('login_account')
                 }
