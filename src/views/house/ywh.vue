@@ -1,33 +1,28 @@
 <template>
     <div>
-        <div style="display: flex;padding: 20px;box-sizing: border-box;min-height: calc(100vh - 50px);">
-            <div style="width: calc(60% - 10px);margin-right: 10px;padding:20px;background-color: #ffffff;display: flex;justify-content: center;flex-direction: column;overflow-x: none;overflow-y: auto;">
-                <div style="text-align: center;width: 80%;margin: 0 auto;margin-bottom: 30px;">
-                    <div style="display: inline-block;text-align: left;">
+        <div class="p-20" style="box-sizing: border-box;min-height: calc(100vh - 50px);">
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="16" :md="16" :lg="16" :xl="16">
+                    <div class="p-20 bg-color-white" style="box-sizing: border-box;min-height: calc(100vh - 90px);">
                         <div v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'">
-                            <p>名称：{{ data_details.item.name }}</p>
-                            <p>届次：第{{ data_details.item.period }}届</p>
-                            <p>状态：{{ data_details.item.isbindzone?'有效':'失效' }}</p>
-                            <p>创建时间：{{ data_details.item.created_at }}</p>
-                            <p>更新时间：{{ data_details.item.updated_at }}</p>
-                            <p>描述：{{ data_details.item.desc }}</p>
+                            <p>
+                                <span class="strong size-lg">{{ data_details.item.name }}</span>
+                                <el-tag v-if="data_details.item.isbindzone" type="success" effect="dark" round>有效</el-tag><el-tag v-if="!data_details.item.isbindzone" type="danger" effect="dark" round>失效</el-tag>
+                            </p>
+                            <p class="font-grey size-base">届次：第{{ data_details.item.period }}届</p>
+                            <p class="font-grey size-base">创建时间：{{ data_details.item.created_at }}</p>
+                            <p class="font-grey size-base">更新时间：{{ data_details.item.updated_at }}</p>
+                            <p class="font-grey size-base">描述：{{ data_details.item.desc }}</p>
                         </div>
                         <div style="text-align: center;">
                             <el-button
                                 type="primary"
                                 @click="addResidentialFunc(data_details.item)"
                             >
-                                添加业委会
-                            </el-button>
-                            <el-button
-                                v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'"
-                                type="primary"
-                                @click="addflowFunc(data_details.item)"
-                            >
-                                添加成员
+                                业委会换届
                             </el-button>
                             <el-popconfirm
-                                title="确定要删除当前项么?" cancel-button-type="info"
+                                title="确定要取消当前业委会么?" cancel-button-type="info"
                                 @confirm="cancelYwhFunc(data_details.item,0)"
                             >
                                 <template #reference>
@@ -35,124 +30,148 @@
                                         v-if="data_details.item.isbindzone"
                                         type="danger"
                                     >
-                                        取消当前业委会
+                                        取消业委会
                                     </el-button>
                                 </template>
                             </el-popconfirm>
                         </div>
-                    </div>
-                </div>
-                <el-table
-                    v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'"
-                    v-loading="tabloading"
-                    :data="flow_data.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    style="width: 100%;border: 1px solid #ebeef5;border-radius: 6px;box-sizing: border-box;"
-                >
-                    <el-table-column label="手机号" width="180">
-                        <template #default="scope">
-                            <span>{{ scope.row.user.mobile }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="真实姓名" width="180">
-                        <template #default="scope">
-                            <span>{{ scope.row.user.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="160">
-                        <template #default="scope">
-                            <el-button
-                                type="primary" size="small"
-                                @click="modifyFlowFunc(scope.row)"
-                            >
-                                修改
-                            </el-button>
-                            <el-popconfirm
-                                title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteFunc2(scope.row)"
-                            >
-                                <template #reference>
-                                    <el-button type="danger" size="small">
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                    <el-table-column />
-                </el-table>
-            </div>
-            <div style="width: calc(40% - 10px);margin-left: 10px;background-color: #ffffff">
-                <div style="color: #aaa; font-size: 14px; padding: 10px;">
-                    *点击列表切换当前业委会内容。
-                </div>
-                <div style="padding: 0 10px;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;border: 1px solid #ebeef5;border-radius: 6px;box-sizing: border-box;"
-                        @row-click="rowClickFunc"
-                    >
-                        <el-table-column prop="name" label="业委会名称" width="160">
-                            <template #default="scope">
-                                <span>{{ scope.row.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="name" label="届次" width="160">
-                            <template #default="scope">
-                                <span>第{{ scope.row.period }}届</span>
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <div @click.stop="()=>{}">
-                                    <el-button
-                                        type="primary" size="small"
-                                        @click="modifyResidentialFunc(scope.row)"
-                                    >
-                                        修改
-                                    </el-button>
-                                    <el-popconfirm
-                                        title="确定要删除当前项么?" cancel-button-type="info"
-                                        @confirm="deleteFunc(scope.row)"
-                                    >
-                                        <template #reference>
-                                            <el-button type="danger" size="small">
-                                                删除
-                                            </el-button>
+                        <el-tabs model-value="first" @tab-click="handleClick">
+                            <el-tab-pane label="业委会成员" name="first">
+                                <el-button
+                                    v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'"
+                                    type="primary"
+                                    @click="addflowFunc(data_details.item)"
+                                >
+                                    添加成员
+                                </el-button>
+                                <el-table
+                                    v-loading="tabloading"
+                                    :data="flow_data.arr"
+                                    class="size-sm"
+                                >
+                                    <el-table-column label="真实姓名">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.user.name }} </span>
                                         </template>
-                                    </el-popconfirm>
-                                    <el-popconfirm
-                                        title="确定要激活当前业委会么?" cancel-button-type="info"
-                                        @confirm="activeYwhFunc(scope.row,1)"
-                                    >
-                                        <template #reference>
+                                    </el-table-column>
+                                    <el-table-column label="手机号" width="120">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.user.mobile }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="注册名">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.user.username }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="职务" width="100">
+                                        <template #default="scope">
+                                            <span>无 </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="操作">
+                                        <template #default="scope">
                                             <el-button
-                                                type="success" size="small"
-                                                :disabled="scope.row.isbindzone"
+                                                type="primary" size="small"
+                                                @click="modifyFlowFunc(scope.row)"
                                             >
-                                                激活
+                                                修改
                                             </el-button>
+                                            <el-popconfirm
+                                                title="确定要删除当前项么?" cancel-button-type="info"
+                                                @confirm="deleteFunc2(scope.row)"
+                                            >
+                                                <template #reference>
+                                                    <el-button type="danger" size="small">
+                                                        删除
+                                                    </el-button>
+                                                </template>
+                                            </el-popconfirm>
                                         </template>
-                                    </el-popconfirm>
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                    style="padding-top: 20px;"
-                />
-            </div>
+                                    </el-table-column>
+                                </el-table>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </el-col>
+                <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                    <div class="p-20 bg-color-white" style="box-sizing: border-box;min-height: calc(100vh - 90px);">
+                        <el-tabs model-value="first" @tab-click="handleClick">
+                            <el-tab-pane label="历届业委会" name="first" style=" cursor: pointer;">
+                                <el-table
+                                    v-loading="loading_tab"
+                                    :data="data_tab.arr"
+                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                    height="calc(100vh - 240px)"
+                                    @row-click="rowClickFunc"
+                                >
+                                    <el-table-column prop="name" label="业委会名称">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.name }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="name" label="届次" width="80">
+                                        <template #default="scope">
+                                            <span>第{{ scope.row.period }}届</span>
+                                        </template>
+                                    </el-table-column>
+
+                                    <el-table-column label="操作">
+                                        <template #default="scope">
+                                            <div @click.stop="()=>{}">
+                                                <el-button
+                                                    v-if="scope.row.isbindzone"
+                                                    type="success" size="small"
+                                                >
+                                                    生效
+                                                </el-button>
+                                                <el-popconfirm
+                                                    title="确定要激活当前业委会么?" cancel-button-type="info"
+                                                    @confirm="activeYwhFunc(scope.row,1)"
+                                                >
+                                                    <template #reference>
+                                                        <el-button
+                                                            v-if="!scope.row.isbindzone"
+                                                            type="info" size="small"
+                                                        >
+                                                            失效
+                                                        </el-button>
+                                                    </template>
+                                                </el-popconfirm>
+                                                <el-button
+                                                    type="primary" size="small"
+                                                    @click="modifyResidentialFunc(scope.row)"
+                                                >
+                                                    修改
+                                                </el-button>
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?" cancel-button-type="info"
+                                                    @confirm="deleteFunc(scope.row)"
+                                                >
+                                                    <template #reference>
+                                                        <el-button type="danger" size="small">
+                                                            删除
+                                                        </el-button>
+                                                    </template>
+                                                </el-popconfirm>
+                                            </div>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <el-pagination
+                                    v-model:current-page="page"
+                                    layout="total,prev,pager,next,jumper,"
+                                    :total="total"
+                                    :page-size="per_page"
+                                    background
+                                    hide-on-single-page
+                                    style="padding-top: 20px;"
+                                />
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </el-col>
+            </el-row>
         </div>
         <!-- 修改添加 -->
         <el-dialog
@@ -167,7 +186,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="业委会名称" prop="name"
+                            label="业委会名称" prop="name" label-width="120px"
                             :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                         >
                             <el-input
@@ -178,7 +197,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="届次" prop="period"
+                            label="届次" prop="period" label-width="120px"
                             :error="from_error.msg&&from_error.msg.period?from_error.msg.period[0]:''"
                         >
                             <el-input
@@ -189,7 +208,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
-                            label="描述" prop="desc"
+                            label="描述" prop="desc" label-width="120px"
                             :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
                         >
                             <el-input
@@ -209,66 +228,6 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 成员 -->
-        <el-dialog
-            v-model="show_dialog_flow"
-            title="成员"
-            width="70%"
-        >
-            <el-row :gutter="20">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加业委会成员</el-button>
-                </el-col>
-            </el-row>
-            <el-table
-                v-loading="tabloading"
-                :data="flow_data.arr"
-                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;"
-            >
-                <el-table-column label="用户名" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.user.username }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="手机号" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.user.mobile }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="真实姓名" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.user.name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="信息描述" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.desc }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="160">
-                    <template #default="scope">
-                        <el-button
-                            type="primary" size="small"
-                            @click="modifyFlowFunc(scope.row)"
-                        >
-                            修改
-                        </el-button>
-                        <el-popconfirm
-                            title="确定要删除当前项么?" cancel-button-type="info"
-                            @confirm="deleteFunc2(scope.row)"
-                        >
-                            <template #reference>
-                                <el-button type="danger" size="small">
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-popconfirm>
-                    </template>
-                </el-table-column>
-                <el-table-column />
-            </el-table>
-        </el-dialog>
         <!-- 步骤 修改添加 -->
         <el-dialog
             v-model="switch_examine2"
@@ -282,7 +241,7 @@
                     <el-row :gutter="10">
                         <el-col v-if="!hide_id" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="用户" prop="uid"
+                                label="选择用户" prop="uid" label-width="100px"
                                 :error="from_error2.msg&&from_error2.msg.uid?from_error2.msg.uid[0]:''"
                             >
                                 <div style="height: 100%;width: 100%;">
@@ -294,14 +253,14 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             <el-form-item
-                                label="信息描述" prop="desc"
+                                label="工作描述" prop="desc" label-width="100px"
                                 :error="from_error2.msg&&from_error2.msg.desc?from_error2.msg.desc[0]:''"
                             >
                                 <el-input
                                     v-model="from_examine2.item.desc"
                                     :autosize="{ minRows: 2, maxRows: 10 }"
                                     type="textarea"
-                                    placeholder="审核回执内容"
+                                    placeholder="工作职责描述"
                                 />
                             </el-form-item>
                         </el-col>
@@ -499,7 +458,6 @@ var flow_id = ''
 const flow_data = reactive({
     arr: []
 })
-const show_dialog_flow = ref(false)
 const tabloading = ref(false)
 const switch_examine2 = ref(false)
 const str_title2 = ref('')
