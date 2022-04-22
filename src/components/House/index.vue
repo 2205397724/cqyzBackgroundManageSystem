@@ -184,7 +184,7 @@
                     :model="from_examine.item"
                 >
                     <el-row :gutter="10">
-                        <el-col :md="24" :lg="12">
+                        <!-- <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="直属楼栋/单元类型" prop="houseable_type"
                                 :error="from_error.msg&&from_error.msg.houseable_type?from_error.msg.houseable_type[0]:''"
@@ -208,7 +208,7 @@
                                     <SearchUnit v-model:str="from_examine.item.houseable_id" />
                                 </div>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="物理楼层" prop="floor_truth"
@@ -1189,6 +1189,8 @@ import {
 } from '@/api/custom/custom.js'
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
+    from_examine.item.houseable_type = active_obj.obj.type
+    from_examine.item.houseable_id = active_obj.obj.id
     if (str_title.value == '修改') {
         APIputHouseHouse(from_examine.item.id, from_examine.item).then(res => {
             if (!res.code) {
