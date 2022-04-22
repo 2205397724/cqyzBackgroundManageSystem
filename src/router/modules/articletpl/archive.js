@@ -6,7 +6,7 @@ export default {
     redirect: '/articletpl_archive/archive',
     name: 'articletplArchiveBox',
     meta: {
-        title: '档案',
+        title: '公示归档',
         icon: 'el-icon-document',
         auth: ['articletpl.archive', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'articletplArchive',
             component: () => import('@/views/articletpl/archive.vue'),
             meta: {
-                title: '档案',
+                title: '公示归档',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/articletpl_archive',

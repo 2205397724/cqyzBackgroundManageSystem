@@ -6,7 +6,7 @@
                     <Cascaders v-model="data_search.obj.from" />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="接收等级" clearable>
+                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="指定等级" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
@@ -19,26 +19,11 @@
                     </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.per" class="head-btn" placeholder="派发频率" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.article_rate" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-date-picker
                         v-model="data_search.obj.runat"
                         type="date"
                         value-format="YYYY-MM-DD"
                         placeholder="执行时间"
-                        style="width: 100%;"
-                        :default-value="new Date()"
-                    />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-date-picker
-                        v-model="data_search.obj.created_at"
-                        type="date"
-                        value-format="YYYY-MM-DD"
-                        placeholder="创建时间"
                         style="width: 100%;"
                         :default-value="new Date()"
                     />
@@ -53,7 +38,7 @@
             </div>
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">派发任务</el-button>
+                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">制定计划</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -62,39 +47,34 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="任务ID" width="250">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="派发对象" width="160">
+                <el-table-column label="指定主体" width="160">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.from }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="接收对象等级" width="120">
+                <el-table-column label="指定主体等级" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.tolv }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv,scope.row.tolv ) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="类型ID" width="250">
+                <el-table-column label="计划发布分类" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cid }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.cid }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="派发频率" width="90">
+                <el-table-column label="计划发布周期" width="160">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.per }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_rate,scope.row.per ) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="执行时间" width="140">
+                <el-table-column label="开始执行时间" width="140">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.runat }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否启用" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.isactive }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.tasksd_use,scope.row.isactive ) }}</span>
                     </template>
                 </el-table-column>
 
@@ -149,7 +129,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="派发对象"
+                            label="指定主体"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
@@ -158,18 +138,29 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收对象等级"
+                            label="指定主体等级"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
-                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="接收等级" clearable>
+                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="主体等级" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="类型"
+                            label="计划发布周期"
+                            label-width="100px"
+                            :error="from_error.msg&&from_error.msg.per?from_error.msg.per[0]:''"
+                        >
+                            <el-select v-model="from_examine.item.per" class="head-btn" placeholder="计划发布周期" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.article_rate" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="计划发布分类"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
@@ -178,18 +169,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="派发频率"
-                            label-width="100px"
-                            :error="from_error.msg&&from_error.msg.per?from_error.msg.per[0]:''"
-                        >
-                            <el-select v-model="from_examine.item.per" class="head-btn" placeholder="派发频率" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.article_rate" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="执行时间"
+                            label="开始执行时间"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.runat?from_error.msg.runat[0]:''"
                         >
@@ -197,7 +177,7 @@
                                 v-model="from_examine.item.runat"
                                 type="date"
                                 value-format="YYYY-MM-DD"
-                                placeholder="执行时间"
+                                placeholder="开始执行时间"
                                 style="width: 100%;"
                                 :default-value="new Date()"
                             />
@@ -235,23 +215,23 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">派发对象</div>
+                    <div class="left">指定主体</div>
                     <div class="right">{{ data_details.item.from }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">接收对象等级</div>
+                    <div class="left">指定主体等级</div>
                     <div class="right">{{ data_details.item.tolv }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">类型ID</div>
+                    <div class="left">计划发布周期</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_rate,data_details.item.per ) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">计划发布分类ID</div>
                     <div class="right">{{ data_details.item.cid }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">派发频率</div>
-                    <div class="right">{{ data_details.item.per }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">执行时间</div>
+                    <div class="left">开始执行时间</div>
                     <div class="right">{{ data_details.item.runat }}</div>
                 </div>
                 <div class="item">
@@ -324,7 +304,7 @@ let switch_examine = ref(false)
 let from_examine = reactive({
     item: {}
 })
-const str_title = ref('添加')
+const str_title = ref('添加计划')
 const from_error = reactive({
     msg: {}
 })
@@ -399,7 +379,7 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
-            if (str_title.value == '修改') {
+            if (str_title.value == '修改计划') {
                 APIputTasksd(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
@@ -460,7 +440,7 @@ const deleteFunc = val => {
 // 添加
 const addResidentialFunc = () => {
     from_error.msg = {}
-    str_title.value = '添加'
+    str_title.value = '添加计划'
     from_examine.item = {
         property_owners: [],
         house_id: '',
@@ -474,7 +454,7 @@ const addResidentialFunc = () => {
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}
-    str_title.value = '修改'
+    str_title.value = '修改计划'
     APIgetTasksdDetails(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data

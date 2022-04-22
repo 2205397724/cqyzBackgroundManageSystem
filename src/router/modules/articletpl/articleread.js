@@ -6,7 +6,7 @@ export default {
     redirect: '/articletpl_articleread/articleread',
     name: 'articletplArticlereadBox',
     meta: {
-        title: '公示阅读',
+        title: '阅读记录',
         icon: 'el-icon-document',
         auth: ['articletpl.articleread', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'articletplArticleread',
             component: () => import('@/views/articletpl/articleread.vue'),
             meta: {
-                title: '公示阅读',
+                title: '阅读记录',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/articletpl_articleread',

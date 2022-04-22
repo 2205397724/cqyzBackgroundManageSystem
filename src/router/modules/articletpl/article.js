@@ -6,7 +6,7 @@ export default {
     redirect: '/articletpl_article/article',
     name: 'articletplArticleBox',
     meta: {
-        title: '公示',
+        title: '公示管理',
         icon: 'el-icon-document',
         auth: ['articletpl.article', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'articletplArticle',
             component: () => import('@/views/articletpl/article.vue'),
             meta: {
-                title: '公示',
+                title: '公示管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/articletpl_article',

@@ -6,7 +6,7 @@ export default {
     redirect: '/articletpl_task/task',
     name: 'articletplTaskBox',
     meta: {
-        title: '任务',
+        title: '监管督促',
         icon: 'el-icon-document',
         auth: ['articletpl.task', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'articletplTask',
             component: () => import('@/views/articletpl/task.vue'),
             meta: {
-                title: '任务',
+                title: '监管督促',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/articletpl_task',
