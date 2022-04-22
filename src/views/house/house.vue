@@ -742,7 +742,7 @@
                 <el-table-column prop="desc" label="备注" width="280" />
                 <el-table-column prop="status" label="状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_cert,scope.row.status) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="file_err" label="错误信息" width="280" />
@@ -1241,7 +1241,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact']).then(res => {
+getOpts(['status_all','house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact']).then(res => {
     opts_all.obj = res
 })
 

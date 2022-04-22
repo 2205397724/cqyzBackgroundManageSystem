@@ -87,8 +87,10 @@ const opts = {
     enterprise_service: [{
         key: 100, val: '物业'
     }],
-    // 公示任务接收对象等级
+    // 公示任务接收对象等级 如果修改该字段，cascaderTypeAndID组件和tasksd页面需要调整
     article_lv: [{
+        key: 3, val: '区域'
+    }, {
         key: 4, val: '街道'
     }, {
         key: 5, val: '社区'

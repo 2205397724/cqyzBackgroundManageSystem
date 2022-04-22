@@ -5,16 +5,6 @@
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <CascaderType v-model="data_search.obj.cid" />
                 </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.totype" class="head-btn" placeholder="公示对象类型" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.reltype" class="head-btn" placeholder="关联对象类型" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.article_type" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col> -->
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
                         <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
@@ -22,31 +12,8 @@
                         </div>
                     </div>
                 </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.depcc" class="head-btn" placeholder="depcc" clearable />
-                </el-col> -->
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.depcclv" class="head-btn" placeholder="depcclv" clearable />
-                </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
-                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                            <SearchUser v-model:str="data_search.obj.uid" />
-                        </div>
-                    </div>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.utype" class="head-btn" placeholder="发布人用户端" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.lv" class="head-btn" placeholder="接收等级" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col> -->
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.status" class="head-btn" placeholder="状态" clearable>
+                    <el-select v-model="data_search.obj.status" class="head-btn" placeholder="审核状态" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
@@ -65,11 +32,11 @@
                 <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                 *搜索到相关结果共{{ total }}条。
             </div>
-            <el-row :gutter="20" class="bottom-btn-box-2">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">发布公示</el-button>
-                </el-col>
-            </el-row>
+            <div class="bottom-btn-box-2">
+                <el-button class="head-btn" type="primary" @click="addResidentialFunc">发布公示</el-button>
+                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=100;searchFunc()}">未处理</el-button>
+                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=150;searchFunc()}">处理中</el-button>
+            </div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
@@ -81,24 +48,9 @@
                         <span style="margin-left: 10px;">{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示主体" width="180">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.totype }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示开始时间" width="180">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.lv }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示结束时间" width="180">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.reltype }} </span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="审核状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.status }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
 
@@ -193,32 +145,9 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
                         >
-                            <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" />
+                            <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" />
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="公示对象类型"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.totype?from_error.msg.totype[0]:''"
-                        >
-                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
-                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col> -->
-                    <!-- <el-col v-if="from_examine.item.totype||from_examine.item.totype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="公示对象ID"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
-                        >
-                            <div v-if="from_examine.item.totype==6" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                <SearchResidential v-model:str="from_examine.item.toval" />
-                            </div>
-                            <Cascaders v-else v-model="from_examine.item.toval" />
-                        </el-form-item>
-                    </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="关联对象类型"
@@ -291,7 +220,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收等级"
+                            label="接收单位"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
                         >
@@ -327,7 +256,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="状态"
+                            label="审核状态"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
                         >
