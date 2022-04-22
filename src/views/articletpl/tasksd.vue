@@ -6,8 +6,10 @@
                     <Cascaders v-model="data_search.obj.from" />
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="指定等级" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="指定单位" clearable>
+                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=6" label="街道" :value="4" />
+                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=9" label="社区" :value="5" />
+                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=12" label="小区" :value="6" />
                     </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
@@ -47,12 +49,12 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="指定主体" width="160">
+                <el-table-column label="指定范围" width="160">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.from }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="指定主体等级" width="120">
+                <el-table-column label="接收单位" width="120">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv,scope.row.tolv ) }}</span>
                     </template>
@@ -129,7 +131,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="指定主体"
+                            label="指定范围"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
@@ -138,12 +140,14 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="指定主体等级"
+                            label="接收单位"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
-                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="主体等级" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="" clearable>
+                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=6" label="街道" :value="4" />
+                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=9" label="社区" :value="5" />
+                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=12" label="小区" :value="6" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -215,12 +219,12 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">指定主体</div>
+                    <div class="left">指定范围</div>
                     <div class="right">{{ data_details.item.from }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">指定主体等级</div>
-                    <div class="right">{{ data_details.item.tolv }}</div>
+                    <div class="left">接收单位</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.tolv) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">计划发布周期</div>
@@ -236,7 +240,7 @@
                 </div>
                 <div class="item">
                     <div class="left">是否启用</div>
-                    <div class="right">{{ data_details.item.isactive }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.tasksd_use,data_details.item.isactive ) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>

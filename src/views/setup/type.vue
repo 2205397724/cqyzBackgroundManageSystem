@@ -1,19 +1,15 @@
 <template>
     <div class="setuptype">
         <page-main>
-            <el-row :gutter="20" class="bottom-btn-box-2">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加分类</el-button>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="main_type" class="head-btn" placeholder="分类种类" clearable>
-                        <el-option
-                            v-for="(item,i) in opts_all.obj.type_type" :key="item.key" :label="item.val"
-                            :value="item.key"
-                        />
-                    </el-select>
-                </el-col>
-            </el-row>
+            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加分类</el-button>
+
+            <el-select v-model="main_type" class="head-btn" placeholder="分类种类" clearable style="width: 200px;">
+                <el-option
+                    v-for="(item,i) in opts_all.obj.type_type" :key="item.key" :label="item.val"
+                    :value="item.key"
+                />
+            </el-select>
+
             <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                 <el-table
                     v-loading="loading_tab"

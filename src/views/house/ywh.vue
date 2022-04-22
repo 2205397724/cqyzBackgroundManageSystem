@@ -21,14 +21,19 @@
                             >
                                 业委会换届
                             </el-button>
-
-                            <el-button
-                                v-if="data_details.item.isbindzone"
-                                type="danger"
-                                @click="cancelYwhFunc(data_details.item,0)"
+                            <el-popconfirm
+                                title="确定要取消当前业委会么?" cancel-button-type="info"
+                                @confirm="cancelYwhFunc(data_details.item,0)"
                             >
-                                取消业委会
-                            </el-button>
+                                <template #reference>
+                                    <el-button
+                                        v-if="data_details.item.isbindzone"
+                                        type="danger"
+                                    >
+                                        取消业委会
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                         </div>
                         <el-tabs model-value="first" @tab-click="handleClick">
                             <el-tab-pane label="业委会成员" name="first">
@@ -49,7 +54,7 @@
                                             <span>{{ scope.row.user.name }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="手机号">
+                                    <el-table-column label="手机号" width="120">
                                         <template #default="scope">
                                             <span>{{ scope.row.user.mobile }} </span>
                                         </template>
@@ -59,7 +64,7 @@
                                             <span>{{ scope.row.user.username }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="职务">
+                                    <el-table-column label="职务" width="100">
                                         <template #default="scope">
                                             <span>无 </span>
                                         </template>
@@ -113,41 +118,43 @@
 
                                     <el-table-column label="操作">
                                         <template #default="scope">
-                                            <el-button
-                                                v-if="scope.row.isbindzone"
-                                                type="success" size="small"
-                                            >
-                                                生效
-                                            </el-button>
-                                            <el-popconfirm
-                                                title="确定要激活当前业委会么?" cancel-button-type="info"
-                                                @confirm="activeYwhFunc(scope.row,1)"
-                                            >
-                                                <template #reference>
-                                                    <el-button
-                                                        v-if="!scope.row.isbindzone"
-                                                        type="info" size="small"
-                                                    >
-                                                        失效
-                                                    </el-button>
-                                                </template>
-                                            </el-popconfirm>
-                                            <el-button
-                                                type="primary" size="small"
-                                                @click="modifyResidentialFunc(scope.row)"
-                                            >
-                                                修改
-                                            </el-button>
-                                            <el-popconfirm
-                                                title="确定要删除当前项么?" cancel-button-type="info"
-                                                @confirm="deleteFunc(scope.row)"
-                                            >
-                                                <template #reference>
-                                                    <el-button type="danger" size="small">
-                                                        删除
-                                                    </el-button>
-                                                </template>
-                                            </el-popconfirm>
+                                            <div @click.stop="()=>{}">
+                                                <el-button
+                                                    v-if="scope.row.isbindzone"
+                                                    type="success" size="small"
+                                                >
+                                                    生效
+                                                </el-button>
+                                                <el-popconfirm
+                                                    title="确定要激活当前业委会么?" cancel-button-type="info"
+                                                    @confirm="activeYwhFunc(scope.row,1)"
+                                                >
+                                                    <template #reference>
+                                                        <el-button
+                                                            v-if="!scope.row.isbindzone"
+                                                            type="info" size="small"
+                                                        >
+                                                            失效
+                                                        </el-button>
+                                                    </template>
+                                                </el-popconfirm>
+                                                <el-button
+                                                    type="primary" size="small"
+                                                    @click="modifyResidentialFunc(scope.row)"
+                                                >
+                                                    修改
+                                                </el-button>
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?" cancel-button-type="info"
+                                                    @confirm="deleteFunc(scope.row)"
+                                                >
+                                                    <template #reference>
+                                                        <el-button type="danger" size="small">
+                                                            删除
+                                                        </el-button>
+                                                    </template>
+                                                </el-popconfirm>
+                                            </div>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -519,14 +526,14 @@ const rowClickFunc = (row, column, event) => {
     openStepFunc(row)
 }
 import { APIputYwhActive } from '@/api/custom/custom.js'
-const activeYwhFunc = val => {
-    APIputYwhActive(val.id, { isbind: 1 }).then(res => {
+const activeYwhFunc = (val, v) => {
+    APIputYwhActive(val.id, { isbind: v }).then(res => {
         refreshFunc()
     })
 }
 // 取消激活
-const cancelYwhFunc = val => {
-    activeYwhFunc(val, 0)
+const cancelYwhFunc = (val, v) => {
+    activeYwhFunc(val, v)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
