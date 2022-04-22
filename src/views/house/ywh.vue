@@ -26,13 +26,19 @@
                             >
                                 添加成员
                             </el-button>
-                            <el-button
-                                v-if="data_details.item.isbindzone"
-                                type="danger"
-                                @click="cancelYwhFunc(data_details.item,0)"
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="cancelYwhFunc(data_details.item,0)"
                             >
-                                取消当前业委会
-                            </el-button>
+                                <template #reference>
+                                    <el-button
+                                        v-if="data_details.item.isbindzone"
+                                        type="danger"
+                                    >
+                                        取消当前业委会
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
                         </div>
                     </div>
                 </div>
@@ -101,35 +107,37 @@
 
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                                <el-popconfirm
-                                    title="确定要激活当前业委会么?" cancel-button-type="info"
-                                    @confirm="activeYwhFunc(scope.row,1)"
-                                >
-                                    <template #reference>
-                                        <el-button
-                                            type="success" size="small"
-                                            :disabled="data_details.item.isbindzone"
-                                        >
-                                            激活
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
+                                <div @click.stop="()=>{}">
+                                    <el-button
+                                        type="primary" size="small"
+                                        @click="modifyResidentialFunc(scope.row)"
+                                    >
+                                        修改
+                                    </el-button>
+                                    <el-popconfirm
+                                        title="确定要删除当前项么?" cancel-button-type="info"
+                                        @confirm="deleteFunc(scope.row)"
+                                    >
+                                        <template #reference>
+                                            <el-button type="danger" size="small">
+                                                删除
+                                            </el-button>
+                                        </template>
+                                    </el-popconfirm>
+                                    <el-popconfirm
+                                        title="确定要激活当前业委会么?" cancel-button-type="info"
+                                        @confirm="activeYwhFunc(scope.row,1)"
+                                    >
+                                        <template #reference>
+                                            <el-button
+                                                type="success" size="small"
+                                                :disabled="scope.row.isbindzone"
+                                            >
+                                                激活
+                                            </el-button>
+                                        </template>
+                                    </el-popconfirm>
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -560,14 +568,14 @@ const rowClickFunc = (row, column, event) => {
     openStepFunc(row)
 }
 import { APIputYwhActive } from '@/api/custom/custom.js'
-const activeYwhFunc = val => {
-    APIputYwhActive(val.id, { isbind: 1 }).then(res => {
+const activeYwhFunc = (val, v) => {
+    APIputYwhActive(val.id, { isbind: v }).then(res => {
         refreshFunc()
     })
 }
 // 取消激活
-const cancelYwhFunc = val => {
-    activeYwhFunc(val, 0)
+const cancelYwhFunc = (val, v) => {
+    activeYwhFunc(val, v)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
