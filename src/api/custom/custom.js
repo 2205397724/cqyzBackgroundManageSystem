@@ -44,7 +44,7 @@ export function APIpostYwh(data) {
 }
 // 激活
 export function APIputYwhActive(ywh, data) {
-    return api2.post(`/ywh/${ywh}/active`, data)
+    return api2.put(`/ywh/${ywh}/active`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
