@@ -19,7 +19,7 @@
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加档案</el-button>
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加归档</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -30,9 +30,14 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="档案名" width="180">
+                        <el-table-column prop="name" label="归档名" width="180">
                             <template #default="scope">
                                 <span>{{ scope.row.name }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="name" label="归档内容数量" width="180">
+                            <template #default="scope">
+                                <span> 0 </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="id" label="ID" width="250">
@@ -55,6 +60,12 @@
                         <el-table-column fixed="right" label="操作" width="230">
                             <template #default="scope">
                                 <el-button
+                                    type="success" size="small"
+                                    @click="openArticleFunc(scope.row)"
+                                >
+                                    已归档公示
+                                </el-button>
+                                <el-button
                                     type="primary" size="small"
                                     @click="modifyResidentialFunc(scope.row)"
                                 >
@@ -70,12 +81,6 @@
                                         </el-button>
                                     </template>
                                 </el-popconfirm>
-                                <el-button
-                                    type="info" size="small"
-                                    @click="openArticleFunc(scope.row)"
-                                >
-                                    归档
-                                </el-button>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -97,16 +102,16 @@
         <el-dialog
             v-model="switch_examine"
             :title="str_title"
-            width="50%"
+            width="400px"
         >
             <el-form
                 ref="ruleFormRef"
                 :model="from_examine.item"
             >
                 <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :xs="24" :sm="24" :md="24">
                         <el-form-item
-                            label="名称" prop="name"
+                            label="归档名称" prop="name"
                             :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                         >
                             <el-input
@@ -127,8 +132,8 @@
         <!-- 档案下的公示 -->
         <el-dialog
             v-model="switch_article"
-            title="归档"
-            width="70%"
+            title="已归档公示"
+            width="50%"
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
@@ -140,7 +145,7 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="名称" width="180">
+                <el-table-column label="公示主题" width="180">
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
                     </template>
@@ -191,7 +196,7 @@
         <!-- 归档添加 -->
         <el-dialog
             v-model="switch_add"
-            title="添加公示"
+            title="添加归档公示"
             width="50%"
         >
             <el-form
@@ -201,7 +206,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="公示"
+                            label="选择公示"
                             :error="err_msg.obj&&err_msg.obj.article_id?err_msg.obj.article_id[0]:''"
                         >
                             <div style="height: 100%;width: 100%;">
@@ -223,7 +228,7 @@
         <!-- 归档公示详情 -->
         <el-dialog
             v-model="switch_details"
-            title="详情"
+            title="公示详情"
             width="50%"
         >
             <div class="details-box">
@@ -232,7 +237,7 @@
                     <div class="right">{{ details_data.obj.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">名称</div>
+                    <div class="left">公示主题</div>
                     <div class="right">{{ details_data.obj.title }}</div>
                 </div>
                 <div class="item">

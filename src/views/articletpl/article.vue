@@ -5,7 +5,7 @@
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <CascaderType v-model="data_search.obj.cid" />
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="data_search.obj.totype" class="head-btn" placeholder="公示对象类型" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
@@ -14,7 +14,7 @@
                     <el-select v-model="data_search.obj.reltype" class="head-btn" placeholder="关联对象类型" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.article_type" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
-                </el-col>
+                </el-col> -->
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
                         <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
@@ -27,7 +27,7 @@
                 </el-col> -->
                 <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-input v-model="data_search.obj.depcclv" class="head-btn" placeholder="depcclv" clearable />
-                </el-col> -->
+                </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
                         <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
@@ -44,7 +44,7 @@
                     <el-select v-model="data_search.obj.lv" class="head-btn" placeholder="接收等级" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
-                </el-col>
+                </el-col> -->
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="data_search.obj.status" class="head-btn" placeholder="状态" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
@@ -67,7 +67,7 @@
             </div>
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加公示</el-button>
+                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">发布公示</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -76,22 +76,22 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="标题" width="180">
+                <el-table-column label="公示主题" width="180">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="等级" width="180">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.lv }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示对象类型" width="180">
+                <el-table-column label="公示主体" width="180">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.totype }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="关联对象类型" width="180">
+                <el-table-column label="公示开始时间" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.lv }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公示结束时间" width="180">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.reltype }} </span>
                     </template>
