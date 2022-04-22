@@ -532,32 +532,5 @@ getOpts(['article_lv', 'tasksd_use', 'article_rate']).then(res => {
         font-size: 14px;
         margin-bottom: 20px;
     }
-    .details-box {
-        .item {
-            display: flex;
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            .left {
-                box-sizing: border-box;
-                width: 160px;
-                white-space: nowrap;
-                margin-right: 20px;
-                text-align: right;
-                font-weight: 600;
-            }
-            .left::after {
-                content: "：";
-            }
-            .right {
-                width: 100%;
-                color: #666;
-            }
-        }
-        .item:last-child {
-            border-style: none;
-        }
-    }
+
 </style>

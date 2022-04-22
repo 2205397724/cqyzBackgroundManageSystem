@@ -326,27 +326,5 @@ getOpts(['enterprise_type', 'status_all', 'process_status']).then(res => {
         font-size: 14px;
         margin-bottom: 20px;
     }
-    .details-box {
-        .item {
-            display: flex;
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 20px;
-            .left {
-                box-sizing: border-box;
-                width: 100px;
-                white-space: nowrap;
-                margin-right: 20px;
-                text-align: right;
-                font-weight: 600;
-            }
-            .left::after {
-                content: "：";
-            }
-            .right {
-                width: 100%;
-                color: #666;
-            }
-        }
-    }
+
 </style>
