@@ -2,7 +2,7 @@
     <div class="totype-toval">
         <el-cascader
             v-model="code"
-            placeholder="区域"
+            :placeholder="props.tips"
             :props="cascader_props"
             collapse-tags
             collapse-tags-tooltip
@@ -13,13 +13,14 @@
 </template>
 
 <script setup>
+// <CascaderTypeAndID v-model:totype="类型值" v-model:toval="id值" :disableds="[禁止选择值]" :zone="true是否加载小区" :tips="'placeholder值'"/>
 import {
     defineProps,
     defineEmits,
     watch,
     ref
 } from 'vue'
-const props = defineProps(['totype', 'toval', 'disableds', 'zone'])
+const props = defineProps(['totype', 'toval', 'disableds', 'zone', 'tips'])
 const emits = defineEmits(['update:totype', 'update:toval'])
 const code = ref('')
 watch(() => props.toval, new_val => {
