@@ -33,33 +33,33 @@
                 <el-table-column prop="user_id" label="user_id" width="250" />
                 <el-table-column prop="social_code" label="社会责任代码" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.social_code }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.social_code }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="type" label="企业类型" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="logo" label="企业图标" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.logo }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.logo }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="legal" label="legal" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.legal }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.legal }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="contact" label="联系方式" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.contact }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.contact }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="desc" label="简介" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.desc }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -351,79 +351,42 @@ getOpts(['enterprise_type']).then(res => {
 })
 </script>
 <style lang="scss" scoped>
-	.keep-on-record {
-		.tit-box-box {
-			display: flex;
-			padding: 0;
-
-			.tit-box {
-				height: 60px;
-				box-sizing: border-box;
-				margin-right: 30px;
-				padding: 0 20px;
-				font-size: 13px;
-				color: #8c8c8c;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				cursor: pointer;
-				border-bottom: 2px solid transparent;
-				position: relative;
-
-				.tips {
-					position: absolute;
-					right: 0;
-					top: 8px;
-					box-sizing: border-box;
-					padding: 0 8px;
-					border-radius: 14px;
-					font-size: 12px;
-					color: #FFFFFF;
-					background-color: #e55055;
-				}
-			}
-
-			.tit-box.on {
-				border-bottom: 2px solid rgba(2, 167, 240, 1);
-			}
-
-			.tit-box:last-child {
-				margin-right: 0;
-			}
-		}
-	}
-
-    // 详情样式
-    .details-box {
-    	.item {
-    		display: flex;
-    		color: #333;
-    		font-size: 16px;
-    		margin-bottom: 20px;
-    		border-bottom: 1px solid #eee;
-    		padding-bottom: 10px;
-
-    		.left {
-    			box-sizing: border-box;
-    			width: 160px;
-    			white-space: nowrap;
-    			margin-right: 20px;
-    			text-align: right;
-    			font-weight: 600;
-    		}
-
-    		.left::after {
-    			content: "：";
-    		}
-
-    		.right {
-    			width: 100%;
-    			color: #666;
-    		}
-    	}
-
-    	.item:last-child {
-    		border-style: none;
-    	}
+    .keep-on-record {
+        .tit-box-box {
+            display: flex;
+            padding: 0;
+            .tit-box {
+                height: 60px;
+                box-sizing: border-box;
+                margin-right: 30px;
+                padding: 0 20px;
+                font-size: 13px;
+                color: #8c8c8c;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+                position: relative;
+                .tips {
+                    position: absolute;
+                    right: 0;
+                    top: 8px;
+                    box-sizing: border-box;
+                    padding: 0 8px;
+                    border-radius: 14px;
+                    font-size: 12px;
+                    color: #fff;
+                    background-color: #e55055;
+                }
+            }
+            .tit-box.on {
+                border-bottom: 2px solid rgb(2 167 240 / 100%);
+            }
+            .tit-box:last-child {
+                margin-right: 0;
+            }
+        }
     }
+
 </style>
