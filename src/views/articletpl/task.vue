@@ -55,37 +55,33 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="已完成公示ID" width="250">
+                <el-table-column label="公示类型" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.aid }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.cate.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="类型ID" width="250">
+                <el-table-column label="任务范围" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cid }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="派发对象" width="120">
+                <el-table-column label="任务部门" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.from }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.todata.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否完成" width="90">
+                <el-table-column label="任务单位" width="120">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.iscpt }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv,scope.row.tolv ) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="接收对象" width="120">
+                <el-table-column label="是否完成" width="320">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.to }} </span>
+                        <el-tag v-if=" scope.row.iscpt" type="success" effect="dark" round>已完成</el-tag>
+                        <el-tag v-if=" scope.row.iscpt" class="m-l-10" type="default" round>查看{{ scope.row.aid }}</el-tag>
+                        <el-tag v-if="!scope.row.iscpt" type="danger" effect="dark" round>未完成</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="接收对象等级" width="120">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.tolv }} </span>
-                    </template>
-                </el-table-column>
-
                 <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
@@ -137,7 +133,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="派发对象"
+                            label="指定范围"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
@@ -146,7 +142,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收对象等级"
+                            label="指定单位"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
@@ -157,7 +153,7 @@
                     </el-col>
                     <el-col v-if="from_examine.item.tolv" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收对象"
+                            label="指定部门"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
@@ -199,28 +195,28 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">派发对象</div>
-                    <div class="right">{{ data_details.item.from }}</div>
+                    <div class="left">任务范围</div>
+                    <div class="right">{{ data_details.item.fromchina.name }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">接收对象等级</div>
-                    <div class="right">{{ data_details.item.tolv }}</div>
+                    <div class="left">任务单位</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.tolv ) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">接收对象</div>
-                    <div class="right">{{ data_details.item.to }}</div>
+                    <div class="left">任务部门</div>
+                    <div class="right">{{ data_details.item.todata.name }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">类型ID</div>
-                    <div class="right">{{ data_details.item.cid }}</div>
+                    <div class="left">公示分类</div>
+                    <div class="right">{{ data_details.item.cate.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">是否完成</div>
-                    <div class="right">{{ data_details.item.iscpt }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">已完成公示ID</div>
-                    <div class="right">{{ data_details.item.aid }}</div>
+                    <div class="right">
+                        <el-tag v-if=" data_details.item.iscpt" type="success" effect="dark" round>已完成</el-tag>
+                        <el-tag v-if=" data_details.item.iscpt" class="m-l-10" type="default" round>查看{{ data_details.item.aid }}</el-tag>
+                        <el-tag v-if="!data_details.item.iscpt" type="danger" effect="dark" round>未完成</el-tag>
+                    </div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -355,6 +351,7 @@ const detailsFunc = val => {
         }
     })
 }
+
 // 监听分页
 watch(page, () => {
     getTabListFunc()
