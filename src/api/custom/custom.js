@@ -2,7 +2,7 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 公示任务
+// 业委会成员
 // 列表
 export function APIgetListYwhUser(ywh, params) {
     return api2.get(`/ywh/${ywh}/user`, { params: params })
@@ -21,7 +21,7 @@ export function APIpostYwhUser(ywh, data) {
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-// 公示任务
+// 业委会
 // 列表
 export function APIgetListYwh(params) {
     return api2.get('/ywh', { params: params })
@@ -41,6 +41,10 @@ export function APIputYwh(id, data) {
 // 添加
 export function APIpostYwh(data) {
     return api2.post('/ywh', data)
+}
+// 激活
+export function APIputYwhActive(ywh, data) {
+    return api2.post(`/ywh/${ywh}/active`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */

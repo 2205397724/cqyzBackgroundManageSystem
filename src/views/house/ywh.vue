@@ -6,7 +6,8 @@
                     <div style="display: inline-block;text-align: left;">
                         <div v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'">
                             <p>名称：{{ data_details.item.name }}</p>
-                            <p>届次：{{ data_details.item.period }}</p>
+                            <p>届次：第{{ data_details.item.period }}届</p>
+                            <p>状态：{{ data_details.item.isbindzone?'有效':'失效' }}</p>
                             <p>创建时间：{{ data_details.item.created_at }}</p>
                             <p>更新时间：{{ data_details.item.updated_at }}</p>
                             <p>描述：{{ data_details.item.desc }}</p>
@@ -25,6 +26,13 @@
                             >
                                 添加成员
                             </el-button>
+                            <el-button
+                                v-if="data_details.item.isbindzone"
+                                type="danger"
+                                @click="cancelYwhFunc(data_details.item,0)"
+                            >
+                                取消当前业委会
+                            </el-button>
                         </div>
                     </div>
                 </div>
@@ -37,22 +45,22 @@
                 >
                     <el-table-column label="用户名" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.username }} </span>
+                            <span>{{ scope.row.user.username }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column label="手机号" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.mobile }} </span>
+                            <span>{{ scope.row.user.mobile }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column label="真实姓名" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
+                            <span>{{ scope.row.user.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column label="信息描述" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
+                            <span>{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="160">
@@ -92,31 +100,31 @@
                     >
                         <el-table-column prop="name" label="业委会名称" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                                <span>{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="name" label="届次" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">第{{ scope.row.period }}届</span>
+                                <span>第{{ scope.row.period }}届</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="业委会ID" width="250">
+                        <el-table-column prop="isbindzone" label="状态" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                                <span>{{ data_details.item.isbindzone?'有效':'失效' }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="created_at" label="创建时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
+                                <span>{{ scope.row.created_at }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="updated_at" label="更新时间" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
+                                <span>{{ scope.row.updated_at }} </span>
                             </template>
                         </el-table-column>
 
-                        <el-table-column fixed="right" label="操作" width="140">
+                        <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
                                     type="primary" size="small"
@@ -131,6 +139,19 @@
                                     <template #reference>
                                         <el-button type="danger" size="small">
                                             删除
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
+                                <el-popconfirm
+                                    title="确定要激活当前业委会么?" cancel-button-type="info"
+                                    @confirm="activeYwhFunc(scope.row,1)"
+                                >
+                                    <template #reference>
+                                        <el-button
+                                            type="success" size="small"
+                                            :disabled="data_details.item.isbindzone"
+                                        >
+                                            激活
                                         </el-button>
                                     </template>
                                 </el-popconfirm>
@@ -224,22 +245,22 @@
             >
                 <el-table-column label="用户名" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.user.username }} </span>
+                        <span>{{ scope.row.user.username }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="手机号" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.user.mobile }} </span>
+                        <span>{{ scope.row.user.mobile }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="真实姓名" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
+                        <span>{{ scope.row.user.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="信息描述" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
+                        <span>{{ scope.row.desc }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="160">
@@ -563,7 +584,16 @@ const rowClickFunc = (row, column, event) => {
     detailsFunc(row)
     openStepFunc(row)
 }
-
+import { APIputYwhActive } from '@/api/custom/custom.js'
+const activeYwhFunc = val => {
+    APIputYwhActive(val.id, { isbind: 1 }).then(res => {
+        refreshFunc()
+    })
+}
+// 取消激活
+const cancelYwhFunc = val => {
+    activeYwhFunc(val, 0)
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
