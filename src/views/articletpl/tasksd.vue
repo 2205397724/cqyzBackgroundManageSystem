@@ -51,7 +51,7 @@
             >
                 <el-table-column label="指定范围" width="160">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.from }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="接收单位" width="120">
@@ -61,7 +61,7 @@
                 </el-table-column>
                 <el-table-column label="计划发布分类" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cid }}</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cate.name }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="计划发布周期" width="160">

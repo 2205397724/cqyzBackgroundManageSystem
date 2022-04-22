@@ -45,12 +45,27 @@
             >
                 <el-table-column label="公示主题" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.title }} </span>
+                        <span>{{ scope.row.title }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公示主体" width="180">
+                    <template #default="scope">
+                        <span>无</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公示开始时间" width="200">
+                    <template #default="scope">
+                        <span>{{ scope.row.start_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公示结束时间" width="200">
+                    <template #default="scope">
+                        <span>{{ scope.row.end_at }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="审核状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
+                        <span>{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
 
@@ -121,7 +136,7 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="120px"
-                            label="标题"
+                            label="公示主题"
                             :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
                         >
                             <el-input
@@ -244,7 +259,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="未完成任务"
+                            label="关联任务ID"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.taskid?from_error.msg.taskid[0]:''"
                         >
@@ -294,68 +309,92 @@
             title="详情"
             width="50%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">标题</div>
-                    <div class="right">{{ data_details.item.title }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示分类ID</div>
-                    <div class="right">{{ data_details.item.cid }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示对象类型</div>
-                    <div class="right">{{ data_details.item.totype }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示对象ID</div>
-                    <div class="right">{{ data_details.item.toval }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">关联对象类型</div>
-                    <div class="right">{{ data_details.item.reltype }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">关联对象ID</div>
-                    <div class="right">{{ data_details.item.relval }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">开始时间</div>
-                    <div class="right">{{ data_details.item.start_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">结束时间</div>
-                    <div class="right">{{ data_details.item.end_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">发布人用户组ID</div>
-                    <div class="right">{{ data_details.item.dep_id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">等级</div>
-                    <div class="right">{{ data_details.item.lv }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示内容</div>
-                    <div class="right">{{ data_details.item.content }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">流程</div>
-                    <div class="right">{{ data_details.item.step }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">未完成任务ID</div>
-                    <div class="right">{{ data_details.item.taskid }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">{{ data_details.item.status }}</div>
-                </div>
-            </div>
+            <el-tabs model-value="1" @tab-click="handleClick">
+                <el-tab-pane label="公示信息" name="1">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="item">
+                                <div class="left">公示主题</div>
+                                <div class="right">{{ data_details.item.title }}</div>
+                            </div>
+
+                            <div class="item">
+                                <div class="left">状态</div>
+                                <div class="right">{{ data_details.item.status }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示分类</div>
+                                <div class="right">{{ data_details.item.cid }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示主体</div>
+                                <div class="right">{{ data_details.item.cid }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示对象类型</div>
+                                <div class="right">{{ data_details.item.totype }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示对象ID</div>
+                                <div class="right">{{ data_details.item.toval }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">开始时间</div>
+                                <div class="right">{{ data_details.item.start_at }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">结束时间</div>
+                                <div class="right">{{ data_details.item.end_at }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示内容</div>
+                                <div class="right">{{ data_details.item.content }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="其它信息" name="2">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="item">
+                                <div class="left">公示ID</div>
+                                <div class="right">{{ data_details.item.id }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示分类ID</div>
+                                <div class="right">{{ data_details.item.cid }}</div>
+                            </div>
+
+                            <div class="item">
+                                <div class="left">关联对象类型</div>
+                                <div class="right">{{ data_details.item.reltype }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">关联对象ID</div>
+                                <div class="right">{{ data_details.item.relval }}</div>
+                            </div>
+
+                            <div class="item">
+                                <div class="left">发布人用户组ID</div>
+                                <div class="right">{{ data_details.item.dep_id }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">等级</div>
+                                <div class="right">{{ data_details.item.lv }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">流程</div>
+                                <div class="right">{{ data_details.item.step }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">关联任务ID</div>
+                                <div class="right">{{ data_details.item.taskid }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+            </el-tabs>
+
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
