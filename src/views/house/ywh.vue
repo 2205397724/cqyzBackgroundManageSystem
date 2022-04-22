@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="display: flex;padding: 20px;box-sizing: border-box;min-height: calc(100vh - 50px);">
-            <div style="width: calc(40% - 10px);margin-right: 10px;padding:20px;background-color: #ffffff;display: flex;justify-content: center;flex-direction: column;overflow-x: none;overflow-y: auto;">
+            <div style="width: calc(60% - 10px);margin-right: 10px;padding:20px;background-color: #ffffff;display: flex;justify-content: center;flex-direction: column;overflow-x: none;overflow-y: auto;">
                 <div style="text-align: center;width: 80%;margin: 0 auto;margin-bottom: 30px;">
                     <div style="display: inline-block;text-align: left;">
                         <div v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'">
@@ -43,11 +43,6 @@
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     style="width: 100%;border: 1px solid #ebeef5;border-radius: 6px;box-sizing: border-box;"
                 >
-                    <el-table-column label="用户名" width="180">
-                        <template #default="scope">
-                            <span>{{ scope.row.user.username }} </span>
-                        </template>
-                    </el-table-column>
                     <el-table-column label="手机号" width="180">
                         <template #default="scope">
                             <span>{{ scope.row.user.mobile }} </span>
@@ -56,11 +51,6 @@
                     <el-table-column label="真实姓名" width="180">
                         <template #default="scope">
                             <span>{{ scope.row.user.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="信息描述" width="180">
-                        <template #default="scope">
-                            <span>{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="160">
@@ -86,7 +76,7 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <div style="width: calc(60% - 10px);margin-left: 10px;background-color: #ffffff">
+            <div style="width: calc(40% - 10px);margin-left: 10px;background-color: #ffffff">
                 <div style="color: #aaa; font-size: 14px; padding: 10px;">
                     *点击列表切换当前业委会内容。
                 </div>
@@ -98,29 +88,14 @@
                         style="width: 100%;border: 1px solid #ebeef5;border-radius: 6px;box-sizing: border-box;"
                         @row-click="rowClickFunc"
                     >
-                        <el-table-column prop="name" label="业委会名称" width="180">
+                        <el-table-column prop="name" label="业委会名称" width="160">
                             <template #default="scope">
                                 <span>{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="届次" width="180">
+                        <el-table-column prop="name" label="届次" width="160">
                             <template #default="scope">
                                 <span>第{{ scope.row.period }}届</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="isbindzone" label="状态" width="90">
-                            <template #default="scope">
-                                <span>{{ data_details.item.isbindzone?'有效':'失效' }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="created_at" label="创建时间" width="180">
-                            <template #default="scope">
-                                <span>{{ scope.row.created_at }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="updated_at" label="更新时间" width="180">
-                            <template #default="scope">
-                                <span>{{ scope.row.updated_at }} </span>
                             </template>
                         </el-table-column>
 
@@ -604,32 +579,6 @@ getOpts(['type_type']).then(res => {
     opts_all.obj = res
 })
 </script>
-<style lang="scss">
-    .setupgroup {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
-</style>
 <style lang="scss" scoped>
 
 </style>
