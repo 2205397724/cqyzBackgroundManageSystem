@@ -1,155 +1,101 @@
 <template>
-    <div>
-        <div style="display: flex;padding: 20px;box-sizing: border-box;min-height: calc(100vh - 50px);">
-            <div style="width: calc(40% - 10px);margin-right: 10px;padding:20px;background-color: #ffffff;display: flex;justify-content: center;flex-direction: column;overflow-x: none;overflow-y: auto;">
-                <div style="text-align: center;width: 80%;margin: 0 auto;margin-bottom: 30px;">
-                    <div style="display: inline-block;text-align: left;">
-                        <div v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'">
-                            <p>名称：{{ data_details.item.name }}</p>
-                            <p>届次：{{ data_details.item.period }}</p>
-                            <p>创建时间：{{ data_details.item.created_at }}</p>
-                            <p>更新时间：{{ data_details.item.updated_at }}</p>
-                            <p>描述：{{ data_details.item.desc }}</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <el-button
-                                type="primary"
-                                @click="addResidentialFunc(data_details.item)"
-                            >
-                                添加业委会
-                            </el-button>
-                            <el-button
-                                v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'"
-                                type="primary"
-                                @click="addflowFunc(data_details.item)"
-                            >
-                                添加成员
-                            </el-button>
-                        </div>
-                    </div>
-                </div>
-                <el-table
-                    v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'"
-                    v-loading="tabloading"
-                    :data="flow_data.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    style="width: 100%;border: 1px solid #ebeef5;border-radius: 6px;box-sizing: border-box;"
-                >
-                    <el-table-column label="用户名" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.username }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="手机号" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.mobile }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="真实姓名" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="信息描述" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="160">
-                        <template #default="scope">
-                            <el-button
-                                type="primary" size="small"
-                                @click="modifyFlowFunc(scope.row)"
-                            >
-                                修改
-                            </el-button>
-                            <el-popconfirm
-                                title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteFunc2(scope.row)"
-                            >
-                                <template #reference>
-                                    <el-button type="danger" size="small">
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                    <el-table-column />
-                </el-table>
+    <div class="setupgroup">
+        <page-main>
+            <el-row :gutter="10">
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input v-model="data_search.name" class="head-btn" placeholder="名称" clearable />
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                </el-col>
+            </el-row>
+            <div v-show="switch_search" class="search-tips">
+                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
+                *搜索到相关结果共{{ total }}条。
             </div>
-            <div style="width: calc(60% - 10px);margin-left: 10px;background-color: #ffffff">
-                <div style="color: #aaa; font-size: 14px; padding: 10px;">
-                    *点击列表切换当前业委会内容。
-                </div>
-                <div style="padding: 0 10px;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;border: 1px solid #ebeef5;border-radius: 6px;box-sizing: border-box;"
-                        @row-click="rowClickFunc"
-                    >
-                        <el-table-column prop="name" label="业委会名称" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="name" label="届次" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">第{{ scope.row.period }}届</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="业委会ID" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="created_at" label="创建时间" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="updated_at" label="更新时间" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
-                            </template>
-                        </el-table-column>
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加业委会</el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <el-table-column prop="name" label="业委会名称" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="届次" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">第{{ scope.row.period }}届</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="业委会ID" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="创建时间" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="updated_at" label="更新时间" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
+                    </template>
+                </el-table-column>
 
-                        <el-table-column fixed="right" label="操作" width="140">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
+                <el-table-column />
+                <el-table-column fixed="right" label="操作" width="260">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyResidentialFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
                                 </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
                             </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                    style="padding-top: 20px;"
-                />
-            </div>
-        </div>
+                        </el-popconfirm>
+                        <el-button
+                            size="small"
+                            type="info"
+                            @click="openStepFunc(scope.row)"
+                        >
+                            成员
+                        </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page"
+                layout="total,prev,pager,next,jumper,"
+                :total="total"
+                :page-size="per_page"
+                background
+                hide-on-single-page
+                style="padding-top: 20px;"
+            />
+        </page-main>
         <!-- 修改添加 -->
         <el-dialog
             v-model="switch_examine"
@@ -205,13 +151,51 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 成员 -->
+        <!-- 详情 -->
+        <el-dialog
+            v-model="switch_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">业委会ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">业委会名称</div>
+                    <div class="right">{{ data_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">届次</div>
+                    <div class="right">第{{ data_details.item.period }}届</div>
+                </div>
+                <div class="item">
+                    <div class="left">描述</div>
+                    <div class="right">{{ data_details.item.desc }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_details = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 步骤 -->
         <el-dialog
             v-model="show_dialog_flow"
             title="成员"
             width="70%"
         >
-            <el-row :gutter="20">
+            <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                     <el-button class="head-btn" type="primary" @click="addflowFunc">添加业委会成员</el-button>
                 </el-col>
@@ -317,6 +301,7 @@
 import SearchUser from '@/components/SearchUser/index.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
+import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
 import {
     APIgetListYwh,
     APIgetDetailsYwh,
@@ -335,7 +320,10 @@ import {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
+let switch_search = ref(false)
 let data_search = reactive({ })
+// 详情
+let switch_details = ref(false)
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
@@ -348,7 +336,7 @@ let data_dialog = reactive({
 })
 // 详情
 const data_details = reactive({
-    item: {}
+    item: ''
 })
 // 分页
 let total = ref(100)
@@ -365,9 +353,16 @@ const from_error = reactive({
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+}
 // 刷新
 const refreshFunc = () => {
     page.value = 1
+    switch_search.value = false
     data_search.name = ''
     getTabListFunc()
 }
@@ -378,6 +373,7 @@ const detailsFunc = val => {
     APIgetDetailsYwh(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
+            switch_details.value = true
         }
     })
 }
@@ -439,9 +435,6 @@ const getTabListFunc = () => {
             loading_tab.value = false
             data_tab.arr = res.data.items
             total.value = res.data.aggregation.total_cnt
-            if (data_tab.arr.length > 0) {
-                rowClickFunc(data_tab.arr[0])
-            }
         }
     })
 }
@@ -518,6 +511,7 @@ const deleteFunc2 = val => {
 }
 const openStepFunc = val => {
     flow_id = val.id
+    show_dialog_flow.value = true
     refreshFunc2()
 }
 const refreshFunc2 = () => {
@@ -558,12 +552,6 @@ const flowUpdataFunc = () => {
         })
     }
 }
-
-const rowClickFunc = (row, column, event) => {
-    detailsFunc(row)
-    openStepFunc(row)
-}
-
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
@@ -601,40 +589,40 @@ getOpts(['type_type']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    // .setupgroup {
+    .setupgroup {
 
-    // }
-    // .search-tips {
-    //     color: #aaa;
-    //     font-size: 14px;
-    //     margin-bottom: 20px;
-    // }
-    // .details-box {
-    //     .item {
-    //         display: flex;
-    //         color: #333;
-    //         font-size: 16px;
-    //         margin-bottom: 20px;
-    //         border-bottom: 1px solid #eee;
-    //         padding-bottom: 10px;
-    //         .left {
-    //             box-sizing: border-box;
-    //             width: 160px;
-    //             white-space: nowrap;
-    //             margin-right: 20px;
-    //             text-align: right;
-    //             font-weight: 600;
-    //         }
-    //         .left::after {
-    //             content: "：";
-    //         }
-    //         .right {
-    //             width: 100%;
-    //             color: #666;
-    //         }
-    //     }
-    //     .item:last-child {
-    //         border-style: none;
-    //     }
-    // }
+    }
+    .search-tips {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .details-box {
+        .item {
+            display: flex;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            .left {
+                box-sizing: border-box;
+                width: 160px;
+                white-space: nowrap;
+                margin-right: 20px;
+                text-align: right;
+                font-weight: 600;
+            }
+            .left::after {
+                content: "：";
+            }
+            .right {
+                width: 100%;
+                color: #666;
+            }
+        }
+        .item:last-child {
+            border-style: none;
+        }
+    }
 </style>

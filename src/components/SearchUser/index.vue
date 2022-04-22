@@ -29,7 +29,7 @@
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-input v-model="data_search.obj.name" class="head-btn" placeholder="真实姓名" clearable />
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="data_search.obj.gender" class="head-btn" placeholder="性别" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
@@ -51,7 +51,7 @@
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <Cascaders v-model="data_search.obj.region" />
-                </el-col>
+                </el-col> -->
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                 </el-col>
