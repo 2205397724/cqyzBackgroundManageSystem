@@ -3,6 +3,7 @@ import axios from 'axios'
 import router from '@/router/index'
 import { ElMessage, ElLoading  } from 'element-plus'
 import { useUserOutsideStore } from '@/store/modules/user'
+import SHA256 from 'crypto-js/sha256'
 var loading = ''
 
 const toLogin = () => {
@@ -40,6 +41,11 @@ api.interceptors.request.use(
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
             // request.headers['Token'] = userOutsideStore.token
         }
+        var time = new Date().getTime().toString()
+        var eqtype = '2'
+        var secret = 'secret'
+        var sign = SHA256(time + eqtype + secret)
+        request.headers['X-Sign'] = [time, eqtype, sign].join('.')
         // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {
             // request.data = qs.stringify(request.data, {
