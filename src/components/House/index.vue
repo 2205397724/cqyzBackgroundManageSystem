@@ -582,9 +582,14 @@
                         <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="file_err" label="错误信息" width="280" />
+                <el-table-column prop="file_err" label="错误信息" width="280">
+                    <template #default="scope">
+                        <el-link :href="`${VITE_APP_FOLDER_SRC+scope.row.file_err}`" target="_blank" type="danger" style="margin-left: 10px">{{ scope.row.file_err.substring(scope.row.file_err.lastIndexOf('/')+1) }} </el-link>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="created_at" label="创建时间" width="180" />
                 <el-table-column prop="updated_at" label="更新时间" width="180" />
+                <el-table-column />
             </el-table>
         </el-dialog>
         <!-- 上传表单 -->
@@ -814,6 +819,7 @@ import {
     ElMessage
 } from 'element-plus'
 const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const activeName = ref('first')
 const props = defineProps(['tree_item'])
 const { tree_item } = toRefs(props)
