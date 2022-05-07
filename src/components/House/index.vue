@@ -542,7 +542,7 @@
             title="上传"
             width="70%"
         >
-            <div>
+            <div style="display: flex; flex-wrap: wrap;">
                 <el-button class="head-btn" @click="refreshFilesListFunc">刷新</el-button>
                 <el-button class="head-btn" type="success" @click="openFileFunc">导入房屋</el-button>
                 <el-popover
