@@ -365,6 +365,58 @@
                                         </div>
                                     </div>
                                 </el-col>
+                                <!-- <el-col :xs="24"><div class="details-tit-sm m-b-10">小区档案</div></el-col> -->
+                                <!-- <el-col :md="24" :lg="24" class="file-2022">
+                                    <div style="margin-bottom: 10px;">
+                                        <el-button type="primary" plain>添加文件</el-button>
+                                    </div>
+                                    <div class="serve-box">
+                                        <el-row :gutter="10">
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label="文件名称">
+                                                    <el-input
+                                                        v-model="file_obj.obj.name"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label="文件分类">
+                                                    <el-input
+                                                        v-model="file_obj.obj.ftype"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label="资源类型">
+                                                    <el-input
+                                                        v-model="file_obj.obj.rtype"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="24" :sm="24">
+                                                <el-form-item label="">
+                                                    <el-upload
+                                                    style="width: 100%;"
+                                                      action=""
+                                                      :auto-upload="false"
+                                                      :on-change="handleChange"
+                                                      :file-list="fileList"
+                                                    >
+                                                      <el-button type="primary">选择文件</el-button>
+                                                    </el-upload>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <div class="delete-service">
+                                            <el-icon :size="20" color="#F56C6C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
+                                        </div>
+                                    </div>
+                                </el-col> -->
                             </el-row>
                         </el-form>
                     </div>
@@ -808,6 +860,23 @@ const addServiceFunc = index => {
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
+// 文件名称
+const file_obj = reactive({
+    obj:{
+        rtype:'',
+        rid:'',
+        name:'',
+        ftype:'',
+        key:[]
+    }
+})
+const fileList = ref([])
+const handleChange= (uploadFile, uploadFiles) => {
+    console.log(uploadFile)
+    console.log(uploadFiles)
+  fileList.value = uploadFiles
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
 </script>
@@ -835,6 +904,11 @@ refreshFunc()
                 cursor: pointer;
                 background-color: #fff;
             }
+        }
+    }
+    .file-2022{
+        .el-form-item{
+          margin-bottom: 18px!important;
         }
     }
 </style>
