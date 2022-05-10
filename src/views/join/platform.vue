@@ -51,6 +51,7 @@
                                 <el-button
                                     type="primary" size="small"
                                     @click="examineFunc(scope.row)"
+                                    :disabled="scope.row.process_status<200?false:true"
                                 >
                                     审批
                                 </el-button>
