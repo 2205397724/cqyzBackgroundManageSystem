@@ -6,7 +6,7 @@ export default {
     redirect: '/event_flow/flow',
     name: 'eventflowBox',
     meta: {
-        title: '流程',
+        title: '流程管理',
         icon: 'el-icon-document',
         auth: ['event.flow', '*']
     },
@@ -16,7 +16,7 @@ export default {
             name: 'eventflow',
             component: () => import('@/views/event/flow.vue'),
             meta: {
-                title: '流程',
+                title: '流程管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/event_flow',

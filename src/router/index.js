@@ -92,7 +92,7 @@ import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
 // 事件
 import eventFlow from './modules/event/flow.js'
-
+import eventEvents from './modules/event/flow_events.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
 import setupFile from './modules/setup/file.js'
@@ -114,21 +114,7 @@ const asyncRoutes = [
             superviseWorkbench
         ]
     },
-    {
-        meta: {
-            title: '公示',
-            icon: 'el-icon-set-up',
-            auth: ['articletpl', '*']
-        },
-        children: [
-            articletplArticle,
-            articletplArchive,
-            articletplArticleread,
-            articletplArticletpl,
-            articletplTask,
-            articletplTasksd
-        ]
-    },
+
     // {
     //     meta: {
     //         title: '统计',
@@ -159,6 +145,32 @@ const asyncRoutes = [
     },
     {
         meta: {
+            title: '公示',
+            icon: 'el-icon-set-up',
+            auth: ['articletpl', '*']
+        },
+        children: [
+            articletplArticle,
+            articletplArchive,
+            articletplArticleread,
+            articletplArticletpl,
+            articletplTask,
+            articletplTasksd
+        ]
+    },
+    {
+        meta: {
+            title: '议事',
+            icon: 'event',
+            auth: ['event', '*']
+        },
+        children: [
+            eventEvents,
+            eventFlow
+        ]
+    },
+    {
+        meta: {
             title: '用户',
             icon: 'users',
             auth: ['users', '*']
@@ -177,16 +189,6 @@ const asyncRoutes = [
         children: [
             joinPlatform,
             joinResidential
-        ]
-    },
-    {
-        meta: {
-            title: '议事',
-            icon: 'event',
-            auth: ['event', '*']
-        },
-        children: [
-            eventFlow
         ]
     },
     {

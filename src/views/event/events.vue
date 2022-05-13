@@ -1,11 +1,22 @@
 <template>
     <div class="setupgroup">
+        <page-main class="tit-box-box">
+            <div class="tit-box on">
+                <div class="tit">
+                    <div>所有议事</div>
+                </div>
+            </div>
+            <div class="tit-box">
+                <div class="tit">待审</div>
+                <div v-if="total" class="tips">{{ total }}</div>
+            </div>
+        </page-main>
         <page-main>
             <div>
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.name" class="head-btn" placeholder="名称" clearable />
+                            <el-input v-model="data_search.name" class="head-btn" placeholder="议事主题" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -55,13 +66,6 @@
                         <el-table-column fixed="right" label="操作" width="260">
                             <template #default="scope">
                                 <el-button
-                                    size="small"
-                                    type="success"
-                                    @click="openStepFunc(scope.row)"
-                                >
-                                    步骤
-                                </el-button>
-                                <el-button
                                     type="primary" size="small"
                                     @click="modifyResidentialFunc(scope.row)"
                                 >
@@ -83,6 +87,13 @@
                                         </el-button>
                                     </template>
                                 </el-popconfirm>
+                                <el-button
+                                    size="small"
+                                    type="info"
+                                    @click="openStepFunc(scope.row)"
+                                >
+                                    步骤
+                                </el-button>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -171,7 +182,7 @@
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加步骤</el-button>
+                    <el-button class="head-btn" type="primary" @click="addflowFunc">添加流程</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -707,5 +718,39 @@ getOpts(['step_type']).then(res => {
         font-size: 14px;
         margin-bottom: 20px;
     }
-
+    .tit-box-box {
+        display: flex;
+        padding: 0;
+        .tit-box {
+            height: 60px;
+            box-sizing: border-box;
+            margin-right: 30px;
+            padding: 0 20px;
+            font-size: 13px;
+            color: #8c8c8c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            position: relative;
+            .tips {
+                position: absolute;
+                right: 0;
+                top: 8px;
+                box-sizing: border-box;
+                padding: 0 8px;
+                border-radius: 14px;
+                font-size: 12px;
+                color: #fff;
+                background-color: #e55055;
+            }
+        }
+        .tit-box.on {
+            border-bottom: 2px solid #409eff;
+        }
+        .tit-box:last-child {
+            margin-right: 0;
+        }
+    }
 </style>
