@@ -179,46 +179,46 @@ export function APIpostFileList(data) {
 // 流程步骤 Step
 // 列表
 export function APIgetFlowStepList(flow, params) {
-    return api2.get(`/flow/${flow}/step`, { params: params })
+    return api2.get(`v2/flow/${flow}/step`, { params: params })
 }
 // 详情
 export function APIgetFlowStepDetails(flow, step) {
-    return api2.get(`/flow/${flow}/step/${step}`)
+    return api2.get(`v2/flow/${flow}/step/${step}`)
 }
 // 删除
 export function APIdeleteFlowStep(flow, step) {
-    return api2.delete(`/flow/${flow}/step/${step}`)
+    return api2.delete(`v2/flow/${flow}/step/${step}`)
 }
 // 修改
 export function APIputFlowStep(flow, step, data) {
-    return api2.put(`/flow/${flow}/step/${step}`, data)
+    return api2.put(`v2/flow/${flow}/step/${step}`, data)
 }
 // 添加
 export function APIpostFlowStep(flow, data) {
-    return api2.post(`/flow/${flow}/step`, data)
+    return api2.post(`v2/flow/${flow}/step`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 流程 /api/
 // 列表
 export function APIgetFlowList(params) {
-    return api2.get('/flow', { params: params })
+    return api2.get('v2/flow', { params: params })
 }
 // 详情
 export function APIgetFlowDetails(id) {
-    return api2.get('/flow/' + id)
+    return api2.get('v2/flow/' + id)
 }
 // 删除
 export function APIdeleteFlow(id) {
-    return api2.delete('/flow/' + id)
+    return api2.delete('v2/flow/' + id)
 }
 // 修改
 export function APIputFlow(id, data) {
-    return api2.put('/flow/' + id, data)
+    return api2.put('v2/flow/' + id, data)
 }
 // 添加
 export function APIpostFlow(data) {
-    return api2.post('/flow', data)
+    return api2.post('v2/flow', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */

@@ -641,7 +641,7 @@ const addflowFunc = () => {
 const flowUpdataFunc = () => {
     from_error2.msg = {}
     if (str_title2.value == '修改步骤') {
-        APIputFlowStep(flow_id, from_examine2.item.id, from_examine2.item).then(res => {
+        APIgetFlowStep(flow_id, from_examine2.item.id, from_examine2.item).then(res => {
             if (!res.code) {
                 refreshFunc2()
                 ElMessage.success(res.msg)
