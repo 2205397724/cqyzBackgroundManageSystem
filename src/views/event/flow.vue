@@ -12,7 +12,83 @@
         </page-main>
         <page-main>
             <div v-if="tab_index==0">
-                123
+                <div>
+                    <el-input v-model="flowwork.search.name" class="input-b-r" placeholder="流程名称" clearable />
+                    <el-button class="btn-b-r" type="primary" @click="()=>{flowwork.page=1;flowwork.switch_search=true;getFuncFlowworkList();}">搜索</el-button>
+                </div>
+                <div v-show="flowwork.switch_search" class="search-tips">
+                    <el-button style="margin-right: 10px;" @click="()=>{flowworkRefreshFunc();}">重置</el-button>
+                    *搜索到相关结果共{{ flowwork.total }}条。
+                </div>
+                <div>
+                    <el-button class="head-btn" type="primary" @click="()=>{flowwork.title='添加';flowwork.form={};flowwork.error={};flowwork.switch_pop=true;}">添加流程</el-button>
+                </div>
+                <el-table
+                    :data="flowwork.list"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
+                >
+                    <el-table-column label="流程名称" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.name }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="终端类型" width="180">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.terminal_num,scope.row.eqtype) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="创建时间" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.created_at }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="更新时间" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.updated_at }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="210">
+                        <template #default="scope">
+                            <el-button
+                                type="primary" size="small"
+                                @click="()=>{flowwork.title='修改';flowwork.form={...scope.row};flowwork.error={};flowwork.switch_pop=true;}"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFlowworkFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?"
+                                cancel-button-type="info"
+                                @confirm="deleteFlowworkFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                    >
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+                <el-pagination
+                    v-model:current-page="flowwork.page"
+                    style="padding-top: 20px;"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="flowwork.total"
+                    :page-size="flowwork.per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
             <!-- ************************************************************************************************************** -->
             <div v-if="tab_index==1">
@@ -385,6 +461,36 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :md="24" :lg="24">
+                        <div style="margin-bottom: 10px;">
+                            <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
+                        </div>
+                        <div v-for="(item,i) in step.form.extra" class="serve-box">
+                            <el-row :gutter="10">
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="自定义字段名" :error="step.error&&step.error[`extra.${i}.label`]?step.error[`extra.${i}.label`][0]:''">
+                                        <el-input
+                                            v-model="item.label"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="自定义值" :error="step.error&&step.error[`extra.${i}.type`]?step.error[`extra.${i}.type`][0]:''">
+                                        <el-input
+                                            v-model="item.type"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <div class="delete-service" @click="deleteServiceFunc(i)">
+                                <el-icon :size="20" color="#F56C6C">
+                                    <el-icon-circle-close />
+                                </el-icon>
+                            </div>
+                        </div>
+                    </el-col>
                 </el-row>
             </el-form>
             <template #footer>
@@ -437,6 +543,16 @@
                     <div class="left">更新时间</div>
                     <div class="right">{{ step.details.updated_at }}</div>
                 </div>
+                <div class="details-tit-sm">自定义字段</div>
+                <div class="item">
+                    <div class="right">
+                        <div v-for="(item,i) in step.details.extra" class="flex-row p-t-10">
+                            <div>
+                                <span>自定义字段名：</span>{{ item.label }} , <span>自定义字段值：</span>{{ item.type }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <template #footer>
                 <span class="dialog-footer">
@@ -464,7 +580,7 @@ import {
     ElMessage
 } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
-const tab_index = ref(1)
+const tab_index = ref(0)
 
 const flow = reactive({
     list: [],
@@ -582,6 +698,38 @@ const getFuncStepDetails = val => {
         step.switch_details = true
     })
 }
+// 添加字段
+const addServiceFunc = index => {
+    let data = {
+        'label': '',
+        'type': ''
+    }
+    if (!step.form.extra) {
+        step.form.extra = []
+    }
+    step.form.extra.push(data)
+}
+// 删除 字段
+const deleteServiceFunc = index => {
+    step.form.extra.splice(index, 1)
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+import {
+
+} from '@/api/custom/custom.js'
+const flowwork = reactive({
+    switch_list: false,
+    search: {},
+    switch_search: false,
+    list: '',
+    active_flow: '',
+    switch_pop: false,
+    title: '添加',
+    form: {},
+    error: {},
+    switch_details: false,
+    details: ''
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 刷新
 const flowRefreshFunc = () => {
