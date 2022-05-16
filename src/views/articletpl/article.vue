@@ -34,8 +34,8 @@
             </div>
             <div class="bottom-btn-box-2">
                 <el-button class="head-btn" type="primary" @click="addResidentialFunc">发布公示</el-button>
-                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=100;searchFunc()}">未处理</el-button>
-                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=150;searchFunc()}">处理中</el-button>
+                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[0];searchFunc()}">未处理</el-button>
+                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[1];searchFunc()}">处理中</el-button>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -101,7 +101,7 @@
                             审核记录
                         </el-button>
                         <el-button
-                            :disabled="scope.row.status==200"
+                            :disabled="scope.row.status==opts_all.obj.status_all[1]"
                             size="small"
                             type="danger"
                             @click="passAudit(scope.row)"
@@ -160,7 +160,7 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
                         >
-                            <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''"/>
+                            <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -511,10 +511,10 @@
                 ref="ruleFormRef"
                 :model="from_pass.obj"
             >
-                <el-steps :active="gongshixiangqing.obj.status == 200?99:active_bzt" finish-status="success" :align-center="true" style="margin-bottom: 20px;">
+                <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" style="margin-bottom: 20px;">
                     <el-step v-for="(item,i) in buzhoutiao.arr" :title="item.name" />
                 </el-steps>
-                <div v-if="gongshixiangqing.obj.status == 200" style="width: 100%;text-align: center;font-size: 16px;color: #aaa;">
+                <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" style="width: 100%;text-align: center;font-size: 16px;color: #aaa;">
                     当前公示已审核完成
                 </div>
                 <el-row v-else :gutter="10">
@@ -549,7 +549,7 @@
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_pass=false">取消</el-button>
-                    <el-button v-if="gongshixiangqing.obj.status != 200" type="primary" @click="passToAuditFunc">确定</el-button>
+                    <el-button v-if="gongshixiangqing.obj.status != opts_all.obj.status_all[1]" type="primary" @click="passToAuditFunc">确定</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -794,7 +794,7 @@ const buzhoutiao = reactive({
     arr: []
 })
 const active_bzt = ref(99)
-import { APIgetFlowStepList } from '@/api/custom/custom.js'
+import { APIgetStepList } from '@/api/custom/custom.js'
 const passAudit = val => {
     from_pass.obj = {}
     err_msg.obj = {}
@@ -802,7 +802,7 @@ const passAudit = val => {
     APIgetEventArticleDetails(val.id).then(res => {
         gongshixiangqing.obj = res.data
         // 获取步骤条
-        APIgetFlowStepList(res.data.flowstep.fid).then(res2 => {
+        APIgetStepList(res.data.flowstep.fid).then(res2 => {
             buzhoutiao.arr = res2.data
             for (let i in res2.data) {
                 if (res.data.flowstep.id == res2.data[i].id) {

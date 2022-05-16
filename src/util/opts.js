@@ -9,6 +9,27 @@
 
 import api2 from '@/api/index2.js'
 const opts = {
+    // 步骤是否可以进行返回步骤操作
+    step_back: [{
+        key: 1,
+        val: '允许返回'
+    }, {
+        key: 0,
+        val: '禁止返回'
+    }],
+    // 步骤里面的内置议题类型？死的 10代表公示
+    step_yt_type: [{
+        key: 10,
+        val: '公示'
+    }],
+    // 流程启用
+    flow_active: [{
+        key: 1,
+        val: '启用'
+    }, {
+        key: 0,
+        val: '禁用'
+    }],
     // 性别
     gender: [{
         key: 'U', val: '未设置'
@@ -37,13 +58,13 @@ const opts = {
     }],
     // 通用处理状态
     status_all: [{
-        key: 100, val: '未处理'
+        key: 10, val: '未处理'
     }, {
-        key: 150, val: '处理中'
+        key: 15, val: '处理中'
     }, {
-        key: 200, val: '处理成功'
+        key: 20, val: '处理成功'
     }, {
-        key: 300, val: '处理失败'
+        key: 30, val: '处理失败'
     }],
     // 用户端类型
     terminal: [{
@@ -56,6 +77,18 @@ const opts = {
         key: 'pm', val: '物业端'
     }, {
         key: 'gov', val: '行政管理端'
+    }],
+    // 用户端类型
+    terminal_num: [{
+        key: 1, val: '总平台管理端'
+    }, {
+        key: 2, val: '区域平台管理端'
+    }, {
+        key: 3, val: '行政管理端'
+    }, {
+        key: 4, val: '物业端'
+    }, {
+        key: 5, val: '业主端'
     }],
     // 房屋住户标识
     role_house: [{

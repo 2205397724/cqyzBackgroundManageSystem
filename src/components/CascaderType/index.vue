@@ -1,6 +1,7 @@
 <template>
     <div class="fenlei-box">
         <el-cascader
+            v-if="!props.text"
             v-model="code"
             placeholder="分类"
             :options="options.arr"
@@ -10,6 +11,9 @@
             :show-all-levels="false"
             clearable
         />
+        <span v-else>
+            {{ text }}
+        </span>
     </div>
 </template>
 
@@ -33,8 +37,13 @@ const props = defineProps({
     checkbox: {
         type: Boolean,
         default: false
+    },
+    text: {
+        type: Boolean,
+        default: false
     }
 })
+const text = ref('123')
 const emits = defineEmits(['update:modelValue'])
 const code = ref('')
 const options = reactive({
@@ -65,6 +74,12 @@ getOpts(['type_type']).then(res => {
             new Promise((resolve, reject) => {
                 APIgetTypeList(opt.id).then(res => {
                     opt.children = res.data
+                    for (let i in res.data) {
+                        if (res.data[i].id == props.modelValue) {
+                            text.value = res.data[i].name
+                            break
+                        }
+                    }
                     return resolve(opt)
                 }).catch(err => {
                     resolve(opt)

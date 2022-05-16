@@ -208,11 +208,11 @@ const flow_data = reactive({
     arr: []
 })
 import {
-    APIgetFlowStepList
+    APIgetStepList
 } from '@/api/custom/custom.js'
 const refreshFunc2 = id => {
     tabloading.value = true
-    APIgetFlowStepList(id).then(res => {
+    APIgetStepList(id).then(res => {
         flow_data.arr = res.data
         tabloading.value = false
     })

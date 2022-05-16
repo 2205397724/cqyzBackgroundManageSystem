@@ -588,7 +588,7 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
-    APIgetFlowStepList,
+    APIgetStepList,
     APIgetFlowStepDetails,
     APIdeleteFlowStep,
     APIputFlowStep,
@@ -638,7 +638,7 @@ const openStepFunc = val => {
 }
 const refreshFunc2 = () => {
     tabloading.value = true
-    APIgetFlowStepList(flow_id).then(res => {
+    APIgetStepList(flow_id).then(res => {
         flow_data.arr = res.data
         tabloading.value = false
     })
