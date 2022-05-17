@@ -2,6 +2,25 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 制定流程
+// 列表
+export function APIgetFlowworkList(params) {
+    return api2.get('flowwork', { params: params })
+}
+// 详情
+export function APIgetFlowworkDetails(id) {
+    return api2.get(`flowwork/${id}`)
+}
+// 删除
+export function APIdeleteFlowwork(id) {
+    return api2.delete(`flowwork/${id}`)
+}
+// 添加
+export function APIpostFlowwork(flow, data) {
+    return api2.post(`flow/${flow}/work`, data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 流程的步骤
 // 列表
 export function APIgetStepList(flow, params) {

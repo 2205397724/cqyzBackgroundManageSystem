@@ -1,7 +1,7 @@
 <template>
     <div class="setupgroup">
         <page-main class="tit-box-box">
-            <div class="tit-box " :class="{'on':tab_index==0}" @click="tab_index=0">
+            <div class="tit-box " :class="{'on':tab_index==0}" @click="tab_index=0;flowworkRefreshFunc()">
                 <div class="tit">流程管理</div>
                 <!-- <div v-if="tab_tips" class="tips">{{ tab_tips }}</div> -->
             </div>
@@ -21,21 +21,31 @@
                     *搜索到相关结果共{{ flowwork.total }}条。
                 </div>
                 <div>
-                    <el-button class="head-btn" type="primary" @click="()=>{flowwork.title='添加';flowwork.form={};flowwork.error={};flowwork.switch_pop=true;}">添加流程</el-button>
+                    <el-button class="head-btn" type="primary" @click="()=>{flowwork.title='添加';flowwork.form={};flowwork.error={};flowwork.switch_pop=true;}">发起流程</el-button>
                 </div>
                 <el-table
                     :data="flowwork.list"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
                 >
-                    <el-table-column label="流程名称" width="180">
+                    <el-table-column label="用户级" width="180">
                         <template #default="scope">
-                            <span>{{ scope.row.name }} </span>
+                            <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.baselv) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="终端类型" width="180">
+                    <el-table-column label="用户级id" width="250">
                         <template #default="scope">
-                            <span>{{ getOptVal(opts_all.obj.terminal_num,scope.row.eqtype) }} </span>
+                            <span>{{ scope.row.baseval }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="步骤" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.step }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="状态" width="180">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column label="创建时间" width="180">
@@ -48,14 +58,8 @@
                             <span>{{ scope.row.updated_at }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="210">
+                    <el-table-column fixed="right" label="操作" width="140">
                         <template #default="scope">
-                            <el-button
-                                type="primary" size="small"
-                                @click="()=>{flowwork.title='修改';flowwork.form={...scope.row};flowwork.error={};flowwork.switch_pop=true;}"
-                            >
-                                修改
-                            </el-button>
                             <el-button
                                 size="small"
                                 @click="detailsFlowworkFunc(scope.row)"
@@ -560,6 +564,102 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 发起流程 -->
+        <el-dialog
+            v-model="flowwork.switch_pop"
+            title="发起流程"
+            width="50%"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="flowwork.form"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="选择流程"
+                            :error="flowwork.error&&flowwork.error.baselv?flowwork.error.baselv[0]:''"
+                        >
+                            <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchFlow v-model:str="flowwork.form.flow" />
+                                </div>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="用户级"
+                            :error="flowwork.error&&flowwork.error.baselv?flowwork.error.baselv[0]:''"
+                        >
+                            <el-select v-model="flowwork.form.baselv" class="head-btn" placeholder="" clearable @change="flowwork.form.baseval= ''">
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="用户级id"
+                            :error="flowwork.error&&flowwork.error.baselv?flowwork.error.baselv[0]:''"
+                        >
+                            <div v-if="flowwork.form.baselv==6" style="height: 100%;box-sizing: border-box;padding-bottom: 10px;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchResidential v-model:str="flowwork.form.baseval" />
+                                </div>
+                            </div>
+                            <Cascaders v-else v-model="flowwork.form.baseval" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="flowwork.switch_pop=false">取消</el-button>
+                    <el-button type="primary" @click="addAndModifyFlowworkFunc">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 详情 -->
+        <el-dialog
+            v-model="flowwork.switch_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">用户级</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,flowwork.details.baselv) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">用户级id</div>
+                    <div class="right">{{ flowwork.details.baseval }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">步骤</div>
+                    <div class="right">{{ flowwork.details.step }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">状态</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.status_all,flowwork.details.status) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ flowwork.details.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ flowwork.details.updated_at }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="flowwork.switch_details = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -715,14 +815,18 @@ const deleteServiceFunc = index => {
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
-
+    APIgetFlowworkList,
+    APIgetFlowworkDetails,
+    APIdeleteFlowwork,
+    APIpostFlowwork
 } from '@/api/custom/custom.js'
 const flowwork = reactive({
-    switch_list: false,
+    list: [],
+    page: 1,
+    total: 0,
+    per_page: 15,
     search: {},
     switch_search: false,
-    list: '',
-    active_flow: '',
     switch_pop: false,
     title: '添加',
     form: {},
@@ -730,6 +834,41 @@ const flowwork = reactive({
     switch_details: false,
     details: ''
 })
+const getFuncFlowworkList = () => {
+    let data = {
+        page: flowwork.page,
+        per_page: flowwork.per_page
+    }
+    if (flowwork.search.name) {
+        data.name = flowwork.search.name
+    }
+    APIgetFlowworkList(data).then(res => {
+        flowwork.list = res.data.items
+        flowwork.total = res.data.aggregation.total_cnt
+    })
+}
+watch(() => flowwork.page, val => {
+    getFuncFlowworkList()
+}, { immediate: true, deep: true })
+const detailsFlowworkFunc = val => {
+    APIgetFlowworkDetails(val.id).then(res => {
+        flowwork.details = res.data
+        flowwork.switch_details = true
+    })
+}
+const deleteFlowworkFunc = val => {
+    APIdeleteFlowwork(val.id).then(res => {
+        getFuncFlowworkList()
+    })
+}
+const addAndModifyFlowworkFunc = () => {
+    APIpostFlowwork(flowwork.form.flow, flowwork.form).then(res => {
+        flowworkRefreshFunc()
+        flowwork.switch_pop = false
+    }).catch(err => {
+        flowwork.error = err.data
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 刷新
 const flowRefreshFunc = () => {
@@ -741,13 +880,19 @@ const flowRefreshFunc = () => {
 const stepRefreshFunc = () => {
     getFuncStepList()
 }
+const flowworkRefreshFunc = () => {
+    flowwork.search = {}
+    flowwork.page = 1
+    flowwork.switch_search = false
+    getFuncFlowworkList()
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['terminal_num', 'type_type', 'flow_active', 'article_lv', 'step_yt_type', 'step_back']).then(res => {
+getOpts(['terminal_num', 'type_type', 'flow_active', 'article_lv', 'step_yt_type', 'step_back', 'status_all']).then(res => {
     opts_all.obj = res
 })
 const getOptArr = (opts, arr) => {
