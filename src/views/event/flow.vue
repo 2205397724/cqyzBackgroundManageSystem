@@ -58,13 +58,20 @@
                             <span>{{ scope.row.updated_at }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="140">
+                    <el-table-column fixed="right" label="操作" width="210">
                         <template #default="scope">
                             <el-button
                                 size="small"
                                 @click="detailsFlowworkFunc(scope.row)"
                             >
                                 详情
+                            </el-button>
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="flowworkFuncEventList(scope.row)"
+                            >
+                                事项
                             </el-button>
                             <el-popconfirm
                                 title="确定要删除当前项么?"
@@ -660,6 +667,244 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 事项 -->
+        <el-dialog
+            v-model="flowevent.switch_list"
+            title="事项"
+            width="70%"
+        >
+            <el-table
+                :data="flowevent.list"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <el-table-column label="事项id" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column label="wid" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.wid }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="forval" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.forval }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="douid" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.douid }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="doutype" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.doutype }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="douser" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.douser }} </span>
+                    </template>
+                </el-table-column> -->
+                <el-table-column label="议题" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.topictype }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="议题对象" width="250">
+                    <template #default="scope">
+                        <CascaderType v-model="scope.row.topicid" :text="true" />
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="创建时间" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.created_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="更新时间" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.updated_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="210">
+                    <template #default="scope">
+                        <el-button
+                            type="success" size="small"
+                            @click="flowworkFuncEventSaveFunc"
+                        >
+                            保存
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要提交当前项么?"
+                            cancel-button-type="info"
+                            @confirm="clickFuncUpdate(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button
+                                    type="primary"
+                                    size="small"
+                                >
+                                    提交
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                        <el-button
+                            size="small"
+                            type="warning"
+                            @click="flowevent.switch_back=true"
+                        >
+                            返回
+                        </el-button>
+                        <!-- <el-popconfirm
+                            title="确定要删除当前项么?"
+                            cancel-button-type="info"
+                            @confirm=""
+                        >
+                            <template #reference>
+                                <el-button
+                                    type="danger"
+                                    size="small"
+                                >
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm> -->
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+        </el-dialog>
+        <!-- 保存 -->
+        <el-dialog
+            v-model="flowevent.switch_save"
+            title="保存当前事项进度"
+            width="50%"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="flowevent.form_save"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="议题"
+                            :error="flowevent.error_save&&flowevent.error_save.topictype?flowevent.error_save.topictype[0]:''"
+                        >
+                            <el-select v-model="flowevent.form_save.topictype" class="head-btn" placeholder="" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.step_yt_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="议题对象"
+                            :error="flowevent.error_save&&flowevent.error_save.forval?flowevent.error_save.forval[0]:''"
+                        >
+                            <CascaderType v-model="flowevent.form_save.forval" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="对象ID"
+                            :error="flowevent.error_save&&flowevent.error_save.topicid?flowevent.error_save.topicid[0]:''"
+                        >
+                            <!-- 行政端为 区域代码、企业端和业主端为 小区ID -->
+                            <!-- <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchResidential v-model:str="flowevent.form_save.topicid" />
+                                </div>
+                            </div> -->
+                            <Cascaders v-model="flowevent.form_save.topicid" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="24" :lg="24">
+                        <div style="margin-bottom: 10px;">
+                            <el-button type="primary" plain @click="addServiceFuncSave">添加自定义字段</el-button>
+                        </div>
+                        <div v-for="(item,i) in flowevent.form_save.extra" class="serve-box">
+                            <el-row :gutter="10">
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="自定义字段名" :error="flowevent.error_save&&flowevent.error_save[`extra.${i}.label`]?flowevent.error_save[`extra.${i}.label`][0]:''">
+                                        <el-input
+                                            v-model="item.label"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="自定义值" :error="flowevent.error_save&&flowevent.error_save[`extra.${i}.type`]?flowevent.error_save[`extra.${i}.type`][0]:''">
+                                        <el-input
+                                            v-model="item.val"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="自定义类型" :error="flowevent.error_save&&flowevent.error_save[`extra.${i}.type`]?flowevent.error_save[`extra.${i}.type`][0]:''">
+                                        <el-input
+                                            v-model="item.type"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <div class="delete-service" @click="deleteServiceFuncSave(i)">
+                                <el-icon :size="20" color="#F56C6C">
+                                    <el-icon-circle-close />
+                                </el-icon>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="flowevent.switch_save=false">取消</el-button>
+                    <el-button type="primary" @click="flowworkFuncEventSaveFuncUpdata">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 保存 -->
+        <el-dialog
+            v-model="flowevent.switch_back"
+            title="返回事件进度"
+            width="50%"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="flowevent.form_back"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="步骤节点"
+                            :error="flowevent.error_back&&flowevent.error_back.topictype?flowevent.error_back.topictype[0]:''"
+                        >
+                            <!-- <el-select v-model="flowevent.form_back.step" class="head-btn" placeholder="" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.step_yt_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select> -->
+                            <el-input
+                                v-model="flowevent.form_back.step"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="flowevent.switch_back=false">取消</el-button>
+                    <el-button type="primary" @click="flowworkFuncEventSaveFuncEvent">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -832,7 +1077,8 @@ const flowwork = reactive({
     form: {},
     error: {},
     switch_details: false,
-    details: ''
+    details: '',
+    active: ''
 })
 const getFuncFlowworkList = () => {
     let data = {
@@ -869,6 +1115,73 @@ const addAndModifyFlowworkFunc = () => {
         flowwork.error = err.data
     })
 }
+
+import {
+    APIgetFlowworkEventList,
+    APIpostFlowworkEventSave,
+    APIpostFlowworkEventUpdate,
+    APIpostFlowworkEventSpeed
+} from '@/api/custom/custom.js'
+const flowevent = reactive({
+    switch_list: false,
+    list: [],
+    error_save: {},
+    form_save: {},
+    switch_save: false,
+    error_back: {},
+    form_back: {},
+    switch_back: false
+})
+const flowworkFuncEventList = val => {
+    flowwork.active = val
+    APIgetFlowworkEventList(flowwork.active.id).then(res => {
+        flowevent.list = res.data
+        flowevent.switch_list = true
+    })
+}
+const flowworkFuncEventSaveFunc = val => {
+    flowevent.error_save = {}
+    flowevent.form_save = {}
+    flowevent.switch_save = true
+}
+const flowworkFuncEventSaveFuncUpdata = val => {
+    flowevent.error_save = {}
+    APIpostFlowworkEventSave(flowwork.active.id, flowevent.form_save).then(res => {
+        flowworkFuncEventList(flowwork.active.id)
+        flowevent.switch_save = false
+    }).catch(err => {
+        flowevent.error_save = err.data
+    })
+}
+// 添加字段
+const addServiceFuncSave = index => {
+    let data = {
+        'label': '',
+        'type': '',
+        'val': ''
+    }
+    if (!flowevent.form_save.extra) {
+        flowevent.form_save.extra = []
+    }
+    flowevent.form_save.extra.push(data)
+}
+// 删除
+const deleteServiceFuncSave = index => {
+    flowevent.form_save.extra.splice(index, 1)
+}
+const clickFuncUpdate = val => {
+    APIpostFlowworkEventUpdate(flowwork.active.id).then(res => {
+        flowworkFuncEventList(flowwork.active.id)
+    })
+}
+const flowworkFuncEventSaveFuncEvent = val => {
+    APIpostFlowworkEventSpeed(flowwork.active.id, flowevent.form_back).then(res => {
+        flowworkFuncEventList(flowwork.active.id)
+        flowevent.switch_back = false
+    }).catch(err => {
+        flowevent.error_back = err.data
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 刷新
 const flowRefreshFunc = () => {
@@ -886,6 +1199,7 @@ const flowworkRefreshFunc = () => {
     flowwork.switch_search = false
     getFuncFlowworkList()
 }
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'

@@ -19,6 +19,9 @@ const opts = {
     }],
     // 步骤里面的内置议题类型？死的 10代表公示
     step_yt_type: [{
+        key: 0,
+        val: '无'
+    }, {
         key: 10,
         val: '公示'
     }],
