@@ -49,8 +49,35 @@
                         <span>{{ scope.row.updated_at }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="210">
+                <el-table-column fixed="right" label="操作" width="400">
                     <template #default="scope">
+                        <el-button
+                            type="success" size="small"
+                            @click="flowworkFuncEventSaveFunc(scope.row)"
+                        >
+                            保存
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要提交当前项么?"
+                            cancel-button-type="info"
+                            @confirm="clickFuncUpdate(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button
+                                    type="primary"
+                                    size="small"
+                                >
+                                    提交
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                        <el-button
+                            size="small"
+                            type="warning"
+                            @click="flowevent.switch_back=true;flowwork.active = scope.row;getOptBZListFunc(scope.row)"
+                        >
+                            返回
+                        </el-button>
                         <el-button
                             size="small"
                             @click="detailsFlowworkFunc(scope.row)"
@@ -250,51 +277,7 @@
                             <span>{{ scope.row.updated_at }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="210">
-                        <template #default="scope">
-                            <el-button
-                                type="success" size="small"
-                                @click="flowworkFuncEventSaveFunc"
-                            >
-                                保存
-                            </el-button>
-                            <el-popconfirm
-                                title="确定要提交当前项么?"
-                                cancel-button-type="info"
-                                @confirm="clickFuncUpdate(scope.row)"
-                            >
-                                <template #reference>
-                                    <el-button
-                                        type="primary"
-                                        size="small"
-                                    >
-                                        提交
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                            <el-button
-                                size="small"
-                                type="warning"
-                                @click="flowevent.switch_back=true"
-                            >
-                                返回
-                            </el-button>
-                        <!-- <el-popconfirm
-                            title="确定要删除当前项么?"
-                            cancel-button-type="info"
-                            @confirm=""
-                        >
-                            <template #reference>
-                                <el-button
-                                    type="danger"
-                                    size="small"
-                                >
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-popconfirm> -->
-                        </template>
-                    </el-table-column>
+
                     <el-table-column />
                 </el-table>
             </el-dialog>
@@ -408,13 +391,9 @@
                                 label="步骤节点"
                                 :error="flowevent.error_back&&flowevent.error_back.topictype?flowevent.error_back.topictype[0]:''"
                             >
-                                <!-- <el-select v-model="flowevent.form_back.step" class="head-btn" placeholder="" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.step_yt_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select> -->
-                                <el-input
-                                    v-model="flowevent.form_back.step"
-                                    placeholder=""
-                                />
+                                <el-select v-model="flowevent.form_back.step" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opt_bz.obj" :key="item.key" :label="item.name" :value="item.step" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -485,6 +464,7 @@ watch(() => flowwork.page, val => {
     getFuncFlowworkList()
 }, { immediate: true, deep: true })
 const detailsFlowworkFunc = val => {
+    flowwork.active = val
     APIgetFlowworkDetails(val.id).then(res => {
         flowwork.details = res.data
         flowwork.switch_details = true
@@ -521,6 +501,7 @@ const flowevent = reactive({
     switch_back: false
 })
 const flowworkFuncEventList = val => {
+    // val.id = '626b835da8adce40560707f4'
     flowwork.active = val
     APIgetFlowworkEventList(flowwork.active.id).then(res => {
         flowevent.list = res.data
@@ -528,6 +509,7 @@ const flowworkFuncEventList = val => {
     })
 }
 const flowworkFuncEventSaveFunc = val => {
+    flowwork.active = val
     flowevent.error_save = {}
     flowevent.form_save = {}
     flowevent.switch_save = true
@@ -558,6 +540,7 @@ const deleteServiceFuncSave = index => {
     flowevent.form_save.extra.splice(index, 1)
 }
 const clickFuncUpdate = val => {
+    flowwork.active = val
     APIpostFlowworkEventUpdate(flowwork.active.id).then(res => {
         flowworkFuncEventList(flowwork.active.id)
     })
@@ -568,6 +551,18 @@ const flowworkFuncEventSaveFuncEvent = val => {
         flowevent.switch_back = false
     }).catch(err => {
         flowevent.error_back = err.data
+    })
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+import {
+    APIgetStepList
+} from '@/api/custom/custom.js'
+const opt_bz = reactive({
+    obj: []
+})
+const getOptBZListFunc = val => {
+    APIgetStepList(val.fid).then(res => {
+        opt_bz.obj = res.data
     })
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
