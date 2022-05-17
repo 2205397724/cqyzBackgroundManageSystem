@@ -3,6 +3,8 @@
         <page-main>
             <div>
                 <el-input v-model="flowwork.search.name" class="input-b-r" placeholder="流程名称" clearable />
+                <CascaderType v-model="flowwork.search.cid" class="input-b-r" style="width: 200px;" />
+                <el-input v-model="flowwork.search.baseval" class="input-b-r" placeholder="对象id" clearable />
                 <el-button class="btn-b-r" type="primary" @click="()=>{flowwork.page=1;flowwork.switch_search=true;getFuncFlowworkList();}">搜索</el-button>
             </div>
             <div v-show="flowwork.switch_search" class="search-tips">
@@ -467,6 +469,12 @@ const getFuncFlowworkList = () => {
     }
     if (flowwork.search.name) {
         data.name = flowwork.search.name
+    }
+    if (flowwork.search.cid) {
+        data.cid = flowwork.search.cid
+    }
+    if (flowwork.search.baseval) {
+        data.baseval = flowwork.search.baseval
     }
     APIgetFlowworkList(data).then(res => {
         flowwork.list = res.data.items
