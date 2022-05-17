@@ -17,7 +17,7 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="流程名称" width="180">
+                <el-table-column label="流程名称" width="300">
                     <template #default="scope">
                         <span>{{ scope.row.name }} </span>
                     </template>
