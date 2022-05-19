@@ -9,6 +9,35 @@
 
 import api2 from '@/api/index2.js'
 const opts = {
+    // 自定义表单type表单类型
+    from_type: [{
+        key: 'upload',
+        val: '文件'
+    }, {
+        key: 'text',
+        val: '文本输入框'
+    }, {
+        key: 'textarea',
+        val: '多行文本输入框'
+    }, {
+        key: 'password',
+        val: '密码输入框'
+    }, {
+        key: 'number',
+        val: '数字输入框'
+    }, {
+        key: 'picker-select',
+        val: '选择器'
+    }, {
+        key: 'picker-city-china',
+        val: '城市选择器'
+    }, {
+        key: 'picker-date',
+        val: '日期选择器'
+    }, {
+        key: 'checkbox',
+        val: '勾选框'
+    }],
     // 步骤是否可以进行返回步骤操作
     step_back: [{
         key: 1,

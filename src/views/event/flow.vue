@@ -3,14 +3,24 @@
         <page-main>
             <div>
                 <el-input v-model="flow.search.name" class="input-b-r" placeholder="流程名称" clearable />
-                <el-button class="btn-b-r" type="primary" @click="()=>{flow.page=1;flow.switch_search=true;getFuncFlowList();}">搜索</el-button>
+                <el-button
+                    class="btn-b-r" type="primary"
+                    @click="()=>{flow.page=1;flow.switch_search=true;getFuncFlowList();}"
+                >
+                    搜索
+                </el-button>
             </div>
             <div v-show="flow.switch_search" class="search-tips">
                 <el-button style="margin-right: 10px;" @click="()=>{flowRefreshFunc();}">重置</el-button>
                 *搜索到相关结果共{{ flow.total }}条。
             </div>
             <div>
-                <el-button class="head-btn" type="primary" @click="()=>{flow.title='添加';flow.form={};flow.error={};flow.switch_pop=true;}">添加流程</el-button>
+                <el-button
+                    class="head-btn" type="primary"
+                    @click="()=>{flow.title='添加';flow.form={};flow.error={};flow.switch_pop=true;}"
+                >
+                    添加流程
+                </el-button>
             </div>
             <el-table
                 :data="flow.list"
@@ -114,7 +124,10 @@
                             :error="flow.error&&flow.error.eqtype?flow.error.eqtype[0]:''"
                         >
                             <el-select v-model="flow.form.eqtype" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.terminal_num" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.terminal_num" :key="item.key"
+                                    :label="item.val" :value="item.key"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -134,7 +147,10 @@
                             :error="flow.error&&flow.error.active?flow.error.active[0]:''"
                         >
                             <el-select v-model="flow.form.active" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.flow_active" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.flow_active" :key="item.key"
+                                    :label="item.val" :value="item.key"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -194,7 +210,12 @@
             width="70%"
         >
             <div>
-                <el-button class="head-btn" type="primary" @click="()=>{step.title='添加';step.form={};step.error={};step.switch_pop=true;}">添加步骤</el-button>
+                <el-button
+                    class="head-btn" type="primary"
+                    @click="()=>{step.title='添加';step.form={};step.error={};step.switch_pop=true;}"
+                >
+                    添加步骤
+                </el-button>
             </div>
             <el-table
                 :data="step.list"
@@ -309,7 +330,10 @@
                         >
                             <el-select v-model="step.form.prev" class="head-btn" clearable>
                                 <el-option label="无前一个节点" :value="0" />
-                                <el-option v-for="(item,i) in step.list" :key="item.id" :label="item.name" :value="item.step" />
+                                <el-option
+                                    v-for="(item,i) in step.list" :key="item.id" :label="item.name"
+                                    :value="item.step"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -331,7 +355,10 @@
                             :error="step.error&&step.error.next?step.error.next[0]:''"
                         >
                             <el-select v-model="step.form.next" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in step.list" :key="item.id" :label="item.name" :value="item.step" />
+                                <el-option
+                                    v-for="(item,i) in step.list" :key="item.id" :label="item.name"
+                                    :value="item.step"
+                                />
                                 <el-option label="无后一个节点" :value="0" />
                             </el-select>
                         </el-form-item>
@@ -343,7 +370,10 @@
                             :error="step.error&&step.error.forlv?step.error.forlv[0]:''"
                         >
                             <el-select v-model="step.form.forlv" multiple class="head-btn" placeholder="" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val"
+                                    :value="item.key"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -354,7 +384,10 @@
                             :error="step.error&&step.error.topictype?step.error.topictype[0]:''"
                         >
                             <el-select v-model="step.form.topictype" class="head-btn" placeholder="" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.step_yt_type" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.step_yt_type" :key="item.key"
+                                    :label="item.val" :value="item.key"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -365,31 +398,135 @@
                             :error="step.error&&step.error.canback?step.error.canback[0]:''"
                         >
                             <el-select v-model="step.form.canback" class="head-btn" placeholder="" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.step_back" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option
+                                    v-for="(item,i) in opts_all.obj.step_back" :key="item.key" :label="item.val"
+                                    :value="item.key"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :md="24" :lg="24">
                         <div style="margin-bottom: 10px;">
-                            <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
+                            <el-button type="primary" plain @click="addServiceFunc">自定义表单</el-button>
                         </div>
                         <div v-for="(item,i) in step.form.extra" class="serve-box">
                             <el-row :gutter="10">
-                                <el-col :xs="12" :sm="12">
-                                    <el-form-item label="自定义字段名" :error="step.error&&step.error[`extra.${i}.label`]?step.error[`extra.${i}.label`][0]:''">
-                                        <el-input
-                                            v-model="item.label"
-                                            placeholder=""
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item
+                                        label="表单项类型"
+                                        :error="step.error&&step.error[`extra.${i}.type`]?step.error[`extra.${i}.type`][0]:''"
+                                    >
+                                        <el-select v-model="item.type" class="head-btn" clearable>
+                                            <el-option
+                                                v-for="(item,i) in opts_all.obj.from_type" :key="item.key"
+                                                :label="item.val" :value="item.key"
+                                            />
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="是否必填">
+                                        <el-switch
+                                            v-model="item.required"
+                                            inline-prompt
+                                            active-text="是"
+                                            inactive-text="否"
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :xs="12" :sm="12">
-                                    <el-form-item label="自定义值" :error="step.error&&step.error[`extra.${i}.type`]?step.error[`extra.${i}.type`][0]:''">
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item
+                                        label="表单项标题"
+                                        :error="step.error&&step.error[`extra.${i}.label`]?step.error[`extra.${i}.label`][0]:''"
+                                    >
                                         <el-input
-                                            v-model="item.type"
-                                            placeholder=""
+                                            v-model="item.label"
+                                            placeholder="如:'姓名'"
+                                            clearable
                                         />
                                     </el-form-item>
+                                </el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="字段名" :error="!item.name?'必填':''">
+                                        <el-input
+                                            v-model="item.name"
+                                            placeholder="如:'name' 不可重复,小写英文abc和下划线_"
+                                            clearable
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="默认值">
+                                        <el-input
+                                            v-if="item.type!='checkbox'&&item.type!='picker-select'"
+                                            v-model="item.value"
+                                            placeholder="如:'张三'"
+                                            clearable
+                                        />
+                                        <el-select
+                                            v-else v-model="item.value" class="head-btn" clearable
+                                            :multiple="item.multiple" placeholder="请先添加选项值!"
+                                        >
+                                            <el-option
+                                                v-for="(opt,i) in item.options" :key="opt.value"
+                                                :label="opt.text" :value="opt.value"
+                                            />
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="占位内容">
+                                        <el-input
+                                            v-model="item.placeholder"
+                                            placeholder="如:'请输入姓名!'"
+                                            clearable
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col v-if="item.type=='checkbox'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="是否支持多选">
+                                        <el-switch
+                                            v-model="item.multiple"
+                                            inline-prompt
+                                            active-text="是"
+                                            inactive-text="否"
+                                            @change="(val)=>{changeMultiple(val,item)}"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col v-if="item.type=='checkbox'||item.type=='picker-select'" :xs="24" :sm="24">
+                                    <div style="margin-bottom: 10px;">
+                                        <el-button plain @click="addOptsFunc(item)">添加选项值</el-button>
+                                    </div>
+                                </el-col>
+                                <el-col v-if="item.type=='checkbox'||item.type=='picker-select'" :xs="24" :sm="24">
+                                    <div v-for="(child,i) in item.options" class="serve-box">
+                                        <el-row :gutter="10">
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label="显示文本">
+                                                    <el-input
+                                                        v-model="child.text"
+                                                        placeholder="如:'男'"
+                                                        clearable
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label="保存值">
+                                                    <el-input
+                                                        v-model="child.value"
+                                                        placeholder="如:'0' 不可重复"
+                                                        clearable
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <div class="delete-service" @click="deleteOptFunc(item.options,i)">
+                                            <el-icon :size="20" color="#E6A23C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
+                                        </div>
+                                    </div>
                                 </el-col>
                             </el-row>
                             <div class="delete-service" @click="deleteServiceFunc(i)">
@@ -487,7 +624,6 @@ import {
     ElMessage
 } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
-
 const flow = reactive({
     list: [],
     page: 1,
@@ -518,7 +654,10 @@ const getFuncFlowList = () => {
 }
 watch(() => flow.page, val => {
     getFuncFlowList()
-}, { immediate: true, deep: true })
+}, {
+    immediate: true,
+    deep: true
+})
 // 修改和添加
 const addAndModifyFlowFunc = () => {
     if (flow.title == '添加') {
@@ -608,16 +747,38 @@ const getFuncStepDetails = val => {
 const addServiceFunc = index => {
     let data = {
         'label': '',
-        'type': ''
+        'type': '',
+        'name': '',
+        'value': '',
+        'required': true,
+        'placeholder': '',
+        'options': [], // {"text": "显示文本","value": "值"}
+        'multiple': false
     }
     if (!step.form.extra) {
         step.form.extra = []
     }
-    step.form.extra.push(data)
+    step.form.extra.unshift(data)
 }
 // 删除 字段
 const deleteServiceFunc = index => {
     step.form.extra.splice(index, 1)
+}
+const changeMultiple = (val, item) => {
+    item.value = ''
+    if (val) {
+        item.value = []
+    }
+}
+const addOptsFunc = item => {
+    console.log(item)
+    item.options.unshift({
+        'text': '',
+        'value': ''
+    })
+}
+const deleteOptFunc = (item, i) => {
+    item.splice(i, 1)
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -634,11 +795,16 @@ const stepRefreshFunc = () => {
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
-import { getOpts, getOptVal } from '@/util/opts.js'
+import {
+    getOpts,
+    getOptVal
+} from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['terminal_num', 'type_type', 'flow_active', 'article_lv', 'step_yt_type', 'step_back', 'status_all']).then(res => {
+getOpts(['terminal_num', 'type_type', 'flow_active', 'article_lv', 'step_yt_type', 'step_back', 'status_all',
+         'from_type'
+]).then(res => {
     opts_all.obj = res
 })
 const getOptArr = (opts, arr) => {
@@ -658,73 +824,79 @@ const getListText = (list, val) => {
 }
 </script>
 <style lang="scss">
-    .setupgroup {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
+	.setupgroup {
+		.el-cascader-box-my {
+			.el-cascader {
+				width: 100% !important;
+				margin-bottom: 10px;
+			}
+		}
+
+		.serve-box {
+			border: 1px solid #eee;
+			box-sizing: border-box;
+			padding: 10px;
+			margin-bottom: 10px;
+			border-radius: 6px;
+			position: relative;
+
+			.delete-service {
+				position: absolute;
+				right: 0;
+				top: 0;
+				z-index: 999999;
+				cursor: pointer;
+				background-color: #fff;
+			}
+		}
+	}
 </style>
 <style lang="scss" scoped>
-    .setupgroup {
+	.setupgroup {}
 
-    }
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-    .tit-box-box {
-        display: flex;
-        padding: 0;
-        .tit-box {
-            height: 60px;
-            box-sizing: border-box;
-            margin-right: 30px;
-            padding: 0 20px;
-            font-size: 13px;
-            color: #8c8c8c;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            position: relative;
-            .tips {
-                position: absolute;
-                right: 0;
-                top: 8px;
-                box-sizing: border-box;
-                padding: 0 8px;
-                border-radius: 14px;
-                font-size: 12px;
-                color: #fff;
-                background-color: #e55055;
-            }
-        }
-        .tit-box.on {
-            border-bottom: 2px solid #409eff;
-        }
-        .tit-box:last-child {
-            margin-right: 0;
-        }
-    }
+	.search-tips {
+		color: #aaa;
+		font-size: 14px;
+		margin-bottom: 20px;
+	}
+
+	.tit-box-box {
+		display: flex;
+		padding: 0;
+
+		.tit-box {
+			height: 60px;
+			box-sizing: border-box;
+			margin-right: 30px;
+			padding: 0 20px;
+			font-size: 13px;
+			color: #8c8c8c;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			cursor: pointer;
+			border-bottom: 2px solid transparent;
+			position: relative;
+
+			.tips {
+				position: absolute;
+				right: 0;
+				top: 8px;
+				box-sizing: border-box;
+				padding: 0 8px;
+				border-radius: 14px;
+				font-size: 12px;
+				color: #fff;
+				background-color: #e55055;
+			}
+		}
+
+		.tit-box.on {
+			border-bottom: 2px solid #409eff;
+		}
+
+		.tit-box:last-child {
+			margin-right: 0;
+		}
+	}
 </style>
