@@ -773,8 +773,8 @@ const changeMultiple = (val, item) => {
 const addOptsFunc = item => {
     console.log(item)
     item.options.unshift({
-        'text': '',
-        'value': ''
+        'text': '默认值' + item.options.length,
+        'value': item.options.length
     })
 }
 const deleteOptFunc = (item, i) => {
