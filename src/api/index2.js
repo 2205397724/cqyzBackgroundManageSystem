@@ -24,9 +24,11 @@ const api = axios.create({
     timeout: 10000,
     responseType: 'json'
 })
-
 api.interceptors.request.use(
     request => {
+        if (!request.baseURL) {
+            request.baseURL = localStorage.domain
+        }
         loading = ElLoading.service({
             lock: true,
             text: 'Loading',
