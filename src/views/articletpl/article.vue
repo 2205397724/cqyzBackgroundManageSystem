@@ -835,7 +835,9 @@ refreshFunc()
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
-    obj: {}
+    obj: {
+        status_all: []
+    }
 })
 getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).then(res => {
     opts_all.obj = res
