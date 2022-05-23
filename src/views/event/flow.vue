@@ -758,7 +758,7 @@ const addServiceFunc = index => {
     if (!step.form.extra) {
         step.form.extra = []
     }
-    step.form.extra.unshift(data)
+    step.form.extra.push(data)
 }
 // 删除 字段
 const deleteServiceFunc = index => {
