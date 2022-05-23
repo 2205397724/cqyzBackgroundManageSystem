@@ -700,8 +700,31 @@ const dialogExamineCloseFunc = formEl => {
             for (let i in from_examine.item.affix) {
                 files_arr.push(from_examine.item.affix[i].file)
             }
+            if (files_arr.length <= 0) {
+                if (str_title.value == '修改') {
+                    APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
+                        if (!res.code) {
+                            refreshFunc()
+                            ElMessage.success(res.msg)
+                            switch_examine.value = false
+                        }
+                    }).catch(err => {
+                        from_error.msg = err.data
+                    })
+                } else {
+                    APIpostEventArticle(from_examine.item).then(res => {
+                        if (!res.code) {
+                            refreshFunc()
+                            ElMessage.success(res.msg)
+                            switch_examine.value = false
+                        }
+                    }).catch(err => {
+                        from_error.msg = err.data
+                    })
+                }
+                return false
+            }
             getFilesKeys(files_arr, 'folder').then(files => {
-                console.log(files)
                 for (let i in files) {
                     from_examine.item.affix[i].file = files[i]
                 }
