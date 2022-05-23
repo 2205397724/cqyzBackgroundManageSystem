@@ -247,7 +247,7 @@
                         <span>{{ getOptArr(opts_all.obj.article_lv,scope.row.forlv) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="内置议题类型" width="120">
+                <el-table-column label="内置动作" width="120">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.step_yt_type,scope.row.topictype) }} </span>
                     </template>
