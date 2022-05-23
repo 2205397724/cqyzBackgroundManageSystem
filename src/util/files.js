@@ -35,7 +35,9 @@ export function getFilesKeys(files, folder) {
                 atemp.push(
                     new Promise((resolve2, reject) => {
                         api[res.data.attrs.method.toLowerCase()]('', formData).then(res2 => {
-                            resolve2(res2)
+                            resolve2(`${folder}/${res.data.keys[i]}`)
+                        }).catch(err => {
+                            reject('err')
                         })
                     })
                 )
@@ -45,9 +47,6 @@ export function getFilesKeys(files, folder) {
             })
         })
     })
-
-
-
 
     // ElMessage.success(res2.statusText)
 }

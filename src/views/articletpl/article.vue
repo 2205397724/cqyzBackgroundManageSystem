@@ -244,7 +244,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="流程"
                             label-width="120px"
@@ -256,8 +256,8 @@
                                 </div>
                             </div>
                         </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    </el-col> -->
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="关联任务ID"
                             label-width="120px"
@@ -268,8 +268,8 @@
                                 placeholder=""
                             />
                         </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    </el-col> -->
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="审核状态"
                             label-width="120px"
@@ -279,7 +279,7 @@
                                 <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label="公示内容"
@@ -293,6 +293,34 @@
                                 placeholder=""
                             />
                         </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <div style="margin-bottom: 10px;">
+                            <el-button type="primary" plain @click="addServiceFunc">添加附件</el-button>
+                        </div>
+                        <div v-for="(item,i) in from_examine.item.affix" class="serve-box">
+                            <el-row :gutter="10">
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="附件名称" :error="from_error.msg&&from_error.msg['affix.'+i+'.title']?from_error.msg['affix.'+i+'.title'][0]:''">
+                                        <el-input
+                                            v-model="item.title"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item label="附件" :error="from_error.msg&&from_error.msg['affix.'+i+'.file']?from_error.msg['affix.'+i+'.file'][0]:''">
+                                        <input v-show="false" :id="'fileRef'+i" :ref="'fileRef'+i" type="file" @change="(val)=>{fileChange(val,i)}">
+                                        <el-button @click="chooseFile(i)">{{ item.file||'添加附件' }}</el-button>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <div class="delete-service" @click="deleteServiceFunc(i)">
+                                <el-icon :size="20" color="#F56C6C">
+                                    <el-icon-circle-close />
+                                </el-icon>
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </el-form>
@@ -389,6 +417,19 @@
                             <div class="item">
                                 <div class="left">关联任务ID</div>
                                 <div class="right">{{ data_details.item.taskid }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="附件" name="3">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div v-for="(item,i) in data_details.item.affix" :key="item.file" class="item">
+                                <div class="left">附件{{ i }}</div>
+                                <!-- <div class="right">{{ VITE_APP_FOLDER_SRC + item.file }}</div> -->
+                                <div class="right">
+                                    <el-link :href="`${VITE_APP_FOLDER_SRC+item.file}`" target="_blank" type="danger" style="margin-left: 10px">{{ item.title }} </el-link>
+                                </div>
                             </div>
                         </div>
                     </el-scrollbar>
@@ -563,6 +604,7 @@ import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
 import SearchUser from '@/components/SearchUser/index.vue'
 import SearchFlowStep from '@/components/SearchFlowStep/index.vue'
 
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import {
     APIgetEventArticleList,
     APIgetEventArticleDetails,
@@ -609,7 +651,9 @@ let page = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
-    item: {}
+    item: {
+        affix: []
+    }
 })
 const str_title = ref('添加')
 const from_error = reactive({
@@ -646,32 +690,43 @@ watch(page, () => {
     getTabListFunc()
 })
 // 同意拒绝提交
+import { getFilesKeys } from '@/util/files.js'
 const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
-            if (str_title.value == '修改') {
-                APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
-            } else {
-                APIpostEventArticle(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
+            let files_arr = []
+            for (let i in from_examine.item.affix) {
+                files_arr.push(from_examine.item.affix[i].file)
             }
+            getFilesKeys(files_arr, 'folder').then(files => {
+                console.log(files)
+                for (let i in files) {
+                    from_examine.item.affix[i].file = files[i]
+                }
+                if (str_title.value == '修改') {
+                    APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
+                        if (!res.code) {
+                            refreshFunc()
+                            ElMessage.success(res.msg)
+                            switch_examine.value = false
+                        }
+                    }).catch(err => {
+                        from_error.msg = err.data
+                    })
+                } else {
+                    APIpostEventArticle(from_examine.item).then(res => {
+                        if (!res.code) {
+                            refreshFunc()
+                            ElMessage.success(res.msg)
+                            switch_examine.value = false
+                        }
+                    }).catch(err => {
+                        from_error.msg = err.data
+                    })
+                }
+            })
         } else {
             return false
         }
@@ -733,6 +788,22 @@ const modifyResidentialFunc = val => {
             switch_examine.value = true
         }
     })
+}
+
+// 删除 附件
+const deleteServiceFunc = index => {
+    from_examine.item.affix.splice(index, 1)
+}
+// 添加 附件
+const addServiceFunc = index => {
+    let data = {
+        'title': '',
+        'file': ''
+    }
+    if (!from_examine.item.affix) {
+        from_examine.item.affix = []
+    }
+    from_examine.item.affix.push(data)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 审核
@@ -826,6 +897,13 @@ const passToAuditFunc = () => {
     }).catch(err => {
         err_msg.obj = err.data
     })
+}
+const fileChange = (val, i) => {
+    from_examine.item.affix[i].file = val.target.files[0].name
+}
+const chooseFile = i => {
+    const file = document.getElementById('fileRef' + i)
+    file.click()
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
