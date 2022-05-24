@@ -1,11 +1,15 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+// 设置步骤组
+export function APIpostFlowstepgroup(data) {
+    return api2.post('flowstepgroup', data)
+}
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 流程事件
 // 列表
-export function APIgetFlowworkEventList(flowwork,params) {
+export function APIgetFlowworkEventList(flowwork, params) {
     return api2.get(`flowwork/${flowwork}/item`, { params: params })
 }
 // 保存
@@ -17,7 +21,7 @@ export function APIpostFlowworkEventUpdate(flowwork, data) {
     return api2.post(`flowwork/${flowwork}/next`, data)
 }
 // 返回事项进度
-export function APIpostFlowworkEventSpeed (flowwork, data) {
+export function APIpostFlowworkEventSpeed(flowwork, data) {
     return api2.post(`flowwork/${flowwork}/back`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */

@@ -216,12 +216,20 @@
                 >
                     添加步骤
                 </el-button>
+                <el-button type="info" plain :disabled="step.select.length<=0" @click="clickFuncGroup">步骤组</el-button>
             </div>
             <el-table
                 :data="step.list"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
+                @selection-change="handleSelectionChange"
             >
+                <el-table-column type="selection" width="55" />
+                <el-table-column label="步骤组名称" width="120">
+                    <template #default="scope">
+                        <span style="color: #aaaaaa;">{{ scope.row.group || '无' }} </span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="步骤名称" width="180">
                     <template #default="scope">
                         <span>{{ scope.row.name }} </span>
@@ -257,7 +265,7 @@
                         <span>{{ getOptVal(opts_all.obj.step_back,scope.row.canback) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="创建时间" width="180">
+                <!-- <el-table-column label="创建时间" width="180">
                     <template #default="scope">
                         <span>{{ scope.row.created_at }} </span>
                     </template>
@@ -266,7 +274,7 @@
                     <template #default="scope">
                         <span>{{ scope.row.updated_at }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column fixed="right" label="操作" width="210">
                     <template #default="scope">
                         <el-button
@@ -605,6 +613,35 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 添加步骤组 -->
+        <el-dialog
+            v-model="step.switch_group"
+            title="设置步骤组"
+            width="500px"
+        >
+            <el-form
+                :model="step.group"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="步骤组名称"
+                            :error="step.group_err&&step.group_err.group?step.group_err.group[0]:''"
+                        >
+                            <el-input
+                                v-model="step.group.group"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="step.switch_group=false">取消</el-button>
+                    <el-button type="primary" @click="addFuncGroup">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -706,7 +743,11 @@ const step = reactive({
     form: {},
     error: {},
     switch_details: false,
-    details: ''
+    details: '',
+    select: [],
+    switch_group: false,
+    group: {},
+    group_err: {}
 })
 const getFuncStepList = () => {
     APIgetStepList(step.active_flow.id).then(res => {
@@ -747,7 +788,7 @@ const getFuncStepDetails = val => {
     })
 }
 // 添加字段
-const addServiceFunc = index => {
+const addServiceFunc = () => {
     let data = {
         'label': '',
         'type': '',
@@ -783,7 +824,31 @@ const addOptsFunc = item => {
 const deleteOptFunc = (item, i) => {
     item.splice(i, 1)
 }
-
+const handleSelectionChange = val => {
+    step.select = val
+}
+import { APIpostFlowstepgroup } from '@/api/custom/custom.js'
+const clickFuncGroup = () => {
+    step.switch_group = true
+}
+const addFuncGroup = () => {
+    step.group_err = {}
+    let arr = []
+    for (let i in step.select) {
+        arr.push(step.select[i].id)
+    }
+    APIpostFlowstepgroup({ sid: arr, group: step.group.group }).then(res => {
+        ElMessage({
+            message: res.msg,
+            type: 'success'
+        })
+        step.select = []
+        step.switch_group = false
+        stepRefreshFunc()
+    }).catch(err => {
+        step.group_err = err.data
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 刷新
 const flowRefreshFunc = () => {
