@@ -380,7 +380,7 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="100px"
-                            label="内置议题类型"
+                            label="内置动作"
                             :error="step.error&&step.error.topictype?step.error.topictype[0]:''"
                         >
                             <el-select v-model="step.form.topictype" class="head-btn" placeholder="" clearable>
@@ -724,6 +724,9 @@ const stepClickTrue = () => {
         return false
     }
     if (step.title == '修改') {
+        if (!step.form.group) {
+            delete step.form.group
+        }
         APIputStep(step.active_flow.id, step.form.id, step.form).then(res => {
             getFuncStepList()
             step.switch_pop = false
