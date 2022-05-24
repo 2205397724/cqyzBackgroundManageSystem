@@ -12,7 +12,7 @@ const opts = {
     // 自定义表单type表单类型
     from_type: [{
         key: 'upload',
-        val: '文件'
+        val: '图片'
     }, {
         key: 'text',
         val: '文本输入框'

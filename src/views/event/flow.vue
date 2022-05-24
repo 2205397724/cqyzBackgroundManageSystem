@@ -421,6 +421,7 @@
                             <el-row :gutter="10">
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                     <el-form-item
+                                        label-width="100px"
                                         label="表单项类型"
                                         :error="step.error&&step.error[`extra.${i}.type`]?step.error[`extra.${i}.type`][0]:''"
                                     >
@@ -433,7 +434,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                    <el-form-item label="是否必填">
+                                    <el-form-item label="是否必填"     label-width="100px">
                                         <el-switch
                                             v-model="item.required"
                                             inline-prompt
@@ -444,6 +445,7 @@
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                     <el-form-item
+                                        label-width="100px"
                                         label="表单项标题"
                                         :error="step.error&&step.error[`extra.${i}.label`]?step.error[`extra.${i}.label`][0]:''"
                                     >
@@ -455,7 +457,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                    <el-form-item label="字段名" :error="!item.name?'必填':''">
+                                    <el-form-item label="字段名" :error="!item.name?'必填':''"     label-width="100px">
                                         <el-input
                                             v-model="item.name"
                                             placeholder="如:'name' 不可重复,小写英文abc和下划线_"
@@ -464,7 +466,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                    <el-form-item label="默认值">
+                                    <el-form-item label="默认值"     label-width="100px">
                                         <el-input
                                             v-if="item.type!='checkbox'&&item.type!='picker-select'"
                                             v-model="item.value"
@@ -483,7 +485,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                    <el-form-item label="占位内容">
+                                    <el-form-item label="占位内容"     label-width="100px">
                                         <el-input
                                             v-model="item.placeholder"
                                             placeholder="如:'请输入姓名!'"
@@ -491,8 +493,13 @@
                                         />
                                     </el-form-item>
                                 </el-col>
+                                <el-col v-if="item.type=='upload'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item label="图片数量"     label-width="100px">
+                                        <el-input-number v-model="item.limit" :min="1" :max="9" />
+                                    </el-form-item>
+                                </el-col>
                                 <el-col v-if="item.type=='checkbox'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                    <el-form-item label="是否支持多选">
+                                    <el-form-item label="是否支持多选"     label-width="100px">
                                         <el-switch
                                             v-model="item.multiple"
                                             inline-prompt
@@ -511,7 +518,7 @@
                                     <div v-for="(child,i) in item.options" class="serve-box">
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label="显示文本">
+                                                <el-form-item label="显示文本"     label-width="100px">
                                                     <el-input
                                                         v-model="child.text"
                                                         placeholder="如:'男'"
@@ -520,7 +527,7 @@
                                                 </el-form-item>
                                             </el-col>
                                             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label="保存值">
+                                                <el-form-item label="保存值"     label-width="100px">
                                                     <el-input
                                                         v-model="child.value"
                                                         placeholder="如:'0' 不可重复"
@@ -797,7 +804,8 @@ const addServiceFunc = () => {
         'required': true,
         'placeholder': '',
         'options': [], // {"text": "显示文本","value": "值"}
-        'multiple': false
+        'multiple': false,
+        'limit':1
     }
     if (!step.form.extra) {
         step.form.extra = []
