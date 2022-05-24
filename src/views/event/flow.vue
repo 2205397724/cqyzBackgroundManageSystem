@@ -830,6 +830,8 @@ const handleSelectionChange = val => {
 import { APIpostFlowstepgroup } from '@/api/custom/custom.js'
 const clickFuncGroup = () => {
     step.switch_group = true
+    step.group_err = {}
+    step.group ={}
 }
 const addFuncGroup = () => {
     step.group_err = {}
