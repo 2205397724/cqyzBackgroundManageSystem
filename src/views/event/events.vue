@@ -19,6 +19,11 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
+                <el-table-column label="流程标题" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.title }} </span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="用户级" width="180">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.baselv) }} </span>
@@ -39,7 +44,7 @@
                         <span>{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="创建时间" width="180">
+                <!-- <el-table-column label="创建时间" width="180">
                     <template #default="scope">
                         <span>{{ scope.row.created_at }} </span>
                     </template>
@@ -48,7 +53,7 @@
                     <template #default="scope">
                         <span>{{ scope.row.updated_at }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column fixed="right" label="操作" width="210">
                     <template #default="scope">
                         <el-button
@@ -105,7 +110,21 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label-width="70px"
+                                label-width="80px"
+                                label="流程标题"
+                                :required="true"
+                                :error="flowwork.error&&flowwork.error.title?flowwork.error.title[0]:''"
+                            >
+                                <el-input
+                                    v-model="flowwork.form.title"
+                                    placeholder=""
+                                >
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="80px"
                                 label="选择流程"
                                 :error="flowwork.error&&flowwork.error.baselv?flowwork.error.baselv[0]:''"
                             >
@@ -118,7 +137,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label-width="70px"
+                                label-width="80px"
                                 label="用户级"
                                 :error="flowwork.error&&flowwork.error.baselv?flowwork.error.baselv[0]:''"
                             >
@@ -129,7 +148,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label-width="70px"
+                                label-width="80px"
                                 label="用户级id"
                                 :error="flowwork.error&&flowwork.error.baselv?flowwork.error.baselv[0]:''"
                             >
@@ -139,6 +158,21 @@
                                     </div>
                                 </div>
                                 <Cascaders v-else v-model="flowwork.form.baseval" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            <el-form-item
+                                label-width="80px"
+                                label="流程简介"
+                                :required="true"
+                                :error="flowwork.error&&flowwork.error.desc?flowwork.error.desc[0]:''"
+                            >
+                                <el-input
+                                    v-model="flowwork.form.desc"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -157,6 +191,14 @@
                 width="50%"
             >
                 <div class="details-box">
+                    <div class="item">
+                        <div class="left">流程标题</div>
+                        <div class="right">{{ flowwork.details.title }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">流程简介</div>
+                        <div class="right">{{ flowwork.details.desc }}</div>
+                    </div>
                     <div class="item">
                         <div class="left">用户级</div>
                         <div class="right">{{ getOptVal(opts_all.obj.article_lv,flowwork.details.baselv) }}</div>
@@ -384,6 +426,15 @@ const deleteFlowworkFunc = val => {
     })
 }
 const addAndModifyFlowworkFunc = () => {
+    flowwork.error = {}
+    if(!flowwork.form.title){
+        flowwork.error.title = ['标题必填！']
+        return false
+    }
+    if(!flowwork.form.desc){
+        flowwork.error.desc = ['简介必填！']
+        return false
+    }
     APIpostFlowwork(flowwork.form.flow, flowwork.form).then(res => {
         flowworkRefreshFunc()
         flowwork.switch_pop = false
