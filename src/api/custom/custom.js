@@ -1,6 +1,29 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+// 设置投票
+// 列表
+export function APIgetVoteList(params) {
+    return api2.get('vote', { params: params })
+}
+// 详情
+export function APIgetVoteDetails(vote) {
+    return api2.get(`vote/${vote}`)
+}
+// 删除
+export function APIdeleteVote(vote) {
+    return api2.delete(`vote/${vote}`)
+}
+// 修改
+export function APIputVote(vote, data) {
+    return api2.put(`vote/${vote}`, data)
+}
+// 添加
+export function APIpostVote(data) {
+    return api2.post('vote', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+
 // 设置步骤组
 export function APIpostFlowstepgroup(data) {
     return api2.post('flowstepgroup', data)

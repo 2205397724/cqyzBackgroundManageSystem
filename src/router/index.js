@@ -93,6 +93,7 @@ import userGroup from './modules/user/group.js'
 // 事件
 import eventFlow from './modules/event/flow.js'
 import eventEvents from './modules/event/flow_events.js'
+import eventVote from './modules/event/vote.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
 import setupFile from './modules/setup/file.js'
@@ -166,7 +167,8 @@ const asyncRoutes = [
         },
         children: [
             eventEvents,
-            eventFlow
+            eventFlow,
+            eventVote
         ]
     },
     {
