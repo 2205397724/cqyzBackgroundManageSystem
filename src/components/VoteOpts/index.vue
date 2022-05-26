@@ -41,7 +41,7 @@
                             </el-button>
                             <el-button
                                 size="small"
-                                @click=""
+                                @click="clickFuncDetails(scope.row)"
                             >
                                 详情
                             </el-button>
@@ -141,6 +141,46 @@
                 </div>
             </template>
         </el-dialog>
+
+        <!-- 详情 -->
+        <el-dialog
+            v-model="data_1.details_switch"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">选项名称</div>
+                    <div class="right">{{ data_1.details_data.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">选项值</div>
+                    <div class="right">{{ data_1.details_data.val }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">排序</div>
+                    <div class="right">{{ data_1.details_data.sort }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_1.details_data.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_1.details_data.updated_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">额外信息</div>
+                    <div v-if="data_1.details_data.extra" class="right">{{ data_1.details_data.extra.desc }}</div>
+                    <div v-else class="right">无</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="data_1.details_switch = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -187,7 +227,9 @@ const data_1 = reactive({
     },
     add_error: {},
     add_switch: false,
-    add_title: '添加'
+    add_title: '添加',
+    details_switch: false,
+    details_data: {}
 })
 const getFuncVoteoptsList = () => {
     APIgetVoteoptsList({ vid: id.value }).then(res => {
@@ -237,6 +279,12 @@ const clickFuncDelete = val => {
     APIdeleteVoteopts(val.id).then(res => {
         ElMessage.success(res.msg)
         refreshFunc()
+    })
+}
+const clickFuncDetails = val => {
+    APIgetVoteoptsDetails(val.id).then(res => {
+        data_1.details_data = res.data
+        data_1.details_switch = true
     })
 }
 /* -------------------------------------------------------------------------------------------------------- */

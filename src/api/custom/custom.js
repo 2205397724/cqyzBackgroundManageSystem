@@ -1,6 +1,25 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+// 设置投票房屋
+// 获取参与投票的房屋所属的楼栋单元
+export function APIgetVoteHouseUnit(vote, params) {
+    return api2.get(`vote/${vote}/bu`, { params: params })
+}
+// 获取投票事项下参与的房屋
+export function APIgetVoteHouse(vote, params) {
+    return api2.get(`vote/${vote}/house`, { params: params })
+}
+// 删除
+export function APIdeleteVoteHouse(vote) {
+    return api2.delete(`vote/${vote}/ticket`)
+}
+// 添加
+export function APIpostVoteHouse(vote, data) {
+    return api2.post(`vote/${vote}/house`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+
 // 设置投票选项
 // 列表
 export function APIgetVoteoptsList(params) {

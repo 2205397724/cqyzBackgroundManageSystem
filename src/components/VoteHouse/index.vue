@@ -3,7 +3,7 @@
         <el-dialog
             v-model="box_switch"
             width="70%"
-            title="投票选项"
+            title="投票房屋"
             custom-class="box-dialog2"
             @close="dialogClose"
         >
@@ -18,7 +18,7 @@
                             data_1.add_switch = true;
                         }"
                     >
-                        添加投票选项
+                        添加投票房屋
                     </el-button>
                 </div>
                 <el-table
@@ -31,20 +31,8 @@
                             <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="210">
+                    <el-table-column fixed="right" label="操作" width="90">
                         <template #default="scope">
-                            <el-button
-                                type="primary" size="small"
-                                @click="clickFuncModify(scope.row)"
-                            >
-                                修改
-                            </el-button>
-                            <el-button
-                                size="small"
-                                @click=""
-                            >
-                                详情
-                            </el-button>
                             <el-popconfirm
                                 title="确定要删除当前项么?"
                                 cancel-button-type="info"
@@ -174,10 +162,13 @@ const dialogClose = () => {
 }
 /* -------------------------------------------------------------------------------------------------------- */
 import {
+    // APIgetVoteHouseUnit,
+    // APIgetVoteHouse,
+    // APIdeleteVoteHouse,
+    // APIpostVoteHouse
+
     APIgetVoteoptsList,
-    APIgetVoteoptsDetails,
     APIdeleteVoteopts,
-    APIputVoteopts,
     APIpostVoteopts
 } from '@/api/custom/custom.js'
 const data_1 = reactive({
@@ -213,26 +204,9 @@ const clickFuncAddVoteopt = () => {
         }).catch(err => {
             data_1.add_error = err.data
         })
-    } else {
-        APIputVoteopts(data_1.add_form.id, data_1.add_form).then(res => {
-            ElMessage.success(res.msg)
-            refreshFunc()
-            data_1.add_switch = false
-        }).catch(err => {
-            data_1.add_error = err.data
-        })
     }
 }
-const clickFuncModify = val => {
-    APIgetVoteoptsDetails(val.id).then(res => {
-        if (!res.data.extra) {
-            res.data.extra = {}
-        }
-        data_1.add_form = res.data
-        data_1.add_title = '修改'
-        data_1.add_switch = true
-    })
-}
+
 const clickFuncDelete = val => {
     APIdeleteVoteopts(val.id).then(res => {
         ElMessage.success(res.msg)

@@ -92,12 +92,19 @@
                         </el-popconfirm>
                         <el-button
                             size="small"
-                            @click="()=>{vote_opts.opts_switch=true;vote_opts.opts_voteid=scope.row.id;}"
+                            @click="()=>{
+                                vote_opts.opts_voteid=scope.row.id;
+                                vote_opts.opts_switch=true;
+                            }"
                         >
                             选项
                         </el-button>
                         <el-button
                             size="small"
+                            @click="()=>{
+                                vote_house.house_voteid = scope.row.id;
+                                vote_house.house_switch = true;
+                            }"
                         >
                             房屋
                         </el-button>
@@ -299,6 +306,8 @@
 
         <!-- 投票选项 -->
         <VoteOpts :id="vote_opts.opts_voteid" v-model:dialog_switch="vote_opts.opts_switch" />
+        <!-- 投票房屋 -->
+        <VoteHouse :id="vote_house.house_voteid" v-model:dialog_switch="vote_house.house_switch" />
     </div>
 </template>
 <script setup>
@@ -396,6 +405,10 @@ const clickFuncDeteails = val => {
 const vote_opts = reactive({
     opts_switch: false,
     opts_voteid: ''
+})
+const vote_house = reactive({
+    house_switch: false,
+    house_voteid: ''
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
