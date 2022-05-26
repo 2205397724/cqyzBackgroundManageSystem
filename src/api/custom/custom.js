@@ -1,6 +1,29 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+// 设置投票选项
+// 列表
+export function APIgetVoteoptsList(params) {
+    return api2.get('voteopt', { params: params })
+}
+// 详情
+export function APIgetVoteoptsDetails(voteopt) {
+    return api2.get(`voteopt/${voteopt}`)
+}
+// 删除
+export function APIdeleteVoteopts(voteopt) {
+    return api2.delete(`voteopt/${voteopt}`)
+}
+// 修改
+export function APIputVoteopts(voteopt, data) {
+    return api2.put(`voteopt/${voteopt}`, data)
+}
+// 添加
+export function APIpostVoteopts(data) {
+    return api2.post('voteopt', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+
 // 设置投票
 // 列表
 export function APIgetVoteList(params) {

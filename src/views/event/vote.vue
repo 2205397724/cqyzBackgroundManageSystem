@@ -62,7 +62,7 @@
                         <span>{{ scope.row.endat }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="210">
+                <el-table-column fixed="right" label="操作" width="320">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -90,6 +90,17 @@
                                 </el-button>
                             </template>
                         </el-popconfirm>
+                        <el-button
+                            size="small"
+                            @click="()=>{vote_opts.opts_switch=true;vote_opts.opts_voteid=scope.row.id;}"
+                        >
+                            选项
+                        </el-button>
+                        <el-button
+                            size="small"
+                        >
+                            房屋
+                        </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -285,8 +296,9 @@
                 </span>
             </template>
         </el-dialog>
-        
+
         <!-- 投票选项 -->
+        <VoteOpts :id="vote_opts.opts_voteid" v-model:dialog_switch="vote_opts.opts_switch" />
     </div>
 </template>
 <script setup>
@@ -380,6 +392,11 @@ const clickFuncDeteails = val => {
         data_1.details_switch = true
     })
 }
+/* ----------------------------------------------------------------------------------------------------------------------- */
+const vote_opts = reactive({
+    opts_switch: false,
+    opts_voteid: ''
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     data_1.search = {}
