@@ -12,7 +12,7 @@
                     <el-button
                         class="head-btn" type="primary"
                         @click="()=>{
-                            data_1.add_form = {extra:{}}
+                            data_1.add_form = {}
                             data_1.add_error={};
                             data_1.add_title = '添加';
                             data_1.add_switch = true;
@@ -52,87 +52,27 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <!-- <template #footer>
-                <span class="dialog-footer">
-                    <el-button>Cancel</el-button>
-                    <el-button type="primary">Confirm</el-button>
-                </span>
-            </template> -->
         </el-dialog>
 
         <!-- 修改添加 -->
         <el-dialog
             v-model="data_1.add_switch"
             :title="data_1.add_title"
-            width="50%"
+            width="60%"
         >
-            <el-form
-                ref="ruleFormRef"
-                :model="data_1.add_form"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="选项名称"
-                            :error="data_1.add_error&&data_1.add_error.name?data_1.add_error.name[0]:''"
-                        >
-                            <el-input
-                                v-model="data_1.add_form.name"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="选项值"
-                            :error="data_1.add_error&&data_1.add_error.val?data_1.add_error.val[0]:''"
-                        >
-                            <el-input
-                                v-model="data_1.add_form.val"
-                                placeholder="不能重复"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="排序"
-                            :error="data_1.add_error&&data_1.add_error.sort?data_1.add_error.sort[0]:''"
-                        >
-                            <el-input
-                                v-model="data_1.add_form.sort"
-                                placeholder="数字越大越靠前"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="70px"
-                            label="额外信息"
-                            :error="data_1.add_error&&data_1.add_error['extra.desc']?data_1.add_error['extra.desc'][0]:''"
-                        >
-                            <el-input
-                                v-model="data_1.add_form.extra.desc"
-                                :autosize="{ minRows: 2, maxRows: 6 }"
-                                type="textarea"
-                                placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
+            <ChooseHouse @chooseData="chooseDataFunc" />
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <span class="dialog-footer">
                     <el-button @click="data_1.add_switch=false">取消</el-button>
                     <el-button type="primary" @click="clickFuncAddVoteopt">确定</el-button>
-                </div>
+                </span>
             </template>
         </el-dialog>
     </div>
 </template>
 
 <script setup>
+import ChooseHouse from '@/components/ChooseHouse/index.vue'
 import {
     reactive,
     ref,
@@ -150,7 +90,7 @@ const box_switch = ref('')
 watch(dialog_switch, new_val => {
     box_switch.value = new_val
     if (box_switch.value) {
-        refreshFunc()
+        // refreshFunc()
     }
 }, {
     immediate: true,
@@ -163,41 +103,32 @@ const dialogClose = () => {
 /* -------------------------------------------------------------------------------------------------------- */
 import {
     // APIgetVoteHouseUnit,
-    // APIgetVoteHouse,
-    // APIdeleteVoteHouse,
-    // APIpostVoteHouse
-
-    APIgetVoteoptsList,
-    APIdeleteVoteopts,
-    APIpostVoteopts
+    APIgetVoteHouse,
+    APIdeleteVoteHouse,
+    APIpostVoteHouse
 } from '@/api/custom/custom.js'
 const data_1 = reactive({
     list: [],
-    add_form: {
-        extra: {}
-    },
+    add_form: { },
     add_error: {},
     add_switch: false,
     add_title: '添加'
 })
 const getFuncVoteoptsList = () => {
-    APIgetVoteoptsList({ vid: id.value }).then(res => {
+    APIgetVoteHouse(id.value).then(res => {
         data_1.list = res.data
     })
 }
 const clickFuncAddVoteopt = () => {
     data_1.add_error = {}
     if (data_1.add_title == '添加') {
+        console.log(choose_data.arr)
         let data = {
-            vid: id.value,
-            name: data_1.add_form.name,
-            val: data_1.add_form.val,
-            sort: data_1.add_form.sort,
-            extra: {
-                desc: data_1.add_form.extra.desc
-            }
+            b: '',
+            u: '',
+            h: []
         }
-        APIpostVoteopts(data).then(res => {
+        APIpostVoteHouse(id.value, data).then(res => {
             ElMessage.success(res.msg)
             refreshFunc()
             data_1.add_switch = false
@@ -208,10 +139,16 @@ const clickFuncAddVoteopt = () => {
 }
 
 const clickFuncDelete = val => {
-    APIdeleteVoteopts(val.id).then(res => {
+    APIdeleteVoteHouse(val.id).then(res => {
         ElMessage.success(res.msg)
         refreshFunc()
     })
+}
+const choose_data = reactive({
+    arr: []
+})
+const chooseDataFunc = val => {
+    choose_data.arr = val
 }
 /* -------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
