@@ -86,13 +86,14 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-// const props = defineProps(['dialog_switch', 'id'])
+const props = defineProps(['houses', 'oldval'])
+const { houses, oldval } = toRefs(props)
 // watch(dialog_switch, new_val => {
 // }, {
 //     immediate: true,
 //     deep: true
 // })
-const emit = defineEmits(['chooseData'])
+const emit = defineEmits(['update:houses'])
 // emit('update:dialog_switch', false)
 /* -------------------------------------------------------------------------------------------------------- */
 const tree_item = reactive({
@@ -122,7 +123,7 @@ const checkFunc = val => {
     if (val.id && val.name && (val.type == 'units' || val.type == 'building')) {
         getHouseListFunc()
     }
-    emit('chooseData', '')
+    emit('update:houses', oldval)
 }
 import {
     APIgetHouseListSort
@@ -183,6 +184,9 @@ const getHouseListFunc = () => {
                         val: false,
                         data: house_list.arr[i].houses[j]
                     }
+                    if (houses.value.indexOf(house_list.arr[i].houses[j].id) >= 0) {
+                        checkFH.all[house_list.arr[i].floor_truth][house_list.arr[i].houses[j].house_num].val = true
+                    }
                 }
             }
         }
@@ -198,8 +202,12 @@ const getStateFunc = () => {
             }
         }
     }
-    console.log(choseIDs.arr)
-    emit('chooseData', choseIDs.arr)
+
+    let arr = []
+    for (let i in choseIDs.arr) {
+        arr.push(choseIDs.arr[i].id)
+    }
+    emit('update:houses', arr)
 }
 // 更新check状态
 // row点击

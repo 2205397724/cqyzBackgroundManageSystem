@@ -222,7 +222,7 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
-                            label="选项类型"
+                            label="参与类型"
                             :error="data_1.add_error&&data_1.add_error.opttype?data_1.add_error.opttype[0]:''"
                         >
                             <el-select v-model="data_1.add_form.opttype" class="head-btn" clearable placeholder="">

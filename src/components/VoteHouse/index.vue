@@ -16,6 +16,8 @@
                             data_1.add_error={};
                             data_1.add_title = '添加';
                             data_1.add_switch = true;
+                            choose_data.arr = data_1.list;
+                            choose_data.oldval = data_1.list;
                         }"
                     >
                         添加投票房屋
@@ -55,7 +57,7 @@
             :title="data_1.add_title"
             width="60%"
         >
-            <ChooseHouse @chooseData="chooseDataFunc" />
+            <ChooseHouse v-if="data_1.add_switch" v-model:houses="choose_data.arr" :oldval="choose_data.oldval" />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="data_1.add_switch=false">取消</el-button>
@@ -120,16 +122,7 @@ const clickFuncAddVoteopt = () => {
         let data = {
             // b: '',
             // u: '',
-            h: []
-        }
-        for (let i in choose_data.arr) {
-            data.h.push(choose_data.arr[i].id)
-            // if (!data.b) {
-            //     data.b = choose_data.arr[i].sync_building_id
-            // }
-            // if (!data.u) {
-            //     data.u = choose_data.arr[i].sync_unit_id
-            // }
+            h: choose_data.arr
         }
         APIpostVoteHouse(id.value, data).then(res => {
             ElMessage.success(res.msg)
@@ -148,11 +141,9 @@ const clickFuncDelete = () => {
     })
 }
 const choose_data = reactive({
-    arr: []
+    arr: [],
+    oldval: []
 })
-const chooseDataFunc = val => {
-    choose_data.arr = val
-}
 /* -------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     getFuncVoteoptsList()

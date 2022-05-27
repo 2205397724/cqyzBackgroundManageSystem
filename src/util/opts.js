@@ -17,10 +17,10 @@ const opts = {
         val: '不关联'
     }, {
         key: 1,
-        val: '关联用户'
+        val: '用户参与'
     }, {
         key: 2,
-        val: '关联企业'
+        val: '企业参与'
     }],
     // 投票状态
     vote_status: [{
