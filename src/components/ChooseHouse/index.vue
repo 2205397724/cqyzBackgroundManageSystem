@@ -118,12 +118,18 @@ APIgetChinaRegion().then(res => {
     }
 })
 const checkFunc = val => {
-    console.log(val)
     tree_item.active_unit = val
     if (val.id && val.name && (val.type == 'units' || val.type == 'building')) {
+        emit('update:houses', props.oldval)
         getHouseListFunc()
+        return false
     }
-    emit('update:houses', oldval)
+    // if (!(tree_item.active_unit.type == 'units' || tree_item.active_unit.type == 'building')||) {
+    //     emit('update:houses', '')
+    // } else {
+    emit('update:houses', [])
+    // }
+
 }
 import {
     APIgetHouseListSort
@@ -171,6 +177,7 @@ const getHouseListFunc = () => {
                 val: false
             }
         }
+        checkFH.all = {}
         for (let i in house_list.arr) {
             checkFH.col[house_list.arr[i].floor_truth] = {
                 val: false
@@ -190,10 +197,13 @@ const getHouseListFunc = () => {
                 }
             }
         }
+        getStateFunc()
     })
 }
 const getStateFunc = () => {
     let data = checkFH.all
+    console.log('-----------------------------------')
+    console.log(JSON.parse(JSON.stringify(data)))
     choseIDs.arr = []
     for (let i in data) {
         for (let j in data[i]) {
@@ -207,6 +217,7 @@ const getStateFunc = () => {
     for (let i in choseIDs.arr) {
         arr.push(choseIDs.arr[i].id)
     }
+    console.log(arr)
     emit('update:houses', arr)
 }
 // 更新check状态
