@@ -5,7 +5,8 @@
             style="width:400px;border: 1px solid #eeeeee;height: auto;"
             @checkFunc="checkFunc"
         />
-        <div style="width: 100%;margin-left: 20px;overflow: auto;border: 1px solid #eeeeee;">
+        <div style="width: 100%;margin-left: 20px;overflow: auto;border: 1px solid #eeeeee;position: relative;">
+            <div v-if="!(tree_item.active_unit.type=='units'||tree_item.active_unit.type=='building')" style="position: absolute;left:0;top:0;width:100%;height:100%;background-color: rgba(255,255,255,0.6);z-index: 9;cursor: no-drop;" />
             <div>
                 <div class="row-box row-box-title">
                     <div class="row-item-box row-item-tit-box">
@@ -46,7 +47,24 @@
                                             v-model="checkFH.all[child.floor_truth][item.house_num].val"
                                             @change="(val)=>{checkFH.all[child.floor_truth][item.house_num].val= val;allClickFunc(child.floor_truth,item.house_num,val)}"
                                         />
-                                        <div class="row-item-check">{{ item.house_num }}#</div>
+                                        <!-- <div class="row-item-check">{{ item.house_num }}#</div> -->
+                                        <el-popover
+                                            :width="200"
+                                            trigger="hover"
+
+                                            placement="top"
+                                        >
+                                            <template #reference>
+                                                <div class="row-item-check">{{ item.house_num }}#</div>
+                                            </template>
+                                            <div style="box-sizing: border-box;padding: 4px;">
+                                                <div class="tip-title">房屋：{{ item.name }}</div>
+                                                <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
+                                                <div class="tip-title">安全状态：{{ getOptVal(opts_all.obj.house_status_safe,item.status_safe) }}</div>
+                                                <div class="tip-title">产权性质：{{ getOptVal(opts_all.obj.house_type_property,item.type_property) }}</div>
+                                                <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div>
+                                            </div>
+                                        </el-popover>
                                     </div>
                                 </div>
                             </div>
@@ -104,6 +122,7 @@ const checkFunc = val => {
     if (val.id && val.name && (val.type == 'units' || val.type == 'building')) {
         getHouseListFunc()
     }
+    emit('chooseData', '')
 }
 import {
     APIgetHouseListSort
@@ -242,7 +261,14 @@ const allClickFunc = (row, col, val) => {
     getStateFunc()
 }
 /* -------------------------------------------------------------------------------------------------------- */
-
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts([  'house_type_model', 'house_type_property',  'house_status_use', 'house_status_safe']).then(res => {
+    opts_all.obj = res
+})
 </script>
 <style lang="scss" scoped>
     .row-box {

@@ -20,33 +20,28 @@
                     >
                         添加投票房屋
                     </el-button>
+                    <el-popconfirm
+                        title="确定要删除当前事项下所有房屋么?"
+                        cancel-button-type="info"
+                        @confirm="clickFuncDelete"
+                    >
+                        <template #reference>
+                            <el-button
+                                type="danger"
+                            >
+                                删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
                 </div>
                 <el-table
                     :data="data_1.list"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     style="max-height: calc(85vh - 50px - 40px - 54px - 42px);width: 100%;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
                 >
-                    <el-table-column label="选项名称" width="300">
+                    <el-table-column label="房屋ID" width="300">
                         <template #default="scope">
-                            <span>{{ scope.row.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="90">
-                        <template #default="scope">
-                            <el-popconfirm
-                                title="确定要删除当前项么?"
-                                cancel-button-type="info"
-                                @confirm="clickFuncDelete(scope.row)"
-                            >
-                                <template #reference>
-                                    <el-button
-                                        type="danger"
-                                        size="small"
-                                    >
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
+                            <span>{{ scope.row }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column />
@@ -64,7 +59,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="data_1.add_switch=false">取消</el-button>
-                    <el-button type="primary" @click="clickFuncAddVoteopt">确定</el-button>
+                    <el-button type="primary" :disabled="choose_data.arr.length<=0" @click="clickFuncAddVoteopt">确定</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -90,7 +85,7 @@ const box_switch = ref('')
 watch(dialog_switch, new_val => {
     box_switch.value = new_val
     if (box_switch.value) {
-        // refreshFunc()
+        refreshFunc()
     }
 }, {
     immediate: true,
@@ -122,11 +117,19 @@ const getFuncVoteoptsList = () => {
 const clickFuncAddVoteopt = () => {
     data_1.add_error = {}
     if (data_1.add_title == '添加') {
-        console.log(choose_data.arr)
         let data = {
-            b: '',
-            u: '',
+            // b: '',
+            // u: '',
             h: []
+        }
+        for (let i in choose_data.arr) {
+            data.h.push(choose_data.arr[i].id)
+            // if (!data.b) {
+            //     data.b = choose_data.arr[i].sync_building_id
+            // }
+            // if (!data.u) {
+            //     data.u = choose_data.arr[i].sync_unit_id
+            // }
         }
         APIpostVoteHouse(id.value, data).then(res => {
             ElMessage.success(res.msg)
@@ -138,8 +141,8 @@ const clickFuncAddVoteopt = () => {
     }
 }
 
-const clickFuncDelete = val => {
-    APIdeleteVoteHouse(val.id).then(res => {
+const clickFuncDelete = () => {
+    APIdeleteVoteHouse(id.value).then(res => {
         ElMessage.success(res.msg)
         refreshFunc()
     })
