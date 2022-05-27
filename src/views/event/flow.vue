@@ -413,7 +413,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :md="24" :lg="24">
+                    <el-col v-if="step.form.topictype==0" :md="24" :lg="24">
                         <div style="margin-bottom: 10px;">
                             <el-button type="primary" plain @click="addServiceFunc">自定义表单</el-button>
                         </div>
