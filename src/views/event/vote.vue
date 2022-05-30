@@ -168,6 +168,28 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
+                            label="总票数"
+                            :error="data_1.add_error&&data_1.add_error.ticketall?data_1.add_error.ticketall[0]:''"
+                        >
+                            <el-input
+                                v-model="data_1.add_form.ticketall"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="总面积数"
+                            :error="data_1.add_error&&data_1.add_error.areaall?data_1.add_error.areaall[0]:''"
+                        >
+                            <el-input
+                                v-model="data_1.add_form.areaall"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
                             label="投几项"
                             :error="data_1.add_error&&data_1.add_error.vmax?data_1.add_error.vmax[0]:''"
                         >
