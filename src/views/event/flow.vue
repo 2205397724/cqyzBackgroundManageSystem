@@ -801,7 +801,7 @@ const addServiceFunc = () => {
         'type': '',
         'name': '',
         'value': '',
-        'required': true,
+        'required': false,
         'placeholder': '',
         'options': [], // {"text": "显示文本","value": "值"}
         'multiple': false,
