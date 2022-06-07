@@ -67,7 +67,7 @@
                         <span>{{ scope.row.endat }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="320">
+                <el-table-column fixed="right" label="操作" width="260">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -102,16 +102,7 @@
                                 vote_opts.opts_switch=true;
                             }"
                         >
-                            选项
-                        </el-button>
-                        <el-button
-                            size="small"
-                            @click="()=>{
-                                vote_house.house_voteid = scope.row.id;
-                                vote_house.house_switch = true;
-                            }"
-                        >
-                            房屋
+                            成员
                         </el-button>
                     </template>
                 </el-table-column>
@@ -280,9 +271,7 @@
         </el-dialog>
 
         <!-- 投票选项 -->
-        <VoteOpts :id="vote_opts.opts_voteid" v-model:dialog_switch="vote_opts.opts_switch" />
-        <!-- 投票房屋 -->
-        <VoteHouse :id="vote_house.house_voteid" v-model:dialog_switch="vote_house.house_switch" />
+        <EntryMbr :id="vote_opts.opts_voteid" v-model:dialog_switch="vote_opts.opts_switch" />
     </div>
 </template>
 <script setup>
@@ -380,10 +369,6 @@ const clickFuncDeteails = val => {
 const vote_opts = reactive({
     opts_switch: false,
     opts_voteid: ''
-})
-const vote_house = reactive({
-    house_switch: false,
-    house_voteid: ''
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {

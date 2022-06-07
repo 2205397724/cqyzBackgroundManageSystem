@@ -1,6 +1,34 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+// 点赞
+// 列表
+export function APIgetEntryMbrZanList(params) {
+    return api2.get('entrymbrzan', { params: params })
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 报名成员
+// 列表
+export function APIgetEntryMbrList(params) {
+    return api2.get('entrymbr', { params: params })
+}
+// 详情
+export function APIgetEntryMbrDetails(entrymbr) {
+    return api2.get(`entrymbr/${entrymbr}`)
+}
+// 删除
+export function APIdeleteEntryMbr(entrymbr) {
+    return api2.delete(`entrymbr/${entrymbr}`)
+}
+// 修改
+export function APIputEntryMbr(entrymbr, data) {
+    return api2.put(`entrymbr/${entrymbr}`, data)
+}
+// 添加
+export function APIpostEntryMbr(data) {
+    return api2.post('entrymbr', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 设置报名
 // 列表
 export function APIgetEntryList(params) {
