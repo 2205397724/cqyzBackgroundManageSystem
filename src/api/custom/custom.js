@@ -1,6 +1,29 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+// 设置报名
+// 列表
+export function APIgetEntryList(params) {
+    return api2.get('entry', { params: params })
+}
+// 详情
+export function APIgetEntryDetails(entry) {
+    return api2.get(`entry/${entry}`)
+}
+// 删除
+export function APIdeleteEntry(entry) {
+    return api2.delete(`entry/${entry}`)
+}
+// 修改
+export function APIputEntry(entry, data) {
+    return api2.put(`entry/${entry}`, data)
+}
+// 添加
+export function APIpostEntry(data) {
+    return api2.post('entry', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+
 // 设置投票房屋
 // 获取参与投票的房屋所属的楼栋单元
 export function APIgetVoteHouseUnit(vote, params) {
