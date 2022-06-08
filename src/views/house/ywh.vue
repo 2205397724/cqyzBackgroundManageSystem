@@ -186,7 +186,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="业委会名称" prop="name" label-width="120px"
+                            label="业委会名称" prop="name" label-width="90px"
                             :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                         >
                             <el-input
@@ -197,7 +197,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="届次" prop="period" label-width="120px"
+                            label="届次" prop="period" label-width="90px"
                             :error="from_error.msg&&from_error.msg.period?from_error.msg.period[0]:''"
                         >
                             <el-input
@@ -206,9 +206,41 @@
                             />
                         </el-form-item>
                     </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="开始时间"
+                            label-width="90px"
+                            :error="from_error.msg&&from_error.msg.start_at?from_error.msg.start_at[0]:''"
+                        >
+                            <el-date-picker
+                                v-model="from_examine.item.startat"
+                                type="datetime"
+                                value-format="YYYY-MM-DD"
+                                placeholder=""
+                                style="width: 100%;"
+                                :default-value="new Date()"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="结束时间"
+                            label-width="90px"
+                            :error="from_error.msg&&from_error.msg.end_at?from_error.msg.end_at[0]:''"
+                        >
+                            <el-date-picker
+                                v-model="from_examine.item.endat"
+                                type="datetime"
+                                value-format="YYYY-MM-DD"
+                                placeholder=""
+                                style="width: 100%;"
+                                :default-value="new Date()"
+                            />
+                        </el-form-item>
+                    </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
-                            label="描述" prop="desc" label-width="120px"
+                            label="描述" prop="desc" label-width="90px"
                             :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
                         >
                             <el-input
