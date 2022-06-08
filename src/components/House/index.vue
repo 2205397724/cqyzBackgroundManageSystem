@@ -289,6 +289,34 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
+                                label="套内面积" prop="area_inside"
+                                :error="from_error.msg&&from_error.msg.area_inside?from_error.msg.area_inside[0]:''"
+                                label-width="140px"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.area_inside"
+                                    placeholder=""
+                                >
+                                    <template #append>m²</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="分摊面积" prop="area_share"
+                                :error="from_error.msg&&from_error.msg.area_share?from_error.msg.area_share[0]:''"
+                                label-width="140px"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.area_share"
+                                    placeholder=""
+                                >
+                                    <template #append>m²</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
                                 label="户型" prop="type_model"
                                 :error="from_error.msg&&from_error.msg.type_model?from_error.msg.type_model[0]:''"
                                 label-width="140px"
