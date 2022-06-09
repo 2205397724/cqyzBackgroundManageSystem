@@ -1225,8 +1225,14 @@ const dialogExamineCloseFunc = () => {
     from_error.msg = {}
     from_examine.item.houseable_type = active_obj.obj.type
     from_examine.item.houseable_id = active_obj.obj.id
+    let data = {}
+    for (let i in from_examine.item) {
+        if (from_examine.item[i] || from_examine.item[i] === 0) {
+            data[i] = from_examine.item[i]
+        }
+    }
     if (str_title.value == '修改') {
-        APIputHouseHouse(from_examine.item.id, from_examine.item).then(res => {
+        APIputHouseHouse(data.id, data).then(res => {
             if (!res.code) {
                 refreshFunc()
                 ElMessage.success(res.msg)
@@ -1236,7 +1242,7 @@ const dialogExamineCloseFunc = () => {
             from_error.msg = err.data
         })
     } else {
-        APIpostHouseHouse(from_examine.item).then(res => {
+        APIpostHouseHouse(data).then(res => {
             if (!res.code) {
                 refreshFunc()
                 ElMessage.success(res.msg)
@@ -1285,11 +1291,17 @@ const copy_property = reactive({
 })
 import { APIgetPropertyDetails } from '@/api/custom/custom.js'
 const showPropertyFunc = val => {
+    console.log(val)
     from_error_property.msg = {}
-    property_obj.obj = val
+    property_obj.obj = JSON.parse(JSON.stringify(val))
     APIgetPropertyDetails(property_obj.obj.curr_property_id).then(res => {
-        property_form.obj = res.data
-        copy_property.obj = JSON.parse(JSON.stringify(res.data))
+        if (property_obj.obj.curr_property_id) {
+            property_form.obj = res.data
+            copy_property.obj = JSON.parse(JSON.stringify(res.data))
+        } else {
+            property_form.obj = { house_id: property_obj.obj.id }
+            copy_property.obj = { house_id: property_obj.obj.id }
+        }
         read_state.value = true
         switch_property.value = true
     })
@@ -1307,6 +1319,9 @@ const addServiceFunc = index => {
         mobile: '',
         area: ''
     }
+    if (!property_form.obj.property_owners) {
+        property_form.obj.property_owners = []
+    }
     property_form.obj.property_owners.push(data)
 }
 const from_error_property = reactive({
@@ -1317,16 +1332,16 @@ const add_state = ref(false)
 const modifyPropertyFunc = val => {
     if (val) {
         from_error_property.msg = {}
-        /* property_form.obj = {
+        property_form.obj = {
             property_owners: [],
             house_id: copy_property.obj.house_id,
             should_bind_house: 1
-        } */
+        }
         read_state.value = false
         add_state.value = true
     } else {
         from_error_property.msg = {}
-        // property_form.obj =  JSON.parse(JSON.stringify(copy_property.obj))
+        property_form.obj =  JSON.parse(JSON.stringify(copy_property.obj))
         read_state.value = false
         add_state.value = false
     }
@@ -1339,6 +1354,7 @@ const modifycancel = () => {
 // 同意拒绝提交
 import { APIputProperty, APIpostProperty } from '@/api/custom/custom.js'
 const postPropertyFunc = () => {
+    console.log(property_form.obj)
     from_error_property.msg = {}
     if (!add_state.value) {
         APIputProperty(property_form.obj.id, property_form.obj).then(res => {
