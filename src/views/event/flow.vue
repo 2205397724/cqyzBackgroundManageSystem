@@ -762,6 +762,9 @@ const getFuncStepList = () => {
     })
 }
 const stepClickTrue = () => {
+    if (step.form.topictype !== 0) {
+        step.form.extra = []
+    }
     if (step.title == '添加') {
         APIpostStep(step.active_flow.id, step.form).then(res => {
             stepRefreshFunc()
