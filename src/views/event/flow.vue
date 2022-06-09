@@ -114,6 +114,7 @@
                         >
                             <el-input
                                 v-model="flow.form.name"
+								class="head-btn"
                             />
                         </el-form-item>
                     </el-col>
@@ -327,6 +328,7 @@
                         >
                             <el-input
                                 v-model="step.form.name"
+                                 class="head-btn"
                             />
                         </el-form-item>
                     </el-col>
@@ -353,6 +355,7 @@
                         >
                             <el-input
                                 v-model="step.form.step"
+                                 class="head-btn"
                             />
                         </el-form-item>
                     </el-col>
