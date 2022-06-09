@@ -465,7 +465,7 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                <el-col v-if="item.type!='upload'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                     <el-form-item label="默认值" label-width="100px">
                                         <el-input
                                             v-if="item.type!='checkbox'&&item.type!='picker-select'"
@@ -484,7 +484,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                <el-col v-if="item.type!='upload'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                     <el-form-item label="占位内容" label-width="100px">
                                         <el-input
                                             v-model="item.placeholder"
