@@ -542,7 +542,7 @@
         <!-- 添加违建 -->
         <el-dialog
             v-model="popup_4.switch"
-            title="违建"
+            title="为投诉添加违建"
             width="400px"
         >
             <el-form

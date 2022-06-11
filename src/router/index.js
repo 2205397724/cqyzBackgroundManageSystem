@@ -96,6 +96,7 @@ import eventEvents from './modules/event/flow_events.js'
 import eventVote from './modules/event/vote.js'
 import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
+import eventIllegal from './modules/event/illegal.js'
 
 // 设置
 import setupRegion from './modules/setup/region.js'
@@ -173,7 +174,8 @@ const asyncRoutes = [
             eventFlow,
             eventVote,
             eventEntry,
-            eventComplaint
+            eventComplaint,
+            eventIllegal
         ]
     },
     {
