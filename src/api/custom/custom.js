@@ -1,6 +1,25 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 投诉
+// 列表
+export function APIgetComplaintList(params) {
+    return api2.get('complaint', { params: params })
+}
+// 详情
+export function APIgetComplaintDetails(complaint) {
+    return api2.get(`complaint/${complaint}`)
+}
+// 修改
+export function APIputComplaint(complaint, data) {
+    return api2.put(`complaint/${complaint}`, data)
+}
+// 添加
+export function APIpostComplaint(data) {
+    return api2.post('complaint', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 点赞
 // 列表
 export function APIgetEntryMbrZanList(params) {

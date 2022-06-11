@@ -2,12 +2,13 @@
     <div class="vote">
         <page-main>
             <div>
-                <el-input v-model="data_1.search.name" class="input-b-r" placeholder="标题名称" clearable />
-                <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
-                    <el-option v-for="(item,i) in opts_all.obj.vote_status" :key="item.key" :label="item.val" :value="item.key" />
+                <el-input v-model="data_1.search.title" class="input-b-r" placeholder="标题名称" clearable />
+                <el-select v-model="data_1.search.illegal" class="input-b-r" placeholder="是否违建">
+                    <el-option label="是违建" :value="1" />
+                    <el-option label="不是违建" :value="0" />
                 </el-select>
-                <el-select v-model="data_1.search.type" class="input-b-r" clearable placeholder="参与类型">
-                    <el-option v-for="(item,i) in opts_all.obj.entry_type" :key="item.key" :label="item.val" :value="item.key" />
+                <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
+                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
                 </el-select>
                 <el-button
                     class="btn-b-r" type="primary"
@@ -28,13 +29,14 @@
                 <el-button
                     class="head-btn" type="primary"
                     @click="()=>{
-                        data_1.add_form={status:opts_all.obj.vote_status[0].key};
+                        data_1.add_form={status:opts_all.obj.toushu_status[0].key};
                         data_1.add_error={};
                         data_1.add_switch=true;
+                        file_list=[];
                         data_1.add_title = '添加'
                     }"
                 >
-                    添加事项
+                    添加投诉
                 </el-button>
             </div>
             <el-table
@@ -42,32 +44,32 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="事项名称" width="250">
+                <el-table-column label="投诉名称" width="250">
                     <template #default="scope">
-                        <span>{{ scope.row.name }} </span>
+                        <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态" width="90">
                     <template #default="scope">
-                        <span>{{ getOptVal(opts_all.obj.vote_status,scope.row.status) }} </span>
+                        <span>{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="参与类型" width="90">
+                <el-table-column label="是否匿名" width="90">
                     <template #default="scope">
-                        <span>{{ getOptVal(opts_all.obj.entry_type,scope.row.type) }} </span>
+                        <span>{{ getOptVal(opts_all.obj.toushu_ano,scope.row.ano) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="开始时间" width="180">
+                <el-table-column label="是否公开" width="90">
                     <template #default="scope">
-                        <span>{{ scope.row.startat }} </span>
+                        <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="结束时间" width="180">
+                <el-table-column label="创建时间" width="180">
                     <template #default="scope">
-                        <span>{{ scope.row.endat }} </span>
+                        <span>{{ scope.row.created_at }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="260">
+                <el-table-column fixed="right" label="操作" width="210">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -81,20 +83,6 @@
                         >
                             详情
                         </el-button>
-                        <el-popconfirm
-                            title="确定要删除当前项么?"
-                            cancel-button-type="info"
-                            @confirm="clickFuncDeleteVote(scope.row)"
-                        >
-                            <template #reference>
-                                <el-button
-                                    type="danger"
-                                    size="small"
-                                >
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-popconfirm>
                         <el-button
                             size="small"
                             @click="()=>{
@@ -131,11 +119,46 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
-                            label="参与类型"
-                            :error="data_1.add_error&&data_1.add_error.type?data_1.add_error.type[0]:''"
+                            label="标题名称"
+                            :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
                         >
-                            <el-select v-model="data_1.add_form.type" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.entry_type" :key="item.key" :label="item.val" :value="item.key" />
+                            <el-input
+                                v-model="data_1.add_form.title"
+                                class="head-btn"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="是否公开"
+                            :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
+                        >
+                            <el-select v-model="data_1.add_form.pub" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_pub" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="是否匿名"
+                            :error="data_1.add_error&&data_1.add_error.ano?data_1.add_error.ano[0]:''"
+                        >
+                            <el-select v-model="data_1.add_form.ano" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="是否违建"
+                            :error="data_1.add_error&&data_1.add_error.illegal?data_1.add_error.illegal[0]:''"
+                        >
+                            <el-select v-model="data_1.add_form.illegal" class="head-btn" clearable>
+                                <el-option label="是" :value="1" />
+                                <el-option label="否" :value="0" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -145,63 +168,97 @@
                             label="小区"
                             :error="data_1.add_error&&data_1.add_error.zid?data_1.add_error.zid[0]:''"
                         >
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                <SearchResidential v-model:str="data_1.add_form.zid" />
+                            <div style="margin-bottom: 10px;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchResidential v-model:str="data_1.add_form.zid" />
+                                </div>
                             </div>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <template v-if="data_1.add_title=='修改'">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="70px"
+                                label="问题分类"
+                                :error="data_1.add_error&&data_1.add_error.catpro?data_1.add_error.catpro[0]:''"
+                            >
+                                <el-cascader
+                                    v-model="data_1.add_form.catpro"
+                                    placeholder=""
+                                    :options="opts_all.obj.problem_type"
+                                    :props="{
+                                        multiple: false,
+                                        emitPath: false,
+                                        lazy: false,
+                                        value: 'id',
+                                        label: 'name',
+                                        checkStrictly: true
+                                    }"
+                                    collapse-tags
+                                    collapse-tags-tooltip
+                                    :show-all-levels="false"
+                                    clearable
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="70px"
+                                label="投诉对象"
+                                :error="data_1.add_error&&data_1.add_error.catob?data_1.add_error.catob[0]:''"
+                            >
+                                <el-cascader
+                                    v-model="data_1.add_form.catob"
+                                    style="width: 100%;"
+                                    placeholder=""
+                                    :options="opts_all.obj.toushu_user_type"
+                                    :props="{
+                                        multiple: false,
+                                        emitPath: false,
+                                        lazy: false,
+                                        value: 'id',
+                                        label: 'name',
+                                        checkStrictly: true
+                                    }"
+                                    collapse-tags
+                                    collapse-tags-tooltip
+                                    :show-all-levels="false"
+                                    clearable
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="70px"
+                                label="状态"
+                                :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
+                            >
+                                <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </template>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label-width="70px"
-                            label="标题名称"
-                            :error="data_1.add_error&&data_1.add_error.name?data_1.add_error.name[0]:''"
+                            label="附件"
+                            :error="data_1.add_error&&data_1.add_error.affix?data_1.add_error.affix[0]:''"
                         >
-                            <el-input
-                                v-model="data_1.add_form.name"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="状态"
-                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                        >
-                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable placeholder="">
-                                <el-option v-for="(item,i) in opts_all.obj.vote_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="开始时间"
-                            :error="data_1.add_error&&data_1.add_error.startat?data_1.add_error.startat[0]:''"
-                        >
-                            <el-date-picker
-                                v-model="data_1.add_form.startat"
-                                type="datetime"
-                                value-format="YYYY-MM-DD HH:hh:ss"
-                                placeholder=""
-                                style="width: 100%;"
-                                :default-value="new Date()"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="结束时间"
-                            :error="data_1.add_error&&data_1.add_error.endat?data_1.add_error.endat[0]:''"
-                        >
-                            <el-date-picker
-                                v-model="data_1.add_form.endat"
-                                type="datetime"
-                                value-format="YYYY-MM-DD HH:hh:ss"
-                                placeholder=""
-                                style="width: 100%;"
-                                :default-value="new Date()"
-                            />
+                            <el-upload
+                                ref="uploadRef"
+                                action="***"
+                                :auto-upload="false"
+                                :file-list="file_list"
+                                :on-change="(file,files)=>{
+                                    file_list = files
+                                }"
+                                :on-remove="(file,files)=>{
+                                    file_list = files
+                                }"
+                            >
+                                <el-button type="primary">选择附件</el-button>
+                            </el-upload>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -212,6 +269,7 @@
                         >
                             <el-input
                                 v-model="data_1.add_form.content"
+                                class="head-btn"
                                 :autosize="{ minRows: 2, maxRows: 6 }"
                                 type="textarea"
                                 placeholder=""
@@ -235,31 +293,51 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">参与类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.entry_type,data_1.details_data.type) }}</div>
+                    <div class="left">标题名称</div>
+                    <div class="right">{{ data_1.details_data.title }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">步骤名称</div>
-                    <div class="right">{{ data_1.details_data.name }}</div>
+                    <div class="left">是否公开</div>
+                    <div class="right">{{ data_1.details_data.pub }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">开始时间</div>
-                    <div class="right">{{ data_1.details_data.startat }}</div>
+                    <div class="left">是否匿名</div>
+                    <div class="right">{{ data_1.details_data.ano }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">结束时间</div>
-                    <div class="right">{{ data_1.details_data.endat }}</div>
+                    <div class="left">是否违建</div>
+                    <div class="right">{{ data_1.details_data.illegal }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">小区ID</div>
+                    <div class="left">小区</div>
                     <div class="right">{{ data_1.details_data.zid }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.vote_status,data_1.details_data.status) }}</div>
+                    <div class="left">问题分类</div>
+                    <div class="right">{{ data_1.details_data.catpro }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">事项内容</div>
+                    <div class="left">投诉对象</div>
+                    <div class="right">{{ data_1.details_data.catob }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">状态</div>
+                    <div class="right">{{ data_1.details_data.status }}</div>
+                </div>
+                <div v-if="data_1.details_data.affix&&data_1.details_data.affix.length>0" class="item">
+                    <div class="left">附件</div>
+                    <div class="right">
+                        <!-- 两种模式任君选择 -->
+                        <el-image
+                            v-for="(item,i) in data_1.details_data.affixs" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
+                        />
+                        <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">内容</div>
                     <div class="right">{{ data_1.details_data.content }}</div>
                 </div>
             </div>
@@ -284,12 +362,35 @@ import {
     ElMessage
 } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
+// const fileChange = file => {
+//     if (!data_1.add_form.affix) {
+//         data_1.add_form.affix = []
+//     }
+//     data_1.add_form.affix.push({
+//         name: file.name,
+//         url: document.getElementsByClassName('el-upload__input')[0].value
+//     })
+// }
+// const  fileRemove = file => {
+//     for (let i in data_1.add_form.affix) {
+//         if (typeof data_1.add_form.affix[i] == 'string') {
+//             if (data_1.add_form.affix[i] = file.name) {
+//                 data_1.add_form.affix.splice(i, 1)
+//                 return false
+//             }
+//         } else {
+//             if (data_1.add_form.affix[i].name = file.name) {
+//                 data_1.add_form.affix.splice(i, 1)
+//                 return false
+//             }
+//         }
+//     }
+// }
 import {
-    APIgetEntryList,
-    APIgetEntryDetails,
-    APIdeleteEntry,
-    APIputEntry,
-    APIpostEntry
+    APIgetComplaintList,
+    APIgetComplaintDetails,
+    APIputComplaint,
+    APIpostComplaint
 } from '@/api/custom/custom.js'
 const data_1 = reactive({
     search: {},
@@ -316,18 +417,52 @@ const getFuncVoteList = () => {
             data[key] = item
         }
     }
-    APIgetEntryList(data).then(res => {
+    APIgetComplaintList(data).then(res => {
         data_1.total = res.data.aggregation.total_cnt
         data_1.list = res.data.items
     })
 }
-watch(() => data_1.page, new_val => {
-    getFuncVoteList()
-}, { immediate: true, deep: true })
+const file_list = ref([])
+import { getFilesKeys } from '@/util/files.js'
 const clickFuncAddVote = () => {
+    let files = []
+    let file_key = []
+    if (file_list.value.length > 0) {
+        for (let i in file_list.value) {
+            if (!file_list.value[i].raw) {
+                file_key.push(file_list.value[i].name)
+            } else {
+                files.push(file_list.value[i].raw)
+            }
+        }
+    }
     data_1.add_error = {}
+    if (files.length > 0) {
+        getFilesKeys(files, 'folder').then(arr => {
+            data_1.add_form.affix = file_key.concat(arr)
+            if (data_1.add_title == '添加') {
+                APIpostComplaint(data_1.add_form).then(res => {
+                    refreshFunc()
+                    data_1.add_switch = false
+                    ElMessage.success(res.msg)
+                }).catch(err => {
+                    data_1.add_error = err.data
+                })
+            } else {
+                APIputComplaint(data_1.add_form.id, data_1.add_form).then(res => {
+                    getFuncVoteList()
+                    data_1.add_switch = false
+                    ElMessage.success(res.msg)
+                }).catch(err => {
+                    data_1.add_error = err.data
+                })
+            }
+        })
+        return false
+    }
+    data_1.add_form.affix = file_key
     if (data_1.add_title == '添加') {
-        APIpostEntry(data_1.add_form).then(res => {
+        APIpostComplaint(data_1.add_form).then(res => {
             refreshFunc()
             data_1.add_switch = false
             ElMessage.success(res.msg)
@@ -335,7 +470,7 @@ const clickFuncAddVote = () => {
             data_1.add_error = err.data
         })
     } else {
-        APIputEntry(data_1.add_form.id, data_1.add_form).then(res => {
+        APIputComplaint(data_1.add_form.id, data_1.add_form).then(res => {
             getFuncVoteList()
             data_1.add_switch = false
             ElMessage.success(res.msg)
@@ -344,23 +479,31 @@ const clickFuncAddVote = () => {
         })
     }
 }
+
 const clickFuncModify = val => {
     data_1.add_error = {}
     data_1.add_title = '修改'
     data_1.add_switch
-    APIgetEntryDetails(val.id).then(res => {
+    APIgetComplaintDetails(val.id).then(res => {
         data_1.add_form = res.data
+        let arr = []
+        for (let i in res.data.affix) {
+            if (res.data.affix[i]) {
+                arr.push({
+                    name: res.data.affix[i]
+                })
+            }
+        }
+        file_list.value = arr
         data_1.add_switch = true
     })
 }
-const clickFuncDeleteVote = val => {
-    APIdeleteEntry(val.id).then(res => {
-        getFuncVoteList()
-        ElMessage.success(res.msg)
-    })
-}
 const clickFuncDeteails = val => {
-    APIgetEntryDetails(val.id).then(res => {
+    APIgetComplaintDetails(val.id).then(res => {
+        res.data.affixs = []
+        for (let i in res.data.affix) {
+            res.data.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.data.affix[i])
+        }
         data_1.details_data = res.data
         data_1.details_switch = true
     })
@@ -370,13 +513,19 @@ const vote_opts = reactive({
     opts_switch: false,
     opts_voteid: ''
 })
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
-    data_1.search = {}
+    data_1.search = {
+        illegal: 0
+    }
     data_1.switch_search = false
     data_1.page = 1
     getFuncVoteList()
 }
+watch(() => data_1.page, new_val => {
+    refreshFunc()
+}, { immediate: true, deep: true })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import {
@@ -386,13 +535,23 @@ import {
 const opts_all = reactive({
     obj: {}
 })
-getOpts([ 'vote_status', 'entry_type']).then(res => {
+import {
+    APIgetTypeList
+} from '@/api/custom/custom.js'
+getOpts([ 'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type']).then(res => {
     opts_all.obj = res
+    // , 'toushu_user_type', 'problem_type'
+    APIgetTypeList(opts_all.obj.type_type[2].key).then(res => {
+        opts_all.obj.problem_type = res.data
+    })
+    APIgetTypeList(opts_all.obj.type_type[3].key).then(res => {
+        opts_all.obj.toushu_user_type = res.data
+    })
 })
 
 </script>
 <style lang="scss" scoped>
-	.vote {
-
+	::v-deep .el-cascader{
+        width: 100%;
     }
 </style>
