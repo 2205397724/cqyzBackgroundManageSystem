@@ -91,6 +91,7 @@
                         </el-button>
                         <el-button
                             size="small"
+                            @click="clickFuncAllot4(scope.row.id)"
                         >
                             违建
                         </el-button>
@@ -538,8 +539,45 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 投票选项 -->
-        <!-- <EntryMbr :id="vote_opts.opts_voteid" v-model:dialog_switch="vote_opts.opts_switch" /> -->
+        <!-- 添加违建 -->
+        <el-dialog
+            v-model="popup_4.switch"
+            title="违建"
+            width="400px"
+        >
+            <el-form
+                :model="popup_4.form"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24">
+                        <el-form-item
+                            label="违建类型" prop="name"
+                            :error="popup_4.msg&&popup_4.msg.type?popup_4.msg.type[0]:''"
+                        >
+                            <el-select v-model="popup_4.form.type" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.illegal_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24">
+                        <el-form-item
+                            label="处理状态" prop="name"
+                            :error="popup_4.msg&&popup_4.msg.status?popup_4.msg.status[0]:''"
+                        >
+                            <el-select v-model="popup_4.form.status" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="popup_4.switch=false">取消</el-button>
+                    <el-button type="primary" @click="popupFuncAdd4">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -836,11 +874,33 @@ const clickFuncOpenPopup4 = (val, id) => {
     }
     file_list3.value = arr
 }
+// 违建
+const popup_4 = reactive({
+    switch: false,
+    form: {},
+    msg: {}
+})
+const clickFuncAllot4 = id => {
+    popup_4.msg = {}
+    popup_4.form = {
+        id: id
+    }
+    popup_4.switch = true
+}
+import {
+    APIpostIllegal
+} from '@/api/custom/custom.js'
+const popupFuncAdd4 = val => {
+    popup_4.msg = {}
+    APIpostIllegal(popup_4.form.id, popup_4.form).then(res => {
+        ElMessage.success(res.msg)
+        popup_4.switch = false
+        refreshFunc()
+    }).catch(err => {
+        popup_4.msg = err.data
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// const vote_opts = reactive({
-//     opts_switch: false,
-//     opts_voteid: ''
-// })
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
@@ -866,7 +926,7 @@ const opts_all = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts([ 'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type', 'toushu_return_type', 'toushu_illegal']).then(res => {
+getOpts([ 'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.type_type[2].key).then(res => {
         opts_all.obj.problem_type = res.data

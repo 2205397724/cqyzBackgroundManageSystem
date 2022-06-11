@@ -2,6 +2,30 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+
+// 设置投票选项
+// 列表 Illegal
+export function APIgetIllegalList(params) {
+    return api2.get('complaint-illegal', { params: params })
+}
+// 详情
+export function APIgetIllegalDetails(illegal) {
+    return api2.get(`complaint-illegal/${illegal}`)
+}
+// 删除
+export function APIdeleteIllegal(illegal) {
+    return api2.delete(`complaint-illegal/${illegal}`)
+}
+// 修改
+export function APIputIllegal(illegal, data) {
+    return api2.put(`complaint-illegal/${illegal}`, data)
+}
+// 添加
+export function APIpostIllegal(complaint, data) {
+    return api2.post(`complaint/${complaint}/illegal`, data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 处理
 export function APIpostDealAdd(complaint, data) {
     return api2.post(`complaint/${complaint}/deal`, data)

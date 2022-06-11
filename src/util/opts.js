@@ -11,6 +11,20 @@
 // ---------------------------------------------------------------------------------------
 import api2 from '@/api/index2.js'
 const opts = {
+    illegal_type: [{
+        key: 1,
+        val: '房屋'
+    }],
+    illegal_user: [{
+        key: 10,
+        val: '未处理'
+    }, {
+        key: 15,
+        val: '处理中'
+    }, {
+        key: 20,
+        val: '已处理'
+    }],
     toushu_illegal: [{
         key: 0,
         val: '否'
