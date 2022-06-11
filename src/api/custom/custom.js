@@ -2,6 +2,27 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 处理
+export function APIpostDealAdd(complaint, data) {
+    return api2.post(`complaint/${complaint}/deal`, data)
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 修改内容
+export function APIputDeal(deal, data) {
+    return api2.put(`complaint-deal/${deal}`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 修改状态
+export function APIputAllot(allot, data) {
+    return api2.put(`complaint-allot/${allot}`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 转办
+export function APIpostAllot(complaint, data) {
+    return api2.post(`complaint/${complaint}/allot`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 投诉
 // 列表
 export function APIgetComplaintList(params) {

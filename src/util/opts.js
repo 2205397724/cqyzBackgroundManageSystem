@@ -11,6 +11,13 @@
 // ---------------------------------------------------------------------------------------
 import api2 from '@/api/index2.js'
 const opts = {
+    toushu_illegal: [{
+        key: 0,
+        val: '否'
+    }, {
+        key: 1,
+        val: '是'
+    }],
     toushu_pub: [{
         key: 0,
         val: '不公开'
