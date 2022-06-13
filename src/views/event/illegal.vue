@@ -5,10 +5,12 @@
                 <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.obj.name" class="head-btn" placeholder="名称" clearable />
+                            <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="违建对象id" clearable />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <CascaderType v-model="data_search.obj.cid" />
+                            <el-select v-model="data_search.obj.status" class="head-btn" placeholder="处理状态" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
@@ -19,13 +21,13 @@
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
                 </div>
-                <div>
+                <!-- <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加模板</el-button>
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加</el-button>
                         </el-col>
                     </el-row>
-                </div>
+                </div> -->
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
                         v-loading="loading_tab"
@@ -33,22 +35,26 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="名称" width="180">
+                        <el-table-column prop="name" label="ID" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                                <span>{{ scope.row.id }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="ID" width="250">
+                        <el-table-column prop="id" label="违建对象ID" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                                <span>{{ scope.row.cid }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cid" label="分类ID" width="250">
+                        <el-table-column prop="cid" label="违建类型" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.cid }} </span>
+                                <span>{{ getOptVal(opts_all.obj.illegal_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
-
+                        <el-table-column prop="cid" label="状态" width="90">
+                            <template #default="scope">
+                                <span>{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </span>
+                            </template>
+                        </el-table-column>
                         <el-table-column />
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
@@ -105,97 +111,36 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="模板名称" prop="name"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                                label="对象类型"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.name"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_examine.item.type" class="head-btn" placeholder="处理状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.illegal_type" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="分类"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cid[0]:''"
+                                label="违建对象ID"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.tgt?from_error.msg.tgt[0]:''"
                             >
-                                <CascaderType v-model="from_examine.item.cid" />
+                                <el-select v-model="from_examine.item.tgt" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="流程"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.fid[0]:''"
+                                label="处理状态"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
                             >
-                                <div style="height: 100%;width: 100%;">
-                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                        <SearchFlow v-model:str="from_examine.item.fid" />
-                                    </div>
-                                </div>
+                                <el-select v-model="from_examine.item.status" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="24">
-                            <div style="margin-bottom: 10px;">
-                                <el-button style="margin-right: 10px;" @click="addServiceFunc">添加模板字段</el-button>
-                            </div>
-                            <div v-for="(item,i) in from_examine.item.fields" class="serve-box">
-                                <el-row :gutter="10">
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="字段名称" :error="from_error.msg&&from_error.msg['fields.'+i+'.label']?from_error.msg['fields.'+i+'.label'][0]:''">
-                                            <el-input
-                                                v-model="item.label"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label="字段类型" :error="from_error.msg&&from_error.msg['fields.'+i+'.type']?from_error.msg['fields.'+i+'.type'][0]:''">
-                                            <el-input
-                                                v-model="item.type"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <div style="margin-bottom: 10px;">
-                                    <el-button style="margin-right: 10px;" @click="addServiceOptFunc(i)">添加选项字段</el-button>
-                                </div>
-                                <template v-if="from_examine.item.fields[i].prop&&from_examine.item.fields[i].prop.arr">
-                                    <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" style="position: relative;width: 100%;">
-                                        <el-row :gutter="10">
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item :label="'键Key'+j">
-                                                    <el-input
-                                                        v-model="child.key"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item :label="'值Val'+j">
-                                                    <el-input
-                                                        v-model="child.val"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                        </el-row>
-                                        <div style="position: absolute;top: -10px;right: -10px;z-index: 1;cursor: pointer;" @click="deleteServiceOptFunc(i,j)">
-                                            <el-icon :size="20" color="#aaaaaa">
-                                                <el-icon-circle-close />
-                                            </el-icon>
-                                        </div>
-                                    </div>
-                                </template>
-                                <div class="delete-service" @click="deleteServiceFunc(i)">
-                                    <el-icon :size="20" color="#F56C6C">
-                                        <el-icon-circle-close />
-                                    </el-icon>
-                                </div>
-                            </div>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -215,37 +160,28 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">模板ID</div>
+                    <div class="left">ID</div>
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">分类ID</div>
+                    <div class="left">违建对象ID</div>
                     <div class="right">{{ data_details.item.cid }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">流程ID</div>
-                    <div class="right">{{ data_details.item.fid }}</div>
+                    <div class="left">违建类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.illegal_type,data_details.item.type) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">模板字段</div>
-                    <div class="right">
-                        <div v-for="(item,i) in data_details.item.fields" style="border-bottom: 1px solid #eee;margin-bottom: 8px;">
-                            <div>
-                                字段名称：{{ item.label }}
-                            </div>
-                            <div>
-                                字段类别：{{ item.type }}
-                            </div>
-                            <div v-for="(child,j) in item.prop.arr" style="display: flex;">
-                                <div style="flex: 1;">
-                                    键Key：{{ child.key }}
-                                </div>
-                                <div style="flex: 1;">
-                                    值Val：{{ child.val }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="left">状态</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.illegal_user,data_details.item.status) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
             </div>
             <template #footer>
@@ -258,7 +194,6 @@
 </template>
 <script setup>
 import SearchFlow from '@/components/SearchFlow/index.vue'
-import CascaderType from '@/components/CascaderType/index.vue'
 import {
     APIgetIllegalList,
     APIgetIllegalDetails,
@@ -310,36 +245,6 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-// 删除 服务名称和联系方式
-const deleteServiceFunc = index => {
-    from_examine.item.fields.splice(index, 1)
-}
-// 添加 服务名称和联系方式
-const addServiceFunc = index => {
-    let data = {
-        label: '',
-        type: '',
-        prop: {
-            arr: []
-        }
-    }
-    from_examine.item.fields.push(data)
-}
-// 删除 选项字段
-const deleteServiceOptFunc = (i, j) => {
-    from_examine.item.fields[i].prop.arr.splice(j, 1)
-}
-// 添加 选项字段
-const addServiceOptFunc = index => {
-    let data = {
-        key: '',
-        val: ''
-    }
-    if (!from_examine.item.fields[index].prop || !from_examine.item.fields[index].prop.arr) {
-        from_examine.item.fields[index].prop = { arr: [] }
-    }
-    from_examine.item.fields[index].prop.arr.push(data)
-}
 
 import {
     APIgetTypeList
@@ -490,7 +395,14 @@ const modifyResidentialFunc = val => {
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['illegal_user', 'illegal_type']).then(res => {
+    opts_all.obj = res
+})
 </script>
 <style lang="scss">
     .articletparticletpl {

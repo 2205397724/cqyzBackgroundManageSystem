@@ -551,17 +551,30 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24">
                         <el-form-item
+                            label-width="70px"
                             label="违建类型" prop="name"
                             :error="popup_4.msg&&popup_4.msg.type?popup_4.msg.type[0]:''"
                         >
-                            <el-select v-model="popup_4.form.type" class="head-btn" clearable>
+                            <el-select v-model="popup_4.form.type" class="head-btn" clearable @change="popup_4.form.tgt=''">
                                 <el-option v-for="(item,i) in opts_all.obj.illegal_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" v-if="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(popup_4.form.type==opts_all.obj.illegal_type[0].key)">
+                        <el-form-item
+                        label-width="70px"
+                            label="违建ID"
+                            :error="popup_4.msg&&popup_4.msg.tgt?popup_4.msg.tgt[0]:''"
+                        >
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                <SearchHouse v-model:str="popup_4.form.tgt" />
+                            </div>
+                        </el-form-item>
+                    </el-col>
                     <el-col :xs="24" :sm="24" :md="24">
                         <el-form-item
-                            label="处理状态" prop="name"
+                        label-width="70px"
+                            label="处理状态"
                             :error="popup_4.msg&&popup_4.msg.status?popup_4.msg.status[0]:''"
                         >
                             <el-select v-model="popup_4.form.status" class="head-btn" clearable>
@@ -892,6 +905,10 @@ import {
 } from '@/api/custom/custom.js'
 const popupFuncAdd4 = val => {
     popup_4.msg = {}
+    let data = {
+        type:popup_4.form.type,
+        status:popup_4.form.status
+    }
     APIpostIllegal(popup_4.form.id, popup_4.form).then(res => {
         ElMessage.success(res.msg)
         popup_4.switch = false
