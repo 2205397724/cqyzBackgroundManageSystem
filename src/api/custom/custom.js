@@ -3,7 +3,7 @@ import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 
-// 设置投票选项
+// 设置违建
 // 列表 Illegal
 export function APIgetIllegalList(params) {
     return api2.get('complaint-illegal', { params: params })

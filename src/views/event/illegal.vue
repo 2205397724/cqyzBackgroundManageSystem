@@ -260,11 +260,11 @@
 import SearchFlow from '@/components/SearchFlow/index.vue'
 import CascaderType from '@/components/CascaderType/index.vue'
 import {
-    APIgetArticletplList,
-    APIgetArticletplDetails,
-    APIdeleteArticletpl,
-    APIputArticletpl,
-    APIpostArticletpl
+    APIgetIllegalList,
+    APIgetIllegalDetails,
+    APIdeleteIllegal,
+    APIputIllegal,
+    APIpostIllegal
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -369,7 +369,7 @@ const refreshFunc = () => {
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetArticletplDetails(val.id).then(res => {
+    APIgetIllegalDetails(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -387,7 +387,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputArticletpl(from_examine.item.id, from_examine.item).then(res => {
+                APIputIllegal(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -397,7 +397,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostArticletpl(from_examine.item).then(res => {
+                APIpostIllegal(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -448,7 +448,7 @@ const getTabListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetArticletplList(params).then(res => {
+    APIgetIllegalList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -458,7 +458,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteArticletpl(val.id).then(res => {
+    APIdeleteIllegal(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
@@ -478,7 +478,7 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetArticletplDetails(val.id).then(res => {
+    APIgetIllegalDetails(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
