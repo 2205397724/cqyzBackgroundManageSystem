@@ -94,6 +94,7 @@ import userGroup from './modules/user/group.js'
 import eventFlow from './modules/event/flow.js'
 import eventEvents from './modules/event/flow_events.js'
 import eventVote from './modules/event/vote.js'
+import eventVoteAdmin from './modules/event/voteadmin.js'
 import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
@@ -173,6 +174,7 @@ const asyncRoutes = [
             eventEvents,
             eventFlow,
             eventVote,
+            eventVoteAdmin,
             eventEntry,
             eventComplaint,
             eventIllegal
