@@ -3,7 +3,7 @@
         <el-dialog
             v-model="box_switch"
             width="70%"
-            title="投票选项"
+            title="票管理"
             custom-class="box-dialog2"
             @close="dialogClose"
         >
@@ -126,11 +126,18 @@ import {
 const data_1 = reactive({
     list: [],
     details_switch: false,
-    details_data: {}
+    details_data: {},
+    page:1,
+    per_page:15,
+    total:0
 })
 const getFuncVoteoptsList = () => {
-    APIgetTicketList({ vid: id.value }).then(res => {
-        data_1.list = res.data
+    APIgetTicketList(id.value,{
+        page:data_1.page,
+        per_page:data_1.per_page
+    }).then(res => {
+        data_1.list = res.data.items
+        data_1.total = res.data.aggregation.total_cnt
     })
 }
 const clickFuncDelete = val => {
