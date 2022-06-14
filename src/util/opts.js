@@ -158,14 +158,11 @@ const opts = {
         key: 'picker-select',
         val: '选择器'
     }, {
-        key: 'picker-city-china',
-        val: '城市选择器'
+        key: 'checkbox',
+        val: '勾选框'
     }, {
         key: 'picker-date',
         val: '日期选择器'
-    }, {
-        key: 'checkbox',
-        val: '勾选框'
     }],
     // 步骤是否可以进行返回步骤操作
     step_back: [{
