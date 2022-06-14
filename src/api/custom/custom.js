@@ -2,7 +2,19 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-
+// 列表 Illegal
+export function APIgetTicketList(vote, params) {
+    return api2.get(`vote/${vote}/ticket`, { params: params })
+}
+// 详情
+export function APIgetTicketDetails(ticket) {
+    return api2.get(`ticket/${ticket}`)
+}
+// 删除
+export function APIdeleteTicket(ticket) {
+    return api2.delete(`ticket/${ticket}`)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 设置违建
 // 列表 Illegal
 export function APIgetIllegalList(params) {
