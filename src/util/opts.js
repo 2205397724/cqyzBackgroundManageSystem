@@ -11,6 +11,17 @@
 // ---------------------------------------------------------------------------------------
 import api2 from '@/api/index2.js'
 const opts = {
+    // 投票
+    vote_toupiao: [{
+    	key: 1,
+    	val: '支持'
+    }, {
+    	key: 2,
+    	val: '弃权'
+    }, {
+    	key: 3,
+    	val: '反对'
+    }],
     illegal_type: [{
         key: 1,
         val: '房屋'

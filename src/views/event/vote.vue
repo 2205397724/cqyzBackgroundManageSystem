@@ -112,6 +112,7 @@
                             size="small"
                             @click="()=>{
                                 vote_admin.admin_voteid = scope.row.id;
+                                vote_admin.vmax = scope.row.vmax;
                                 vote_admin.admin_switch = true;
                             }"
                         >
@@ -340,7 +341,7 @@
         <!-- 投票房屋 -->
         <VoteHouse :id="vote_house.house_voteid" v-model:dialog_switch="vote_house.house_switch" />
         <!-- 票管理 -->
-        <VoteAdmin :id="vote_admin.admin_voteid" v-model:dialog_switch="vote_admin.admin_switch" />
+        <VoteAdmin :id="vote_admin.admin_voteid" v-model:dialog_switch="vote_admin.admin_switch" :vmax="vote_admin.vmax" />
     </div>
 </template>
 <script setup>

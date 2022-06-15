@@ -2,6 +2,10 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 线下票
+export function APIpostOfflineAdd(vote, data) {
+    return api2.post(`vote/${vote}/offlineticket`, data)
+}
 // 列表 Illegal
 export function APIgetTicketList(vote, params) {
     return api2.get(`vote/${vote}/ticket`, { params: params })
