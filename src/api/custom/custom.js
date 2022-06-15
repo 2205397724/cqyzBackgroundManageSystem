@@ -2,6 +2,28 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 设备
+// 列表
+export function APIgetDeviceList(params) {
+    return api2.get('device', { params: params })
+}
+// 详情
+export function APIgetDeviceDetails(device) {
+    return api2.get(`device/${device}`)
+}
+// 删除
+export function APIdeleteDevice(device) {
+    return api2.delete(`device/${device}`)
+}
+// 修改
+export function APIputDevice(device, data) {
+    return api2.put(`device/${device}`, data)
+}
+// 添加
+export function APIpostDevice(data) {
+    return api2.post('device', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 线下票
 export function APIpostOfflineAdd(vote, data) {
     return api2.post(`vote/${vote}/offlineticket`, data)

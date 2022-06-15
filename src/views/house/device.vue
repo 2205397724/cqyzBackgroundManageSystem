@@ -21,13 +21,13 @@
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
                 </div>
-                <!-- <div>
+                <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                             <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加</el-button>
                         </el-col>
                     </el-row>
-                </div> -->
+                </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
                         v-loading="loading_tab"
@@ -35,24 +35,29 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="ID" width="250">
+                        <el-table-column prop="id" label="设备名称" width="250">
                             <template #default="scope">
-                                <span>{{ scope.row.id }} </span>
+                                <span>{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="违建对象ID" width="250">
+                        <el-table-column prop="id" label="设备编号" width="110">
                             <template #default="scope">
-                                <span>{{ scope.row.cid }} </span>
+                                <span>{{ scope.row.sno }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cid" label="违建类型" width="90">
+                        <el-table-column prop="cid" label="类型" width="90">
                             <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.illegal_type,scope.row.type) }} </span>
+                                <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cid" label="状态" width="90">
                             <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </span>
+                                <span>{{ getOptVal(opts_all.obj.device_status,scope.row.status) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="是否显示" width="180">
+                            <template #default="scope">
+                                <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -111,36 +116,169 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="对象类型"
+                                label="设备名称"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.name"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="小区"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.zone"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="楼栋"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.building?from_error.msg.building[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.building"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="单元"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.unit?from_error.msg.unit[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.unit"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="所在地址"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.addr"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="编号"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.sno?from_error.msg.sno[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.sno"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="品牌"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.brand?from_error.msg.brand[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.brand"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="提醒信息"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.warn?from_error.msg.warn[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.warn"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="设备类型"
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
                             >
-                                <el-select v-model="from_examine.item.type" class="head-btn" placeholder="处理状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.illegal_type" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-select v-model="from_examine.item.type" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="违建对象ID"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.tgt?from_error.msg.tgt[0]:''"
-                            >
-                                <el-select v-model="from_examine.item.tgt" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="处理状态"
+                                label="设备状态"
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
                             >
                                 <el-select v-model="from_examine.item.status" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="是否显示"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.show?from_error.msg.show[0]:''"
+                            >
+                                <el-switch
+                                    v-model="from_examine.item.show"
+                                    class="head-btn"
+                                    inline-prompt
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    active-text="是"
+                                    inactive-text="否"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24"><div class="details-tit-sm m-b-10">自定义字段</div></el-col>
+                        <el-col :md="24" :lg="24">
+                            <div style="margin-bottom: 10px;">
+                                <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
+                            </div>
+                            <div v-for="(item,i) in from_examine.item.extra" class="serve-box">
+                                <el-row :gutter="10">
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item label="字段名" :error="from_error.msg&&from_error.msg['extra.'+i+'.lab']?from_error.msg['extra.'+i+'.lab'][0]:''">
+                                            <el-input
+                                                v-model="item.lab"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item label="字段内容" :error="from_error.msg&&from_error.msg['extra.'+i+'.val']?from_error.msg['extra.'+i+'.val'][0]:''">
+                                            <el-input
+                                                v-model="item.val"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div class="delete-service" @click="deleteServiceFunc(i)">
+                                    <el-icon :size="20" color="#F56C6C">
+                                        <el-icon-circle-close />
+                                    </el-icon>
+                                </div>
+                            </div>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -160,20 +298,48 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
+                    <div class="left">设备名称</div>
+                    <div class="right">{{ data_details.item.name }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">违建对象ID</div>
-                    <div class="right">{{ data_details.item.cid }}</div>
+                    <div class="left">小区</div>
+                    <div class="right">{{ data_details.item.zone }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">违建类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.illegal_type,data_details.item.type) }}</div>
+                    <div class="left">楼栋</div>
+                    <div class="right">{{ data_details.item.building }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">单元</div>
+                    <div class="right">{{ data_details.item.unit }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">所在地址</div>
+                    <div class="right">{{ data_details.item.addr }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">编号</div>
+                    <div class="right">{{ data_details.item.sno }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">品牌</div>
+                    <div class="right">{{ data_details.item.brand }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">提醒信息</div>
+                    <div class="right">{{ data_details.item.warn }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.device_type,data_details.item.type) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.illegal_user,data_details.item.status) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.device_status,data_details.item.status) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">是否显示</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -193,13 +359,12 @@
     </div>
 </template>
 <script setup>
-import SearchFlow from '@/components/SearchFlow/index.vue'
 import {
-    APIgetIllegalList,
-    APIgetIllegalDetails,
-    APIdeleteIllegal,
-    APIputIllegal,
-    APIpostIllegal
+    APIgetDeviceList,
+    APIgetDeviceDetails,
+    APIdeleteDevice,
+    APIputDevice,
+    APIpostDevice
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -238,7 +403,7 @@ let page = ref(1)
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        fields: []
+        extra: []
     }
 })
 const str_title = ref('添加')
@@ -274,7 +439,7 @@ const refreshFunc = () => {
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetIllegalDetails(val.id).then(res => {
+    APIgetDeviceDetails(val.id).then(res => {
         if (!res.code) {
             data_details.item = res.data
             switch_details.value = true
@@ -292,7 +457,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputIllegal(from_examine.item.id, from_examine.item).then(res => {
+                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -302,7 +467,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostIllegal(from_examine.item).then(res => {
+                APIpostDevice(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -353,7 +518,7 @@ const getTabListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetIllegalList(params).then(res => {
+    APIgetDeviceList(params).then(res => {
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -363,7 +528,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteIllegal(val.id).then(res => {
+    APIdeleteDevice(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
@@ -375,7 +540,7 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        fields: []
+        extra: []
     }
     switch_examine.value = true
 }
@@ -383,14 +548,25 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetIllegalDetails(val.id).then(res => {
+    APIgetDeviceDetails(val.id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
         }
     })
 }
-
+// 删除 服务名称和联系方式
+const deleteServiceFunc = index => {
+    from_examine.item.extra.splice(index, 1)
+}
+// 添加 服务名称和联系方式
+const addServiceFunc = index => {
+    let data = {
+        'lab': '',
+        'val': ''
+    }
+    from_examine.item.extra.push(data)
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -400,7 +576,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['illegal_user', 'illegal_type']).then(res => {
+getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device_show']).then(res => {
     opts_all.obj = res
 })
 </script>

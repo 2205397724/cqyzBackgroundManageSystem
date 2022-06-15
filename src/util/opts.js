@@ -11,16 +11,49 @@
 // ---------------------------------------------------------------------------------------
 import api2 from '@/api/index2.js'
 const opts = {
+    // 是否显示
+    device_show: [{
+        key: 0,
+        val: '隐藏'
+    }, {
+        key: 1,
+        val: '显示'
+    }],
+    // 设备状态
+    device_status: [{
+        key: 1,
+        val: '正常'
+    }, {
+        key: 2,
+        val: '故障'
+    }, {
+        key: 3,
+        val: '维修中'
+    }],
+    // 设备类型
+    device_type: [{
+        key: 1,
+        val: '设备'
+    }, {
+        key: 2,
+        val: '设施'
+    }, {
+        key: 3,
+        val: '部位'
+    }, {
+        key: 9,
+        val: '其他'
+    }],
     // 投票
     vote_toupiao: [{
-    	key: 1,
-    	val: '支持'
+        key: 1,
+        val: '支持'
     }, {
-    	key: 2,
-    	val: '弃权'
+        key: 2,
+        val: '弃权'
     }, {
-    	key: 3,
-    	val: '反对'
+        key: 3,
+        val: '反对'
     }],
     illegal_type: [{
         key: 1,

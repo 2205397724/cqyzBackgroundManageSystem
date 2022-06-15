@@ -14,7 +14,7 @@ export default {
         {
             path: 'device',
             name: 'eventdevice',
-            component: () => import('@/views/event/device.vue'),
+            component: () => import('@/views/house/device.vue'),
             meta: {
                 title: '设备',
                 sidebar: false,

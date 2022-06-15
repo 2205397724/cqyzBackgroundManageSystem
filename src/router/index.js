@@ -87,6 +87,7 @@ import houseHousingManagement from './modules/house/housing_management.js'
 import houseEnterprise from './modules/house/enterprise.js'
 import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
+import eventDevice from './modules/house/device.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
@@ -94,7 +95,6 @@ import userGroup from './modules/user/group.js'
 import eventFlow from './modules/event/flow.js'
 import eventEvents from './modules/event/flow_events.js'
 import eventVote from './modules/event/vote.js'
-import eventDevice from './modules/event/device.js'
 import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
@@ -146,7 +146,8 @@ const asyncRoutes = [
             houseResidential,
             houseHousingManagement,
             houseProperty,
-            houseEnterprise
+            houseEnterprise,
+            eventDevice
         ]
     },
     {
@@ -176,8 +177,7 @@ const asyncRoutes = [
             eventVote,
             eventEntry,
             eventComplaint,
-            eventIllegal,
-            eventDevice
+            eventIllegal
         ]
     },
     {
