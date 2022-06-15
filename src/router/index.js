@@ -88,6 +88,8 @@ import houseEnterprise from './modules/house/enterprise.js'
 import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
 import eventDevice from './modules/house/device.js'
+import eventDeviceArchive from './modules/house/device_archive.js'
+import eventDeviceRepair from './modules/house/device_repair.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
@@ -147,7 +149,9 @@ const asyncRoutes = [
             houseHousingManagement,
             houseProperty,
             houseEnterprise,
-            eventDevice
+            eventDevice,
+            eventDeviceArchive,
+            eventDeviceRepair
         ]
     },
     {

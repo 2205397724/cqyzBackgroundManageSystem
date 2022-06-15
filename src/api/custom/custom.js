@@ -2,6 +2,50 @@ import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
 
 /* --------------------------------------------------------------------------------------------------------------------- */
+// 设备维修
+// 列表
+export function APIgetDeviceRepairList(params) {
+    return api2.get('d/repair', { params: params })
+}
+// 详情
+export function APIgetDeviceRepairDetails(repair) {
+    return api2.get(`d/repair/${repair}`)
+}
+// 删除
+export function APIdeleteDeviceRepair(repair) {
+    return api2.delete(`d/repair/${repair}`)
+}
+// 修改
+export function APIputDeviceRepair(repair, data) {
+    return api2.put(`d/repair/${repair}`, data)
+}
+// 添加
+export function APIpostDeviceRepair(data) {
+    return api2.post('d/repair', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 设备档案
+// 列表
+export function APIgetDeviceArchiveList(params) {
+    return api2.get('d/archive', { params: params })
+}
+// 详情
+export function APIgetDeviceArchiveDetails(archive) {
+    return api2.get(`d/archive/${archive}`)
+}
+// 删除
+export function APIdeleteDeviceArchive(archive) {
+    return api2.delete(`d/archive/${archive}`)
+}
+// 修改
+export function APIputDeviceArchive(archive, data) {
+    return api2.put(`d/archive/${archive}`, data)
+}
+// 添加
+export function APIpostDeviceArchive(data) {
+    return api2.post('d/archive', data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 设备
 // 列表
 export function APIgetDeviceList(params) {
