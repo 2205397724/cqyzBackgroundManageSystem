@@ -3,9 +3,8 @@
         <page-main>
             <div>
                 <el-input v-model="data_1.search.title" class="input-b-r" placeholder="标题名称" clearable />
-                <el-select v-model="data_1.search.illegal" class="input-b-r" placeholder="是否违建">
-                    <el-option label="是违建" :value="1" />
-                    <el-option label="不是违建" :value="0" />
+                <el-select v-model="data_1.search.kind" class="input-b-r" clearable placeholder="分类">
+                    <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
                 </el-select>
                 <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
                     <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
@@ -156,11 +155,11 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
-                            label="是否违建"
-                            :error="data_1.add_error&&data_1.add_error.illegal?data_1.add_error.illegal[0]:''"
+                            label="分类"
+                            :error="data_1.add_error&&data_1.add_error.kind?data_1.add_error.kind[0]:''"
                         >
-                            <el-select v-model="data_1.add_form.illegal" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_illegal" :key="item.key" :label="item.val" :value="item.key" />
+                            <el-select v-model="data_1.add_form.kind" class="head-btn" clearable placeholder="">
+                                <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -299,6 +298,10 @@
                     <div class="right">{{ data_1.details_data.title }}</div>
                 </div>
                 <div class="item">
+                    <div class="left">编号</div>
+                    <div class="right">{{ data_1.details_data.sno }}</div>
+                </div>
+                <div class="item">
                     <div class="left">是否公开</div>
                     <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,data_1.details_data.pub) }}</div>
                 </div>
@@ -307,18 +310,18 @@
                     <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,data_1.details_data.ano) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">是否违建</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_illegal,data_1.details_data.illegal) }}</div>
+                    <div class="left">分类</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,data_1.details_data.kind) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">小区</div>
                     <div class="right">{{ data_1.details_data.zid }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="data_1.details_data.catpro">
                     <div class="left">问题分类</div>
                     <div class="right">{{ data_1.details_data.catpro }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="data_1.details_data.catob">
                     <div class="left">投诉对象</div>
                     <div class="right">{{ data_1.details_data.catob }}</div>
                 </div>
@@ -352,7 +355,7 @@
                                 :timestamp="activity.updated_at"
                             >
                                 <div>事件：{{ activity.content }}</div>
-                                <div>操作人员：{{ activity.uinfo.realname }}</div>
+                                <div>操作人员：{{ activity.uinfo.realname || '空' }}</div>
 
                                 <div v-if="activity.content=='已转办'">转办状态：{{ getOptVal(opts_all.obj.toushu_status,activity.logable.status) }}</div>
                                 <div v-if="activity.content=='已转办'" style="padding: 6px 0;">
@@ -922,7 +925,7 @@ const popupFuncAdd4 = val => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     data_1.search = {
-        illegal: 0
+        kind: 2
     }
     data_1.switch_search = false
     data_1.page = 1
@@ -943,7 +946,7 @@ const opts_all = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts([ 'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
+getOpts(['tousu_type_kind' ,'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.type_type[2].key).then(res => {
         opts_all.obj.problem_type = res.data
