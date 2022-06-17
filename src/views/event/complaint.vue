@@ -486,13 +486,24 @@
                 :model="popup_3.form"
             >
                 <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="处理对象" prop="name"
                             :error="popup_3.msg&&popup_3.msg.type?popup_3.msg.type[0]:''"
                         >
                             <el-select v-model="popup_3.form.type" class="head-btn" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="标记"
+                            :error="popup_3.msg&&popup_3.msg.flg?popup_3.msg.flg[0]:''"
+                        >
+                            <el-select v-model="popup_3.form.flg" class="head-btn" clearable placeholder="">
+                                <el-option v-for="(item,i) in opts_all.obj.flg_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -803,7 +814,8 @@ const clickFuncOpenPopup3 = val => {
         caid: val.id,
         content: val.content,
         affix: val.affix,
-        type: val.type
+        type: val.type,
+        flg: val.flg
     }
     popup_3.switch = true
     let arr = []
@@ -856,7 +868,8 @@ const popupFuncAdd3 = val => {
         caid: popup_3.form.caid,
         content: popup_3.form.content,
         affix: file_key,
-        type: popup_3.form.type
+        type: popup_3.form.type,
+        flg: popup_3.form.flg
     }
     popup_3.msg = {}
     if (files.length > 0) {
@@ -946,7 +959,7 @@ const opts_all = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['tousu_type_kind' ,'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
+getOpts(['flg_type','tousu_type_kind' ,'toushu_status', 'toushu_ano', 'toushu_pub', 'type_type', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.type_type[2].key).then(res => {
         opts_all.obj.problem_type = res.data
