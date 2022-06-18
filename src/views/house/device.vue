@@ -138,6 +138,19 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
+                                label="所属单元"
+                                label-width="90px"
+                                :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
+                            >
+                                <BerZone :disabled="[0,1,2,3,4,5,6]" :code="''" v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit"></BerZone>
+                                <!-- <el-input
+                                    v-model="from_examine.item.zone"
+                                    class="head-btn"
+                                /> -->
+                            </el-form-item>
+                        </el-col>
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
                                 label="小区"
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
@@ -147,8 +160,8 @@
                                     class="head-btn"
                                 />
                             </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="楼栋"
                                 label-width="90px"
@@ -159,8 +172,8 @@
                                     class="head-btn"
                                 />
                             </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        </el-col> -->
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="单元"
                                 label-width="90px"
@@ -171,7 +184,7 @@
                                     class="head-btn"
                                 />
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="所在地址"
