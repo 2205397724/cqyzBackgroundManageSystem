@@ -1,6 +1,40 @@
 import api from '@/api/index.js'
 import api2 from '@/api/index2.js'
-
+import api9 from '@/api/index9.js'
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 查看
+export function APIgetAdCommentList(tgtid, params) {
+    return api9.get(`commentcfg/${tgtid}`, { params: params })
+}
+// 修改
+export function APIpostAdComment(tgtid, data) {
+    return api2.post(`commentcfg/${tgtid}`, data)
+}
+// 删除
+export function APIdeleteAdComment(tgtid) {
+    return api2.delete(`commentcfg/${tgtid}`)
+}
+// 评论
+// 列表
+export function APIgetCommentList(tgtid, params) {
+    return api2.get(`target/${tgtid}/comment`, { params: params })
+}
+// 详情
+export function APIgetCommentDetails(id) {
+    return api2.get(`comment/${id}`)
+}
+// 删除
+export function APIdeleteComment(id) {
+    return api2.delete(`comment/${id}`)
+}
+// 修改
+export function APIputComment(id, data) {
+    return api2.put(`comment/${id}`, data)
+}
+// 添加
+export function APIpostComment(tgtid, data) {
+    return api2.post(`target/${tgtid}/comment`, data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设备维修
 // 列表

@@ -69,7 +69,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="340">
+                <el-table-column fixed="right" label="操作" width="400">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -108,6 +108,7 @@
                         >
                             审核
                         </el-button>
+                        <BerComment :id="scope.row.id" />
                     </template>
                 </el-table-column>
                 <el-table-column />

@@ -11,6 +11,31 @@
 // ---------------------------------------------------------------------------------------
 import api2 from '@/api/index2.js'
 const opts = {
+    // 评论状态
+    comment_status: [{
+        key: 10,
+        val: '未审核'
+    }, {
+        key: 20,
+        val: '正常'
+    }, {
+        key: 30,
+        val: '审核失败'
+    }],
+    // 评论 分割 100百分制、10分制、5分制、0不采用
+    comment_scoreper: [{
+        key: 100,
+        val: '100百分制'
+    }, {
+        key: 10,
+        val: '10分制'
+    }, {
+        key: 5,
+        val: '5分制'
+    }, {
+        key: 0,
+        val: '不采用'
+    }],
     // 标识类别
     flg_type: [{
         key: 0,
@@ -23,7 +48,7 @@ const opts = {
         val: '整改'
     }],
     // 投诉类型
-    tousu_type_kind:[{
+    tousu_type_kind: [{
         key: 1,
         val: '违建'
     }, {
