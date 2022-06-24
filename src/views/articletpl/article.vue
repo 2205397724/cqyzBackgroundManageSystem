@@ -287,12 +287,13 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''"
                         >
-                            <el-input
+                            <!-- <el-input
                                 v-model="from_examine.item.content"
                                 :autosize="{ minRows: 2, maxRows: 10 }"
                                 type="textarea"
                                 placeholder=""
-                            />
+                            /> -->
+                            <editor style="width: 100%;" v-model="from_examine.item.content" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">

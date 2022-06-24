@@ -80,3 +80,8 @@ onMounted(() => {
 })
 
 </script>
+<style lang="scss" >
+    .tox{
+        z-index: 3333!important;
+    }
+</style>
