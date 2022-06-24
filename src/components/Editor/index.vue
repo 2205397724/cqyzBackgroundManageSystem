@@ -28,6 +28,9 @@ import 'tinymce/plugins/wordcount'
 import 'tinymce/plugins/code'
 import 'tinymce/plugins/searchreplace'
 
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
+import { getFilesKeys } from '@/util/files.js'
+
 const props = defineProps({
     modelValue: {
         type: String,
@@ -57,15 +60,20 @@ const defaultSetting = ref({
     branding: false,
     menubar: false,
     toolbar_mode: 'sliding',
+    content_css: 'tinymce/skins/content/default/content.min.css',
+    deprecation_warnings: false,
     insertdatetime_formats: [
         '%Y年%m月%d日',
         '%H点%M分%S秒',
         '%Y-%m-%d',
         '%H:%M:%S'
     ],
-    images_upload_handler: (blobInfo, success) => {
-        const img = 'data:image/jpeg;base64,' + blobInfo.base64()
-        success(img)
+    images_upload_handler: (blobInfo, success, failure) => {
+        getFilesKeys([blobInfo.blob()], 'folder').then(files => {
+            success(VITE_APP_FOLDER_SRC.value + files[0])
+        }).catch(err => {
+            failure(err)
+        })
     }
 })
 
