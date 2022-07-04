@@ -4,7 +4,6 @@
             <p>重庆市哪屋优商务信息咨询有限公司</p>
         </div>
         <div id="login-box">
-            <!-- <div class="login-banner" /> -->
             <div class="logo">
                 <img src="../assets/images/logo2.png" alt="">
             </div>
@@ -43,11 +42,6 @@
                     <!-- <el-button type="text" @click="formType = 'reset'">忘记密码</el-button> -->
                 </div>
                 <el-button :loading="loading" type="primary" size="large" style="width: 100%;" @click.prevent="handleLogin">登 录</el-button>
-                <!-- <div style="margin-top: 20px; margin-bottom: -10px; color: #666; font-size: 14px; text-align: center; font-weight: bold;">
-                    <span style="margin-right: 5px;">演示帐号一键登录：</span>
-                    <el-button type="danger" size="small" @click="testAccount('admin')">admin</el-button>
-                    <el-button type="danger" size="small" plain @click="testAccount('test')">test</el-button>
-                </div> -->
             </el-form>
             <el-form v-show="formType == 'reset'" ref="resetFormRef" :model="resetForm" :rules="resetRules" class="login-form" auto-complete="on" label-position="left">
                 <div class="title-container">
@@ -210,9 +204,6 @@ function handleFind() {
 [data-mode="mobile"] {
     #login-box {
         max-width: 80%;
-        // .login-banner {
-        //     display: none;
-        // }
         position: absolute;
         top: 50%;
         left: 50%;
@@ -236,6 +227,7 @@ function handleFind() {
     background-position: center center;
     p {
         font-weight: bold;
+        color: #666;
         font-size: 1.5rem;
         padding: 20px 0 0 60px;
         letter-spacing: 1em;
@@ -251,14 +243,7 @@ function handleFind() {
     transform: translateX(-50%) translateY(-50%);
     background: rgb(255 255 255 / 37.3%);
     border-radius: 10px;
-    // overflow: hidden;
     box-shadow: 0 0 5px #999;
-    // .login-banner {
-    //     width: 300px;
-    //     background-image: url("../assets/images/login-banner.jpg");
-    //     background-size: cover;
-    //     background-position: center center;
-    // }
     .logo {
         position: absolute;
         top: -11%;
@@ -277,7 +262,7 @@ function handleFind() {
             position: relative;
             .title {
                 font-size: 22px;
-                color: #666;
+                color: #444;
                 margin: 0 auto 30px;
                 text-align: center;
                 font-weight: 800;
@@ -313,13 +298,6 @@ function handleFind() {
         margin: 20px 0;
     }
 }
-// @media only screen and (min-device-width: 900px) {
-//     #login-box {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translateX(-50%) translateY(-50%);
-// }
 .copyright {
     position: absolute;
     bottom: 30px;
