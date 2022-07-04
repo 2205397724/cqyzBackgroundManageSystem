@@ -1,8 +1,13 @@
 <template>
     <div>
-        <div class="bg-banner" />
+        <div class="bg-banner">
+            <p>重庆市哪屋优商务信息咨询有限公司</p>
+        </div>
         <div id="login-box">
-            <div class="login-banner" />
+            <!-- <div class="login-banner" /> -->
+            <div class="logo">
+                <img src="../assets/images/logo2.png" alt="">
+            </div>
             <el-form v-show="formType == 'login'" ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
                 <div class="title-container">
                     <h3 class="title">{{ title }}管理后台</h3>
@@ -205,9 +210,17 @@ function handleFind() {
 [data-mode="mobile"] {
     #login-box {
         max-width: 80%;
-        .login-banner {
-            display: none;
-        }
+        // .login-banner {
+        //     display: none;
+        // }
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+    .bg-banner p {
+        max-width: 80%;
+        font-size: 0;
     }
 }
 :deep(input[type="password"]::-ms-reveal) {
@@ -218,26 +231,43 @@ function handleFind() {
     z-index: 0;
     width: 100%;
     height: 100%;
-    background-image: url("../assets/images/login-bg.jpg");
+    background-image: url("../assets/images/login-big.jpg");
     background-size: cover;
     background-position: center center;
+    p {
+        font-weight: bold;
+        font-size: 1.5rem;
+        padding: 20px 0 0 60px;
+        letter-spacing: 1em;
+        margin: 0 auto;
+    }
 }
 #login-box {
     display: flex;
     justify-content: space-between;
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 70%;
     transform: translateX(-50%) translateY(-50%);
-    background: rgb(255 255 255 / 80%);
+    background: rgb(255 255 255 / 37.3%);
     border-radius: 10px;
-    overflow: hidden;
+    // overflow: hidden;
     box-shadow: 0 0 5px #999;
-    .login-banner {
-        width: 300px;
-        background-image: url("../assets/images/login-banner.jpg");
-        background-size: cover;
-        background-position: center center;
+    // .login-banner {
+    //     width: 300px;
+    //     background-image: url("../assets/images/login-banner.jpg");
+    //     background-size: cover;
+    //     background-position: center center;
+    // }
+    .logo {
+        position: absolute;
+        top: -11%;
+        left: 35%;
+        transform: translateX(50%) translateY(50%);
+        img {
+            width: 70px;
+            height: 50px;
+        }
     }
     .login-form {
         width: 450px;
@@ -250,7 +280,7 @@ function handleFind() {
                 color: #666;
                 margin: 0 auto 30px;
                 text-align: center;
-                font-weight: bold;
+                font-weight: 800;
                 @include text-overflow;
             }
         }
@@ -283,6 +313,13 @@ function handleFind() {
         margin: 20px 0;
     }
 }
+// @media only screen and (min-device-width: 900px) {
+//     #login-box {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translateX(-50%) translateY(-50%);
+// }
 .copyright {
     position: absolute;
     bottom: 30px;
