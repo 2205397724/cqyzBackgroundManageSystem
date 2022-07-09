@@ -3,9 +3,9 @@
         <page-main>
             <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加分类</el-button>
 
-            <el-select v-model="main_type" class="head-btn" placeholder="分类种类" clearable style="width: 200px;">
+            <el-select v-model="main_type" class="head-btn" placeholder="分类种类" style="width: 200px;">
                 <el-option
-                    v-for="(item,i) in opts_all.obj.type_type" :key="item.key" :label="item.val"
+                    v-for="(item,i) in opts_all.obj" :key="item.key" :label="item.val"
                     :value="item.key"
                 />
             </el-select>
@@ -166,7 +166,7 @@ import {
 // 数据
 const show_pid = ref(false)
 // 分类种类
-const main_type = ref(101)
+const main_type = ref('announce')
 // 列表
 let loading_tab = ref(false)
 let data_tab = reactive({
@@ -190,26 +190,27 @@ watch(main_type, () => {
 const refreshFunc = () => {
     getTabListFunc()
 }
+console.log(main_type)
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
     if (str_title.value == '修改') {
         APIputType(main_type.value, from_examine.item.id, from_examine.item).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                ElMessage.success(res.msg)
-                switch_examine.value = false
-            }
+            // if (!res.code) {
+            refreshFunc()
+            ElMessage.success(res.msg)
+            switch_examine.value = false
+            // }
         }).catch(err => {
             from_error.msg = err.data
         })
     } else {
         APIpostType(main_type.value, from_examine.item).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                ElMessage.success(res.msg)
-                switch_examine.value = false
-            }
+            // if (!res.code) {
+            refreshFunc()
+            ElMessage.success(res.msg)
+            switch_examine.value = false
+            // }-
         }).catch(err => {
             from_error.msg = err.data
         })
@@ -220,19 +221,15 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetTypeList(main_type.value).then(res => {
         console.log(res)
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-        }
+        loading_tab.value = false
+        data_tab.arr = res
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteType(main_type.value, val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加
@@ -274,8 +271,9 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['type_type']).then(res => {
-    opts_all.obj = res
+getOpts(['kind']).then(res => {
+    console.log(res)
+    opts_all.obj = res.kind
 })
 
 </script>
@@ -309,9 +307,6 @@ getOpts(['type_type']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .setuptype {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

@@ -42,69 +42,69 @@
                         <el-option v-for="(item,i) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.type_building" class="head-btn" placeholder="*楼栋性质" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.type_model" class="head-btn" placeholder="*户型" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.status_use" class="head-btn" placeholder="*房屋使用状态" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.status_safe" class="head-btn" placeholder="*房屋安全状态" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.status_plan" class="head-btn" placeholder="*规划用途" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.status_fact" class="head-btn" placeholder="*实际用途" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.is_bind_property" class="head-btn" placeholder="是否绑定产权" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_has_property" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-input v-model="data_search.obj.sync_china_code" class="head-btn" placeholder="区域code" clearable />
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
                     <!-- <el-input v-model="data_search.obj.sync_zone_id" class="head-btn" placeholder="小区ID" clearable /> -->
                     <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                         <SearchResidential v-model:str="data_search.obj.sync_zone_id" />
                     </div>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
                     <!-- <el-input v-model="data_search.obj.sync_building_id" class="head-btn" placeholder="楼栋ID" clearable /> -->
                     <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                         <SearchBuilding v-model:str="data_search.obj.sync_building_id" />
                     </div>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
                     <!-- <el-input v-model="data_search.obj.sync_unit_id" class="head-btn" placeholder="单元ID" clearable /> -->
                     <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                         <SearchUnit v-model:str="data_search.obj.sync_unit_id" />
                     </div>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
                     <el-select v-model="data_search.obj.houseable_type" class="head-btn" placeholder="直属上级类型" clearable @change="data_search.obj.houseable_id=''">
                         <el-option label="楼栋" value="buildings" />
                         <el-option label="单元" value="units" />
                     </el-select>
                 </el-col>
-                <el-col v-if="data_search.obj.houseable_type" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
+                <el-col v-show="searchVisible==true" v-if="data_search.obj.houseable_type" :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
                     <div v-if="data_search.obj.houseable_type=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                         <SearchBuilding v-model:str="data_search.obj.houseable_id" />
                     </div>
@@ -112,7 +112,7 @@
                         <SearchUnit v-model:str="data_search.obj.houseable_id" />
                     </div>
                 </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                     <div class="head-btn">
                         <el-date-picker
                             v-model="data_search.obj.created_at"
@@ -125,7 +125,7 @@
                         />
                     </div>
                 </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                     <div class="head-btn">
                         <el-date-picker
                             v-model="data_search.obj.updated_at"
@@ -140,6 +140,9 @@
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                    <el-button class="head-btn" type="primary" @click="searchMore">更多搜索</el-button>
                 </el-col>
             </el-row>
             <div v-show="switch_search" class="search-tips">
@@ -218,6 +221,7 @@ const data_tab = reactive({
 const total = ref(100)
 const per_page = ref(15)
 const page = ref(1)
+const searchVisible = ref(false)
 const switch_search = ref(false)
 const data_search = reactive({
     obj: {}
@@ -225,6 +229,9 @@ const data_search = reactive({
 const searchFunc = () => {
     switch_search.value = true
     getTabListFunc()
+}
+const searchMore = () => {
+    searchVisible.value = !searchVisible.value
 }
 // 打开弹窗
 const openDigFunc = () => {

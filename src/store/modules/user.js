@@ -7,8 +7,7 @@ import { useMenuStore } from './menu'
 
 export const useUserStore = defineStore(
     // 唯一ID
-    'user',
-    {
+    'user', {
         state: () => ({
             account: localStorage.account || '',
             token: localStorage.token || '',
@@ -31,6 +30,7 @@ export const useUserStore = defineStore(
                 return new Promise((resolve, reject) => {
                     // 通过 mock 进行登录
                     APIlogin(data).then(res => {
+                        console.log(res)
                         let name = data.username
                         let time = res.data.expires_in + Date.now() / 1000
                         let token = res.data.access_token

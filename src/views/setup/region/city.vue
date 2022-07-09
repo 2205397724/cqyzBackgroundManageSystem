@@ -45,27 +45,57 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="china_code" label="区域代码" width="180">
+                        <el-table-column prop="name" label="名称" width="100">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.china_code }} </span>
+                                <span>{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="base_url" label="服务域名" width="240">
+                        <el-table-column prop="china_code" label="区域代码" width="100">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.base_url }} </span>
+                                <span style="margin-left: 15px;">{{ scope.row.china_code }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="created_at" label="创建时间" width="180">
+                        <el-table-column prop="ip" label="服务域名">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
+                                <span>{{ scope.row.ip }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="updated_at" label="修改时间" width="180">
+                        <el-table-column prop="created_at" label="rpc端口">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
+                                <span>{{ scope.row.rpc_port }} </span>
                             </template>
                         </el-table-column>
+                        <el-table-column prop="updated_at" label="auth_sk">
+                            <template #default="scope">
+                                <span>{{ scope.row.auth_sk }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="active" label="启用授权" width="100">
+                            <template #default="scope">
+                                <el-switch
+                                    v-model="scope.row.active"
+                                    class="switch"
 
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="启用"
+                                    inactive-text="禁用"
+                                    :active-value="0"
+                                    :inactive-value="1"
+                                    @change="switchFunk(scope.row)"
+                                />
+                            </template>
+                            <!-- <template #default="scope">
+                                <el-button
+                                    size="small" :type="scope.row.active =='1'?'danger':'primary'"
+                                    @click="suppstop(scope.row)"
+                                >   @change="switchFunk(scope.row)"
+                                    {{ scope.row.active =='1'?"禁用":"启用" }}
+                                </el-button>
+                            </template> -->
+                        </el-table-column>
                         <el-table-column />
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
@@ -119,6 +149,17 @@
                     :model="from_examine.item"
                 >
                     <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="名称" prop="name"
+                                :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="区域代码" prop="china_code"
@@ -133,9 +174,51 @@
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
                                 <el-input
-                                    v-model="from_examine.item.base_url"
+                                    v-model="from_examine.item.ip"
                                     placeholder=""
                                 />
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="rpc端口" prop="rpc_port"
+                                :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.rpc_port"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="auth_sk" prop="auth_sk"
+                                :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.auth_sk"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="启用授权" prop="active"
+                                :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
+                            >
+                                <template #default="scope">
+                                    <el-button
+                                        size="small" type="primary" @click="from_examine.item.active = 1 "
+                                    >
+                                        启用
+                                    </el-button>
+                                    <el-button
+                                        size="small" type="danger" @click="from_examine.item.active = 0 "
+                                    >
+                                        禁用
+                                    </el-button>
+                                </template>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -156,12 +239,25 @@
         >
             <div class="details-box">
                 <div class="item">
+                    <div class="left">名称</div>
+                    <div class="right">{{ data_details.item.name }} </div>
+                </div>
+                <div class="item">
                     <div class="left">区域代码</div>
                     <div class="right">{{ data_details.item.china_code }} </div>
                 </div>
                 <div class="item">
                     <div class="left">服务域名</div>
-                    <div class="right">{{ data_details.item.base_url }} </div>
+                    <div class="right">{{ data_details.item.ip }} </div>
+                </div>
+
+                <div class="item">
+                    <div class="left">rpc端口</div>
+                    <div class="right">{{ data_details.item.rpc_port }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">auth_sk</div>
+                    <div class="right">{{ data_details.item.auth_sk }} </div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -172,6 +268,7 @@
                     <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
             </div>
+
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
@@ -226,21 +323,34 @@ let per_page = ref(15)
 let page = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
+// let from_examine = reactive({
+//     item: {
+//         'building_id': '17',
+//         'addr': '浙江省 杭州市 江干区',
+//         'cnt_floor': 21,
+//         'cnt_house': 15,
+//         'time_build_end': '1980-04-26',
+//         'name': '不片原济须',
+//         'remark': '速',
+//         'addition': {
+//             'desc': '例火科准知根天且上了那他不。七社政于知克始术志线二计规在如。全认圆金值速权当二五且解平土办。话划西总确起该极叫可美原间不然生发四。'
+//         }
+//     }
+// })
 let from_examine = reactive({
     item: {
-        'building_id': '17',
-        'addr': '浙江省 杭州市 江干区',
-        'cnt_floor': 21,
-        'cnt_house': 15,
+        'active': 1,
+        'auth_sk': 'secret',
+        'china_code': '50',
+        'created_at': '2022-06-28T04:10:27.000000Z',
         'time_build_end': '1980-04-26',
-        'name': '不片原济须',
-        'remark': '速',
-        'addition': {
-            'desc': '例火科准知根天且上了那他不。七社政于知克始术志线二计规在如。全认圆金值速权当二五且解平土办。话划西总确起该极叫可美原间不然生发四。'
-        }
+        'id': '1',
+        'ip': '192.168.110.37',
+        'name': '重庆',
+        'rpc_port': 30032,
+        'updated_at': '2022-07-09T01:39:09.000000Z'
     }
 })
-
 const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
@@ -265,11 +375,28 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetCityDetails(val.id).then(res => {
-        if (!res.code) {
+        if (res.status === 200) {
             data_details.item = res.data
             switch_details.value = true
         }
     })
+}
+const switchFunk = row => {
+    let status = row.active == '1' ? '启用' : '禁用'
+    ElMessage({
+        type: 'warning',
+        showClose: true,
+        message: `已${status}此接口状态`
+    })
+    APIputCity(row.id, row).then(res => {
+        // console.log(res)
+        if (res.status === 200) {
+            refreshFunc()
+        }
+    }).catch(err => {
+        from_error.msg = err.data
+    })
+
 }
 // 监听分页
 watch(page, () => {
@@ -283,19 +410,22 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputCity(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
+                    // console.log(res)
+                    if (res.status === 200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success(res.statusText)
                         switch_examine.value = false
                     }
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
+                console.log(from_examine.item)
                 APIpostCity(from_examine.item).then(res => {
-                    if (!res.code) {
+                    // console.log(from_examine.item)
+                    if (res.status === 200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success(res.statusText)
                         switch_examine.value = false
                     }
                 }).catch(err => {
@@ -323,20 +453,19 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetCityList(params).then(res => {
-        if (res.code === 0) {
+        // console.log(res)
+        if (res.status === 200) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
+            data_tab.arr = res.data
+            total.value = res.data.rpc_port
         }
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteCity(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加楼栋
@@ -351,7 +480,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetCityDetails(val.id).then(res => {
-        if (!res.code) {
+        console.log(res)
+        if (res.status == 200) {
             from_examine.item = res.data
             switch_examine.value = true
         }
@@ -391,13 +521,9 @@ refreshFunc()
     }
 </style>
 <style lang="scss" scoped>
-    .regioncity {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
     }
-
 </style>

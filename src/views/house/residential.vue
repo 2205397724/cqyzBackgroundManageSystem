@@ -1,105 +1,129 @@
 <template>
     <div class="routineresidentialhouse">
-        <page-main>
-            <div>
-                <div>
-                    <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
-                    <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
-                    <el-button type="primary" class="head-btn" @click="searchFunc">搜索</el-button>
-                    <el-button v-show="switch_search" class="head-btn" @click="refreshFunc">重置</el-button>
-                    <span v-show="switch_search" class="font-grey size-base">*搜索到相关结果共{{ total }}条。</span>
+        <div class="tree-box" style="height: 100%;">
+            <div class="tree-item">
+                <div style="height: calc(100% - 60px);">
+                    <position-tree
+                        :tree_item="tree_item"
+                        :type="no_zone"
+                        @checkFunc="checkFunc"
+                    />
                 </div>
-                <div style="margin: 10px 0 20px;">
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button type="primary" size="large" @click="addResidentialFunc">添加小区</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="name" label="名称" width="180" />
-                        <el-table-column prop="addr" label="地址" width="220" />
-                        <el-table-column prop="id" label="小区ID" width="250" />
-                        <el-table-column prop="area_floor" label="总占地面积" width="140">
-                            <template #default="scope">
-                                <span>{{ scope.row.area_floor }} m²</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="area_build" label="总建筑面积" width="140">
-                            <template #default="scope">
-                                <span>{{ scope.row.area_build }} m²</span>
-                            </template>
-                        </el-table-column>
-                        <!-- <el-table-column prop="area_support" label="配套用房总面积" width="140">
+            </div>
+            <!-- <div class="tree-details" style="display: flex; flex-direction: column;">
+                <div style="height: 100%;">
+                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;  }"> -->
+            <div class="tree-details" style="display: flex; flex-direction: column;">
+                <div style="height: 100%;">
+                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
+                        <!-- <div
+                            v-if="!active_obj.obj.name||active_obj.obj.next_type=='region'"
+                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgba(255,255,255,0.5);cursor: not-allowed;"
+                        /> -->
+                        <div>
+                            <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
+                            <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
+                            <el-button type="primary" class="head-btn" @click="searchFunc">搜索</el-button>
+                            <el-button v-show="switch_search" class="head-btn" @click="refreshFunc">重置</el-button>
+                            <span v-show="switch_search" class="font-grey size-base">*搜索到相关结果共{{ total }}条。</span>
+                        </div>
+                        <div style="margin: 10px 0 20px;">
+                            <el-row :gutter="20" class="bottom-btn-box-2">
+                                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                                    <el-button type="primary" size="large" @click="addResidentialFunc">添加小区</el-button>
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;min-height: 300px;"
+                            >
+                                <el-table-column prop="name" label="名称" width="180" />
+                                <el-table-column prop="addr" label="地址" width="220" />
+                                <el-table-column prop="china_code" label="所在区域" width="180" />
+                                <el-table-column prop="id" label="小区ID" width="250" />
+                                <el-table-column prop="area_floor" label="总占地面积" width="140">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.area_floor }} m²</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="area_build" label="总建筑面积" width="140">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.area_build }} m²</span>
+                                    </template>
+                                </el-table-column>
+                                <!-- <el-table-column prop="area_support" label="配套用房总面积" width="140">
                             <template #default="scope">
                                 <span>{{ scope.row.area_support }} m²</span>
                             </template>
                         </el-table-column> -->
-                        <el-table-column prop="cnt_building" label="楼栋数" width="140">
-                            <template #default="scope">
-                                <el-link :underline="false" type="primary">
-                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cnt_live" label="住房总套数" width="140">
-                            <template #default="scope">
-                                <el-link style="padding: 0 10px;" :underline="false" class="el-button" type="primary" @click="showHouseFunc(scope.row)">
-                                    {{ scope.row.cnt_live }} 套
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cnt_live" label="业委会" width="140">
-                            <template #default="scope">
-                                <el-link :underline="false" type="primary">
-                                    <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id }}">业委会</router-link>
-                                </el-link>
-                            </template>
-                        </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
+                                <el-table-column prop="cnt_building" label="楼栋数" width="140">
+                                    <template #default="scope">
+                                        <el-link :underline="false" type="primary">
+                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
+                                        </el-link>
                                     </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
+                                </el-table-column>
+                                <el-table-column prop="cnt_live" label="住房总套数" width="140">
+                                    <template #default="scope">
+                                        <el-link style="padding: 0 10px;" :underline="false" class="el-button" type="primary" @click="showHouseFunc(scope.row)">
+                                            {{ scope.row.cnt_live }} 套
+                                        </el-link>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="cnt_live" label="业委会" width="140">
+                                    <template #default="scope">
+                                        <el-link :underline="false" type="primary">
+                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id }}">业委会</router-link>
+                                        </el-link>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column fixed="right" label="操作" width="200">
+                                    <template #default="scope">
+                                        <el-button
+                                            type="primary" size="small"
+                                            @click="modifyResidentialFunc(scope.row)"
+                                        >
+                                            修改
+                                        </el-button>
+                                        <el-button
+                                            size="small"
+                                            @click="detailsFunc(scope.row)"
+                                        >
+                                            详情
+                                        </el-button>
+                                        <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
+                                            <template #reference>
+                                                <el-button type="danger" size="small">
+                                                    删除
+                                                </el-button>
+                                            </template>
+                                        </el-popconfirm>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column />
+                            </el-table>
+                        </div>
+                        <div style="padding-top: 20px;">
+                            <el-pagination
+                                v-model:current-page="page"
+                                layout="total,prev,pager,next,jumper,"
+                                :total="total"
+                                :page-size="per_page"
+                                background
+                                hide-on-single-page
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </page-main>
+            <!-- </div>
+                </div>
+            </div> -->
+        </div>
         <!-- 修改添加 -->
         <el-dialog
             v-model="switch_examine"
@@ -591,22 +615,38 @@ import { ElMessage } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 import House from '@/components/House/index.vue'
-const tree_item = reactive({
-    obj: {}
-})
+// const tree_item = reactive({
+//     obj: {}
+// })
 const activeName = ref('1')
 const edit_house = ref(false)
-const showHouseFunc = val => {
-    tree_item.obj = {
-        id: val.id,
-        name: val.name,
-        next_type: 'building',
-        type: 'region'
-    }
-    edit_house.value = true
+// const showHouseFunc = val => {
+//     tree_item.obj = {
+//         id: val.id,
+//         name: val.name,
+//         next_type: 'building',
+//         type: 'region'
+//     }
+//     edit_house.value = true
+// }
+const active_obj = reactive({
+    obj: {}
+})
+const treeDetail = reactive({
+    arr: {}
+})
+const item = reactive({
+    arr: []
+})
+const checkFunc = val => {
+    console.log(val)
+    active_obj.obj = val
+    treeDetail.arr = val[1]
+    console.log(treeDetail.arr)
+    item.arr = treeDetail.arr.items
 }
-
 // 搜索
+let no_zone = ref(false)
 let switch_search = ref(false)
 let data_search = reactive({
     obj: ''
@@ -640,9 +680,13 @@ let from_examine = reactive({
         'area_floor': '',
         'area_build': '',
         'area_support': '',
+        'area_part': '',
+        'area_exc': 0,
+        'area_live': 0,
         'cnt_building': 0,
         'cnt_live': 0,
         'cnt_support': 0,
+        'cnt_part': 0,
         'company_build': '',
         'time_build_end': '',
         'time_build_start': '',
@@ -653,15 +697,38 @@ let from_examine = reactive({
         'remark': '',
         'addition': {
             'extra': {
-                'convenience': []
+                'convenience': [],
+                'geo': {
+                    'lat': 0,
+                    'lon': 0
+                }
             },
-            'desc': ''
+            'desc': '',
+            'created_at': '',
+            'id': '',
+            'updated_at': ''
         }
     }
 })
 
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
+const tree_item = ref({
+    id: '50',
+    name: '测试',
+    next_type: 'region',
+    type: 'region'
+})
+import {
+    APIgetChinaRegion
+} from '@/api/custom/custom.js'
+APIgetChinaRegion().then(res => {
+    console.log(res)
+    tree_item.value.id = res.data[0].code
+    tree_item.value.name = res.data[0].name
+    tree_item.value.next_type = 'region'
+    tree_item.value.type = 'region'
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -680,12 +747,12 @@ const refreshFunc = () => {
 
 // 详情
 const detailsFunc = val => {
+
     data_dialog.obj = val
     APIgetResidentialDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        console.log(res)
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // 监听分页
@@ -789,11 +856,12 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        // if (res.status === 200) {
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = data_tab.arr.length
+        // }
     })
 }
 // 删除
@@ -840,10 +908,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetResidentialDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+        console.log(res)
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 // 删除 服务名称和联系方式
@@ -862,19 +929,19 @@ const addServiceFunc = index => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 文件名称
 const file_obj = reactive({
-    obj:{
-        rtype:'',
-        rid:'',
-        name:'',
-        ftype:'',
-        key:[]
+    obj: {
+        rtype: '',
+        rid: '',
+        name: '',
+        ftype: '',
+        key: []
     }
 })
 const fileList = ref([])
-const handleChange= (uploadFile, uploadFiles) => {
-    console.log(uploadFile)
-    console.log(uploadFiles)
-  fileList.value = uploadFiles
+const handleChange = (uploadFile, uploadFiles) => {
+    // console.log(uploadFile)
+    // console.log(uploadFiles)
+    fileList.value = uploadFiles
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
@@ -882,6 +949,19 @@ refreshFunc()
 </script>
 <style lang="scss">
     .routineresidentialhouse {
+        .tree-box {
+            border-top: 1px solid #efefef;
+            display: flex;
+        }
+        .tree-item {
+            min-width: 300px;
+            width: 300px;
+            border-right: 1px solid #e9e9e9;
+        }
+        .tree-details {
+            flex-grow: 1;
+            max-width: calc(100% - 300px);
+        }
         .el-cascader {
             width: 100% !important;
             margin-bottom: 10px;
@@ -906,16 +986,13 @@ refreshFunc()
             }
         }
     }
-    .file-2022{
-        .el-form-item{
-          margin-bottom: 18px!important;
+    .file-2022 {
+        .el-form-item {
+            margin-bottom: 18px !important;
         }
     }
 </style>
 <style lang="scss" scoped>
-    .routineresidentialhouse {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

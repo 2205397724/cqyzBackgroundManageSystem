@@ -171,10 +171,12 @@ const getTabListFunc = () => {
         params.created_at = updated_str.substring(1)
     }
     loading_tab.value = true
+    console.log('成功')
     APIgetFileList(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
+        if (res.status === 200) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
+            data_tab.arr = res.data
             total.value = res.data.aggregation.total_cnt
         }
     })
@@ -230,9 +232,6 @@ getOpts(['file_type', 'resources_type']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .userregister {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

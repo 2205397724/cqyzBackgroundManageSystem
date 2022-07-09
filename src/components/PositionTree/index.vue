@@ -12,6 +12,7 @@
                 :check-strictly="true"
                 :accordion="true"
                 :default-checked-keys="[tree_item.id]"
+                :filter-node-method="filterNode"
                 @check="handleCheck"
             />
         </el-scrollbar>
@@ -23,12 +24,17 @@
 import {
     ref,
     toRefs,
+    reactive,
     defineProps,
     defineEmits
 } from 'vue'
-const props = defineProps(['tree_item'])
+const props = defineProps(['tree_item', 'type'])
+const type = ref(props.type)
 const emit = defineEmits(['checkFunc'])
 const { tree_item } = toRefs(props)
+const treeDetail = reactive({
+    arr: {}
+})
 const tree_props = {
     label: 'name',
     children: 'children',
@@ -46,18 +52,24 @@ import {
 } from '@/api/custom/custom.js'
 let nodeCopy = ''
 // type: region区域 zone小区 building楼栋 units单元
+const filterNode = (value, data) => {
+    if (!value) return true
+    return data.name.indexof(value) !== 'rigen'
+}
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
         nodeCopy = node
         resolve([tree_item.value])
-        emit('checkFunc', tree_item.value)
+        emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
         return false
     }
     switch (node.data.next_type) {
         case 'region':
             APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
+                treeDetail.arr = res.data
+                console.log(res)
                 let tree_arr = []
-                if (!res.data.code) {
+                if (res.status == 200) {
                     for (let i in res.data) {
                         if (res.data[i].level < 5) {
                             tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
@@ -67,25 +79,35 @@ const loadNode = (node, resolve) => {
                     }
                 }
                 resolve(tree_arr)
+                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
             break
         case 'zone':
-            APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
-                let tree_arr = []
-                if (!res.data.code) {
-                    for (let i in res.data.items) {
-                        tree_arr.push({ name: res.data.items[i].name, type: 'zone', next_type: 'building', id: res.data.items[i].id })
+            console.log(type)
+
+            if (!type.value) {
+                APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
+                    treeDetail.arr = res.data
+                    console.log(res)
+                    let tree_arr = []
+                    if (res.status == 200) {
+                        for (let i in res.data) {
+                            tree_arr.push({ name: res.data[i].name, type: 'zone', next_type: 'building', id: res.data[i].id })
+                        }
                     }
-                }
-                resolve(tree_arr)
-            })
+                    resolve(tree_arr)
+                    emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                    tree_arr = []
+                })
+
+            }
             break
         case 'building':
             APIgetBuildListHouse({ page: 1, per_page: 500, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
-                if (!res.data.code) {
-                    for (let i in res.data.items) {
-                        tree_arr.push({ name: res.data.items[i].name, type: 'building', next_type: 'units', id: res.data.items[i].id })
+                if (res.status == 200) {
+                    for (let i in res.data) {
+                        tree_arr.push({ name: res.data[i].name, type: 'building', next_type: 'units', id: res.data[i].id })
                     }
                 }
                 resolve(tree_arr)
@@ -94,9 +116,9 @@ const loadNode = (node, resolve) => {
         case 'units':
             APIgetUnitsListHouse({ page: 1, per_page: 500, building_id: node.data.id }).then(res => {
                 let tree_arr = []
-                if (!res.data.code) {
-                    for (let i in res.data.items) {
-                        tree_arr.push({ name: res.data.items[i].name, leaf: true, id: res.data.items[i].id, type: 'units', next_type: 'house' })
+                if (res.status == 200) {
+                    for (let i in res.data) {
+                        tree_arr.push({ name: res.data[i].name, leaf: true, id: res.data[i].id, type: 'units', next_type: 'house' })
                     }
                 }
                 resolve(tree_arr)
@@ -124,7 +146,7 @@ const handleCheck = (data, checked) => {
     .main-box {
         height: 100%;
         // overflow: auto;
-        .el-tree-box{
+        .el-tree-box {
             // width: max-content;
             // min-width: 100%;
         }

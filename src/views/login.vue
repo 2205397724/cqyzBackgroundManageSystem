@@ -166,6 +166,7 @@ function handleLogin() {
                 'password': loginForm.value.password
             }
             userStore.login(data).then(() => {
+                console.log('成功')
                 loading.value = false
                 localStorage.setItem('domain', loginForm.value.domain)
                 if (loginForm.value.remember) {
@@ -175,6 +176,7 @@ function handleLogin() {
                 }
                 router.push(redirect.value)
             }).catch(() => {
+
                 loading.value = false
             })
         }

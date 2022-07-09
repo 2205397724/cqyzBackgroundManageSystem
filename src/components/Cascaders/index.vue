@@ -44,13 +44,14 @@ const cascader_props = {
             data
         } = node
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+            console.log(res)
             resolve(res.data)
         })
     }
 }
 </script>
 <style lang="scss">
-    .quyu-box{
+    .quyu-box {
         width: 100%;
         display: inline-block;
         .el-cascader {

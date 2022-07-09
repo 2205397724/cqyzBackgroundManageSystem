@@ -4,43 +4,46 @@
             <div>
                 <div>
                     <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.mobile" class="head-btn" placeholder="手机号" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.username" class="head-btn" placeholder="用户名" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.id_card" class="head-btn" placeholder="身份证号" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.name" class="head-btn" placeholder="真实姓名" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-select v-model="data_search.gender" class="head-btn" placeholder="性别" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.house_id" class="head-btn" placeholder="终端类型" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.oauth_type" class="head-btn" placeholder="第三方登录类型" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.login_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <Cascaders v-model="data_search.region" />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                            <el-button class="head-btn" type="primary" @click="searchMore">更多搜索</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -314,6 +317,7 @@ const from_error = reactive({
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
+const searchVisible = ref(false)
 const cascader_props = {
     multiple: false,
     emitPath: false,
@@ -353,6 +357,9 @@ const searchFunc = () => {
     page.value = 1
     switch_search.value = true
     getTabListFunc()
+}
+const searchMore = () => {
+    searchVisible.value = !searchVisible.value
 }
 // 刷新
 const refreshFunc = () => {
@@ -549,9 +556,6 @@ getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(r
     }
 </style>
 <style lang="scss" scoped>
-    .userregister {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

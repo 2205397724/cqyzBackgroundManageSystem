@@ -404,24 +404,27 @@ const opts = {
         val: '租客'
     }],
     // 分类种类 101：公示、102：流程、103：投诉问题、104：投诉对象、 105：报修问题、106：报修对象
-    type_type: [{
-        key: 101,
+    kind: [{
+        key: 'announce',
         val: '公示'
     }, {
-        key: 102,
-        val: '流程'
-    }, {
-        key: 103,
+        key: 'complaint-pro',
         val: '投诉问题'
     }, {
-        key: 104,
+        key: 'complaint-obj',
         val: '投诉对象'
     }, {
-        key: 105,
+        key: 'repair-pro',
         val: '报修问题'
     }, {
-        key: 106,
+        key: 'repair-obj',
         val: '报修对象'
+    }, {
+        key: 'ill-pro',
+        val: '违建问题'
+    }, {
+        key: 'ill-obj',
+        val: '违建对象'
     }],
     // 企业类别
     enterprise_type: [{
@@ -570,12 +573,13 @@ const opts = {
 
 export async function getOpts(arr) {
     const res = await api2.post('/optitem', {
-        lab: arr
-    })
+            lab: arr
+        })
+        // console.log(res)
     const opt_up = {}
-    for (let key in res.data) {
-        opt_up[key] = res.data[key]
-        if (res.data[key].length <= 0 && opts[key]) {
+    for (let key in res) {
+        opt_up[key] = res[key]
+        if (res[key].length <= 0 && opts[key]) {
             opt_up[key] = opts[key]
         }
     }

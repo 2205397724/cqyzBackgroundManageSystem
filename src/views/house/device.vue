@@ -55,6 +55,11 @@
                                 <span>{{ scope.row.sno }} </span>
                             </template>
                         </el-table-column>
+                        <el-table-column prop="id" label="所在小区" width="110">
+                            <template #default="scope">
+                                <span>{{ scope.row.sno }} </span>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="cid" label="类型" width="90">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>
@@ -70,7 +75,16 @@
                                 <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column />
+                        <el-table-column prop="id" label="档案" width="180">
+                            <template #default="scope">
+                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceArchive">档案</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="记录" width="180">
+                            <template #default="scope">
+                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair">维保记录</div>
+                            </template>
+                        </el-table-column>
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -142,7 +156,7 @@
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
                             >
-                                <BerZone :disabled="[0,1,2,3,4,5,6]" :code="''" v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit"></BerZone>
+                                <BerZone v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit" :disabled="[0,1,2,3,4,5]" :code="''" />
                                 <!-- <el-input
                                     v-model="from_examine.item.zone"
                                     class="head-btn"
@@ -278,7 +292,7 @@
                                 <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
                             </div>
                             <div v-for="(item,i) in from_examine.item.extra" class="serve-box">
-                                <el-row :gutter="10">
+                                <el-row :gutter="10" style="padding-top: 20px;">
                                     <el-col :xs="12" :sm="12">
                                         <el-form-item label="字段名" :error="from_error.msg&&from_error.msg['extra.'+i+'.lab']?from_error.msg['extra.'+i+'.lab'][0]:''">
                                             <el-input
@@ -319,63 +333,103 @@
             title="详情"
             width="50%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">设备名称</div>
-                    <div class="right">{{ data_details.item.name }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">小区</div>
-                    <div class="right">{{ data_details.item.zone }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">楼栋</div>
-                    <div class="right">{{ data_details.item.building }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">单元</div>
-                    <div class="right">{{ data_details.item.unit }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">所在地址</div>
-                    <div class="right">{{ data_details.item.addr }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">编号</div>
-                    <div class="right">{{ data_details.item.sno }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">品牌</div>
-                    <div class="right">{{ data_details.item.brand }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">提醒信息</div>
-                    <div class="right">{{ data_details.item.warn }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.device_type,data_details.item.type) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.device_status,data_details.item.status) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">是否显示</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details.item.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">更新时间</div>
-                    <div class="right">{{ data_details.item.updated_at }}</div>
-                </div>
-            </div>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="基础信息" name="1">
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="item">
+                                <div class="left">设备名称</div>
+                                <div class="right">{{ data_details.item.name }}</div>
+                            </div>
+                            <!-- <div class="item">
+                            <div class="left">小区</div>
+                            <div class="right">{{ data_details.item.zone }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="left">楼栋</div>
+                            <div class="right">{{ data_details.item.building }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="left">单元</div>
+                            <div class="right">{{ data_details.item.unit }}</div>
+                        </div> -->
+                            <div class="item">
+                                <div class="left">小区>楼栋>单元</div>
+                                <div class="right">{{ data_details.item.zone }} {{ data_details.item.building }} {{ data_details.item.unit }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">所在地址</div>
+                                <div class="right">{{ data_details.item.addr }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">编号</div>
+                                <div class="right">{{ data_details.item.sno }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">品牌</div>
+                                <div class="right">{{ data_details.item.brand }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">提醒信息</div>
+                                <div class="right">{{ data_details.item.warn }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">类型</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.device_type,data_details.item.type) }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">状态</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.device_status,data_details.item.status) }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">是否显示</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">创建时间</div>
+                                <div class="right">{{ data_details.item.created_at }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">更新时间</div>
+                                <div class="right">{{ data_details.item.updated_at }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="档案信息" name="2">
+                    <div>小区档案待完善</div>
+                </el-tab-pane>
+                <el-tab-pane label="维保记录" name="3">
+                    <div>小区档案待完善</div>
+                </el-tab-pane>
+            </el-tabs>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 档案 -->
+        <el-dialog
+            v-model="switch_archive"
+            title="档案"
+            width="50%"
+        >
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_archive = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 维保记录 -->
+        <el-dialog
+            v-model="switch_repair"
+            title="维保记录"
+            width="50%"
+        >
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_repair = false">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -404,6 +458,10 @@ let switch_search = ref(false)
 let data_search = reactive({ obj: {} })
 // 详情
 let switch_details = ref(false)
+// 档案
+let switch_archive = ref(false)
+// 维保记录
+let switch_repair = ref(false)
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
@@ -433,7 +491,7 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-
+const activeName = ref('1')
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
@@ -458,7 +516,14 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+// 档案
+const deviceArchive = () => {
+    switch_archive.value = true
+}
+// 维保记录
+const deviceRepair = () => {
+    switch_repair.value = true
+}
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
@@ -612,8 +677,8 @@ getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device
         .serve-box {
             border: 1px solid #eee;
             box-sizing: border-box;
-            padding: 10px;
             margin-bottom: 10px;
+            padding: 0 10px;
             border-radius: 6px;
             position: relative;
             .delete-service {
@@ -628,9 +693,6 @@ getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device
     }
 </style>
 <style lang="scss" scoped>
-    .articletparticletpl {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

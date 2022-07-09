@@ -60,17 +60,6 @@
                                 <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.china_level,scope.row.level) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="created_at" label="创建时间" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="updated_at" label="修改时间" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
-                            </template>
-                        </el-table-column>
-
                         <el-table-column />
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
@@ -344,10 +333,11 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetChinaList(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
+        if (res.status === 200) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
+            data_tab.arr = res.data
+            total.value = data_tab.arr.length
         }
     })
 }
@@ -372,7 +362,7 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetChinaDetails(val.id).then(res => {
-        if (!res.code) {
+        if (res.status == 200) {
             from_examine.item = res.data
             switch_examine.value = true
         }
@@ -388,6 +378,7 @@ const opts_all = reactive({
     obj: {}
 })
 getOpts(['china_level']).then(res => {
+    console.log(res)
     opts_all.obj = res
 })
 
@@ -422,9 +413,6 @@ getOpts(['china_level']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .regionchina {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

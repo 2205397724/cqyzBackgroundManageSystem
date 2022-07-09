@@ -9,27 +9,27 @@
                                 <SearchHouse v-model:str="data_search.obj.house_id" />
                             </div>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.obj.code_property" class="head-btn" placeholder="产权证号" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.obj.code_room" class="head-btn" placeholder="地房籍号" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="4">
                             <el-input v-model="data_search.obj.owner_name" class="head-btn" placeholder="产权人姓名" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="4">
                             <el-input v-model="data_search.obj.owner_id_card" class="head-btn" placeholder="产权人证件号" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
                             <el-input v-model="data_search.obj.owner_mobile" class="head-btn" placeholder="产权人手机号" clearable />
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.obj.is_bind_house" class="head-btn" placeholder="*是否绑定房屋" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                        <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.time_deal"
@@ -42,7 +42,7 @@
                                 />
                             </div>
                         </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                        <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.created_at"
@@ -55,7 +55,7 @@
                                 />
                             </div>
                         </el-col>
-                        <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                        <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                             <div class="head-btn">
                                 <el-date-picker
                                     v-model="data_search.obj.updated_at"
@@ -70,6 +70,9 @@
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                        </el-col>
+                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                            <el-button class="head-btn" type="primary" @click="showForm">更多搜索</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -363,6 +366,7 @@ import {
     APIputProperty,
     APIpostProperty
 } from '@/api/custom/custom.js'
+// import { showForm } from '@/util/form'
 import {
     reactive,
     ref,
@@ -370,6 +374,7 @@ import {
 } from 'vue'
 import { ElMessage } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
+const searchVisible = ref(false)
 // 数据
 // 搜索
 let switch_search = ref(false)
@@ -410,6 +415,9 @@ const searchFunc = () => {
     page.value = 1
     switch_search.value = true
     getTabListFunc()
+}
+const showForm = () => {
+    searchVisible.value = !searchVisible.value
 }
 // 刷新
 const refreshFunc = () => {
@@ -502,6 +510,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
+        console.log(res)
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -600,9 +609,6 @@ getOpts(['house_has_house']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .propertypropertylist {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

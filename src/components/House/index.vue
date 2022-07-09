@@ -5,18 +5,19 @@
                 <div style="height: calc(100% - 60px);">
                     <position-tree
                         :tree_item="tree_item"
+                        :type="no_zone"
                         @checkFunc="checkFunc"
                     />
                 </div>
             </div>
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
-                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;  }">
+                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
                         <div
                             v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
-                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgba(255,255,255,0.5);cursor: not-allowed;"
+                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
                         />
-                        <div style="padding: 20px 20px 0 20px;box-sizing: border-box;">
+                        <div style="padding: 20px 20px 0;box-sizing: border-box;">
                             <el-row :gutter="10">
                                 <el-col :xs="24" class="el-cascader-box-my">
                                     <el-select
@@ -25,7 +26,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_status_use" :key="item.key"
+                                            v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -35,7 +36,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_status_safe" :key="item.key"
+                                            v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -45,7 +46,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key"
+                                            v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -55,7 +56,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key"
+                                            v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -66,7 +67,7 @@
                                         clearable
                                     >
                                         <el-option
-                                            v-for="(item,i) in opts_all.obj.house_has_property" :key="item.key"
+                                            v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
                                             :label="item.val" :value="item.key"
                                         />
                                     </el-select>
@@ -109,7 +110,7 @@
                                     </div>
                                 </div>
                                 <el-scrollbar style="white-space: nowrap;">
-                                    <div v-for="(item,i) in house_num.arr" class="row-item-box ">
+                                    <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
                                         <div class="row-item">
                                             <el-checkbox
                                                 v-model="checkFH.row[item].val"
@@ -120,8 +121,8 @@
                                     </div>
                                 </el-scrollbar>
                             </div>
-                            <div style="height: calc(100% - 45px );overflow: auto;">
-                                <div v-for="(child,j) in house_list.arr" class="row-box">
+                            <div style="height: calc(100% - 45px);overflow: auto;">
+                                <div v-for="(child,j) in house_list.arr" :key="j" class="row-box">
                                     <div class="row-item-box row-item-tit-box">
                                         <div class="row-item row-item-tit row-item-tit-ceng">
                                             <el-checkbox
@@ -133,7 +134,7 @@
                                     </div>
                                     <el-scrollbar style="white-space: nowrap;">
                                         <div style="display: flex;">
-                                            <div v-for="(item,i) in child.houses" class="row-item-box">
+                                            <div v-for="(item,i) in child.houses" :key="i" class="row-item-box">
                                                 <div v-show="item.house_num?true:false" class="row-item">
                                                     <el-checkbox
                                                         v-if="checkFH.all[child.floor_truth]&&checkFH.all[child.floor_truth][item.house_num]"
@@ -322,7 +323,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.type_model" class="head-btn" placeholder="户型" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -333,7 +334,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.type_property" class="head-btn" placeholder="产权性质" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -344,7 +345,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.type_building" class="head-btn" placeholder="楼栋性质" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -355,7 +356,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.status_use" class="head-btn" placeholder="房屋使用状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -366,7 +367,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.status_safe" class="head-btn" placeholder="房屋安全状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -377,7 +378,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.status_plan" class="head-btn" placeholder="规划用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -388,7 +389,7 @@
                                 label-width="140px"
                             >
                                 <el-select v-model="from_examine.item.status_fact" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -454,7 +455,7 @@
             <div>
                 <div style="margin-bottom: 10px;font-size: 16px;font-weight: 600;">已选房屋：</div>
                 <div style="margin-bottom: 10px;">
-                    <span v-for="(item,i) in choseIDs.arr" style="display: inline-block;margin-right: 10px;box-sizing: border-box;padding: 8px 16px; font-size: 14px;border-radius: 6px;border: 1px solid #dcdfe6;color: #a8b3cd;">{{ item.name }}</span>
+                    <span v-for="(item,i) in choseIDs.arr" :key="i" style="display: inline-block;margin-right: 10px;box-sizing: border-box;padding: 8px 16px; font-size: 14px;border-radius: 6px;border: 1px solid #dcdfe6;color: #a8b3cd;">{{ item.name }}</span>
                 </div>
                 <el-form
                     :model="piliangxiugai.obj"
@@ -490,7 +491,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.type_model?error_alldetails.msg.type_model[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.type_model" class="head-btn" placeholder="户型" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -500,7 +501,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.type_property?error_alldetails.msg.type_property[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.type_property" class="head-btn" placeholder="产权性质" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -510,7 +511,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.type_building?error_alldetails.msg.type_building[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.type_building" class="head-btn" placeholder="楼栋性质" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -520,7 +521,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_use?error_alldetails.msg.status_use[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.status_use" class="head-btn" placeholder="房屋使用状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -530,7 +531,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_safe?error_alldetails.msg.status_safe[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.status_safe" class="head-btn" placeholder="房屋安全状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -540,7 +541,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_plan?error_alldetails.msg.status_plan[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.status_plan" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -550,7 +551,7 @@
                                 :error="error_alldetails.msg&&error_alldetails.msg.status_fact?error_alldetails.msg.status_fact[0]:''"
                             >
                                 <el-select v-model="piliangxiugai.obj.status_fact" class="head-btn" placeholder="实际用途" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -607,12 +608,12 @@
                 <el-table-column prop="desc" label="备注" width="280" />
                 <el-table-column prop="status" label="状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="file_err" label="错误信息" width="280">
                     <template #default="scope">
-                        <el-link :href="`${VITE_APP_FOLDER_SRC+scope.row.file_err}`" target="_blank" type="danger" style="margin-left: 10px">{{ scope.row.file_err.substring(scope.row.file_err.lastIndexOf('/')+1) }} </el-link>
+                        <el-link :href="`${VITE_APP_FOLDER_SRC+scope.row.file_err}`" target="_blank" type="danger" style="margin-left: 10px;">{{ scope.row.file_err.substring(scope.row.file_err.lastIndexOf('/')+1) }} </el-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="created_at" label="创建时间" width="180" />
@@ -742,7 +743,7 @@
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="产权人" name="second">
-                            <div v-for="(item,i) in property_form.obj.property_owners" class="serve-box">
+                            <div v-for="(item,i) in property_form.obj.property_owners" :key="i" class="serve-box">
                                 <el-row>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
                                         <el-form-item label-width="80px" label="姓名" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.name']?from_error_property.msg['property_owners.'+i+'.name'][0]:''">
@@ -762,7 +763,7 @@
                                                 clearable
                                             >
                                                 <el-option
-                                                    v-for="(item,i) in opts_all.obj.type_id_card" :key="item.key"
+                                                    v-for="(item) in opts_all.obj.type_id_card" :key="item.key"
                                                     :label="item.val" :value="item.key"
                                                 />
                                             </el-select>
@@ -840,7 +841,6 @@
 import {
     reactive,
     ref,
-    watch,
     defineProps
 } from 'vue'
 import {
@@ -878,6 +878,7 @@ const data_search = reactive({
 })
 
 // 搜索
+let no_zone = ref(true)
 const searchFunc = () => {
     switch_search.value = true
     getHouseListFunc()
@@ -1408,89 +1409,75 @@ getOpts(['status_all', 'type_id_card', 'houseable_type', 'house_has_house', 'hou
                 margin-bottom: 10px;
             }
         }
-
         .serve-box {
-            border: 1px solid #eeeeee;
+            border: 1px solid #eee;
             box-sizing: border-box;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 6px;
             position: relative;
-
             .el-form-item {
                 // margin: 0;
             }
-
             .delete-service {
                 position: absolute;
                 right: 0;
                 top: 0;
                 z-index: 999999;
                 cursor: pointer;
-                background-color: #ffffff;
+                background-color: #fff;
             }
         }
-        .property-read-state{
+        .property-read-state {
             .el-form-item {
                 margin: 0;
             }
         }
     }
     // 覆盖样式
-    .el-tree-node__content{
-        padding-top:20px;
+    .el-tree-node__content {
+        padding-top: 20px;
         padding-bottom: 20px;
     }
 </style>
 <style lang="scss" scoped>
-    .components-house{
-        background-color: #ffffff;
-
+    .components-house {
+        background-color: #fff;
         .tree-box {
             border-top: 1px solid #efefef;
             display: flex;
-             }
-
-            .tree-item {
-                min-width: 300px;
-                width: 300px;
-                border-right: 1px solid #e9e9e9;
-
-                .tree-title {
-                    height: 60px;
-                    line-height: 60px;
-                    padding-left: 20px;
-                    color: #aaaaaa;
-                    font-size: 14px;
-                    border-bottom: 1px solid #e9e9e9;
-                }
+        }
+        .tree-item {
+            min-width: 300px;
+            width: 300px;
+            border-right: 1px solid #e9e9e9;
+            .tree-title {
+                height: 60px;
+                line-height: 60px;
+                padding-left: 20px;
+                color: #aaa;
+                font-size: 14px;
+                border-bottom: 1px solid #e9e9e9;
             }
-
-            .tree-details {
-                flex-grow: 1;
-                max-width: calc(100% - 300px);
-
-                .el-cascader-box-my {}
-
-                .bottom-btn-box-2 {
-                    margin-bottom: 10px;
-
-                }
+        }
+        .tree-details {
+            flex-grow: 1;
+            max-width: calc(100% - 300px);
+            .bottom-btn-box-2 {
+                margin-bottom: 10px;
             }
-
+        }
     }
-
     .row-box {
         border-bottom: 1px solid #f2f2f2;
-        background-color: #ffffff;
+        background-color: #fff;
         display: flex;
         .row-item-box {
             display: inline-block;
             box-sizing: border-box;
-            padding:6px;
-            min-width:84px;
+            padding: 6px;
+            min-width: 84px;
             height: 44px;
-
             .row-item {
                 width: 100%;
                 height: 100%;
@@ -1503,92 +1490,84 @@ getOpts(['status_all', 'type_id_card', 'houseable_type', 'house_has_house', 'hou
                 box-sizing: border-box;
                 padding: 6px;
                 cursor: pointer;
-                justify-content: space-between;
-
-                .row-item-check {}
+                // justify-content: space-between;
             }
-
             .row-item-tit-ceng {
                 border: 0 solid #e9e9e9;
             }
         }
-
         .row-item-tit-box {
             border-right: 1px solid #e9e9e9;
             width: 84px;
             .row-item-tit {
                 border: 0 solid #e9e9e9 !important;
                 font-size: 12px;
-
                 .tit-fh {
                     margin-bottom: -18px;
                 }
-
                 .tit-lc {
                     margin-top: -18px;
                 }
             }
-
             .row-item-tit-bgline {
-                background-image: linear-gradient(to top right, #ffffff 49%, #e9e9e9, #ffffff 51%);
+                background-image: linear-gradient(to top right, #fff 49%, #e9e9e9, #fff 51%);
                 justify-content: space-between;
                 cursor: initial;
             }
         }
     }
-    .row-box-title{
-        .row-item-box{
+    .row-box-title {
+        .row-item-box {
             .row-item {
-                border: 1px solid #ffffff;
+                border: 1px solid #fff;
             }
         }
     }
-    .count{
+    .count {
         display: flex;
         width: 100%;
         flex-wrap: wrap;
         font-size: 14px;
-        color:#666666;
+        color: #666;
     }
-    .count-item{
+    .count-item {
         padding: 0 20px;
         height: 40px;
         line-height: 40px;
         text-align: center;
         font-size: 12px;
     }
-    .count_item_i1{
-        background: #990000;
-        color: #FFFFFF;
-         border:1px solid #990000
+    .count_item_i1 {
+        background: #900;
+        color: #fff;
+        border: 1px solid #900;
     }
-    .count_item_i2{
-        background: #2DC26B;
-        color: #FFFFFF;
-        border:1px solid #2DC26B
+    .count_item_i2 {
+        background: #2dc26b;
+        color: #fff;
+        border: 1px solid #2dc26b;
     }
-    .count_item_i3{
-        background: #FF9900;
-        color: #FFFFFF;
-         border:1px solid #FF9900
+    .count_item_i3 {
+        background: #f90;
+        color: #fff;
+        border: 1px solid #f90;
     }
-    .count_item_i4{
-        background: #CCCCCC;
-        color: #FFFFFF;
-         border:1px solid #CCCCCC
+    .count_item_i4 {
+        background: #ccc;
+        color: #fff;
+        border: 1px solid #ccc;
     }
-    .tip-title{
+    .tip-title {
         font-size: 14px;
         margin-bottom: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .components-house-units{
+    .components-house-units {
         .tree-item {
             display: none;
         }
-
         .tree-details {
             max-width: 100%;
         }

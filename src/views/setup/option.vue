@@ -444,6 +444,7 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputOpts(from_examine.item.id, from_examine.item).then(res => {
+                    console.log(res)
                     if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
@@ -454,11 +455,12 @@ const dialogExamineCloseFunc = formEl => {
                 })
             } else {
                 APIpostOpts(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    console.log(res)
+                    // if (!res.code) {
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
+                    // }
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -484,20 +486,19 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetOptsList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = data_tab.arr.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteOpts(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        // if (res.code === 0) {
+        refreshFunc()
+        ElMessage.success(res.msg)
+        // }
     })
 }
 // 添加楼栋
@@ -566,21 +567,21 @@ const switch_opt_val_search = ref(false)
 const dialogOptValFunc = () => {
     if (str_opt_val_title.value == '修改') {
         APIputOptsVal(from_opt_val.obj.id, from_opt_val.obj).then(res => {
-            if (!res.code) {
-                optValRefreshFunc()
-                ElMessage.success(res.msg)
-                switch_opt_val_add.value = false
-            }
+            // if (!res.code) {
+            optValRefreshFunc()
+            ElMessage.success(res.msg)
+            switch_opt_val_add.value = false
+            // }
         }).catch(err => {
             err_opt.msg = err.data
         })
     } else {
         APIpostOptsVal(from_opt_val.obj).then(res => {
-            if (!res.code) {
-                optValRefreshFunc()
-                ElMessage.success(res.msg)
-                switch_opt_val_add.value = false
-            }
+            // if (!res.code) {
+            optValRefreshFunc()
+            ElMessage.success(res.msg)
+            switch_opt_val_add.value = false
+            // }
         }).catch(err => {
             err_opt.msg = err.data
         })
@@ -656,10 +657,10 @@ const getOptValListFunc = () => {
     }
     opt_loading.value = true
     APIgetOptsValList(params).then(res => {
-        if (res.code === 0) {
+        if (res.status === 200) {
             opt_loading.value = false
-            opt_tab.arr = res.data.items
-            opt_total.value = res.data.aggregation.total_cnt
+            opt_tab.arr = res.data
+            opt_total.value = opt_tab.arr.length
         }
     })
 }
@@ -711,9 +712,6 @@ getOpts(['sys_is_sys', 'sys_is_active']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .setupoption {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

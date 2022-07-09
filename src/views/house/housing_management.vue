@@ -20,6 +20,7 @@ import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
 APIgetChinaRegion().then(res => {
+    console.log(res)
     tree_item.value.id = res.data[0].code
     tree_item.value.name = res.data[0].name
     tree_item.value.next_type = 'region'

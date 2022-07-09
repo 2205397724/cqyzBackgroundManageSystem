@@ -4,12 +4,10 @@
         "stylelint-config-recommended-scss",
         "stylelint-config-recommended-vue"
     ],
-    "overrides": [
-        {
-            "files": ["**/*.scss"],
-            "customSyntax": "postcss-scss"
-        }
-    ],
+    "overrides": [{
+        "files": ["**/*.scss"],
+        "customSyntax": "postcss-scss"
+    }],
     "plugins": [
         "stylelint-scss"
     ],
@@ -27,5 +25,14 @@
         "scss/no-global-function-names": null,
         "scss/at-import-partial-extension": null,
         "max-line-length": null
+    },
+    "lint-staged": {
+        "*.{js,vue}": [
+            "vue-cli-service lint"
+        ],
+        "*.{sass,vue}": [
+            "stylelint --allow-empty-input"
+        ]
     }
+
 }

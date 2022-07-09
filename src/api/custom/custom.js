@@ -782,46 +782,46 @@ export function APIpostProperty(data) {
 // china
 // 列表
 export function APIgetChinaList(params) {
-    return api.get('/pt/china', { params: params })
+    return api.get('china', { params: params })
 }
 // 详情
 export function APIgetChinaDetails(id) {
-    return api.get('/pt/china/' + id)
+    return api.get('/china/' + id)
 }
 // 删除
 export function APIdeleteChina(id) {
-    return api.delete('/pt/china/' + id)
+    return api.delete('/china/' + id)
 }
 // 修改
 export function APIputChina(id, data) {
-    return api.put('/pt/china/' + id, data)
+    return api.put('/china/' + id, data)
 }
 // 添加
 export function APIpostChina(data) {
-    return api.post('/pt/china', data)
+    return api.post('/china', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 单元
 // 列表
 export function APIgetCityList(params) {
-    return api.get('/pt/city-config', { params: params })
+    return api.get('/city-conf', { params: params })
 }
 // 详情
 export function APIgetCityDetails(id) {
-    return api.get('/pt/city-config/' + id)
+    return api.get('/city-conf/' + id)
 }
 // 删除
 export function APIdeleteCity(id) {
-    return api.delete('/pt/city-config/' + id)
+    return api.delete('/city-conf/' + id)
 }
 // 修改
 export function APIputCity(id, data) {
-    return api.put('/pt/city-config/' + id, data)
+    return api.put('/city-conf/' + id, data)
 }
 // 添加
 export function APIpostCity(data) {
-    return api.post('/pt/city-config', data)
+    return api.post('/city-conf', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -1001,7 +1001,7 @@ export function APIputPlatform(id, data) {
 // 登录
 // 登录
 export function APIlogin(data) {
-    return api.post('/user/local-login', data)
+    return api.post('local-login', data)
 }
 // 修改密码？
 export function APIeditPassword(data) {
@@ -1032,7 +1032,7 @@ export function APIgetHouseHouse(params) {
 // 个人信息
 export function APIgetUserinfo(params) {
     return api.get('/member/home/userinfo', { baseURL: '/mock/', params: params })
-    // return api.get('/user/me', { params: params })
+        // return api.get('/user/me', { params: params })
 }
 // 统计
 export function APIgetTipsnum(params) {
