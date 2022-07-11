@@ -21,12 +21,12 @@
             title="楼栋"
             width="70%"
         >
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;">*点击楼栋所在行选择该楼栋</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;">*点击楼栋所在行选择该楼栋</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
                 @row-click="rowClickFunc"
             >
                 <el-table-column prop="name" label="名称" width="180" />
@@ -34,67 +34,67 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="area_live" label="住宅总面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_live }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_live }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="总建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_live_not" label="非住宅面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_live_not }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_live_not }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_floor" label="楼层数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_floor }} 层</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_floor }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_unit" label="单元数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_unit }} 个</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_unit }} 个</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_live" label="住宅总套数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_live }} 套</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_live }} 套</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="by_build_owner" label="建设业主单位" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.by_build_owner }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.by_build_owner }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_build_end" label="建成时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.time_build_end }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.time_build_end }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_turn" label="移交时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.time_turn }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.time_turn }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_use" label="投用时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.time_use }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.time_use }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_lift" label="电梯数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_lift }} 台</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_lift }} 台</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_live_not" label="非住宅面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_live_not }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_live_not }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="by_build" label="建设单位" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.by_build }} </span>
+                        <span style="margin-left: 10px;">{{ scope.row.by_build }} </span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -150,11 +150,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetBuildListHouse(params).then(res => {
-        if (res.code === 0) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 
@@ -168,20 +166,20 @@ const clearFunc = () => {
 }
 </script>
 <style lang="scss" scoped>
-    .tit-box{
+    .tit-box {
         position: relative;
-        .tit-icon{
+        .tit-icon {
             position: absolute;
             right: 10px;
             top: calc(50% - 10px);
-            background-color: #ffffff;
+            background-color: #fff;
             z-index: 1;
         }
-        .tit-icon-on{
+        .tit-icon-on {
             display: none;
         }
     }
-    .nostr{
-        color: #aaaaaa;
+    .nostr {
+        color: #aaa;
     }
 </style>

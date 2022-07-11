@@ -13,10 +13,10 @@
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
-                        <div
+                        <!-- <div
                             v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
                             style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
-                        />
+                        /> -->
                         <div style="padding: 20px 20px 0;box-sizing: border-box;">
                             <el-row :gutter="10">
                                 <el-col :xs="24" class="el-cascader-box-my">
@@ -902,11 +902,18 @@ const details_data = reactive({
 const getUnitBuildFunc = () => {
     if (active_obj.obj.type == 'units') {
         APIgetUnitsDetailsHouse(active_obj.obj.id).then(res => {
-            details_data.obj = res.data
+            details_data.obj = res
         })
     } else if (active_obj.obj.type == 'building') {
         APIgetBuildDetailsHouse(active_obj.obj.id).then(res => {
-            details_data.obj = res.data
+            details_data.obj = res
+
+
+
+
+
+
+
         })
     }
 }
@@ -1187,10 +1194,8 @@ import {
 const getFilesFunc = () => {
     files_loading.value = true
     APIgetFilesList().then(res => {
-        if (!res.code) {
-            files_tab.arr = res.data.items
+            files_tab.arr = res
             files_loading.value = false
-        }
     })
 }
 const fileChangeFunc = (file, fileList) => {

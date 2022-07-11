@@ -511,11 +511,9 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
         console.log(res)
-        if (res.code === 0) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = data_tab.arr.length
     })
 }
 // 删除

@@ -775,11 +775,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetBuildListHouse(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 // 删除
@@ -879,9 +878,6 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .routinebuilding {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

@@ -79,48 +79,42 @@ const loadNode = (node, resolve) => {
                     }
                 }
                 resolve(tree_arr)
-                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
             break
         case 'zone':
-            console.log(type)
+            // console.log(type)
 
-            if (!type.value) {
+            // if (!type.value) {
                 APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
-                    treeDetail.arr = res.data
+                    // treeDetail.arr = res.data
                     console.log(res)
                     let tree_arr = []
-                    if (res.status == 200) {
-                        for (let i in res.data) {
-                            tree_arr.push({ name: res.data[i].name, type: 'zone', next_type: 'building', id: res.data[i].id })
+                        for (let i in res) {
+                            tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'building', id: res[i].id })
                         }
-                    }
                     resolve(tree_arr)
                     emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
                     tree_arr = []
                 })
 
-            }
+            // }
             break
         case 'building':
             APIgetBuildListHouse({ page: 1, per_page: 500, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
-                if (res.status == 200) {
-                    for (let i in res.data) {
-                        tree_arr.push({ name: res.data[i].name, type: 'building', next_type: 'units', id: res.data[i].id })
+                    for (let i in res) {
+                        tree_arr.push({ name: res[i].name, type: 'building', next_type: 'units', id: res[i].id })
                     }
-                }
                 resolve(tree_arr)
             })
             break
         case 'units':
             APIgetUnitsListHouse({ page: 1, per_page: 500, building_id: node.data.id }).then(res => {
                 let tree_arr = []
-                if (res.status == 200) {
-                    for (let i in res.data) {
-                        tree_arr.push({ name: res.data[i].name, leaf: true, id: res.data[i].id, type: 'units', next_type: 'house' })
+                    for (let i in res) {
+                        tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })
                     }
-                }
                 resolve(tree_arr)
             })
             break

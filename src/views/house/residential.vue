@@ -16,10 +16,10 @@
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
-                        <!-- <div
+                        <div
                             v-if="!active_obj.obj.name||active_obj.obj.next_type=='region'"
-                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgba(255,255,255,0.5);cursor: not-allowed;"
-                        /> -->
+                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
+                        />
                         <div>
                             <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
                             <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
@@ -351,7 +351,7 @@
                                 <el-col :md="24" :lg="24">
                                     <el-form-item label="简介" label-width="120px" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
                                         <el-input
-                                            v-model="from_examine.item.addition.desc"
+                                            v-model="descValue1"
                                             :autosize="{ minRows: 2, maxRows: 6 }"
                                             type="textarea"
                                             placeholder=""
@@ -556,7 +556,7 @@
                             </div>
                             <div class="item">
                                 <div class="left">简介</div>
-                                <div class="right">{{ data_details.item.addition.desc }}</div>
+                                <div class="right">{{ descValue2 }}</div>
                             </div>
                             <div class="details-tit-sm">便民信息</div>
                             <div class="item">
@@ -632,18 +632,18 @@ const edit_house = ref(false)
 const active_obj = reactive({
     obj: {}
 })
-const treeDetail = reactive({
-    arr: {}
-})
+// const treeDetail = reactive({
+//     arr: {}
+// })
 const item = reactive({
     arr: []
 })
 const checkFunc = val => {
-    console.log(val)
+    // console.log(val)
     active_obj.obj = val
-    treeDetail.arr = val[1]
-    console.log(treeDetail.arr)
-    item.arr = treeDetail.arr.items
+    // treeDetail.arr = val[1]
+    // console.log(treeDetail.arr)
+    // item.arr = treeDetail.arr
 }
 // 搜索
 let no_zone = ref(false)
@@ -710,7 +710,6 @@ let from_examine = reactive({
         }
     }
 })
-
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
 const tree_item = ref({
@@ -903,6 +902,8 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
+const descValue1=ref("")
+const descValue2=ref("")
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}
@@ -910,6 +911,8 @@ const modifyResidentialFunc = val => {
     APIgetResidentialDetailsHouse(val.id).then(res => {
         console.log(res)
         from_examine.item = res
+        descValue1=from_examine.item.addition.desc
+        descValue2=data_details.item.addition.desc
         switch_examine.value = true
     })
 }
@@ -949,6 +952,7 @@ refreshFunc()
 </script>
 <style lang="scss">
     .routineresidentialhouse {
+        height: calc(100vh - 50px);
         .tree-box {
             border-top: 1px solid #efefef;
             display: flex;

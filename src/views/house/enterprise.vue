@@ -274,10 +274,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetEnterpriseList(params).then(res => {
-        if (res.code === 0) {
+        if (res.status === 200) {
             loading_tab.value = false
-            from_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
+            from_tab.arr = res.data
+            total.value = res.data.length
         }
     })
 }

@@ -271,11 +271,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetHouseListHouse(params).then(res => {
-        if (res.code === 0) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 

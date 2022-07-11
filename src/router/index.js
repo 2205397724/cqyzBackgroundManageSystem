@@ -9,63 +9,67 @@ import { useNProgress } from '@vueuse/integrations/useNProgress'
 const { isLoading } = useNProgress()
 
 // 固定路由
-const constantRoutes = [
-    {
-        path: '/login',
-        name: 'login',
-        component: () => import('@/views/login.vue'),
-        meta: {
-            title: '登录'
-        }
-    },
-    {
-        path: '/',
-        component: () => import('@/layout/index.vue'),
-        redirect: '/dashboard',
-        children: [
-            {
-                path: 'dashboard',
-                name: 'dashboard',
-                component: () => import('@/views/index.vue'),
-                meta: {
-                    title: () => {
-                        const settingsOutsideStore = useSettingsOutsideStore()
-                        return settingsOutsideStore.dashboard.title
-                    }
-                }
-            },
-            {
-                path: 'personal/setting',
-                name: 'personalSetting',
-                component: () => import('@/views/personal/setting.vue'),
-                meta: {
-                    title: '个人设置',
-                    cache: 'personalEditPassword',
-                    breadcrumbNeste: [
-                        { title: '个人设置', path: '/personal/setting' }
-                    ]
-                }
-            },
-            {
-                path: 'personal/edit/password',
-                name: 'personalEditPassword',
-                component: () => import('@/views/personal/edit.password.vue'),
-                meta: {
-                    title: '修改密码',
-                    breadcrumbNeste: [
-                        { title: '修改密码', path: '/personal/edit/password' }
-                    ]
-                }
-            },
-            {
-                path: 'reload',
-                name: 'reload',
-                component: () => import('@/views/reload.vue')
+const constantRoutes = [{
+            path: '/login',
+            name: 'login',
+            component: () =>
+                import ('@/views/login.vue'),
+            meta: {
+                title: '登录'
             }
-        ]
-    }
-]
-// 公示
+        },
+        {
+            path: '/',
+            component: () =>
+                import ('@/layout/index.vue'),
+            redirect: '/dashboard',
+            children: [{
+                    path: 'dashboard',
+                    name: 'dashboard',
+                    component: () =>
+                        import ('@/views/index.vue'),
+                    meta: {
+                        title: () => {
+                            const settingsOutsideStore = useSettingsOutsideStore()
+                            return settingsOutsideStore.dashboard.title
+                        }
+                    }
+                },
+                {
+                    path: 'personal/setting',
+                    name: 'personalSetting',
+                    component: () =>
+                        import ('@/views/personal/setting.vue'),
+                    meta: {
+                        title: '个人设置',
+                        cache: 'personalEditPassword',
+                        breadcrumbNeste: [
+                            { title: '个人设置', path: '/personal/setting' }
+                        ]
+                    }
+                },
+                {
+                    path: 'personal/edit/password',
+                    name: 'personalEditPassword',
+                    component: () =>
+                        import ('@/views/personal/edit.password.vue'),
+                    meta: {
+                        title: '修改密码',
+                        breadcrumbNeste: [
+                            { title: '修改密码', path: '/personal/edit/password' }
+                        ]
+                    }
+                },
+                {
+                    path: 'reload',
+                    name: 'reload',
+                    component: () =>
+                        import ('@/views/reload.vue')
+                }
+            ]
+        }
+    ]
+    // 公示
 import articletplArchive from './modules/articletpl/archive.js'
 import articletplArticle from './modules/articletpl/article.js'
 import articletplArticleread from './modules/articletpl/articleread.js'
@@ -106,12 +110,12 @@ import setupRegion from './modules/setup/region.js'
 import setupFile from './modules/setup/file.js'
 import setupOption from './modules/setup/option.js'
 import setupType from './modules/setup/type.js'
+import setupAPP from './modules/setup/APP.js'
 // 申请
 import joinPlatform from './modules/join/platform.js'
 import joinResidential from './modules/join/residential.js'
 // 动态路由（异步路由、导航栏路由）
-const asyncRoutes = [
-    {
+const asyncRoutes = [{
         meta: {
             title: '管理',
             icon: 'supervise',
@@ -216,14 +220,16 @@ const asyncRoutes = [
             setupRegion,
             setupFile,
             setupOption,
-            setupType
+            setupType,
+            setupAPP
         ]
     }
 ]
 
 const lastRoute = {
     path: '/:pathMatch(.*)*',
-    component: () => import('@/views/404.vue'),
+    component: () =>
+        import ('@/views/404.vue'),
     meta: {
         title: '找不到页面'
     }
@@ -239,7 +245,7 @@ router.beforeEach(async(to, from, next) => {
     const userOutsideStore = useUserOutsideStore()
     const menuOutsideStore = useMenuOutsideStore()
     settingsOutsideStore.app.enableProgress && (isLoading.value = true)
-    // 是否已登录
+        // 是否已登录
     if (userOutsideStore.isLogin) {
         // 是否已根据权限动态生成并挂载路由
         if (menuOutsideStore.isGenerate) {
@@ -285,13 +291,13 @@ router.beforeEach(async(to, from, next) => {
             accessRoutes.push(lastRoute)
             let removeRoutes = []
             accessRoutes.forEach(route => {
-                if (!/^(https?:|mailto:|tel:)/.test(route.path)) {
-                    removeRoutes.push(router.addRoute(route))
-                }
-            })
-            // 记录的 accessRoutes 路由数据，在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
+                    if (!/^(https?:|mailto:|tel:)/.test(route.path)) {
+                        removeRoutes.push(router.addRoute(route))
+                    }
+                })
+                // 记录的 accessRoutes 路由数据，在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
             menuOutsideStore.setCurrentRemoveRoutes(removeRoutes)
-            next({ ...to, replace: true })
+            next({...to, replace: true })
         }
     } else {
         if (to.name != 'login') {
@@ -311,9 +317,9 @@ router.afterEach((to, from) => {
     const settingsOutsideStore = useSettingsOutsideStore()
     const keepAliveOutsideStore = useKeepAliveOutsideStore()
     settingsOutsideStore.app.enableProgress && (isLoading.value = false)
-    // 设置页面 title
+        // 设置页面 title
     to.meta.title && settingsOutsideStore.setTitle(typeof to.meta.title === 'function' ? to.meta.title() : to.meta.title)
-    // 判断当前页面是否开启缓存，如果开启，则将当前页面的 name 信息存入 keep-alive 全局状态
+        // 判断当前页面是否开启缓存，如果开启，则将当前页面的 name 信息存入 keep-alive 全局状态
     if (to.meta.cache) {
         let componentName = to.matched[to.matched.length - 1].components.default.name
         if (componentName) {
@@ -325,7 +331,7 @@ router.afterEach((to, from) => {
     // 判断离开页面是否开启缓存，如果开启，则根据缓存规则判断是否需要清空 keep-alive 全局状态里离开页面的 name 信息
     if (from.meta.cache) {
         let componentName = from.matched[from.matched.length - 1].components.default.name
-        // 通过 meta.cache 判断针对哪些页面进行缓存
+            // 通过 meta.cache 判断针对哪些页面进行缓存
         switch (typeof from.meta.cache) {
             case 'string':
                 if (from.meta.cache != to.name) {

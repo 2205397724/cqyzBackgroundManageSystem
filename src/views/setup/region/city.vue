@@ -82,8 +82,8 @@
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
                                     active-text="启用"
                                     inactive-text="禁用"
-                                    :active-value="0"
-                                    :inactive-value="1"
+                                    :active-value="1"
+                                    :inactive-value="0"
                                     @change="switchFunk(scope.row)"
                                 />
                             </template>
@@ -207,18 +207,18 @@
                                 label="启用授权" prop="active"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
-                                <template #default="scope">
-                                    <el-button
-                                        size="small" type="primary" @click="from_examine.item.active = 1 "
-                                    >
-                                        启用
-                                    </el-button>
-                                    <el-button
-                                        size="small" type="danger" @click="from_examine.item.active = 0 "
-                                    >
-                                        禁用
-                                    </el-button>
-                                </template>
+                                <el-switch
+                                    v-model="from_examine.item.active"
+                                    class="switch"
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="启用"
+                                    inactive-text="禁用"
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    @change="switchFunk(from_examine.item.active)"></el-switch>
                             </el-form-item>
                         </el-col>
                     </el-row>

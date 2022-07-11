@@ -556,7 +556,14 @@ const opt_per_page = ref(15)
 const switch_opt_val_add = ref(false)
 const str_opt_val_title = ref('添加')
 const from_opt_val = reactive({
-    obj: {}
+    obj: {
+        'key':0,
+        'val':'',
+        'desc':'',
+        'is_sys':0,
+        'is_active':0,
+        'sort':0
+    }
 })
 const err_opt = reactive({
     msg: {}
@@ -567,9 +574,10 @@ const switch_opt_val_search = ref(false)
 const dialogOptValFunc = () => {
     if (str_opt_val_title.value == '修改') {
         APIputOptsVal(from_opt_val.obj.id, from_opt_val.obj).then(res => {
+            console.log(res)
             // if (!res.code) {
             optValRefreshFunc()
-            ElMessage.success(res.msg)
+            // ElMessage.success(res.msg)
             switch_opt_val_add.value = false
             // }
         }).catch(err => {
@@ -579,7 +587,7 @@ const dialogOptValFunc = () => {
         APIpostOptsVal(from_opt_val.obj).then(res => {
             // if (!res.code) {
             optValRefreshFunc()
-            ElMessage.success(res.msg)
+            // ElMessage.success(res.msg)
             switch_opt_val_add.value = false
             // }
         }).catch(err => {
@@ -618,10 +626,7 @@ const optValModifyFunc = val => {
 // 删除
 const optValDeleteFunc = val => {
     APIdeleteOptsVal(val.id).then(res => {
-        if (res.code === 0) {
             optValRefreshFunc()
-            ElMessage.success(res.msg)
-        }
     })
 }
 // 搜索
@@ -657,11 +662,10 @@ const getOptValListFunc = () => {
     }
     opt_loading.value = true
     APIgetOptsValList(params).then(res => {
-        if (res.status === 200) {
+        console.log(res)
             opt_loading.value = false
-            opt_tab.arr = res.data
-            opt_total.value = opt_tab.arr.length
-        }
+            opt_tab.arr = res
+            opt_total.value = res.length
     })
 }
 // 打开配置选项

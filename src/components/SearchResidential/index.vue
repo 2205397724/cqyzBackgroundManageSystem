@@ -21,12 +21,12 @@
             title="小区"
             width="70%"
         >
-            <div style="font-size: 14px;color: #aaaaaa;margin-bottom: 8px;">*点击小区所在行选择该小区</div>
+            <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;">*点击小区所在行选择该小区</div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235, 238, 245); border-radius: 6px;"
+                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
                 @row-click="rowClickFunc"
             >
                 <el-table-column prop="name" label="名称" width="180" />
@@ -34,32 +34,32 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="area_floor" label="总占地面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_floor }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_floor }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="总建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_build }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_support" label="配套用房总面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.area_support }} m²</span>
+                        <span style="margin-left: 10px;">{{ scope.row.area_support }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_building" label="楼栋数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_building }} 栋</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_building }} 栋</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_live" label="住房总套数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_live }} 套</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_live }} 套</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px">{{ scope.row.cnt_support }} 套</span>
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_support }} 套</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="company_build" label="建设单位名称" width="140" />
@@ -118,11 +118,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
-        if (res.code === 0) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 
@@ -136,20 +134,20 @@ const clearFunc = () => {
 }
 </script>
 <style lang="scss" scoped>
-    .tit-box{
+    .tit-box {
         position: relative;
-        .tit-icon{
+        .tit-icon {
             position: absolute;
             right: 10px;
             top: calc(50% - 10px);
-            background-color: #ffffff;
+            background-color: #fff;
             z-index: 1;
         }
-        .tit-icon-on{
+        .tit-icon-on {
             display: none;
         }
     }
-    .nostr{
-        color: #aaaaaa;
+    .nostr {
+        color: #aaa;
     }
 </style>

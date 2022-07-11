@@ -42,12 +42,12 @@
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-input v-model="data_search.obj.owner_mobile" class="head-btn" placeholder="产权人手机号" clearable />
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="data_search.obj.is_bind_house" class="head-btn" placeholder="*是否绑定房屋" clearable>
                         <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                     <div class="head-btn">
                         <el-date-picker
                             v-model="data_search.obj.time_deal"
@@ -60,7 +60,7 @@
                         />
                     </div>
                 </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                     <div class="head-btn">
                         <el-date-picker
                             v-model="data_search.obj.created_at"
@@ -73,7 +73,7 @@
                         />
                     </div>
                 </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
+                <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
                     <div class="head-btn">
                         <el-date-picker
                             v-model="data_search.obj.updated_at"
@@ -88,6 +88,9 @@
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
+                    <el-button class="head-btn" type="primary" @click="searchMore">更多搜索</el-button>
                 </el-col>
             </el-row>
             <div v-show="switch_search" class="search-tips">
@@ -176,6 +179,10 @@ const searchFunc = () => {
     switch_search.value = true
     getTabListFunc()
 }
+const searchVisible = ref(false)
+const searchMore = () => {
+    searchVisible.value = !searchVisible.value
+}
 // 打开弹窗
 const openDigFunc = () => {
     switch_list.value = true
@@ -221,11 +228,11 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
+
     })
 }
 

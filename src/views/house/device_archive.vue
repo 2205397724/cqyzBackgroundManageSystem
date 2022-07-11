@@ -302,7 +302,7 @@ import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
-APIgetTypeList(101).then(res => {
+APIgetTypeList('announce').then(res => {
     if (!res.code) {
         options.arr = res.data
     }
@@ -423,11 +423,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetDeviceArchiveList(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 // 删除
@@ -521,9 +520,6 @@ getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device
     }
 </style>
 <style lang="scss" scoped>
-    .articletparticletpl {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

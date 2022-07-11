@@ -501,23 +501,23 @@ export function APIpostTask(data) {
 // 任务派发 /api/a/tasksd
 // 列表
 export function APIgetTasksdList(params) {
-    return api2.get('/a/tasksd', { params: params })
+    return api2.get('/tasksd', { params: params })
 }
 // 详情
 export function APIgetTasksdDetails(id) {
-    return api2.get('/a/tasksd/' + id)
+    return api2.get('/tasksd/' + id)
 }
 // 删除
 export function APIdeleteTasksd(id) {
-    return api2.delete('/a/tasksd/' + id)
+    return api2.delete('/tasksd/' + id)
 }
 // 修改
 export function APIputTasksd(id, data) {
-    return api2.put('/a/tasksd/' + id, data)
+    return api2.put('/tasksd/' + id, data)
 }
 // 添加
 export function APIpostTasksd(data) {
-    return api2.post('/a/tasksd', data)
+    return api2.post('/tasksd', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -708,28 +708,46 @@ export function APIputType(kind, id, data) {
 export function APIpostType(kind, data) {
     return api2.post(`/kind/${kind}/cat`, data)
 }
+/* --------------------------------------------------------------------------------------------------------------------- */
+// APP 菜单列表
+// 列表
+export function APIgetAPPList(params) {
+    return api2.get('/appmenu', { params: params })
+}
+// 删除
+export function APIdeleteAPP(id) {
+    return api2.delete(`/appmenu/${id}`)
+}
+// 修改
+export function APIputAPP(id, data) {
+    return api2.put(`/appmenu/${id}`, data)
+}
+// 添加
+export function APIpostAPP(data) {
+    return api2.post(`/appmenu`, data)
+}
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 企业
 // 列表
 export function APIgetEnterpriseList(params) {
-    return api.get('/pt/company', { params: params })
+    return api.get('/com', { params: params })
 }
 // 详情
 export function APIgetEnterpriseDetails(id) {
-    return api.get('/pt/company/' + id)
+    return api.get('/com/' + id)
 }
 // 删除
 export function APIdeleteEnterprise(id) {
-    return api.delete('/pt/company/' + id)
+    return api.delete('/com/' + id)
 }
 // 修改
 export function APIputEnterprise(id, data) {
-    return api.put('/pt/company/' + id, data)
+    return api.put('/com/' + id, data)
 }
 // 添加
 export function APIpostEnterprise(data) {
-    return api.post('/pt/company', data)
+    return api.post('/com', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */

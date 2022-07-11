@@ -492,11 +492,20 @@ const from_error = reactive({
     msg: {}
 })
 const activeName = ref('1')
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device_show','kind']).then(res => {
+    console.log(res)
+    opts_all.obj = res
+})
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
-APIgetTypeList(101).then(res => {
+APIgetTypeList('announce').then(res => {
     if (!res.code) {
         options.arr = res.data
     }
@@ -546,21 +555,17 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
                         switch_examine.value = false
-                    }
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 APIpostDevice(from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
                         ElMessage.success(res.msg)
                         switch_examine.value = false
-                    }
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -607,11 +612,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetDeviceList(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 // 删除
@@ -637,10 +641,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceDetails(val.id).then(res => {
-        if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
-        }
     })
 }
 // 删除 服务名称和联系方式
@@ -659,14 +661,7 @@ const addServiceFunc = index => {
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 配置项
-import { getOpts, getOptVal } from '@/util/opts.js'
-const opts_all = reactive({
-    obj: {}
-})
-getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device_show']).then(res => {
-    opts_all.obj = res
-})
+
 </script>
 <style lang="scss">
     .articletparticletpl {

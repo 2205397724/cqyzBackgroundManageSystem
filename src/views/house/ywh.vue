@@ -430,6 +430,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetListYwh(params).then(res => {
+        console.log(res)
         if (res.code === 0) {
             loading_tab.value = false
             data_tab.arr = res.data.items
@@ -577,6 +578,3 @@ getOpts(['type_type']).then(res => {
     opts_all.obj = res
 })
 </script>
-<style lang="scss" scoped>
-
-</style>
