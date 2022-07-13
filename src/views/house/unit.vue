@@ -356,7 +356,8 @@ let from_examine = reactive({
         'name': '不片原济须',
         'remark': '速',
         'addition': {
-            'desc': '例火科准知根天且上了那他不。七社政于知克始术志线二计规在如。全认圆金值速权当二五且解平土办。话划西总确起该极叫可美原间不然生发四。'
+            'desc': '例火科准知根天且上了那他不。七社政于知克始术志线二计规在如。全认圆金值速权当二五且解平土办。话划西总确起该极叫可美原间不然生发四。',
+            'extra':null
         }
     }
 })
@@ -390,10 +391,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetUnitsDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
@@ -409,23 +408,19 @@ const dialogExamineCloseFunc = formEl => {
             from_examine.item.building_id = route.query.building_id
             if (str_title.value == '修改') {
                 APIputUnitsHouse(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
-                    }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.success('修改失败')
                 })
             } else {
                 APIpostUnitsHouse(from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
-                    }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.success('添加失败')
                 })
             }
         } else {
@@ -475,11 +470,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetUnitsListHouse(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 // 删除
@@ -487,15 +481,12 @@ const deleteFunc = val => {
     APIdeleteUnitsHouse(val.id).then(res => {
         if (res.code === 0) {
             refreshFunc()
-            ElMessage.success(res.msg)
+            ElMessage.success('删除成功')
         }
     })
 }
 // 添加楼栋
-const addResidentialFunc = () => {
-    from_error.msg = {}
-    str_title.value = '添加'
-    from_examine.item = {
+from_examine.item = {
         'building_id': '',
         'addr': '',
         'cnt_floor': 0,
@@ -507,6 +498,10 @@ const addResidentialFunc = () => {
             'desc': ''
         }
     }
+const addResidentialFunc = () => {
+    from_error.msg = {}
+    str_title.value = '添加'
+    from_examine.item = {}
     switch_examine.value = true
 }
 // 修改
@@ -514,10 +509,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetUnitsDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
+            from_examine.item = res
             switch_examine.value = true
-        }
     })
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -554,9 +547,6 @@ refreshFunc()
     }
 </style>
 <style lang="scss" scoped>
-    .routineunit {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;
