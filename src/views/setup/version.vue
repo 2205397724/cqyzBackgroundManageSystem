@@ -9,30 +9,42 @@
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_type,scope.row.type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="version" label="版本号" width="140">
+                    <el-table-column prop="version" label="版本号" width="160">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.version }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="version_name" label="版本名称" width="140">
+                    <el-table-column prop="version_name" label="版本名称" width="160">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.version_name}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="force" label="是否强制更新">
+                    <el-table-column prop="force" label="是否强制更新" width="160">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_force,scope.row.force) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="url" label="下载地址" width="140">
+                    <el-table-column prop="url" label="下载地址">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.url}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="kind" label="状态
-                    " width="180">
+                    <el-table-column prop="status" label="状态" width="160">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_status,scope.row.status) }} </span>
+                            <el-switch
+                                    v-model="scope.row.status"
+                                    class="switch"
+
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="开启"
+                                    inactive-text="关闭"
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    @change="switchFunk(scope.row.status)"
+                                />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
@@ -119,6 +131,8 @@
                             >
                                 <el-input
                                     v-model="addMenuForm.item.content"
+                                    type="textarea"
+                                    rows="4"
                                     placeholder=""
                                 />
                             </el-form-item>
@@ -146,12 +160,23 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="状态" prop="status"
+                                label="状态" prop="status" label-width="120px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
-                                    <el-select v-model="addMenuForm.item.status" class="head-btn" placeholder="启用状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_status" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                    <el-switch
+                                    v-model="addMenuForm.item.status"
+                                    class="switch"
+
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="开启"
+                                    inactive-text="关闭"
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    @change="switchFunk(addMenuForm.item.status)"
+                                />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -318,9 +343,6 @@ const opts_all = reactive({
     obj: {}
 })
 getOpts(['sys_is_status','sys_is_force','sys_is_type']).then(res => {
-    if(opts_all.obj.sys_is_type.key === 0){
-
-    }
     opts_all.obj = res
 })
 </script>

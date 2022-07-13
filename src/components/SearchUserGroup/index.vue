@@ -105,7 +105,6 @@ const getTabListFunc = () => {
     APIgetGroupList(code.value).then(res => {
             loading_tab.value = false
             data_tab.arr = res
-        }
     })
 }
 

@@ -4,7 +4,7 @@
             <el-button class="head-btn" type="primary" @click="addresidentialFunc">添加App菜单</el-button>
             <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 400px;">
                 <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}"  default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
-                    <el-table-column prop="icon" label="图标" width="140">
+                    <el-table-column prop="icon" label="图标" width="80">
                         <template #default="scope">
                             <img :src="scope.row.icon" alt="" style="width: 50%; height: 50%;">
                         </template>
@@ -19,22 +19,22 @@
                             <span style="margin-left: 10px;">{{ scope.row.appid }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="china_code" label="区域id" width="100">
+                    <el-table-column prop="china_code" label="区域id" width="140">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.china_code}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="url" label="跳转地址" width="200">
+                    <el-table-column prop="url" label="跳转地址" >
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.url}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="place" label="菜单位置" width="140">
+                    <el-table-column prop="place" label="菜单位置">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sele_menu,scope.row.place)}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="type" label="跳转方式" width="140">
+                    <el-table-column prop="type" label="跳转方式">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.type}} </span>
                         </template>
@@ -51,7 +51,7 @@
                         </template>
                     </el-table-column> -->
 
-                    <el-table-column fixed="right" label="操作" width="200">
+                    <el-table-column fixed="right" label="操作">
                         <template #default="scope">
                             <el-button
                                 type="primary" size="small"
@@ -140,7 +140,7 @@
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-select v-model="addMenuForm.item.type" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.sele_type" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.sele_type" :key="item.key" :label="item.val" :value="item.val" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -195,6 +195,8 @@
 import {
     ElMessage
 } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
     let data_tab = reactive({
         arr: []
     })
@@ -214,12 +216,12 @@ const data_details = reactive({
 })
 let addMenuForm=reactive({
     item:{
-    "appid":"",
+    "appid": route.query.appid,
     "china_code":"",
     "name":"",
     "place":"",
     "icon":"",
-    "type":-1,//整数
+    "type":"",//整数
     "url":""
     }
 })
@@ -249,7 +251,7 @@ const refreshFunc = () => {
 // 获取列表
 const getTabListFunc = () => {
     let params = {
-        appid: "62cb90667d7cf91d2b4624c3",
+        appid: route.query.appid,
         china_code: "500101",
         place: 1
     }
@@ -261,6 +263,11 @@ const getTabListFunc = () => {
             total.value = res.length
     })
 }
+const switchFunk = row => {
+        console.log(row)
+        addMenuForm.item.status = row
+
+}
 refreshFunc()
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -269,7 +276,9 @@ const dialogExamineCloseFunc = formEl => {
     // if (!formEl) return
     // formEl.validate(valid => {
     //     if (valid) {
+        addMenuForm.item.appid= route.query.appid
             if (str_title.value == '修改') {
+                switchFunk()
                 APIputAppMenu(addMenuForm.item.id, addMenuForm.item).then(res => {
                     console.log(res)
                         refreshFunc()
@@ -279,6 +288,7 @@ const dialogExamineCloseFunc = formEl => {
                     ElMessage.success('修改失败')
                 })
             } else {
+                switchFunk()
                 console.log(addMenuForm.item)
                 APIpostAppMenu(addMenuForm.item).then(res => {
                         refreshFunc()
@@ -304,7 +314,7 @@ const addresidentialFunc=()=>{
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetAppMenuList({"appid": "62cb90667d7cf91d2b4624c3","place": 1,"china_code":"500101"}).then(res => {
+    APIgetAppMenuList({"appid": route.query.appid ,"place": 1,"china_code":"500101"}).then(res => {
         console.log(res)
             addMenuForm.item = res[0]
             switch_examine.value = true
