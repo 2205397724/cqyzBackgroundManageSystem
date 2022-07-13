@@ -52,9 +52,11 @@ import {
 } from '@/api/custom/custom.js'
 let nodeCopy = ''
 // type: region区域 zone小区 building楼栋 units单元
-const filterNode = (value, data) => {
-    if (!value) return true
-    return data.name.indexof(value) !== 'rigen'
+const filterNode = (value, data,node) => {
+
+    if(node.data.next_type===value){
+        return false
+    }
 }
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
@@ -83,9 +85,6 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'zone':
-            // console.log(type)
-
-            // if (!type.value) {
                 APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
                     // treeDetail.arr = res.data
                     console.log(res)
@@ -93,12 +92,10 @@ const loadNode = (node, resolve) => {
                         for (let i in res) {
                             tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'building', id: res[i].id })
                         }
-                    resolve(tree_arr)
+                    resolve("")
                     emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
                     tree_arr = []
                 })
-
-            // }
             break
         case 'building':
             APIgetBuildListHouse({ page: 1, per_page: 500, zone_id: node.data.id }).then(res => {

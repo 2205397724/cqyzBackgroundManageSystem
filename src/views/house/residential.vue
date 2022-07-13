@@ -1,7 +1,7 @@
 <template>
     <div class="routineresidentialhouse">
         <div class="tree-box" style="height: 100%;">
-            <div class="tree-item">
+            <div class="tree-item" style="background-color: white;">
                 <div style="height: calc(100% - 60px);">
                     <position-tree
                         :tree_item="tree_item"
@@ -16,10 +16,7 @@
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
-                        <div
-                            v-if="!active_obj.obj.name||active_obj.obj.next_type=='region'"
-                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
-                        />
+
                         <div>
                             <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
                             <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
@@ -41,10 +38,9 @@
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                 style="width: 100%;min-height: 300px;"
                             >
-                                <el-table-column prop="name" label="名称" width="180" />
+                                   <el-table-column prop="name" label="名称" width="180" />
                                 <el-table-column prop="addr" label="地址" width="220" />
                                 <el-table-column prop="china_code" label="所在区域" width="180" />
-                                <el-table-column prop="id" label="小区ID" width="250" />
                                 <el-table-column prop="area_floor" label="总占地面积" width="140">
                                     <template #default="scope">
                                         <span>{{ scope.row.area_floor }} m²</span>
@@ -69,8 +65,8 @@
                                 </el-table-column>
                                 <el-table-column prop="cnt_live" label="住房总套数" width="140">
                                     <template #default="scope">
-                                        <el-link style="padding: 0 10px;" :underline="false" class="el-button" type="primary" @click="showHouseFunc(scope.row)">
-                                            {{ scope.row.cnt_live }} 套
+                                        <el-link  :underline="false" type="primary" >
+                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_building_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>
@@ -363,7 +359,8 @@
                                     <div style="margin-bottom: 10px;">
                                         <el-button type="primary" plain @click="addServiceFunc">添加服务名称和电话</el-button>
                                     </div>
-                                    <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box">
+                                    <div v-if="from_examine.item.addition">
+                                       <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box" :key="i">
                                         <el-row :gutter="10">
                                             <el-col :xs="12" :sm="12">
                                                 <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
@@ -387,6 +384,7 @@
                                                 <el-icon-circle-close />
                                             </el-icon>
                                         </div>
+                                    </div>
                                     </div>
                                 </el-col>
                                 <!-- <el-col :xs="24"><div class="details-tit-sm m-b-10">小区档案</div></el-col> -->
@@ -556,17 +554,19 @@
                             </div>
                             <div class="item">
                                 <div class="left">简介</div>
-                                <div class="right">{{ descValue2 }}</div>
+                                <div class="right" v-if="data_details.item.addition">{{ data_details.item.addition.desc}}</div>
+                                <div class="right" v-else>~无简介信息</div>
                             </div>
                             <div class="details-tit-sm">便民信息</div>
                             <div class="item">
-                                <div class="right">
-                                    <div v-for="(item,i) in data_details.item.addition.extra.convenience" class="flex-row p-t-10">
+                                <div class="right" v-if="data_details.item.addition">
+                                    <div v-for="(item,i) in data_details.item.addition.extra.convenience" class="flex-row p-t-10" :key="i">
                                         <div>
                                             <span>服务名称：</span>{{ item.title }} , <span>联系方式：</span>{{ item.phone }}
                                         </div>
                                     </div>
                                 </div>
+                                <div class="right" v-else>~无信息</div>
                             </div>
                         </div>
                     </el-scrollbar>
@@ -620,15 +620,16 @@ import House from '@/components/House/index.vue'
 // })
 const activeName = ref('1')
 const edit_house = ref(false)
-// const showHouseFunc = val => {
-//     tree_item.obj = {
-//         id: val.id,
-//         name: val.name,
-//         next_type: 'building',
-//         type: 'region'
-//     }
-//     edit_house.value = true
-// }
+const showHouseFunc = val => {
+    console.log(val)
+    tree_item.obj = {
+        id: val.id,
+        name: val.name,
+        next_type: 'building',
+        type: 'region'
+    }
+    edit_house.value = true
+}
 const active_obj = reactive({
     obj: {}
 })
@@ -639,11 +640,16 @@ const item = reactive({
     arr: []
 })
 const checkFunc = val => {
-    // console.log(val)
     active_obj.obj = val
-    // treeDetail.arr = val[1]
-    // console.log(treeDetail.arr)
-    // item.arr = treeDetail.arr
+    console.log(val)
+    let cur=active_obj.obj.name||""
+    if(cur.includes("社区")){
+        APIgetResidentialListHouse({ page: 1, per_page: 5, china_code:  active_obj.obj.id}).then(res=>{
+            console.log(res)
+            data_tab.arr=res
+        })
+    }
+
 }
 // 搜索
 let no_zone = ref(false)
@@ -855,6 +861,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
+        console.log("ssss")
         console.log(res)
         // if (res.status === 200) {
         loading_tab.value = false
@@ -902,8 +909,6 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
-const descValue1=ref("")
-const descValue2=ref("")
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}
@@ -911,8 +916,6 @@ const modifyResidentialFunc = val => {
     APIgetResidentialDetailsHouse(val.id).then(res => {
         console.log(res)
         from_examine.item = res
-        descValue1=from_examine.item.addition.desc
-        descValue2=data_details.item.addition.desc
         switch_examine.value = true
     })
 }
