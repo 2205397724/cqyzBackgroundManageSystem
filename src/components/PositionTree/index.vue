@@ -54,9 +54,9 @@ let nodeCopy = ''
 // type: region区域 zone小区 building楼栋 units单元
 const filterNode = (value, data,node) => {
 
-    if(node.data.next_type===value){
-        return false
-    }
+    // if(node.data.next_type===value){
+    //     return false
+    // }
 }
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
@@ -85,7 +85,7 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'zone':
-                APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
+                APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
                     // treeDetail.arr = res.data
                     console.log(res)
                     let tree_arr = []
@@ -98,7 +98,7 @@ const loadNode = (node, resolve) => {
                 })
             break
         case 'building':
-            APIgetBuildListHouse({ page: 1, per_page: 500, zone_id: node.data.id }).then(res => {
+            APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
                     for (let i in res) {
                         tree_arr.push({ name: res[i].name, type: 'building', next_type: 'units', id: res[i].id })
@@ -107,7 +107,7 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'units':
-            APIgetUnitsListHouse({ page: 1, per_page: 500, building_id: node.data.id }).then(res => {
+            APIgetUnitsListHouse({ page: 1, per_page: 7, building_id: node.data.id }).then(res => {
                 let tree_arr = []
                     for (let i in res) {
                         tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })

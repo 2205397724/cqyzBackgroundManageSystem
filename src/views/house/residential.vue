@@ -643,7 +643,7 @@ const checkFunc = val => {
     active_obj.obj = val
     console.log(val)
     let cur=active_obj.obj.name||""
-    if(cur.includes("社区")){
+    if(cur.includes("社区")||cur.includes("街道")||cur.includes("镇")||cur.includes("区")||cur.includes("县")){
         APIgetResidentialListHouse({ page: 1, per_page: 5, china_code:  active_obj.obj.id}).then(res=>{
             console.log(res)
             data_tab.arr=res
