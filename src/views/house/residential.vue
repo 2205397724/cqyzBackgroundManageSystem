@@ -16,7 +16,14 @@
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
+<<<<<<< HEAD
 
+=======
+                        <!-- <div
+                            v-if="!active_obj.obj.name||active_obj.obj.next_type=='region'"
+                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
+                        /> -->
+>>>>>>> 8799235e19968300b9de459be84a8316016c8dac
                         <div>
                             <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
                             <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
@@ -156,13 +163,13 @@
                                         <Cascaders v-model="from_examine.item.china_code" />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="12">
+                                <!-- <el-col :md="24" :lg="12">
                                     <el-form-item label="地图位置" label-width="120px" prop="">
                                         <el-input
                                             placeholder=""
                                         />
                                     </el-form-item>
-                                </el-col>
+                                </el-col> -->
                                 <el-col :xs="24"><div class="details-tit-sm m-b-10">面积/数量</div></el-col>
                                 <el-col :md="24" :lg="12">
                                     <el-form-item label="楼栋数" label-width="120px" prop="cnt_building" :error="from_error.msg&&from_error.msg.cnt_building?from_error.msg.cnt_building[0]:''">
@@ -344,23 +351,27 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="24">
+                                <!-- <el-col :md="24" :lg="24">
                                     <el-form-item label="简介" label-width="120px" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
                                         <el-input
-                                            v-model="descValue1"
+                                            v-model=""
                                             :autosize="{ minRows: 2, maxRows: 6 }"
                                             type="textarea"
                                             placeholder=""
                                         />
                                     </el-form-item>
-                                </el-col>
+                                </el-col> -->
                                 <el-col :xs="24"><div class="details-tit-sm m-b-10">便民信息</div></el-col>
                                 <el-col :md="24" :lg="24">
                                     <div style="margin-bottom: 10px;">
                                         <el-button type="primary" plain @click="addServiceFunc">添加服务名称和电话</el-button>
                                     </div>
+<<<<<<< HEAD
                                     <div v-if="from_examine.item.addition">
                                        <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box" :key="i">
+=======
+                                    <div v-for="(item,i) in ExtraConvenience1" class="serve-box">
+>>>>>>> 8799235e19968300b9de459be84a8316016c8dac
                                         <el-row :gutter="10">
                                             <el-col :xs="12" :sm="12">
                                                 <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
@@ -552,8 +563,9 @@
                                 <div class="left">备注</div>
                                 <div class="right">{{ data_details.item.remark }}</div>
                             </div>
-                            <div class="item">
+                            <!-- <div class="item">
                                 <div class="left">简介</div>
+<<<<<<< HEAD
                                 <div class="right" v-if="data_details.item.addition">{{ data_details.item.addition.desc}}</div>
                                 <div class="right" v-else>~无简介信息</div>
                             </div>
@@ -561,6 +573,14 @@
                             <div class="item">
                                 <div class="right" v-if="data_details.item.addition">
                                     <div v-for="(item,i) in data_details.item.addition.extra.convenience" class="flex-row p-t-10" :key="i">
+=======
+                                <div class="right">{{ descValue2 }}</div>
+                            </div> -->
+                            <div class="details-tit-sm">便民信息</div>
+                            <div class="item">
+                                <div class="right">
+                                    <div v-for="(item,i) in ExtraConvenience2" class="flex-row p-t-10">
+>>>>>>> 8799235e19968300b9de459be84a8316016c8dac
                                         <div>
                                             <span>服务名称：</span>{{ item.title }} , <span>联系方式：</span>{{ item.phone }}
                                         </div>
@@ -909,6 +929,13 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
+<<<<<<< HEAD
+=======
+const descValue1=ref("")
+const descValue2=ref("")
+const ExtraConvenience1=ref("")
+const ExtraConvenience2=ref("")
+>>>>>>> 8799235e19968300b9de459be84a8316016c8dac
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}
@@ -916,6 +943,13 @@ const modifyResidentialFunc = val => {
     APIgetResidentialDetailsHouse(val.id).then(res => {
         console.log(res)
         from_examine.item = res
+<<<<<<< HEAD
+=======
+        // descValue1=from_examine.item.addition.desc
+        // descValue2=data_details.item.addition.desc
+        // ExtraConvenience1=from_examine.item.addition.extra.convenience
+        // ExtraConvenience2=data_details.item.addition.extra.convenience
+>>>>>>> 8799235e19968300b9de459be84a8316016c8dac
         switch_examine.value = true
     })
 }

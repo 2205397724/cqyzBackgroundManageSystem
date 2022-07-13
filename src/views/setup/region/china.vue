@@ -344,10 +344,8 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteChina(val.id).then(res => {
-        if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
-        }
     })
 }
 // 添加楼栋

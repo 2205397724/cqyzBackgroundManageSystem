@@ -676,10 +676,9 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetBuildDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
+        console.log(res)
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
@@ -695,23 +694,20 @@ const dialogExamineCloseFunc = formEl => {
             from_examine.item.zone_id = route.query.zone_id
             if (str_title.value == '修改') {
                 APIputBuildHouse(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
-                    }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.success('修改失败')
                 })
             } else {
                 APIpostBuildHouse(from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
-                    }
                 }).catch(err => {
-                    from_error.msg = err.data
+                        ElMessage.success('添加失败')
+
                 })
             }
         } else {
@@ -784,17 +780,11 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteBuildHouse(val.id).then(res => {
-        if (res.code === 0) {
             refreshFunc()
-            ElMessage.success(res.msg)
-        }
+            ElMessage.success('删除成功')
     })
 }
-// 添加楼栋
-const addResidentialFunc = () => {
-    from_error.msg = {}
-    str_title.value = '添加'
-    from_examine.item = {
+from_examine.item = {
         'zone_id': '',
         'addr': '',
         'area_live': '',
@@ -820,6 +810,11 @@ const addResidentialFunc = () => {
             'desc': ''
         }
     }
+// 添加楼栋
+const addResidentialFunc = () => {
+    from_error.msg = {}
+    str_title.value = '添加'
+    from_examine.item={}
     switch_examine.value = true
 }
 // 修改
@@ -827,10 +822,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetBuildDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
+            from_examine.item = res
             switch_examine.value = true
-        }
     })
 }
 
