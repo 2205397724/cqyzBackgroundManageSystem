@@ -155,12 +155,13 @@
                                             <el-upload
                                                 action="***"
                                                 :auto-upload="false"
-                                                :file-list="fileListFn(item.key)"
+                                                multiple
+                                                v-model:file-list="fileList"
                                                 :on-change="(file,files)=>{
-                                                    item.key = file
+                                                    fileList.push(file)
                                                 }"
                                                 :on-remove="(file,files)=>{
-                                                    item.key = file
+                                                    fileList.pop(file)
                                                 }"
                                             >
                                                 <el-button type="primary">选择附件</el-button>
@@ -471,9 +472,10 @@ const addServiceFunc = index => {
     }
     from_examine.item.content.push(data)
 }
+const fileList=reactive([])
 const fileListFn = (val) => {
     if(!val){
-        return []
+        return
     }
     if(typeof val == 'string') {
         return [{

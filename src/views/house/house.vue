@@ -154,7 +154,8 @@
                     </el-row>
                 </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
+                    <div v-if="data_tab.arr.length>0">
+                        <el-table
                         ref="multipleTableRef"
                         v-loading="loading_tab"
                         :data="data_tab.arr"
@@ -249,6 +250,8 @@
                         </el-table-column>
                         <el-table-column />
                     </el-table>
+                    </div>
+                    <div v-else class="flex-row flex-center p-tb-30 font-grey">~无房屋信息~</div>
                 </div>
                 <div style="padding-top: 20px;">
                     <el-pagination
@@ -1089,12 +1092,14 @@ const getTabListFunc = () => {
         }
         params.updated_at = updated_str.substring(1)
     }
+    console.log(route.query)
     APIgetHouseListHouse(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
+        console.log(res)
+        if (res.statuscode === 200) {
+            data_tab.arr = res.data
+            total.value = res.data.length
         }
+        loading_tab.value = false
     })
 }
 // 删除
@@ -1276,9 +1281,6 @@ getOpts(['status_all','house_has_property', 'house_type_model', 'house_type_prop
     }
 </style>
 <style lang="scss" scoped>
-    .routine-house {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;
