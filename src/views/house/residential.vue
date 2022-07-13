@@ -16,14 +16,6 @@
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
-<<<<<<< HEAD
-
-=======
-                        <!-- <div
-                            v-if="!active_obj.obj.name||active_obj.obj.next_type=='region'"
-                            style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
-                        /> -->
->>>>>>> 8799235e19968300b9de459be84a8316016c8dac
                         <div>
                             <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
                             <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
@@ -45,7 +37,7 @@
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                 style="width: 100%;min-height: 300px;"
                             >
-                                   <el-table-column prop="name" label="名称" width="180" />
+                                <el-table-column prop="name" label="名称" width="180" />
                                 <el-table-column prop="addr" label="地址" width="220" />
                                 <el-table-column prop="china_code" label="所在区域" width="180" />
                                 <el-table-column prop="area_floor" label="总占地面积" width="140">
@@ -123,9 +115,6 @@
                     </div>
                 </div>
             </div>
-            <!-- </div>
-                </div>
-            </div> -->
         </div>
         <!-- 修改添加 -->
         <el-dialog
@@ -366,12 +355,8 @@
                                     <div style="margin-bottom: 10px;">
                                         <el-button type="primary" plain @click="addServiceFunc">添加服务名称和电话</el-button>
                                     </div>
-<<<<<<< HEAD
                                     <div v-if="from_examine.item.addition">
                                        <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box" :key="i">
-=======
-                                    <div v-for="(item,i) in ExtraConvenience1" class="serve-box">
->>>>>>> 8799235e19968300b9de459be84a8316016c8dac
                                         <el-row :gutter="10">
                                             <el-col :xs="12" :sm="12">
                                                 <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
@@ -563,9 +548,8 @@
                                 <div class="left">备注</div>
                                 <div class="right">{{ data_details.item.remark }}</div>
                             </div>
-                            <!-- <div class="item">
+                            <div class="item">
                                 <div class="left">简介</div>
-<<<<<<< HEAD
                                 <div class="right" v-if="data_details.item.addition">{{ data_details.item.addition.desc}}</div>
                                 <div class="right" v-else>~无简介信息</div>
                             </div>
@@ -573,14 +557,6 @@
                             <div class="item">
                                 <div class="right" v-if="data_details.item.addition">
                                     <div v-for="(item,i) in data_details.item.addition.extra.convenience" class="flex-row p-t-10" :key="i">
-=======
-                                <div class="right">{{ descValue2 }}</div>
-                            </div> -->
-                            <div class="details-tit-sm">便民信息</div>
-                            <div class="item">
-                                <div class="right">
-                                    <div v-for="(item,i) in ExtraConvenience2" class="flex-row p-t-10">
->>>>>>> 8799235e19968300b9de459be84a8316016c8dac
                                         <div>
                                             <span>服务名称：</span>{{ item.title }} , <span>联系方式：</span>{{ item.phone }}
                                         </div>
@@ -929,13 +905,6 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
-<<<<<<< HEAD
-=======
-const descValue1=ref("")
-const descValue2=ref("")
-const ExtraConvenience1=ref("")
-const ExtraConvenience2=ref("")
->>>>>>> 8799235e19968300b9de459be84a8316016c8dac
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}
@@ -943,13 +912,6 @@ const modifyResidentialFunc = val => {
     APIgetResidentialDetailsHouse(val.id).then(res => {
         console.log(res)
         from_examine.item = res
-<<<<<<< HEAD
-=======
-        // descValue1=from_examine.item.addition.desc
-        // descValue2=data_details.item.addition.desc
-        // ExtraConvenience1=from_examine.item.addition.extra.convenience
-        // ExtraConvenience2=data_details.item.addition.extra.convenience
->>>>>>> 8799235e19968300b9de459be84a8316016c8dac
         switch_examine.value = true
     })
 }
@@ -988,56 +950,55 @@ const handleChange = (uploadFile, uploadFiles) => {
 refreshFunc()
 </script>
 <style lang="scss">
-    .routineresidentialhouse {
-        height: calc(100vh - 50px);
-        .tree-box {
-            border-top: 1px solid #efefef;
-            display: flex;
-        }
-        .tree-item {
-            min-width: 300px;
-            width: 300px;
-            border-right: 1px solid #e9e9e9;
-        }
-        .tree-details {
-            flex-grow: 1;
-            max-width: calc(100% - 300px);
-        }
-        .el-cascader {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .el-form-item {
-                margin: 0;
-            }
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
+.routineresidentialhouse {
+    height: calc(100vh - 50px);
+    .tree-box {
+        border-top: 1px solid #efefef;
+        display: flex;
     }
-    .file-2022 {
+    .tree-item {
+        min-width: 300px;
+        width: 300px;
+        border-right: 1px solid #e9e9e9;
+    }
+    .tree-details {
+        flex-grow: 1;
+        max-width: calc(100% - 300px);
+    }
+    .el-cascader {
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
         .el-form-item {
-            margin-bottom: 18px !important;
+            margin: 0;
+        }
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
         }
     }
+}
+.file-2022 {
+    .el-form-item {
+        margin-bottom: 18px !important;
+    }
+}
 </style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 </style>
