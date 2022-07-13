@@ -709,24 +709,61 @@ export function APIpostType(kind, data) {
     return api2.post(`/kind/${kind}/cat`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-// APP 菜单列表
+// APP 管理
 // 列表
 export function APIgetAPPList(params) {
-    return api2.get('/appmenu', { params: params })
+    return api2.get('/apps', { params: params })
+}
+// 详情
+export function APIgetAPPListDetails(id) {
+    return api2.get(`/apps/${id}`)
 }
 // 删除
 export function APIdeleteAPP(id) {
-    return api2.delete(`/appmenu/${id}`)
+    return api2.delete(`/apps/${id}`)
 }
 // 修改
 export function APIputAPP(id, data) {
-    return api2.put(`/appmenu/${id}`, data)
+    return api2.put(`/apps/${id}`, data)
 }
 // 添加
 export function APIpostAPP(data) {
+    return api2.post(`/apps`, data)
+}
+// APP 菜单管理
+// 列表
+export function APIgetAppMenuList(params) {
+    return api2.get('/appmenu', { params: params })
+}
+// 删除
+export function APIdeleteAppMenu(id) {
+    return api2.delete(`/appmenu/${id}`)
+}
+// 修改
+export function APIputAppMenu(id, data) {
+    return api2.put(`/appmenu/${id}`, data)
+}
+// 添加
+export function APIpostAppMenu(data) {
     return api2.post(`/appmenu`, data)
 }
-
+// APP 版本管理
+// 列表
+export function APIgetAppVersionList(params) {
+    return api2.get('/appversion', { params: params })
+}
+// 删除
+export function APIdeleteAppVersion(id) {
+    return api2.delete(`/appversion/${id}`)
+}
+// 修改
+export function APIputAppVersion(id, data) {
+    return api2.put(`/appversion/${id}`, data)
+}
+// 添加
+export function APIpostAppVersion(data) {
+    return api2.post(`/appversion`, data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 企业
 // 列表

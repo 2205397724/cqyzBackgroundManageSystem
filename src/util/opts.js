@@ -549,6 +549,61 @@ const opts = {
         key: 1,
         val: '开启'
     }],
+    // app管理状态
+    sys_is_status: [{
+        key: 0,
+        val: '已关闭'
+    }, {
+        key: 1,
+        val: '已开启'
+    }],
+    // 是否强制更新
+    sys_is_force: [{
+        key: 0,
+        val: '是'
+    }, {
+        key: 1,
+        val: '否'
+    }],
+    // app类别
+    sys_is_type: [{
+        key: 1,
+        val: '安卓'
+    }, {
+        key: 2,
+        val: '苹果'
+    }],
+    // 菜单位置
+    sele_menu: [{
+        key: 1,
+        val: 'APP首页金刚区'
+    }, {
+        key: 2,
+        val: '发布首页'
+    }, {
+        key: 3,
+        val: '用户中心'
+    }, {
+        key: 4,
+        val: 'APP小区中心'
+    }],
+    // 跳转方式
+    sele_type: [{
+        key: 0,
+        val: 'tabbar'
+    }, {
+        key: 1,
+        val: 'pages'
+    }, {
+        key: 2,
+        val: 'url'
+    }, {
+        key: 3,
+        val: 'wxapp'
+    }, {
+        key: 4,
+        val: 'phone'
+    }],
     // 供水方式
     build_type_water: [{
         key: 100,
