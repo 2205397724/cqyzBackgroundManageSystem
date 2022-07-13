@@ -9,7 +9,7 @@
                             <img :src="scope.row.icon" alt="" style="width: 50%; height: 50%;">
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="菜单名称" width="120">
+                    <el-table-column prop="name" label="菜单名称" width="100">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
@@ -19,7 +19,7 @@
                             <span style="margin-left: 10px;">{{ scope.row.appid }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="china_code" label="区域id" width="140">
+                    <el-table-column prop="china_code" label="区域id" width="100">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.china_code}} </span>
                         </template>
@@ -39,6 +39,16 @@
                             <span style="margin-left: 10px;">{{ scope.row.type}} </span>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="sort" label="排序" width="80">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.sort}} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="show" label="是否显示" width="120">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.show}} </span>
+                        </template>
+                    </el-table-column>
                     <!-- <el-table-column prop="id" label="APP 相关" width="250">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ addMenuForm. }} </span>
@@ -51,7 +61,7 @@
                         </template>
                     </el-table-column> -->
 
-                    <el-table-column fixed="right" label="操作">
+                    <el-table-column fixed="right" label="操作" width="120">
                         <template #default="scope">
                             <el-button
                                 type="primary" size="small"
@@ -101,7 +111,7 @@
                                         <Cascaders v-model="addMenuForm.item.china_code" />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12" v-show="str_title == '修改'">
+                        <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="appid" prop="appid" label-width="120px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
@@ -157,11 +167,33 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
+                                label="排序" prop="sort" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="addMenuForm.item.sort"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
                                 label="gh_id" prop="ghid" label-width="120px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
                                     v-model="addMenuForm.item.ghid"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="是否显示" prop="show" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="addMenuForm.item.show"
                                     placeholder=""
                                 />
                             </el-form-item>
@@ -214,6 +246,7 @@ let switch_details=ref(false)
 const data_details = reactive({
     item: ''
 })
+console.log(route.query.appid)
 let addMenuForm=reactive({
     item:{
     "appid": route.query.appid,
@@ -263,11 +296,6 @@ const getTabListFunc = () => {
             total.value = res.length
     })
 }
-const switchFunk = row => {
-        console.log(row)
-        addMenuForm.item.status = row
-
-}
 refreshFunc()
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -278,7 +306,6 @@ const dialogExamineCloseFunc = formEl => {
     //     if (valid) {
         addMenuForm.item.appid= route.query.appid
             if (str_title.value == '修改') {
-                switchFunk()
                 APIputAppMenu(addMenuForm.item.id, addMenuForm.item).then(res => {
                     console.log(res)
                         refreshFunc()
@@ -288,7 +315,6 @@ const dialogExamineCloseFunc = formEl => {
                     ElMessage.success('修改失败')
                 })
             } else {
-                switchFunk()
                 console.log(addMenuForm.item)
                 APIpostAppMenu(addMenuForm.item).then(res => {
                         refreshFunc()
@@ -308,6 +334,7 @@ const addresidentialFunc=()=>{
     from_error.msg = {}
     str_title.value = '添加'
     addMenuForm.item = {}
+    addMenuForm.item.appid=route.query.appid
     switch_examine.value = true
 }
 // 修改

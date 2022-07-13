@@ -84,7 +84,7 @@
                                     inactive-text="禁用"
                                     :active-value="1"
                                     :inactive-value="0"
-                                    @change="switchFunk(scope.row)"
+                                    @change="switchFunk(scope.row.active)"
                                 />
                             </template>
                             <!-- <template #default="scope">
@@ -382,21 +382,32 @@ const detailsFunc = val => {
     })
 }
 const switchFunk = row => {
-    let status = row.active == '1' ? '启用' : '禁用'
-    ElMessage({
-        type: 'warning',
-        showClose: true,
-        message: `已${status}此接口状态`
-    })
-    APIputCity(row.id, row).then(res => {
-        // console.log(res)
-        if (res.status === 200) {
-            refreshFunc()
-        }
-    }).catch(err => {
-        from_error.msg = err.data
-    })
-
+    // let status = row.active == '1' ? '启用' : '禁用'
+    // ElMessage({
+    //     type: 'warning',
+    //     showClose: true,
+    //     message: `已${status}此接口状态`
+    // })
+    console.log(row)
+    from_examine.item.active=row
+    console.log(from_examine.item.active);
+    // APIputCity(from_examine.item.id, from_examine.item).then(res => {
+    //                 // console.log(res)
+    //                 if (res.status === 200) {
+    //                     ElMessage.success(res.statusText)
+    //                     switch_examine.value = false
+    //                 }
+    //             }).catch(err => {
+    //                 from_error.msg = err.data
+    //             })
+    // APIputCity(row.id, row).then(res => {
+    //     // console.log(res)
+    //     if (res.status === 200) {
+    //         refreshFunc()
+    //     }
+    // }).catch(err => {
+    //     from_error.msg = err.data
+    // })
 }
 // 监听分页
 watch(page, () => {
@@ -409,6 +420,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
+                switchFunk(from_examine.item.active)
                 APIputCity(from_examine.item.id, from_examine.item).then(res => {
                     // console.log(res)
                     if (res.status === 200) {
@@ -420,6 +432,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
+                switchFunk(from_examine.item.active)
                 console.log(from_examine.item)
                 APIpostCity(from_examine.item).then(res => {
                     // console.log(from_examine.item)
