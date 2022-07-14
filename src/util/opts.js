@@ -621,7 +621,7 @@ const opts = {
     }],
     // china添加时候的区域等级
     china_level: [{
-        key: 100,
+        key: 1,
         val: '区域等级一'
     }]
 }

@@ -4,22 +4,27 @@
             <el-button class="head-btn" type="primary" @click="addresidentialFunc">添加App</el-button>
             <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 500px;">
                 <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}"  default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
-                <el-table-column prop="logo" label="图标">
+                <el-table-column prop="logo" label="图标" width="100">
                         <template #default="scope">
-                            <img :src="scope.row.logo" alt="" style="width: 50%; height: 50%;">
+                            <img :src="scope.row.logo" alt="" style="width: 50px; height: 50px;">
                         </template>
                     </el-table-column>
-                <el-table-column prop="name" label="APP名称">
+                <el-table-column prop="name" label="APP名称" width="120">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="china_code" label="区域id">
+                    <el-table-column prop="china_code" label="区域id" width="120">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.china_code}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="status" label="状态">
+                    <el-table-column prop="id" label="appid" width="260">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.id}} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status" label="状态" width="120">
                         <template #default="scope">
                             <el-switch
                                     v-model="scope.row.status"
@@ -33,17 +38,17 @@
                                     inactive-text="关闭"
                                     :active-value="1"
                                     :inactive-value="0"
-                                    @change="switchFunk(scope.row)"
+                                    @change="switchFunk(scope.row.status)"
                                 />
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="APP相关" width="400">
+                    <el-table-column fixed="right" label="APP相关" width="250">
                         <template #default="scope">
-                            <el-link :underline="false" type="primary">
-                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppMenu'}">APP菜单管理</router-link>
+                            <el-link :underline="false" type="primary" style="padding-right: 10px;">
+                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppMenu',query:{ appid: scope.row.id }}">APP菜单管理</router-link>
                             </el-link>
                             <el-link :underline="false" type="primary">
-                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppVersion'}">APP版本管理</router-link>
+                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppVersion',query:{ id: scope.row.id }}">APP版本管理</router-link>
                             </el-link>
                         </template>
                     </el-table-column>
@@ -112,14 +117,15 @@
                                         <Cascaders v-model="addMenuForm.item.china_code" />
                                     </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="12" v-show="str_title == '修改'">
                             <el-form-item
-                                label="APPID" prop="id" label-width="120px"
+                                label="appid" prop="id" label-width="120px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
                                     v-model="addMenuForm.item.id"
                                     placeholder=""
+                                    disabled
                                 />
                             </el-form-item>
                         </el-col>
@@ -130,17 +136,6 @@
                             >
                                 <el-input
                                     v-model="addMenuForm.item.logo"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="内容" prop="content" label-width="120px"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
-                            >
-                                <el-input
-                                    v-model="addMenuForm.item.content"
                                     placeholder=""
                                 />
                             </el-form-item>
@@ -163,6 +158,19 @@
                                     :active-value="1"
                                     :inactive-value="0"
                                     @change="switchFunk(addMenuForm.item.status)"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="内容" prop="content" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="addMenuForm.item.content"
+                                    type="textarea"
+                                    rows="4"
+                                    placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
@@ -322,24 +330,7 @@ const getTabListFunc = () => {
     })
 }
 const switchFunk = row => {
-    // let status = row.status == '1' ? '开启' : '关闭'
-    // ElMessage({
-    //     type: 'warning',
-    //     showClose: true,
-    //     message: `已${status}此接口状态`
-    // })
-    // APIputCity(row.id, row).then(res => {
-    //     // console.log(res)
-    //     if (res.status === 200) {
-    //         refreshFunc()
-    //     }
-    // }).catch(err => {
-    //     from_error.msg = err.data
-    // })
-    // APIputAPP(row.id,row).then(res => {
-    //                 console.log(res)
-    //                     refreshFunc()
-    //             })
+        console.log(row)
 
 }
 refreshFunc()
@@ -358,6 +349,7 @@ const dialogExamineCloseFunc =()  => {
     // formEl.validate(valid => {
     //     if (valid) {
             if (str_title.value == '修改') {
+                switchFunk(addMenuForm.item.status)
                 APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
                     console.log(res)
                         refreshFunc()
@@ -367,6 +359,7 @@ const dialogExamineCloseFunc =()  => {
                     ElMessage.success('修改失败')
                 })
             } else {
+                switchFunk()
                 console.log(addMenuForm.item)
                 APIpostAPP(addMenuForm.item).then(res => {
                     // console.log(from_examine.item)

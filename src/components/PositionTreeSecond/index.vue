@@ -38,7 +38,7 @@ const treeDetail = reactive({
 const tree_props = {
     label: 'name',
     children: 'children',
-    isLeaf: 'leaf'
+    isLeaf: false
 }
 import {
     // china区域
@@ -65,6 +65,22 @@ const loadNode = (node, resolve) => {
         emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
         return false
     }
+
+     if(node.data.name.includes("社区"||"村")){
+                 APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
+                treeDetail.arr = res.data
+                console.log(res)
+                let tree_arr = []
+                if (res.status == 200) {
+                    for (let i in res.data) {
+                        tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code,isLeaf:true})
+                    }
+                }
+                resolve(tree_arr)
+                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                return
+            })
+            }
     switch (node.data.next_type) {
         case 'region':
             APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
@@ -84,38 +100,37 @@ const loadNode = (node, resolve) => {
                 emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
             break
-        case 'zone':
-                APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
-                    // treeDetail.arr = res.data
-                    console.log(res)
-                    let tree_arr = []
-                        for (let i in res) {
-                            tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'building', id: res[i].id })
-                        }
-                    resolve(tree_arr)
-                    emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
-                    tree_arr = []
-                })
-            break
-        case 'building':
-            APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
-                let tree_arr = []
-                    for (let i in res) {
-                        tree_arr.push({ name: res[i].name, type: 'building', next_type: 'units', id: res[i].id })
-                    }
-                resolve(tree_arr)
-            })
-            break
-        case 'units':
-            APIgetUnitsListHouse({ page: 1, per_page: 7, building_id: node.data.id }).then(res => {
-                let tree_arr = []
-                    for (let i in res) {
-                        tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })
-                    }
-                resolve(tree_arr)
-                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
-            })
-            break
+        // case 'zone':
+        //         APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
+        //             // treeDetail.arr = res.data
+        //             console.log(res)
+        //             let tree_arr = []
+        //                 for (let i in res) {
+        //                     tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'building', id: res[i].id ,leaf: true})
+        //                 }
+        //             resolve("")
+        //             emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+        //             tree_arr = []
+        //         })
+        //     break
+        // case 'building':
+        //     APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
+        //         let tree_arr = []
+        //             for (let i in res) {
+        //                 tree_arr.push({ name: res[i].name, type: 'building', next_type: 'units', id: res[i].id })
+        //             }
+        //         resolve(tree_arr)
+        //     })
+        //     break
+        // case 'units':
+        //     APIgetUnitsListHouse({ page: 1, per_page: 7, building_id: node.data.id }).then(res => {
+        //         let tree_arr = []
+        //             for (let i in res) {
+        //                 tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })
+        //             }
+        //         resolve(tree_arr)
+        //     })
+        //     break
     }
 }
 const treeRef = ref(null)

@@ -3,7 +3,7 @@
         <div class="tree-box" style="height: 100%;">
             <div class="tree-item" style="background-color: white;">
                 <div style="height: calc(100% - 60px);">
-                    <position-tree
+                    <position-tree-second
                         :tree_item="tree_item"
                         :type="no_zone"
                         @checkFunc="checkFunc"
@@ -121,6 +121,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            draggable
         >
             <div>
                 <el-scrollbar style="height: 400px;">
@@ -343,7 +344,7 @@
                                 <!-- <el-col :md="24" :lg="24">
                                     <el-form-item label="简介" label-width="120px" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
                                         <el-input
-                                            v-model=""
+                                            v-model="from_examine.item.addition.desc"
                                             :autosize="{ minRows: 2, maxRows: 6 }"
                                             type="textarea"
                                             placeholder=""
@@ -452,6 +453,7 @@
             v-model="switch_details"
             title="详情"
             width="50%"
+            draggable
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基础信息" name="1">
@@ -586,6 +588,7 @@
             title="房屋"
             width="70%"
             center
+            draggable
         >
             <div style="width: 100%;height: 60vh;overflow: auto;">
                 <House :tree_item="tree_item.obj" />
@@ -777,6 +780,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
+                from_examine.item.addition.desc=`${from_examine.item.addition.desc}`
                 APIpostResidentialHouse(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
@@ -857,7 +861,6 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
-        console.log("ssss")
         console.log(res)
         // if (res.status === 200) {
         loading_tab.value = false

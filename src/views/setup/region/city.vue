@@ -142,6 +142,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            draggable
         >
             <div>
                 <el-form
@@ -319,7 +320,7 @@ const data_details = reactive({
 })
 // 分页
 let total = ref(100)
-let per_page = ref(15)
+let per_page = ref(5)
 let page = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
@@ -349,6 +350,20 @@ let from_examine = reactive({
         'name': '重庆',
         'rpc_port': 30032,
         'updated_at': '2022-07-09T01:39:09.000000Z'
+    }
+})
+let from_examine_ = reactive({
+    item: {
+        'active': "",
+        'auth_sk': '',
+        'china_code': '',
+        'created_at': '',
+        'time_build_end': '',
+        'id': '',
+        'ip': '',
+        'name': '',
+        'rpc_port': 0,
+        'updated_at': ''
     }
 })
 const str_title = ref('添加')
@@ -389,14 +404,11 @@ const switchFunk = row => {
         message: `已${status}此接口状态`
     })
     APIputCity(row.id, row).then(res => {
-        // console.log(res)
+         console.log(res)
         if (res.status === 200) {
             refreshFunc()
         }
-    }).catch(err => {
-        from_error.msg = err.data
     })
-
 }
 // 监听分页
 watch(page, () => {
@@ -470,11 +482,12 @@ const deleteFunc = val => {
 }
 // 添加楼栋
 const addResidentialFunc = () => {
+    from_examine.item = {}
     from_error.msg = {}
     str_title.value = '添加'
-    from_examine.item = { }
+
     switch_examine.value = true
-}
+ }
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}

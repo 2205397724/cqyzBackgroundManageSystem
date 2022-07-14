@@ -153,7 +153,7 @@
                                     <el-col :xs="24" :sm="24">
                                         <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
                                             <el-upload
-                                                action="***"
+                                                action=""
                                                 :auto-upload="false"
                                                 multiple
                                                 v-model:file-list="fileList"
@@ -370,10 +370,12 @@ const dialogExamineCloseFunc = () => {
             obj[i] = from_examine.item.content[i].key
         }
     }
+    console.log(obj)
     let files = []
     for(let i in obj){
         files.push(obj[i].raw)
     }
+    console.log(files)
     if(files.length>0){
         getFilesKeys(files, 'folder').then(arr => {
             let o = 0

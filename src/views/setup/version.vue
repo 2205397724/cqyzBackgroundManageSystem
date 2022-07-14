@@ -9,30 +9,42 @@
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_type,scope.row.type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="version" label="版本号" width="140">
+                    <el-table-column prop="version" label="版本号" width="160">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.version }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="version_name" label="版本名称" width="140">
+                    <el-table-column prop="version_name" label="版本名称" width="160">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.version_name}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="force" label="是否强制更新">
+                    <el-table-column prop="force" label="是否强制更新" width="160">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_force,scope.row.force) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="url" label="下载地址" width="140">
+                    <el-table-column prop="url" label="下载地址">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.url}} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="kind" label="状态
-                    " width="180">
+                    <el-table-column prop="status" label="状态" width="160">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_status,scope.row.status) }} </span>
+                            <el-switch
+                                    v-model="scope.row.status"
+                                    class="switch"
+
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="开启"
+                                    inactive-text="关闭"
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    @change="switchFunk(scope.row.status)"
+                                />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
@@ -71,7 +83,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="APP类别" prop="type"
+                                label="APP类别" prop="type" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-select v-model="addMenuForm.item.type" class="head-btn" placeholder="APP类别" clearable>
@@ -81,18 +93,19 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="appid" prop="应用id"
+                                label="appid" prop="appid" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
                                     v-model="addMenuForm.item.appid"
                                     placeholder=""
+                                    disabled
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="版本号" prop="version"
+                                label="版本号" prop="version" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -103,7 +116,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="版本名称" prop="version_name"
+                                label="版本名称" prop="version_name" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -114,18 +127,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="更新说明" prop="content"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
-                            >
-                                <el-input
-                                    v-model="addMenuForm.item.content"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="是否强制更新" prop="force"
+                                label="是否强制更新" prop="force" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-select v-model="addMenuForm.item.force" class="head-btn" placeholder="" clearable>
@@ -135,7 +137,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="下载地址" prop="url"
+                                label="下载地址" prop="url" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -146,12 +148,36 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="状态" prop="status"
+                                label="状态" prop="status" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
-                                    <el-select v-model="addMenuForm.item.status" class="head-btn" placeholder="启用状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_status" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
+                                    <el-switch
+                                    v-model="addMenuForm.item.status"
+                                    class="switch"
+
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="开启"
+                                    inactive-text="关闭"
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    @change="switchFunk(addMenuForm.item.status)"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="更新说明" prop="content" label-width="100px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="addMenuForm.item.content"
+                                    type="textarea"
+                                    rows="4"
+                                    placeholder=""
+                                />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -183,7 +209,9 @@
 import {
     ElMessage
 } from 'element-plus'
-    let data_tab = reactive({
+import { useRoute } from 'vue-router'
+const route = useRoute()
+let data_tab = reactive({
         arr: []
     })
 // 分页
@@ -200,9 +228,10 @@ let switch_details=ref(false)
 const data_details = reactive({
     item: ''
 })
+console.log(route.query.id)
 let addMenuForm=reactive({
     item:{
-    "appid":"",
+    "appid": route.query.id,
     "version":0,
     "version_name":"",
     "content":"",
@@ -239,12 +268,12 @@ const refreshFunc = () => {
 const params = {
         page: page.value,
         per_page: per_page.value,
-        appid: "50010",
+        appid: route.query.id,
         type: 1,
         status: 1
     }
 const getTabListFunc = () => {
-
+    console.log(route.query.id)
     loading_tab.value = true
     APIgetAppVersionList(params).then(res => {
         console.log(res)
@@ -253,6 +282,11 @@ const getTabListFunc = () => {
             total.value = res.length
     })
 }
+const switchFunk = row => {
+        console.log(row)
+        addMenuForm.item.status = row
+
+}
 refreshFunc()
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -260,6 +294,7 @@ const dialogExamineCloseFunc = formEl => {
     // if (!formEl) return
     // formEl.validate(valid => {
     //     if (valid) {
+        addMenuForm.item.appid= route.query.id
             if (str_title.value == '修改') {
                 APIputAppVersion(addMenuForm.item.id, addMenuForm.item).then(res => {
                         refreshFunc()
@@ -271,6 +306,7 @@ const dialogExamineCloseFunc = formEl => {
             } else {
                 console.log(addMenuForm.item)
                 APIpostAppVersion(addMenuForm.item).then(res => {
+                        console.log(res)
                         refreshFunc()
                         ElMessage.success('添加成功')
                         switch_examine.value = false
@@ -288,6 +324,7 @@ const addresidentialFunc=()=>{
     from_error.msg = {}
     str_title.value = '添加'
     addMenuForm.item = {}
+    addMenuForm.item.appid= route.query.id
     switch_examine.value = true
 }
 // 修改
@@ -318,9 +355,6 @@ const opts_all = reactive({
     obj: {}
 })
 getOpts(['sys_is_status','sys_is_force','sys_is_type']).then(res => {
-    if(opts_all.obj.sys_is_type.key === 0){
-
-    }
     opts_all.obj = res
 })
 </script>
