@@ -161,8 +161,8 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
-            for (let i in res.data.items) {
-                tree_arr.push({ name: res.data.items?.[i]?.name, type: 'zone', next_type: 'building', id: res.data.items?.[i]?.id, data: res.data.items?.[i], disabled: dis  })
+            for (let i in res.data) {
+                tree_arr.push({ name: res.data?.[i]?.name, type: 'zone', next_type: 'building', id: res.data?.[i]?.id, data: res.data?.[i], disabled: dis  })
             }
             resolve(tree_arr)
         })
@@ -178,8 +178,8 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
-            for (let i in res.data.items) {
-                tree_arr.push({ name: res.data.items?.[i]?.name, type: 'building', next_type: 'units', id: res.data.items?.[i]?.id, data: res.data.items?.[i], disabled: dis })
+            for (let i in res.data) {
+                tree_arr.push({ name: res.data?.[i]?.name, type: 'building', next_type: 'units', id: res.data?.[i]?.id, data: res.data?.[i], disabled: dis })
             }
             resolve(tree_arr)
         })
@@ -195,8 +195,8 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
-            for (let i in res.data.items) {
-                tree_arr.push({ name: res.data.items?.[i]?.name, leaf: true, id: res.data.items?.[i]?.id, type: 'units', next_type: 'house', data: res.data.items?.[i], disabled: dis })
+            for (let i in res.data) {
+                tree_arr.push({ name: res.data?.[i]?.name, leaf: true, id: res.data?.[i]?.id, type: 'units', next_type: 'house', data: res.data?.[i], disabled: dis })
             }
             resolve(tree_arr)
         })

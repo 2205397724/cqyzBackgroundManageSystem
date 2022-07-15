@@ -148,20 +148,19 @@
                             <div style="margin-bottom: 10px;">
                                 <el-button type="primary" plain @click="addServiceFunc">添加档案内容</el-button>
                             </div>
-                            <div v-for="(item,i) in from_examine.item.content" class="serve-box">
+                            <div v-for="(item,i) in from_examine.item.content" class="serve-box" :key="i">
                                 <el-row :gutter="10">
                                     <el-col :xs="24" :sm="24">
                                         <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
                                             <el-upload
-                                                action=""
+                                                action="***"
                                                 :auto-upload="false"
-                                                multiple
-                                                v-model:file-list="fileList"
+                                                :file-list="fileListFn(item.key)"
                                                 :on-change="(file,files)=>{
-                                                    fileList.push(file)
+                                                    item.key = file
                                                 }"
                                                 :on-remove="(file,files)=>{
-                                                    fileList.pop(file)
+                                                    item.key = file
                                                 }"
                                             >
                                                 <el-button type="primary">选择附件</el-button>
@@ -220,7 +219,7 @@
                 <div v-if="data_details.item.content&&data_details.item.content.length>0" class="item">
                     <div class="left">附件</div>
                     <div class="right">
-                        <div v-for="(item,i) in data_details.item.content">
+                        <div v-for="(item,i) in data_details.item.content" :key="i">
                             <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link>
                         </div>
                     </div>
@@ -291,7 +290,10 @@ let page = ref(1)
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        content: []
+        content: [],
+        did:"",
+        title:"",
+        id:""
     }
 })
 const str_title = ref('添加')
@@ -304,9 +306,7 @@ import {
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
-    if (!res.code) {
         options.arr = res.data
-    }
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
@@ -328,10 +328,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceArchiveDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
@@ -342,21 +340,17 @@ watch(page, () => {
 const formFnUpload = () =>{
     if (str_title.value == '修改') {
         APIputDeviceArchive(from_examine.item.id, from_examine.item).then(res => {
-            if (!res.code) {
                 refreshFunc()
                 ElMessage.success(res.msg)
                 switch_examine.value = false
-            }
         }).catch(err => {
             from_error.msg = err.data
         })
     } else {
         APIpostDeviceArchive(from_examine.item).then(res => {
-            if (!res.code) {
                 refreshFunc()
                 ElMessage.success(res.msg)
                 switch_examine.value = false
-            }
         }).catch(err => {
             from_error.msg = err.data
         })
@@ -370,12 +364,10 @@ const dialogExamineCloseFunc = () => {
             obj[i] = from_examine.item.content[i].key
         }
     }
-    console.log(obj)
     let files = []
     for(let i in obj){
         files.push(obj[i].raw)
     }
-    console.log(files)
     if(files.length>0){
         getFilesKeys(files, 'folder').then(arr => {
             let o = 0
@@ -426,19 +418,16 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetDeviceArchiveList(params).then(res => {
-        console.log(res)
             loading_tab.value = false
             data_tab.arr = res
-            total.value = res.length
+            total.value = res.data?.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteDeviceArchive(val.id).then(res => {
-        if (res.code === 0) {
             refreshFunc()
             ElMessage.success(res.msg)
-        }
     })
 }
 // 添加模板
@@ -455,10 +444,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
+            console.log(res)
+            from_examine.item = res
             switch_examine.value = true
-        }
     })
 }
 // 删除 服务名称和联系方式
@@ -474,10 +462,9 @@ const addServiceFunc = index => {
     }
     from_examine.item.content.push(data)
 }
-const fileList=reactive([])
 const fileListFn = (val) => {
     if(!val){
-        return
+        return []
     }
     if(typeof val == 'string') {
         return [{

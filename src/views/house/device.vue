@@ -537,10 +537,9 @@ const deviceRepair = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
+            console.log(res)
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
