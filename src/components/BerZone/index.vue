@@ -111,6 +111,8 @@ import {
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
         APIgetChinaRegion({ 'p_code': code.value }).then(res => {
+            console.log(res)
+
             let tree_arr = []
             let dis = false
             for (let i in disabled.value) {
@@ -119,11 +121,11 @@ const loadNode = (node, resolve) => {
                     break
                 }
             }
-            for (let i in res) {
-                if (res?.[i]?.level < 5) {
-                    tree_arr.push({ name: res?.[i]?.name, type: 'region', next_type: 'region', id: res?.[i]?.code, disabled: dis })
+            for (let i in res.data) {
+                if (res.data?.[i]?.level < 5) {
+                    tree_arr.push({ name: res.data?.[i]?.name, type: 'region', next_type: 'region', id: res.data?.[i]?.code, disabled: dis })
                 } else {
-                    tree_arr.push({ name: res?.[i]?.name, type: 'region', next_type: 'zone', id: res?.[i]?.code, disabled: dis })
+                    tree_arr.push({ name: res.data?.[i]?.name, type: 'region', next_type: 'zone', id: res.data?.[i]?.code, disabled: dis })
                 }
             }
             resolve(tree_arr)
@@ -140,11 +142,11 @@ const loadNode = (node, resolve) => {
                     break
                 }
             }
-            for (let i in res) {
-                if (res[i].level < 5) {
-                    tree_arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code, disabled: dis })
+            for (let i in res.data) {
+                if (res.data[i].level < 5) {
+                    tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code, disabled: dis })
                 } else {
-                    tree_arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code, disabled: dis })
+                    tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code, disabled: dis })
                 }
             }
             resolve(tree_arr)
@@ -153,6 +155,7 @@ const loadNode = (node, resolve) => {
     }
     if (node.data.next_type == 'zone') {
         APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
+            console.log(res)
             let tree_arr = []
             let dis = false
             // for (let i in disabled.value) {
@@ -161,13 +164,8 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
-<<<<<<< HEAD
-            for (let i in res.data) {
-                tree_arr.push({ name: res.data?.[i]?.name, type: 'zone', next_type: 'building', id: res.data?.[i]?.id, data: res.data?.[i], disabled: dis  })
-=======
             for (let i in res) {
                 tree_arr.push({ name: res?.[i]?.name, type: 'zone', next_type: 'building', id: res.items?.[i]?.id, data: res.items?.[i], disabled: dis  })
->>>>>>> admin2
             }
             resolve(tree_arr)
         })
@@ -183,13 +181,8 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
-<<<<<<< HEAD
-            for (let i in res.data) {
-                tree_arr.push({ name: res.data?.[i]?.name, type: 'building', next_type: 'units', id: res.data?.[i]?.id, data: res.data?.[i], disabled: dis })
-=======
             for (let i in res) {
                 tree_arr.push({ name: res?.[i]?.name, type: 'building', next_type: 'units', id: res?.[i]?.id, data: res?.[i], disabled: dis })
->>>>>>> admin2
             }
             resolve(tree_arr)
         })
@@ -205,13 +198,8 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
-<<<<<<< HEAD
-            for (let i in res.data) {
-                tree_arr.push({ name: res.data?.[i]?.name, leaf: true, id: res.data?.[i]?.id, type: 'units', next_type: 'house', data: res.data?.[i], disabled: dis })
-=======
             for (let i in res) {
                 tree_arr.push({ name: res?.[i]?.name, leaf: true, id: res?.[i]?.id, type: 'units', next_type: 'house', data: res?.[i], disabled: dis })
->>>>>>> admin2
             }
             resolve(tree_arr)
         })

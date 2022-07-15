@@ -565,10 +565,7 @@ const deviceRepair = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceDetails(val.id).then(res => {
-<<<<<<< HEAD
             console.log(res)
-=======
->>>>>>> admin2
             data_details.item = res
             switch_details.value = true
     })
