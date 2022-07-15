@@ -349,14 +349,12 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceRepairDetails(val.id).then(res => {
-        if (!res.code) {
-            res.data.affixs = []
-            for (let i in res.data.affix) {
-                res.data.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.data.affix[i])
+            res.affixs = []
+            for (let i in res.affix) {
+                res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])
             }
-            data_details.item = res.data
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
@@ -370,23 +368,19 @@ import { getFilesKeys } from '@/util/files.js'
 const fromFnUpload = () => {
     if (str_title.value == '修改') {
         APIputDeviceRepair(from_examine.item.id, from_examine.item).then(res => {
-            if (!res.code) {
                 refreshFunc()
-                ElMessage.success(res.msg)
+                ElMessage.success('修改成功')
                 switch_examine.value = false
-            }
         }).catch(err => {
-            from_error.msg = err.data
+                ElMessage.error('修改失败')
         })
     } else {
         APIpostDeviceRepair(from_examine.item).then(res => {
-            if (!res.code) {
                 refreshFunc()
-                ElMessage.success(res.msg)
+                ElMessage.success('添加成功')
                 switch_examine.value = false
-            }
         }).catch(err => {
-            from_error.msg = err.data
+            ElMessage.error('添加失败')
         })
     }
 }
@@ -458,10 +452,8 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteDeviceRepair(val.id).then(res => {
-        if (res.code === 0) {
             refreshFunc()
-            ElMessage.success(res.msg)
-        }
+            ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -479,19 +471,17 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceRepairDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
+            from_examine.item = res
             let arr = []
-            for (let i in res.data.affix) {
-                if (res.data.affix[i]) {
+            for (let i in res.affix) {
+                if (res.affix[i]) {
                     arr.push({
-                        name: res.data.affix[i]
+                        name: res.affix[i]
                     })
                 }
             }
             file_list.value = arr
             switch_examine.value = true
-        }
     })
 }
 

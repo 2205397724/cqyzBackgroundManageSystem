@@ -15,7 +15,9 @@
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;  }"> -->
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
-                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
+                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}"
+                    style="box-sizing: border-box;"
+                    class="p-20 flex-colmun">
                         <div>
                             <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
                             <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />

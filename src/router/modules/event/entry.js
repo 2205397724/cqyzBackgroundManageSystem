@@ -1,4 +1,5 @@
-const Layout = () => import('@/layout/index.vue')
+const Layout = () =>
+    import ('@/layout/index.vue')
 
 export default {
     path: '/event_entry',
@@ -7,21 +8,21 @@ export default {
     name: 'eventEntryBox',
     meta: {
         title: '报名设置',
+        sidebar: false,
         icon: 'el-icon-document',
         auth: ['event.entry', '*']
     },
-    children: [
-        {
-            path: 'entry',
-            name: 'eventEntry',
-            component: () => import('@/views/event/entry.vue'),
-            meta: {
-                title: '报名设置',
-                sidebar: false,
-                breadcrumb: false,
-                activeMenu: '/event_entry',
-                auth: ['event.entry.entry', '*']
-            }
+    children: [{
+        path: 'entry',
+        name: 'eventEntry',
+        component: () =>
+            import ('@/views/event/entry.vue'),
+        meta: {
+            title: '报名设置',
+            sidebar: false,
+            breadcrumb: false,
+            activeMenu: '/event_entry',
+            auth: ['event.entry.entry', '*']
         }
-    ]
+    }]
 }

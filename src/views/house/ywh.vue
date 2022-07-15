@@ -431,14 +431,12 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetListYwh(params).then(res => {
         console.log(res)
-        if (res.code === 0) {
             loading_tab.value = false
-            data_tab.arr = res.data.items
+            data_tab.arr = res
             total.value = res.data.aggregation.total_cnt
             if (data_tab.arr.length > 0) {
                 rowClickFunc(data_tab.arr[0])
             }
-        }
     })
 }
 // 删除

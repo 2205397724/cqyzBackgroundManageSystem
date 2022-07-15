@@ -161,8 +161,13 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
+<<<<<<< HEAD
             for (let i in res.data) {
                 tree_arr.push({ name: res.data?.[i]?.name, type: 'zone', next_type: 'building', id: res.data?.[i]?.id, data: res.data?.[i], disabled: dis  })
+=======
+            for (let i in res) {
+                tree_arr.push({ name: res?.[i]?.name, type: 'zone', next_type: 'building', id: res.items?.[i]?.id, data: res.items?.[i], disabled: dis  })
+>>>>>>> admin2
             }
             resolve(tree_arr)
         })
@@ -178,8 +183,13 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
+<<<<<<< HEAD
             for (let i in res.data) {
                 tree_arr.push({ name: res.data?.[i]?.name, type: 'building', next_type: 'units', id: res.data?.[i]?.id, data: res.data?.[i], disabled: dis })
+=======
+            for (let i in res) {
+                tree_arr.push({ name: res?.[i]?.name, type: 'building', next_type: 'units', id: res?.[i]?.id, data: res?.[i], disabled: dis })
+>>>>>>> admin2
             }
             resolve(tree_arr)
         })
@@ -195,8 +205,13 @@ const loadNode = (node, resolve) => {
             //         break
             //     }
             // }
+<<<<<<< HEAD
             for (let i in res.data) {
                 tree_arr.push({ name: res.data?.[i]?.name, leaf: true, id: res.data?.[i]?.id, type: 'units', next_type: 'house', data: res.data?.[i], disabled: dis })
+=======
+            for (let i in res) {
+                tree_arr.push({ name: res?.[i]?.name, leaf: true, id: res?.[i]?.id, type: 'units', next_type: 'house', data: res?.[i], disabled: dis })
+>>>>>>> admin2
             }
             resolve(tree_arr)
         })
