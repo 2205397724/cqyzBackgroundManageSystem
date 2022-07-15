@@ -35,22 +35,22 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="ID" width="250">
+                        <el-table-column prop="name" label="ID" >
                             <template #default="scope">
                                 <span>{{ scope.row.id }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="违建对象ID" width="250">
+                        <el-table-column prop="id" label="违建对象ID">
                             <template #default="scope">
                                 <span>{{ scope.row.cid }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cid" label="违建类型" width="90">
+                        <el-table-column prop="cid" label="违建类型" width="120">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.illegal_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cid" label="状态" width="90">
+                        <el-table-column prop="cid" label="状态" width="100">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </span>
                             </template>
@@ -120,17 +120,17 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
                             <el-form-item
-                                label="违建对象ID"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.tgt?from_error.msg.tgt[0]:''"
+                                label-width="70px"
+                                label="违建ID"
+                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
                             >
-                                <el-select v-model="from_examine.item.tgt" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;" v-show="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(from_examine.item.type==opts_all.obj.illegal_type[0].key)">
+                                <SearchHouse v-model:str="from_examine.item.cid" />
+                            </div>
+                        </el-form-item>
+                    </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="处理状态"
@@ -250,10 +250,8 @@ import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
-APIgetTypeList(101).then(res => {
-    if (!res.code) {
-        options.arr = res.data
-    }
+APIgetTypeList('announce').then(res => {
+        options.arr = res
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
@@ -275,10 +273,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetIllegalDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
@@ -293,23 +289,20 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputIllegal(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
-                    }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.success('修改失败')
                 })
             } else {
-                APIpostIllegal(from_examine.item).then(res => {
-                    if (!res.code) {
+                console.log(from_examine.item)
+                APIpostIllegal("62cbf190ee857750a615a1d5",from_examine.item).then(res => {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
-                    }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.success('添加失败')
                 })
             }
         } else {
@@ -321,7 +314,9 @@ const dialogExamineCloseFunc = formEl => {
 const getTabListFunc = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value
+        per_page: per_page.value,
+        // cid: "62cbf190ee857750a615a1d5",
+        // status: 10
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
@@ -354,20 +349,17 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetIllegalList(params).then(res => {
-        if (res.code === 0) {
+        console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res
+            total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteIllegal(val.id).then(res => {
-        if (res.code === 0) {
             refreshFunc()
-            ElMessage.success(res.msg)
-        }
+            ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -384,10 +376,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetIllegalDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
+            console.log(res.cid)
+            from_examine.item = res
             switch_examine.value = true
-        }
     })
 }
 
@@ -429,9 +420,6 @@ getOpts(['illegal_user', 'illegal_type']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .articletparticletpl {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

@@ -2,10 +2,7 @@
     <div class="vote">
         <page-main>
             <div>
-                <el-input v-model="data_1.search.title" class="input-b-r" placeholder="标题名称" clearable />
-                <el-select v-model="data_1.search.kind" class="input-b-r" clearable placeholder="分类">
-                    <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
-                </el-select>
+                <el-input v-model="data_1.search.title" class="input-b-r" placeholder="报修名称" clearable />
                 <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
                     <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
                 </el-select>
@@ -35,7 +32,7 @@
                         data_1.add_title = '添加'
                     }"
                 >
-                    添加投诉
+                    添加报修
                 </el-button>
             </div>
             <el-table
@@ -48,7 +45,7 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="投诉id" >
+                <el-table-column label="报修id" >
                     <template #default="scope">
                         <span>{{ scope.row.id }} </span>
                     </template>
@@ -73,7 +70,7 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="270">
+                <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -86,18 +83,6 @@
                             @click="clickFuncDeteails(scope.row)"
                         >
                             详情
-                        </el-button>
-                        <el-button
-                            size="small"
-                            @click="clickFuncAllot(scope.row)"
-                        >
-                            转办
-                        </el-button>
-                        <el-button
-                            size="small"
-                            @click="clickFuncAllot4(scope.row.id)"
-                        >
-                            违建
                         </el-button>
                     </template>
                 </el-table-column>
@@ -126,7 +111,7 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
-                            label="标题名称"
+                            label="报修名称"
                             :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
                         >
                             <el-input
@@ -154,17 +139,6 @@
                         >
                             <el-select v-model="data_1.add_form.ano" class="head-btn" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="分类"
-                            :error="data_1.add_error&&data_1.add_error.kind?data_1.add_error.kind[0]:''"
-                        >
-                            <el-select v-model="data_1.add_form.kind" class="head-btn" clearable placeholder="">
-                                <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -248,28 +222,6 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label-width="70px"
-                            label="附件"
-                            :error="data_1.add_error&&data_1.add_error.affix?data_1.add_error.affix[0]:''"
-                        >
-                            <el-upload
-                                ref="uploadRef"
-                                action="***"
-                                :auto-upload="false"
-                                :file-list="file_list"
-                                :on-change="(file,files)=>{
-                                    file_list = files
-                                }"
-                                :on-remove="(file,files)=>{
-                                    file_list = files
-                                }"
-                            >
-                                <el-button type="primary">选择附件</el-button>
-                            </el-upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="70px"
                             label="内容"
                             :error="data_1.add_error&&data_1.add_error.content?data_1.add_error.content[0]:''"
                         >
@@ -303,6 +255,10 @@
                     <div class="right">{{ data_1.details_data.title }}</div>
                 </div>
                 <div class="item">
+                    <div class="left">报修id</div>
+                    <div class="right">{{ data_1.details_data.id }}</div>
+                </div>
+                <div class="item">
                     <div class="left">编号</div>
                     <div class="right">{{ data_1.details_data.sno }}</div>
                 </div>
@@ -313,10 +269,6 @@
                 <div class="item">
                     <div class="left">是否匿名</div>
                     <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,data_1.details_data.ano) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">分类</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,data_1.details_data.kind) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">小区id</div>
@@ -334,280 +286,11 @@
                     <div class="left">状态</div>
                     <div class="right">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }}</div>
                 </div>
-                <div v-if="data_1.details_data.affix&&data_1.details_data.affix.length>0" class="item">
-                    <div class="left">附件</div>
-                    <div class="right">
-                        <!-- 两种模式任君选择 -->
-                        <el-image
-                            v-for="(item,i) in data_1.details_data.affixs" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
-                        />
-                        <!-- <div v-for="(item,i) in data_1.details_data.affixs">
-                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
-                        </div> -->
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">内容</div>
-                    <div class="right">{{ data_1.details_data.content }}</div>
-                </div>
-                <div v-if="data_1.details_data.totlogs&&data_1.details_data.totlogs.length>=0" class="item">
-                    <div class="left">记录</div>
-                    <div class="right">
-                        <el-timeline>
-                            <el-timeline-item
-                                v-for="(activity, index) in data_1.details_data.totlogs"
-                                :key="index"
-                                :timestamp="activity.updated_at"
-                            >
-                                <div>事件：{{ activity.content }}</div>
-                                <div>操作人员：{{ activity.uinfo.realname || '空' }}</div>
-
-                                <div v-if="activity.content=='已转办'">转办状态：{{ getOptVal(opts_all.obj.toushu_status,activity.logable.status) }}</div>
-                                <div v-if="activity.content=='已转办'" style="padding: 6px 0;">
-                                    <el-button
-                                        size="small"
-                                        @click="clickFuncOpenPopup2(activity.tgtid)"
-                                    >
-                                        转办状态
-                                    </el-button>
-                                    <el-button
-                                        size="small"
-                                        @click="clickFuncOpenPopup4(activity.logable,data_1.details_data.id,activity.tgtid)"
-                                    >
-                                        添加处理
-                                    </el-button>
-                                </div>
-                                <div v-if="activity.content=='已回复'" style="padding: 6px 0;">
-                                    <el-button
-                                        size="small"
-                                        @click="clickFuncOpenPopup3(activity.logable)"
-                                    >
-                                        修改处理
-                                    </el-button>
-                                </div>
-                                <div v-if="activity.content=='已回复'">
-                                    <div class="item">
-                                        <div class="left">处理对象</div>
-                                        <div class="right">
-                                            {{ getOptVal(opts_all.obj.toushu_return_type,activity.logable.type) }}
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="left">回复内容</div>
-                                        <div class="right">
-                                            {{ activity.logable.content }}
-                                        </div>
-                                    </div>
-                                    <div v-if="activity.logable.affixs&&activity.logable.affixs.length>0" class="item">
-                                        <div class="left">回复附件</div>
-                                        <div class="right">
-                                            <!-- 两种模式任君选择 -->
-                                            <el-image
-                                                v-for="(item,i) in activity.logable.affixs" :preview-src-list="activity.logable.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
-                                            />
-                                            <!-- <div v-for="(item,i) in activity.logable.affixs">
-                                                <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
-                                            </div> -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </el-timeline-item>
-                        </el-timeline>
-                    </div>
-                </div>
             </div>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="data_1.details_switch = false">取消</el-button>
                 </span>
-            </template>
-        </el-dialog>
-
-        <!-- 转办 -->
-        <el-dialog
-            v-model="popup_1.switch"
-            title="转办"
-            width="400px"
-        >
-            <el-form
-                :model="popup_1.form"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24">
-                        <el-form-item
-                            label="投诉转办对象" prop="name"
-                            :error="popup_1.msg&&popup_1.msg.type?popup_1.msg.type[0]:''"
-                        >
-                            <el-select v-model="popup_1.form.type" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="popup_1.switch=false">取消</el-button>
-                    <el-button type="primary" @click="popupFuncAdd">确定</el-button>
-                </div>
-            </template>
-        </el-dialog>
-        <!-- 状态 -->
-        <el-dialog
-            v-model="popup_2.switch"
-            title="转办状态"
-            width="400px"
-        >
-            <el-form
-                :model="popup_2.form"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24">
-                        <el-form-item
-                            label="投诉转办状态" prop="name"
-                            :error="popup_2.msg&&popup_2.msg.status?popup_2.msg.status[0]:''"
-                        >
-                            <el-select v-model="popup_2.form.status" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="popup_2.switch=false">取消</el-button>
-                    <el-button type="primary" @click="popupFuncAdd2">确定</el-button>
-                </div>
-            </template>
-        </el-dialog>
-        <!-- 修改投诉处理 -->
-        <el-dialog
-            v-model="popup_3.switch"
-            :title="popup_3.title"
-            width="40%"
-        >
-            <el-form
-                :model="popup_3.form"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="处理对象" prop="name"
-                            :error="popup_3.msg&&popup_3.msg.type?popup_3.msg.type[0]:''"
-                        >
-                            <el-select v-model="popup_3.form.type" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="标记"
-                            :error="popup_3.msg&&popup_3.msg.flg?popup_3.msg.flg[0]:''"
-                        >
-                            <el-select v-model="popup_3.form.flg" class="head-btn" clearable placeholder="">
-                                <el-option v-for="(item,i) in opts_all.obj.flg_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="70px"
-                            label="附件"
-                            :error="popup_3.msg&&popup_3.msg.affix?popup_3.msg.affix[0]:''"
-                        >
-                            <el-upload
-                                ref="uploadRef"
-                                action="***"
-                                :auto-upload="false"
-                                :file-list="file_list3"
-                                :on-change="(file,files)=>{
-                                    file_list3 = files
-                                }"
-                                :on-remove="(file,files)=>{
-                                    file_list3 = files
-                                }"
-                            >
-                                <el-button type="primary">选择附件</el-button>
-                            </el-upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="70px"
-                            label="内容"
-                            :error="popup_3.msg&&popup_3.msg.content?popup_3.msg.content[0]:''"
-                        >
-                            <el-input
-                                v-model="popup_3.form.content"
-                                class="head-btn"
-                                :autosize="{ minRows: 2, maxRows: 6 }"
-                                type="textarea"
-                                placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="popup_3.switch=false">取消</el-button>
-                    <el-button type="primary" @click="popupFuncAdd3">确定</el-button>
-                </div>
-            </template>
-        </el-dialog>
-        <!-- 添加违建 -->
-        <el-dialog
-            v-model="popup_4.switch"
-            title="为投诉添加违建"
-            width="400px"
-        >
-            <el-form
-                :model="popup_4.form"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24">
-                        <el-form-item
-                            label-width="70px"
-                            label="违建类型" prop="name"
-                            :error="popup_4.msg&&popup_4.msg.type?popup_4.msg.type[0]:''"
-                        >
-                            <el-select v-model="popup_4.form.type" class="head-btn" clearable @change="popup_4.form.tgt=''">
-                                <el-option v-for="(item,i) in opts_all.obj.illegal_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" v-if="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(popup_4.form.type==opts_all.obj.illegal_type[0].key)">
-                        <el-form-item
-                        label-width="70px"
-                            label="违建ID"
-                            :error="popup_4.msg&&popup_4.msg.tgt?popup_4.msg.tgt[0]:''"
-                        >
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                <SearchHouse v-model:str="popup_4.form.tgt" />
-                            </div>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24">
-                        <el-form-item
-                        label-width="70px"
-                            label="处理状态"
-                            :error="popup_4.msg&&popup_4.msg.status?popup_4.msg.status[0]:''"
-                        >
-                            <el-select v-model="popup_4.form.status" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="popup_4.switch=false">取消</el-button>
-                    <el-button type="primary" @click="popupFuncAdd4">确定</el-button>
-                </div>
             </template>
         </el-dialog>
     </div>
@@ -947,7 +630,7 @@ const popupFuncAdd4 = val => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     data_1.search = {
-        kind: 2
+        kind: 3
     }
     data_1.switch_search = false
     data_1.page = 1

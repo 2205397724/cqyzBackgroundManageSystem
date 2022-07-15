@@ -4,17 +4,17 @@
             <el-button class="head-btn" type="primary" @click="addresidentialFunc">添加App</el-button>
             <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 500px;">
                 <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}"  default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
-                <el-table-column prop="logo" label="图标">
+                <el-table-column prop="logo" label="图标" width="100">
                         <template #default="scope">
-                            <img :src="scope.row.logo" alt="" style="width: 30%; height: 30%;">
+                            <img :src="scope.row.logo" alt="" style="width: 50px; height: 50px;">
                         </template>
                     </el-table-column>
-                <el-table-column prop="name" label="APP名称" width="120">
+                <el-table-column prop="name" label="APP名称">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="china_code" label="区域id" width="120">
+                    <el-table-column prop="china_code" label="区域id">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.china_code}} </span>
                         </template>
@@ -42,7 +42,7 @@
                                 />
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="APP相关" width="400">
+                    <el-table-column fixed="right" label="APP相关" width="250">
                         <template #default="scope">
                             <el-link :underline="false" type="primary" style="padding-right: 10px;">
                                 <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppMenu',query:{ appid: scope.row.id }}">APP菜单管理</router-link>
@@ -61,7 +61,7 @@
                                 修改
                             </el-button>
                             <el-button
-                                type="primary" size="small"
+                            size="small"
                                 @click="addResidentialFunc(scope.row)"
                             >
                                 详情

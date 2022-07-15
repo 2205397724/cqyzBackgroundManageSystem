@@ -38,12 +38,22 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="id" label="档案id" width="250">
+                        <el-table-column prop="id" label="档案名称" width="120">
                             <template #default="scope">
                                 <span>{{ scope.row.title }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="是否显示" width="180">
+                        <el-table-column prop="id" label="档案id">
+                            <template #default="scope">
+                                <span>{{ scope.row.id }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="设备id">
+                            <template #default="scope">
+                                <span>{{ scope.row.did }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="是否显示" width="100">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                             </template>
@@ -214,6 +224,14 @@
                     <div class="right">{{ data_details.item.title }}</div>
                 </div>
                 <div class="item">
+                    <div class="left">档案id</div>
+                    <div class="right">{{ data_details.item.id}}</div>
+                </div>
+                <div class="item">
+                    <div class="left">设备id</div>
+                    <div class="right">{{ data_details.item.did }}</div>
+                </div>
+                <div class="item">
                     <div class="left">是否显示</div>
                     <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
                 </div>
@@ -328,10 +346,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceArchiveDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
+            data_details.item = res
             switch_details.value = true
-        }
     })
 }
 // 监听分页
@@ -342,23 +358,19 @@ watch(page, () => {
 const formFnUpload = () =>{
     if (str_title.value == '修改') {
         APIputDeviceArchive(from_examine.item.id, from_examine.item).then(res => {
-            if (!res.code) {
                 refreshFunc()
-                ElMessage.success(res.msg)
+                ElMessage.success('修改成功')
                 switch_examine.value = false
-            }
         }).catch(err => {
-            from_error.msg = err.data
+            ElMessage.error('修改失败')
         })
     } else {
         APIpostDeviceArchive(from_examine.item).then(res => {
-            if (!res.code) {
                 refreshFunc()
-                ElMessage.success(res.msg)
+                ElMessage.success('添加失败')
                 switch_examine.value = false
-            }
         }).catch(err => {
-            from_error.msg = err.data
+            ElMessage.error('添加失败')
         })
     }
 }
@@ -433,10 +445,8 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteDeviceArchive(val.id).then(res => {
-        if (res.code === 0) {
             refreshFunc()
-            ElMessage.success(res.msg)
-        }
+            ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -453,10 +463,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
+            from_examine.item = res
             switch_examine.value = true
-        }
     })
 }
 // 删除 服务名称和联系方式

@@ -104,6 +104,7 @@ import eventVote from './modules/event/vote.js'
 import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
+import eventRepair from './modules/event/repair.js'
 
 // 设置
 import setupRegion from './modules/setup/region.js'
@@ -175,7 +176,7 @@ const asyncRoutes = [{
     },
     {
         meta: {
-            title: '议事',
+            title: '民事',
             icon: 'event',
             auth: ['event', '*']
         },
@@ -185,7 +186,8 @@ const asyncRoutes = [{
             eventVote,
             eventEntry,
             eventComplaint,
-            eventIllegal
+            eventIllegal,
+            eventRepair
         ]
     },
     {
