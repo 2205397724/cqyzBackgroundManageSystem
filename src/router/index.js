@@ -69,7 +69,12 @@ const constantRoutes = [{
             ]
         }
     ]
-    // 公示
+// 活动
+import activityJointly from './modules/activity/jointly.js'
+import activitySurvey from './modules/activity/survey.js'
+import activityElect from './modules/activity/elect.js'
+import activityVote from './modules/activity/vote.js'
+// 公示
 import articletplArchive from './modules/articletpl/archive.js'
 import articletplArticle from './modules/articletpl/article.js'
 import articletplArticleread from './modules/articletpl/articleread.js'
@@ -171,6 +176,19 @@ const asyncRoutes = [{
             articletplArticletpl,
             articletplTask,
             articletplTasksd
+        ]
+    },
+    {
+        meta: {
+            title: '活动',
+            icon: 'el-icon-set-up',
+            auth: ['activity', '*']
+        },
+        children: [
+            activityJointly,
+            activityVote,
+            activityElect,
+            activitySurvey,
         ]
     },
     {
