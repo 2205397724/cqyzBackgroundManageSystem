@@ -430,10 +430,13 @@ const refreshFunc = () => {
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetPropertyDetails(val.id).then(res => {
-        if (!res.code) {
+    APIgetPropertyDetails(val.house_id).then(res => {
+        if (res.status===200) {
             data_details.item = res.data
             switch_details.value = true
+        }
+        if(res.status===404){
+            ElMessage.error("改产权信息不存在")
         }
     })
 }
@@ -448,10 +451,11 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputProperty(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
+                console.log(from_examine.item)
+                APIputProperty(from_examine.item.house_id, from_examine.item).then(res => {
+                    if (res.status===200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success("修改成功")
                         switch_examine.value = false
                     }
                 }).catch(err => {
@@ -518,10 +522,10 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteProperty(val.id).then(res => {
-        if (res.code === 0) {
+    APIdeleteProperty(val.house_id).then(res => {
+        if (res.status ===200) {
             refreshFunc()
-            ElMessage.success(res.msg)
+            ElMessage.success("删除成功")
         }
     })
 }
@@ -543,7 +547,7 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetPropertyDetails(val.id).then(res => {
+    APIgetPropertyDetails(val.house_id).then(res => {
         if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true

@@ -124,11 +124,11 @@
                 <div style="padding-top: 20px;">
                     <el-pagination
                         v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
+                        layout="prev,next"
                         :page-size="per_page"
                         background
-                        hide-on-single-page
+                        @next-click="next_click_page"
+                        @prev-click="prev_click_page"
                     />
                 </div>
             </div>
@@ -151,7 +151,7 @@
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.auth_type?from_error.msg.auth_type[0]:''"
                             >
-                                <el-select v-model="from_examine.item.auth_type" class="head-btn" placeholder="终端类型" clearable>
+                                <el-select v-model="from_examine.item.authType" class="head-btn" placeholder="终端类型" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
@@ -176,6 +176,30 @@
                             >
                                 <el-input
                                     v-model="from_examine.item.username"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="性别" prop="gender"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.username?from_error.msg.username[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.gender"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="身份证号" prop="id_card"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.username?from_error.msg.username[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.id_card"
                                     placeholder=""
                                 />
                             </el-form-item>
@@ -237,6 +261,10 @@
                 <div class="item">
                     <div class="left">身份证号</div>
                     <div class="right">{{ data_details.item.id_card }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">用户端类型</div>
+                    <div class="right">{{ data_details.item.authType }}</div>
                 </div>
                 <div class="item">
                     <div class="left">性别</div>
@@ -303,8 +331,16 @@ const data_details = reactive({
 })
 // 分页
 let total = ref(100)
-let per_page = ref(15)
+let per_page = ref(8)
 let page = ref(1)
+const next_click_page=()=>{
+    page=page+1
+}
+const prev_click_page=()=>{
+    if(page>1){
+        page=page-1
+    }
+}
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -372,6 +408,7 @@ const refreshFunc = () => {
     data_search.gender = ''
     data_search.status_cert = ''
     data_search.house_id = ''
+    data_search.house_id = ''
     data_search.oauth_type = ''
     data_search.region = ''
     getTabListFunc()
@@ -399,19 +436,20 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputUser(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
+                    if (res.status===200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostUser(from_examine.item).then(res => {
-                    if (!res.code) {
+                console.log(from_examine.item)
+                APIpostUser(from_examine.item.authType,from_examine.item).then(res => {
+                    if (res.status===200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success("添加成功")
                         switch_examine.value = false
                     }
                 }).catch(err => {
@@ -459,20 +497,19 @@ const getTabListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetUserList(params).then(res => {
-        if (res.code === 0) {
+    APIgetUserList().then(res => {
+            console.log(res)
             loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+            data_tab.arr = res.data
+            total.value = res.data.length
     })
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteUser(val.id).then(res => {
-        if (res.code === 0) {
+    APIdeleteUser(val.auth_type).then(res => {
+        if (res.status === 200) {
             refreshFunc()
-            ElMessage.success(res.msg)
+            ElMessage.success('删除成功')
         }
     })
 }
@@ -481,12 +518,13 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        property_owners: [],
-        house_id: '',
-        time_deal: '',
-        code_property: '',
-        code_room: '',
-        should_bind_house: ''
+        gender:"",
+        mobile: '',
+        username: '',
+        id_card: '',
+        auth_type: '',
+        status_cert: '',
+        password:""
     }
     switch_examine.value = true
 }
@@ -495,10 +533,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetUserDetails(val.id).then(res => {
-        if (!res.code) {
             from_examine.item = res.data
             switch_examine.value = true
-        }
     })
 }
 // 删除 服务名称和联系方式

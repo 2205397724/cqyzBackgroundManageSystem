@@ -356,7 +356,7 @@
                         </div> -->
                             <div class="item">
                                 <div class="left">小区>楼栋>单元</div>
-                                <div class="right">{{ data_details.item.zoneinfo }} {{ data_details.item.buildinginfo }} {{ data_details.item.unitinfo }}</div>
+                                <div class="right">{{ data_details.item.zoneinfo['name'] }} {{ data_details.item.buildinginfo['name'] }} {{ data_details.item.unitinfo['name'] }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>
@@ -565,7 +565,6 @@ const deviceRepair = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceDetails(val.id).then(res => {
-            console.log(res)
             data_details.item = res
             switch_details.value = true
     })

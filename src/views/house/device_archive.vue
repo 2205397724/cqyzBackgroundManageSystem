@@ -12,7 +12,7 @@
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                             <el-select v-model="data_search.obj.show" class="head-btn" placeholder="是否显示" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
@@ -445,11 +445,7 @@ const getTabListFunc = () => {
 const deleteFunc = val => {
     APIdeleteDeviceArchive(val.id).then(res => {
             refreshFunc()
-<<<<<<< HEAD
-            ElMessage.success(res.msg)
-=======
             ElMessage.success('删除成功')
->>>>>>> admin2
     })
 }
 // 添加模板
@@ -466,10 +462,6 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
-<<<<<<< HEAD
-            console.log(res)
-=======
->>>>>>> admin2
             from_examine.item = res
             switch_examine.value = true
     })
