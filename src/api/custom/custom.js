@@ -1175,8 +1175,8 @@ export function APIsetSurvey() {
 
 
 // 获取问卷题目列表
-export function APIgetSurveyTopic() {
-    return api.get('/s/topic')
+export function APIgetSurveyTopic(params) {
+    return api.get('/s/topic',{ params: params })
 }
 // 获取问卷题目详情
 // export function APIsetSurvey(props) {

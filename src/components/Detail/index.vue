@@ -164,109 +164,112 @@
 </template>
 
 <script setup>
-import {
-    APIgetSurveyDetails,
-    APIsetSurvey,
-    APIgetSurveyTopic
-} from '@/api/custom/custom.js'
-// 导入图标
-import {
-  Edit,
-  Search,
-} from '@element-plus/icons-vue'
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
-// 详情
-let switch_details = ref(false)
-// 接收父组件传递过来的id
-const props = defineProps(['id'])
-const activeName = ref('1')
-// 详情
-const data_details = reactive({
-    item: ''
-})
-// 问卷题目
-const topic_details = reactive({
-    item: ''
-})
-// 参与详情
-const radio = ref('网络参与')
-// 参与范围
-const data_range = {}
-onMounted(() => {
-    console.log(props.id)
-    detailsFunc(props.id)
-})
-// 切换tab-pane触发请求事件
-const changePane = (tab,event) => {
-    // 代理
-    // console.log(tab)
-    // 指针事件pointerEvent（未使用）
-    // console.log(event)
-    // console.log(tab.props.name)
-    if(tab.props.name == 2){
-        APIsetSurvey().then(res => {
-            console.log(res.data)
-            // data_range = res.data
-            // console.log(data_range)
-        })
-    }else if(tab.props.name == 3){
-        // 问卷题目
-        APIgetSurveyTopic().then(res => {
-            // console.log(res.data)
+    import {
+        APIgetSurveyDetails,
+        APIsetSurvey,
+        APIgetSurveyTopic
+    } from '@/api/custom/custom.js'
+    // 导入图标
+    import {
+    Edit,
+    Search,
+    } from '@element-plus/icons-vue'
+    const tableData = [
+    {
+        date: '2016-05-03',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+        date: '2016-05-02',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+        date: '2016-05-04',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+        date: '2016-05-01',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+        date: '2016-05-08',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+        date: '2016-05-06',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+        date: '2016-05-07',
+        name: 'Tom',
+        address: 'No. 189, Grove St, Los Angeles',
+    },
+    ]
+    // 详情
+    let switch_details = ref(false)
+    // 接收父组件传递过来的id
+    const props = defineProps(['id'])
+    const activeName = ref('1')
+    // 详情
+    const data_details = reactive({
+        item: ''
+    })
+    // 问卷题目
+    const topic_details = reactive({
+        item: ''
+    })
+    // 参与详情
+    const radio = ref('网络参与')
+    // 参与范围
+    const data_range = {}
+    onMounted(() => {
+        console.log(props.id)
+        detailsFunc(props.id)
+    })
+    // 切换tab-pane触发请求事件
+    const changePane = (tab,event) => {
+        // 代理
+        // console.log(tab)
+        // 指针事件pointerEvent（未使用）
+        // console.log(event)
+        // console.log(tab.props.name)
+        if(tab.props.name == 2){
+            APIsetSurvey().then(res => {
+                console.log(res.data)
+                // data_range = res.data
+                // console.log(data_range)
+            })
+        }else if(tab.props.name == 3){
+            let params = {
+                sid:props.id
+            }
+            // 问卷题目
+            APIgetSurveyTopic(params).then(res => {
+                // console.log(res.data)
+                if (res.status === 200) {
+                    topic_details.item = res.data
+                }
+            })
+        }else{
+
+        }
+    }
+    // 获取问卷详情
+    const detailsFunc = id => {
+        APIgetSurveyDetails(id).then(res => {
             if (res.status === 200) {
-                topic_details.item = res.data
+                data_details.item = res.data
+                switch_details.value = true
             }
         })
-    }else{
-
+        console.log(data_details.item)
     }
-}
-// 获取问卷详情
-const detailsFunc = id => {
-    APIgetSurveyDetails(id).then(res => {
-        if (res.status === 200) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
-    })
-    console.log(data_details.item)
-}
 </script>
 <style lang="scss" scoped>
 .record {
