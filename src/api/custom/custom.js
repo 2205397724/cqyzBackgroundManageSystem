@@ -1179,18 +1179,18 @@ export function APIgetSurveyTopic(params) {
     return api.get('/s/topic',{ params: params })
 }
 // 获取问卷题目详情
-// export function APIsetSurvey(props) {
-//     return api.get('/s/topic/'+props)
-// }
+export function APIgetSurveyTopicDetail(props) {
+    return api.get('/s/topic/'+props)
+}
 // 添加问卷题目
-// export function APIsetSurvey(props) {
-//     return api.post('/s/topic/'+props)
-// }
+export function APIaddSurveyTopic(params) {
+    return api.post('/s/topic/',params)
+}
 // 修改问卷题目
-// export function APIsetSurvey(props) {
-//     return api.put('/s/topic/'+props)
-// }
+export function APImodifySurveyTopic(id,props) {
+    return api.put('/s/topic/'+id,props)
+}
 // // 删除问卷题目
-// export function APIsetSurvey(props) {
-//     return api.delete('/s/topic/'+props)
-// }
+export function APIdeleteSurveyTopic(props) {
+    return api.delete('/s/topic/'+props)
+}

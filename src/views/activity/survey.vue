@@ -211,12 +211,10 @@
         </template>
     </el-dialog>
     <!-- 详情 -->
-    <el-dialog v-model="switch_details" :title="data_details.item.name" width="80%">
+    <el-dialog  v-model="switch_details" :title="data_details.item.name" width="80%">
         <Detail :id="data_details.item.id"></Detail>
         <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="switch_details = false">取消</el-button>
-            </span>
+            <el-button  type="warning" plain @click="switch_details = false">取消</el-button>
         </template>
     </el-dialog>
     </page-main>
@@ -225,251 +223,251 @@
 </template>
 
 <script lang="ts" setup>
-import Detail from '@/components/Detail/index.vue'
-import {
-    APIgetSurvey,
-    APIaddSurvey,
-    APIdeleteSurvey,
-    APImodifySurvey,
-    APIgetSurveyDetails,
-} from '@/api/custom/custom.js'
-import {
-    reactive,
-    ref,
-    watch
-} from 'vue'
-import {
-    ElMessage
-} from 'element-plus'
-import { log } from 'console';
-import { valid } from 'mockjs';
-const value = ref('')
-// 选项数据
-const options = [
-  {
-    value: 1,
-    label: '未开始',
-  },
-  {
-    value: 2,
-    label: '进行中',
-  },
-  {
-    value: 3,
-    label: '已结束',
-  },
-]
-// 搜索
-let switch_search = ref(false)
-let data_search = reactive({
-    obj: {}
-})
-// 标签页
-const activeName = ref('全部')
-// 列表
-let ruleFormRef = ref('')
-// 是否加载中（element UI）
-let loading_tab = ref(false)
-let data_tab = reactive({
-    arr: []
-})
-// 详情
-const data_details = reactive({
-    item: ''
-})
-// 分页
-let total = ref(100)
-let per_page = ref(15)
-let page = ref(1)
-// 详情
-let switch_details = ref(false)
-// 添加 修改
-let switch_examine = ref(false)
-let from_examine = reactive({
-    item: {
-        'type':83,
-        'author_type': 1,
-        'author_tgt': '62bd6f76ee071f1789147d41',
-        'author_cc': '500101001002',
-        'name': '高温补贴征集',
-        'startat':'2022-07-13 11:00:00',
-        'endat': '2022-08-13 11:00:00',
-        'content':'是否需要安装空调',
-        'ticketall':2,
-        'areaall':42,
-        'pub':1,
-        'status':1,
-        'vmax':14,
-        'uid':"62d0c1f95c611c26d344b114",
-        'utype':'mbr',
-        'id':'62bd6f76ee071f1789147d41',
-        'updated_at': '2022-07-13 11:00:00',
-        'created_at': '2022-07-13 11:00:00',
-    }
-})
-// 开始结束时间
-const value1 = ref('')
-const value2 = ref('')
-// 修改弹出框的标题
-const str_title = ref('添加')
-const from_error = reactive({
-    msg: {}
-})
-// 刷新
-const refreshFunc = () => {
-    page.value = 1
-    getTabListFunc()
-}
-// 详情
-const detailsFunc = val => {
-    console.log(val.id)
-    APIgetSurveyDetails(val.id).then(res => {
-        if (res.status === 200) {
-            data_details.item = res.data
-            switch_details.value = true
+    import Detail from '@/components/Detail/index.vue'
+    import {
+        APIgetSurvey,
+        APIaddSurvey,
+        APIdeleteSurvey,
+        APImodifySurvey,
+        APIgetSurveyDetails,
+    } from '@/api/custom/custom.js'
+    import {
+        reactive,
+        ref,
+        watch
+    } from 'vue'
+    import {
+        ElMessage
+    } from 'element-plus'
+    import { log } from 'console';
+    import { valid } from 'mockjs';
+    const value = ref('')
+    // 选项数据
+    const options = [
+    {
+        value: 1,
+        label: '未开始',
+    },
+    {
+        value: 2,
+        label: '进行中',
+    },
+    {
+        value: 3,
+        label: '已结束',
+    },
+    ]
+    // 搜索
+    let switch_search = ref(false)
+    let data_search = reactive({
+        obj: {}
+    })
+    // 标签页
+    const activeName = ref('全部')
+    // 列表
+    let ruleFormRef = ref('')
+    // 是否加载中（element UI）
+    let loading_tab = ref(false)
+    let data_tab = reactive({
+        arr: []
+    })
+    // 详情
+    const data_details = reactive({
+        item: ''
+    })
+    // 分页
+    let total = ref(100)
+    let per_page = ref(15)
+    let page = ref(1)
+    // 详情
+    let switch_details = ref(false)
+    // 添加 修改
+    let switch_examine = ref(false)
+    let from_examine = reactive({
+        item: {
+            'type':83,
+            'author_type': 1,
+            'author_tgt': '62bd6f76ee071f1789147d41',
+            'author_cc': '500101001002',
+            'name': '高温补贴征集',
+            'startat':'2022-07-13 11:00:00',
+            'endat': '2022-08-13 11:00:00',
+            'content':'是否需要安装空调',
+            'ticketall':2,
+            'areaall':42,
+            'pub':1,
+            'status':1,
+            'vmax':14,
+            'uid':"62d0c1f95c611c26d344b114",
+            'utype':'mbr',
+            'id':'62bd6f76ee071f1789147d41',
+            'updated_at': '2022-07-13 11:00:00',
+            'created_at': '2022-07-13 11:00:00',
         }
     })
-    // switch_details.value = true
-    // console.log(data_details.item)
-}
-// Tabs标签页点击切换事件,切换显示不同状态的问卷
-// 切换标签后，根据label的值进行if判断，切换不同状态问卷
-const handleClick = (tab) => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        status:''
-    }
-    // tab未label的值
-    // console.log(tab)
-    if(tab === "未开始") {
-        params.status = 1
-    }else if(tab === "进行中") {
-        params.status = 2
-    }else if(tab === "已结束"){
-        params.status = 3
-    }else {
-        return getTabListFunc()
-    }
-    APIgetSurvey(params).then(res => {
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = data_tab.arr.length
-        }
-        console.log(data_tab.arr)
+    // 开始结束时间
+    const value1 = ref('')
+    const value2 = ref('')
+    // 修改弹出框的标题
+    const str_title = ref('添加')
+    const from_error = reactive({
+        msg: {}
     })
-}
-// 监听分页
-watch(page, () => {
-    getTabListFunc()
-})
-// 同意拒绝提交
-const dialogExamineCloseFunc = (formEl,id) => {
-    from_error.msg = {}
-    id = from_examine.item.id
-    // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
-    from_examine.item.startat = value1._value ? value1._value : from_examine.item.startat
-    from_examine.item.endat = value2._value ? value2._value : from_examine.item.endat
-    from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if(valid){
-            if(str_title.value == '修改'){
-                APImodifySurvey(id,from_examine.item).then(res => {
-                    if (res.status === 200) {
-                        refreshFunc()
-                        // ElMessage.success(res.statusText)
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                    }
-
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
-            }else {
-                APIaddSurvey(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        // ElMessage.success(res.msg)
-                        ElMessage.success('添加成功')
-                        switch_examine.value = false
-                    }
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
+    // 刷新
+    const refreshFunc = () => {
+        page.value = 1
+        getTabListFunc()
+    }
+    // 详情
+    const detailsFunc = val => {
+        console.log(val.id)
+        APIgetSurveyDetails(val.id).then(res => {
+            if (res.status === 200) {
+                data_details.item = res.data
+                switch_details.value = true
             }
+        })
+        // switch_details.value = true
+        // console.log(data_details.item)
+    }
+    // Tabs标签页点击切换事件,切换显示不同状态的问卷
+    // 切换标签后，根据label的值进行if判断，切换不同状态问卷
+    const handleClick = (tab) => {
+        let params = {
+            page: page.value,
+            per_page: per_page.value,
+            status:''
+        }
+        // tab未label的值
+        // console.log(tab)
+        if(tab === "未开始") {
+            params.status = 1
+        }else if(tab === "进行中") {
+            params.status = 2
+        }else if(tab === "已结束"){
+            params.status = 3
         }else {
-            return false
+            return getTabListFunc()
         }
-    })
-}
-// 获取列表api请求
-const getTabListFunc = () => {
-    // 请求信息
-    let params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    for (let key in data_search.obj) {
-        if (data_search.obj[key] || data_search.obj[key] === 0) {
-            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
-                continue
+        APIgetSurvey(params).then(res => {
+            if (res.status === 200) {
+                loading_tab.value = false
+                data_tab.arr = res.data
+                total.value = data_tab.arr.length
             }
-            params[key] = data_search.obj[key]
-        }
+            console.log(data_tab.arr)
+        })
     }
-    loading_tab.value = true
-    console.log(params)
-    APIgetSurvey(params).then(res => {
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = data_tab.arr.length
+    // 监听分页
+    watch(page, () => {
+        getTabListFunc()
+    })
+    // 同意拒绝提交
+    const dialogExamineCloseFunc = (formEl,id) => {
+        from_error.msg = {}
+        id = from_examine.item.id
+        // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
+        from_examine.item.startat = value1._value ? value1._value : from_examine.item.startat
+        from_examine.item.endat = value2._value ? value2._value : from_examine.item.endat
+        from_error.msg = {}
+        if (!formEl) return
+        formEl.validate(valid => {
+            if(valid){
+                if(str_title.value == '修改'){
+                    APImodifySurvey(id,from_examine.item).then(res => {
+                        if (res.status === 200) {
+                            refreshFunc()
+                            // ElMessage.success(res.statusText)
+                            ElMessage.success('修改成功')
+                            switch_examine.value = false
+                        }
+
+                    }).catch(err => {
+                        from_error.msg = err.data
+                    })
+                }else {
+                    APIaddSurvey(from_examine.item).then(res => {
+                        if (!res.code) {
+                            refreshFunc()
+                            // ElMessage.success(res.msg)
+                            ElMessage.success('添加成功')
+                            switch_examine.value = false
+                        }
+                    }).catch(err => {
+                        from_error.msg = err.data
+                    })
+                }
+            }else {
+                return false
+            }
+        })
+    }
+    // 获取列表api请求
+    const getTabListFunc = () => {
+        // 请求信息
+        let params = {
+            page: page.value,
+            per_page: per_page.value
         }
-        console.log(data_tab.arr)
-    })
-}
-// 添加问卷
-const addResidentialFunc = () => {
-    from_error.msg = {}
-    str_title.value = '添加'
-    // from_examine.item = {}
-    // 清空添加问卷内的内容
-    from_examine.item.name = ''
-    from_examine.item.startat = ''
-    from_examine.item.endat = ''
-    from_examine.item.content =''
-    switch_examine.value = true
-}
-// 删除
-const deleteFunc = val => {
-    APIdeleteSurvey(val.id).then(res => {
-        refreshFunc()
-        // ElMessage.success(res.statusText)
-        ElMessage.success("删除成功")
-    })
-}
-// 修改问卷
-const modifySurvey = val => {
-    from_error.msg = {}
-    str_title.value = '修改'
-    APIgetSurveyDetails(val.id).then(res => {
-        // console.log(val.id)
-        if (res.status == 200) {
-            from_examine.item = res.data
-            switch_examine.value = true
+        for (let key in data_search.obj) {
+            if (data_search.obj[key] || data_search.obj[key] === 0) {
+                if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
+                    continue
+                }
+                params[key] = data_search.obj[key]
+            }
         }
-    })
-}
-// 搜索
-const searchFunc = () => {
-    page.value = 1
-    switch_search.value = true
-    getTabListFunc()
-    // console.log('aaa')
-    // 搜索结束后，清空筛选条件
-    data_search.obj = {}
-}
-refreshFunc()
+        loading_tab.value = true
+        console.log(params)
+        APIgetSurvey(params).then(res => {
+            if (res.status === 200) {
+                loading_tab.value = false
+                data_tab.arr = res.data
+                total.value = data_tab.arr.length
+            }
+            console.log(data_tab.arr)
+        })
+    }
+    // 添加问卷
+    const addResidentialFunc = () => {
+        from_error.msg = {}
+        str_title.value = '添加'
+        // from_examine.item = {}
+        // 清空添加问卷内的内容
+        from_examine.item.name = ''
+        from_examine.item.startat = ''
+        from_examine.item.endat = ''
+        from_examine.item.content =''
+        switch_examine.value = true
+    }
+    // 删除
+    const deleteFunc = val => {
+        APIdeleteSurvey(val.id).then(res => {
+            refreshFunc()
+            // ElMessage.success(res.statusText)
+            ElMessage.success("删除成功")
+        })
+    }
+    // 修改问卷
+    const modifySurvey = val => {
+        from_error.msg = {}
+        str_title.value = '修改'
+        APIgetSurveyDetails(val.id).then(res => {
+            // console.log(val.id)
+            if (res.status == 200) {
+                from_examine.item = res.data
+                switch_examine.value = true
+            }
+        })
+    }
+    // 搜索
+    const searchFunc = () => {
+        page.value = 1
+        switch_search.value = true
+        getTabListFunc()
+        // console.log('aaa')
+        // 搜索结束后，清空筛选条件
+        data_search.obj = {}
+    }
+    refreshFunc()
 </script>

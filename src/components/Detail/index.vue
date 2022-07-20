@@ -15,20 +15,20 @@
                 <div class="details-box">
                     <div class="item">
                         <div style="margin: auto 0;" class="left">内容</div>
-                        <p>kajfhjdshfkahfkahfjaskhfksdhfjakhfalhfjsafhlakghalhgakghdsghalkhgdlahgladsjhgalsdjhgaldghalsjhgdalhdsjahlksadhlaskdjgh</p>
+                        <p>{{data_details.item.content}}</p>
                     </div>
                     <div class="item">
                         <div class="left">附件</div>
                     </div>
                     <div class="item">
-                        <div class="left">是否开放</div><span>123</span>
-                        <div class="left">是否匿名</div><span>123</span>
-                        <div class="left">分类</div><span>123</span>
+                        <div class="left">是否开放</div><span>{{data_details.item.pub}}</span>
+                        <div class="left">是否匿名</div><span>{{data_details.item.pub}}</span>
+                        <div class="left">活动类型</div><span>{{data_details.item.type}}</span>
                     </div>
                     <div class="item">
-                        <div class="left">小区id</div><span>123</span>
-                        <div class="left">问卷分类</div><span>123</span>
-                        <div class="left">问卷对象</div><span>123</span>
+                        <div class="left">总票数</div><span>{{data_details.item.ticketall}}</span>
+                        <div class="left">总面积数</div><span>{{data_details.item.areaall}}</span>
+                        <div class="left">活动id</div><span>{{data_details.item.id}}</span>
                     </div>
                 </div>
                 <div class="record">
@@ -83,37 +83,38 @@
         <el-tab-pane label="问卷题目" name="3">
             <el-scrollbar height="400px">
                 <div>
-                    <el-button type="primary">添加投票项</el-button>
+                    <el-button type="primary" @click="addServeyTopic()">添加问卷题目</el-button>
                 </div>
-                <div v-for="item in topic_details.item">
-                    <div class="m-tb-10">
-                        <!-- <span>你是否愿意使用大修基金安装中央空调？</span> -->
-                        <span>{{item.title}}</span>
-                        <el-button>修改</el-button>
-                        <el-button>删除</el-button>
-                    </div>
-                    <div>
-                        <ul style="list-style: decimal;">
-                            <li>同意</li>
-                            <li>弃权</li>
-                            <li>反对</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="m-tb-10">
-                        <span>你认为安装中央空调所需要资金可从下列哪些途径而来</span>
-                        <el-button>修改</el-button>
-                        <el-button>删除</el-button>
-                    </div>
-                    <div>
-                        <ul style="list-style: decimal;">
-                            <li>用户自筹资金</li>
-                            <li>通过三方途径赞助</li>
-                            <li>其它<el-input v-model="input" placeholder="请输入其它途径" /></li>
-                        </ul>
-                    </div>
-                </div>
+                <el-table :data="topic_details.item"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    width="100%"
+                >
+                    <el-table-column type="index" width="50"></el-table-column>
+                    <el-table-column prop="title" label="题目"></el-table-column>
+                    <el-table-column prop="type" label="题目选项类型" >
+                        <template #default="scope">
+                            <span v-if="scope.row.type == 1">单选</span>
+                            <span v-else-if="scope.row.type == 2">多选</span>
+                            <span v-else-if="scope.row.type == 3">主观填空</span>
+                            <span v-else="scope.row.type == 0">文字描述</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed='right' width="250px" label="操作">
+                        <template #default="scope">
+                            <el-button border type="primary" size="small" @click="modifyServeyTopic(scope.row)">
+                            修改
+                            </el-button>
+                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)">
+                                <template #reference>
+                                    <el-button type="danger" size="small" >
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="问卷调查结果" name="4">
@@ -160,6 +161,85 @@
             </el-scrollbar>
         </el-tab-pane>
     </el-tabs>
+    <!-- 修改添加 -->
+    <el-dialog v-model="switch_examine" :title="str_title" width="50%">
+        <div>
+            <el-scrollbar style="height: 400px;">
+                <div class="details-box p-lr-10">
+                    <el-form :model="topic_examine.item">
+                        <el-row :gutter="10">
+                            <el-col>
+                                <el-form-item label="问卷题目"  label-width="120px">
+                                    <el-input v-model="topic_examine.item.title"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col>
+                                <el-form-item label="类型"  label-width="120px">
+                                    <el-radio-group class="ml-4" v-model="topic_examine.item.type">
+                                        <el-radio label="1" size="large">单选</el-radio>
+                                        <el-radio label="2" size="large">多选</el-radio>
+                                        <el-radio label="3" size="large">主观填空</el-radio>
+                                        <el-radio label="0" size="large">文字描述</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col>
+                                <el-form-item label="计分方式"  label-width="120px">
+                                    <el-radio-group class="ml-4" v-model="topic_examine.item.score_calc">
+                                        <el-radio label="0" size="large">不计分</el-radio>
+                                        <el-radio label="1" size="large">取最小值</el-radio>
+                                        <el-radio label="2" size="large">取最大值</el-radio>
+                                        <el-radio label="3" size="large">取平均值四舍五入</el-radio>
+                                        <el-radio label="4" size="large">取平均值向下取整</el-radio>
+                                        <el-radio label="5" size="large">取平均值向上取整</el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col>
+                                <el-form-item label="题目分值"  label-width="120px">
+                                    <el-input v-model="topic_examine.item.score" placeholder=""></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10" v-for="(v,key) in opts">
+                            <el-col  :md="24" :lg="8">
+                                <el-form-item label="选项内容"  label-width="120px">
+                                    <el-input v-model="opts[key].content" placeholder=""></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col  :md="24" :lg="8">
+                                <el-form-item label="选项分值" label-width="120px">
+                                    <el-input v-model="opts[key].score" placeholder=""></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col  :md="24" :lg="8">
+                                <el-form-item label="选项排序" label-width="120px">
+                                    <el-input v-model="opts[key].sort" placeholder=""></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col>
+                                <el-button type="primary" @click="addopts()">增加选项</el-button>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </div>
+            </el-scrollbar>
+        </div>
+        <template #footer>
+            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <el-button @click="switch_examine=false">取消</el-button>
+                <el-button type="primary" @click="dialogExamineCloseFunc(id)">确定</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </div>
 </template>
 
@@ -167,13 +247,20 @@
     import {
         APIgetSurveyDetails,
         APIsetSurvey,
-        APIgetSurveyTopic
+        APIgetSurveyTopic,
+        APIdeleteSurveyTopic,
+        APIaddSurveyTopic,
+        APImodifySurveyTopic,
+        APIgetSurveyTopicDetail
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
-    Edit,
-    Search,
-    } from '@element-plus/icons-vue'
+        Edit,
+        Search,
+  } from '@element-plus/icons-vue'
+    import {
+        ElMessage
+    } from 'element-plus'
     const tableData = [
     {
         date: '2016-05-03',
@@ -224,10 +311,54 @@
     const topic_details = reactive({
         item: ''
     })
+    const value1 = ref([])
     // 参与详情
     const radio = ref('网络参与')
     // 参与范围
     const data_range = {}
+    // 添加问卷题目
+    const str_title = ref('添加')
+    let switch_examine = ref(false)
+    let topic_examine = reactive({
+        item: {
+            'sid':'62d27c25ce5af423097e55f1',
+            'title':'',
+            'extra':false,
+            'type':1,
+            'score_calc':1,
+            'score':'',
+            'sort':5,
+            'opts': [
+                // {
+                //     'content':'同意',
+                //     'score':100,
+                //     'sort':40
+                // },
+                // {
+                //     'content':'不同意',
+                //     'score':0,
+                //     'sort':30
+                // },
+            ]
+        }
+    })
+    let opts = reactive([
+        // {
+        //     'content':'',
+        //     'score':'',
+        //     'sort':''
+        // },
+    ])
+    // 增加选项
+    const addopts = () => {
+        opts.push(
+            {
+                'content':'',
+                'score':'',
+                'sort':''
+            },
+        )
+    }
     onMounted(() => {
         console.log(props.id)
         detailsFunc(props.id)
@@ -246,16 +377,7 @@
                 // console.log(data_range)
             })
         }else if(tab.props.name == 3){
-            let params = {
-                sid:props.id
-            }
-            // 问卷题目
-            APIgetSurveyTopic(params).then(res => {
-                // console.log(res.data)
-                if (res.status === 200) {
-                    topic_details.item = res.data
-                }
-            })
+            topicsFunc()
         }else{
 
         }
@@ -269,6 +391,81 @@
             }
         })
         console.log(data_details.item)
+    }
+    // 获取问卷题目
+    const topicsFunc = () => {
+        let params = {
+            sid:props.id
+        }
+        // 问卷题目列表
+        APIgetSurveyTopic(params).then(res => {
+            console.log(res.data)
+            if (res.status === 200) {
+                topic_details.item = res.data
+            }
+        })
+    }
+    // 添加问卷题目、修改问卷题目
+    const addServeyTopic = () => {
+        str_title.value = '添加'
+        switch_examine.value = true
+    }
+    const modifyServeyTopic = (val) =>{
+        console.log(val.id)
+        str_title.value = '修改'
+        // 获取问卷题目详情
+        APIgetSurveyTopicDetail(val.id).then(res => {
+            if(res.status == 200 ) {
+                topic_examine.item = res.data
+                // opts.push(res.data.opts)
+                // 将选项数据遍历插入数组对象
+                res.data.opts.forEach(element => {
+                    opts.push(element)
+                });
+                console.log(opts)
+                switch_examine.value = true
+            }
+        })
+    }
+    // 删除
+    const deleteFunc = val => {
+        APIdeleteSurveyTopic(val.id).then(res => {
+            refreshFunc()
+            // ElMessage.success(res.statusText)
+            ElMessage.success("删除成功")
+        })
+    }
+    // 刷新
+    const refreshFunc = () => {
+        topicsFunc()
+    }
+    // 确定提交添加问卷
+    const dialogExamineCloseFunc = (id) => {
+        topic_examine.item.opts = opts
+        // console.log(topic_examine.item)
+        if(str_title.value == '添加') {
+            APIaddSurveyTopic(topic_examine.item).then(res => {
+                // console.log(res)
+                if (!res.code) {
+                    refreshFunc()
+                    // ElMessage.success(res.msg)
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }
+            })
+        }else {
+            id = topic_examine.item.id
+            // console.log(id)
+            APImodifySurveyTopic(id,topic_examine.item).then(res => {
+                if (res.status == 200) {
+                    refreshFunc()
+                    // ElMessage.success(res.msg)
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }
+            })
+        }
+
     }
 </script>
 <style lang="scss" scoped>
