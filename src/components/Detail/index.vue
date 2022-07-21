@@ -215,22 +215,22 @@
                         </div>
                         <el-scrollbar height="140px">
                         <el-row :gutter="24" v-for="(item,i) in opts">
-                            <el-col :span="14">
-                                <span>选项内容</span>
+                            <el-col :span="14" class="flex">
+                                <span style="width: 40px;">选项内容</span>
                                 <el-input v-model="item.content"></el-input>
                             </el-col>
-                            <el-col :span="4">
+                            <el-col :span="4" class="flex">
                                 <span>排序</span>
                                 <el-input v-model="item.score" ></el-input>
                             </el-col>
-                            <el-col :span="4">
+                            <el-col :span="4" class="flex">
                                 <span>分值</span>
                                 <el-input v-model="item.sort"></el-input>
                             </el-col>
-                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                            <el-popconfirm  title="确定要删除当前项么?" cancel-button-type="info"
                                 @confirm="deleteOptions(i)">
                                 <template #reference>
-                                    <el-button type="danger" size="small" >
+                                    <el-button type="danger"  >
                                         删除
                                     </el-button>
                                 </template>
@@ -586,5 +586,9 @@
 }
 .bg {
     background-color: #bfa;
+}
+//弹性布局
+.flex {
+    display: flex;
 }
 </style>
