@@ -214,21 +214,30 @@
                             <el-button class="m-b-10" type="primary" size="small" @click="addopts()">增加选项</el-button>
                         </div>
                         <el-scrollbar height="140px">
-                        <el-row :gutter="24" v-for="(item,i) in opts">
+                        <el-row :gutter="24" v-for="(v,key) in opts">
                             <el-col :span="14">
-                                <span>选项内容</span>
-                                <el-input v-model="item.content"></el-input>
+                                <div>
+                                    <el-form-item label="选项内容">
+                                        <el-input v-model="opts[key].content" placeholder=""></el-input>
+                                    </el-form-item>
+                                </div>
                             </el-col>
                             <el-col :span="4">
-                                <span>排序</span>
-                                <el-input v-model="item.score" ></el-input>
+                                <div>
+                                    <el-form-item label="分值">
+                                        <el-input v-model="opts[key].score" placeholder=""></el-input>
+                                    </el-form-item>
+                                </div>
                             </el-col>
                             <el-col :span="4">
-                                <span>分值</span>
-                                <el-input v-model="item.sort"></el-input>
+                                <div>
+                                    <el-form-item label="排序">
+                                <el-input v-model="opts[key].sort" placeholder=""></el-input>
+                                    </el-form-item>
+                                </div>
                             </el-col>
                             <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteOptions(i)">
+                                @confirm="deleteOptions(key,topic_examine.item)">
                                 <template #reference>
                                     <el-button type="danger" size="small" >
                                         删除
