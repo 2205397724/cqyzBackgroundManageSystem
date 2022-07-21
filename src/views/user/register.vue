@@ -3,6 +3,13 @@
         <page-main>
             <div>
                 <div>
+                    <el-row :gutter="20" class="bottom-btn-box-2">
+                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc" :icon="Plus">添加用户</el-button>
+                        </el-col>
+                    </el-row>
+                </div>
+                <div>
                     <el-row :gutter="10">
                         <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
                             <el-input v-model="data_search.mobile" class="head-btn" placeholder="手机号" clearable />
@@ -40,7 +47,7 @@
                             <Cascaders v-model="data_search.region" />
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                            <el-button class="head-btn" type="primary" @click="searchFunc" :icon="Search">搜索</el-button>
                         </el-col>
                         <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                             <el-button class="head-btn" type="primary" @click="searchMore">更多搜索</el-button>
@@ -50,13 +57,6 @@
                 <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加用户</el-button>
-                        </el-col>
-                    </el-row>
                 </div>
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
@@ -293,6 +293,7 @@
 </template>
 <script setup>
 import Cascaders from '@/components/Cascaders/index.vue'
+import { Delete, Edit, Search, Share, Upload ,Plus} from '@element-plus/icons-vue'
 import {
     APIgetUserList,
     APIgetUserDetails,

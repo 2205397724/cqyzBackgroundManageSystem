@@ -4,10 +4,11 @@
         <div :gutter="20" class="bottom-btn-box-2">
             <el-row>
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                  <el-button @click="addPerms" type="primary">添加权限</el-button>
+                  <el-button @click="addPerms" type="primary" class="m-b-10">添加权限</el-button>
                 </el-col>
             </el-row>
-            <el-row>
+            <el-dialog v-model="switch_add_perms" title="添加权限">
+                <el-row>
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                   <el-input style="min-width: 500px;" class="m-tb-10" v-model="from_add_perms.item.name">
                     <template #prepend>
@@ -18,7 +19,7 @@
             </el-row>
             <el-row>
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                  <el-input style="min-width: 500px;" class="m-b-10" v-model="from_add_perms.item.utype">
+                  <el-input style="min-width: 500px;" class="m-b-10" v-model="from_add_perms.item.utype" placeholder="gov管理端、pm物业端、mbr业主端">
                     <template #prepend>
                         权限所属
                     </template>
@@ -34,6 +35,10 @@
                   </el-input>
                 </el-col>
             </el-row>
+            <template #footer>
+                <el-button type="primary" @click="addPerms_submit">确认</el-button>
+            </template>
+            </el-dialog>
         </div>
          <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                 <el-table
@@ -45,17 +50,17 @@
                     :tree-props="{ children: 'children' }"
                     style="width: 100%;min-height: 300px;"
                 >
-                    <el-table-column prop="name" label="权限名称" >
+                    <el-table-column prop="name" label="权限名称" width="150px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="utype" label="权限所属" width="180">
+                    <el-table-column prop="utype" label="权限所属" width="80">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.utype }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="权限ID" width="120px">
+                    <el-table-column prop="id" label="权限ID" width="250px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.id }} </span>
                         </template>
@@ -242,6 +247,7 @@ const data_tab_perms_roles=reactive({
     arr:[]
 })
 const switch_show_roles=ref(false)
+const switch_add_perms=ref(false)
 const from_add_perms=reactive({
     item:{
         name:"",
@@ -264,6 +270,21 @@ const close_put_perms=()=>{
 //
 const closePostPermsRoles=()=>{
     from_post_perms_roles.item.role_ids[0]=""
+}
+//
+const addPerms_submit=()=>{
+    let params={
+        name:from_add_perms.item.name,
+        desc:from_add_perms.item.desc,
+        utype:from_add_perms.item.utype,
+    }
+    APIpostPerms(params).then(res=>{
+        if(res.status==200){
+            refreshFunc()
+            ElMessage.success("添加权限成功")
+            switch_add_perms.value=false
+        }
+    })
 }
 //赋予角色权限1
 const postPerms_rolesFun=(val)=>{
@@ -307,21 +328,7 @@ const deletePerms_roles=(val)=>{
 }
 //添加权限
 const addPerms=()=>{
-    let params={
-        name:from_add_perms.item.name,
-        desc:from_add_perms.item.desc,
-        utype:from_add_perms.item.utype,
-    }
-    if(from_add_perms.item.name==""&&from_add_perms.item.utype==""){
-        ElMessage.error("请输入信息")
-        return
-    }
-    APIpostPerms(params).then(res=>{
-        if(res.status==200){
-            refreshFunc()
-            ElMessage.success("添加权限成功")
-        }
-    })
+    switch_add_perms.value=true
 }
 //修改提交
 const put_perms_submit=()=>{

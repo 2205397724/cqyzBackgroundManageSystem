@@ -21,12 +21,12 @@
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="角色ID" width="180">
+                    <el-table-column prop="id" label="角色ID" width="250">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="group_id" label="所属用户组" width="180">
+                    <el-table-column prop="group_id" label="所属用户组" width="250">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
                         </template>

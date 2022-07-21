@@ -1,11 +1,8 @@
 <template>
     <div class="usergroup">
         <page-main>
-            <el-row :gutter="20" class="bottom-btn-box-2">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加用户组</el-button>
-                </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+            <el-row :gutter="10">
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-cascader
                         v-model="region_code" class="head-btn"
                         placeholder="区域"
@@ -14,7 +11,27 @@
                         collapse-tags-tooltip
                         :show-all-levels="false"
                     />
-                </el-col> -->
+                </el-col >
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" >
+                    <el-input placeholder="类型"></el-input>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" >
+                    <el-input placeholder="区域类型"></el-input>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" >
+                    <el-input placeholder="区域类型对应值"></el-input>
+                </el-col>
+                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-input placeholder="最小区域代码"></el-input>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-button type="primary" class="m-t-10">搜索</el-button>
+            </el-row>
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn m-t-10" type="primary" @click="addResidentialFunc">添加用户组</el-button>
+                </el-col>
             </el-row>
             <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                 <el-table
@@ -41,31 +58,42 @@
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.toushu_return_type,scope.row.type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="region_type" label="区域类型" width="180">
+                    <el-table-column  label="成员" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.region_type) }} </span>
+                            <el-button
+                                type="primary"
+                                size="small"
+                                style="margin-left: -10px;"
+                                @click="optValFunc(scope.row)"
+                            >
+                                成员
+                            </el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="region_val" label="区域类型对应值" width="180">
+                    <el-table-column  label="权限" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.region_val }} </span>
+                            <el-button
+                                size="small"
+                                type="warning"
+                                style="margin-left: -10px;"
+                                @click="getGroup_perms(scope.row)"
+                            >
+                                权限
+                            </el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="region_cc" label="最小区域代码" width="180">
+                    <el-table-column  label="角色" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.region_cc }} </span>
+                           <el-button
+                                type="success"
+                                size="small"
+                                style="margin-left: -10px;"
+                                @click="getGroupRolesFun(scope.row)"
+                            >
+                                角色
+                            </el-button>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="created_at" label="创建时间" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="updated_at" label="更新时间" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column />
                     <el-table-column fixed="right" label="操作" width="320">
                         <template #default="scope">
@@ -77,16 +105,9 @@
                             </el-button>
                             <el-button
                                 size="small"
-                                @click="getGroup_perms(scope.row)"
+                                @click="getGroupDetail(scope.row)"
                             >
-                                权限
-                            </el-button>
-                            <el-button
-                                type="success"
-                                size="small"
-                                @click="getGroupRolesFun(scope.row)"
-                            >
-                                角色
+                                详情
                             </el-button>
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
@@ -98,13 +119,6 @@
                                     </el-button>
                                 </template>
                             </el-popconfirm>
-
-                            <el-button
-                                type="info" size="small"
-                                @click="optValFunc(scope.row)"
-                            >
-                                成员
-                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -219,28 +233,50 @@
                 style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
                 max-height="400"
             >
-                <el-table-column prop="group_id" label="用户组ID" width="300">
+                <el-table-column prop="name" label="姓名" width="80">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
+                        <span >{{ scope.row.username }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="user_id" label="用户ID" width="300">
+                <el-table-column prop="gender" label="性别" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.user_id}} </span>
+                        <span >{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender)}} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="flg" label="职位" width="90">
+                <el-table-column prop="mobile" label="电话" width="130" >
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.flg }} </span>
+                        <span >{{ scope.row.mobile}} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="post" label="职位描述" width="300">
+                <el-table-column prop="post" label="职位" width="100" >
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.post }} </span>
+                        <span >{{ scope.row.post }} </span>
+                    </template>
+                </el-table-column>
+                 <el-table-column  label="角色" width="100">
+                    <template #default="scope">
+                        <el-button
+                            type="success" size="small"  style="margin-left: -10px;"
+                            @click="groupUserRolesFun(scope.row)"
+                        >
+                            成员角色
+                        </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column  label="权限" width="100" >
+                    <template #default="scope">
+                       <el-button
+                                type="warning"
+                                size="small"
+                                style="margin-left: -10px;"
+                                @click="getGroupUser_permsFun(scope.row)"
+                            >
+                                成员权限
+                            </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column />
-                <el-table-column  label="操作" width="280px" fixed="right">
+                <el-table-column  label="操作" width="200px" fixed="right">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -249,17 +285,10 @@
                             修改
                         </el-button>
                         <el-button
-                            type="info" size="small"
-                            @click="groupUserRolesFun(scope.row)"
-                        >
-                            角色
-                        </el-button>
-                        <el-button
-                                type="success"
                                 size="small"
-                                @click="getGroupUser_permsFun(scope.row)"
+                                @click="getUserDetail(scope.row)"
                             >
-                                权限
+                                详细
                             </el-button>
                         <el-popconfirm
                             title="确定要删除当前项么?" cancel-button-type="info"
@@ -335,7 +364,6 @@
             </div>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="switch_opt_val_add=false">取消</el-button>
                     <el-button type="primary" @click="dialogOptValFunc">确定</el-button>
                 </div>
             </template>
@@ -386,9 +414,14 @@
         <!-- 成员角色部分 -->
         <el-dialog v-model="switch_group_roles" title="成员角色">
             <el-button type="primary" @click="addGroupUser_rolesFun">添加角色</el-button>
-            <el-input class="p-tb-10" v-model="from_addGroupUser_Roles.item.role_ids[0]">
+            <!-- <el-input class="p-tb-10" v-model="from_addGroupUser_Roles.item.role_ids[0]">
                     <template #prepend>角色ID</template>
-            </el-input>
+            </el-input> -->
+            <el-select v-model="from_addGroupUser_Roles.item.role_ids[0]" placeholder="请选择要赋予的角色" class="m-tb-10">
+                <el-option v-for="item in data_tab_roles.arr" :key="item.id" :label="item.name" :value="item.id">
+
+                </el-option>
+            </el-select>
             <el-table  :data="data_tab_user_roles.arr" v-loading="loading_tab">
              <el-table-column label="角色名称" prop="name">
                 <template #default="scope">
@@ -429,9 +462,14 @@
         <!-- 组成员权限 -->
         <el-dialog v-model="switch_group_user_perms" title="成员权限">
             <el-button type="primary" @click="addGroupUser_permsFun">添加权限</el-button>
-            <el-input class="p-tb-10" v-model="from_addGroupUser_perms.item.perm_ids[0]">
+            <!-- <el-input class="p-tb-10" v-model="from_addGroupUser_perms.item.perm_ids[0]">
                     <template #prepend>权限ID</template>
-            </el-input>
+            </el-input> -->
+            <el-select v-model="from_addGroupUser_perms.item.perm_ids[0]" placeholder="请选择要赋予的权限" class="m-tb-10">
+                <el-option v-for="item in tab_group_all_perms.arr" :key="item.id" :label="item.name" :value="item.id">
+
+                </el-option>
+            </el-select>
             <el-table  :data="data_tab_user_perms.arr" v-loading="loading_tab">
              <el-table-column label="权限名称" prop="name">
                 <template #default="scope">
@@ -470,47 +508,123 @@
            </el-table>
         </el-dialog>
         <!-- 组权限 -->
-        <el-dialog v-model="switch_group_perms" title="用户组权限" width="60%">
-            <el-button type="primary" @click="addGroup_permsFun">添加权限</el-button>
-            <el-input class="p-tb-10" v-model="from_addGroup_perms.item.perm_ids[0]">
-                    <template #prepend>权限ID</template>
-            </el-input>
-            <el-table  :data="data_tab_group_perms.arr" v-loading="loading_tab">
-             <el-table-column label="权限名称" prop="name">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.name}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column label="权限ID" prop="id" width="250px">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.id}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column label="权限端" prop="group_id">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.utype}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column label="权限描述" prop="spec">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.desc}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column fixed="right" label="操作" width="80">
-                            <template #default="scope">
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteGroup_perms(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-           </el-table>
+        <el-dialog v-model="switch_group_perms" title="用户组权限" width="60%" @close="group_perms_close">
+            <el-tabs>
+                <el-tab-pane label="管理端权限">
+                    <!-- <el-checkbox-group v-model="data_tab_group_perms_selected_gov.arr"> -->
+                        <div v-for="item in all_perms_list.arr" :key="item.id">
+                            <el-checkbox :label="item.name" :true-label="item.id" v-if="item.utype=='gov'"
+                            @change="(val)=>(group_perms_selectFun_gov(val,item.id))" :checked="data_tab_group_perms_selected_gov.arr.indexOf(item.id)==-1?false:true"
+                            ></el-checkbox>
+                        </div>
+                    <!-- </el-checkbox-group> -->
+                </el-tab-pane>
+                <el-tab-pane label="物业端权限">
+                        <div v-for="item in all_perms_list.arr" :key="item.id">
+                            <el-checkbox :label="item.name" :true-label="item.id" v-if="item.utype=='pm'"
+                            @change="(val)=>(group_perms_selectFun_pm(val,item.id))" :checked="data_tab_group_perms_selected_pm.arr.indexOf(item.id)==-1?false:true"
+                            ></el-checkbox>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="业主端权限">
+                        <div v-for="item in all_perms_list.arr" :key="item.id">
+                            <el-checkbox :label="item.name" :true-label="item.id" v-if="item.utype=='mbr'"
+                            @change="(val)=>(group_perms_selectFun_mbr(val,item.id))" :checked="data_tab_group_perms_selected_mbr.arr.indexOf(item.id)==-1?false:true"
+                            ></el-checkbox>
+                        </div>
+                </el-tab-pane>
+            </el-tabs>
+            <template #footer>
+                <el-button type="primary" @click="post_all_group_perms">确认</el-button>
+            </template>
+        </el-dialog>
+        <!-- 用户组成员详情 -->
+        <el-dialog
+            v-model="switch_user_details"
+            title="详情"
+            width="50%"
+        >
+                    <el-scrollbar height="400px">
+                        <div class="details-box">
+                            <div class="item">
+                                <div class="left">用户真实名</div>
+                                <div class="right">{{ data_user_detail.item.name }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">用户昵称</div>
+                                <div class="right">{{ data_user_detail.item.username }}</div>
+                            </div>
+                             <div class="item">
+                                <div class="left">性别</div>
+                                <div class="right">{{ getOptVal([{key: 'U',val: '未设置'}, {key: 'F',val: '男'}, {key: 'M',val: '女'}],data_user_detail.item.gender) }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">身份证号</div>
+                                <div class="right">{{ data_user_detail.item.id_card }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">手机号</div>
+                                <div class="right">{{ data_user_detail.item.mobile }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">职位描述</div>
+                                <div class="right">{{ data_user_detail.item.post}}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">用户ID</div>
+                                <div class="right">{{ data_user_detail.item.user_id }}</div>
+                            </div>
+                             <div class="item">
+                                <div class="left">成员所在组</div>
+                                <div class="right">{{ data_user_detail.item.group_id }}</div>
+                            </div>
+                        </div>
+                    </el-scrollbar>
+        </el-dialog>
+        <!-- 用户组详情 -->
+        <el-dialog
+            v-model="switch_group_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">用户组名称</div>
+                    <div class="right">{{ data_group_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.toushu_return_type,data_group_details.item.type) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">关联</div>
+                    <div class="right">{{ data_group_details.item.ref }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">区域类型</div>
+                    <div class="right">{{ data_group_details.item.region_type }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">区域类型对应值</div>
+                    <div class="right">{{ data_group_details.item.region_val }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">最小中国区域代码</div>
+                    <div class="right">{{ data_group_details.item.region_cc }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">用户组ID</div>
+                    <div class="right">{{ data_group_details.item.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_group_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_group_details.item.updated_at }}</div>
+                </div>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -532,11 +646,14 @@ import {
     APIdeleteGroupUser_perms,
     APIgetGroupPerms,
     APIpostGroupPerms,
-    APIdeleteGroupPerms
+    APIdeleteGroupPerms,
+    APIgetUserDetails,
+APIgetPermsList,
 } from '@/api/custom/custom.js'
 import {
     ref,
-    watch
+    watch,
+    toRefs
 } from 'vue'
 import {
     ElMessage
@@ -545,6 +662,18 @@ import {
 // 数据
 // 分类种类
 // 列表
+const data_tab_group_perms_selected_gov=reactive({arr:[]})
+const data_tab_group_perms_selected_pm=reactive({arr:[]})
+const data_tab_group_perms_selected_mbr=reactive({arr:[]})
+const switch_group_details=ref(false)
+const data_user_detail=reactive({
+    item:{}
+})
+const tab_group_all_perms=reactive({
+    arr:[]
+})
+const data_tab_group_perms_selected_gov_boolean=ref(false)
+let switch_user_details=ref(false)
 let loading_tab = ref(false)
 let data_tab = reactive({
     arr: []
@@ -558,9 +687,6 @@ const from_addGroupUser_Roles=reactive({
         user_id:"",
         role_ids:[""]
     }
-})
-let data_tab_group_perms=reactive({
-    arr:[]
 })
 let from_addGroup_perms=reactive({
     item:{
@@ -612,6 +738,53 @@ const current_group_perms=reactive({
 const current_user_perms=reactive({
     item:{}
 })
+const data_group_details=reactive({
+    item:{}
+})
+const all_perms_list=reactive({
+    arr:[]
+})
+//添加用户组全部权限
+const post_all_group_perms=()=>{
+    APIpostGroupPerms(current_group_perms.item.id,{perm_ids:[...data_tab_group_perms_selected_gov.arr,...data_tab_group_perms_selected_pm.arr
+    ,...data_tab_group_perms_selected_mbr.arr]}).then(res=>{
+        if(res.status==200){
+            ElMessage.success("添加用户组权限成功")
+            switch_group_perms.value=false
+        }
+    })
+}
+//三种权限进行判断
+const group_perms_selectFun_gov=(val,id)=>{
+    if(data_tab_group_perms_selected_gov.arr.indexOf(id)!==-1&&val==false){
+        let index=data_tab_group_perms_selected_gov.arr.indexOf(id)
+        data_tab_group_perms_selected_gov.arr.splice(index,1)
+    }
+    if(val!=false&&data_tab_group_perms_selected_gov.arr.indexOf(id)==-1){
+        data_tab_group_perms_selected_gov.arr.push(id)
+    }
+    console.log(data_tab_group_perms_selected_gov.arr)
+}
+const group_perms_selectFun_pm=(val,id)=>{
+    if(data_tab_group_perms_selected_pm.arr.indexOf(id)!==-1&&val==false){
+        let index=data_tab_group_perms_selected_pm.arr.indexOf(id)
+        data_tab_group_perms_selected_pm.arr.splice(index,1)
+    }
+    if(val!=false&&data_tab_group_perms_selected_gov.arr.indexOf(id)==-1){
+        data_tab_group_perms_selected_pm.arr.push(id)
+    }
+    console.log(data_tab_group_perms_selected_pm.arr)
+}
+const group_perms_selectFun_mbr=(val,id)=>{
+     if(data_tab_group_perms_selected_mbr.arr.indexOf(id)!==-1&&val==false){
+        let index=data_tab_group_perms_selected_mbr.arr.indexOf(id)
+        data_tab_group_perms_selected_mbr.arr.splice(index,1)
+    }
+    if(val!=false&&data_tab_group_perms_selected_mbr.arr.indexOf(id)==-1){
+        data_tab_group_perms_selected_mbr.arr.push(id)
+    }
+    console.log(data_tab_group_perms_selected_mbr.arr)
+}
 const type_change=(val)=>{
     for(let i=0;i<opts_all.item.toushu_return_type.length;i++){
         if(opts_all.item.toushu_return_type[i].val===val){
@@ -638,9 +811,27 @@ const cascader_props = {
         })
     }
 }
+//用户组详情
+const getGroupDetail=(val)=>{
+    APIgetGroupDetails(val.id).then(res=>{
+        if(res.status==200){
+            data_group_details.item=res.data
+            switch_group_details.value=true
+        }
+    })
+}
+//用户组成员详细
+const getUserDetail=(val)=>{
+    APIgetUserDetails(val.user_id).then(res=>{
+        if(res.status===200){
+            data_user_detail.item=res.data
+            switch_user_details.value=true
+        }
+    })
+}
 //删除组权限
 const deleteGroup_perms=(val)=>{
-    APIdeleteGroupPerms(current_group_perms.id,{data:{perm_ids:[val.id]}}).then(res=>{
+    APIdeleteGroupPerms(current_group_perms.item.id,{data:{perm_ids:[val.id]}}).then(res=>{
         if(res.status=200){
             ElMessage.success("删除成功")
             switch_group_perms.value=false
@@ -665,11 +856,31 @@ const addGroup_permsFun=()=>{
         }
     })
 }
-//获取组权限
+//获取组权限弹窗
 const getGroup_perms=(val)=>{
     current_group_perms.item=val
+    APIgetPermsList().then(res=>{
+        all_perms_list.arr=res.data
+    })
     APIgetGroupPerms(val.id).then(res=>{
-        data_tab_group_perms.arr=res.data
+        tab_group_all_perms.arr=res.data
+        data_tab_group_perms_selected_gov.arr=[]
+        data_tab_group_perms_selected_pm.arr=[]
+        data_tab_group_perms_selected_mbr.arr=[]
+        for(let i=0;i<res.data.length;i++){
+            if(res.data[i].utype=='gov'){
+                data_tab_group_perms_selected_gov.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_gov.arr)
+            }
+            if(res.data[i].utype=='pm'){
+                data_tab_group_perms_selected_pm.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_pm.arr)
+            }
+            if(res.data[i].utype=='mbr'){
+                data_tab_group_perms_selected_mbr.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_mbr.arr)
+            }
+        }
         switch_group_perms.value=true
     })
 }
@@ -723,6 +934,9 @@ const groupUserRolesFun=(val)=>{
     switch_group_roles.value=true
     from_addGroupUser_Roles.item.group_id=val.group_id
     from_addGroupUser_Roles.item.user_id=val.user_id
+    APIgetGroupRolesList(val.group_id).then(res=>{
+        data_tab_roles.arr=res.data
+    })
     APIgetGroupUser_Roles(val.group_id,val.user_id).then(res=>{
         console.log(res)
         data_tab_user_roles.arr=res.data
@@ -789,6 +1003,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
+    console.log(val)
     APIdeleteGroup(val.id).then(res => {
         if (res.status === 200) {
             refreshFunc()
@@ -965,7 +1180,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['status_all','toushu_return_type','group_user_flg','group_user_region_type']).then(res => {
+getOpts(['status_all','toushu_return_type','group_user_flg','group_user_region_type','gender']).then(res => {
     opts_all.obj = res
     console.log(res)
 })
