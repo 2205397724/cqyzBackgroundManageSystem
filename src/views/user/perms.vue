@@ -137,7 +137,7 @@
             </template>
          </el-dialog>
          <!-- 权限对于角色 -->
-         <el-dialog v-model="switch_perms_roles" title="角色拥有权限">
+         <el-dialog v-model="switch_perms_roles" title="角色拥有权限" width="70%">
             <el-table
                     v-loading="loading_tab"
                     :data="data_tab_perms_roles.arr"
@@ -152,12 +152,12 @@
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="角色ID" width="180">
+                    <el-table-column prop="id" label="角色ID"  style="min-width: 230px;">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="group_id" label="所属用户组" width="180">
+                    <el-table-column prop="group_id" label="所属用户组"  style="min-width: 230px;">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.group_id }} </span>
                         </template>

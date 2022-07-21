@@ -118,7 +118,7 @@
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="权限ID" width="180">
+                    <el-table-column prop="id" label="权限ID" style="min-width: 230px;">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.id }} </span>
                         </template>

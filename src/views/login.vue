@@ -98,7 +98,7 @@ import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
-
+import {APIgetUser_where_group} from '@/api/custom/custom'
 const title = import.meta.env.VITE_APP_TITLE
 
 // 表单类型，login 登录，reset 重置密码
@@ -166,7 +166,16 @@ function handleLogin() {
                 'password': loginForm.value.password
             }
             userStore.login(data).then(() => {
-                console.log('成功')
+                APIgetUser_where_group().then(res=>{
+                    console.log(res)
+                    let user_groupid_arr=[]
+                    res.data.forEach(item=>{
+                        user_groupid_arr.push(item.id)
+                    })
+                    let user_groupid_arr_promise=[]
+                    for(let i=0;i<user_groupid_arr.length;i++)
+                    console.log(user_groupid_arr)
+                })
                 loading.value = false
                 localStorage.setItem('domain', loginForm.value.domain)
                 if (loginForm.value.remember) {

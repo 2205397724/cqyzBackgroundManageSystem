@@ -901,6 +901,14 @@ export function APIpostEnterprise(data) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户
+//获取用户所在组权限
+export function APIgetUser_group_perms_whenLogin(gid){
+    return api.get(`/me/group-perms`,gid)
+}
+//获取用户在哪个组
+export function APIgetUser_where_group(){
+    return api.get(`/me/groups`)
+}
 // 列表
 export function APIgetUserList() {
     return api.get('/users')
