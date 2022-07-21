@@ -228,7 +228,7 @@
                                 <el-input v-model="item.sort"></el-input>
                             </el-col>
                             <el-popconfirm  title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteOptions(i)">
+                                @confirm="opts.splice(i,1)">
                                 <template #reference>
                                     <el-button type="danger"  >
                                         删除
@@ -468,6 +468,9 @@
     const addServeyTopic = () => {
         str_title.value = '添加'
         switch_examine.value = true
+        // 清除问卷的信息
+        topic_examine.item = []
+        opts.length = 0
     }
     const modifyServeyTopic = (val) =>{
         console.log(val.id)
@@ -478,7 +481,6 @@
                 topic_examine.item = res.data
                 // 清除选项缓存数据
                 opts.length = 0
-                // opts = [...res.data]
                 // 将选项数据遍历插入数组对象
                 res.data.opts.forEach(element => {
                     opts.push(element)
@@ -533,13 +535,6 @@
         APIgetChinaRegion().then(res => {
             console.log(res.data)
         })
-    }
-    // 删除选项
-    const deleteOptions = (key,val) => {
-        console.log(key)
-        opts.splice(key,1)
-        console.log(opts)
-
     }
 </script>
 <style lang="scss" scoped>
