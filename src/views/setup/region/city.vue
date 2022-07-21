@@ -219,7 +219,8 @@
                                     inactive-text="禁用"
                                     :active-value="1"
                                     :inactive-value="0"
-                                    @change="switchFunk(from_examine.item.active)"></el-switch>
+                                    @change="switchFunk(from_examine.item.active)"
+                                />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -354,7 +355,7 @@ let from_examine = reactive({
 })
 let from_examine_ = reactive({
     item: {
-        'active': "",
+        'active': '',
         'auth_sk': '',
         'china_code': '',
         'created_at': '',
@@ -397,20 +398,6 @@ const detailsFunc = val => {
     })
 }
 const switchFunk = row => {
-<<<<<<< HEAD
-    let status = row.active == '1' ? '启用' : '禁用'
-    ElMessage({
-        type: 'warning',
-        showClose: true,
-        message: `已${status}此接口状态`
-    })
-    APIputCity(row.id, row).then(res => {
-         console.log(res)
-        if (res.status === 200) {
-            refreshFunc()
-        }
-    })
-=======
     // let status = row.active == '1' ? '启用' : '禁用'
     // ElMessage({
     //     type: 'warning',
@@ -418,8 +405,8 @@ const switchFunk = row => {
     //     message: `已${status}此接口状态`
     // })
     console.log(row)
-    from_examine.item.active=row
-    console.log(from_examine.item.active);
+    from_examine.item.active = row
+    console.log(from_examine.item.active)
     // APIputCity(from_examine.item.id, from_examine.item).then(res => {
     //                 // console.log(res)
     //                 if (res.status === 200) {
@@ -437,7 +424,6 @@ const switchFunk = row => {
     // }).catch(err => {
     //     from_error.msg = err.data
     // })
->>>>>>> admin2
 }
 // 监听分页
 watch(page, () => {
@@ -518,7 +504,7 @@ const addResidentialFunc = () => {
     str_title.value = '添加'
 
     switch_examine.value = true
- }
+}
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}

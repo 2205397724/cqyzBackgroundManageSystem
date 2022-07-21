@@ -17,7 +17,18 @@ const opts = {
         val: '未审核'
     }, {
         key: 20,
-        val: '正常'
+        val: '已审核'
+    }, {
+        key: 30,
+        val: '审核失败'
+    }],
+    // 资讯状态
+    information_status: [{
+        key: 10,
+        val: '未审核'
+    }, {
+        key: 20,
+        val: '已审核'
     }, {
         key: 30,
         val: '审核失败'

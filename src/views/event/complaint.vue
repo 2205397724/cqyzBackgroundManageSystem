@@ -2,31 +2,8 @@
     <div class="vote">
         <page-main>
             <div>
-                <el-input v-model="data_1.search.title" class="input-b-r" placeholder="标题名称" clearable />
-                <el-select v-model="data_1.search.kind" class="input-b-r" clearable placeholder="分类">
-                    <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
-                </el-select>
-                <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
-                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                </el-select>
                 <el-button
-                    class="btn-b-r" type="primary"
-                    @click="()=>{
-                        data_1.switch_search = true;
-                        data_1.page = 1;
-                        getFuncVoteList()
-                    }"
-                >
-                    搜索
-                </el-button>
-            </div>
-            <div v-show="data_1.switch_search" style="margin-bottom: 10px;">
-                <el-button style="margin-right: 10px;" @click="refreshFunc()">重置</el-button>
-                *搜索到相关结果共{{ data_1.total }}条。
-            </div>
-            <div>
-                <el-button
-                    class="head-btn" type="primary"
+                    class="head-btn" type="primary" :icon="Plus"
                     @click="()=>{
                         data_1.add_form={status:opts_all.obj.toushu_status[0].key};
                         data_1.add_error={};
@@ -38,6 +15,53 @@
                     添加投诉
                 </el-button>
             </div>
+            <div class="search">
+                <span class="searchKey">关键字</span>
+                <el-input v-model="data_1.search.title" class="input-b-r" placeholder="标题名称" clearable />
+                <el-select v-model="data_1.search.kind" class="input-b-r" clearable placeholder="分类">
+                    <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
+                </el-select>
+                <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
+                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                </el-select>
+                <br>
+                <el-button
+                    class="btn-b-r" type="primary" :icon="Search"
+                    @click="()=>{
+                        data_1.switch_search = true;
+                        data_1.page = 1;
+                        getFuncVoteList()
+                    }"
+                >
+                    筛选
+                </el-button>
+            </div>
+            <div v-show="data_1.switch_search" style="margin-bottom: 10px;">
+                <el-button style="margin-right: 10px;" @click="refreshFunc()">重置</el-button>
+                *搜索到相关结果共{{ data_1.total }}条。
+            </div>
+            <div class="btn">
+                <el-badge :value="index == 0 ? data_1.total : ''" class="item" :hidden="flag">
+                    <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">
+                        未处理
+                    </el-button>
+                </el-badge>
+                <el-badge :value="index == 1 ? data_1.total : ''" class="item" :hidden="flag">
+                    <el-button :type="index == 1 ? 'primary' : ''" @click="StatusFunk(1)">
+                        办理中
+                    </el-button>
+                </el-badge>
+                <el-badge :value="index == 3 ? data_1.total : ''" class="item" :hidden="flag">
+                    <el-button :type="index == 3 ? 'primary' : ''" @click="StatusFunk(3)">
+                        已回复
+                    </el-button>
+                </el-badge>
+                <el-badge :value="index == 4 ? data_1.total : ''" class="item" :hidden="flag">
+                    <el-button :type="index == 4 ? 'primary' : ''" @click="StatusFunk(4)">
+                        已结案
+                    </el-button>
+                </el-badge>
+            </div>
             <el-table
                 :data="data_1.list"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -48,19 +72,28 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="投诉id" >
+                <el-table-column label="投诉id">
                     <template #default="scope">
                         <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="小区id" >
+                <el-table-column label="小区id">
                     <template #default="scope">
                         <span>{{ scope.row.zid }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="90">
+                <el-table-column label="状态" width="150">
                     <template #default="scope">
-                        <span>{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </span>
+                        <el-button v-show="scope.row.status == 0" class="btn1 noDeal" type="danger">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 1" class="btn1" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 2" class="btn1" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 3" class="btn1" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 4" class="btn1" type="warning">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 5" class="btn1" type="warning">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 6" class="btn1" type="primary">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 7" class="btn1" type="info">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 8" class="btn1" type="info">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-button>
+                        <!-- <div style=":background-color"></div> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="是否匿名" width="90">
@@ -73,7 +106,25 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="270">
+                <!-- <el-table-column label="评论" width="90">
+                    <template #default="scope">
+                        <el-switch
+                            v-model="scope.row.comment"
+                            class="mb-2"
+
+                            inline-prompt
+                            style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            active-text="开启"
+                            inactive-text="关闭"
+                            :active-value="1"
+                            :inactive-value="0"
+                            @change="switchFunk(scope.row)"
+                        />
+                    </template>
+                </el-table-column> -->
+                <el-table-column fixed="right" label="操作" width="300">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -81,12 +132,9 @@
                         >
                             修改
                         </el-button>
-                        <el-button
-                            size="small"
-                            @click="clickFuncDeteails(scope.row)"
-                        >
-                            详情
-                        </el-button>
+                        <el-link :underline="false" type="primary">
+                            <router-link class="el-button details" :to="{name: 'complaintDetails',query:{ id : scope.row.id }}">详情</router-link>
+                        </el-link>
                         <el-button
                             size="small"
                             @click="clickFuncAllot(scope.row)"
@@ -154,6 +202,17 @@
                         >
                             <el-select v-model="data_1.add_form.ano" class="head-btn" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="状态"
+                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
+                        >
+                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
+                                <el-option v-for="(item) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -236,6 +295,28 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label-width="70px"
+                                label="评论"
+                                :error="data_1.add_error&&data_1.add_error.catob?data_1.add_error.catob[0]:''"
+                            >
+                                <el-switch
+                                    v-model="data_1.list.comment"
+                                    class="mb-2"
+
+                                    inline-prompt
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    active-text="开启"
+                                    inactive-text="关闭"
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    @change="switchFunk"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="70px"
                                 label="状态"
                                 :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
                             >
@@ -297,7 +378,7 @@
             title="详情"
             width="50%"
         >
-            <div class="details-box">
+            <div class="">
                 <div class="item">
                     <div class="left">标题名称</div>
                     <div class="right">{{ data_1.details_data.title }}</div>
@@ -322,11 +403,11 @@
                     <div class="left">小区id</div>
                     <div class="right">{{ data_1.details_data.zid }}</div>
                 </div>
-                <div class="item" v-if="data_1.details_data.catpro">
+                <div v-if="data_1.details_data.catpro" class="item">
                     <div class="left">问题分类</div>
                     <div class="right">{{ data_1.details_data.catpro }}</div>
                 </div>
-                <div class="item" v-if="data_1.details_data.catob">
+                <div v-if="data_1.details_data.catob" class="item">
                     <div class="left">投诉对象</div>
                     <div class="right">{{ data_1.details_data.catob }}</div>
                 </div>
@@ -339,7 +420,7 @@
                     <div class="right">
                         <!-- 两种模式任君选择 -->
                         <el-image
-                            v-for="(item,i) in data_1.details_data.affixs" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
+                            v-for="(item,i) in data_1.details_data.affixs" :key="i" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
                         />
                         <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
@@ -402,9 +483,7 @@
                                         <div class="left">回复附件</div>
                                         <div class="right">
                                             <!-- 两种模式任君选择 -->
-                                            <el-image
-                                                v-for="(item,i) in activity.logable.affixs" :preview-src-list="activity.logable.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
-                                            />
+                                            <el-imag v-for="(item,i) in activity.logable.affixs" :key="i" :preview-src-list="activity.logable.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover" />
                                             <!-- <div v-for="(item,i) in activity.logable.affixs">
                                                 <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                                             </div> -->
@@ -579,9 +658,9 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" v-if="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(popup_4.form.type==opts_all.obj.illegal_type[0].key)">
+                    <el-col v-if="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(popup_4.form.type==opts_all.obj.illegal_type[0].key)" :xs="24" :sm="24" :md="24">
                         <el-form-item
-                        label-width="70px"
+                            label-width="70px"
                             label="违建ID"
                             :error="popup_4.msg&&popup_4.msg.tgt?popup_4.msg.tgt[0]:''"
                         >
@@ -592,7 +671,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24">
                         <el-form-item
-                        label-width="70px"
+                            label-width="70px"
                             label="处理状态"
                             :error="popup_4.msg&&popup_4.msg.status?popup_4.msg.status[0]:''"
                         >
@@ -687,6 +766,7 @@ const clickFuncAddVote = () => {
                 })
             } else {
                 APIputComplaint(data_1.add_form.id, data_1.add_form).then(res => {
+                    console.log(data_1.add_form.catpro)
                     getFuncVoteList()
                     data_1.add_switch = false
                     ElMessage.success('修改成功 ')
@@ -931,10 +1011,10 @@ import {
 const popupFuncAdd4 = val => {
     popup_4.msg = {}
     let data = {
-        type:popup_4.form.type,
-        status:popup_4.form.status
+        type: popup_4.form.type,
+        status: popup_4.form.status
     }
-    APIpostIllegal(popup_4.form.id, popup_4.form).then(res => {
+    APIpostIllegal(popup_4.form.id, popup_4.form).then(() => {
         ElMessage.success('添加违建成功')
         popup_4.switch = false
         refreshFunc()
@@ -942,6 +1022,76 @@ const popupFuncAdd4 = val => {
         ElMessage.error('添加违建失败')
     })
 }
+// 待处理点击事件
+const index = ref(1)
+const noDeal = val => {
+    index.value = val
+    data_1.page = 1
+    data_1.list.type = 0
+    let data1 = {
+        page: data_1.page,
+        per_page: data_1.per_page,
+        kind: 2,
+        status: val
+    }
+    APIgetComplaintList(data1).then(res => {
+        console.log(res)
+        data_1.total = res.length
+        data_1.list = res
+    })
+}
+const flag = ref(true)
+const StatusFunk = val => {
+    noDeal(val)
+    console.log(index.value)
+    flag.value = !flag.value
+}
+const integer = ref(false)
+import {
+    APIpostAdComment,
+    APIgetAdCommentList
+} from '@/api/custom/custom.js'
+const switchFunk = () => {
+    // row.comment == 1
+    if (data_1.list.comment == 1) {
+        APIpostAdComment(data_1.add_form.id, { scoreper: 10 }).then(res => {
+            console.log(res)
+        })
+    }
+    // data_1.add_form = {
+    //     comment: row.comment,
+    //     king: 2
+    // }
+    // data_1.add_form.comment == row.comment
+    // data_1.add_form.kind == 2
+    // APIputComplaint(row.id, data_1.add_form).then(res => {
+    //     console.log(data_1.add_form.comment)
+    //     getFuncVoteList()
+    // }).catch(err => {})
+    // APIgetAdCommentList(id).then(res => {
+    //     console.log(res)
+    // })
+    // APIgetComplaintDetails(row.id).then(res => {
+    //     console.log(res)
+    //     data_1.add_form = res
+    // let arr = []
+    // for (let i in res.affix) {
+    //     if (res.affix[i]) {
+    //         arr.push({
+    //             name: res.affix[i]
+    //         })
+    //     }
+    // }
+    // file_list.value = arr
+    // data_1.add_switch = true
+    // })
+    // console.log(res)
+    // APIputComplaint(row.id, data_1.add_form).then(res => {
+    //     console.log(data_1.add_form)
+    //     getFuncVoteList()
+    // }).catch(err => {})
+}
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -951,6 +1101,7 @@ const refreshFunc = () => {
     }
     data_1.switch_search = false
     data_1.page = 1
+    index.value = 9
     getFuncVoteList()
 }
 watch(() => data_1.page, new_val => {
@@ -968,7 +1119,7 @@ const opts_all = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['flg_type','tousu_type_kind' ,'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
+getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.kind[1].key).then(res => {
         console.log(res)
@@ -978,10 +1129,41 @@ getOpts(['flg_type','tousu_type_kind' ,'toushu_status', 'toushu_ano', 'toushu_pu
         opts_all.obj.toushu_user_type = res
     })
 })
-
+import { Search, Plus } from '@element-plus/icons-vue'
 </script>
 <style lang="scss" scoped>
     ::v-deep .el-cascader {
         width: 100%;
+    }
+    .search {
+        background-color: #fafafa;
+        height: 150px;
+        width: 100%;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+    .searchKey {
+        margin-right: 10px;
+    }
+    .searchSele {
+        margin: 10px 0 0 15px;
+    }
+    .btn {
+        margin-bottom: 15px;
+    }
+    .noDeal {
+        margin-left: 12px;
+    }
+    .details {
+        text-decoration: inherit;
+        font-size: small;
+        margin: 0 10px;
+    }
+    .el-button--small {
+        height: 32px;
+        width: 58px;
+    }
+    .el-badge {
+        margin-right: 25px;
     }
 </style>

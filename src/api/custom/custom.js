@@ -3,8 +3,8 @@ import api2 from '@/api/index2.js'
 import api9 from '@/api/index9.js'
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 查看
-export function APIgetAdCommentList(tgtid, params) {
-    return api9.get(`commentcfg/${tgtid}`, { params: params })
+export function APIgetAdCommentList(tgtid) {
+    return api9.get(`commentcfg/${tgtid}`)
 }
 // 修改
 export function APIpostAdComment(tgtid, data) {
@@ -16,8 +16,8 @@ export function APIdeleteAdComment(tgtid) {
 }
 // 评论
 // 列表
-export function APIgetCommentList(tgtid, params) {
-    return api2.get(`target/${tgtid}/comment`, { params: params })
+export function APIgetCommentList(params) {
+    return api2.get('/comment', params)
 }
 // 详情
 export function APIgetCommentDetails(id) {
@@ -169,8 +169,8 @@ export function APIgetComplaintList(params) {
     return api2.get('complaint', { params: params })
 }
 // 详情
-export function APIgetComplaintDetails(complaint) {
-    return api2.get(`complaint/${complaint}`)
+export function APIgetComplaintDetails(complaint, data) {
+    return api2.get(`complaint/${complaint}`, data)
 }
 // 修改
 export function APIputComplaint(complaint, data) {
@@ -637,7 +637,43 @@ export function APIgetFilesList(params) {
 export function APIpostFilesList(data) {
     return api2.post('/houseimptask', data)
 }
-
+// 资讯
+// 资讯类别管理列表
+export function APIgetInforCategoryList(params) {
+    return api2.get('/newscate', params)
+}
+// 资讯类别管理添加
+export function APIpostInforCategory(data) {
+    return api.post('/newscate', data)
+}
+// 资讯类别管理修改
+export function APIputInforCategory(id, data) {
+    return api2.get(`/newscate/${id}`, data)
+}
+// 资讯类别管理删除
+export function APIdeleteInforCategory(id) {
+    return api2.get(`/newscate/${id}`)
+}
+// 资讯管理列表
+export function APIgetInforManageList(params) {
+    return api2.get('/news', { params: params })
+}
+// 资讯管理详情
+export function APIgetInforManageDetails(id) {
+    return api2.get(`/news/${id}`)
+}
+// 资讯管理添加
+export function APIpostInforManage(data) {
+    return api.post('/news', data)
+}
+// 资讯管理修改
+export function APIputInforManage(id, data) {
+    return api2.get(`/news/${id}`, data)
+}
+// 资讯管理删除
+export function APIdeleteInforManage(id) {
+    return api2.get(`/news/${id}`)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 文件上传获取配置 { 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }
 export function APIpostFiles(data) {
@@ -728,7 +764,7 @@ export function APIputAPP(id, data) {
 }
 // 添加
 export function APIpostAPP(data) {
-    return api2.post(`/apps`, data)
+    return api2.post('/apps', data)
 }
 // APP 菜单管理
 // 列表
@@ -745,7 +781,7 @@ export function APIputAppMenu(id, data) {
 }
 // 添加
 export function APIpostAppMenu(data) {
-    return api2.post(`/appmenu`, data)
+    return api2.post('/appmenu', data)
 }
 // APP 版本管理
 // 列表
@@ -762,7 +798,7 @@ export function APIputAppVersion(id, data) {
 }
 // 添加
 export function APIpostAppVersion(data) {
-    return api2.post(`/appversion`, data)
+    return api2.post('/appversion', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 企业

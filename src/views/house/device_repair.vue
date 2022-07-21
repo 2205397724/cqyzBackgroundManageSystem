@@ -35,9 +35,19 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="id" label="维保名称" width="250">
+                        <el-table-column prop="id" label="维保名称">
                             <template #default="scope">
                                 <span>{{ scope.row.title }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="维保id">
+                            <template #default="scope">
+                                <span>{{ scope.row.id }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="设备id">
+                            <template #default="scope">
+                                <span>{{ scope.row.did }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="cid" label="类型" width="90">
@@ -45,7 +55,7 @@
                                 <span>{{ getOptVal(opts_all.obj.repair_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="是否显示" width="180">
+                        <el-table-column prop="id" label="是否显示" width="90">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                             </template>
@@ -106,7 +116,7 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="设备"
+                                label="设备id"
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.did?from_error.msg.did[0]:''"
                             >
@@ -220,7 +230,7 @@
             <div class="details-box">
                 <div class="item">
                     <div class="left">维保名称</div>
-                    <div class="right">{{ data_details.item.name }}</div>
+                    <div class="right">{{ data_details.item.title }}</div>
                 </div>
                 <div class="item">
                     <div class="left">设备id</div>

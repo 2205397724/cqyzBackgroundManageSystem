@@ -155,15 +155,14 @@ const loadNode = (node, resolve) => {
     }
     if (node.data.next_type == 'zone') {
         APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: node.data.id }).then(res => {
-            console.log(res)
             let tree_arr = []
             let dis = false
-            // for (let i in disabled.value) {
-            //     if (disabled.value[i] == node.level) {
-            //         dis = true
-            //         break
-            //     }
-            // }
+            for (let i in disabled.value) {
+                if (disabled.value[i] == node.level) {
+                    dis = true
+                    break
+                }
+            }
             for (let i in res) {
                 tree_arr.push({ name: res?.[i]?.name, type: 'zone', next_type: 'building', id: res.items?.[i]?.id, data: res.items?.[i], disabled: dis  })
             }
@@ -175,12 +174,12 @@ const loadNode = (node, resolve) => {
         APIgetBuildListHouse({ page: 1, per_page: 500, zone_id: node.data.id }).then(res => {
             let tree_arr = []
             let dis = false
-            // for (let i in disabled.value) {
-            //     if (disabled.value[i] == node.level) {
-            //         dis = true
-            //         break
-            //     }
-            // }
+            for (let i in disabled.value) {
+                if (disabled.value[i] == node.level) {
+                    dis = true
+                    break
+                }
+            }
             for (let i in res) {
                 tree_arr.push({ name: res?.[i]?.name, type: 'building', next_type: 'units', id: res?.[i]?.id, data: res?.[i], disabled: dis })
             }

@@ -69,7 +69,7 @@ const constantRoutes = [{
             ]
         }
     ]
-    // 公示
+    // 民事
 import articletplArchive from './modules/articletpl/archive.js'
 import articletplArticle from './modules/articletpl/article.js'
 import articletplArticleread from './modules/articletpl/articleread.js'
@@ -105,7 +105,9 @@ import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
 import eventRepair from './modules/event/repair.js'
-
+// 资讯
+import informationManage from './modules/information/manage.js'
+import informationCategory from './modules/information/category.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
 import setupFile from './modules/setup/file.js'
@@ -188,6 +190,17 @@ const asyncRoutes = [{
             eventComplaint,
             eventIllegal,
             eventRepair
+        ]
+    },
+    {
+        meta: {
+            title: '资讯',
+            icon: 'apply',
+            auth: [' information', '*']
+        },
+        children: [
+            informationManage,
+            informationCategory
         ]
     },
     {

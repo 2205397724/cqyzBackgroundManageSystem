@@ -367,7 +367,7 @@ const formFnUpload = () =>{
     } else {
         APIpostDeviceArchive(from_examine.item).then(res => {
                 refreshFunc()
-                ElMessage.success('添加失败')
+                ElMessage.success('添加成功')
                 switch_examine.value = false
         }).catch(err => {
             ElMessage.error('添加失败')
@@ -445,11 +445,7 @@ const getTabListFunc = () => {
 const deleteFunc = val => {
     APIdeleteDeviceArchive(val.id).then(res => {
             refreshFunc()
-<<<<<<< HEAD
-            ElMessage.success(res.msg)
-=======
             ElMessage.success('删除成功')
->>>>>>> admin2
     })
 }
 // 添加模板
@@ -466,10 +462,6 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
-<<<<<<< HEAD
-            console.log(res)
-=======
->>>>>>> admin2
             from_examine.item = res
             switch_examine.value = true
     })
