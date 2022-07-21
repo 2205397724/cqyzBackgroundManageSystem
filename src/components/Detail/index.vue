@@ -261,7 +261,11 @@
         APImodifySurveyTopic,
         APIgetSurveyTopicDetail,
         // 获取问卷范围城市
-        APIgetChinaRegion
+        APIgetChinaRegion,
+        APIgetResidentialListHouse,
+        APIgetBuildListHouse,
+        APIgetUnitsListHouse,
+        APIgetHouseListHouse
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -310,6 +314,7 @@
     ]
     // 可多选
     const prop = { multiple: true }
+    const city = []
     const cities = [
   {
     value: 50,
@@ -532,8 +537,25 @@
     }
     // 获取活动参与范围的城市
     const getCities = () => {
+        // 区域代码
         APIgetChinaRegion().then(res => {
             console.log(res.data)
+        })
+        // 小区
+        APIgetResidentialListHouse().then(res => {
+            console.log(res)
+        })
+        // 楼栋
+        APIgetBuildListHouse().then(res => {
+            console.log(res)
+        })
+        // 单元
+        APIgetUnitsListHouse().then(res => {
+            console.log(res)
+        })
+        // 房屋
+        APIgetHouseListHouse().then(res => {
+            console.log(res)
         })
     }
 </script>
