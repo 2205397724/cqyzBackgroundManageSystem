@@ -660,7 +660,12 @@ const popupFuncAdd3 = () => {
 const tableData = reactive({
     arr: []
 })
-
+import {
+    APIgetAdCommentList
+} from '@/api/custom/custom.js'
+APIgetAdCommentList(route.query.id).then(res=>{
+    console.log(res)
+})
 // 删除评论
 const toggleDelete = () => {
     console.log(selectArray.arr[0].tgtid)
