@@ -97,6 +97,8 @@ import eventDeviceRepair from './modules/house/device_repair.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
+import userRoles from './modules/user/roles'
+import userPerms from './modules/user/perms'
 // 事件
 import eventFlow from './modules/event/flow.js'
 import eventEvents from './modules/event/flow_events.js'
@@ -211,7 +213,9 @@ const asyncRoutes = [{
         },
         children: [
             userRegister,
-            userGroup
+            userGroup,
+            userRoles,
+            userPerms
         ]
     },
     {

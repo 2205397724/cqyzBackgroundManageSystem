@@ -304,7 +304,11 @@
                             </div>
                             <div class="item">
                                 <div class="left">小区>楼栋>单元</div>
+<<<<<<< HEAD
                                 <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div>
+=======
+                                <div class="right">{{ data_details.item.zoneinfo['name'] }} {{ data_details.item.buildinginfo['name'] }} {{ data_details.item.unitinfo['name'] }}</div>
+>>>>>>> test
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>
@@ -607,6 +611,7 @@ import {
 
 } from '@/api/custom/custom.js'
 // 维保记录
+<<<<<<< HEAD
 const repairInfo = val => {
     let params1 = {
         page: page.value,
@@ -617,6 +622,17 @@ const repairInfo = val => {
         console.log(res)
         data_repair.arr = res
         switch_details.value = true
+=======
+const deviceRepair = () => {
+    switch_repair.value = true
+}
+// 详情
+const detailsFunc = val => {
+    data_dialog.obj = val
+    APIgetDeviceDetails(val.id).then(res => {
+            data_details.item = res
+            switch_details.value = true
+>>>>>>> test
     })
 }
 const deviceRepair = val => {

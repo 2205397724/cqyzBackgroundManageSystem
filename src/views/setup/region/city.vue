@@ -398,6 +398,7 @@ const detailsFunc = val => {
     })
 }
 const switchFunk = row => {
+<<<<<<< HEAD
     // let status = row.active == '1' ? '启用' : '禁用'
     // ElMessage({
     //     type: 'warning',
@@ -424,6 +425,20 @@ const switchFunk = row => {
     // }).catch(err => {
     //     from_error.msg = err.data
     // })
+=======
+    let status = row.active == '1' ? '启用' : '禁用'
+    ElMessage({
+        type: 'warning',
+        showClose: true,
+        message: `已${status}此接口状态`
+    })
+    APIputCity(row.id, row).then(res => {
+         console.log(res)
+        if (res.status === 200) {
+            refreshFunc()
+        }
+    })
+>>>>>>> test
 }
 // 监听分页
 watch(page, () => {
