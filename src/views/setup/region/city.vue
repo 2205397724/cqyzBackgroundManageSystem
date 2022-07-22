@@ -397,7 +397,6 @@ const detailsFunc = val => {
     })
 }
 const switchFunk = row => {
-<<<<<<< HEAD
     let status = row.active == '1' ? '启用' : '禁用'
     ElMessage({
         type: 'warning',
@@ -410,7 +409,6 @@ const switchFunk = row => {
             refreshFunc()
         }
     })
-=======
     // let status = row.active == '1' ? '启用' : '禁用'
     // ElMessage({
     //     type: 'warning',
@@ -437,7 +435,6 @@ const switchFunk = row => {
     // }).catch(err => {
     //     from_error.msg = err.data
     // })
->>>>>>> admin2
 }
 // 监听分页
 watch(page, () => {

@@ -1133,3 +1133,64 @@ export function APIgenerateRoutesAtBack() {
 // export function delLateFee(id) {
 //     return api.delete('/backend/money_overdue_rules/'+id)
 // }
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 获取问卷列表
+export function APIgetSurvey(params) {
+    return api.get('/survey', { params: params })
+}
+// 添加问卷
+export function APIaddSurvey(params) {
+    return api.post('/survey', params)
+}
+// 删除问卷
+export function APIdeleteSurvey(id) {
+    return api.delete('/survey/'+ id)
+}
+// 修改问卷信息
+export function APImodifySurvey(id,data) {
+    return api.put('/survey/'+id,data)
+}
+// 获得问卷详情
+export function APIgetSurveyDetails(id) {
+    return api.get('/survey/'+ id)
+}
+
+
+// 问卷设置范围列表
+export function APIsetSurvey() {
+    return api.get('/s/can')
+}
+// // 问卷设置范围详情
+// export function APIsetSurveyDetails(props) {
+//     return api.get('/s/can/'+ props)
+// }
+// // 添加问卷设置范围
+// export function APIsetSurvey() {
+//     return api.post('/s/can')
+// }
+// // 删除问卷设置范围
+// export function APIsetSurvey() {
+//     return api.delete('/s/can')
+// }
+
+
+// 获取问卷题目列表
+export function APIgetSurveyTopic(params) {
+    return api.get('/s/topic',{ params: params })
+}
+// 获取问卷题目详情
+export function APIgetSurveyTopicDetail(props) {
+    return api.get('/s/topic/'+props)
+}
+// 添加问卷题目
+export function APIaddSurveyTopic(params) {
+    return api.post('/s/topic/',params)
+}
+// 修改问卷题目
+export function APImodifySurveyTopic(id,props) {
+    return api.put('/s/topic/'+id,props)
+}
+// // 删除问卷题目
+export function APIdeleteSurveyTopic(props) {
+    return api.delete('/s/topic/'+props)
+}
