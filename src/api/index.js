@@ -24,7 +24,7 @@ const api = axios.create({
         import.meta.env.VITE_OPEN_PROXY === 'true' ?
         '/proxy/' :
         import.meta.env.VITE_APP_API_BASEURL,
-    timeout: 3000,
+    timeout: 6000,
     responseType: 'json'
 })
 

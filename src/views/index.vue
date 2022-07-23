@@ -84,18 +84,82 @@
                 </el-col>
             </el-row>
         </page-main>
+        <el-dialog title="请选择地区" v-model="switch_choose_city.item"
+        width="40%" :close-on-click-modal="false" :show-close="false">
+            <el-select v-model="choosed_city" placeholder="请选择城市" @change="choose_cityFun">
+              <el-option :label="city.name" :value="city.china_code" v-for="city in city_list.arr" :key="city.id"></el-option>
+            </el-select>
+            <template #footer>
+                <el-button type="primary" @click="choose_city_end">确认</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
-// 公共导入 cscs
-import { reactive } from 'vue'
-
-// 数据
+import {useUserOutsideStore} from "@/store/modules/user"
 import {
     APIgetUserinfo,
     APIgetTipsnum,
-    APIgetEventnum
+    APIgetEventnum,
+    APIgetCityNotPm
 } from '@/api/custom/custom.js'
+import {ElMessage} from "element-plus"
+const userStore=useUserOutsideStore()
+// 公共导入 cscs
+const switch_choose_city=ref(false)
+const choosed_city=ref("")
+
+const city_list=reactive({
+    arr:[]
+})
+const choose_city_end=()=>{
+    if(!choosed_city.value){
+        ElMessage.error("请选择城市")
+        return
+    }
+    ElMessage.success("选择成功")
+    switch_choose_city.value=false
+}
+const choose_city=()=>{//进入首页判断
+    userStore.isChooseCity=sessionStorage.getItem("IS_chooseCity")
+    if(userStore.isChooseCity){
+        switch_choose_city.value=false
+        console.log("ssss")
+    }else{
+        switch_choose_city.value=true
+        console.log("ss")
+        // userStore.isChooseCity=false
+        APIgetCityNotPm().then(res=>{
+            console.log(res)
+            city_list.arr=res.data
+        })
+    }
+    // if(sessionStorage.getItem('IS_chooseCity')){
+    //     userStore.isChooseCity=sessionStorage.getItem('IS_chooseCity')
+    //     userStore.city=sessionStorage.getItem('city')
+    //     return
+    // }else{
+    //     switch_choose_city.value=true
+    //     APIgetCityNotPm().then(res=>{
+    //         console.log(res)
+    //         city_list.arr=res.data
+    //     })
+    // }
+}
+choose_city()
+const choose_cityFun=(val)=>{
+    userStore.city=val
+    userStore.isChooseCity=true
+    sessionStorage.setItem('city',val)
+    sessionStorage.setItem('IS_chooseCity',true)
+
+}
+import { reactive } from 'vue'
+// const refreshCurPage=()=>{
+//     location.reload()
+// }
+// 数据
+
 const data = reactive({ userinfo: '', tipsnum: '', eventnum: '', echarts: '' })
 APIgetUserinfo().then(res => {
     console.log(res)

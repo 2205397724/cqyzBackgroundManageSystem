@@ -5,7 +5,6 @@ import { ElMessage, ElLoading } from 'element-plus'
 import { useUserOutsideStore } from '@/store/modules/user'
 import SHA256 from 'crypto-js/sha256'
 var loading = ''
-
 const toLogin = () => {
     const userOutsideStore = useUserOutsideStore()
     userOutsideStore.logout().then(() => {
@@ -51,7 +50,15 @@ api.interceptors.request.use(
         var secret = 'secret'
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
-        request.headers['X-Cc'] = '500101'
+        // if(userOutsideStore.utype=='ptzxcvbnm159'){
+        //     userOutsideStore.isChooseCity=true
+        // }else{
+            request.headers['X-Cc'] = userOutsideStore.city
+        // }
+
+        // if(!request.headers['X-Cc']){
+        //     userOutsideStore.isChooseCity=false
+        // }
             // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {
             // request.data = qs.stringify(request.data, {

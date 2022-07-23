@@ -991,6 +991,10 @@ export function APIpostProperty(data) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // china
+//获取可服务的城市
+export function APIgetCityNotPm(){
+    return api.get(`/srv-city`)
+}
 // 列表
 export function APIgetChinaList(params) {
     return api.get('china', { params: params })
