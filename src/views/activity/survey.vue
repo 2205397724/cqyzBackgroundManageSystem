@@ -49,9 +49,9 @@
             <el-table-column label="问卷状态" width="200px"  align="center">
                 <template #default="scope">
                     <!-- <span>{{ scope.row.status }}</span> -->
-                    <el-button v-if="scope.row.status == 1" size="small" type="danger" round>未开始</el-button>
-                    <el-button v-else-if="scope.row.status == 2" size="small" type="success" round>进行中</el-button>
-                    <el-button v-else="scope.row.status == 3" size="small" type="info" round>已结束</el-button>
+                    <el-button v-if="scope.row.status == '1'" size="small" type="danger" round>未开始</el-button>
+                    <el-button v-else-if="scope.row.status == '2'" size="small" type="success" round>进行中</el-button>
+                    <el-button v-else="scope.row.status == '3'" size="small" type="info" round>已结束</el-button>
                 </template>
             </el-table-column>
             <el-table-column label="问卷时间" align="center">
@@ -161,8 +161,8 @@
                                 <el-col :md="24" :lg="12">
                                     <el-form-item label="开放—关闭" label-width="120px" prop="pub" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                         <el-radio-group v-model="from_examine.item.pub" class="ml-4">
-                                            <el-radio label="1" size="large">1开放</el-radio>
-                                            <el-radio label="0" size="large">0关闭</el-radio>
+                                            <el-radio label="1" size="large">开放</el-radio>
+                                            <el-radio label="0" size="large">关闭</el-radio>
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -173,9 +173,9 @@
                                             placeholder=""
                                         ></el-input> -->
                                         <el-radio-group v-model="from_examine.item.status" class="ml-4">
-                                            <el-radio label="1" size="large">1未开始</el-radio>
-                                            <el-radio label="2" size="large">2进行中</el-radio>
-                                            <el-radio label="3" size="large">3已结束</el-radio>
+                                            <el-radio label="1" size="large">未开始</el-radio>
+                                            <el-radio label="2" size="large">进行中</el-radio>
+                                            <el-radio label="3" size="large">已结束</el-radio>
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -285,24 +285,24 @@
     let switch_examine = ref(false)
     let from_examine = reactive({
         item: {
-            'type':83,
-            'author_type': 1,
-            'author_tgt': '62bd6f76ee071f1789147d41',
-            'author_cc': '500101001002',
-            'name': '高温补贴征集',
-            'startat':'2022-07-13 11:00:00',
-            'endat': '2022-08-13 11:00:00',
-            'content':'是否需要安装空调',
-            'ticketall':2,
-            'areaall':42,
-            'pub':1,
-            'status':1,
-            'vmax':14,
-            'uid':"62d0c1f95c611c26d344b114",
-            'utype':'mbr',
-            'id':'62bd6f76ee071f1789147d41',
-            'updated_at': '2022-07-13 11:00:00',
-            'created_at': '2022-07-13 11:00:00',
+            // 'type':83,
+            // 'author_type': 1,
+            // 'author_tgt': '62bd6f76ee071f1789147d41',
+            // 'author_cc': '500101001002',
+            // 'name': '高温补贴征集',
+            // 'startat':'2022-07-13 11:00:00',
+            // 'endat': '2022-08-13 11:00:00',
+            // 'content':'是否需要安装空调',
+            // 'ticketall':2,
+            // 'areaall':42,
+            // 'pub':1,
+            // 'status':1,
+            // 'vmax':14,
+            // 'uid':"62d0c1f95c611c26d344b114",
+            // 'utype':'mbr',
+            // 'id':'62bd6f76ee071f1789147d41',
+            // 'updated_at': '2022-07-13 11:00:00',
+            // 'created_at': '2022-07-13 11:00:00',
         }
     })
     // 开始结束时间
@@ -374,6 +374,7 @@
         formEl.validate(valid => {
             if(valid){
                 if(str_title.value == '修改'){
+                    console.log(from_examine.item)
                     APImodifySurvey(id,from_examine.item).then(res => {
                         if (res.status === 200) {
                             refreshFunc()
@@ -453,9 +454,9 @@
         from_error.msg = {}
         str_title.value = '修改'
         APIgetSurveyDetails(val.id).then(res => {
-            // console.log(val.id)
             if (res.status == 200) {
                 from_examine.item = res.data
+                from_examine.item.pub += ''
                 switch_examine.value = true
             }
         })

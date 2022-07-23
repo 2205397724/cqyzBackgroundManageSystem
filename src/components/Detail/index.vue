@@ -66,30 +66,60 @@
                 </div>
             </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="参与范围" name="2" >
+        <el-tab-pane label="设置参与范围" name="2" >
             <div class="font-darkgrey size-lg" style="background-color: #fafafa;">
                 <span class="m-40">
                     已选择<span class="size-lx strong m-10">328</span>户
                 </span>
-                <el-button type="primary" class="m-10">修改</el-button>
-                <el-button type="primary" class="m-10">保存</el-button>
+                <el-button type="primary" class="m-10" @click="submit">提交</el-button>
             </div>
             <el-scrollbar height="400px">
                 <!-- 树形结构 -->
                 <div class="tree-item" >
                     <div style="height: calc(100% - 60px);">
-                    <position-tree-third
-                        :tree_item = "tree_item"
-                        :type="no_zone"
-                        @checkFunc="checkFunc"
-                    />
-                </div >
+                        <position-tree-third
+                            :tree_item = "tree_item"
+                            :type="no_zone"
+                            @checkFunc="checkFunc"
+                        />
+                    </div >
                     <!-- 房屋 -->
-                    <div class="houses bgbfa ">
-                        <div>1313212313</div>
+                    <div class="houses p-l-20">
+                        <div style="width: 100%;">
+                            <!-- <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;"
+                            >
+                                <el-table-column prop="name" label="小区" width="700px">
+                                    <template #default="scope">
+                                        <span>{{scope.row.floor_truth}}</span>
+                                        <div v-for="item in scope.row.houses">{{item.name}}</div>
+                                    </template>
+                                </el-table-column>
+                            </el-table> -->
+                            <div v-for="item in data_tab.arr" class="housesStyle">
+                                <span class="floor">{{item.floor_truth}}层</span>
+                                <!-- <span class="floorHouse" v-for="items in item.houses"><span><el-button>{{items.name}}</el-button></span></span> -->
+                                <span class="floorHouse" v-for="items in item.houses"><span @click="exchange(items.id)" :class="[isSelect?'hover':'']">{{items.name}}</span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </el-scrollbar>
+        </el-tab-pane>
+        <el-tab-pane label="参与范围" name="6" >
+            <div class="font-darkgrey size-lg" style="background-color: #fafafa;">
+                <span class="m-40">
+                    已选择<span class="size-lx strong m-10">{{data_range.arr.length}}</span>户
+                </span>
+                <el-button type="primary" class="m-10">修改</el-button>
+                <el-button type="primary" class="m-10">保存</el-button>
+            </div>
+            <div v-for="item in data_range.arr" >
+                <span>{{item.id}}</span>
+            </div>
         </el-tab-pane>
         <el-tab-pane label="问卷题目" name="3">
             <el-scrollbar height="400px">
@@ -189,10 +219,10 @@
                             <el-col>
                                 <el-form-item label="类型"  label-width="120px">
                                     <el-radio-group class="ml-4" v-model="topic_examine.item.type">
-                                        <el-radio label="1" size="large">单选</el-radio>
-                                        <el-radio label="2" size="large">多选</el-radio>
-                                        <el-radio label="3" size="large">主观填空</el-radio>
-                                        <el-radio label="0" size="large">文字描述</el-radio>
+                                        <el-radio label='1' size="large">单选</el-radio>
+                                        <el-radio label='2' size="large">多选</el-radio>
+                                        <el-radio label='3' size="large">主观填空</el-radio>
+                                        <el-radio label='0' size="large">文字描述</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </el-col>
@@ -265,7 +295,8 @@
 <script setup>
     import {
         APIgetSurveyDetails,
-        APIsetSurvey,
+        // 问卷范围
+        APIgetSurveyRange,
         APIgetSurveyTopic,
         APIdeleteSurveyTopic,
         APIaddSurveyTopic,
@@ -273,7 +304,8 @@
         APIgetSurveyTopicDetail,
         // 获取问卷范围城市
         APIgetChinaRegion,
-        APIgetHouseListSort
+        APIgetHouseListSort,
+        APIaddSurveyRange
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -370,31 +402,23 @@
     // 参与详情
     const radio = ref('网络参与')
     // 参与范围
-    const data_range = reactive({})
+    let data_range = reactive({
+        arr:[]
+    })
     // 添加问卷题目
     const str_title = ref('添加')
     let switch_examine = ref(false)
     let topic_examine = reactive({
         item: {
-            'sid':'62d27c25ce5af423097e55f1',
-            'title':'',
-            'extra':false,
-            'type':1,
-            'score_calc':1,
-            'score':'',
-            'sort':5,
-            'opts': [
-                // {
-                //     'content':'同意',
-                //     'score':100,
-                //     'sort':40
-                // },
-                // {
-                //     'content':'不同意',
-                //     'score':0,
-                //     'sort':30
-                // },
-            ]
+            // 'sid':'62d27c25ce5af423097e55f1',
+            // 'title':'',
+            // 'extra':false,
+            // 'type':1,
+            // 'score_calc':1,
+            // 'score':'',
+            // 'sort':5,
+            // 'opts': [
+            // ]
         }
     })
     let opts = reactive([
@@ -413,13 +437,6 @@
         console.log(props.id)
         detailsFunc(props.id)
     })
-    onUpdated(()=> {
-        console.log("onUpdated",)
-    })
-    // 监听分页
-    watch(page, () => {
-        getTabListFunc()
-    })
     // 切换tab-pane触发请求事件
     const changePane = (tab,event) => {
         // 代理
@@ -427,15 +444,16 @@
         // 指针事件pointerEvent（未使用）
         // console.log(event)
         // console.log(tab.props.name)
-        if(tab.props.name == 2){
-            APIsetSurvey().then(res => {
-                // console.log(res.data)
-                // data_range = res.data
-                // console.log(data_range)
+        if(tab.props.name == 6){
+            APIgetSurveyRange().then(res => {
+                console.log('xxx',res.data)
+                data_range.arr = res.data
+                console.log(data_range.arr.length)
                 // getCities()
             })
         }else if(tab.props.name == 3){
             topicsFunc()
+        }else if(tab.props.name == 4){
         }else{
 
         }
@@ -463,14 +481,16 @@
             }
         })
     }
-    // 添加问卷题目、修改问卷题目
+    // 添加问卷题目
     const addServeyTopic = () => {
+        console.log(props.id)
         str_title.value = '添加'
         switch_examine.value = true
         // 清除问卷的信息
-        topic_examine.item = []
+        topic_examine.item = {'sid':props.id,'extra':null,'sort':5}
         opts.length = 0
     }
+    // 修改问卷题目
     const modifyServeyTopic = (val) =>{
         console.log(val.id)
         str_title.value = '修改'
@@ -478,6 +498,9 @@
         APIgetSurveyTopicDetail(val.id).then(res => {
             if(res.status == 200 ) {
                 topic_examine.item = res.data
+                // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
+                topic_examine.item.type += ''
+                topic_examine.item.score_calc += ''
                 // 清除选项缓存数据
                 opts.length = 0
                 // 将选项数据遍历插入数组对象
@@ -501,13 +524,13 @@
     const refreshFunc = () => {
         topicsFunc()
     }
-    // 确定提交添加修改问卷
+    // 确定提交添加修改问卷题目
     const dialogExamineCloseFunc = (id) => {
         topic_examine.item.opts = opts
         // console.log(topic_examine.item)
         if(str_title.value == '添加') {
+            console.log('qqqqqq',topic_examine.item)
             APIaddSurveyTopic(topic_examine.item).then(res => {
-                // console.log(res)
                 if (!res.code) {
                     refreshFunc()
                     // ElMessage.success(res.msg)
@@ -580,74 +603,59 @@
     let data_tab = reactive({
         arr: []
     })
-    const active_obj = reactive({
-        obj: {}
-    })
     const edit_house = ref(false)
-    // const showHouseFunc = val => {
-    //     // console.log(val)
-    //     tree_item.obj = {
-    //         id: val.id,
-    //         name: val.name,
-    //         next_type: 'building',
-    //         type: 'region'
-    //     }
-    //     edit_house.value = true
-    // }
+    let houseableType = ref()
+    let houseableTgt = ref()
     const checkFunc = val => {
-        active_obj.obj = val
-        // console.log(val)
-        let cur=active_obj.obj.name||""
+        console.log('aaa',val)
+        // if判断组件传递的type，指定添加问卷范围类型和范围类型对应的值
+        if(val.type == 'houses'){
+            houseableType = 1
+        }else if(val.type == 'units'){
+            houseableType = 2
+            houseableTgt = val.id
+        }else if(val.type == 'buildings'){
+            houseableType = 3
+            houseableTgt = val.id
+        }else if(val.type == 'zone'){
+            houseableType = 4
+            houseableTgt = val.id
+        }else if(val.type == 'region'){
+            houseableType = 5
+            houseableTgt = val.id
+        }
+        // console.log(houseableType)
+        if(val.type == 'units') {
+            // 获取房屋数据按楼栋楼层
+            APIgetHouseListSort({ houseable_type: 'units ', houseable_id: val.id }).then(res => {
+                console.log(res)
+                data_tab.arr=res.floors
+                console.log('bbb',data_tab.arr)
+            })
+        }
+    }
+    const submit = () => {
+        console.log(props.id,'1',houseableType,houseableTgt)
+        APIaddSurveyRange().then(res => {
+
+        })
     }
     const tree_item = ref({
-        // id: '50',
-        // name: '测试',
-        // next_type: 'region',
-        // type: 'region'
     })
+    // tree树形组件初始的请求
     APIgetChinaRegion().then(res => {
         tree_item.value.id = res.data[0].code
         tree_item.value.name = res.data[0].name
-        // tree_item.value.next_type = 'region'
-        // tree_item.value.type = 'region'
+        tree_item.value.type = 'region'
         tree_item.value.next_type = 'zone'
-        tree_item.value.type = 'zone'
-        // if(res.data.type) {
-        //     console.log('building')
-        // }
     })
-    // 展示房屋数据
-    // 判断是否选中房屋
-    const getHouses = (a) => {
-        const isGetHouses = a
-        console.log('aaaa',isGetHouses)
+    // 点击房屋的事件
+    let isSelect = false
+    const exchange = (id) => {
+        isSelect = !isSelect
+        console.log(isSelect,id)
     }
-    APIgetHouseListSort({ houseable_type: 'units', houseable_id: '62da5a8936c81e2c5e100708' }).then(res => {
-        console.log(res)
-        // city[0].children[0].children[0].children[0].children = []
-        //  res.forEach(element => {
-        //     city[0].children[0].children[0].children[0].children.push({'label':element.name,'value':element.sync_china_code,})
-        // })
-        // console.log(city)
-    })
-    // let data_tab = reactive({
-    //     arr: []
-    // })
-    const getTabListFunc = () => {
-        let params = {
-            page: page.value,
-            per_page: per_page.value
-        }
-        loading_tab.value = true
-        APIgetResidentialListHouse(params).then(res => {
-            console.log(res)
-            // if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = data_tab.arr.length
-            // }
-        })
-    }
+
 </script>
 <style lang="scss" scoped>
 .record {
@@ -715,5 +723,28 @@
 }
 .display {
     display: flex;
+}
+.housesStyle {
+    display: flex;
+    .floor {
+        width: 50px;
+        margin: auto 0;
+        text-align: center;
+        color: #ccc;
+    }
+    .floorHouse {
+        span {
+            display: inline-block;
+            text-align: center;
+            width: 100px;
+            margin: 5px;
+            padding: 15px;
+            background-color: #e6e6ee;
+        }
+        .hover {
+            background-color: #439dfd;
+            color: #fff;
+        }
+    }
 }
 </style>

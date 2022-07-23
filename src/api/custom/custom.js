@@ -1157,17 +1157,17 @@ export function APIgetSurveyDetails(id) {
 
 
 // 问卷设置范围列表
-export function APIsetSurvey() {
+export function APIgetSurveyRange() {
     return api.get('/s/can')
 }
 // // 问卷设置范围详情
 // export function APIsetSurveyDetails(props) {
 //     return api.get('/s/can/'+ props)
 // }
-// // 添加问卷设置范围
-// export function APIsetSurvey() {
-//     return api.post('/s/can')
-// }
+// 添加问卷设置范围
+export function APIaddSurveyRange(params) {
+    return api.post('/s/can',params)
+}
 // // 删除问卷设置范围
 // export function APIsetSurvey() {
 //     return api.delete('/s/can')

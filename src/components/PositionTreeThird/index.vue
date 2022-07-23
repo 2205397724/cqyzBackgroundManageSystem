@@ -109,7 +109,7 @@ const loadNode = (node, resolve) => {
                     // console.log(res)
                     let tree_arr = []
                         res.forEach((element,i) => {
-                            tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'building', id: res[i].id })
+                            tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'buildings', id: res[i].id })
                         })
                     resolve(tree_arr)
                     emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
@@ -117,11 +117,11 @@ const loadNode = (node, resolve) => {
                 })
             break
             // 楼栋
-        case 'building':
+        case 'buildings':
             APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
                     res.forEach((element,i) => {
-                        tree_arr.push({ name: res[i].name, type: 'building', next_type: 'units', id: res[i].id })
+                        tree_arr.push({ name: res[i].name, type: 'buildings', next_type: 'units', id: res[i].id })
                     })
                 resolve(tree_arr)
             })
@@ -141,7 +141,7 @@ const loadNode = (node, resolve) => {
             APIgetHouseListHouse({ page: 1, per_page: 7, houseable_id: node.data.id }).then(res => {
                 let tree_arr = []
                     res.forEach((element,i) => {
-                        tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'house', })
+                        tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'houses', })
                     })
                 resolve(tree_arr)
             })
