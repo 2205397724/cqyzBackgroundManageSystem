@@ -97,9 +97,15 @@ const route = useRoute(), router = useRouter()
 
 import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
+<<<<<<< HEAD
 import { useUserOutsideStore } from '@/store/modules/user'
 const userStore = useUserOutsideStore()
 import {APIgetUser_where_group} from '@/api/custom/custom'
+=======
+import { useUserStore } from '@/store/modules/user'
+const userStore = useUserStore()
+// import { APIgetUser_where_group } from '@/api/custom/custom'
+>>>>>>> test
 const title = import.meta.env.VITE_APP_TITLE
 const user_utype=ref("")
 // 表单类型，login 登录，reset 重置密码
@@ -168,8 +174,21 @@ function handleLogin() {
             }
             console.log(data)
             userStore.login(data).then(() => {
+<<<<<<< HEAD
                 localStorage.removeItem("utype")
                 userStore.utype=data.auth_type
+=======
+                // APIgetUser_where_group().then(res => {
+                //     console.log(res)
+                //     let user_groupid_arr = []
+                //     res.data.forEach(item => {
+                //         user_groupid_arr.push(item.id)
+                //     })
+                //     let user_groupid_arr_promise = []
+                //     for (let i = 0;i < user_groupid_arr.length;i++)
+                //         console.log(user_groupid_arr)
+                // })
+>>>>>>> test
                 loading.value = false
                 localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
                 if (loginForm.value.remember) {
