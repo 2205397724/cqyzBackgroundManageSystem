@@ -20,24 +20,6 @@
                 <el-button v-if="dataForm.item.status !== 0 && dataForm.item.status !== 8" type="success" class="btn3" @click="setting_switch= true">
                     结案
                 </el-button>
-                <!-- </el-button-group> -->
-            </div>
-            <div>
-                <span class="m-r-10">评论:</span>
-                <el-switch
-                    v-model="data_1.list.comment"
-                    class="mb-2"
-
-                    inline-prompt
-                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                    active-text="开启"
-                    inactive-text="关闭"
-                    :active-value="1"
-                    :inactive-value="0"
-                    @change="switchFunk"
-                />
             </div>
             <div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -122,86 +104,77 @@
                     </el-tab-pane>
                     <el-tab-pane label="业主评论" name="3">
                         <el-scrollbar height="800px">
+                            <comment-switch :id="route.query.id" />
                             <div>
-                                <el-scrollbar height="400px">
-                                    <el-table
-                                        ref="multipleTableRef"
-                                        :data="tableData.arr"
-                                        style="width: 100%;"
-                                        @selection-change="handleSelectionChange"
-                                    >
-                                        <el-table-column type="selection" width="50" />
-                                        <el-table-column label="评论内容" width="200" show-overflow-tooltip="true">
-                                            <template #default="scope">
-                                                <span>{{ scope.row.content }} </span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column label="点赞" width="100">
-                                            <template #default="scope">
-                                                <span>{{ scope.row.zan }} </span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column label="状态" width="150">
-                                            <template #default="scope">
-                                                <el-button v-show="scope.row.status == 10" type="warning">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                                <el-button v-show="scope.row.status == 20" type="success">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                                <el-button v-show="scope.row.status == 30" type="danger">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column label="评分" width="100">
-                                            <template #default="scope">
-                                                <span>{{ scope.row.score }} </span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column label="作者" width="100">
-                                            <template #default="scope">
-                                                <span>{{ scope.row.atuname }} </span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column label="时间">
-                                            <template #default="scope">
-                                                <span>{{ scope.row.created_at }} </span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column fixed="right" label="操作" with="250">
-                                            <template #default="scope">
-                                                <el-button
-                                                    v-show="scope.row.status == 10"
-                                                    type="primary"
-                                                    @click="toggleSelection(scope.row)"
-                                                >
-                                                    审核
-                                                </el-button>
-                                                <el-button
-                                                    v-if="scope.row.status == 20 || scope.row.status == 30"
-                                                    type="success"
-                                                    @click="toggleSelection(scope.row)"
-                                                >
-                                                    修改
-                                                </el-button>
-                                                <el-button
-                                                    @click="clickFuncDetail(scope.row)"
-                                                >
-                                                    详情
-                                                </el-button>
-                                                <el-button
-                                                    type="danger"
-                                                    @click="toggleDelete(scope.row)"
-                                                >
-                                                    删除
-                                                </el-button>
-                                            </template>
-                                        </el-table-column>
-                                        <!-- <el-table-column property="zan" label="点赞" width="120" />
-                                <el-table-column property="status" label="状态" /> -->
-                                    </el-table>
-                                <!-- <div style="margin-top: 20px;">
-                                    <el-button type="danger" :icon="Delete" @click="toggleDelete()">
-                                        删除
-                                    </el-button>
-                                    <el-button type="primary" :icon="Edit" @click="toggleSelection()">审核</el-button>
-                                </div> -->
-                                </el-scrollbar>
+                                <el-table
+                                    ref="multipleTableRef"
+                                    :data="tableData.arr"
+                                    style="width: 100%;"
+                                    @selection-change="handleSelectionChange"
+                                >
+                                    <el-table-column type="selection" width="50" />
+                                    <el-table-column label="评论内容" width="200" show-overflow-tooltip="true">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.content }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="点赞" width="100">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.zan }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="状态" width="150">
+                                        <template #default="scope">
+                                            <el-button v-show="scope.row.status == 10" type="warning">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
+                                            <el-button v-show="scope.row.status == 20" type="success">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
+                                            <el-button v-show="scope.row.status == 30" type="danger">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="评分" width="100">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.score }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="作者" width="100">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.atuname }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="时间">
+                                        <template #default="scope">
+                                            <span>{{ scope.row.created_at }} </span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column fixed="right" label="操作" with="250">
+                                        <template #default="scope">
+                                            <el-button
+                                                v-show="scope.row.status == 10"
+                                                type="primary"
+                                                @click="toggleSelection(scope.row)"
+                                            >
+                                                审核
+                                            </el-button>
+                                            <el-button
+                                                v-if="scope.row.status == 20 || scope.row.status == 30"
+                                                type="success"
+                                                @click="toggleSelection(scope.row)"
+                                            >
+                                                修改
+                                            </el-button>
+                                            <el-button
+                                                @click="clickFuncDetail(scope.row)"
+                                            >
+                                                详情
+                                            </el-button>
+                                            <el-button
+                                                type="danger"
+                                                @click="toggleDelete(scope.row)"
+                                            >
+                                                删除
+                                            </el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
                             </div>
                         </el-scrollbar>
                     </el-tab-pane>
@@ -482,7 +455,7 @@ import {
     // APIgetComplaintList
     APIgetComplaintDetails,
     APIgetCommentList,
-    APIpostComment,
+    // APIpostComment,
     APIgetCommentDetails,
     APIputComplaint
     // APIpostComplaint
@@ -522,7 +495,7 @@ APIgetComplaintDetails(route.query.id, { log: 'all' }).then(res => {
             res.totlogs[i].logable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.totlogs[i].logable.affix[j])
         }
     }
-    Name.value = dataForm.item.inifo.name
+    Name.value = dataForm.item.inifo['name']
     replayTotlogs.item = dataForm.item.totlogs
     replayLogable.item = replayTotlogs.item.logable
     console.log(replayTotlogs.item)
@@ -535,7 +508,7 @@ const data = {
     atuid: '34kgkfoiik12ffbvfg24dufj',
     status: 3
 }
-import { APIdeleteAdComment, APIputComment, APIpostDealAdd } from '@/api/custom/custom.js'
+import { APIputComment, APIpostDealAdd } from '@/api/custom/custom.js'
 // 投诉审核
 const examine_switch = ref(false)
 // const examineFunk = () => {
@@ -660,20 +633,14 @@ const popupFuncAdd3 = () => {
 const tableData = reactive({
     arr: []
 })
-import {
-    APIgetAdCommentList
-} from '@/api/custom/custom.js'
-APIgetAdCommentList(route.query.id).then(res=>{
-    console.log(res)
-})
 // 删除评论
-const toggleDelete = () => {
-    console.log(selectArray.arr[0].tgtid)
-    APIdeleteAdComment(route.query.id).then(res => {
-        console.log(res)
-        getFuncCommentList()
-    })
-}
+// const toggleDelete = () => {
+//     console.log(selectArray.arr[0].tgtid)
+//     APIdeleteAdComment(route.query.id).then(res => {
+//         console.log(res)
+//         getFuncCommentList()
+//     })
+// }
 // 审核
 // 评论审核
 const status = ref(0)
@@ -766,9 +733,9 @@ const handleSelectionChange = select => {
 }
 const score = ref(3)
 // 添加评论
-APIpostComment(route.query.id, data).then(res => {
-    console.log(tableData.arr)
-})
+// APIpostComment(route.query.id, data).then(res => {
+//     console.log(tableData.arr)
+// })
 // 获取评论列表
 const getFuncCommentList = () => {
     APIgetCommentList({ tgtid: route.query.id }).then(res => {

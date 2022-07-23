@@ -82,7 +82,7 @@
                         </el-table-column>
                         <el-table-column prop="id" label="维保记录" width="120">
                             <template #default="scope">
-                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair">维保记录</div>
+                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair(scope.row)">维保记录</div>
                             </template>
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="200">
@@ -97,7 +97,7 @@
                                     size="small"
                                     @click="detailsFunc(scope.row)"
                                 >
-                                    详细
+                                    详情
                                 </el-button>
                                 <el-popconfirm
                                     title="确定要删除当前项么?" cancel-button-type="info"
@@ -304,11 +304,7 @@
                             </div>
                             <div class="item">
                                 <div class="left">小区>楼栋>单元</div>
-<<<<<<< HEAD
                                 <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div>
-=======
-                                <div class="right">{{ data_details.item.zoneinfo['name'] }} {{ data_details.item.buildinginfo['name'] }} {{ data_details.item.unitinfo['name'] }}</div>
->>>>>>> test
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>
@@ -425,7 +421,7 @@
                                 </el-timeline-item>
                             </el-timeline>
                         </div>
-                        <div v-show="data_archive.arr.length <= 0" class="size-lx">此设备无维保记录</div>
+                        <div v-show="data_repair.arr.length <= 0" class="size-lx">此设备无维保记录</div>
                     </el-scrollbar>
                 </el-tab-pane>
             </el-tabs>
@@ -498,6 +494,8 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
+const switch_repair = ref(false)
+const switch_archive = ref(false)
 const activeName = ref('1')
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
@@ -517,170 +515,6 @@ APIgetTypeList('announce').then(res => {
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
-// 搜索
-const searchFunc = () => {
-    page.value = 1
-    switch_search.value = true
-    getTabListFunc()
-}
-// 刷新
-const refreshFunc = () => {
-    page.value = 1
-    switch_search.value = false
-    data_search.obj = {}
-    getTabListFunc()
-}
-
-// 详情
-const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetDeviceDetails(val.id).then(res => {
-        data_details.item = res
-        switch_details.value = true
-        console.log(data_details.item)
-        zoneName.value = data_details.item.zoneinfo
-        buildingName.value = data_details.item.buildinginfo
-        unitName.value = data_details.item.unitinfo
-    })
-    repairInfo(val)
-    archiveInfo(val)
-    // let params = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceArchiveList(params).then(res => {
-    //     console.log(res)
-    //     data_archive.arr = res
-    //     switch_details.value = true
-    // })
-    // let params1 = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceRepairList(params1).then(res => {
-    //     console.log(res)
-    //     data_repair.arr = res
-    //     switch_details.value = true
-    // })
-
-}
-
-// 关闭详情对话框
-const closeDialog = () => {
-    activeName.value = '1'
-}
-import {
-    APIgetDeviceArchiveList
-} from '@/api/custom/custom.js'
-// 档案信息
-const archiveInfo = val => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        did: val.id
-    }
-    APIgetDeviceArchiveList(params).then(res => {
-        console.log(res)
-        data_archive.arr = res
-        switch_details.value = true
-    })
-}
-
-const deviceArchive = val => {
-    // APIgetDeviceDetails(val.id).then(res => {
-    //     data_details.item = res
-    //     switch_details.value = true
-    // })
-    activeName.value = '2'
-    archiveInfo(val)
-    // let params = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceArchiveList(params).then(res => {
-    //     console.log(res)
-    //     data_archive.arr = res
-    //     switch_details.value = true
-    // })
-}
-import {
-    APIgetDeviceRepairList
-
-} from '@/api/custom/custom.js'
-// 维保记录
-<<<<<<< HEAD
-const repairInfo = val => {
-    let params1 = {
-        page: page.value,
-        per_page: per_page.value,
-        did: val.id
-    }
-    APIgetDeviceRepairList(params1).then(res => {
-        console.log(res)
-        data_repair.arr = res
-        switch_details.value = true
-=======
-const deviceRepair = () => {
-    switch_repair.value = true
-}
-// 详情
-const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetDeviceDetails(val.id).then(res => {
-            data_details.item = res
-            switch_details.value = true
->>>>>>> test
-    })
-}
-const deviceRepair = val => {
-    activeName.value = '3'
-    repairInfo(val)
-    // let params1 = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceRepairList(params1).then(res => {
-    //     console.log(res)
-    //     data_repair.arr = res
-    //     switch_details.value = true
-    // })
-}
-// 监听分页
-watch(page, () => {
-    getTabListFunc()
-})
-// 同意拒绝提交
-const dialogExamineCloseFunc = formEl => {
-    from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            if (str_title.value == '修改') {
-                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('修改失败')
-                })
-            } else {
-                APIpostDevice(from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('添加失败')
-                })
-            }
-        } else {
-            return false
-        }
-    })
-}
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -724,6 +558,110 @@ const getTabListFunc = () => {
         total.value = res.length
     })
 }
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+}
+// 刷新
+const refreshFunc = () => {
+    page.value = 1
+    switch_search.value = false
+    data_search.obj = {}
+    getTabListFunc()
+}
+
+// 详情
+const getDetailsFunc = val => {
+    data_dialog.obj = val
+    APIgetDeviceDetails(val.id).then(res => {
+        data_details.item = res
+        switch_details.value = true
+        console.log(data_details.item)
+        zoneName.value = data_details.item.zoneinfo
+        buildingName.value = data_details.item.buildinginfo
+        unitName.value = data_details.item.unitinfo
+    })
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        did: val.id
+
+    }
+    APIgetDeviceArchiveList(params).then(res => {
+        console.log(res)
+        data_archive.arr = res
+        switch_details.value = true
+    })
+    let params1 = {
+        page: page.value,
+        per_page: per_page.value,
+        did: val.id
+    }
+    APIgetDeviceRepairList(params1).then(res => {
+        console.log(res)
+        data_repair.arr = res
+        switch_details.value = true
+    })
+
+}
+const detailsFunc = val => {
+    getDetailsFunc(val)
+}
+// 关闭详情对话框
+const closeDialog = () => {
+    activeName.value = '1'
+}
+import {
+    APIgetDeviceArchiveList
+} from '@/api/custom/custom.js'
+// 档案信息
+const deviceArchive = val => {
+    activeName.value = '2'
+    getDetailsFunc(val)
+}
+import {
+    APIgetDeviceRepairList
+
+} from '@/api/custom/custom.js'
+// 维保记录
+const deviceRepair = val => {
+    activeName.value = '3'
+    getDetailsFunc(val)
+}
+// 监听分页
+watch(page, () => {
+    refreshFunc()
+}, { immediate: true, deep: true })
+// 同意拒绝提交
+const dialogExamineCloseFunc = formEl => {
+    from_error.msg = {}
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            if (str_title.value == '修改') {
+                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('修改失败')
+                })
+            } else {
+                APIpostDevice(from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('添加失败')
+                })
+            }
+        } else {
+            return false
+        }
+    })
+}
 // 删除
 const deleteFunc = val => {
     APIdeleteDevice(val.id).then(res => {
@@ -762,8 +700,6 @@ const addServiceFunc = index => {
     from_examine.item.extra.push(data)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 执行
-refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 </script>
 <style lang="scss">

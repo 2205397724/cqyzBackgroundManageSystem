@@ -24,14 +24,11 @@ const opts = {
     }],
     // 资讯状态
     information_status: [{
-        key: 10,
+        key: 0,
         val: '未审核'
     }, {
-        key: 20,
+        key: 1,
         val: '已审核'
-    }, {
-        key: 30,
-        val: '审核失败'
     }],
     // 评论 分割 100百分制、10分制、5分制、0不采用
     comment_scoreper: [{
@@ -172,9 +169,9 @@ const opts = {
     }, {
         key: 7,
         val: '物业'
-    },{
-        key:99,
-        val:"其他"
+    }, {
+        key: 99,
+        val: "其他"
     }],
     // 投诉 状态
     toushu_status: [{
@@ -639,20 +636,20 @@ const opts = {
         val: '区域等级一'
     }],
     //用户组成员类型
-    group_user_flg:[{
-        key:0,
-        val:"普通成员"
-    },{
-        key:1,
-        val:"组管理员"
+    group_user_flg: [{
+        key: 0,
+        val: "普通成员"
+    }, {
+        key: 1,
+        val: "组管理员"
     }],
     //用户组成员区域类型
-    group_user_region_type:[{
-        key:1,
-        val:"中国区域代码"
-    },{
-        key:2,
-        val:"小区ID"
+    group_user_region_type: [{
+        key: 1,
+        val: "中国区域代码"
+    }, {
+        key: 2,
+        val: "小区ID"
     }]
 }
 

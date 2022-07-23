@@ -21,7 +21,7 @@
                         <div>关键字</div>
                     </el-col>
                     <el-col :lg="4" class="m-r-10">
-                        <el-input v-model="data_1.search.title" placeholder="标题名称" clearable />
+                        <el-input v-model="data_1.search.name" placeholder="标题名称" clearable />
                     </el-col>
                     <el-col :lg="4">
                         <Cascaders v-model="data_1.search.china_code" />
@@ -38,18 +38,22 @@
                     @click="()=>{
                         data_1.switch_search = true;
                         data_1.page = 1;
-                        getFuncVoteList()
+                        getFuncCategoryList()
                     }"
                 >
                     筛选
                 </el-button>
             </div>
             <div v-show="data_1.switch_search" style="margin-bottom: 10px;">
-                <el-button style="margin-right: 10px;" @click="refreshFunc()">重置</el-button>
+                <el-button style="margin-right: 10px;" type="primary" @click="refreshFunc()">重置</el-button>
                 *搜索到相关结果共{{ data_1.total }}条。
             </div>
             <el-table
                 :data="data_1.list"
+                row-key="id"
+                lazy
+                :load="getChildrens"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
@@ -60,24 +64,22 @@
                 </el-table-column>
                 <el-table-column label="所在区域" width="250">
                     <template #default="scope">
-                        <span>{{ scope.row.china_code }} </span>
+                        <span>{{ scope.row.china_name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态">
                     <template #default="scope">
                         <el-switch
                             v-model="scope.row.status"
-                            class="mb-2"
 
-                            inline-prompt
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="开启"
-                            inactive-text="关闭"
+                            active-text="已审核"
+                            inactive-text="未审核"
                             :active-value="1"
                             :inactive-value="0"
-                            @change="switchFunk(scope.row)"
+                            class="switchStyle"
                         />
                     </template>
                 </el-table-column>
@@ -85,22 +87,28 @@
                     <template #default="scope">
                         <el-button
                             type="success"
-                            @click="clickFuncModify(scope.row)"
+                            @click="clickFuncPost(scope.row)"
                         >
                             添加子栏目
                         </el-button>
                         <el-button
                             type="primary"
-                            @click="clickFuncAllot(scope.row)"
+                            @click="clickFuncModify(scope.row)"
                         >
                             修改
                         </el-button>
-                        <el-button
-                            type="danger"
-                            @click="clickFuncAllot4(scope.row.id)"
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="clickFuncDelete(scope.row.id)"
                         >
-                            删除
-                        </el-button>
+                            <template #reference>
+                                <el-button
+                                    type="danger"
+                                >
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -126,13 +134,24 @@
                 :model="data_1.add_form"
             >
                 <el-row :gutter="10">
+                    <!-- <template v-if="data_1.add_title !== '添加子栏目'"> -->
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="父类别"
+                            :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
+                        >
+                            <el-input v-model="data_1.add_form.pid" />
+                        </el-form-item>
+                    </el-col>
+                    <!-- </template> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
                             label="类别名称"
                             :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
                         >
-                            <el-input v-model="data_1.add_form.zon_id" />
+                            <el-input v-model="data_1.add_form.name" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -141,18 +160,7 @@
                             label="所在区域"
                             :error="data_1.add_error&&data_1.add_error.ano?data_1.add_error.ano[0]:''"
                         >
-                            <Cascaders v-model="data_1.search.china_code" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="状态"
-                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                        >
-                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                                <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
+                            <Cascaders v-model="data_1.add_form.china_code" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -169,35 +177,43 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
-                            label="其他配置"
+                            label="状态"
                             :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
                         >
-                            <el-input v-model="data_1.add_form.setting" />
+                            <el-switch
+                                v-model="data_1.add_form.status"
+
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                active-text="已审核"
+                                inactive-text="未审核"
+                                :active-value="1"
+                                :inactive-value="0"
+                                class="switchStyle"
+                            />
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <template v-if="data_1.add_title=='修改'">
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label-width="70px"
-                                label="附件"
-                                :error="data_1.add_error&&data_1.add_error.affix?data_1.add_error.affix[0]:''"
+                                label="配置"
+                                :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
                             >
-                                <el-upload
-                                    ref="uploadRef"
-                                    action="***"
-                                    :auto-upload="false"
-                                    :file-list="file_list"
-                                    :on-change="(file,files)=>{
-                                        file_list = files
-                                    }"
-                                    :on-remove="(file,files)=>{
-                                        file_list = files
-                                    }"
-                                >
-                                    <el-button type="primary">选择附件</el-button>
-                                </el-upload>
+                                <el-input v-model="data_1.add_form.setting" />
                             </el-form-item>
                         </el-col> -->
-                    <!-- </el-col> -->
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="70px"
+                                label="缩略图"
+                                :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
+                            >
+                                <el-input v-model="data_1.add_form.thumb" />
+                            </el-form-item>
+                        </el-col>
+                    </template>
                 </el-row>
             </el-form>
             <template #footer>
@@ -276,11 +292,11 @@ import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetInforCategoryList,
-    APIgetInforManageDetails,
     APIpostInforCategory,
-    APIputInforManage,
-    APIdeleteInforManage
+    APIputInforCategory,
+    APIdeleteInforCategory
 } from '@/api/custom/custom.js'
+import category from '@/router/modules/information/category'
 const data_1 = reactive({
     search: {},
     switch_search: false,
@@ -307,28 +323,39 @@ const getFuncCategoryList = () => {
             data[key] = item
         }
     }
-    APIgetInforCategoryList().then(res => {
+    console.log(data)
+    APIgetInforCategoryList(data).then(res => {
         console.log(res)
         data_1.total = res.length
         data_1.list = res
     })
-//     let data = {
-//         china_code: '62bd6f76ee071f1789147d41',
-//         name: '不v地佛if'
-//     }
-//     APIpostInforCategory(data).then(res => {
-//         // console.log(res)
-//     })
 }
 // 添加修改 同意拒绝提交
-const clickFuncCategory = formEL => {
-    // from_error.msg = {}
-    // console.log('成功')
-    // if (!formEL) return
-    // console.log('成功')
-    // formEL.validate(valid => {
-    //     if (valid) {
+const clickFuncCategory = () => {
+    console.log(data_1.add_form)
     if (data_1.add_title == '添加') {
+        APIpostInforCategory(data_1.add_form).then(res => {
+            // console.log(res)
+            refreshFunc()
+            ElMessage.success('添加成功')
+            data_1.add_switch = false
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+    } else if (data_1.add_title == '修改') {
+        data_1.add_form.setting = []
+        // data_1.add_form.thumb = ''
+        console.log(data_1.add_form)
+        APIputInforCategory(data_1.add_form.id, data_1.add_form).then(res => {
+            refreshFunc()
+            ElMessage.success('修改成功')
+            data_1.add_switch = false
+        }).catch(err => {
+            ElMessage.error('修改失败')
+        })
+    } else {
+        data_1.add_form.pid = parseInt(data_1.add_form.pid)
+        console.log(data_1.add_form.pid)
         APIpostInforCategory(data_1.add_form).then(res => {
             // console.log(res)
             refreshFunc()
@@ -341,13 +368,41 @@ const clickFuncCategory = formEL => {
     // }
     // })
 }
+// 修改
+const clickFuncModify = row => {
+    data_1.add_title = '修改'
+    console.log(row)
+    data_1.add_form = row
+    data_1.add_switch = true
+}
+// 添加子栏目
+const clickFuncPost = () => {
+    data_1.add_form = {}
+    data_1.add_title = '添加子栏目'
+    data_1.add_switch = true
+}
+// 删除
+const clickFuncDelete = id => {
+    APIdeleteInforCategory(id).then(() => {
+        ElMessage.success('删除成功')
+        refreshFunc()
+    })
+}
+// 懒加载
+const getChildrens = (tree, resolve) => {
+    APIgetInforCategoryList({ id: tree.id }).then(res => {
+        console.log(res)
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
+
 const refreshFunc = () => {
+    data_1.search = {}
     data_1.switch_search = false
     data_1.page = 1
     getFuncCategoryList()
 }
-watch(() => {
+watch(data_1.page, () => {
     refreshFunc()
 }, { immediate: true, deep: true })
 // // 配置项
@@ -363,39 +418,60 @@ getOpts(['information_status']).then(res => {
 })
 </script>
 <style lang="scss" scoped>
-    ::v-deep .el-cascader {
-        width: 100%;
-    }
-    .search {
-        background-color: #fafafa;
-        height: 150px;
-        width: 100%;
-        padding: 20px;
-        margin-bottom: 15px;
-    }
-    .searchKey {
-        text-align: center;
-        margin-top: 5px;
-    }
-    .searchSele {
-        margin: 10px 0 0 15px;
-    }
-    .btn {
-        margin-bottom: 15px;
-    }
-    .noDeal {
-        margin-left: 12px;
-    }
-    .details {
-        text-decoration: inherit;
-        font-size: small;
-        margin: 0 10px;
-    }
-    .el-button--small {
-        height: 32px;
-        width: 58px;
-    }
-    .el-badge {
-        margin-right: 25px;
-    }
+::v-deep .el-cascader {
+    width: 100%;
+}
+.search {
+    background-color: #fafafa;
+    height: 150px;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+.searchKey {
+    text-align: center;
+    margin-top: 5px;
+}
+.searchSele {
+    margin: 10px 0 0 15px;
+}
+.btn {
+    margin-bottom: 15px;
+}
+.noDeal {
+    margin-left: 12px;
+}
+.details {
+    text-decoration: inherit;
+    font-size: small;
+    margin: 0 10px;
+}
+.el-button--small {
+    height: 32px;
+    width: 58px;
+}
+.el-badge {
+    margin-right: 25px;
+}
+.switchStyle ::v-deep .el-switch__label {
+    position: absolute !important;
+    display: none !important;
+    color: #fff !important;
+    width: 80px;
+}
+.switchStyle ::v-deep .el-switch__label--left {
+    z-index: 9 !important;
+    left: 17px !important;
+}
+.switchStyle ::v-deep .el-switch__label--right {
+    z-index: 9 !important;
+    left: -5px !important;
+}
+.switchStyle ::v-deep .el-switch__label.is-active {
+    display: block !important;
+}
+.switchStyle.el-switch ::v-deep .el-switch__core,
+.switchStyle ::v-deep .el-switch__label {
+    width: 70px !important;
+}
 </style>

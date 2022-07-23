@@ -106,24 +106,6 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="评论" width="90">
-                    <template #default="scope">
-                        <el-switch
-                            v-model="scope.row.comment"
-                            class="mb-2"
-
-                            inline-prompt
-                            style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="开启"
-                            inactive-text="关闭"
-                            :active-value="1"
-                            :inactive-value="0"
-                            @change="switchFunk(scope.row)"
-                        />
-                    </template>
-                </el-table-column> -->
                 <el-table-column fixed="right" label="操作" width="300">
                     <template #default="scope">
                         <el-button
@@ -293,37 +275,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label-width="70px"
-                                label="评论"
-                                :error="data_1.add_error&&data_1.add_error.catob?data_1.add_error.catob[0]:''"
-                            >
-                                <el-switch
-                                    v-model="data_1.list.comment"
-                                    class="mb-2"
-
-                                    inline-prompt
-                                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                    active-text="开启"
-                                    inactive-text="关闭"
-                                    :active-value="1"
-                                    :inactive-value="0"
-                                    @change="switchFunk"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label-width="70px"
-                                label="状态"
-                                :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                            >
-                                <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
+                            <comment-switch :id="data_1.add_form.id" />
                         </el-col>
                     </template>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -816,7 +768,7 @@ const clickFuncModify = val => {
         data_1.add_switch = true
     })
 }
-const clickFuncDeteails = val => {
+const clickFuncDetails = val => {
     APIgetComplaintDetails(val.id).then(res => {
         res.affixs = []
         for (let i in res.affix) {
@@ -882,7 +834,7 @@ const popupFuncAdd2 = val => {
         ElMessage.success(res.msg)
         popup_2.switch = false
         refreshFunc()
-        clickFuncDeteails(data_1.details_data)
+        clickFuncDetails(data_1.details_data)
     }).catch(err => {
         popup_2.msg = err.data
     })
@@ -926,7 +878,7 @@ const dealFuncAddPut = (data, id) => {
         APIpostDealAdd(id, data).then(res => {
             ElMessage.success(res.msg)
             popup_3.switch = false
-            clickFuncDeteails(data_1.details_data)
+            clickFuncDetails(data_1.details_data)
         }).catch(err => {
             popup_3.msg = err.data
         })
@@ -935,7 +887,7 @@ const dealFuncAddPut = (data, id) => {
     APIputDeal(data.caid, data).then(res => {
         ElMessage.success(res.msg)
         popup_3.switch = false
-        clickFuncDeteails(data_1.details_data)
+        clickFuncDetails(data_1.details_data)
     }).catch(err => {
         popup_3.msg = err.data
     })
@@ -1046,54 +998,6 @@ const StatusFunk = val => {
     console.log(index.value)
     flag.value = !flag.value
 }
-const integer = ref(false)
-import {
-    APIpostAdComment,
-    APIgetAdCommentList
-} from '@/api/custom/custom.js'
-const switchFunk = () => {
-    // row.comment == 1
-    if (data_1.list.comment == 1) {
-        APIpostAdComment(data_1.add_form.id, { scoreper: 10 }).then(res => {
-            console.log(res)
-        })
-    }
-    // data_1.add_form = {
-    //     comment: row.comment,
-    //     king: 2
-    // }
-    // data_1.add_form.comment == row.comment
-    // data_1.add_form.kind == 2
-    // APIputComplaint(row.id, data_1.add_form).then(res => {
-    //     console.log(data_1.add_form.comment)
-    //     getFuncVoteList()
-    // }).catch(err => {})
-    // APIgetAdCommentList(id).then(res => {
-    //     console.log(res)
-    // })
-    // APIgetComplaintDetails(row.id).then(res => {
-    //     console.log(res)
-    //     data_1.add_form = res
-    // let arr = []
-    // for (let i in res.affix) {
-    //     if (res.affix[i]) {
-    //         arr.push({
-    //             name: res.affix[i]
-    //         })
-    //     }
-    // }
-    // file_list.value = arr
-    // data_1.add_switch = true
-    // })
-    // console.log(res)
-    // APIputComplaint(row.id, data_1.add_form).then(res => {
-    //     console.log(data_1.add_form)
-    //     getFuncVoteList()
-    // }).catch(err => {})
-}
-
-/* ----------------------------------------------------------------------------------------------------------------------- */
-
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     data_1.search = {
