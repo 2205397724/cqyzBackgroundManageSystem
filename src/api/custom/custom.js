@@ -473,7 +473,96 @@ export function APIgetArticlereadList(params) {
 export function APIpostArticleread(data) {
     return api2.post('/a/articleread', data)
 }
-
+export function APIgetGroupRolesList(gid){
+    return api2.get(`/groups/${gid}/roles`)
+}
+export function APIpostGroupRoles(gid,data){
+    return api2.post(`/groups/${gid}/roles`,data)
+}
+export function APIdeleteGroupRoles(gid,data){
+    return api2.delete(`/groups/${gid}/roles`,data)
+}
+export function APIgetGroupUser_Roles(group,user){
+    return api2.get(`/groups/${group}/users/${user}/roles`)
+}
+export function APIpostGroupUser_Roles(group,user,data){
+    return api2.post(`/groups/${group}/users/${user}/roles`,data)
+}
+export function APIdeleteGroupUser_Roles(group,user,data){
+    return api2.delete(`/groups/${group}/users/${user}/roles`,data)
+}
+export function APIgetGroupUser_perms(group,user){
+    return api2.get(`/groups/${group}/users/${user}/perms`)
+}
+export function APIpostGroupUser_perms(group,user,data){
+    return api2.post(`/groups/${group}/users/${user}/perms`,data)
+}
+export function APIdeleteGroupUser_perms(group,user,data){
+    return api2.delete(`/groups/${group}/users/${user}/perms`,data)
+}
+export function APIgetGroupPerms(group){
+    return api2.get(`/groups/${group}/perms`)
+}
+export function APIpostGroupPerms(group,data){
+    return api2.post(`/groups/${group}/perms`,data)
+}
+export function APIdeleteGroupPerms(group,data){
+    return api2.delete(`/groups/${group}/perms`,data)
+}
+export function APIgetPermsList(){
+    return api2.get(`/perms`)
+}
+export function APIgetPermsDetail(perm){
+    return api2.get(`/perms/${perm}`)
+}
+export function APIpostPerms(data){
+    return api2.post(`/perms`,data)
+}
+export function APIputPerms(data){
+    return api2.put(`/perms/${perm}`,data)
+}
+export function APIdeletePerms(perm){
+    return api2.put(`/perms/${perm}`)
+}
+export function APIgetPerms_Roles(perm){
+    return api2.get(`/perms/${perm}/roles`)
+}
+export function APIpostPerms_Roles(perm,data){
+    return api2.post(`/perms/${perm}/roles`,data)
+}
+export function APIdeletePerms_Roles(perm,data){
+    return api2.delete(`/perms/${perm}/roles`,data)
+}
+export function APIgetRolesList(){
+    return api2.get(`/roles`)
+}
+export function APIgetRolesDetail(role){
+    return api2.get(`/roles/${role}`)
+}
+export function APIpostRoles(data){
+    return api2.post(`/roles`,data)
+}
+export function APIputRoles(role,data){
+    return api2.put(`/roles/${role}`,data)
+}
+export function APIDeleteRoles(role){
+    return api2.delete(`/roles/${role}`)
+}
+export function payRoles_perms(role,data){
+    return api2.post(`/roles/${role}/perms`,data)
+}
+export function deleteRoles_perms(role,data){
+    return api2.delete(`/roles/${role}/perms`,data)
+}
+export function APIgetRoles_perms(role){
+    return api2.get(`/roles/${role}/perms`)
+}
+export function APIpostRoles_perms(role,data){
+    return api2.post(`/roles/${role}/perms`,data)
+}
+export function APIdeleteRoles_perms(role,data){
+    return api2.delete(`/roles/${role}/perms`,data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示任务
 // 列表

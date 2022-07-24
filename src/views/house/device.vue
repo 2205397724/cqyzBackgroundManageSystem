@@ -516,14 +516,6 @@ APIgetTypeList('announce').then(res => {
     options.arr = res
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 方法
-<<<<<<< HEAD
-// 搜索
-const searchFunc = () => {
-    page.value = 1
-    switch_search.value = true
-    getTabListFunc()
-}
 // 刷新
 const refreshFunc = () => {
     page.value = 1
@@ -567,11 +559,6 @@ const refreshFunc = () => {
     // })
 
 } */
-
-// 关闭详情对话框
-const closeDialog = () => {
-    activeName.value = '1'
-}
 import {
     APIgetDeviceArchiveList
 } from '@/api/custom/custom.js'
@@ -624,9 +611,7 @@ const repairInfo = val => {
         switch_details.value = true
         })
 }
-/* const deviceRepair = () => {
-    switch_repair.value = true
-} */
+
 //详情
 const detailsFunc = val => {
     data_dialog.obj = val
@@ -681,8 +666,6 @@ const dialogExamineCloseFunc = formEl => {
         }
     })
 }
-=======
->>>>>>> test
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -732,14 +715,6 @@ const searchFunc = () => {
     switch_search.value = true
     getTabListFunc()
 }
-// 刷新
-const refreshFunc = () => {
-    page.value = 1
-    switch_search.value = false
-    data_search.obj = {}
-    getTabListFunc()
-}
-
 // 详情
 const getDetailsFunc = val => {
     data_dialog.obj = val
@@ -774,62 +749,55 @@ const getDetailsFunc = val => {
     })
 
 }
-const detailsFunc = val => {
-    getDetailsFunc(val)
-}
+// const detailsFunc = val => {
+//     getDetailsFunc(val)
+// }
 // 关闭详情对话框
 const closeDialog = () => {
     activeName.value = '1'
 }
-import {
-    APIgetDeviceArchiveList
-} from '@/api/custom/custom.js'
 // 档案信息
 const deviceArchive = val => {
     activeName.value = '2'
     getDetailsFunc(val)
 }
-import {
-    APIgetDeviceRepairList
-
-} from '@/api/custom/custom.js'
 // 维保记录
-const deviceRepair = val => {
-    activeName.value = '3'
-    getDetailsFunc(val)
-}
+// const deviceRepair = val => {
+//     activeName.value = '3'
+//     getDetailsFunc(val)
+// }
 // 监听分页
 watch(page, () => {
     refreshFunc()
 }, { immediate: true, deep: true })
 // 同意拒绝提交
-const dialogExamineCloseFunc = formEl => {
-    from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            if (str_title.value == '修改') {
-                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('修改失败')
-                })
-            } else {
-                APIpostDevice(from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('添加失败')
-                })
-            }
-        } else {
-            return false
-        }
-    })
-}
+// const dialogExamineCloseFunc = formEl => {
+//     from_error.msg = {}
+//     if (!formEl) return
+//     formEl.validate(valid => {
+//         if (valid) {
+//             if (str_title.value == '修改') {
+//                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+//                     refreshFunc()
+//                     ElMessage.success('修改成功')
+//                     switch_examine.value = false
+//                 }).catch(err => {
+//                     ElMessage.error('修改失败')
+//                 })
+//             } else {
+//                 APIpostDevice(from_examine.item).then(res => {
+//                     refreshFunc()
+//                     ElMessage.success('添加成功')
+//                     switch_examine.value = false
+//                 }).catch(err => {
+//                     ElMessage.error('添加失败')
+//                 })
+//             }
+//         } else {
+//             return false
+//         }
+//     })
+// }
 // 删除
 const deleteFunc = val => {
     APIdeleteDevice(val.id).then(res => {
