@@ -304,12 +304,9 @@
                             </div>
                             <div class="item">
                                 <div class="left">小区>楼栋>单元</div>
-<<<<<<< HEAD
                                 <!-- <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div> -->
                                 <div class="right">{{ data_details.item.zoneinfo['name'] }} {{ data_details.item.buildinginfo['name'] }} {{ data_details.item.unitinfo['name'] }}</div>
-=======
                                 <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div>
->>>>>>> test
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>
