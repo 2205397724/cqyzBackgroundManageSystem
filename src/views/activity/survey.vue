@@ -48,10 +48,13 @@
             <el-table-column prop="content" label="问卷内容" width="350px"></el-table-column>
             <el-table-column label="问卷状态" width="200px"  align="center">
                 <template #default="scope">
-                    <!-- <span>{{ scope.row.status }}</span> -->
-                    <el-button v-if="scope.row.status == '1'" size="small" type="danger" round>未开始</el-button>
-                    <el-button v-else-if="scope.row.status == '2'" size="small" type="success" round>进行中</el-button>
-                    <el-button v-else="scope.row.status == '3'" size="small" type="info" round>已结束</el-button>
+                    <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
+                    <el-button v-else-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
+                    <el-button v-else-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
+                    <el-button v-else-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
+                    <el-button v-else-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
+                    <el-button v-else-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
+                    <el-button v-else="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
                 </template>
             </el-table-column>
             <el-table-column label="问卷时间" align="center">
@@ -173,9 +176,13 @@
                                             placeholder=""
                                         ></el-input> -->
                                         <el-radio-group v-model="from_examine.item.status" class="ml-4">
-                                            <el-radio label="1" size="large">未开始</el-radio>
-                                            <el-radio label="2" size="large">进行中</el-radio>
-                                            <el-radio label="3" size="large">已结束</el-radio>
+                                            <el-radio label="1">筹备阶段</el-radio>
+                                            <el-radio label="2">待审</el-radio>
+                                            <el-radio label="3">未开始</el-radio>
+                                            <el-radio label="4">进行中</el-radio>
+                                            <el-radio label="5">暂停</el-radio>
+                                            <el-radio label="6">终止</el-radio>
+                                            <el-radio label="7">已结束</el-radio>
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
@@ -229,6 +236,7 @@
         APIaddSurvey,
         APIdeleteSurvey,
         APImodifySurvey,
+        APImodifySurveyStatus,
         APIgetSurveyDetails,
     } from '@/api/custom/custom.js'
     import {
@@ -328,7 +336,6 @@
             }
         })
         // switch_details.value = true
-        // console.log(data_details.item)
     }
     // Tabs标签页点击切换事件,切换显示不同状态的问卷
     // 切换标签后，根据label的值进行if判断，切换不同状态问卷
@@ -339,7 +346,6 @@
             status:''
         }
         // tab未label的值
-        // console.log(tab)
         if(tab === "未开始") {
             params.status = 1
         }else if(tab === "进行中") {
@@ -355,7 +361,7 @@
                 data_tab.arr = res.data
                 total.value = data_tab.arr.length
             }
-            console.log(data_tab.arr)
+            // console.log(data_tab.arr)
         })
     }
     // 监听分页
@@ -382,6 +388,10 @@
                             ElMessage.success('修改成功')
                             switch_examine.value = false
                         }
+                        // 如果传递了状态码，就修改状态信息
+                        APImodifySurveyStatus(id,{"status":from_examine.item.status}).then(res => {
+                            refreshFunc()
+                        })
 
                     }).catch(err => {
                         from_error.msg = err.data
@@ -419,7 +429,6 @@
             }
         }
         loading_tab.value = true
-        console.log(params)
         APIgetSurvey(params).then(res => {
             if (res.status === 200) {
                 loading_tab.value = false
@@ -457,6 +466,7 @@
             if (res.status == 200) {
                 from_examine.item = res.data
                 from_examine.item.pub += ''
+                from_examine.item.status += ''
                 switch_examine.value = true
             }
         })

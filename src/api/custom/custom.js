@@ -1154,7 +1154,10 @@ export function APImodifySurvey(id,data) {
 export function APIgetSurveyDetails(id) {
     return api.get('/survey/'+ id)
 }
-
+//修改问卷状态
+export function APImodifySurveyStatus(id,data) {
+    return api.put('/survey-status/'+id,data)
+}
 
 // 问卷设置范围列表
 export function APIgetSurveyRange() {

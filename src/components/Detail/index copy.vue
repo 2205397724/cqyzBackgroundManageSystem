@@ -67,29 +67,46 @@
             </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="设置参与范围" name="2" >
+            <div class="font-darkgrey size-lg" style="background-color: #fafafa;">
+                <span class="m-40">
+                    已选择<span class="size-lx strong m-10">328</span>户
+                </span>
+                <el-button type="primary" class="m-10" @click="submit">提交</el-button>
+            </div>
             <el-scrollbar height="400px">
-                <div>
-                    <el-button type="primary" size="large" @click="addServeyTopic()">设置问卷范围</el-button>
+                <!-- 树形结构 -->
+                <div class="tree-item" >
+                    <div style="height: calc(100% - 60px);">
+                        <position-tree-third
+                            :tree_item = "tree_item"
+                            :type="no_zone"
+                            @checkFunc="checkFunc"
+                        />
+                    </div >
+                    <!-- 房屋 -->
+                    <div class="houses p-l-20">
+                        <div style="width: 100%;">
+                            <!-- <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;"
+                            >
+                                <el-table-column prop="name" label="小区" width="700px">
+                                    <template #default="scope">
+                                        <span>{{scope.row.floor_truth}}</span>
+                                        <div v-for="item in scope.row.houses">{{item.name}}</div>
+                                    </template>
+                                </el-table-column>
+                            </el-table> -->
+                            <div v-for="item in data_tab.arr" class="housesStyle">
+                                <span class="floor">{{item.floor_truth}}层</span>
+                                <!-- <span class="floorHouse" v-for="items in item.houses"><span><el-button>{{items.name}}</el-button></span></span> -->
+                                <span class="floorHouse" v-for="items in item.houses"><span @click="exchange(items.id)" :class="[isSelect?'hover':'']">{{items.name}}</span></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-               <el-table :data="data_range.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    width="100%"
-                >
-                    <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column prop="title" label="地区范围"></el-table-column>
-                    <el-table-column prop="type" label="题目选项类型" ></el-table-column>
-                    <el-table-column fixed='right' width="250px" label="操作">
-                        <template #default="scope">
-                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info">
-                                <template #reference>
-                                    <el-button type="danger" size="large" >
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                </el-table>
             </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="参与范围" name="6" >
@@ -285,6 +302,10 @@
         APIaddSurveyTopic,
         APImodifySurveyTopic,
         APIgetSurveyTopicDetail,
+        // 获取问卷范围城市
+        APIgetChinaRegion,
+        APIgetHouseListSort,
+        APIaddSurveyRange
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -331,6 +352,39 @@
         address: 'No. 189, Grove St, Los Angeles',
     },
     ]
+    const checkstrictly = ref("false")
+    let no_zone = ref(false)
+    // 可多选
+    const prop = { multiple: true }
+    const city = reactive([
+        // 区域代码
+        {
+            // value:'',
+            // label:'',
+            // 小区
+            children:[
+                {
+                    // value:'',
+                    // label:'',
+                    // 楼栋
+                    children:[
+                        {
+                            // value:'',
+                            // label:'',
+                            // 单元
+                            children:[
+                                {
+                                    // value:'',
+                                    // label:'',
+                                    // 房屋
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    ])
     // 详情
     let switch_details = ref(false)
     // 接收父组件传递过来的id
@@ -381,9 +435,9 @@
         // 指针事件pointerEvent（未使用）
         // console.log(event)
         // console.log(tab.props.name)
-        if(tab.props.name == 2){
+        if(tab.props.name == 6){
             APIgetSurveyRange().then(res => {
-                // console.log('xxx',res.data)
+                console.log('xxx',res.data)
                 data_range.arr = res.data
                 console.log(data_range.arr.length)
                 // getCities()
@@ -489,9 +543,110 @@
         }
 
     }
+    // 获取活动参与范围的城市
+    // const getCities = () => {
+    //     // 区域代码
+    //     APIgetChinaRegion().then(res => {
+    //         // console.log(res.data)
+    //         city.length = 0
+    //         res.data.forEach(element => {
+    //             city.push({'label':element.name,'value':element.code,'children':[]})
+    //         })
+    //         // console.log(city)
+    //     })
+    //     // // 小区
+    //     APIgetResidentialListHouse().then(res => {
+    //         // console.log(res)
+    //         city[0].children = []
+    //         res.forEach(element => {
+    //             city[0].children.push({'label':element.name,'value':element.china_code,'children':[]})
+    //         })
+    //         // console.log(city)
+    //     })
+    //     // 楼栋
+    //     APIgetBuildListHouse().then(res => {
+    //         // console.log(res)
+    //         city[0].children[0].children = []
+    //         res.forEach(element => {
+    //             city[0].children[0].children.push({'label':element.name,'value':element.sync_china_code,'children':[]})
+    //         })
+    //         console.log(city)
+    //     })
+    //     // // // 单元
+    //     // APIgetUnitsListHouse().then(res => {
+    //     //     // console.log(res)
+    //     //     city[0].children[0].children[0].children = []
+    //     //      res.forEach(element => {
+    //     //         city[0].children[0].children[0].children.push({'label':element.name,'value':element.sync_china_code,'children':[]})
+    //     //     })
+    //     //     console.log(city)
+    //     // })
+    //     // // // 房屋
+    //     // APIgetHouseListHouse().then(res => {
+    //     //     console.log(res)
+    //     //     city[0].children[0].children[0].children[0].children = []
+    //     //      res.forEach(element => {
+    //     //         city[0].children[0].children[0].children[0].children.push({'label':element.name,'value':element.sync_china_code,})
+    //     //     })
+    //     //     console.log(city)
+    //     // })
+    // }
     let data_tab = reactive({
         arr: []
     })
+    const edit_house = ref(false)
+    let houseableType = ref()
+    let houseableTgt = ref()
+    const checkFunc = val => {
+        console.log('aaa',val)
+        // if判断组件传递的type，指定添加问卷范围类型和范围类型对应的值
+        if(val.type == 'houses'){
+            houseableType = 1
+        }else if(val.type == 'units'){
+            houseableType = 2
+            houseableTgt = val.id
+        }else if(val.type == 'buildings'){
+            houseableType = 3
+            houseableTgt = val.id
+        }else if(val.type == 'zone'){
+            houseableType = 4
+            houseableTgt = val.id
+        }else if(val.type == 'region'){
+            houseableType = 5
+            houseableTgt = val.id
+        }
+        // console.log(houseableType)
+        if(val.type == 'units') {
+            // 获取房屋数据按楼栋楼层
+            APIgetHouseListSort({ houseable_type: 'units ', houseable_id: val.id }).then(res => {
+                console.log(res)
+                data_tab.arr=res.floors
+                console.log('bbb',data_tab.arr)
+            })
+        }
+    }
+    const submit = () => {
+        console.log(props.id,'1',houseableType,houseableTgt)
+        APIaddSurveyRange().then(res => {
+
+        })
+    }
+    const tree_item = ref({
+    })
+    // tree树形组件初始的请求
+    APIgetChinaRegion().then(res => {
+        tree_item.value.id = res.data[0].code
+        tree_item.value.name = res.data[0].name
+        tree_item.value.type = 'region'
+        tree_item.value.next_type = 'zone'
+    })
+    // 点击房屋的事件
+    let isSelect = false
+    const exchange = (id) => {
+        isSelect = !isSelect
+        console.log(isSelect,id)
+    }
+
 </script>
 <style lang="scss" scoped>
 .record {
