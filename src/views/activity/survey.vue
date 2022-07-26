@@ -29,13 +29,17 @@
             <svg-icon name="search"></svg-icon>筛选
         </el-button>
         <div>
-            <span v-show="switch_search" class="font-grey size-base">*搜索到相关结果共{{ total }}条。</span>
+            <span v-show="switch_search" class="font-grey m-l-40">累计搜索到相关结果共<span style="font-size: 24px;">{{ total }}</span>条。</span>
         </div>
     </div>
     <el-radio-group v-model="activeName" size="large" class="m-b-20" @change="handleClick">
         <el-radio-button label="全部" ></el-radio-button>>
+        <el-radio-button label="筹备阶段" ></el-radio-button>>
+        <el-radio-button label="待审" ></el-radio-button>>
         <el-radio-button label="未开始" ></el-radio-button>>
         <el-radio-button label="进行中" ></el-radio-button>>
+        <el-radio-button label="暂停" ></el-radio-button>>
+        <el-radio-button label="终止" ></el-radio-button>>
         <el-radio-button label="已结束" ></el-radio-button>>
     </el-radio-group>
     <!-- 问卷列表 -->
@@ -146,17 +150,17 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :md="24" :lg="12">
-                                    <el-form-item label="是否多选" label-width="120px" prop="areall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                    <el-form-item label="是否多选" label-width="120px" prop="vmax" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                         <el-input
-                                            v-model="from_examine.item.vamx"
+                                            v-model="from_examine.item.vmax"
                                             placeholder=""
                                         ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :md="24" :lg="12">
-                                    <el-form-item label="总面积" label-width="120px" prop="areall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                    <el-form-item label="总面积" label-width="120px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                         <el-input
-                                            v-model="from_examine.item.areall"
+                                            v-model="from_examine.item.areaall"
                                             placeholder=""
                                         ></el-input>
                                     </el-form-item>
@@ -218,7 +222,7 @@
         </template>
     </el-dialog>
     <!-- 详情 -->
-    <el-dialog  v-model="switch_details" :title="data_details.item.name" width="80%">
+    <el-dialog  v-model="switch_details" :title="data_details.item.name" width="80%" destroy-on-close="true">
         <Detail :id="data_details.item.id"></Detail>
         <template #footer>
             <el-button  type="warning" plain @click="switch_details = false">取消</el-button>
@@ -230,7 +234,6 @@
 </template>
 
 <script lang="ts" setup>
-    import Detail from '@/components/Detail/index.vue'
     import {
         APIgetSurvey,
         APIaddSurvey,
@@ -247,23 +250,16 @@
     import {
         ElMessage
     } from 'element-plus'
-    import { log } from 'console';
-    import { valid } from 'mockjs';
     const value = ref('')
     // 选项数据
     const options = [
-    {
-        value: 1,
-        label: '未开始',
-    },
-    {
-        value: 2,
-        label: '进行中',
-    },
-    {
-        value: 3,
-        label: '已结束',
-    },
+    {value: 1,label: '筹备阶段',},
+    {value: 2,label: '待审',},
+    {value: 3,label: '未开始',},
+    {value: 4,label: '进行中',},
+    {value: 5,label: '暂停',},
+    {value: 6,label: '终止',},
+    {value: 7,label: '已结束',},
     ]
     // 搜索
     let switch_search = ref(false)
@@ -328,6 +324,7 @@
     }
     // 详情
     const detailsFunc = val => {
+        data_details.item = ''
         console.log(val.id)
         APIgetSurveyDetails(val.id).then(res => {
             if (res.status === 200) {
@@ -346,12 +343,20 @@
             status:''
         }
         // tab未label的值
-        if(tab === "未开始") {
+        if(tab === "筹备阶段") {
             params.status = 1
-        }else if(tab === "进行中") {
+        }else if(tab === "待审"){
             params.status = 2
-        }else if(tab === "已结束"){
+        }else if(tab === "未开始"){
             params.status = 3
+        }else if(tab === "进行中") {
+            params.status = 4
+        }else if(tab === "暂停"){
+            params.status = 5
+        }else if(tab === "终止"){
+            params.status = 6
+        }else if(tab === "已结束"){
+            params.status = 7
         }else {
             return getTabListFunc()
         }

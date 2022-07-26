@@ -3,9 +3,13 @@
     <div style="position: relative; top: -10px;">
         <span>开始时间：{{data_details.item.startat}}</span>
         <span class="m-20">
-            <el-button v-if="data_details.item.status == 1" type="danger" round>未开始</el-button>
-            <el-button v-if="data_details.item.status == 2" type="success" round>进行中</el-button>
-            <el-button v-if="data_details.item.status == 3" type="info" round>已结束</el-button>
+            <el-button v-if="data_details.item.status == 1" round>筹备阶段</el-button>
+            <el-button v-if="data_details.item.status == 2" type="primary" round>待审</el-button>
+            <el-button v-if="data_details.item.status == 3" type="info" round>未开始</el-button>
+            <el-button v-if="data_details.item.status == 4" type="success" round>进行中</el-button>
+            <el-button v-if="data_details.item.status == 5" type="warning" round>暂停</el-button>
+            <el-button v-if="data_details.item.status == 6" type="warning" round>终止</el-button>
+            <el-button v-if="data_details.item.status == 7" type="danger" round>已结束</el-button>
         </span>
         <span>结束时间：{{data_details.item.endat}}</span>
     </div>
@@ -109,12 +113,22 @@
                 <div class="tree-item" >
                     <div style="height: calc(100% - 60px);">
                         <position-tree-third
+                            :id="props.id"
                             :tree_item = "tree_item"
-                            :type="no_zone"
-                            @checkedFunc="checkedFunc"
+                            @arrSetRange="arrSetRange"
+                            @checkFunc="checkFunc"
                         />
-                    </div >
-
+                    </div>
+                    <!-- 房屋 -->
+                    <div class="houses p-l-20">
+                        <div style="width: 100%;">
+                            <div v-for="item in data_tab.arr" class="housesStyle">
+                                <span class="floor">{{item.floor_truth}}层</span>
+                                <!-- <span class="floorHouse" v-for="items in item.houses"><span><el-button>{{items.name}}</el-button></span></span> -->
+                                <span class="floorHouse" v-for="items in item.houses"><span @click="exchange(items.id)" :class="[isSelect?'hover':'']">{{items.name}}</span></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </el-scrollbar>
         </el-tab-pane>
@@ -199,7 +213,7 @@
             </el-scrollbar>
         </el-tab-pane>
     </el-tabs>
-    <!-- 修改添加 -->
+    <!-- 修改添加问卷题目 -->
     <el-dialog v-model="switch_examine" :title="str_title" width="50%">
         <div>
             <el-scrollbar style="height: 450px;">
@@ -302,6 +316,7 @@
         APIaddSurveyTopic,
         APImodifySurveyTopic,
         APIgetSurveyTopicDetail,
+        APIgetHouseListSort,
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -324,26 +339,6 @@
     },
     {
         date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-08',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-06',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-07',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles',
     },
@@ -375,15 +370,14 @@
         item: {
         }
     })
-    let opts = reactive([
-    ])
+    let opts = reactive([])
     // 增加选项
     const addopts = () => {
         opts.push(
             {
                 'content':'',
                 'score':'',
-                'sort':''
+                'sort':'',
             },
         )
     }
@@ -400,10 +394,6 @@
         // console.log(tab.props.name)
         if(tab.props.name == 2){
             rangeFunc()
-            // APIgetSurveyRange().then(res => {
-            //     data_range.arr = res.data
-            //     console.log(data_range.arr.length)
-            // })
         }else if(tab.props.name == 3){
             topicsFunc()
         }else if(tab.props.name == 4){
@@ -413,6 +403,8 @@
     }
     // 获取问卷详情
     const detailsFunc = id => {
+        data_details.item = ''
+        console.log(data_details.item,'123456789')
         APIgetSurveyDetails(id).then(res => {
             if (res.status === 200) {
                 data_details.item = res.data
@@ -436,9 +428,16 @@
     }
     // 获取问卷范围
     const rangeFunc = () => {
-        APIgetSurveyRange().then(res => {
+        let params = {
+            page:1,
+            per_page:15,
+            sid:props.id
+        }
+        APIgetSurveyRange(params).then(res => {
             data_range.arr = res.data
             console.log(data_range.arr.length)
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 添加问卷题目
@@ -522,65 +521,11 @@
 
     }
 
-
-    // 获取tree树形控件数据
-    // 从房屋到区域的数组
-    let arr1 =[]
-    let arr2 =[]
-    let arr3 =[]
-    let arr4 =[]
-    let arr5 =[]
-    // 定义在外部会导致最后调用dealArr的输出结果相同
-    // let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
-    const checkedFunc = val => {
-        // 清空数组
-        let arr1 =[]
-        let arr2 =[]
-        let arr3 =[]
-        let arr4 =[]
-        let arr5 =[]
-        // 将相同区域类型的数据整合到同一数组
-        val.forEach(element => {
-            // console.log(element.type)
-            if(element.type === "region") {
-                arr5.push(element)
-            }else if(element.type === "zone") {
-                arr4.push(element)
-            }else if(element.type === "buildings") {
-                arr3.push(element)
-            }else if(element.type === "units") {
-                arr2.push(element)
-            }else if(element.type === "houses") {
-                arr1.push(element)
-            }
-        })
-        if(arr5.length != 0){
-            dealArr(arr5,5)
-        }
-        if(arr4.length != 0){
-            dealArr(arr4,4)
-        }
-        if(arr3.length != 0){
-            dealArr(arr3,3)
-        }
-        if(arr2.length != 0){
-            dealArr(arr2,2)
-        }
-        if(arr1.length != 0){
-            dealArr(arr1,1)
-        }
-    }
-    // 处理五种数组
-    let ArrSetRange = []//将请求信息插入数组内
-    const dealArr = (arr,types) =>{
-        let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
-        setrange.tgt = []
-        setrange.type = types
-        arr.forEach(element => {
-            setrange.tgt.push(element.id)
-        })
-        // console.log('111111',types,setrange)
-        ArrSetRange.push(setrange)
+    // 接受传递的数据
+    let ArrSetRange
+    const arrSetRange = val => {
+        ArrSetRange = val
+        // console.log("Arr",ArrSetRange)
     }
     // 调用接口设置范围
     const submit = () => {
@@ -601,6 +546,20 @@
         tree_item.value.type = 'region'
         tree_item.value.next_type = 'zone'
     })
+
+    let data_tab = reactive({
+        arr: []
+    })
+    const checkFunc = val => {
+        if(val.type == 'units') {
+            // 获取房屋数据按楼栋楼层
+            APIgetHouseListSort({ houseable_type: 'units ', houseable_id: val.id }).then(res => {
+                console.log(res)
+                data_tab.arr=res.floors
+                console.log('bbb',data_tab.arr)
+            })
+        }
+    }
 </script>
 <style lang="scss" scoped>
 .record {

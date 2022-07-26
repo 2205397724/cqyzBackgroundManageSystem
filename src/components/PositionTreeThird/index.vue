@@ -27,9 +27,9 @@
         defineProps,
         defineEmits
     } from 'vue'
-    const props = defineProps(['tree_item', 'type'])
+    const props = defineProps(['tree_item', 'type','id'])
     const type = ref(props.type)
-    const emit = defineEmits(['checkFunc','checkedFunc'])
+    const emit = defineEmits(['checkFunc','arrSetRange'])
     const { tree_item } = toRefs(props)
     const treeDetail = reactive({
         arr: {}
@@ -148,19 +148,82 @@
             nodeCopy.loadData()
         }
     }, { immediate: true, deep: true })
+    let checkedFunc
     const handleCheck = (data, checked) => {
         if (checked.checkedKeys.length > 0) {
             // 控制同一级只能单选
             // treeRef.value.setCheckedNodes([data])
             // 传递已选的节点的数组
-            let checkedFunc = treeRef.value.getCheckedNodes()
-            console.log('已选节点:',checkedFunc)
-            emit('checkedFunc', checkedFunc)
+            checkedFunc = treeRef.value.getCheckedNodes()
+            checkedArr(checkedFunc)
+            // console.log('已选节点:',checkedFunc)
+            // emit('checkedFunc', checkedFunc)
             // 传递点击的节点数据
             emit('checkFunc', data)
             return false
         }
         emit('checkFunc', '')
+    }
+
+    // 从房屋到区域的数组
+    let arr1 =[]
+    let arr2 =[]
+    let arr3 =[]
+    let arr4 =[]
+    let arr5 =[]
+    // 定义在外部会导致最后调用dealArr的输出结果相同
+    // let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
+    const checkedArr = checkedFunc => {
+        // 清空数组
+        arr1 =[]
+        arr2 =[]
+        arr3 =[]
+        arr4 =[]
+        arr5 =[]
+        // 将相同区域类型的数据整合到同一数组
+        checkedFunc.forEach(element => {
+            // console.log(element.type)
+            if(element.type === "region") {
+                arr5.push(element)
+            }else if(element.type === "zone") {
+                arr4.push(element)
+            }else if(element.type === "buildings") {
+                arr3.push(element)
+            }else if(element.type === "units") {
+                arr2.push(element)
+            }else if(element.type === "houses") {
+                arr1.push(element)
+            }
+        })
+        if(arr5.length != 0){
+            dealArr(arr5,5)
+        }
+        if(arr4.length != 0){
+            dealArr(arr4,4)
+        }
+        if(arr3.length != 0){
+            dealArr(arr3,3)
+        }
+        if(arr2.length != 0){
+            dealArr(arr2,2)
+        }
+        if(arr1.length != 0){
+            dealArr(arr1,1)
+        }
+    }
+    // 处理五种数组
+    let ArrSetRange = []//将请求信息插入数组内
+    const dealArr = (arr,types) =>{
+        let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
+        setrange.tgt = []
+        setrange.type = types
+        arr.forEach(element => {
+            setrange.tgt.push(element.id)
+        })
+        ArrSetRange = []
+        ArrSetRange.push(setrange)
+        // console.log('111111',types,setrange,ArrSetRange)
+        emit('arrSetRange', ArrSetRange)
     }
 </script>
 <style lang="scss">
