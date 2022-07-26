@@ -1160,8 +1160,8 @@ export function APImodifySurveyStatus(id,data) {
 }
 
 // 问卷设置范围列表
-export function APIgetSurveyRange() {
-    return api.get('/s/can')
+export function APIgetSurveyRange(params) {
+    return api.get('/s/can', { params: params })
 }
 // // 问卷设置范围详情
 // export function APIsetSurveyDetails(props) {
@@ -1172,9 +1172,9 @@ export function APIaddSurveyRange(params) {
     return api.post('/s/can',params)
 }
 // // 删除问卷设置范围
-// export function APIsetSurvey() {
-//     return api.delete('/s/can')
-// }
+export function APIdeleteSurveyRange(params) {
+    return api.delete('/s/can',{ params: params })
+}
 
 
 // 获取问卷题目列表

@@ -598,7 +598,7 @@
     let houseableType = ref()
     let houseableTgt = ref()
     const checkFunc = val => {
-        console.log('aaa',val)
+        // console.log('aaa',val)
         // if判断组件传递的type，指定添加问卷范围类型和范围类型对应的值
         if(val.type == 'houses'){
             houseableType = 1

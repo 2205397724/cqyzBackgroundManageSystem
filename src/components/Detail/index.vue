@@ -69,18 +69,28 @@
         <el-tab-pane label="设置参与范围" name="2" >
             <el-scrollbar height="400px">
                 <div>
-                    <el-button type="primary" size="large" @click="addServeyTopic()">设置问卷范围</el-button>
+                    <el-button type="primary" size="large" @click="addServeyTopic()">添加问卷范围</el-button>
                 </div>
                <el-table :data="data_range.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     width="100%"
                 >
                     <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column prop="title" label="地区范围"></el-table-column>
-                    <el-table-column prop="type" label="题目选项类型" ></el-table-column>
+                    <el-table-column prop="tgt_name" label="地区范围"></el-table-column>
+                    <el-table-column label="活动参与范围类型" >
+                        <template #default="scope">
+                            <span v-if="scope.row.type === 1">房屋</span>
+                            <span v-if="scope.row.type === 2">单元</span>
+                            <span v-if="scope.row.type === 3">楼栋</span>
+                            <span v-if="scope.row.type === 4">小区</span>
+                            <span v-if="scope.row.type === 5">区域</span>
+                            <span>{{scope.row.type}}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column fixed='right' width="250px" label="操作">
                         <template #default="scope">
-                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info">
+                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteRange(scope.row)">
                                 <template #reference>
                                     <el-button type="danger" size="large" >
                                         删除
@@ -92,17 +102,21 @@
                 </el-table>
             </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="参与范围" name="6" >
-            <div class="font-darkgrey size-lg" style="background-color: #fafafa;">
-                <span class="m-40">
-                    已选择<span class="size-lx strong m-10">{{data_range.arr.length}}</span>户
-                </span>
-                <el-button type="primary" class="m-10">修改</el-button>
-                <el-button type="primary" class="m-10">保存</el-button>
-            </div>
-            <div v-for="item in data_range.arr" >
-                <span>{{item.id}}</span>
-            </div>
+        <el-tab-pane label="添加参与范围" name="6" >
+            <el-button type="primary" class="m-10" @click="submit">提交</el-button>
+            <el-scrollbar height="400px">
+                <!-- 树形结构 -->
+                <div class="tree-item" >
+                    <div style="height: calc(100% - 60px);">
+                        <position-tree-third
+                            :tree_item = "tree_item"
+                            :type="no_zone"
+                            @checkedFunc="checkedFunc"
+                        />
+                    </div >
+
+                </div>
+            </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="问卷题目" name="3">
             <el-scrollbar height="400px">
@@ -277,9 +291,12 @@
 
 <script setup>
     import {
+        APIgetChinaRegion,
+        APIaddSurveyRange,
         APIgetSurveyDetails,
         // 问卷范围
         APIgetSurveyRange,
+        APIdeleteSurveyRange,
         APIgetSurveyTopic,
         APIdeleteSurveyTopic,
         APIaddSurveyTopic,
@@ -382,12 +399,11 @@
         // console.log(event)
         // console.log(tab.props.name)
         if(tab.props.name == 2){
-            APIgetSurveyRange().then(res => {
-                // console.log('xxx',res.data)
-                data_range.arr = res.data
-                console.log(data_range.arr.length)
-                // getCities()
-            })
+            rangeFunc()
+            // APIgetSurveyRange().then(res => {
+            //     data_range.arr = res.data
+            //     console.log(data_range.arr.length)
+            // })
         }else if(tab.props.name == 3){
             topicsFunc()
         }else if(tab.props.name == 4){
@@ -416,6 +432,13 @@
             if (res.status === 200) {
                 topic_details.item = res.data
             }
+        })
+    }
+    // 获取问卷范围
+    const rangeFunc = () => {
+        APIgetSurveyRange().then(res => {
+            data_range.arr = res.data
+            console.log(data_range.arr.length)
         })
     }
     // 添加问卷题目
@@ -449,11 +472,20 @@
             }
         })
     }
-    // 删除
+    // 删除问卷题目
     const deleteFunc = val => {
         APIdeleteSurveyTopic(val.id).then(res => {
             refreshFunc()
             // ElMessage.success(res.statusText)
+            ElMessage.success("删除成功")
+        })
+    }
+    // 删除问卷范围
+    const deleteRange = val => {
+        let range = {"sid":val.sid,"can_type":val.can_type,"type":val.type,"tgt":[]}
+        range.tgt.push(val.tgt)
+        APIdeleteSurveyRange(range).then(res => {
+            rangeFunc()
             ElMessage.success("删除成功")
         })
     }
@@ -489,8 +521,85 @@
         }
 
     }
-    let data_tab = reactive({
-        arr: []
+
+
+    // 获取tree树形控件数据
+    // 从房屋到区域的数组
+    let arr1 =[]
+    let arr2 =[]
+    let arr3 =[]
+    let arr4 =[]
+    let arr5 =[]
+    // 定义在外部会导致最后调用dealArr的输出结果相同
+    // let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
+    const checkedFunc = val => {
+        // 清空数组
+        let arr1 =[]
+        let arr2 =[]
+        let arr3 =[]
+        let arr4 =[]
+        let arr5 =[]
+        // 将相同区域类型的数据整合到同一数组
+        val.forEach(element => {
+            // console.log(element.type)
+            if(element.type === "region") {
+                arr5.push(element)
+            }else if(element.type === "zone") {
+                arr4.push(element)
+            }else if(element.type === "buildings") {
+                arr3.push(element)
+            }else if(element.type === "units") {
+                arr2.push(element)
+            }else if(element.type === "houses") {
+                arr1.push(element)
+            }
+        })
+        if(arr5.length != 0){
+            dealArr(arr5,5)
+        }
+        if(arr4.length != 0){
+            dealArr(arr4,4)
+        }
+        if(arr3.length != 0){
+            dealArr(arr3,3)
+        }
+        if(arr2.length != 0){
+            dealArr(arr2,2)
+        }
+        if(arr1.length != 0){
+            dealArr(arr1,1)
+        }
+    }
+    // 处理五种数组
+    let ArrSetRange = []//将请求信息插入数组内
+    const dealArr = (arr,types) =>{
+        let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
+        setrange.tgt = []
+        setrange.type = types
+        arr.forEach(element => {
+            setrange.tgt.push(element.id)
+        })
+        // console.log('111111',types,setrange)
+        ArrSetRange.push(setrange)
+    }
+    // 调用接口设置范围
+    const submit = () => {
+        // console.log(ArrSetRange)
+        // 遍历数组调用API接口添加数据
+        ArrSetRange.forEach(element => {
+            APIaddSurveyRange(element).then(res => {
+                console.log(res)
+            })
+        })
+    }
+    const tree_item = ref({
+    })
+    // 调用tree树形组件初始的请求
+    APIgetChinaRegion().then(res => {
+        tree_item.value.id = res.data[0].code
+        tree_item.value.name = res.data[0].name
+        tree_item.value.type = 'region'
+        tree_item.value.next_type = 'zone'
     })
 </script>
 <style lang="scss" scoped>
