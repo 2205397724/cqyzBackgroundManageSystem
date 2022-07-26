@@ -12,7 +12,7 @@
           添加分类
         </el-button>
       </div>
-      <div class="search m-t-10">
+      <!-- <div class="search m-t-10">
         <el-row>
           <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="searchKey">
             <div>关键字</div>
@@ -57,7 +57,7 @@
         >
           筛选
         </el-button>
-      </div>
+      </div> -->
       <div v-show="data_1.switch_search" style="margin-bottom: 10px;">
         <el-button
           style="margin-right: 10px;"
