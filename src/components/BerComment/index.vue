@@ -239,23 +239,23 @@ const popup1 = reactive({
     scoreper: 0
 })
 import {
-    APIgetAdCommentList,
-    APIpostAdComment,
-    APIdeleteAdComment
+    APIgetCommentconfig,
+    APIpostCommentconfig,
+    APIdeleteCommentconfig
 } from '@/api/custom/custom.js'
 const switchFnUse = val => {
     if (val) {
-        APIpostAdComment(id.value, { scoreper: popup1.scoreper }).then(res => {
+        APIpostCommentconfig(id.value, { scoreper: popup1.scoreper }).then(res => {
             ElMessage.success(res.msg)
         })
         return false
     }
-    APIdeleteAdComment(id.value).then(res => {
+    APIdeleteCommentconfig(id.value).then(res => {
         ElMessage.success(res.msg)
     })
 }
 const switchFnStatus = () => {
-    APIgetAdCommentList(id.value).then(res => {
+    APIgetCommentconfig(id.value).then(res => {
         popup1.using = false
         if (res.data) {
             popup1.using = true
@@ -272,7 +272,7 @@ const data_1 = reactive({
 import {
     APIgetCommentList,
     APIgetCommentDetails,
-    APIdeleteComment,
+    // APIdeleteComment,
     APIputComment,
     APIpostComment
 } from '@/api/custom/custom.js'
@@ -351,11 +351,11 @@ const popup3FnDetails = id => {
     })
 }
 
-const data1FnDelete = id => {
-    APIdeleteComment(id).then(res => {
-        data1FnGetList()
-    })
-}
+// const data1FnDelete = id => {
+//     APIdeleteComment(id).then(res => {
+//         data1FnGetList()
+//     })
+// }
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 const refreshFn = () => {
     popup1.switch = true
@@ -374,6 +374,3 @@ getOpts(['comment_scoreper', 'comment_status']).then(res => {
 })
 
 </script>
-<style lang="scss" scoped="">
-
-</style>

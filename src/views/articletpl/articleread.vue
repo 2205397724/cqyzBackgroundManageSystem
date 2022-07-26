@@ -310,11 +310,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetArticlereadList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
@@ -378,9 +376,6 @@ refreshFunc()
     }
 </style>
 <style lang="scss" scoped>
-    .articletarticleread {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

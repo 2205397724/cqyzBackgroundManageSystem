@@ -82,6 +82,14 @@ const opts = {
         key: 1,
         val: '显示'
     }],
+    // 是否显示1
+    app_show: [{
+        key: 0,
+        val: '是'
+    }, {
+        key: 1,
+        val: '否'
+    }],
     // 设备状态
     device_status: [{
         key: 1,
@@ -171,7 +179,7 @@ const opts = {
         val: '物业'
     }, {
         key: 99,
-        val: "其他"
+        val: '其他'
     }],
     // 投诉 状态
     toushu_status: [{
@@ -635,21 +643,21 @@ const opts = {
         key: 1,
         val: '区域等级一'
     }],
-    //用户组成员类型
+    // 用户组成员类型
     group_user_flg: [{
         key: 0,
-        val: "普通成员"
+        val: '普通成员'
     }, {
         key: 1,
-        val: "组管理员"
+        val: '组管理员'
     }],
-    //用户组成员区域类型
+    // 用户组成员区域类型
     group_user_region_type: [{
         key: 1,
-        val: "中国区域代码"
+        val: '中国区域代码'
     }, {
         key: 2,
-        val: "小区ID"
+        val: '小区ID'
     }]
 }
 

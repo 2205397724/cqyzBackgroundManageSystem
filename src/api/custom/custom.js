@@ -23,10 +23,10 @@ export function APIgetCommentList(params) {
 export function APIgetCommentDetails(id) {
     return api2.get(`comment/${id}`)
 }
-// 删除
-export function APIdeleteComment(id) {
-    return api2.delete(`comment/${id}`)
-}
+// // 删除
+// export function APIdeleteAdComment(id) {
+//     return api2.delete(`comment/${id}`)
+// }
 // 修改
 export function APIputComment(id, data) {
     return api2.put(`comment/${id}`, data)
@@ -447,8 +447,8 @@ export function APIpostArchiveAudit(archive, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示归档
 // 列表
-export function APIgetListArchiveArticle(archive, params) {
-    return api2.get(`/a/archive/${archive}/article`, { params: params })
+export function APIgetListArchiveArticle(params) {
+    return api2.get('/a/archive/', { params: params })
 }
 // 详情
 export function APIgetDetailsArchiveArticle(archive, article) {
@@ -501,46 +501,46 @@ export function APIpostTask(data) {
 // 任务派发 /api/a/tasksd
 // 列表
 export function APIgetTasksdList(params) {
-    return api2.get('/tasksd', { params: params })
+    return api2.get('/a/task-fac', { params: params })
 }
 // 详情
 export function APIgetTasksdDetails(id) {
-    return api2.get('/tasksd/' + id)
+    return api2.get(`/a/task-fac/${id}`)
 }
 // 删除
 export function APIdeleteTasksd(id) {
-    return api2.delete('/tasksd/' + id)
+    return api2.delete(`/a/task-fac/${id}`)
 }
 // 修改
 export function APIputTasksd(id, data) {
-    return api2.put('/tasksd/' + id, data)
+    return api2.put(`/a/task-fac/${id}`, data)
 }
 // 添加
 export function APIpostTasksd(data) {
-    return api2.post('/tasksd', data)
+    return api2.post('/a/task-fac', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示
 // 列表
 export function APIgetEventArticleList(params) {
-    return api2.get('/a/article', { params: params })
+    return api2.get('/announce', { params: params })
 }
 // 详情
 export function APIgetEventArticleDetails(id) {
-    return api2.get('/a/article/' + id)
+    return api2.get(`/announce/${id}`)
 }
 // 删除
 export function APIdeleteEventArticle(id) {
-    return api2.delete('/a/article/' + id)
+    return api2.delete(`/announce/${id}`)
 }
 // 修改
 export function APIputEventArticle(id, data) {
-    return api2.put('/a/article/' + id, data)
+    return api2.put(`/announce/${id}`, data)
 }
 // 添加
 export function APIpostEventArticle(data) {
-    return api2.post('/a/article', data)
+    return api2.post('/announce', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -562,23 +562,23 @@ export function APIpostFileList(data) {
 // 公示 模板 Articletpl /api/a/
 // 列表
 export function APIgetArticletplList(params) {
-    return api2.get('/a/articletpl', { params: params })
+    return api2.get('/a/tpl', { params: params })
 }
 // 详情
 export function APIgetArticletplDetails(id) {
-    return api2.get('/a/articletpl/' + id)
+    return api2.get('/a/tpl/' + id)
 }
 // 删除
 export function APIdeleteArticletpl(id) {
-    return api2.delete('/a/articletpl/' + id)
+    return api2.delete('/a/tpl/' + id)
 }
 // 修改
 export function APIputArticletpl(id, data) {
-    return api2.put('/a/articletpl/' + id, data)
+    return api2.put('/a/tpl/' + id, data)
 }
 // 添加
 export function APIpostArticletpl(data) {
-    return api2.post('/a/articletpl', data)
+    return api2.post('/a/tpl', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -698,18 +698,18 @@ export function APIputGroupUser(gid, id, data) {
 }
 // 添加
 export function APIpostGroupUser(gid, data) {
-    return api.post(`/ccgroup/${gid}/user`, data)
+    return api.post(`/groups/${gid}/users`, data)
 }
 // 详情
 export function APIgetGroupUserDetails(gid, id) {
-    return api.get(`/ccgroup/${gid}/user/${id}`)
+    return api.get(`/groups/${gid}/users/${id}`)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
 // 列表
-export function APIgetGroupList(cc, params) {
-    return api.get(`/cc/${cc}/group`, { params: params })
+export function APIgetGroupList(params) {
+    return api.get('/groups', { params: params })
 }
 // 删除
 export function APIdeleteGroup(cc, id) {
@@ -829,7 +829,7 @@ export function APIpostEnterprise(data) {
 // 用户
 // 列表
 export function APIgetUserList(params) {
-    return api.get('/pt/user-account', { params: params })
+    return api.get('/users', { params: params })
 }
 // 详情
 export function APIgetUserDetails(id) {
@@ -852,19 +852,19 @@ export function APIpostUser(data) {
 // 产权
 // 列表
 export function APIgetPropertyList(params) {
-    return api2.get('/house-property', { params: params })
+    return api2.get('/house-property-log', { params: params })
 }
 // 详情
-export function APIgetPropertyDetails(id) {
-    return api2.get('/house-property/' + id)
+export function APIgetPropertyDetails(log) {
+    return api2.get(`/house-property-log/${log}`)
 }
 // 删除
-export function APIdeleteProperty(id) {
-    return api2.delete('/house-property/' + id)
+export function APIdeleteProperty(log) {
+    return api2.delete(`/house-property-log/${log}`)
 }
 // 修改
 export function APIputProperty(id, data) {
-    return api2.put('/house-property/' + id, data)
+    return api2.put('/house-property/', data)
 }
 // 添加
 export function APIpostProperty(data) {

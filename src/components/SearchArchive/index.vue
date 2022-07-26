@@ -188,9 +188,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetEventArticleList(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 

@@ -173,11 +173,13 @@ const getTabListFunc = () => {
     //         data_tab.arr = res
     //         total.value = res.length
     // })
-     APIgetUserList().then(res => {
-        console.log(res)
+    APIgetUserList().then(res => {
+        if (res.status == 200) {
+            console.log(res)
             loading_tab.value = false
             data_tab.arr = res.data
-            total.value = res.length
+            total.value = res.data.length
+        }
     })
 }
 

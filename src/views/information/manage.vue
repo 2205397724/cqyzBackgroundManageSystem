@@ -63,7 +63,7 @@
                         <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="类别">
+                <el-table-column label="资讯类别id">
                     <template #default="scope">
                         <span>{{ scope.row.cate_id }} </span>
                     </template>
@@ -81,11 +81,12 @@
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审核"
-                            inactive-text="未审核"
+                            active-text="已审"
+                            inactive-text="未审"
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
+                            @change="SwitchFunc(scope.row)"
                         />
                     </template>
                 </el-table-column>
@@ -154,10 +155,27 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
-                            label="类别id"
+                            label="资讯类别"
                             :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
                         >
-                            <el-input v-model="data_1.add_form.cate_id" />
+                            <!-- <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;">
+                                <CategoryList v-model:id="data_1.add_form.cate_id" />
+                            </div> -->
+                            <!-- <el-select v-model="data_1.add_form.cate_id" class="head-btn" placeholder="" clearable>
+                                <el-option v-for="(item) in NewArr.arr" :key="item.id" :label="item.name" :value="item.id" />
+                            </el-select> -->
+                            <el-cascader
+                                v-model="data_1.add_form.cate_id" :options="data_tab.arr" collapse-tags
+                                placeholder="类别"
+                                :show-all-levels="false"
+                                :props="props"
+                                clearable
+                                @change="cascader_change"
+                            >
+                                <template #default="{ node, data }">
+                                    <span>{{ data.name }}</span>
+                                </template>
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -214,15 +232,15 @@
                                 style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                active-text="已审核"
-                                inactive-text="未审核"
+                                active-text="已审"
+                                inactive-text="未审"
                                 :active-value="1"
                                 :inactive-value="0"
                                 class="switchStyle"
                             />
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label-width="70px"
                             label="内容"
@@ -236,6 +254,24 @@
                                 placeholder=""
                             />
                         </el-form-item>
+                    </el-col> -->
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <div class="m-l-10 m-b-10">资讯内容</div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <!-- <el-form-item
+                            label=""
+                            label-width="120px"
+                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
+                        > -->
+                        <!-- <el-input
+                                v-model="from_examine.item.content"
+                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                type="textarea"
+                                placeholder=""
+                            /> -->
+                        <editor v-model="data_1.add_form.content" style="width: 100%;" />
+                        <!-- </el-form-item> -->
                     </el-col>
                 </el-row>
             </el-form>
@@ -259,15 +295,15 @@
                 </div>
                 <div class="item">
                     <div class="left">资讯id</div>
-                    <div class="right">{{ data_1.details_data.cate_id }}</div>
+                    <div class="right">{{ data_1.details_data.id }}</div>
                 </div>
-                <div class="item">
-                    <div class="left">类别id</div>
-                    <div class="right">{{ data_1.details_data.cate_id }}</div>
-                </div>
-                <div class="item">
+                <div v-if="data_1.details_data.zone_id" class="item">
                     <div class="left">小区id</div>
                     <div class="right">{{ data_1.details_data.zone_id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">资讯类别id</div>
+                    <div class="right">{{ data_1.details_data.cate_id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">所在区域</div>
@@ -276,13 +312,9 @@
                 <div v-if="data_1.details_data.affix&&data_1.details_data.affix.length>0" class="item">
                     <div class="left">附件</div>
                     <div class="right">
-                        <!-- 两种模式任君选择 -->
                         <el-image
                             v-for="(item,i) in data_1.details_data.affixs" :key="i" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
                         />
-                        <!-- <div v-for="(item,i) in data_1.details_data.affixs">
-                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
-                        </div> -->
                     </div>
                 </div>
                 <div class="item">
@@ -302,8 +334,8 @@
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审核"
-                            inactive-text="未审核"
+                            active-text="已审"
+                            inactive-text="未审"
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
@@ -312,7 +344,7 @@
                 </div>
                 <div class="item">
                     <div class="left">内容</div>
-                    <div class="right">{{ data_1.details_data.content }}</div>
+                    <div class="right">{{ AudioContext }}</div>
                 </div>
             </div>
             <template #footer>
@@ -333,6 +365,7 @@ import {
     ElMessage
 } from 'element-plus'
 import { Search, Plus } from '@element-plus/icons-vue'
+
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetInforManageList,
@@ -375,6 +408,11 @@ const getFuncManageList = () => {
         data_1.list = res
     })
 }
+//
+const cascader_change = val => {
+    data_1.add_form.cate_id = val
+    console.log(val)
+}
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
     let files = []
@@ -393,6 +431,7 @@ const clickFuncCategory = () => {
         getFilesKeys(files, 'folder').then(arr => {
             data_1.add_form.affix = file_key.concat(arr)
             if (data_1.add_title == '添加') {
+                console.log(data_1.add_form.cate_id)
                 APIpostInforManage(data_1.add_form).then(res => {
                     // console.log(res)
                     refreshFunc()
@@ -427,7 +466,6 @@ const clickFuncCategory = () => {
             ElMessage.error('添加失败')
         })
     } else {
-        data_1.add_form.setting = []
         // data_1.add_form.thumb = ''
         console.log(data_1.add_form)
         APIputInforManage(data_1.add_form.id, data_1.add_form).then(res => {
@@ -439,6 +477,30 @@ const clickFuncCategory = () => {
         })
     }
 }
+// 资讯列表
+// const getFuncCategoryList = () => {
+import {
+    APIgetInforCategoryList
+} from '@/api/custom/custom.js'
+const data_tab = reactive({
+    arr: []
+})
+const NewArr = reactive({
+    arr: []
+})
+let params = {
+    // page: page.value,
+    // per_page: per_page.value
+}
+APIgetInforCategoryList(params).then(res => {
+    console.log(res)
+    data_tab.arr = res
+    // NewArr.arr = data_tab.arr.map(item => { return Object.assign({}, { 'id': item.id, 'name': item.name }) })
+    // console.log(NewArr.arr)
+})
+const props = { multiple: false, emitPath: false, checkStrictly: true, value: 'id', label: 'name' }
+
+// }
 // 修改
 const clickFuncModify = row => {
     data_1.add_title = '修改'
@@ -458,6 +520,7 @@ const clickFuncModify = row => {
     })
 }
 // 详情
+const AudioContext = ref('')
 const clickFuncDetails = val => {
     APIgetInforManageDetails(val.id).then(res => {
         res.affixs = []
@@ -466,6 +529,8 @@ const clickFuncDetails = val => {
         }
         data_1.details_data = res
         data_1.details_switch = true
+        AudioContext.value = data_1.details_data.content.slice(3, -4)
+        console.log(AudioContext.value)
     })
 }
 // 删除
@@ -474,6 +539,12 @@ const clickFuncDelete = id => {
         ElMessage.success('删除成功')
         refreshFunc()
     })
+}
+// switch 状态改变事件
+const SwitchFunc = row => {
+    console.log(row)
+    data_1.add_form = row
+    APIputInforManage(data_1.add_form.id, data_1.add_form)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
@@ -534,6 +605,9 @@ getOpts(['information_status']).then(res => {
 .el-badge {
     margin-right: 25px;
 }
+::v-deep .el-form-item__content {
+    align-items: inherit !important;
+}
 .switchStyle ::v-deep .el-switch__label {
     position: absolute !important;
     display: none !important;
@@ -553,6 +627,6 @@ getOpts(['information_status']).then(res => {
 }
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
-    width: 70px !important;
+    width: 60px !important;
 }
 </style>
