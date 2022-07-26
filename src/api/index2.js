@@ -53,7 +53,7 @@ api.interceptors.request.use(
         // if(userOutsideStore.utype=='ptzxcvbnm159'){
         //     userOutsideStore.isChooseCity=true
         // }else{
-            request.headers['X-Cc'] = userOutsideStore.city
+            request.headers['X-Cc'] = '500101'//userOutsideStore.city
         // }
 
         // if(!request.headers['X-Cc']){

@@ -616,9 +616,9 @@ import { ElMessage } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 import House from '@/components/House/index.vue'
-// const tree_item = reactive({
-//     obj: {}
-// })
+const tree_item = reactive({
+    obj: {}
+})
 const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
