@@ -80,11 +80,11 @@
           'font-size': '12px',
         }"
         style="
-                                        width: 100%;
-                                        min-height: 300px;
-                                        overflow: auto;
-                                        border: 1px solid #ebeef4;
-                                        box-sizing: border-box;
+                                                                                                                                                                                                                                                                                                                                width: 100%;
+                                                                                                                                                                                                                                                                                                                                min-height: 300px;
+                                                                                                                                                                                                                                                                                                                                overflow: auto;
+                                                                                                                                                                                                                                                                                                                                border: 1px solid #ebeef4;
+                                                                                                                                                                                                                                                                                                                                box-sizing: border-box;
 "
       >
         <el-table-column label="备案名称" width="120">
@@ -133,10 +133,10 @@
               <router-link
                 class="el-button m-lr-10"
                 style="
-                                                                        text-decoration: inherit;
-                                                                        color: inherit;
-                                                                        width: 52px;
-                                                                        height: 26px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                text-decoration: inherit;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                color: inherit;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: 52px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                height: 26px;
 "
                 :to="{
                   name: 'recordManangeDetail',
@@ -192,8 +192,8 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-              <el-form-item label-width="50px" label="类型">
-                <el-select
+              <el-form-item label-width="70px" label="类型">
+                <!-- <el-select
                   v-model="from_record.item.type"
                   placeholder="选择类型"
                 >
@@ -204,7 +204,8 @@
                     :key="item.id"
                   >
                   </el-option>
-                </el-select>
+                </el-select> -->
+                <GroupListTabs/>
               </el-form-item>
             </el-col>
           </el-row>
