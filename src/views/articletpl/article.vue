@@ -705,18 +705,17 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-const affixs = ref([])
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetEventArticleDetails(val.id).then(res => {
         data_details.item = res
-        res.affixs = []
-        for (let i in res.affix.file) {
-            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix.file[i])
+        res.affix = []
+        for (let i in res.affix) {
+            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
         }
         switch_details.value = true
-        console.log(res.affixs)
+        console.log(data_details.item)
     })
 }
 // 监听分页
