@@ -1,9 +1,11 @@
+
 import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import { APIlogin, APIgetPermissions, APIeditPassword } from '@/api/custom/custom.js'
 
 import { useMenuStore } from './menu'
+// import { resolve } from 'path-browserify'
 
 export const useUserStore = defineStore(
     // 唯一ID
@@ -12,7 +14,10 @@ export const useUserStore = defineStore(
             account: localStorage.account || '',
             token: localStorage.token || '',
             failure_time: localStorage.failure_time || '',
-            permissions: []
+            permissions: [],
+            utype:"",
+            city:"",
+            isChooseCity:false
         }),
         getters: {
             isLogin: state => {
@@ -28,7 +33,6 @@ export const useUserStore = defineStore(
         actions: {
             login(data) {
                 return new Promise((resolve, reject) => {
-                    // 通过 mock 进行登录
                     APIlogin(data).then(res => {
                         console.log(res)
                         let name = data.username
@@ -64,13 +68,24 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    // 通过 mock 获取权限
+                    //通过 mock 获取权限
                     APIgetPermissions({ account: this.account }).then(res => {
                         this.permissions = res.data.permissions
                         resolve(res.data.permissions)
                     })
+                    // this.permissions=['supervise','supervise.home','information']
+                    // console.log(this.permissions)
+                    // resolve(this.permissions)
                 })
             },
+            // setPermissions(data){
+            //    return new Promise(resolve=>{
+            //     for(let i=0;i<data.length;i++){
+            //         this.permissions.push(data[0])
+            //     }
+            //     resolve()
+            //    })
+            // },
             editPassword(data) {
                 return new Promise(resolve => {
                     APIeditPassword({ password: data.password }).then(res => {

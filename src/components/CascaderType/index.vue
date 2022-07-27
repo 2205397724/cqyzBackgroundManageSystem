@@ -73,10 +73,11 @@ getOpts(['type_type']).then(res => {
         atemp.push(
             new Promise((resolve, reject) => {
                 APIgetTypeList(opt.id).then(res => {
-                    opt.children = res.data
-                    for (let i in res.data) {
-                        if (res.data[i].id == props.modelValue) {
-                            text.value = res.data[i].name
+                    console.log(res)
+                    opt.children = res
+                    for (let i in res) {
+                        if (res[i].id == props.modelValue) {
+                            text.value = res[i].name
                             break
                         }
                     }
@@ -105,7 +106,6 @@ const cascader_props = {
     .fenlei-box {
         width: 100%;
         display: inline-block;
-
         .el-cascader {
             width: 100% !important;
         }

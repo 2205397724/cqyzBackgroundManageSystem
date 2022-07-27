@@ -7,7 +7,7 @@ import { APIgenerateRoutesAtBack } from '@/api/custom/custom.js'
 import { useSettingsStore } from './settings'
 import { useUserStore } from './user'
 
-function hasPermission(permissions, route) {
+function hasPermission(permissions=[], route) {
     let isAuth = false
     if (route.meta && route.meta.auth) {
         isAuth = permissions.some(auth => {

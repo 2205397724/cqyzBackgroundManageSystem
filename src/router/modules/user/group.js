@@ -4,7 +4,7 @@ export default {
     path: '/user_group',
     component: Layout,
     redirect: '/user_group/group',
-    name: 'userTypeBox',
+    name: 'userGroupBox',
     meta: {
         title: '用户组管理',
         icon: 'el-icon-document-copy',
@@ -13,7 +13,7 @@ export default {
     children: [
         {
             path: 'group',
-            name: 'userType',
+            name: 'userGroup',
             component: () => import('@/views/user/group.vue'),
             meta: {
                 title: '用户组管理',

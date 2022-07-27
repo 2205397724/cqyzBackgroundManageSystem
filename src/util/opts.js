@@ -17,10 +17,18 @@ const opts = {
         val: '未审核'
     }, {
         key: 20,
-        val: '正常'
+        val: '已审核'
     }, {
         key: 30,
         val: '审核失败'
+    }],
+    // 资讯状态
+    information_status: [{
+        key: 0,
+        val: '未审核'
+    }, {
+        key: 1,
+        val: '已审核'
     }],
     // 评论 分割 100百分制、10分制、5分制、0不采用
     comment_scoreper: [{
@@ -73,6 +81,14 @@ const opts = {
     }, {
         key: 1,
         val: '显示'
+    }],
+    // 是否显示1
+    app_show: [{
+        key: 0,
+        val: '是'
+    }, {
+        key: 1,
+        val: '否'
     }],
     // 设备状态
     device_status: [{
@@ -157,10 +173,13 @@ const opts = {
         val: '社区'
     }, {
         key: 6,
-        val: '业委'
+        val: '业委会'
     }, {
         key: 7,
         val: '物业'
+    }, {
+        key: 99,
+        val: '其他'
     }],
     // 投诉 状态
     toushu_status: [{
@@ -291,6 +310,17 @@ const opts = {
         key: 30,
         val: '报名'
     }],
+    //备案状态
+    record_status:[
+        {
+            key:0,
+            val:'未审核'
+        },
+        {
+            key:1,
+            val:'已审核'
+        }
+    ],
     // 流程启用
     flow_active: [{
         key: 1,
@@ -623,6 +653,22 @@ const opts = {
     china_level: [{
         key: 1,
         val: '区域等级一'
+    }],
+    // 用户组成员类型
+    group_user_flg: [{
+        key: 0,
+        val: '普通成员'
+    }, {
+        key: 1,
+        val: '组管理员'
+    }],
+    // 用户组成员区域类型
+    group_user_region_type: [{
+        key: 1,
+        val: '中国区域代码'
+    }, {
+        key: 2,
+        val: '小区ID'
     }]
 }
 

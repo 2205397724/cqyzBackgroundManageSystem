@@ -236,14 +236,14 @@
                             <div>
                                 字段类别：{{ item.type }}
                             </div>
-                            <div v-for="(child,j) in item.prop.arr" style="display: flex;">
+                            <!-- <div v-for="(child,j) in item.prop.arr" style="display: flex;">
                                 <div style="flex: 1;">
                                     键Key：{{ child.key }}
                                 </div>
                                 <div style="flex: 1;">
                                     值Val：{{ child.val }}
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -345,10 +345,8 @@ import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
-APIgetTypeList(101).then(res => {
-    if (!res.code) {
-        options.arr = res.data
-    }
+APIgetTypeList('announce').then(res => {
+    options.arr = res.data
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
@@ -370,16 +368,14 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetArticletplDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // 监听分页
 watch(page, () => {
     getTabListFunc()
-})
+}, { immediate: true, deep: true })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
@@ -388,21 +384,17 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputArticletpl(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 APIpostArticletpl(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -449,20 +441,17 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetArticletplList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteArticletpl(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加模板
@@ -470,7 +459,22 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        fields: []
+        // fields: []
+        'name': '大风书本',
+        'cid': '71cdfdggtfh556hgf56hgfh6',
+        'fields': [
+            {
+                'label': 'Lorem',
+                'type': 'Excepteur'
+            },
+            {
+                'label': 'aliqua sed',
+                'type': 'proident'
+            }
+        ],
+        'id': '32fer4354fdf5453gvdgfh34',
+        'created_at': '2022-7-25 15:00',
+        'updated_at': '2022-7-25 15:03'
     }
     switch_examine.value = true
 }
@@ -479,10 +483,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetArticletplDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 
@@ -517,9 +519,6 @@ refreshFunc()
     }
 </style>
 <style lang="scss" scoped>
-    .articletparticletpl {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

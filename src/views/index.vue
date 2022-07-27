@@ -15,10 +15,10 @@
                         </el-col>
                         <el-col
                             :xs="24" :sm="24" :lg="18"
-                            style="display: flex;flex-direction: column;justify-content:space-between;"
+                            style="display: flex;flex-direction: column;justify-content: space-between;"
                         >
-                            <div style="color: #333333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.nickname }}</div>
-                            <div style="color: #666666;font-weight: 400;">
+                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.nickname }}</div>
+                            <div style="color: #666;font-weight: 400;">
                                 <div style="font-size: 14px;">{{ data.userinfo.address }} {{ data.userinfo.department }} {{ data.userinfo.job }}</div>
                                 <div style="font-size: 12px;">
                                     手机号码：{{ data.userinfo.tel }} 最后登录：{{ data.userinfo.lasttime }}
@@ -65,7 +65,7 @@
                 </page-main>
             </el-col>
         </el-row>
-        <el-row :gutter="20" style="margin: 10px 10px -10px 10px;">
+        <el-row :gutter="20" style="margin: 10px 10px -10px;">
             <el-col v-for="(item,i) in data.eventnum" :key="'eventnum'+i" :xs="24" :sm="12" :md="12" :lg="8">
                 <page-main style="margin: 10px 0;" :title="item.name">
                     <div class="numname">
@@ -84,40 +84,98 @@
                 </el-col>
             </el-row>
         </page-main>
+        <el-dialog title="请选择地区" v-model="switch_choose_city.item"
+        width="40%" :close-on-click-modal="false" :show-close="false">
+            <el-select v-model="choosed_city" placeholder="请选择城市" @change="choose_cityFun">
+              <el-option :label="city.name" :value="city.china_code" v-for="city in city_list.arr" :key="city.id"></el-option>
+            </el-select>
+            <template #footer>
+                <el-button type="primary" @click="choose_city_end">确认</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
-// 公共导入 cscs
-import { reactive } from 'vue'
-
-// 数据
+import {useUserOutsideStore} from "@/store/modules/user"
 import {
     APIgetUserinfo,
     APIgetTipsnum,
-    APIgetEventnum
+    APIgetEventnum,
+    APIgetCityNotPm
 } from '@/api/custom/custom.js'
+import {ElMessage} from "element-plus"
+const userStore=useUserOutsideStore()
+// 公共导入 cscs
+const switch_choose_city=ref(false)
+const choosed_city=ref("")
+
+const city_list=reactive({
+    arr:[]
+})
+const choose_city_end=()=>{
+    if(!choosed_city.value){
+        ElMessage.error("请选择城市")
+        return
+    }
+    ElMessage.success("选择成功")
+    switch_choose_city.value=false
+}
+const choose_city=()=>{//进入首页判断
+    userStore.isChooseCity=sessionStorage.getItem("IS_chooseCity")
+    if(userStore.isChooseCity){
+        switch_choose_city.value=false
+        console.log("ssss")
+    }else{
+        switch_choose_city.value=true
+        console.log("ss")
+        // userStore.isChooseCity=false
+        APIgetCityNotPm().then(res=>{
+            console.log(res)
+            city_list.arr=res.data
+        })
+    }
+    // if(sessionStorage.getItem('IS_chooseCity')){
+    //     userStore.isChooseCity=sessionStorage.getItem('IS_chooseCity')
+    //     userStore.city=sessionStorage.getItem('city')
+    //     return
+    // }else{
+    //     switch_choose_city.value=true
+    //     APIgetCityNotPm().then(res=>{
+    //         console.log(res)
+    //         city_list.arr=res.data
+    //     })
+    // }
+}
+choose_city()
+const choose_cityFun=(val)=>{
+    userStore.city=val
+    userStore.isChooseCity=true
+    sessionStorage.setItem('city',val)
+    sessionStorage.setItem('IS_chooseCity',true)
+
+}
+import { reactive } from 'vue'
+// const refreshCurPage=()=>{
+//     location.reload()
+// }
+// 数据
+
 const data = reactive({ userinfo: '', tipsnum: '', eventnum: '', echarts: '' })
 APIgetUserinfo().then(res => {
     console.log(res)
-    if (res.code == 0) {
-        data.userinfo = res.data
-    }
+        data.userinfo = res.data.data
 }).catch(error => {
     console.log(error)
 })
 APIgetTipsnum().then(res => {
     // console.log(res)
-    if (res.code == 0) {
-        data.tipsnum = res.data
-    }
+        data.tipsnum = res.data.data
 }).catch(error => {
     console.log(error)
 })
 APIgetEventnum().then(res => {
     // console.log(res)
-    if (res.code == 0) {
-        data.eventnum = res.data
-    }
+        data.eventnum = res.data.data
 }).catch(error => {
     console.log(error)
 })
@@ -128,9 +186,7 @@ import {
 } from '@/api/custom/custom.js'
 APIgetEchartsHome().then(res => {
     // console.log(res)
-    if (res.code == 0) {
         data.echarts = res.data
-    }
 }).catch(error => {
     console.log(error)
 })
@@ -138,142 +194,114 @@ const aaa = ref()
 </script>
 
 <style lang="scss" scoped>
-	@media only screen and (min-width: 1700px) {
-		.el-col-xl-4-8 {
-			max-width: 20%;
-		}
-
-		.el-col-xl-offset-4-8 {
-			margin-left: 20%;
-		}
-
-		.el-col-xl-pull-4-8 {
-			position: relative;
-			right: 20%;
-		}
-
-		.el-col-xl-push-4-8 {
-			position: relative;
-			left: 20%;
-		}
-	}
-
-	.list-icon {
-		display: inline-block;
-		margin: 10px;
-
-		i {
-			font-size: 32px;
-			color: #606266;
-		}
-	}
-
-	.item-bottom {
-		display: flex;
-		color: #999999;
-		font-size: 14px;
-
-		>div {
-			flex: 1;
-			white-space: nowrap;
-
-			.tit {
-				font-size: 18px;
-				color: #333333;
-			}
-
-			.num {
-				font-size: 18px;
-				color: #EA2929;
-			}
-		}
-	}
-
-	.icontitbox .icontit {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin: 20px 0;
-
-		>.img {
-			>.svg {
-				width: 40px;
-				height: 20px;
-				margin: 0 10px;
-			}
-		}
-	}
-
-	.icontitbox .icontitcolbox:nth-child(1) .icontit {
-		color: #42C493;
-	}
-
-	.icontitbox .icontitcolbox:nth-child(2) .icontit {
-		color: #48B9FD;
-	}
-
-	.icontitbox .icontitcolbox:nth-child(3) .icontit {
-		color: #5CCED4;
-	}
-
-	.icontitbox .icontitcolbox:nth-child(4) .icontit {
-		color: #BF5CD4;
-	}
-
-	.icontitbox .icontitcolbox:nth-child(5) .icontit {
-		color: #D79A25;
-	}
-
-	.numname {
-		display: flex;
-		justify-content: space-between;
-
-		>div {
-			text-align: center;
-		}
-
-		>div:nth-child(1) .num {
-			color: #E88301;
-		}
-
-		>div:nth-child(2) .num {
-			color: #48B9FD;
-		}
-
-		>div:nth-child(3) .num {
-			color: #42C493;
-		}
-
-		>div:nth-child(4) .num {
-			color: #48B9FD;
-		}
-
-		>div:nth-child(5) .num {
-			color: #6C6C6C;
-		}
-
-		.num {
-			font-size: 22px;
-		}
-
-		.name {
-			font-size: 14px;
-			color: #666666;
-		}
-	}
-
-	.picbox {
-		.pic-item {
-			margin-bottom: 20px;
-
-			.pictit {
-				font-size: 14px;
-				color: #666666;
-			}
-
-			.pic {
-				// background-color: #F2F2F2;
-			}
-		}
-	}
+    @media only screen and (min-width: 1700px) {
+        .el-col-xl-4-8 {
+            max-width: 20%;
+        }
+        .el-col-xl-offset-4-8 {
+            margin-left: 20%;
+        }
+        .el-col-xl-pull-4-8 {
+            position: relative;
+            right: 20%;
+        }
+        .el-col-xl-push-4-8 {
+            position: relative;
+            left: 20%;
+        }
+    }
+    .list-icon {
+        display: inline-block;
+        margin: 10px;
+        i {
+            font-size: 32px;
+            color: #606266;
+        }
+    }
+    .item-bottom {
+        display: flex;
+        color: #999;
+        font-size: 14px;
+        >div {
+            flex: 1;
+            white-space: nowrap;
+            .tit {
+                font-size: 18px;
+                color: #333;
+            }
+            .num {
+                font-size: 18px;
+                color: #ea2929;
+            }
+        }
+    }
+    .icontitbox .icontit {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        >.img {
+            >.svg {
+                width: 40px;
+                height: 20px;
+                margin: 0 10px;
+            }
+        }
+    }
+    .icontitbox .icontitcolbox:nth-child(1) .icontit {
+        color: #42c493;
+    }
+    .icontitbox .icontitcolbox:nth-child(2) .icontit {
+        color: #48b9fd;
+    }
+    .icontitbox .icontitcolbox:nth-child(3) .icontit {
+        color: #5cced4;
+    }
+    .icontitbox .icontitcolbox:nth-child(4) .icontit {
+        color: #bf5cd4;
+    }
+    .icontitbox .icontitcolbox:nth-child(5) .icontit {
+        color: #d79a25;
+    }
+    .numname {
+        display: flex;
+        justify-content: space-between;
+        >div {
+            text-align: center;
+        }
+        >div:nth-child(1) .num {
+            color: #e88301;
+        }
+        >div:nth-child(2) .num {
+            color: #48b9fd;
+        }
+        >div:nth-child(3) .num {
+            color: #42c493;
+        }
+        >div:nth-child(4) .num {
+            color: #48b9fd;
+        }
+        >div:nth-child(5) .num {
+            color: #6c6c6c;
+        }
+        .num {
+            font-size: 22px;
+        }
+        .name {
+            font-size: 14px;
+            color: #666;
+        }
+    }
+    .picbox {
+        .pic-item {
+            margin-bottom: 20px;
+            .pictit {
+                font-size: 14px;
+                color: #666;
+            }
+            .pic {
+                // background-color: #F2F2F2;
+            }
+        }
+    }
 </style>

@@ -254,7 +254,8 @@ import {
     APIgetEnterpriseList,
     APIgetEnterpriseDetails,
     APIdeleteEnterprise,
-    APIputEnterprise
+    APIputEnterprise,
+    APIpostEnterprise
 } from '@/api/custom/custom.js'
 
 // 获取列表
@@ -275,6 +276,7 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetEnterpriseList(params).then(res => {
         if (res.status === 200) {
+            console.log(res)
             loading_tab.value = false
             from_tab.arr = res.data
             total.value = res.data.length
@@ -319,9 +321,38 @@ const deleteFunc = val => {
         ElMessage.success(res.msg)
     })
 }
+// from_add.obj = {
+//     user_id: '5sd54ggfer56gfggjh5546fg',
+//     name: '马式经',
+//     social_code: '20',
+//     type: 12,
+//     logo: 'consequat aliqua eiusmod dolore adipisicing',
+//     legal: 'minim culpa',
+//     contact: 'ea nisi voluptate',
+//     desc: 'labore non',
+//     extra: {}
+// }
+// APIpostEnterprise(from_add.obj).then(res => {
+//     refreshFunc()
+//     ElMessage.success(res.msg)
+//     switch_add.value = false
+// }).catch(err => {
+//     err_add.obj = err.data
+// })
 // 提交
 const postFunc = () => {
     if (str_title.value == '添加') {
+        // from_add.obj = {
+        //     'user_id': '5',
+        //     'name': '马式经',
+        //     'social_code': '20',
+        //     'type': 12,
+        //     'logo': 'consequat aliqua eiusmod dolore adipisicing',
+        //     'legal': 'minim culpa',
+        //     'contact': 'ea nisi voluptate',
+        //     'desc': 'labore non',
+        //     'extra': {}
+        // }
         // APIpostEnterprise(from_add.obj).then(res => {
         //     refreshFunc()
         //     ElMessage.success(res.msg)

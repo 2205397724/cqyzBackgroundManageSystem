@@ -168,10 +168,18 @@ const getTabListFunc = () => {
         }
     }
     loading_tab.value = true
-    APIgetUserList(params).then(res => {
+    // APIgetUserList(params).then(res => {
+    //         loading_tab.value = false
+    //         data_tab.arr = res
+    //         total.value = res.length
+    // })
+    APIgetUserList().then(res => {
+        if (res.status == 200) {
+            console.log(res)
             loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+            data_tab.arr = res.data
+            total.value = res.data.length
+        }
     })
 }
 

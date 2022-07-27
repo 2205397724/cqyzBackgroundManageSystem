@@ -24,7 +24,7 @@ const api = axios.create({
         import.meta.env.VITE_OPEN_PROXY === 'true' ?
         '/proxy/' :
         import.meta.env.VITE_APP_API_BASEURL,
-    timeout: 10000,
+    timeout: 6000,
     responseType: 'json'
 })
 
@@ -42,6 +42,7 @@ api.interceptors.request.use(
              */
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
+            request.headers['X-Cc'] = ('500101')
                 // request.headers['Token'] = userOutsideStore.token
         }
         var time = new Date().getTime().toString()

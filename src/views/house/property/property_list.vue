@@ -430,10 +430,11 @@ const refreshFunc = () => {
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
-    APIgetPropertyDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
+    APIgetPropertyDetails(val.house_id).then(res => {
+        data_details.item = res.data
+        switch_details.value = true
+        if (res.status === 404) {
+            ElMessage.error('改产权信息不存在')
         }
     })
 }
@@ -448,24 +449,21 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputProperty(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                console.log(from_examine.item)
+                APIputProperty(from_examine.item.house_id, from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('修改失败')
                 })
             } else {
                 APIpostProperty(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('添加失败')
                 })
             }
         } else {
@@ -511,18 +509,16 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
         console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = data_tab.arr.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = data_tab.arr.length
     })
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteProperty(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+    APIdeleteProperty(val.house_id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加产权
@@ -543,11 +539,9 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetPropertyDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+    APIgetPropertyDetails(val.house_id).then(res => {
+        from_examine.item = res.data
+        switch_examine.value = true
     })
 }
 // 删除 服务名称和联系方式
@@ -612,5 +606,4 @@ getOpts(['house_has_house']).then(res => {
         font-size: 14px;
         margin-bottom: 20px;
     }
-
 </style>

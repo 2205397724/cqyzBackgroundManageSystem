@@ -103,8 +103,11 @@ watch(code, () => {
 const getTabListFunc = () => {
     loading_tab.value = true
     APIgetGroupList(code.value).then(res => {
+        if (res.status == 200) {
+            console.log(res)
             loading_tab.value = false
-            data_tab.arr = res
+            data_tab.arr = res.data
+        }
     })
 }
 

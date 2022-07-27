@@ -3,30 +3,30 @@ import api2 from '@/api/index2.js'
 import api9 from '@/api/index9.js'
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 查看
-export function APIgetAdCommentList(tgtid, params) {
-    return api9.get(`commentcfg/${tgtid}`, { params: params })
+export function APIgetCommentconfig(tgtid) {
+    return api9.get(`commentcfg/${tgtid}`)
 }
 // 修改
-export function APIpostAdComment(tgtid, data) {
+export function APIpostCommentconfig(tgtid, data) {
     return api2.post(`commentcfg/${tgtid}`, data)
 }
 // 删除
-export function APIdeleteAdComment(tgtid) {
+export function APIdeleteCommentconfig(tgtid) {
     return api2.delete(`commentcfg/${tgtid}`)
 }
 // 评论
 // 列表
-export function APIgetCommentList(tgtid, params) {
-    return api2.get(`target/${tgtid}/comment`, { params: params })
+export function APIgetCommentList(params) {
+    return api2.get('/comment', params)
 }
 // 详情
 export function APIgetCommentDetails(id) {
     return api2.get(`comment/${id}`)
 }
-// 删除
-export function APIdeleteComment(id) {
-    return api2.delete(`comment/${id}`)
-}
+// // 删除
+// export function APIdeleteAdComment(id) {
+//     return api2.delete(`comment/${id}`)
+// }
 // 修改
 export function APIputComment(id, data) {
     return api2.put(`comment/${id}`, data)
@@ -169,8 +169,8 @@ export function APIgetComplaintList(params) {
     return api2.get('complaint', { params: params })
 }
 // 详情
-export function APIgetComplaintDetails(complaint) {
-    return api2.get(`complaint/${complaint}`)
+export function APIgetComplaintDetails(complaint, data) {
+    return api2.get(`complaint/${complaint}`, data)
 }
 // 修改
 export function APIputComplaint(complaint, data) {
@@ -447,8 +447,8 @@ export function APIpostArchiveAudit(archive, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示归档
 // 列表
-export function APIgetListArchiveArticle(archive, params) {
-    return api2.get(`/a/archive/${archive}/article`, { params: params })
+export function APIgetListArchiveArticle(params) {
+    return api2.get('/a/archive/', { params: params })
 }
 // 详情
 export function APIgetDetailsArchiveArticle(archive, article) {
@@ -501,46 +501,46 @@ export function APIpostTask(data) {
 // 任务派发 /api/a/tasksd
 // 列表
 export function APIgetTasksdList(params) {
-    return api2.get('/tasksd', { params: params })
+    return api2.get('/a/task-fac', { params: params })
 }
 // 详情
 export function APIgetTasksdDetails(id) {
-    return api2.get('/tasksd/' + id)
+    return api2.get(`/a/task-fac/${id}`)
 }
 // 删除
 export function APIdeleteTasksd(id) {
-    return api2.delete('/tasksd/' + id)
+    return api2.delete(`/a/task-fac/${id}`)
 }
 // 修改
 export function APIputTasksd(id, data) {
-    return api2.put('/tasksd/' + id, data)
+    return api2.put(`/a/task-fac/${id}`, data)
 }
 // 添加
 export function APIpostTasksd(data) {
-    return api2.post('/tasksd', data)
+    return api2.post('/a/task-fac', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示
 // 列表
 export function APIgetEventArticleList(params) {
-    return api2.get('/a/article', { params: params })
+    return api2.get('/announce', { params: params })
 }
 // 详情
 export function APIgetEventArticleDetails(id) {
-    return api2.get('/a/article/' + id)
+    return api2.get(`/announce/${id}`)
 }
 // 删除
 export function APIdeleteEventArticle(id) {
-    return api2.delete('/a/article/' + id)
+    return api2.delete(`/announce/${id}`)
 }
 // 修改
 export function APIputEventArticle(id, data) {
-    return api2.put('/a/article/' + id, data)
+    return api2.put(`/announce/${id}`, data)
 }
 // 添加
 export function APIpostEventArticle(data) {
-    return api2.post('/a/article', data)
+    return api2.post('/announce', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -562,23 +562,23 @@ export function APIpostFileList(data) {
 // 公示 模板 Articletpl /api/a/
 // 列表
 export function APIgetArticletplList(params) {
-    return api2.get('/a/articletpl', { params: params })
+    return api2.get('/a/tpl', { params: params })
 }
 // 详情
 export function APIgetArticletplDetails(id) {
-    return api2.get('/a/articletpl/' + id)
+    return api2.get('/a/tpl/' + id)
 }
 // 删除
 export function APIdeleteArticletpl(id) {
-    return api2.delete('/a/articletpl/' + id)
+    return api2.delete('/a/tpl/' + id)
 }
 // 修改
 export function APIputArticletpl(id, data) {
-    return api2.put('/a/articletpl/' + id, data)
+    return api2.put('/a/tpl/' + id, data)
 }
 // 添加
 export function APIpostArticletpl(data) {
-    return api2.post('/a/articletpl', data)
+    return api2.post('/a/tpl', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -637,7 +637,63 @@ export function APIgetFilesList(params) {
 export function APIpostFilesList(data) {
     return api2.post('/houseimptask', data)
 }
+// 资讯
+// 资讯类别管理列表
+export function APIgetInforCategoryList(params) {
+    return api2.get('/newscate', { params: params })
+}
+// 资讯类别管理添加
 
+export function APIpostInforCategory(data) {
+    return api.post('/newscate', data)
+}
+// 资讯类别管理修改
+export function APIputInforCategory(id, data) {
+    return api.put(`/newscate/${id}`, data)
+}
+// 资讯类别管理删除
+export function APIdeleteInforCategory(id) {
+    return api2.delete(`/newscate/${id}`)
+}
+
+// 资讯管理列表
+export function APIgetInforManageList(params) {
+    return api2.get('/news', { params: params })
+}
+// 资讯管理详情
+export function APIgetInforManageDetails(id) {
+    return api2.get(`/news/${id}`)
+}
+// 资讯管理添加
+export function APIpostInforManage(data) {
+    return api2.post('/news', data)
+}
+// 资讯管理修改
+export function APIputInforManage(id, data) {
+    return api2.put(`/news/${id}`, data)
+}
+// 资讯管理删除
+export function APIdeleteInforManage(id) {
+    return api2.delete(`/news/${id}`)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+//备案
+export function APIgetRecordList(params){
+    return api2.get(`/filing`,{params:params})
+}
+export function APIpostRecord(data){
+    return api2.post(`/filing`,data)
+}
+export function APIputRecord(id,data){
+    return api2.put(`/filing/${id}`,data)
+}
+export function APIdeleteRecord(id){
+    return api2.delete(`/filing/${id}`)
+}
+export function APIgetRecordDetail(id){
+    return api2.get(`/filing/${id}`)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 文件上传获取配置 { 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }
 export function APIpostFiles(data) {
@@ -646,49 +702,163 @@ export function APIpostFiles(data) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组成员 /api/ccgroup/{gid}/user
-// 列表
-export function APIgetGroupUserList(gid, params) {
-    return api.get(`/ccgroup/${gid}/user`, { params: params })
+export function APIgetGroupUserList(gid) {
+    return api.get(`/groups/${gid}/users`)
 }
 // 删除
-export function APIdeleteGroupUser(gid, id) {
-    return api.delete(`/ccgroup/${gid}/user/${id}`)
+export function APIdeleteGroupUser(gid, uid) {
+    return api.delete(`/groups/${gid}/users/${uid}`)
 }
 // 修改
-export function APIputGroupUser(gid, id, data) {
-    return api.put(`/ccgroup/${gid}/user/${id}`, data)
+export function APIputGroupUser(gid, uid, data) {
+    return api.put(`/groups/${gid}/users/${uid}`, data)
 }
 // 添加
 export function APIpostGroupUser(gid, data) {
-    return api.post(`/ccgroup/${gid}/user`, data)
+    return api.post(`/groups/${gid}/users`, data)
 }
 // 详情
-export function APIgetGroupUserDetails(gid, id) {
-    return api.get(`/ccgroup/${gid}/user/${id}`)
+export function APIgetGroupUserDetails(gid, data) {
+    return api.get(`/groups/${gid}/users`, data)
 }
-
+/* --------------------------------------------------------------------------------------------------------------------- */
+//组成员角色
+export function APIgetGroupUser_Roles(gid, uid) {
+    return api.get(`/groups/${gid}/users/${uid}/roles`)
+}
+export function APIpostGroupUser_Roles(gid, uid, data) {
+    return api.post(`/groups/${gid}/users/${uid}/roles`, data)
+}
+export function APIdeleteGroupUser_Roles(gid, uid, data) {
+    return api.delete(`/groups/${gid}/users/${uid}/roles`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------- */
+//用户组成员权限
+export function APIgetGroupUser_perms(group, user) {
+    return api.get(`/groups/${group}/users/${user}/perms`)
+}
+export function APIpostGroupUser_perms(group, user, data) {
+    return api.post(`/groups/${group}/users/${user}/perms`, data)
+}
+export function APIdeleteGroupUser_perms(group, user, data) {
+    return api.delete(`/groups/${group}/users/${user}/perms`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+//权限管理
+export function APIgetPermsList() {
+    return api.get(`/perms`)
+}
+export function APIgetPermsDetail(perm) {
+    return api.get(`/perms/${perm}`)
+}
+export function APIpostPerms(data) {
+    return api.post(`/perms`, data)
+}
+export function APIputPerms(id, data) {
+    return api.put(`/perms/${id}`, data)
+}
+export function APIdeletePerms(id) {
+    return api.delete(`/perms/${id}`)
+}
+//获取权限被赋予到的所有角色
+export function APIgetPerms_Roles(pid) {
+    return api.get(`/perms/${pid}/roles`)
+}
+//将权限赋予给角色
+export function APIpostPerms_Roles(pid, rid) {
+    return api.post(`/perms/${pid}/roles`, rid)
+}
+//权限移除角色
+export function APIdeletePerms_Roles(pid, rid) {
+    return api.delete(`/perms/${pid}/roles`, rid)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 用户组角色
+export function APIgetGroupRolesList(gid) {
+    return api.get(`/groups/${gid}/roles`)
+}
+export function APIpostGroupRoles(gid, data) {
+    return api.post(`/groups/${gid}/roles`, data)
+}
+export function APIdeleteGroupRoles(gid, data) {
+    return api.delete(`/groups/${gid}/roles`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+//角色管理
+export function APIgetRolesList() {
+    return api.get(`/roles`)
+}
+export function APIgetRolesDetail(role) {
+    return api.get(`/roles/${role}`)
+}
+export function APIpostRoles(data) {
+    return api.post(`/roles`, data)
+}
+export function APIputRoles(id, data) {
+    return api.put(`/roles/${id}`, data)
+}
+export function APIDeleteRoles(id) {
+    return api.delete(`/roles/${id}`)
+}
+export function APIgetRoles_perms(role) {
+    return api.get(`/roles/${role}/perms`)
+}
+export function APIpostRoles_perms(role, data) {
+    return api.post(`/roles/${role}/perms`, data)
+}
+export function APIdeleteRoles_perms(role, data) {
+    return api.delete(`/roles/${role}/perms`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
 // 列表
-export function APIgetGroupList(cc, params) {
-    return api.get(`/cc/${cc}/group`, { params: params })
+export function APIgetGroupList() {
+    return api.get(`/groups`)
 }
 // 删除
-export function APIdeleteGroup(cc, id) {
-    return api.delete(`/cc/${cc}/group/${id}`)
+export function APIdeleteGroup(id) {
+    return api.delete(`/groups/${id}`)
 }
 // 修改
-export function APIputGroup(cc, id, data) {
-    return api.put(`/cc/${cc}/group/${id}`, data)
+export function APIputGroup(id, data) {
+    return api.put(`/groups/${id}`, data)
 }
 // 添加
-export function APIpostGroup(cc, data) {
-    return api.post(`/cc/${cc}/group`, data)
+export function APIpostGroup(data) {
+    return api.post(`/groups`, data)
 }
 // 详情
-export function APIgetGroupDetails(cc, id) {
-    return api.get('/cc/${cc}/group/' + id)
+export function APIgetGroupDetails(id) {
+    return api.get(`/groups/${id}`)
 }
+export function APIgetGroupPerms(gid) {
+    return api.get(`/groups/${gid}/perms`)
+}
+export function APIpostGroupPerms(gid, data) {
+    return api.post(`/groups/${gid}/perms`, data)
+}
+export function APIdeleteGroupPerms(gid) {
+    return api.delete(`/groups/${gid}/perms`)
+}
+//获取角色拥有所有权限
+export function getRoles_perms(role) {
+    return api.get(`/roles/${role}/perms`)
+}
+export function payRoles_perms(role, data) {
+    return api.post(`/roles/${role}/perms`, data)
+}
+export function deleteRoles_perms(role, data) {
+    return api.delete(`/roles/${role}/perms`, data)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+// 用户组 /api/cc/{cc}/group
+// 列表
+
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 类别
@@ -728,7 +898,7 @@ export function APIputAPP(id, data) {
 }
 // 添加
 export function APIpostAPP(data) {
-    return api2.post(`/apps`, data)
+    return api2.post('/apps', data)
 }
 // APP 菜单管理
 // 列表
@@ -745,7 +915,7 @@ export function APIputAppMenu(id, data) {
 }
 // 添加
 export function APIpostAppMenu(data) {
-    return api2.post(`/appmenu`, data)
+    return api2.post('/appmenu', data)
 }
 // APP 版本管理
 // 列表
@@ -762,7 +932,7 @@ export function APIputAppVersion(id, data) {
 }
 // 添加
 export function APIpostAppVersion(data) {
-    return api2.post(`/appversion`, data)
+    return api2.post('/appversion', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 企业
@@ -791,7 +961,7 @@ export function APIpostEnterprise(data) {
 // 用户
 // 列表
 export function APIgetUserList(params) {
-    return api.get('/pt/user-account', { params: params })
+    return api.get('/users', { params: params })
 }
 // 详情
 export function APIgetUserDetails(id) {
@@ -814,19 +984,19 @@ export function APIpostUser(data) {
 // 产权
 // 列表
 export function APIgetPropertyList(params) {
-    return api2.get('/house-property', { params: params })
+    return api2.get('/house-property-log', { params: params })
 }
 // 详情
-export function APIgetPropertyDetails(id) {
-    return api2.get('/house-property/' + id)
+export function APIgetPropertyDetails(log) {
+    return api2.get(`/house-property-log/${log}`)
 }
 // 删除
-export function APIdeleteProperty(id) {
-    return api2.delete('/house-property/' + id)
+export function APIdeleteProperty(log) {
+    return api2.delete(`/house-property-log/${log}`)
 }
 // 修改
 export function APIputProperty(id, data) {
-    return api2.put('/house-property/' + id, data)
+    return api2.put('/house-property/', data)
 }
 // 添加
 export function APIpostProperty(data) {
@@ -835,6 +1005,10 @@ export function APIpostProperty(data) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // china
+//获取可服务的城市
+export function APIgetCityNotPm(){
+    return api.get(`/srv-city`)
+}
 // 列表
 export function APIgetChinaList(params) {
     return api.get('china', { params: params })
@@ -1063,6 +1237,21 @@ export function APIeditPassword(data) {
     return api.put('/user/password', data)
 }
 
+/* --------------------------------------------------------------------------------------------------------------------- */
+//分类
+export function APIpostkind(kind,data){
+    return api2.post(`/kind/${kind}/cat`,data)
+}
+export function APIgetKindList(kind,params){
+    return api2.get(`/kind/${kind}/cat`,{params:params})
+}
+export function APIputKind(kind,cat,data){
+    return api2.put(`/kind/${kind}/cat/${cat}`,data)
+}
+export function APIdeleteKind(kind,cat){
+    return api2.delete(`/kind/${kind}/cat/${cat}`)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 // 统计

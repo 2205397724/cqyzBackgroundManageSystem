@@ -55,21 +55,21 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="公示类型" width="250">
+                <!-- <el-table-column label="公示类型" width="250">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.cate.name }} </span>
                     </template>
-                </el-table-column>
-                <el-table-column label="任务范围" width="120">
+                </el-table-column> -->
+                <!-- <el-table-column label="任务范围" width="120">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
                     </template>
-                </el-table-column>
-                <el-table-column label="任务部门" width="120">
+                </el-table-column> -->
+                <!-- <el-table-column label="任务部门" width="120">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.todata.name }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="任务单位" width="120">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv,scope.row.tolv ) }}</span>
@@ -198,18 +198,18 @@
                     <div class="left">任务范围</div>
                     <div class="right">{{ data_details.item.fromchina.name }}</div>
                 </div>
-                <div class="item">
+                <!-- <div class="item">
                     <div class="left">任务单位</div>
                     <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.tolv ) }}</div>
-                </div>
-                <div class="item">
+                </div> -->
+                <!-- <div class="item">
                     <div class="left">任务部门</div>
                     <div class="right">{{ data_details.item.todata.name }}</div>
-                </div>
-                <div class="item">
+                </div> -->
+                <!-- <div class="item">
                     <div class="left">公示分类</div>
                     <div class="right">{{ data_details.item.cate.name }}</div>
-                </div>
+                </div> -->
                 <div class="item">
                     <div class="left">是否完成</div>
                     <div class="right">
@@ -305,7 +305,7 @@ const cascader_props = {
             data
         } = node
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
+            resolve(res)
         })
     }
 }
@@ -321,7 +321,7 @@ const cascader_props2 = {
             data
         } = node
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
+            resolve(res)
         })
     }
 }
@@ -345,10 +345,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetTaskDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
 }
 
@@ -364,21 +362,17 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputTask(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 APIpostTask(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -404,20 +398,17 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetTaskList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteTask(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加
@@ -430,7 +421,11 @@ const addResidentialFunc = () => {
         time_deal: '',
         code_property: '',
         code_room: '',
-        should_bind_house: ''
+        should_bind_house: '',
+        from: 'tgt54bvfg564545ggtgt34gh',
+        tolv: 4,
+        to: '43tdtg54y6h6',
+        cid: '37vfgdgrt5465gftyy67fg45'
     }
     switch_examine.value = true
 }
@@ -439,10 +434,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetTaskDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 
@@ -487,9 +480,6 @@ getOpts(['article_lv', 'task_ok']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .articletpltask {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

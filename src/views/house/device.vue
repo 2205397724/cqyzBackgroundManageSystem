@@ -80,9 +80,9 @@
                                 <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceArchive(scope.row)">档案</div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="记录" width="120">
+                        <el-table-column prop="id" label="维保记录" width="120">
                             <template #default="scope">
-                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair">维保记录</div>
+                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair(scope.row)">维保记录</div>
                             </template>
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="200">
@@ -157,48 +157,8 @@
                                 :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
                             >
                                 <BerZone v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit" :disabled="[0,1,2,3,4,5]" :code="''" />
-                                <!-- <el-input
-                                    v-model="from_examine.item.zone"
-                                    class="head-btn"
-                                /> -->
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="小区"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.zone"
-                                    class="head-btn"
-                                />
-                            </el-form-item>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="楼栋"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.building?from_error.msg.building[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.building"
-                                    class="head-btn"
-                                />
-                            </el-form-item>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="单元"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.unit?from_error.msg.unit[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.unit"
-                                    class="head-btn"
-                                />
-                            </el-form-item>
-                        </el-col> -->
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="所在地址"
@@ -342,21 +302,9 @@
                                 <div class="left">设备名称</div>
                                 <div class="right">{{ data_details.item.name }}</div>
                             </div>
-                            <!-- <div class="item">
-                            <div class="left">小区</div>
-                            <div class="right">{{ data_details.item.zone }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">楼栋</div>
-                            <div class="right">{{ data_details.item.building }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">单元</div>
-                            <div class="right">{{ data_details.item.unit }}</div>
-                        </div> -->
                             <div class="item">
                                 <div class="left">小区>楼栋>单元</div>
-                                <div class="right">{{ data_details.item.zoneinfo }} {{ data_details.item.buildinginfo }} {{ data_details.item.unitinfo }}</div>
+                                <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>
@@ -398,47 +346,83 @@
                     </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="档案信息" name="2">
-                    <el-scrollbar>
-                        <div class="details-box" v-for="(item,index) in data_archive.arr" :key="index" v-if="data_archive.arr.length >0">
-                <div class="item">
-                    <div class="left">档案名称</div>
-                    <div class="right">{{ item.title }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">档案id</div>
-                    <div class="right">{{ item.id}}</div>
-                </div>
-                <div class="item">
-                    <div class="left">设备id</div>
-                    <div class="right">{{ item.did }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">是否显示</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.device_show,item.show) }}</div>
-                </div>
-                <div v-if="item.content&&item.content.length>0" class="item">
-                    <div class="left">附件</div>
-                    <div class="right">
-                        <div v-for="(item,i) in item.content">
-                            <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ item.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">更新时间</div>
+                    <el-scrollbar height="400px">
+                        <div>
+                            <el-timeline v-for="(item,index) in data_archive.arr" :key="index">
+                                <el-timeline-item :timestamp="item.created_at" placement="top">
+                                    <el-card>
+                                        <div class="details-box">
+                                            <div class="item">
+                                                <div class="left">档案名称</div>
+                                                <div class="right">{{ item.title }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">档案id</div>
+                                                <div class="right">{{ item.id }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">设备id</div>
+                                                <div class="right">{{ item.did }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">是否显示</div>
+                                                <div class="right">{{ getOptVal(opts_all.obj.device_show,item.show) }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">更新时间</div>
 
-                    <div class="right">{{ item.updated_at }}</div>
-                </div>
+                                                <div class="right">{{ item.updated_at }}</div>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-timeline-item>
+                            </el-timeline>
                         </div>
-                <div v-else class="size-lx">此设备无档案信息</div>
-            </el-scrollbar>
+                        <div v-show="data_archive.arr.length <= 0" class="size-lx">此设备无档案信息</div>
+                    </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="维保记录" name="3">
-                    <div>小区档案待完善</div>
+                    <el-scrollbar height="400px">
+                        <div>
+                            <el-timeline v-for="(item,index) in data_repair.arr" :key="index">
+                                <el-timeline-item :timestamp="item.created_at" placement="top">
+                                    <el-card>
+                                        <div class="details-box">
+                                            <div class="item">
+                                                <div class="left">维保名称</div>
+                                                <div class="right">{{ item.title }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">维保id</div>
+                                                <div class="right">{{ item.id }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">设备id</div>
+                                                <div class="right">{{ item.did }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">详细记录</div>
+                                                <div class="right">{{ item.content }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">类型</div>
+                                                <div class="right">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">是否显示</div>
+                                                <div class="right">{{ getOptVal(opts_all.obj.device_show,item.show) }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">更新时间</div>
+                                                <div class="right">{{ item.updated_at }}</div>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-timeline-item>
+                            </el-timeline>
+                        </div>
+                        <div v-show="data_repair.arr.length <= 0" class="size-lx">此设备无维保记录</div>
+                    </el-scrollbar>
                 </el-tab-pane>
             </el-tabs>
             <template #footer>
@@ -472,10 +456,6 @@ let switch_search = ref(false)
 let data_search = reactive({ obj: {} })
 // 详情
 let switch_details = ref(false)
-// 档案
-let switch_archive = ref(false)
-// 维保记录
-let switch_repair = ref(false)
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
@@ -493,6 +473,12 @@ const data_details = reactive({
 const data_archive = reactive({
     arr: []
 })
+const data_repair = reactive({
+    arr: []
+})
+const zoneName = ref('')
+const buildingName = ref('')
+const unitName = ref('')
 // 分页
 let total = ref(100)
 let per_page = ref(15)
@@ -508,13 +494,15 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
+const switch_repair = ref(false)
+const switch_archive = ref(false)
 const activeName = ref('1')
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device_show','kind']).then(res => {
+getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device_show', 'kind', 'repair_type', 'device_show']).then(res => {
     console.log(res)
     opts_all.obj = res
 })
@@ -523,89 +511,10 @@ import {
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
-        options.arr = res
+    options.arr = res
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
-// 搜索
-const searchFunc = () => {
-    page.value = 1
-    switch_search.value = true
-    getTabListFunc()
-}
-// 刷新
-const refreshFunc = () => {
-    page.value = 1
-    switch_search.value = false
-    data_search.obj = {}
-    getTabListFunc()
-}
-import {
-    APIgetDeviceArchiveList,
-} from '@/api/custom/custom.js'
-// 档案信息
-const deviceArchive = (val) => {
-    activeName.value='2'
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        did: val.id
-    }
-    APIgetDeviceArchiveList(params).then(res => {
-            console.log(res)
-            data_archive.arr = res
-            switch_details.value = true
-    })
-}
-// 维保记录
-const deviceRepair = () => {
-    switch_repair.value = true
-}
-// 详情
-const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetDeviceDetails(val.id).then(res => {
-            console.log(res)
-            data_details.item = res
-            switch_details.value = true
-    })
-}
-// 关闭详情对话框
-const closeDialog=()=>{
-    activeName.value='1'
-}
-// 监听分页
-watch(page, () => {
-    getTabListFunc()
-})
-// 同意拒绝提交
-const dialogExamineCloseFunc = formEl => {
-    from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            if (str_title.value == '修改') {
-                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
-                        refreshFunc()
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('修改失败')
-                })
-            } else {
-                APIpostDevice(from_examine.item).then(res => {
-                        refreshFunc()
-                        ElMessage.success('添加成功')
-                        switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('添加失败')
-                })
-            }
-        } else {
-            return false
-        }
-    })
-}
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -644,16 +553,120 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetDeviceList(params).then(res => {
         console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
+    })
+}
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+}
+// 刷新
+const refreshFunc = () => {
+    page.value = 1
+    switch_search.value = false
+    data_search.obj = {}
+    getTabListFunc()
+}
+
+// 详情
+const getDetailsFunc = val => {
+    data_dialog.obj = val
+    APIgetDeviceDetails(val.id).then(res => {
+        data_details.item = res
+        switch_details.value = true
+        console.log(data_details.item)
+        zoneName.value = data_details.item.zoneinfo
+        buildingName.value = data_details.item.buildinginfo
+        unitName.value = data_details.item.unitinfo
+    })
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        did: val.id
+
+    }
+    APIgetDeviceArchiveList(params).then(res => {
+        console.log(res)
+        data_archive.arr = res
+        switch_details.value = true
+    })
+    let params1 = {
+        page: page.value,
+        per_page: per_page.value,
+        did: val.id
+    }
+    APIgetDeviceRepairList(params1).then(res => {
+        console.log(res)
+        data_repair.arr = res
+        switch_details.value = true
+    })
+
+}
+const detailsFunc = val => {
+    getDetailsFunc(val)
+}
+// 关闭详情对话框
+const closeDialog = () => {
+    activeName.value = '1'
+}
+import {
+    APIgetDeviceArchiveList
+} from '@/api/custom/custom.js'
+// 档案信息
+const deviceArchive = val => {
+    activeName.value = '2'
+    getDetailsFunc(val)
+}
+import {
+    APIgetDeviceRepairList
+
+} from '@/api/custom/custom.js'
+// 维保记录
+const deviceRepair = val => {
+    activeName.value = '3'
+    getDetailsFunc(val)
+}
+// 监听分页
+watch(page, () => {
+    refreshFunc()
+}, { immediate: true, deep: true })
+// 同意拒绝提交
+const dialogExamineCloseFunc = formEl => {
+    from_error.msg = {}
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            if (str_title.value == '修改') {
+                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('修改失败')
+                })
+            } else {
+                APIpostDevice(from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('添加失败')
+                })
+            }
+        } else {
+            return false
+        }
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteDevice(val.id).then(res => {
-            refreshFunc()
-            ElMessage.success('删除成功')
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -670,8 +683,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceDetails(val.id).then(res => {
-            from_examine.item = res
-            switch_examine.value = true
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 // 删除 服务名称和联系方式
@@ -687,10 +700,7 @@ const addServiceFunc = index => {
     from_examine.item.extra.push(data)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 执行
-refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-
 </script>
 <style lang="scss">
     .articletparticletpl {
@@ -722,5 +732,4 @@ refreshFunc()
         font-size: 14px;
         margin-bottom: 20px;
     }
-
 </style>

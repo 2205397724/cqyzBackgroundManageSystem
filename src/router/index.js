@@ -69,6 +69,7 @@ const constantRoutes = [{
             ]
         }
     ]
+    // 民事
 // 活动
 import activityJointly from './modules/activity/jointly.js'
 import activitySurvey from './modules/activity/survey.js'
@@ -102,6 +103,8 @@ import eventDeviceRepair from './modules/house/device_repair.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
+import userRoles from './modules/user/roles'
+import userPerms from './modules/user/perms'
 // 事件
 import eventFlow from './modules/event/flow.js'
 import eventEvents from './modules/event/flow_events.js'
@@ -110,7 +113,9 @@ import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
 import eventRepair from './modules/event/repair.js'
-
+// 资讯
+import informationManage from './modules/information/manage.js'
+import informationCategory from './modules/information/category.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
 import setupFile from './modules/setup/file.js'
@@ -120,23 +125,25 @@ import setupAPP from './modules/setup/APP.js'
 // 申请
 import joinPlatform from './modules/join/platform.js'
 import joinResidential from './modules/join/residential.js'
+//备案
+import recordManage from './modules/record/manange.js'
+import recordType from './modules/record/type'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [{
         meta: {
             title: '管理',
-            icon: 'supervise',
-            auth: ['supervise', '*']
+            icon: 'manage',
+            // auth: ['supervise', '*']
         },
         children: [
             superviseHome,
             superviseWorkbench
         ]
     },
-
     // {
     //     meta: {
     //         title: '统计',
-    //         icon: 'statistics',
+    //         icon: 'data',
     //         auth: ['statistics', '*']
     //     },
     //     children: [
@@ -150,7 +157,7 @@ const asyncRoutes = [{
     // },
     {
         meta: {
-            title: '房源',
+            title: '小区',
             icon: 'house',
             auth: ['house', '*']
         },
@@ -167,7 +174,7 @@ const asyncRoutes = [{
     {
         meta: {
             title: '公示',
-            icon: 'el-icon-set-up',
+            icon: 'announce',
             auth: ['articletpl', '*']
         },
         children: [
@@ -181,8 +188,8 @@ const asyncRoutes = [{
     },
     {
         meta: {
-            title: '活动',
-            icon: 'el-icon-set-up',
+            title: '议事',
+            icon: 'survey',
             auth: ['activity', '*']
         },
         children: [
@@ -194,8 +201,8 @@ const asyncRoutes = [{
     },
     {
         meta: {
-            title: '议事',
-            icon: 'event',
+            title: '民生',
+            icon: 'service',
             auth: ['event', '*']
         },
         children: [
@@ -210,30 +217,54 @@ const asyncRoutes = [{
     },
     {
         meta: {
+            title: '备案',
+            icon: 'filing',
+            auth: ['record', '*']
+        },
+        children: [
+            recordManage,
+            recordType,
+        ]
+    },
+    {
+        meta: {
+            title: '资讯',
+            icon: 'news',
+            auth: [' information', '*']
+        },
+        children: [
+            informationManage,
+            informationCategory
+        ]
+    },
+    {
+        meta: {
             title: '用户',
             icon: 'users',
             auth: ['users', '*']
         },
         children: [
             userRegister,
-            userGroup
+            userGroup,
+            userRoles,
+            userPerms
         ]
     },
-    {
-        meta: {
-            title: '申请',
-            icon: 'apply',
-            auth: ['join', '*']
-        },
-        children: [
-            joinPlatform,
-            joinResidential
-        ]
-    },
+    // {
+    //     meta: {
+    //         title: '申请',
+    //         icon: 'apply',
+    //         auth: ['join', '*']
+    //     },
+    //     children: [
+    //         joinPlatform,
+    //         joinResidential
+    //     ]
+    // },
     {
         meta: {
             title: '设置',
-            icon: 'setup',
+            icon: 'setting',
             auth: ['setup', '*']
         },
         children: [
