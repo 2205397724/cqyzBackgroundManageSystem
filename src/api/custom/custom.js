@@ -1193,7 +1193,12 @@ export function APIaddSurveyTopic(params) {
 export function APImodifySurveyTopic(id,props) {
     return api.put('/s/topic/'+id,props)
 }
-// // 删除问卷题目
+// 删除问卷题目
 export function APIdeleteSurveyTopic(props) {
     return api.delete('/s/topic/'+props)
+}
+
+//获取答卷管理列表
+export function APIgetSurveyAnswerList(id,params) {
+    return api.get('/s/'+id+'/answer',{ params : params})
 }

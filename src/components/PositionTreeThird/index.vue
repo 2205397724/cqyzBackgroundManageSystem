@@ -214,7 +214,7 @@
     // 处理五种数组
     let ArrSetRange = []//将请求信息插入数组内
     const dealArr = (arr,types) =>{
-        let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
+        let setrange = {"sid":props.id,"can_type":2,"type":'',"tgt":[]}
         setrange.tgt = []
         setrange.type = types
         arr.forEach(element => {

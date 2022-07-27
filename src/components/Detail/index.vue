@@ -72,9 +72,9 @@
         </el-tab-pane>
         <el-tab-pane label="设置参与范围" name="2" >
             <el-scrollbar height="400px">
-                <div>
+                <!-- <div>
                     <el-button type="primary" size="large" @click="addServeyTopic()">添加问卷范围</el-button>
-                </div>
+                </div> -->
                <el-table :data="data_range.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     width="100%"
@@ -107,7 +107,7 @@
             </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="添加参与范围" name="6" >
-            <el-button type="primary" class="m-10" @click="submit">提交</el-button>
+            <el-button type="primary" class="m-10" @click="submit">确认设置</el-button>
             <el-scrollbar height="400px">
                 <!-- 树形结构 -->
                 <div class="tree-item" >
@@ -173,22 +173,18 @@
             <div class="m-b-20">
                 <el-button class="m-r-20" type="primary" style="padding: 19px 18px;position: relative;top: 5px;">添加书面票</el-button>
                 <el-radio-group v-model="radio" size="large">
-                    <el-radio-button label="网络参与">网络参与(125)</el-radio-button>>
-                    <el-radio-button label="书面参与">书面参与(62)</el-radio-button>>
-                    <el-radio-button label="未参与">书面参与(62)</el-radio-button>>
+                    <el-radio-button label="线上参与">线上参与(125)</el-radio-button>>
+                    <el-radio-button label="线下参与">线下参与(62)</el-radio-button>>
+                    <el-radio-button label="未参与">未参与(62)</el-radio-button>>
                 </el-radio-group>
             </div>
             <el-scrollbar height="400px">
-                <el-table :data="tableData" border style="width: 100%;">
-                    <el-table-column prop="date" label="序号"></el-table-column>
-                    <el-table-column prop="name" label="操作人"></el-table-column>
-                    <el-table-column prop="address" label="表决人"></el-table-column>
-                    <el-table-column prop="date" label="真实业主"></el-table-column>
-                    <el-table-column prop="name" label="房号"></el-table-column>
-                    <el-table-column prop="address" label="类型"></el-table-column>
-                    <el-table-column prop="date" label="面积"></el-table-column>
-                    <el-table-column prop="name" label="表态"></el-table-column>
-                    <el-table-column prop="address" label="时间"></el-table-column>
+                <el-table :data="answer_list" border style="width: 100%;">
+                    <el-table-column prop="uinfo.gender" label="性别"></el-table-column>
+                    <el-table-column prop="uinfo.auth_type" label="操作人"></el-table-column>
+                    <el-table-column prop="uinfo.name" label="答题人"></el-table-column>
+                    <el-table-column prop="score" label="真实业主"></el-table-column>
+                    <el-table-column prop="source" label="线上线下"></el-table-column>
                     <el-table-column fixed="right" width="180px" label="操作">
                         <template #default="scope">
                             <el-button type="success" :icon="Edit"  size="small">修改</el-button>
@@ -317,6 +313,8 @@
         APImodifySurveyTopic,
         APIgetSurveyTopicDetail,
         APIgetHouseListSort,
+        // 问卷结果
+        APIgetSurveyAnswerList,
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -395,8 +393,11 @@
         if(tab.props.name == 2){
             rangeFunc()
         }else if(tab.props.name == 3){
+            // 问卷题目
             topicsFunc()
         }else if(tab.props.name == 4){
+            // 问卷调查结果
+            answerListFunc()
         }else{
 
         }
@@ -438,6 +439,20 @@
             console.log(data_range.arr.length)
         }).catch(err => {
             from_error.msg = err.data
+        })
+    }
+    // 获取问卷结果列表
+    let answer_list = reactive([
+    ])
+    const answerListFunc = () => {
+        let params = {
+            page:1,
+            per_page:15,
+        }
+        APIgetSurveyAnswerList(props.id,params).then(res => {
+            console.log(res.data)
+            answer_list = res.data
+            console.log(answer_list.source)
         })
     }
     // 添加问卷题目
