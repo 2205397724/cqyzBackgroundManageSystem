@@ -732,5 +732,4 @@ const addServiceFunc = index => {
         font-size: 14px;
         margin-bottom: 20px;
     }
-
 </style>

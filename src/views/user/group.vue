@@ -269,7 +269,7 @@
                                 type="warning"
                                 size="small"
                                 style="margin-left: -10px;"
-                                @click="getGroupUser_permsFun(scope.row)"
+                                @click="getGroupUser_perms(scope.row)"
                             >
                                 成员权限
                             </el-button>
@@ -461,54 +461,35 @@
         </el-dialog>
         <!-- 组成员权限 -->
         <el-dialog v-model="switch_group_user_perms" title="成员权限">
-            <el-button type="primary" @click="addGroupUser_permsFun">添加权限</el-button>
-            <!-- <el-input class="p-tb-10" v-model="from_addGroupUser_perms.item.perm_ids[0]">
-                    <template #prepend>权限ID</template>
-            </el-input> -->
-            <el-select v-model="from_addGroupUser_perms.item.perm_ids[0]" placeholder="请选择要赋予的权限" class="m-tb-10">
-                <el-option v-for="item in tab_group_all_perms.arr" :key="item.id" :label="item.name" :value="item.id">
-
-                </el-option>
-            </el-select>
-            <el-table  :data="data_tab_user_perms.arr" v-loading="loading_tab">
-             <el-table-column label="权限名称" prop="name">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.name}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column label="权限ID" prop="id" width="250px">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.id}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column label="权限端" prop="group_id">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.utype}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column label="权限秒速" prop="spec">
-                <template #default="scope">
-                    <span style="margin-left: 10px;">{{ scope.row.desc}} </span>
-                </template>
-             </el-table-column>
-             <el-table-column fixed="right" label="操作" width="80">
-                            <template #default="scope">
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteGroupUser_perms(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-           </el-table>
+            <el-tabs>
+                <el-tab-pane label="管理端权限">
+                        <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
+                            <el-checkbox :label="item.name" :true-label="item.id" v-if="item.utype=='gov'"
+                            @change="(val)=>(group_perms_selectFun_gov(val,item.id))" :checked="data_tab_group_perms_selected_gov.arr.indexOf(item.id)==-1?false:true"
+                            ></el-checkbox>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="物业端权限">
+                        <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
+                            <el-checkbox :label="item.name" :true-label="item.id" v-if="item.utype=='pm'"
+                            @change="(val)=>(group_perms_selectFun_pm(val,item.id))" :checked="data_tab_group_perms_selected_pm.arr.indexOf(item.id)==-1?false:true"
+                            ></el-checkbox>
+                        </div>
+                </el-tab-pane>
+                <el-tab-pane label="业主端权限">
+                        <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
+                            <el-checkbox :label="item.name" :true-label="item.id" v-if="item.utype=='mbr'"
+                            @change="(val)=>(group_perms_selectFun_mbr(val,item.id))" :checked="data_tab_group_perms_selected_mbr.arr.indexOf(item.id)==-1?false:true"
+                            ></el-checkbox>
+                        </div>
+                </el-tab-pane>
+            </el-tabs>
+            <template #footer>
+                <el-button type="primary" @click="post_all_group_user_perms">确认</el-button>
+            </template>
         </el-dialog>
         <!-- 组权限 -->
-        <el-dialog v-model="switch_group_perms" title="用户组权限" width="60%" @close="group_perms_close">
+        <el-dialog v-model="switch_group_perms" title="用户组权限" width="60%" @closed="group_perms_close">
             <el-tabs>
                 <el-tab-pane label="管理端权限">
                     <!-- <el-checkbox-group v-model="data_tab_group_perms_selected_gov.arr"> -->
@@ -751,6 +732,23 @@ const post_all_group_perms=()=>{
         if(res.status==200){
             ElMessage.success("添加用户组权限成功")
             switch_group_perms.value=false
+
+        }
+    })
+}
+//添加用户组全部权限取消弹窗
+const group_perms_close=()=>{
+    data_tab_group_perms_selected_gov.arr.length=0
+    data_tab_group_perms_selected_pm.arr.length=0
+    data_tab_group_perms_selected_mbr.arr.length=0
+}
+//添加用户组成员全部权限
+const post_all_group_user_perms=()=>{
+    APIpostGroupUser_perms(current_user_perms.item.group_id,current_user_perms.item.user_id,{perm_ids:[...data_tab_group_perms_selected_gov.arr,...data_tab_group_perms_selected_pm.arr
+    ,...data_tab_group_perms_selected_mbr.arr]}).then(res=>{
+        if(res.status==200){
+            ElMessage.success("修改成员权限成功")
+            switch_group_user_perms.value=false
         }
     })
 }
@@ -856,6 +854,40 @@ const addGroup_permsFun=()=>{
         }
     })
 }
+const all_perms_list_userIngroup=reactive({
+    arr:[]
+})
+//获取组成员权限弹窗
+const getGroupUser_perms=(val)=>{
+     data_tab_group_perms_selected_gov.arr=[]
+        data_tab_group_perms_selected_pm.arr=[]
+        data_tab_group_perms_selected_mbr.arr=[]
+    console.log(val)
+    current_user_perms.item.group_id=val.group_id
+    current_user_perms.item.user_id=val.user_id
+    switch_group_user_perms.value=true
+    APIgetGroupPerms(val.group_id).then(res=>{
+        all_perms_list_userIngroup.arr=res.data
+    })
+    APIgetGroupUser_perms(val.group_id,val.user_id).then(res=>{
+        tab_group_all_perms.arr=res.data
+
+        for(let i=0;i<res.data.length;i++){
+            if(res.data[i].utype=='gov'){
+                data_tab_group_perms_selected_gov.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_gov.arr)
+            }
+            if(res.data[i].utype=='pm'){
+                data_tab_group_perms_selected_pm.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_pm.arr)
+            }
+            if(res.data[i].utype=='mbr'){
+                data_tab_group_perms_selected_mbr.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_mbr.arr)
+            }
+        }
+    })
+}
 //获取组权限弹窗
 const getGroup_perms=(val)=>{
     current_group_perms.item=val
@@ -863,7 +895,7 @@ const getGroup_perms=(val)=>{
         all_perms_list.arr=res.data
     })
     APIgetGroupPerms(val.id).then(res=>{
-        tab_group_all_perms.arr=res.data
+        // tab_group_all_perms.arr=res.data
         data_tab_group_perms_selected_gov.arr=[]
         data_tab_group_perms_selected_pm.arr=[]
         data_tab_group_perms_selected_mbr.arr=[]
@@ -885,20 +917,20 @@ const getGroup_perms=(val)=>{
     })
 }
 //添加成员权限
-const addGroupUser_permsFun=()=>{
-    if(from_addGroupUser_perms.item.perm_ids[0]==""){
-        ElMessage.error("请填入数据")
-        return
-    }
-    APIpostGroupUser_perms(current_user_perms.item.group_id,current_user_perms.item.user_id,
-    {perm_ids:[from_addGroupUser_perms.item.perm_ids[0]]}).then(res=>{
-        if(res.status==200){
-            ElMessage.success("添加权限成功")
-            switch_group_user_perms.value=false
-            from_addGroupUser_perms.item.perm_ids[0]=""
-        }
-    })
-}
+// const addGroupUser_permsFun=()=>{
+//     if(from_addGroupUser_perms.item.perm_ids[0]==""){
+//         ElMessage.error("请填入数据")
+//         return
+//     }
+//     APIpostGroupUser_perms(current_user_perms.item.group_id,current_user_perms.item.user_id,
+//     {perm_ids:[from_addGroupUser_perms.item.perm_ids[0]]}).then(res=>{
+//         if(res.status==200){
+//             ElMessage.success("添加权限成功")
+//             switch_group_user_perms.value=false
+//             from_addGroupUser_perms.item.perm_ids[0]=""
+//         }
+//     })
+// }
 //删除成员权限
 const deleteGroupUser_perms=(val)=>{
     APIdeleteGroupUser_perms(current_user_perms.item.group_id,current_user_perms.item.user_id,{data:{perm_ids:[val.id]}}).then(res=>{

@@ -29,13 +29,14 @@
                             </template>
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="domain">
-                        <el-input ref="password" v-model="loginForm.domain" type="text" placeholder="主域名" tabindex="2">
-                            <template #prefix>
-                                <el-icon :size="14" color="#c0c4cc"><el-icon-mostly-cloudy /></el-icon>
-                            </template>
-                        </el-input>
-                    </el-form-item>
+                </div>
+                <div>
+                    <el-radio-group v-model="user_utype">
+                      <el-radio label="pt">总平台</el-radio>
+                      <el-radio label="ptr">区域平台</el-radio>
+                      <el-radio label="pm">企业端</el-radio>
+                      <el-radio label="gov">行政端</el-radio>
+                    </el-radio-group>
                 </div>
                 <div class="flex-bar">
                     <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
@@ -100,7 +101,7 @@ import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 // import { APIgetUser_where_group } from '@/api/custom/custom'
 const title = import.meta.env.VITE_APP_TITLE
-
+const user_utype=ref("")
 // 表单类型，login 登录，reset 重置密码
 const formType = ref('login')
 
@@ -161,11 +162,14 @@ function handleLogin() {
         if (valid) {
             loading.value = true
             let data = {
-                'auth_type': 'pt',
+                'auth_type': user_utype.value,
                 'username': loginForm.value.account,
                 'password': loginForm.value.password
             }
+            console.log(data)
             userStore.login(data).then(() => {
+                localStorage.removeItem("utype")
+                userStore.utype=data.auth_type
                 // APIgetUser_where_group().then(res => {
                 //     console.log(res)
                 //     let user_groupid_arr = []
@@ -177,13 +181,32 @@ function handleLogin() {
                 //         console.log(user_groupid_arr)
                 // })
                 loading.value = false
-                localStorage.setItem('domain', loginForm.value.domain)
+                localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
                 if (loginForm.value.remember) {
                     localStorage.setItem('login_account', loginForm.value.account)
                 } else {
                     localStorage.removeItem('login_account')
                 }
+                if(data.auth_type==="pt"){
+                    userStore.utype="pt"
+                    localStorage.setItem("utype","ptzxcvbnm159")
+                    userStore.isChooseCity=true
+                     sessionStorage.setItem("IS_chooseCity",true)
+                }
+                if(data.auth_type!=="pt"){
+                     userStore.utype=data.auth_type
+                     userStore.isChooseCity=false
+                     sessionStorage.setItem("IS_chooseCity",false)
+                    // APIgetUser_where_group().then(res=>{//获取登录用户所在用户组
+                    // let user_groupid_arr=[]
+                    // user_groupid_arr=res.data
+                    // console.log(res)
+                    userStore.getPermissions().then(res=>{
+                        console.log(res)
+                    })
+                }
                 router.push(redirect.value)
+                location.reload()
             }).catch(() => {
 
                 loading.value = false

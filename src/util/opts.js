@@ -310,6 +310,17 @@ const opts = {
         key: 30,
         val: '报名'
     }],
+    //备案状态
+    record_status:[
+        {
+            key:0,
+            val:'未审核'
+        },
+        {
+            key:1,
+            val:'已审核'
+        }
+    ],
     // 流程启用
     flow_active: [{
         key: 1,
