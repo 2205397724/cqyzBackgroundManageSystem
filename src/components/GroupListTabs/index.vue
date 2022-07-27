@@ -4,22 +4,22 @@
      <el-dialog title="选择用户组" v-model="switchTabs">
         <el-tabs>
           <el-tab-pane label="住建">
-            <el-tag type="success" v-for="item in groupType_3.arr" :key="item.id" class="m-r-10">{{item.name}}</el-tag>
+            <el-tag type="success" v-for="item in groupType_3.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
           </el-tab-pane>
           <el-tab-pane label="街道">
-            <el-tag type="success" v-for="item in groupType_4.arr" :key="item.id" class="m-r-10">{{item.name}}</el-tag>
+            <el-tag type="success" v-for="item in groupType_4.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
           </el-tab-pane>
           <el-tab-pane label="社区">
-            <el-tag type="success" v-for="item in groupType_5.arr" :key="item.id" class="m-r-10">{{item.name}}</el-tag>
+            <el-tag type="success" v-for="item in groupType_5.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
           </el-tab-pane>
           <el-tab-pane label="业委会">
-            <el-tag type="success" v-for="item in groupType_6.arr" :key="item.id" class="m-r-10">{{item.name}}</el-tag>
+            <el-tag type="success" v-for="item in groupType_6.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
           </el-tab-pane>
           <el-tab-pane label="物业">
-            <el-tag type="success" v-for="item in groupType_7.arr" :key="item.id" class="m-r-10">{{item.name}}</el-tag>
+            <el-tag type="success" v-for="item in groupType_7.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
           </el-tab-pane>
           <el-tab-pane label="其他">
-            <el-tag type="success" v-for="item in groupType_99.arr" :key="item.id" class="m-r-10">{{item.name}}</el-tag>
+            <el-tag type="success" v-for="item in groupType_99.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
           </el-tab-pane>
         </el-tabs>
         <template #footer>
@@ -68,6 +68,9 @@ const getGroupList=()=>{
         })
         console.log(tab_group_list.arr)
     })
+}
+const clickTag=(item)=>{
+    emit('change',item)
 }
 const click=()=>{
      switchTabs.value=true

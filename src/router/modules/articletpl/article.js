@@ -16,7 +16,7 @@ export default {
             name: 'articletplArticle',
             component: () => import('@/views/articletpl/article.vue'),
             meta: {
-                title: '公示管理',
+                title: '管理',
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/articletpl_article',
