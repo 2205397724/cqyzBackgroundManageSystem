@@ -15,9 +15,11 @@
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;  }"> -->
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
-                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}"
-                    style="box-sizing: border-box;"
-                    class="p-20 flex-colmun">
+                    <div
+                        :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}"
+                        style="box-sizing: border-box;"
+                        class="p-20 flex-colmun"
+                    >
                         <div>
                             <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
                             <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
@@ -66,7 +68,7 @@
                                 </el-table-column>
                                 <el-table-column prop="cnt_live" label="住房总套数" width="140">
                                     <template #default="scope">
-                                        <el-link  :underline="false" type="primary" >
+                                        <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_building_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
                                         </el-link>
                                     </template>
@@ -359,31 +361,31 @@
                                         <el-button type="primary" plain @click="addServiceFunc">添加服务名称和电话</el-button>
                                     </div>
                                     <div v-if="from_examine.item.addition">
-                                       <div v-for="(item,i) in from_examine.item.addition.extra.convenience" class="serve-box" :key="i">
-                                        <el-row :gutter="10">
-                                            <el-col :xs="12" :sm="12">
-                                                <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
-                                                    <el-input
-                                                        v-model="item.title"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="12" :sm="12">
-                                                <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.phone']?from_error.msg['addition.extra.convenience.'+i+'.phone'][0]:''">
-                                                    <el-input
-                                                        v-model="item.phone"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                        </el-row>
-                                        <div class="delete-service" @click="deleteServiceFunc(i)">
-                                            <el-icon :size="20" color="#F56C6C">
-                                                <el-icon-circle-close />
-                                            </el-icon>
+                                        <div v-for="(item,i) in from_examine.item.addition.extra.convenience" :key="i" class="serve-box">
+                                            <el-row :gutter="10">
+                                                <el-col :xs="12" :sm="12">
+                                                    <el-form-item label="服务名称" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.title']?from_error.msg['addition.extra.convenience.'+i+'.title'][0]:''">
+                                                        <el-input
+                                                            v-model="item.title"
+                                                            placeholder=""
+                                                        />
+                                                    </el-form-item>
+                                                </el-col>
+                                                <el-col :xs="12" :sm="12">
+                                                    <el-form-item label="联系方式" :error="from_error.msg&&from_error.msg['addition.extra.convenience.'+i+'.phone']?from_error.msg['addition.extra.convenience.'+i+'.phone'][0]:''">
+                                                        <el-input
+                                                            v-model="item.phone"
+                                                            placeholder=""
+                                                        />
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                            <div class="delete-service" @click="deleteServiceFunc(i)">
+                                                <el-icon :size="20" color="#F56C6C">
+                                                    <el-icon-circle-close />
+                                                </el-icon>
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                 </el-col>
                                 <!-- <el-col :xs="24"><div class="details-tit-sm m-b-10">小区档案</div></el-col> -->
@@ -554,19 +556,19 @@
                             </div>
                             <div class="item">
                                 <div class="left">简介</div>
-                                <div class="right" v-if="data_details.item.addition">{{ data_details.item.addition.desc}}</div>
-                                <div class="right" v-else>~无简介信息</div>
+                                <div v-if="data_details.item.addition" class="right">{{ data_details.item.addition.desc }}</div>
+                                <div v-else class="right">~无简介信息</div>
                             </div>
                             <div class="details-tit-sm">便民信息</div>
                             <div class="item">
-                                <div class="right" v-if="data_details.item.addition">
-                                    <div v-for="(item,i) in data_details.item.addition.extra.convenience" class="flex-row p-t-10" :key="i">
+                                <div v-if="data_details.item.addition" class="right">
+                                    <div v-for="(item,i) in data_details.item.addition.extra.convenience" :key="i" class="flex-row p-t-10">
                                         <div>
                                             <span>服务名称：</span>{{ item.title }} , <span>联系方式：</span>{{ item.phone }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="right" v-else>~无信息</div>
+                                <div v-else class="right">~无信息</div>
                             </div>
                         </div>
                     </el-scrollbar>
@@ -616,14 +618,14 @@ import { ElMessage } from 'element-plus'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 import House from '@/components/House/index.vue'
-const tree_item = reactive({
-    obj: {}
-})
+// const tree_item = reactive({
+//     obj: {}
+// })
 const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
     console.log(val)
-    tree_item.obj = {
+    tree_item.value.obj = {
         id: val.id,
         name: val.name,
         next_type: 'building',
@@ -643,11 +645,11 @@ const item = reactive({
 const checkFunc = val => {
     active_obj.obj = val
     console.log(val)
-    let cur=active_obj.obj.name||""
-    if(cur.includes("社区")||cur.includes("街道")||cur.includes("镇")||cur.includes("区")||cur.includes("县")){
-        APIgetResidentialListHouse({ page: 1, per_page: 5, china_code:  active_obj.obj.id}).then(res=>{
+    let cur = active_obj.obj.name || ''
+    if (cur.includes('社区') || cur.includes('街道') || cur.includes('镇') || cur.includes('区') || cur.includes('县')) {
+        APIgetResidentialListHouse({ page: 1, per_page: 5, china_code: active_obj.obj.id }).then(res => {
             console.log(res)
-            data_tab.arr=res
+            data_tab.arr = res
         })
     }
 
@@ -782,7 +784,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                from_examine.item.addition.desc=`${from_examine.item.addition.desc}`
+                from_examine.item.addition.desc = `${from_examine.item.addition.desc}`
                 APIpostResidentialHouse(from_examine.item).then(res => {
                     if (!res.code) {
                         refreshFunc()
@@ -862,6 +864,7 @@ const getTabListFunc = () => {
         params.updated_at = created_str.substring(1)
     }
     loading_tab.value = true
+    console.log(params)
     APIgetResidentialListHouse(params).then(res => {
         console.log(res)
         // if (res.status === 200) {

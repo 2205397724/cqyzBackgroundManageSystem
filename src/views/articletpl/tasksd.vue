@@ -7,9 +7,10 @@
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="指定单位" clearable>
-                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=6" label="街道" :value="4" />
+                        <!-- <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=6" label="街道" :value="4" />
                         <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=9" label="社区" :value="5" />
-                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=12" label="小区" :value="6" />
+                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=12" label="小区" :value="6" /> -->
+                        <el-option v-for="item in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
@@ -49,21 +50,21 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="指定范围" width="160">
+                <!-- <el-table-column label="指定范围" width="160">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="接收单位" width="120">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv,scope.row.tolv ) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="计划发布分类" width="250">
+                <!-- <el-table-column label="计划发布分类" width="250">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.cate.name }}</span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="计划发布周期" width="160">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_rate,scope.row.per ) }} </span>
@@ -145,9 +146,10 @@
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
                             <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="" clearable>
-                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=6" label="街道" :value="4" />
+                                <!-- <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=6" label="街道" :value="4" />
                                 <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=9" label="社区" :value="5" />
-                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=12" label="小区" :value="6" />
+                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=12" label="小区" :value="6" /> -->
+                                <el-option v-for="item in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -327,7 +329,7 @@ const cascader_props = {
             data
         } = node
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
+            resolve(res)
         })
     }
 }
@@ -343,7 +345,7 @@ const cascader_props2 = {
             data
         } = node
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res.data)
+            resolve(res)
         })
     }
 }
@@ -367,10 +369,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetTasksdDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // 监听分页
@@ -385,21 +385,17 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改计划') {
                 APIputTasksd(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 APIpostTasksd(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -425,20 +421,17 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetTasksdList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteTasksd(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加
@@ -460,10 +453,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改计划'
     APIgetTasksdDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 
@@ -508,9 +499,6 @@ getOpts(['article_lv', 'tasksd_use', 'article_rate']).then(res => {
     }
 </style>
 <style lang="scss" scoped>
-    .articletpletasksd {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;

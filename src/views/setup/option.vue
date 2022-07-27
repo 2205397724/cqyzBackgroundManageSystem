@@ -447,22 +447,22 @@ const dialogExamineCloseFunc = formEl => {
                     console.log(res)
                     if (!res.code) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('修改失败')
                 })
             } else {
                 APIpostOpts(from_examine.item).then(res => {
                     console.log(res)
                     // if (!res.code) {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('添加成功')
                     switch_examine.value = false
                     // }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('添加失败')
                 })
             }
         } else {
@@ -497,7 +497,7 @@ const deleteFunc = val => {
     APIdeleteOpts(val.id).then(res => {
         // if (res.code === 0) {
         refreshFunc()
-        ElMessage.success(res.msg)
+        ElMessage.error('删除成功')
         // }
     })
 }
@@ -557,12 +557,12 @@ const switch_opt_val_add = ref(false)
 const str_opt_val_title = ref('添加')
 const from_opt_val = reactive({
     obj: {
-        'key':0,
-        'val':'',
-        'desc':'',
-        'is_sys':0,
-        'is_active':0,
-        'sort':0
+        'key': 0,
+        'val': '',
+        'desc': '',
+        'is_sys': 0,
+        'is_active': 0,
+        'sort': 0
     }
 })
 const err_opt = reactive({
@@ -626,7 +626,7 @@ const optValModifyFunc = val => {
 // 删除
 const optValDeleteFunc = val => {
     APIdeleteOptsVal(val.id).then(res => {
-            optValRefreshFunc()
+        optValRefreshFunc()
     })
 }
 // 搜索
@@ -663,9 +663,9 @@ const getOptValListFunc = () => {
     opt_loading.value = true
     APIgetOptsValList(params).then(res => {
         console.log(res)
-            opt_loading.value = false
-            opt_tab.arr = res
-            opt_total.value = res.length
+        opt_loading.value = false
+        opt_tab.arr = res
+        opt_total.value = res.length
     })
 }
 // 打开配置选项

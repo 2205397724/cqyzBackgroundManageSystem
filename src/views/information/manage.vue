@@ -81,8 +81,8 @@
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审核"
-                            inactive-text="未审核"
+                            active-text="已审"
+                            inactive-text="未审"
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
@@ -232,8 +232,8 @@
                                 style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                active-text="已审核"
-                                inactive-text="未审核"
+                                active-text="已审"
+                                inactive-text="未审"
                                 :active-value="1"
                                 :inactive-value="0"
                                 class="switchStyle"
@@ -334,8 +334,8 @@
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审核"
-                            inactive-text="未审核"
+                            active-text="已审"
+                            inactive-text="未审"
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
@@ -627,6 +627,6 @@ getOpts(['information_status']).then(res => {
 }
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
-    width: 70px !important;
+    width: 60px !important;
 }
 </style>
