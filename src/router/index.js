@@ -70,6 +70,12 @@ const constantRoutes = [{
         }
     ]
     // 民事
+// 活动
+import activityJointly from './modules/activity/jointly.js'
+import activitySurvey from './modules/activity/survey.js'
+import activityElect from './modules/activity/elect.js'
+import activityVote from './modules/activity/vote.js'
+// 公示
 import articletplArchive from './modules/articletpl/archive.js'
 import articletplArticle from './modules/articletpl/article.js'
 import articletplArticleread from './modules/articletpl/articleread.js'
@@ -126,7 +132,7 @@ import recordType from './modules/record/type'
 const asyncRoutes = [{
         meta: {
             title: '管理',
-            icon: 'supervise',
+            icon: 'manage',
             // auth: ['supervise', '*']
         },
         children: [
@@ -134,11 +140,10 @@ const asyncRoutes = [{
             superviseWorkbench
         ]
     },
-
     // {
     //     meta: {
     //         title: '统计',
-    //         icon: 'statistics',
+    //         icon: 'data',
     //         auth: ['statistics', '*']
     //     },
     //     children: [
@@ -152,7 +157,7 @@ const asyncRoutes = [{
     // },
     {
         meta: {
-            title: '房源',
+            title: '小区',
             icon: 'house',
             auth: ['house', '*']
         },
@@ -169,7 +174,7 @@ const asyncRoutes = [{
     {
         meta: {
             title: '公示',
-            icon: 'el-icon-set-up',
+            icon: 'announce',
             auth: ['articletpl', '*']
         },
         children: [
@@ -183,8 +188,21 @@ const asyncRoutes = [{
     },
     {
         meta: {
-            title: '民事',
-            icon: 'event',
+            title: '议事',
+            icon: 'survey',
+            auth: ['activity', '*']
+        },
+        children: [
+            activityJointly,
+            activityVote,
+            activityElect,
+            activitySurvey,
+        ]
+    },
+    {
+        meta: {
+            title: '民生',
+            icon: 'service',
             auth: ['event', '*']
         },
         children: [
@@ -199,8 +217,19 @@ const asyncRoutes = [{
     },
     {
         meta: {
+            title: '备案',
+            icon: 'filing',
+            auth: ['record', '*']
+        },
+        children: [
+            recordManage,
+            recordType,
+        ]
+    },
+    {
+        meta: {
             title: '资讯',
-            icon: 'apply',
+            icon: 'news',
             auth: [' information', '*']
         },
         children: [
@@ -221,32 +250,21 @@ const asyncRoutes = [{
             userPerms
         ]
     },
-    {
-        meta: {
-            title: '备案',
-            icon: 'suitcase',
-            auth: ['record', '*']
-        },
-        children: [
-            recordManage,
-            recordType,
-        ]
-    },
-    {
-        meta: {
-            title: '申请',
-            icon: 'apply',
-            auth: ['join', '*']
-        },
-        children: [
-            joinPlatform,
-            joinResidential
-        ]
-    },
+    // {
+    //     meta: {
+    //         title: '申请',
+    //         icon: 'apply',
+    //         auth: ['join', '*']
+    //     },
+    //     children: [
+    //         joinPlatform,
+    //         joinResidential
+    //     ]
+    // },
     {
         meta: {
             title: '设置',
-            icon: 'setup',
+            icon: 'setting',
             auth: ['setup', '*']
         },
         children: [

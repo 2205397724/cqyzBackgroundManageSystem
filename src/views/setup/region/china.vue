@@ -34,7 +34,7 @@
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加区域</el-button>
+                            <el-button class="head-btn" type="primary" @click="addSurvey">添加区域</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -348,14 +348,14 @@ const deleteFunc = val => {
             ElMessage.success(res.msg)
     })
 }
-// 添加楼栋
-const addResidentialFunc = () => {
+// 添加问卷
+const addSurvey = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = { }
     switch_examine.value = true
 }
-// 修改
+// 修改问卷
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
