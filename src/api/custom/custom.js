@@ -766,6 +766,24 @@ export function APIdeleteInforManage(id) {
     return api2.delete(`/news/${id}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
+//备案
+export function APIgetRecordList(params){
+    return api2.get(`/filing`,{params:params})
+}
+export function APIpostRecord(data){
+    return api2.post(`/filing`,data)
+}
+export function APIputRecord(id,data){
+    return api2.put(`/filing/${id}`,data)
+}
+export function APIdeleteRecord(id){
+    return api2.delete(`/filing/${id}`)
+}
+export function APIgetRecordDetail(id){
+    return api2.get(`/filing/${id}`)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------- */
 // 文件上传获取配置 { 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }
 export function APIpostFiles(data) {
     return api.post('/blob/form', data)
@@ -1308,6 +1326,21 @@ export function APIeditPassword(data) {
     return api.put('/user/password', data)
 }
 
+/* --------------------------------------------------------------------------------------------------------------------- */
+//分类
+export function APIpostkind(kind,data){
+    return api2.post(`/kind/${kind}/cat`,data)
+}
+export function APIgetKindList(kind,params){
+    return api2.get(`/kind/${kind}/cat`,{params:params})
+}
+export function APIputKind(kind,cat,data){
+    return api2.put(`/kind/${kind}/cat/${cat}`,data)
+}
+export function APIdeleteKind(kind,cat){
+    return api2.delete(`/kind/${kind}/cat/${cat}`)
+}
+/* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 // 统计

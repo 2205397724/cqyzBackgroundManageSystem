@@ -304,8 +304,6 @@
                             </div>
                             <div class="item">
                                 <div class="left">小区>楼栋>单元</div>
-                                <!-- <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div> -->
-                                <div class="right">{{ data_details.item.zoneinfo['name'] }} {{ data_details.item.buildinginfo['name'] }} {{ data_details.item.unitinfo['name'] }}</div>
                                 <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div>
                             </div>
                             <div class="item">
@@ -516,156 +514,7 @@ APIgetTypeList('announce').then(res => {
     options.arr = res
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
-// 刷新
-const refreshFunc = () => {
-    page.value = 1
-    switch_search.value = false
-    data_search.obj = {}
-    getTabListFunc()
-}
-
-// 详情
-/* const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetDeviceDetails(val.id).then(res => {
-        data_details.item = res
-        switch_details.value = true
-        console.log(data_details.item)
-        zoneName.value = data_details.item.zoneinfo
-        buildingName.value = data_details.item.buildinginfo
-        unitName.value = data_details.item.unitinfo
-    })
-    repairInfo(val)
-    archiveInfo(val)
-    // let params = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceArchiveList(params).then(res => {
-    //     console.log(res)
-    //     data_archive.arr = res
-    //     switch_details.value = true
-    // })
-    // let params1 = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceRepairList(params1).then(res => {
-    //     console.log(res)
-    //     data_repair.arr = res
-    //     switch_details.value = true
-    // })
-
-} */
-import {
-    APIgetDeviceArchiveList
-} from '@/api/custom/custom.js'
-// 档案信息
-const archiveInfo = val => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        did: val.id
-    }
-    APIgetDeviceArchiveList(params).then(res => {
-        console.log(res)
-        data_archive.arr = res
-        switch_details.value = true
-    })
-}
-
-/* const deviceArchive = val => {
-    // APIgetDeviceDetails(val.id).then(res => {
-    //     data_details.item = res
-    //     switch_details.value = true
-    // })
-    activeName.value = '2'
-    archiveInfo(val)
-    // let params = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceArchiveList(params).then(res => {
-    //     console.log(res)
-    //     data_archive.arr = res
-    //     switch_details.value = true
-    // })
-} */
-import {
-    APIgetDeviceRepairList
-
-} from '@/api/custom/custom.js'
-// 维保记录
-const repairInfo = val => {
-    let params1 = {
-        page: page.value,
-        per_page: per_page.value,
-        did: val.id
-    }
-    APIgetDeviceRepairList(params1).then(res => {
-        console.log(res)
-        data_repair.arr = res
-        switch_details.value = true
-        })
-}
-
-//详情
-const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetDeviceDetails(val.id).then(res => {
-            data_details.item = res
-            switch_details.value = true
-    })
-}
-const deviceRepair = val => {
-    activeName.value = '3'
-    repairInfo(val)
-    // let params1 = {
-    //     page: page.value,
-    //     per_page: per_page.value,
-    //     did: val.id
-    // }
-    // APIgetDeviceRepairList(params1).then(res => {
-    //     console.log(res)
-    //     data_repair.arr = res
-    //     switch_details.value = true
-    // })
-}
-// 监听分页
-watch(page, () => {
-    getTabListFunc()
-})
-// 同意拒绝提交
-const dialogExamineCloseFunc = formEl => {
-    from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            if (str_title.value == '修改') {
-                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('修改失败')
-                })
-            } else {
-                APIpostDevice(from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('添加失败')
-                })
-            }
-        } else {
-            return false
-        }
-    })
-}
+// 方法
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -715,6 +564,14 @@ const searchFunc = () => {
     switch_search.value = true
     getTabListFunc()
 }
+// 刷新
+const refreshFunc = () => {
+    page.value = 1
+    switch_search.value = false
+    data_search.obj = {}
+    getTabListFunc()
+}
+
 // 详情
 const getDetailsFunc = val => {
     data_dialog.obj = val
@@ -749,55 +606,62 @@ const getDetailsFunc = val => {
     })
 
 }
-// const detailsFunc = val => {
-//     getDetailsFunc(val)
-// }
+const detailsFunc = val => {
+    getDetailsFunc(val)
+}
 // 关闭详情对话框
 const closeDialog = () => {
     activeName.value = '1'
 }
+import {
+    APIgetDeviceArchiveList
+} from '@/api/custom/custom.js'
 // 档案信息
 const deviceArchive = val => {
     activeName.value = '2'
     getDetailsFunc(val)
 }
+import {
+    APIgetDeviceRepairList
+
+} from '@/api/custom/custom.js'
 // 维保记录
-// const deviceRepair = val => {
-//     activeName.value = '3'
-//     getDetailsFunc(val)
-// }
+const deviceRepair = val => {
+    activeName.value = '3'
+    getDetailsFunc(val)
+}
 // 监听分页
 watch(page, () => {
     refreshFunc()
 }, { immediate: true, deep: true })
 // 同意拒绝提交
-// const dialogExamineCloseFunc = formEl => {
-//     from_error.msg = {}
-//     if (!formEl) return
-//     formEl.validate(valid => {
-//         if (valid) {
-//             if (str_title.value == '修改') {
-//                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
-//                     refreshFunc()
-//                     ElMessage.success('修改成功')
-//                     switch_examine.value = false
-//                 }).catch(err => {
-//                     ElMessage.error('修改失败')
-//                 })
-//             } else {
-//                 APIpostDevice(from_examine.item).then(res => {
-//                     refreshFunc()
-//                     ElMessage.success('添加成功')
-//                     switch_examine.value = false
-//                 }).catch(err => {
-//                     ElMessage.error('添加失败')
-//                 })
-//             }
-//         } else {
-//             return false
-//         }
-//     })
-// }
+const dialogExamineCloseFunc = formEl => {
+    from_error.msg = {}
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            if (str_title.value == '修改') {
+                APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('修改失败')
+                })
+            } else {
+                APIpostDevice(from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('添加失败')
+                })
+            }
+        } else {
+            return false
+        }
+    })
+}
 // 删除
 const deleteFunc = val => {
     APIdeleteDevice(val.id).then(res => {

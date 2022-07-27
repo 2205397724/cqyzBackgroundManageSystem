@@ -119,6 +119,9 @@ import setupAPP from './modules/setup/APP.js'
 // 申请
 import joinPlatform from './modules/join/platform.js'
 import joinResidential from './modules/join/residential.js'
+//备案
+import recordManage from './modules/record/manange.js'
+import recordType from './modules/record/type'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [{
         meta: {
@@ -216,6 +219,17 @@ const asyncRoutes = [{
             userGroup,
             userRoles,
             userPerms
+        ]
+    },
+    {
+        meta: {
+            title: '备案',
+            icon: 'suitcase',
+            auth: ['record', '*']
+        },
+        children: [
+            recordManage,
+            recordType,
         ]
     },
     {

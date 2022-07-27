@@ -68,14 +68,14 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    // 通过 mock 获取权限
-                    // APIgetPermissions({ account: this.account }).then(res => {
-                    //     this.permissions = res.data.permissions
-                    //     resolve(res.data.permissions)
-                    // })
-                    this.permissions=['supervise','supervise.home','information']
-                    console.log(this.permissions)
-                    resolve(this.permissions)
+                    //通过 mock 获取权限
+                    APIgetPermissions({ account: this.account }).then(res => {
+                        this.permissions = res.data.permissions
+                        resolve(res.data.permissions)
+                    })
+                    // this.permissions=['supervise','supervise.home','information']
+                    // console.log(this.permissions)
+                    // resolve(this.permissions)
                 })
             },
             // setPermissions(data){
