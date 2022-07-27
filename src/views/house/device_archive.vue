@@ -464,7 +464,7 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
             console.log(res)
-cls            from_examine.item = res
+            from_examine.item = res
             switch_examine.value = true
     })
 }

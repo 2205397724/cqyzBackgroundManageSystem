@@ -250,16 +250,18 @@
     import {
         ElMessage
     } from 'element-plus'
+    import { log } from 'console';
+    import { valid } from 'mockjs';
     const value = ref('')
     // 选项数据
     const options = [
-    {value: 1,label: '筹备阶段',},
-    {value: 2,label: '待审',},
-    {value: 3,label: '未开始',},
-    {value: 4,label: '进行中',},
-    {value: 5,label: '暂停',},
-    {value: 6,label: '终止',},
-    {value: 7,label: '已结束',},
+        {value: 1,label: '筹备阶段',},
+        {value: 2,label: '待审',},
+        {value: 3,label: '未开始',},
+        {value: 4,label: '进行中',},
+        {value: 5,label: '暂停',},
+        {value: 6,label: '终止',},
+        {value: 7,label: '已结束',},
     ]
     // 搜索
     let switch_search = ref(false)
