@@ -15,6 +15,7 @@
             v-model="switch_list"
             title="用户组"
             width="70%"
+            style="z-index: 999999;"
         >
             <Cascaders v-model="code" style="max-width: 200px;margin-bottom: 10px;" />
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;">*点击列表选择用户组</div>

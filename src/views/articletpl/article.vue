@@ -53,7 +53,7 @@
                 </el-table-column>
                 <el-table-column label="公示对象类型" width="150">
                     <template #default="scope">
-                        <span>{{ scope.row.totype }} </span>
+                        <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="用户组ID" width="220">
@@ -175,30 +175,29 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="关联对象类型"
+                            label="公示对象类型"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.reltype?from_error.msg.reltype[0]:''"
                         >
-                            <el-select v-model="from_examine.item.reltype" placeholder="" clearable style="width: 100%;">
+                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
                                 <el-option v-for="(item,i) in opts_all.obj.article_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
 
                     <!-- <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12"> -->
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="关联对象"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.relval?from_error.msg.relval[0]:''"
                         >
                             <el-input
-                                v-model="from_examine.item.relval"
+                                v-model="from_examine.item.relid"
                                 placeholder=""
                             />
                         </el-form-item>
-                    </el-col>
-
+                    </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="开始时间"
@@ -239,18 +238,18 @@
                         >
                             <div style="height: 100%;width: 100%;">
                                 <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                    <SearchUserGroup v-model:str="from_examine.item.dep_id" />
+                                    <SearchUserGroup v-model:str="from_examine.item.groupid" />
                                 </div>
                             </div>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收单位"
+                            label="公示对象类型"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
                         >
-                            <el-select v-model="from_examine.item.lv" placeholder="" clearable style="width: 100%;">
+                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
                                 <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
@@ -357,27 +356,30 @@
                                 <div class="left">公示主题</div>
                                 <div class="right">{{ data_details.item.title }}</div>
                             </div>
-
                             <div class="item">
-                                <div class="left">状态</div>
-                                <div class="right">{{ data_details.item.status }}</div>
+                                <div class="left">公示ID</div>
+                                <div class="right">{{ data_details.item.id }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">公示分类</div>
                                 <div class="right">{{ data_details.item.cid }}</div>
                             </div>
                             <div class="item">
-                                <div class="left">公示主体</div>
-                                <div class="right">{{ data_details.item.cid }}</div>
+                                <div class="left">公示对象</div>
+                                <div class="right">{{ data_details.item.toval }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">公示对象类型</div>
-                                <div class="right">{{ data_details.item.totype }}</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
                             </div>
                             <div class="item">
-                                <div class="left">公示对象ID</div>
-                                <div class="right">{{ data_details.item.toval }}</div>
+                                <div class="left">发布人用户组</div>
+                                <div class="right">{{ data_details.item.groupid }}</div>
                             </div>
+                            <!-- <div class="item">
+                                <div class="left">关联任务ID</div>
+                                <div class="right">{{ data_details.item.taskid }}</div>
+                            </div> -->
                             <div class="item">
                                 <div class="left">开始时间</div>
                                 <div class="right">{{ data_details.item.start_at }}</div>
@@ -386,6 +388,18 @@
                                 <div class="left">结束时间</div>
                                 <div class="right">{{ data_details.item.end_at }}</div>
                             </div>
+                            <!-- <div class="item">
+                                <div class="left">附件名称</div>
+                                <div class="right">{{ data_details.item.affix.title }}</div>
+                            </div> -->
+                            <div class="item">
+                                <div class="left">附件图</div>
+                                <div class="right">
+                                    <el-image
+                                        v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
+                                    />
+                                </div>
+                            </div>
                             <div class="item">
                                 <div class="left">公示内容</div>
                                 <div class="right">{{ data_details.item.content }}</div>
@@ -393,7 +407,7 @@
                         </div>
                     </el-scrollbar>
                 </el-tab-pane>
-                <el-tab-pane label="其它信息" name="2">
+                <!-- <el-tab-pane label="其它信息" name="2">
                     <el-scrollbar height="400px">
                         <div class="details-box">
                             <div class="item">
@@ -438,14 +452,14 @@
                         <div class="details-box">
                             <div v-for="(item,i) in data_details.item.affix" :key="item.file" class="item">
                                 <div class="left">附件{{ i }}</div>
-                                <!-- <div class="right">{{ VITE_APP_FOLDER_SRC + item.file }}</div> -->
+                                <div class="right">{{ VITE_APP_FOLDER_SRC + item.file }}</div>
                                 <div class="right">
                                     <el-link :href="`${VITE_APP_FOLDER_SRC+item.file}`" target="_blank" type="danger" style="margin-left: 10px;">{{ item.title }} </el-link>
                                 </div>
                             </div>
                         </div>
                     </el-scrollbar>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
 
             <template #footer>
@@ -691,13 +705,18 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const affixs = ref([])
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetEventArticleDetails(val.id).then(res => {
-        data_details.item = res.data
+        data_details.item = res
+        res.affixs = []
+        for (let i in res.affix.file) {
+            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix.file[i])
+        }
         switch_details.value = true
+        console.log(res.affixs)
     })
 }
 // 监听分页
@@ -717,6 +736,14 @@ const dialogExamineCloseFunc = formEl => {
             }
             if (files_arr.length <= 0) {
                 if (str_title.value == '修改') {
+                    // from_examine.item = {
+                    //     custom: [],
+                    //     groupcc: '',
+                    //     taskid: ''
+                    // }
+                    from_examine.item.custom = []
+                    from_examine.item.groupcc = '500101'
+                    from_examine.item.taskid = '62dfacc69e8d7b0b5b7abea1'
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
                         ElMessage.success('修改成功')
@@ -740,6 +767,9 @@ const dialogExamineCloseFunc = formEl => {
                     from_examine.item.affix[i].file = files[i]
                 }
                 if (str_title.value == '修改') {
+                    from_examine.item.custom = []
+                    from_examine.item.groupcc = '500101'
+                    from_examine.item.taskid = '62dfacc69e8d7b0b5b7abea1'
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
                         ElMessage.success('修改成功')

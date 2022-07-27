@@ -101,4 +101,7 @@ onMounted(() => {
     border: 1px solid #dcdfe6;
     border-radius: 4px;
 }
+.editor ::v-deep {
+    z-index: 0;
+}
 </style>
