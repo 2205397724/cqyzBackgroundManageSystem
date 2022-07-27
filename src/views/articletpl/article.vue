@@ -664,7 +664,12 @@ let page = ref(1)
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        affix: []
+        custom: [],
+        affix: [],
+        groupcc: '',
+        relid: '',
+        relid: '',
+        groupid: ''
     }
 })
 const str_title = ref('添加')
@@ -714,18 +719,18 @@ const dialogExamineCloseFunc = formEl => {
                 if (str_title.value == '修改') {
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
                     }).catch(err => {
-                        from_error.msg = err.data
+                        ElMessage.error('修改失败')
                     })
                 } else {
                     APIpostEventArticle(from_examine.item).then(res => {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
                     }).catch(err => {
-                        from_error.msg = err.data
+                        ElMessage.error('添加失败')
                     })
                 }
                 return false
@@ -737,18 +742,18 @@ const dialogExamineCloseFunc = formEl => {
                 if (str_title.value == '修改') {
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
                     }).catch(err => {
-                        from_error.msg = err.data
+                        ElMessage.error('修改失败')
                     })
                 } else {
                     APIpostEventArticle(from_examine.item).then(res => {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
                     }).catch(err => {
-                        from_error.msg = err.data
+                        ElMessage.error('添加失败')
                     })
                 }
             })
@@ -783,7 +788,7 @@ const getTabListFunc = () => {
 const deleteFunc = val => {
     APIdeleteEventArticle(val.id).then(res => {
         refreshFunc()
-        ElMessage.success(res.msg)
+        ElMessage.success('删除成功')
     })
 }
 // 添加
@@ -820,7 +825,7 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetEventArticleDetails(val.id).then(res => {
-        from_examine.item = res.data
+        from_examine.item = res
         switch_examine.value = true
     })
 }
@@ -924,7 +929,7 @@ const passAudit = val => {
 }
 const passToAuditFunc = () => {
     APIpostArchiveAudit(gongshixiangqing.obj.id, from_pass.obj).then(res => {
-        ElMessage.success(res.msg)
+        // ElMessage.success(res.msg)
         refreshFunc()
         passAudit(gongshixiangqing.obj)
     }).catch(err => {
