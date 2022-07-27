@@ -80,6 +80,7 @@
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
+                            @change="SwitchFunc(scope.row)"
                         />
                     </template>
                 </el-table-column>
@@ -134,17 +135,17 @@
                 :model="data_1.add_form"
             >
                 <el-row :gutter="10">
-                    <!-- <template v-if="data_1.add_title !== '添加子栏目'"> -->
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="父类别"
-                            :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
-                        >
-                            <el-input v-model="data_1.add_form.pid" />
-                        </el-form-item>
-                    </el-col>
-                    <!-- </template> -->
+                    <template v-if="data_1.add_title == '添加子栏目'">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label-width="70px"
+                                label="父类别"
+                                :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
+                            >
+                                <el-input v-model="data_1.add_form.pid" disabled />
+                            </el-form-item>
+                        </el-col>
+                    </template>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="70px"
@@ -376,9 +377,10 @@ const clickFuncModify = row => {
     data_1.add_switch = true
 }
 // 添加子栏目
-const clickFuncPost = () => {
+const clickFuncPost = row => {
     data_1.add_form = {}
     data_1.add_title = '添加子栏目'
+    data_1.add_form.pid = row.id
     data_1.add_switch = true
 }
 // 删除
@@ -389,10 +391,18 @@ const clickFuncDelete = id => {
     })
 }
 // 懒加载
-const getChildrens = (tree, resolve) => {
-    APIgetInforCategoryList({ id: tree.id }).then(res => {
-        console.log(res)
-    })
+// const getChildrens = (tree, resolve) => {
+//     if(tree.)
+//     APIgetInforCategoryList({ id: tree.id }).then(res => {
+//         console.log(res)
+//     })
+// }
+// switch 状态改变事件
+const SwitchFunc = row => {
+    // console.log(row)
+    data_1.add_form.setting = []
+    data_1.add_form = row
+    APIputInforCategory(data_1.add_form.id, data_1.add_form)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 

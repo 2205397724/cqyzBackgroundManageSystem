@@ -17,13 +17,6 @@
                         <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                     </el-select>
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
-                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                            <SearchFlow v-model:str="data_search.obj.step" />
-                        </div>
-                    </div>
-                </el-col>
                 <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
                     <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
                 </el-col>
@@ -34,8 +27,8 @@
             </div>
             <div class="bottom-btn-box-2">
                 <el-button class="head-btn" type="primary" @click="addResidentialFunc">发布公示</el-button>
-                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[0];searchFunc()}">未处理</el-button>
-                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[1];searchFunc()}">处理中</el-button>
+                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[0].key;searchFunc()}">未处理</el-button>
+                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[1].key;searchFunc()}">处理中</el-button>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -43,32 +36,48 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="公示主题" width="180">
+                <el-table-column label="公示主题">
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示主体" width="180">
+                <el-table-column label="分类id" width="220">
                     <template #default="scope">
-                        <span>无</span>
+                        <span>{{ scope.row.cid }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示开始时间" width="200">
+                <el-table-column label="公示对象">
                     <template #default="scope">
-                        <span>{{ scope.row.start_at }} </span>
+                        <span>{{ scope.row.toval }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示结束时间" width="200">
+                <el-table-column label="公示对象类型" width="150">
                     <template #default="scope">
-                        <span>{{ scope.row.end_at }} </span>
+                        <span>{{ scope.row.totype }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="审核状态" width="90">
+                <el-table-column label="用户组ID" width="220">
                     <template #default="scope">
-                        <span>{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
+                        <span>{{ scope.row.groupid }} </span>
                     </template>
                 </el-table-column>
+                <el-table-column label="状态" width="90">
+                    <template #default="scope">
+                        <el-switch
+                            v-model="scope.row.status"
 
+                            style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            active-text="已审"
+                            inactive-text="未审"
+                            :active-value="1"
+                            :inactive-value="0"
+                            class="switchStyle"
+                            @change="SwitchFunc(scope.row)"
+                        />
+                    </template>
+                </el-table-column>
                 <el-table-column fixed="right" label="操作" width="400">
                     <template #default="scope">
                         <el-button
@@ -176,7 +185,8 @@
                         </el-form-item>
                     </el-col>
 
-                    <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <!-- <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12"> -->
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="关联对象"
                             label-width="120px"
@@ -293,14 +303,14 @@
                                 type="textarea"
                                 placeholder=""
                             /> -->
-                            <editor style="width: 100%;" v-model="from_examine.item.content" />
+                            <editor v-model="from_examine.item.content" style="width: 100%;" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <div style="margin-bottom: 10px;">
                             <el-button type="primary" plain @click="addServiceFunc">添加附件</el-button>
                         </div>
-                        <div v-for="(item,i) in from_examine.item.affix" class="serve-box">
+                        <div v-for="(item,i) in from_examine.item.affix" :key="i" class="serve-box">
                             <el-row :gutter="10">
                                 <el-col :xs="12" :sm="12">
                                     <el-form-item label="附件名称" :error="from_error.msg&&from_error.msg['affix.'+i+'.title']?from_error.msg['affix.'+i+'.title'][0]:''">
@@ -430,7 +440,7 @@
                                 <div class="left">附件{{ i }}</div>
                                 <!-- <div class="right">{{ VITE_APP_FOLDER_SRC + item.file }}</div> -->
                                 <div class="right">
-                                    <el-link :href="`${VITE_APP_FOLDER_SRC+item.file}`" target="_blank" type="danger" style="margin-left: 10px">{{ item.title }} </el-link>
+                                    <el-link :href="`${VITE_APP_FOLDER_SRC+item.file}`" target="_blank" type="danger" style="margin-left: 10px;">{{ item.title }} </el-link>
                                 </div>
                             </div>
                         </div>
@@ -600,11 +610,11 @@
 </template>
 <script setup>
 import CascaderTypeAndID from '@/components/CascaderTypeAndID/index.vue'
-import SearchResidential from '@/components/SearchResidential/index.vue'
-import CascaderType from '@/components/CascaderType/index.vue'
+// import SearchResidential from '@/components/SearchResidential/index.vue'
+// import CascaderType from '@/components/CascaderType/index.vue'
 import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
-import SearchUser from '@/components/SearchUser/index.vue'
-import SearchFlowStep from '@/components/SearchFlowStep/index.vue'
+// import SearchUser from '@/components/SearchUser/index.vue'
+// import SearchFlowStep from '@/components/SearchFlowStep/index.vue'
 
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import {
@@ -681,10 +691,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetEventArticleDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res.data
+        switch_details.value = true
     })
 }
 // 监听分页
@@ -705,21 +713,17 @@ const dialogExamineCloseFunc = formEl => {
             if (files_arr.length <= 0) {
                 if (str_title.value == '修改') {
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
-                        if (!res.code) {
-                            refreshFunc()
-                            ElMessage.success(res.msg)
-                            switch_examine.value = false
-                        }
+                        refreshFunc()
+                        ElMessage.success(res.msg)
+                        switch_examine.value = false
                     }).catch(err => {
                         from_error.msg = err.data
                     })
                 } else {
                     APIpostEventArticle(from_examine.item).then(res => {
-                        if (!res.code) {
-                            refreshFunc()
-                            ElMessage.success(res.msg)
-                            switch_examine.value = false
-                        }
+                        refreshFunc()
+                        ElMessage.success(res.msg)
+                        switch_examine.value = false
                     }).catch(err => {
                         from_error.msg = err.data
                     })
@@ -732,21 +736,17 @@ const dialogExamineCloseFunc = formEl => {
                 }
                 if (str_title.value == '修改') {
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
-                        if (!res.code) {
-                            refreshFunc()
-                            ElMessage.success(res.msg)
-                            switch_examine.value = false
-                        }
+                        refreshFunc()
+                        ElMessage.success(res.msg)
+                        switch_examine.value = false
                     }).catch(err => {
                         from_error.msg = err.data
                     })
                 } else {
                     APIpostEventArticle(from_examine.item).then(res => {
-                        if (!res.code) {
-                            refreshFunc()
-                            ElMessage.success(res.msg)
-                            switch_examine.value = false
-                        }
+                        refreshFunc()
+                        ElMessage.success(res.msg)
+                        switch_examine.value = false
                     }).catch(err => {
                         from_error.msg = err.data
                     })
@@ -773,20 +773,17 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetEventArticleList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteEventArticle(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加
@@ -794,12 +791,27 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        property_owners: [],
-        house_id: '',
-        time_deal: '',
-        code_property: '',
-        code_room: '',
-        should_bind_house: ''
+        // 'title': '气总造毛',
+        'cid': '45gdfgt46gvfdt54fgrt45fg'
+        // 'totype': 97,
+        // 'toval': 'incididunt',
+        // 'start_at': '2022-07-23 12:23:34',
+        // 'end_at': '2022-07-25 12:23:34',
+        // 'groupid': '45gdfgt687gvfdt54fgrt45f',
+        // 'groupcc': 'irure',
+        // 'grouplv': 45,
+        // 'lv': 0,
+        // 'affix': [
+        //     {
+        //         'title': '生口史',
+        //         'file': 'ut dolore in'
+        //     }
+        // ],
+        // 'custom': [],
+        // 'content': 'minim et pariatur proident non',
+        // 'taskid': '78',
+        // 'relid': '46',
+        // 'reltype': 0
     }
     switch_examine.value = true
 }
@@ -808,10 +820,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetEventArticleDetails(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+        from_examine.item = res.data
+        switch_examine.value = true
     })
 }
 
@@ -862,8 +872,8 @@ const getListArchiveFunc = () => {
         per_page: per_page2.value
     }
     APIgetListArchiveAudit(article_item.obj.id, params).then(res => {
-        article_tab.arr = res.data.items
-        total2.value = res.data.aggregation.total_cnt
+        article_tab.arr = res
+        total2.value = res.length
     })
 }
 const switch_audit = ref(false)
@@ -872,7 +882,7 @@ const details_audit = reactive({
 })
 const lookDetails = val => {
     APIgetDetailsArchiveAudit(article_item.obj.id, val.id).then(res => {
-        details_audit.obj = res.data
+        details_audit.obj = res
         switch_audit.value = true
     })
 }
@@ -896,12 +906,12 @@ const passAudit = val => {
     err_msg.obj = {}
     // 获取详情
     APIgetEventArticleDetails(val.id).then(res => {
-        gongshixiangqing.obj = res.data
+        gongshixiangqing.obj = res
         // 获取步骤条
         APIgetStepList(res.data.flowstep.fid).then(res2 => {
-            buzhoutiao.arr = res2.data
-            for (let i in res2.data) {
-                if (res.data.flowstep.id == res2.data[i].id) {
+            buzhoutiao.arr = res2
+            for (let i in res2) {
+                if (res.flowstep.id == res2[i].id) {
                     nextTick(() => {
                         active_bzt.value = i * 1
                     })
@@ -914,11 +924,9 @@ const passAudit = val => {
 }
 const passToAuditFunc = () => {
     APIpostArchiveAudit(gongshixiangqing.obj.id, from_pass.obj).then(res => {
-        if (!res.code) {
-            ElMessage.success(res.msg)
-            refreshFunc()
-            passAudit(gongshixiangqing.obj)
-        }
+        ElMessage.success(res.msg)
+        refreshFunc()
+        passAudit(gongshixiangqing.obj)
     }).catch(err => {
         err_msg.obj = err.data
     })
@@ -973,13 +981,30 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).
     }
 </style>
 <style lang="scss" scoped>
-    .articletplarticle {
-
-    }
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.switchStyle ::v-deep .el-switch__label {
+    position: absolute !important;
+    display: none !important;
+    color: #fff !important;
+    width: 80px;
+}
+.switchStyle ::v-deep .el-switch__label--left {
+    z-index: 9 !important;
+    left: 17px !important;
+}
+.switchStyle ::v-deep .el-switch__label--right {
+    z-index: 9 !important;
+    left: -5px !important;
+}
+.switchStyle ::v-deep .el-switch__label.is-active {
+    display: block !important;
+}
+.switchStyle.el-switch ::v-deep .el-switch__core,
+.switchStyle ::v-deep .el-switch__label {
+    width: 60px !important;
+}
 </style>

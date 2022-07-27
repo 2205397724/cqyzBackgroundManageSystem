@@ -338,21 +338,17 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputArchive(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 APIpostArchive(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success(res.msg)
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -399,11 +395,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetArchiveList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
@@ -458,7 +453,7 @@ const openArticleFunc = val => {
 }
 import {
     APIgetListArchiveArticle,
-    APIgetDetailsArchiveArticle,
+    // APIgetDetailsArchiveArticle,
     APIpostArchiveArticle,
     APIdeleteArchiveArticle
 } from '@/api/custom/custom.js'
@@ -472,8 +467,8 @@ const getListArchiveFunc = () => {
         per_page: per_page2.value
     }
     APIgetListArchiveArticle(article_item.obj.id, params).then(res => {
-        article_tab.arr = res.data.items
-        total2.value = res.data.aggregation.total_cnt
+        article_tab.arr = res
+        total2.value = res.length
     })
 }
 const switch_add = ref(false)
@@ -500,10 +495,11 @@ const details_data = reactive({
     obj: {}
 })
 const lookDetails = val => {
-    APIgetDetailsArchiveArticle(article_item.obj.id, val.id).then(res => {
-        details_data.obj = res.data
-        switch_details.value = true
-    })
+    console.log(val)
+    // APIgetDetailsArchiveArticle(article_item.obj.id, val.id).then(res => {
+    details_data.obj = val
+    // switch_details.value = true
+    // })
 }
 const deleteFuncDialog = val => {
     APIdeleteArchiveArticle(article_item.obj.id, val.id).then(res => {
@@ -544,9 +540,6 @@ refreshFunc()
     }
 </style>
 <style lang="scss" scoped>
-    .articletplarchive {
-
-    }
     .search-tips {
         color: #aaa;
         font-size: 14px;
