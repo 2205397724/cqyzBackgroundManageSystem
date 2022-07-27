@@ -22,15 +22,15 @@ const api = axios.create({
     // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL_2,
     baseURL: import.meta.env.DEV &&
         import.meta.env.VITE_OPEN_PROXY === 'true' ?
-        '/proxy/' :
-        import.meta.env.VITE_APP_API_BASEURL,
-    timeout: 3000,
+        '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
+    timeout: 6000,
     responseType: 'json'
 })
 api.interceptors.request.use(
     request => {
         if (!request.baseURL) {
-            request.baseURL = import.meta.env.VITE_APP_API_BASEURL
+            request.baseURL =
+                import.meta.env.VITE_APP_API_BASEURL
         }
         loading = ElLoading.service({
             lock: true,
