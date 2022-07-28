@@ -1391,3 +1391,15 @@ export function APIdeleteSurveyTopic(props) {
 export function APIgetSurveyAnswerList(id,params) {
     return api.get('/s/'+id+'/answer',{ params : params})
 }
+//获取答卷管理详情
+export function APIgetSurveyAnswerDetail(id) {
+    return api.get('/s/answer/'+id)
+}
+//录入线下参与答卷
+export function APIaddSurveyAnswer(id,params) {
+    return api.post('/s/'+id+'/answer',params)
+}
+// 获取未参与答卷的房屋
+export function APIgetNotParticipate(id) {
+    return api.get('/s/'+id+'/doesnt')
+}

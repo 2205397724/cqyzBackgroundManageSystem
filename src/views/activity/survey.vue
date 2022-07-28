@@ -369,6 +369,8 @@
                 total.value = data_tab.arr.length
             }
             // console.log(data_tab.arr)
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 监听分页
@@ -399,7 +401,6 @@
                         APImodifySurveyStatus(id,{"status":from_examine.item.status}).then(res => {
                             refreshFunc()
                         })
-
                     }).catch(err => {
                         from_error.msg = err.data
                     })
@@ -443,6 +444,8 @@
                 total.value = data_tab.arr.length
             }
             console.log(data_tab.arr)
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 添加问卷
@@ -463,6 +466,8 @@
             refreshFunc()
             // ElMessage.success(res.statusText)
             ElMessage.success("删除成功")
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 修改问卷
@@ -476,6 +481,8 @@
                 from_examine.item.status += ''
                 switch_examine.value = true
             }
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 搜索

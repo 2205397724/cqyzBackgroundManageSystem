@@ -171,24 +171,44 @@
         </el-tab-pane>
         <el-tab-pane label="问卷调查结果" name="4">
             <div class="m-b-20">
-                <el-button class="m-r-20" type="primary" style="padding: 19px 18px;position: relative;top: 5px;">添加书面票</el-button>
-                <el-radio-group v-model="radio" size="large">
-                    <el-radio-button label="线上参与">线上参与(125)</el-radio-button>>
-                    <el-radio-button label="线下参与">线下参与(62)</el-radio-button>>
-                    <el-radio-button label="未参与">未参与(62)</el-radio-button>>
+                <el-button class="m-r-20" type="primary"
+                    style="padding: 19px 18px;position: relative;top: 5px;"
+                    @click="addAnswer()">
+                    添加书面票
+                </el-button>
+                <el-radio-group v-model="radio" size="large" @change="handleClick">
+                    <el-radio-button label="全部">全部</el-radio-button>>
+                    <el-radio-button label="线上参与">线上参与({{participate.on_line}})</el-radio-button>>
+                    <el-radio-button label="线下参与">线下参与({{participate.off_line}})</el-radio-button>>
+                    <el-radio-button label="未参与">未参与({{participate.notParticipateLength}})</el-radio-button>>
                 </el-radio-group>
             </div>
             <el-scrollbar height="400px">
                 <el-table :data="answer_list" border style="width: 100%;">
-                    <el-table-column prop="uinfo.gender" label="性别"></el-table-column>
-                    <el-table-column prop="uinfo.auth_type" label="操作人"></el-table-column>
+                    <el-table-column label="用户端类型">
+                        <template #default="scope">
+                            <span v-if="scope.row.uinfo.auth_type === 'pt'">总平台端</span>
+                            <span v-else-if="scope.row.uinfo.auth_type === 'ptr'">区域平台端</span>
+                            <span v-else-if="scope.row.uinfo.auth_type === 'gov'">管理端</span>
+                            <span v-else-if="scope.row.uinfo.auth_type === 'pm'">物业端</span>
+                            <span v-else>业主端</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="uinfo.name" label="答题人"></el-table-column>
-                    <el-table-column prop="score" label="真实业主"></el-table-column>
-                    <el-table-column prop="source" label="线上线下"></el-table-column>
+                    <el-table-column prop="mobile" label="电话"></el-table-column>
+                    <el-table-column prop="idcard" label="idcard"></el-table-column>
+                    <el-table-column prop="updated_at" label="参与时间"></el-table-column>
+                    <el-table-column label="参与途径">
+                        <template #default="scope">
+                            <span v-if="scope.row.source === 1">线上参与</span>
+                            <span v-else-if="scope.row.source === 2">线下参与</span>
+                            <!-- <span v-else>未设置</span> -->
+                            <span v-else>未参与</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column fixed="right" width="180px" label="操作">
                         <template #default="scope">
-                            <el-button type="success" :icon="Edit"  size="small">修改</el-button>
-                            <el-button type="primary" :icon="Search" size="small">查看</el-button>
+                            <el-button type="primary" :icon="Search" size="small" @click="addAnswer()">查看</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -209,6 +229,24 @@
             </el-scrollbar>
         </el-tab-pane>
     </el-tabs>
+    <!-- 添加书面票、产看问卷结果 -->
+    <el-dialog v-model="switch_addAnswer" title="添加书面票">
+        <div>证件号码：<el-input v-model="addticket.idcard"></el-input></div>
+        <div v-for="(item,index) in topic_details.item" :key="item.id">
+            <div>题号{{index}}：{{item.title}}</div>
+            <div class="m-l-40" v-for="(items,i) in item.opts" :key="items.id">
+                <el-radio-group v-model="addticket.answers[index].opt[i]">
+                    <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
+                </el-radio-group>
+            </div>
+        </div>
+        <template #footer>
+            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <el-button @click="switch_addAnswer=false">取消</el-button>
+                <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
+            </div>
+        </template>
+    </el-dialog>
     <!-- 修改添加问卷题目 -->
     <el-dialog v-model="switch_examine" :title="str_title" width="50%">
         <div>
@@ -308,13 +346,18 @@
         APIgetSurveyRange,
         APIdeleteSurveyRange,
         APIgetSurveyTopic,
+        APIgetSurveyTopicDetail,
         APIdeleteSurveyTopic,
         APIaddSurveyTopic,
         APImodifySurveyTopic,
-        APIgetSurveyTopicDetail,
         APIgetHouseListSort,
         // 问卷结果
         APIgetSurveyAnswerList,
+        APIgetSurveyAnswerDetail,
+        APIaddSurveyAnswer,
+        APIgetNotParticipate,
+        // 评论
+        APIgetCommentList,
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -341,6 +384,9 @@
         address: 'No. 189, Grove St, Los Angeles',
     },
     ]
+    const from_error = reactive({
+        msg: {}
+    })
     // 详情
     let switch_details = ref(false)
     // 接收父组件传递过来的id
@@ -356,7 +402,7 @@
     })
     const value1 = ref([])
     // 参与详情
-    const radio = ref('网络参与')
+    const radio = ref('全部')
     // 参与范围
     let data_range = reactive({
         arr:[]
@@ -364,9 +410,9 @@
     // 添加问卷题目
     const str_title = ref('添加')
     let switch_examine = ref(false)
+    let switch_addAnswer = ref(false)
     let topic_examine = reactive({
-        item: {
-        }
+        item: {}
     })
     let opts = reactive([])
     // 增加选项
@@ -396,16 +442,18 @@
             // 问卷题目
             topicsFunc()
         }else if(tab.props.name == 4){
+            notParticipate()
             // 问卷调查结果
             answerListFunc()
+            topicsFunc()
         }else{
-
+            // 业主评论
+            ownerComment()
         }
     }
     // 获取问卷详情
     const detailsFunc = id => {
         data_details.item = ''
-        console.log(data_details.item,'123456789')
         APIgetSurveyDetails(id).then(res => {
             if (res.status === 200) {
                 data_details.item = res.data
@@ -426,6 +474,15 @@
                 topic_details.item = res.data
             }
         })
+        // 根据问卷题目数量插入对象到answers中
+        // console.log('length',topic_details.item.length)
+        // 先判断数组长度是否相同
+        if(addticket.answers.length != topic_details.item.length) {
+            addticket.answers = []
+            for(let i=0;i<topic_details.item.length;i++) {
+                addticket.answers.push({'tid':'','opt':[]})
+            }
+        }
     }
     // 获取问卷范围
     const rangeFunc = () => {
@@ -441,9 +498,16 @@
             from_error.msg = err.data
         })
     }
+    // 参与情况
+    let participate = reactive({
+        "on_line":0,
+        "off_line":0,
+        "notParticipateLength":0
+    })
     // 获取问卷结果列表
-    let answer_list = reactive([
-    ])
+    let answer_list = reactive([])
+    let answer_list_on = reactive([])
+    let answer_list_off = reactive([])
     const answerListFunc = () => {
         let params = {
             page:1,
@@ -451,8 +515,49 @@
         }
         APIgetSurveyAnswerList(props.id,params).then(res => {
             console.log(res.data)
-            answer_list = res.data
-            console.log(answer_list.source)
+            // answer_list = res.data[0]
+            // 清空答卷列表
+            answer_list.length = 0
+            answer_list_on.length = 0
+            answer_list_off.length = 0
+            participate.on_line = 0
+            participate.off_line = 0
+            res.data.forEach(element => {
+                if(element.source === 1) {
+                    participate.on_line++
+                    answer_list_on.push(element)
+                }else{
+                    participate.off_line++
+                    answer_list_off.push(element)
+                }
+            })
+            answer_list.push(...answer_list_on,...answer_list_off)
+            console.log(answer_list)
+        })
+    }
+    // 切换标签，显示不同参与情况的列表
+    const handleClick = (tab) => {
+        if(tab === "线上参与") {
+            answer_list.length = 0
+            answer_list.push(...answer_list_on)
+        }else if(tab === "线下参与"){
+            answer_list.length = 0
+            answer_list.push(...answer_list_off)
+        }else if(tab === "全部"){
+            answer_list.length = 0
+            answer_list.push(...answer_list_on,...answer_list_off)
+        }
+    }
+    //打开对话框添加书面票
+    const addAnswer = () => {
+        switch_addAnswer.value = true
+    }
+    // 获取未参与答卷的房屋作为未参与用户的数量
+    let notParticipateLength = 0
+    const notParticipate = () => {
+        APIgetNotParticipate(props.id).then(res => {
+            console.log('aaa',res.data)
+            participate.notParticipateLength = res.data.length
         })
     }
     // 添加问卷题目
@@ -535,7 +640,40 @@
         }
 
     }
-
+    // 确认提交添加书面票
+    let addticket = reactive({
+        'idcard':'',
+        'answers':[
+            // {
+            //     // 'tid':'',
+            //     // 'content':'',
+            //     'opt':''
+            // },
+            // {
+            //     // 'tid':'',
+            //     // 'content':'',
+            //     'opt':''
+            // },
+            // {
+            //     // 'tid':'',
+            //     // 'content':'',
+            //     'opt':''
+            // },
+        ]
+    })
+    // 点击选框事件
+    const emitTickets = (tid,opt,index) => {
+        // console.log('tid',tid)
+        addticket.answers[index].tid = tid
+        // addticket.answers.opt = opt
+    }
+    const dialogAddSurveyAnswer = () => {
+        console.log("addticket",addticket)
+        APIaddSurveyAnswer(props.id,addticket).then(res => {
+            // console.log(res)
+        })
+    }
+    //
     // 接受传递的数据
     let ArrSetRange
     const arrSetRange = val => {
@@ -574,6 +712,17 @@
                 console.log('bbb',data_tab.arr)
             })
         }
+    }
+
+    // 业主评论
+    const ownerComment = () => {
+        let params = {
+            tgtid:props.id,
+        }
+        APIgetCommentList(params).then(res => {
+            console.log(params)
+            console.log(res)
+        })
     }
 </script>
 <style lang="scss" scoped>
