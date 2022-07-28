@@ -82,7 +82,7 @@
         </el-table-column>
         <el-table-column label="级别">
           <template #default="scope">
-            <span>{{ scope.row.pid }} </span>
+            <el-tag :type="level_tag_type(scope.row.level)">{{level_number_chiese(scope.row.level) }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="排序">
@@ -148,7 +148,7 @@
         <el-row :gutter="10">
           <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <el-form-item label-width="85px" label="上级分类ID">
-              <el-input v-model="from_record.item.id" />
+              <el-input v-model="from_record.item.pid"  disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -247,6 +247,46 @@ const addRecordKind = () => {
 const recordKindList = reactive({
   arr: [],
 });
+//根据level转换tag的type
+const level_tag_type=(val)=>{
+    switch(val){
+        case 1:
+            return ""
+            break
+        case 2:
+            return "success"
+            break
+        case 3:
+            return "info"
+            break
+        case 4:
+            return "danger"
+            break
+        case 5:
+            return "warning"
+            break
+    }
+}
+//级别数字变为中文
+const level_number_chiese=(val)=>{
+    switch(val){
+        case 1:
+            return '一级'
+            break
+        case 2:
+            return '二级'
+            break
+        case 3:
+            return '三级'
+            break
+        case 4:
+            return '四级'
+            break
+        case 5:
+            return '四级'
+            break
+    }
+}
 //关闭dialog ，清除表单
 const add_dialog_close=()=>{
     from_record.item.name=""
@@ -321,6 +361,7 @@ const putRecordKind = (val) => {
   switch_add_recordKind.value = true;
   add_put_title.value = "修改";
   from_record.item.name=val.name
+  from_record.item.pid=val.pid
   current_recordKind.item = val;
 };
 const current_recordKind = reactive({
@@ -342,6 +383,7 @@ const submit_post_put = () => {
       console.log(res);
       ElMessage.success("添加成功");
       switch_add_recordKind.value = false;
+      switch_add_recordKind_children.value=false
       refreshPage();
     });
   }

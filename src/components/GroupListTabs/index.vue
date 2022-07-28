@@ -1,25 +1,56 @@
 <template>
    <div @click="click" style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;">
-     <span style="color: #c0c4cc;margin-left: 11px;">请选择类型</span>
-     <el-dialog title="选择用户组" v-model="switchTabs">
+     <span style="margin-left: 11px;">{{selectGroup_name.item}}</span>
+     <el-dialog title="选择备案主体" v-model="switchTabs">
         <el-tabs>
           <el-tab-pane label="住建">
-            <el-tag type="success" v-for="item in groupType_3.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            <div v-if="groupType_3.arr.length!=0">
+                <el-tag type="success" v-for="item in groupType_3.arr" :key="item.id" size="large" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            </div>
+            <div v-else class="flex-row flex-center">
+                <div class="font-grey">~无类型分类~</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="街道">
-            <el-tag type="success" v-for="item in groupType_4.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            <div v-if="groupType_4.arr.length!=0">
+                <el-tag type="success" v-for="item in groupType_4.arr" :key="item.id" size="large" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            </div>
+            <div v-else class="flex-row flex-center">
+                <div class="font-grey">~无类型分类~</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="社区">
-            <el-tag type="success" v-for="item in groupType_5.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            <div v-if="groupType_5.arr.length!=0">
+                <el-tag type="success" v-for="item in groupType_5.arr" :key="item.id" size="large" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            </div>
+            <div v-else class="flex-row flex-center">
+                <div class="font-grey">~无类型分类~</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="业委会">
-            <el-tag type="success" v-for="item in groupType_6.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            <div v-if="groupType_6.arr.length!=0">
+                <el-tag type="success" v-for="item in groupType_6.arr" :key="item.id" size="large" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            </div>
+            <div v-else class="flex-row flex-center">
+                <div class="font-grey">~无类型分类~</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="物业">
-            <el-tag type="success" v-for="item in groupType_7.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            <div v-if="groupType_7.arr.length!=0">
+                <el-tag type="success" v-for="item in groupType_7.arr" :key="item.id" size="large" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            </div>
+
+            <div v-else class="flex-row flex-center">
+                <div class="font-grey">~无类型分类~</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="其他">
-            <el-tag type="success" v-for="item in groupType_99.arr" :key="item.id" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            <div v-if="groupType_99.arr.length!=0">
+                <el-tag type="success" v-for="item in groupType_99.arr" :key="item.id" size="large" class="m-r-10" @click="clickTag(item)">{{item.name}}</el-tag>
+            </div>
+            <div v-else class="flex-row flex-center">
+                <div class="font-grey">~无类型分类~</div>
+            </div>
           </el-tab-pane>
         </el-tabs>
         <template #footer>
@@ -42,12 +73,19 @@ const groupType_5=reactive({arr:[]})
 const groupType_6=reactive({arr:[]})
 const groupType_7=reactive({arr:[]})
 const groupType_99=reactive({arr:[]})
+const prop=defineProps({modelValue:{ type: [String, Array], default: '' }})
+
 const emit=defineEmits(['change'])
 const switchTabs=ref(false)
 const tab_group_list=reactive({
     arr:[]
 })
-
+/* watch(selectGroup_name,new_val=>{
+    e
+})
+watch(prop,new_val=>{
+    selectGroup_name.item=new_val.modelValue
+}) */
 const getGroupList=()=>{
     APIgetGroupList().then(res=>{
         tab_group_list.arr=res.data
@@ -69,8 +107,13 @@ const getGroupList=()=>{
         console.log(tab_group_list.arr)
     })
 }
+const selectGroup_name=reactive({
+    item:"请选择类型"
+})
 const clickTag=(item)=>{
+    selectGroup_name.item=item.name
     emit('change',item)
+    switchTabs.value=false
 }
 const click=()=>{
      switchTabs.value=true

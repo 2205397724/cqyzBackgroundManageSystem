@@ -74,7 +74,7 @@
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
-                            @change="SwitchFunc(scope.row)"
+
                         />
                     </template>
                 </el-table-column>
@@ -776,7 +776,7 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        total.value = res.length
+
     })
 }
 // 删除

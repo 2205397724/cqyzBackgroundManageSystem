@@ -19,7 +19,7 @@
                 <div class="flex-column" style="flex: 1;">
                     <span style="color: #409eff;" class="size-base strong">备案主体</span>
                     <div style="width: 90%;height: 1px;background-color: #dcdfe6;" class="m-tb-10"></div>
-                    <span style="color: #909399;" class="size-base m-t-10">主体名称: {{}}</span>
+                    <span style="color: #909399;" class="size-base m-t-10">主体名称: {{route.query.gruop_name}}</span>
                     <span style="color: #909399;" class="size-base">统一信用代码:{{}}</span>
                 </div>
                 <div class="flex-column" style="flex: 1;">

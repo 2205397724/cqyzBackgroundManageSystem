@@ -30,7 +30,8 @@ watch(code, new_val => {
     emits('update:modelValue', new_val)
 })
 import {
-    APIgetChinaRegion
+    APIgetChinaRegion,
+    APIgetResidentialListHouse
 } from '@/api/custom/custom.js'
 const cascader_props = {
     multiple: props.checkbox,
@@ -43,10 +44,19 @@ const cascader_props = {
         const {
             data
         } = node
+        // console.log(node)
+        if(data.level==5){
+                APIgetResidentialListHouse({'china_code':data.code}).then(res=>{
+                    console.log(res)
+                    resolve(res.data)
+                })
+            }
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
             console.log(res)
+
             resolve(res.data)
         })
+
     }
 }
 </script>

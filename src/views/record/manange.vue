@@ -80,26 +80,26 @@
           'font-size': '12px',
         }"
         style="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                min-height: 300px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                overflow: auto;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border: 1px solid #ebeef4;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                box-sizing: border-box;
+                                                                                width: 100%;
+                                                                                min-height: 300px;
+                                                                                overflow: auto;
+                                                                                border: 1px solid #ebeef4;
+                                                                                box-sizing: border-box;
 "
       >
-        <el-table-column label="备案名称" width="120">
+        <el-table-column label="备案名称" width="220">
           <template #default="scope">
             <span>{{ scope.row.title }} </span>
           </template>
         </el-table-column>
-        <el-table-column label="类别" width="150px">
+        <el-table-column label="类别" width="180px">
           <template #default="scope">
             <span>{{ find_right_typeId_to_name(scope.row.type) }} </span>
           </template>
         </el-table-column>
-        <el-table-column label="备案主体">
+        <el-table-column label="备案主体" width="180px">
           <template #default="scope">
-            <span>{{ scope.row.org_id }} </span>
+            <span>{{ scope_row_group_id_chinese(scope.row.group_id) }} </span>
           </template>
         </el-table-column>
         <el-table-column label="备案时间" width="150">
@@ -133,10 +133,10 @@
               <router-link
                 class="el-button m-lr-10"
                 style="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                text-decoration: inherit;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                color: inherit;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: 52px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                height: 26px;
+                                                                                                                                                text-decoration: inherit;
+                                                                                                                                                color: inherit;
+                                                                                                                                                width: 52px;
+                                                                                                                                                height: 26px;
 "
                 :to="{
                   name: 'recordManangeDetail',
@@ -148,6 +148,7 @@
                     sno: scope.row.sno,
                     status: scope.row.status,
                     id: scope.row.id,
+                    gruop_name:send_to_add_group_name
                   },
                 }"
                 >详情</router-link
@@ -183,17 +184,17 @@
     >
       <el-scrollbar height="600px">
         <el-form ref="ruleFormRef" :model="from_record.item">
-          <el-row :gutter="10">
+          <!-- <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label-width="70px" label="区域">
                 <Cascaders v-model="from_record.item.china_code"></Cascaders>
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label-width="70px" label="类型">
-                <!-- <el-select
+                <el-select
                   v-model="from_record.item.type"
                   placeholder="选择类型"
                 >
@@ -204,32 +205,41 @@
                     :key="item.id"
                   >
                   </el-option>
-                </el-select> -->
-                <GroupListTabs @change="group_tab_click" />
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label-width="70px" label="备案小区">
-                <position-tree-third
+                <position-tree-fourth
                   :tree_item="tree_item"
                   @checkFunc="checkFunc"
                 />
+                <!-- <Cascaders v-model="from_record.item.zone_id" /> -->
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label-width="70px" label="备案主体">
-                <el-input v-model="from_record.item.group_id" />
+                <GroupListTabs
+                  @change="
+                    (val) => {
+                      from_record.item.group_id = val.id;
+                    }
+                  "
+                />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
               <el-form-item label-width="70px" label="备案主题">
-                <el-input v-model="from_record.item.title" />
+                <el-input
+                  :value="add_record_title_computed"
+                  placeholder="小区名称 类别名称"
+                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -337,7 +347,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import {
   APIgetRecordList,
   APIpostRecord,
@@ -345,6 +355,9 @@ import {
   APIdeleteRecord,
   APIgetRecordDetail,
   APIgetKindList,
+  APIgetResidentialDetailsHouse,
+  APIgetGroupDetails,
+  APIgetGroupList,
 } from "@/api/custom/custom";
 import { ElMessage } from "element-plus";
 import { Search, Plus } from "@element-plus/icons-vue";
@@ -354,18 +367,26 @@ const per_page = ref(10);
 const recordList = reactive({
   arr: [],
 });
+//把备案ID转换成对应名字
 const find_right_typeId_to_name = (typeid) => {
   let name = "";
   recordKindList.arr.find((item, index) => {
     for (let key in item) {
       if (item[key] == typeid) {
-        console.log(item.name);
         name = item["name"];
       }
     }
   });
   return name;
 };
+const add_record_title_computed = computed({
+  get: () => {
+    return (
+      add_record_zone_id_compited.item +
+      find_right_typeId_to_name(from_record.item.type)
+    );
+  },
+});
 const switch_add_record = ref(false);
 const refreshPage = () => {
   page.value = 1;
@@ -380,7 +401,19 @@ const getRecordKindList = () => {
     console.log(res);
   });
 };
+//添加备案弹出框备案主题
+/* const add_record_title=computed({
+    get:()=>{
 
+        // recordKindList.arr.forEach(item=>{
+        //     if(item.type=from_record.item.type){
+        //         console.log(item)
+        //         return item.name
+        //     }
+        // })
+        return find_right_typeId_to_name(from_record.item.type)
+    },
+}) */
 const from_record = reactive({
   item: {
     china_code: "",
@@ -413,10 +446,33 @@ const tree_item = ref({
   next_type: "region",
   type: "region",
 });
-//添加备案选择用户组Tabs事件
-const group_tab_click=()=>{
+//用户组id转换成中文
+const tab_group_list = reactive({ arr: [] });
+const getGroupList = () => {
+  APIgetGroupList().then((res) => {
+    console.log(res);
+    tab_group_list.arr = res.data;
+  });
+};
+getGroupList();
+const send_to_add_group_name=ref("")
+const scope_row_group_id_chinese = (val) => {
+  let name = "";
+  tab_group_list.arr.find((item, index) => {
+    for (let key in item) {
+      if (item[key] == val) {
+        name = item["name"];
+        send_to_add_group_name.value=name
+      }
+    }
+  });
 
-}
+  return name;
+};
+//添加备案选择用户组Tabs事件
+const group_tab_click = (item) => {
+  console.log(item);
+};
 //备案列表详情
 const getFunRecordList = () => {
   let data = {
@@ -459,8 +515,24 @@ const record_dialog_close = () => {
     status: 0,
   };
 };
+const add_record_zone_id_compited = reactive({ item: "" });
 //添加备案选择备案小区事件
-const checkFunc = () => {};
+const checkFunc = (val) => {
+  console.log(val);
+  if (val.leaf) {
+    from_record.item.zone_id = val.id;
+    from_record.item.china_code = val.china_code;
+  } else {
+    from_record.item.zone_id = "62d90211615d750a917fe689";
+  }
+  APIgetResidentialDetailsHouse(from_record.item.zone_id)
+    .then((res) => {
+      add_record_zone_id_compited.item = res.name;
+    })
+    .catch((err) => {
+      return;
+    });
+};
 // 文件上传
 const fileListFn = (val) => {
   if (!val) {
@@ -537,6 +609,7 @@ const getRecordList = () => {
     recordList.arr = res;
   });
 };
+//修改备案
 const putRecord = (val) => {
   switch_add_record.value = true;
   add_put_title.value = "修改";
@@ -586,6 +659,7 @@ const submit_post_put = () => {
     });
   }
   if (add_put_title.value == "添加") {
+    from_record.item.title = add_record_title_computed.value;
     APIpostRecord(from_record.item).then((res) => {
       ElMessage.success("添加成功");
       switch_add_record.value = false;
@@ -593,22 +667,6 @@ const submit_post_put = () => {
     });
   }
 };
-/* const a=()=>{
-    APIpostRecord({
-        china_code:'500101',
-        type:"62de39d0ac5207226502bfe7",
-        zone_id:'62bd6f76ee071f1789147d41',
-        group_id:'62cfddd215acff15ec472de5',
-        title:"凄凄切切群群群群群",
-        sno:'CQ8989125',
-        desc:"发我QQ搜索",
-        affix:[{name:'名称密码',type:'文件',key:['foll']}],
-        startat:'2022-1-1',
-        endat:'2022-9-10',
-        status:0
-    })
-}
-a() */
 import { getOpts, getOptVal } from "@/util/opts.js";
 const opts_all = reactive({
   obj: {},
