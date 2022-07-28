@@ -16,8 +16,11 @@ export function APIdeleteCommentconfig(tgtid) {
 }
 // 评论
 // 列表
+// export function APIgetCommentList(params) {
+//     return api2.get('/comment', params)
+// }
 export function APIgetCommentList(params) {
-    return api2.get('/comment', params)
+    return api2.get('/comment', {params:params})
 }
 // 详情
 export function APIgetCommentDetails(id) {

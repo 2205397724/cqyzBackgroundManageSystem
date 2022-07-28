@@ -195,7 +195,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="uinfo.name" label="答题人"></el-table-column>
-                    <el-table-column prop="mobile" label="电话"></el-table-column>
+                    <el-table-column prop="uinfo.mobile" label="电话"></el-table-column>
                     <el-table-column prop="idcard" label="idcard"></el-table-column>
                     <el-table-column prop="updated_at" label="参与时间"></el-table-column>
                     <el-table-column label="参与途径">
@@ -208,7 +208,7 @@
                     </el-table-column>
                     <el-table-column fixed="right" width="180px" label="操作">
                         <template #default="scope">
-                            <el-button type="primary" :icon="Search" size="small" @click="addAnswer()">查看</el-button>
+                            <el-button type="primary" :icon="Search" size="small" @click="getAnswerDetail(scope.row.id)">查看</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -216,37 +216,29 @@
         </el-tab-pane>
         <el-tab-pane label="业主评论" name="5">
             <el-scrollbar height="400px">
-                <el-table :data="tableData" border style="width: 100%;">
-                    <el-table-column label="序号">1</el-table-column>
-                    <el-table-column label="评论内容">2</el-table-column>
-                    <el-table-column label="点赞">3</el-table-column>
-                    <el-table-column label="状态">4</el-table-column>
-                    <el-table-column label="用户">5</el-table-column>
-                    <el-table-column label="地区">6</el-table-column>
-                    <el-table-column label="时间">7</el-table-column>
-                    <el-table-column label="操作">8</el-table-column>
+                <el-table :data="comment_list" style="width: 100%;">
+                    <el-table-column prop="content" width="200" label="评论内容"></el-table-column>
+                    <el-table-column prop="zan" label="点赞" width="100"></el-table-column>
+                    <el-table-column label="状态" width="150" align="center">
+                        <template #default="scope">
+                            <el-button v-show="scope.row.status == 10" type="warning">未审核</el-button>
+                            <el-button v-show="scope.row.status == 20" type="success">已审核</el-button>
+                            <el-button v-show="scope.row.status == 30" type="danger">审核失败</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="score" label="评分" width="100"></el-table-column>
+                    <el-table-column prop="atuname" label="作者" width="100"></el-table-column>
+                    <el-table-column prop="updated_at" label="时间" ></el-table-column>
+                    <el-table-column fixed='right' width="200" label="操作">
+                        <template #default="scope">
+                            <el-button border size="small" @click="getCommentDetail(scope.row.id)">详情</el-button>
+                            <el-button border type="primary" size="small" @click="modifyComment(scope.row.id)">修改</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-scrollbar>
         </el-tab-pane>
     </el-tabs>
-    <!-- 添加书面票、产看问卷结果 -->
-    <el-dialog v-model="switch_addAnswer" title="添加书面票">
-        <div>证件号码：<el-input v-model="addticket.idcard"></el-input></div>
-        <div v-for="(item,index) in topic_details.item" :key="item.id">
-            <div>题号{{index}}：{{item.title}}</div>
-            <div class="m-l-40" v-for="(items,i) in item.opts" :key="items.id">
-                <el-radio-group v-model="addticket.answers[index].opt[i]">
-                    <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
-                </el-radio-group>
-            </div>
-        </div>
-        <template #footer>
-            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                <el-button @click="switch_addAnswer=false">取消</el-button>
-                <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
-            </div>
-        </template>
-    </el-dialog>
     <!-- 修改添加问卷题目 -->
     <el-dialog v-model="switch_examine" :title="str_title" width="50%">
         <div>
@@ -334,6 +326,127 @@
             </div>
         </template>
     </el-dialog>
+    <!-- 添加书面票 -->
+    <el-dialog v-model="switch_addAnswer" title="添加书面票">
+        <div>证件号码：<el-input v-model="addticket.idcard"></el-input></div>
+        <div v-for="(item,index) in topic_details.item" :key="item.id">
+            <div>题号{{index+1}}：{{item.title}}</div>
+            <div class="m-l-40" v-for="(items,i) in item.opts" :key="items.id">
+                <el-radio-group v-model="addticket.answers[index].opt[i]">
+                    <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
+                </el-radio-group>
+            </div>
+        </div>
+        <template #footer>
+            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <el-button @click="switch_addAnswer=false">取消</el-button>
+                <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
+            </div>
+        </template>
+    </el-dialog>
+    <!-- 查看答卷详情 -->
+    <el-dialog v-model="switch_answer_detail" title="用户答卷详情">
+        <div>证件号码：{{answer_detail.item.idcard}}</div>
+        <div>电话：{{answer_detail.item.uinfo.mobile}}</div>
+        <div>
+            参与途径：
+            <span v-if="answer_detail.item.source == 1">线上参与</span>
+            <span v-if="answer_detail.item.source == 2">线下参与</span>
+        </div>
+        <div v-for="(item,index) in topic_details.item" :key="item.id">
+            <div>题号{{index+1}}：{{item.title}}</div>
+            <div class="m-l-40" v-for="items in item.opts" :key="items.id">
+                <span v-show="items.id == answer_detail.item.answertopics.ansansweropts.oid">{{items.content}}</span>
+                <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
+                    <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
+                </el-radio-group> -->
+            </div>
+        </div>
+        <!-- <div v-for="item in answer_detail.item.answertopics">
+            <div>
+                题目id：{{item.id}}
+                <span v-for="items in item.answeropts">题目选项id：{{items.oid}}</span>
+            </div>
+        </div> -->
+        <template #footer>
+            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <el-button @click="switch_answer_detail=false">取消</el-button>
+            </div>
+        </template>
+    </el-dialog>
+    <!-- 修改问卷评论 -->
+    <el-dialog v-model="switch_comment" title="修改问卷评论">
+        <div class="details-box p-lr-10">
+            <el-form :model="comment_details.item">
+                <el-row :gutter="10">
+                    <el-col>
+                        <el-form-item label="评论内容"  label-width="120px">
+                            <el-input v-model="comment_details.item.content"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col>
+                        <el-form-item label="评论状态"  label-width="120px">
+                            <el-radio-group class="ml-4" v-model="comment_details.item.status">
+                                <el-radio label="10" size="large">未审核</el-radio>
+                                <el-radio label="20" size="large">已审核</el-radio>
+                                <el-radio label="30" size="large">审核失败</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        <template #footer>
+            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <el-button @click="switch_comment=false">取消</el-button>
+                <el-button type="primary" @click="dialogModifyComment(comment_details.item.content,comment_details.item.status)">确定</el-button>
+            </div>
+        </template>
+    </el-dialog>
+    <!-- 问卷评论详情 -->
+    <el-dialog v-model="switch_comment_detail" title="问卷评论详情">
+        <div class="details-box p-lr-10">
+            <div class="item">
+                <div class="left">评论内容</div>
+                <div class="right">{{comment_details.item.content}}</div>
+            </div>
+            <div class="item">
+                <div class="left">评论状态</div>
+                <div class="right">
+                    <span v-if="comment_details.item.status == 10">未审核</span>
+                    <span v-else-if="comment_details.item.status == 20">未审核</span>
+                    <span v-else>审核失败</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="left">评论时间</div>
+                <div class="right">{{comment_details.item.created_at}}</div>
+            </div>
+            <div class="item">
+                <div class="left">修改时间</div>
+                <div class="right">{{comment_details.item.updated_at}}</div>
+            </div>
+            <div class="item">
+                <div class="left">点赞</div>
+                <div class="right">{{comment_details.item.zan}}</div>
+            </div>
+            <div class="item">
+                <div class="left">分数</div>
+                <div class="right">{{comment_details.item.score}}</div>
+            </div>
+            <div class="item">
+                <div class="left">网络位置</div>
+                <div class="right">{{comment_details.item.loc}}:{{comment_details.item.ip}}</div>
+            </div>
+        </div>
+        <template #footer>
+            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <el-button @click="switch_comment_detail=false">取消</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </div>
 </template>
 
@@ -358,6 +471,8 @@
         APIgetNotParticipate,
         // 评论
         APIgetCommentList,
+        APIgetCommentDetails,
+        APIputComment,
     } from '@/api/custom/custom.js'
     // 导入图标
     import {
@@ -367,23 +482,6 @@
     import {
         ElMessage
     } from 'element-plus'
-    const tableData = [
-    {
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-02',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    ]
     const from_error = reactive({
         msg: {}
     })
@@ -411,6 +509,9 @@
     const str_title = ref('添加')
     let switch_examine = ref(false)
     let switch_addAnswer = ref(false)
+    let switch_answer_detail = ref(false)
+    let switch_comment = ref(false)
+    let switch_comment_detail = ref(false)
     let topic_examine = reactive({
         item: {}
     })
@@ -498,6 +599,18 @@
             from_error.msg = err.data
         })
     }
+    // 获取问卷结果详情
+    let answer_detail = reactive({
+        item:''
+    })
+    const getAnswerDetail = (id) => {
+        switch_answer_detail.value = true
+        // console.log(id)
+        APIgetSurveyAnswerDetail(id).then(res => {
+            console.log(res.data)
+            answer_detail.item = res.data
+        })
+    }
     // 参与情况
     let participate = reactive({
         "on_line":0,
@@ -514,7 +627,7 @@
             per_page:15,
         }
         APIgetSurveyAnswerList(props.id,params).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             // answer_list = res.data[0]
             // 清空答卷列表
             answer_list.length = 0
@@ -532,7 +645,7 @@
                 }
             })
             answer_list.push(...answer_list_on,...answer_list_off)
-            console.log(answer_list)
+            // console.log(answer_list)
         })
     }
     // 切换标签，显示不同参与情况的列表
@@ -556,7 +669,7 @@
     let notParticipateLength = 0
     const notParticipate = () => {
         APIgetNotParticipate(props.id).then(res => {
-            console.log('aaa',res.data)
+            // console.log('aaa',res.data)
             participate.notParticipateLength = res.data.length
         })
     }
@@ -617,7 +730,7 @@
         topic_examine.item.opts = opts
         // console.log(topic_examine.item)
         if(str_title.value == '添加') {
-            console.log('qqqqqq',topic_examine.item)
+            // console.log('qqqqqq',topic_examine.item)
             APIaddSurveyTopic(topic_examine.item).then(res => {
                 if (!res.code) {
                     refreshFunc()
@@ -640,20 +753,11 @@
         }
 
     }
+
     // 确认提交添加书面票
     let addticket = reactive({
         'idcard':'',
         'answers':[
-            // {
-            //     // 'tid':'',
-            //     // 'content':'',
-            //     'opt':''
-            // },
-            // {
-            //     // 'tid':'',
-            //     // 'content':'',
-            //     'opt':''
-            // },
             // {
             //     // 'tid':'',
             //     // 'content':'',
@@ -673,7 +777,7 @@
             // console.log(res)
         })
     }
-    //
+
     // 接受传递的数据
     let ArrSetRange
     const arrSetRange = val => {
@@ -715,14 +819,55 @@
     }
 
     // 业主评论
+    let comment_list = reactive([])
     const ownerComment = () => {
         let params = {
             tgtid:props.id,
         }
         APIgetCommentList(params).then(res => {
-            console.log(params)
-            console.log(res)
+            // console.log(res)
+            comment_list.length = 0
+            res.forEach(element => {
+                comment_list.push(element)
+            })
+            console.log(comment_list)
         })
+    }
+    // 修改评论
+    const modify = reactive({
+        Id: ''
+    })
+    const comment_details = reactive({
+        item: ''
+    })
+    const modifyComment = (id) => {
+        modify.Id = id
+        switch_comment.value = true
+        APIgetCommentDetails(id).then(res => {
+            console.log(res)
+            comment_details.item = res
+        })
+    }
+    // 评论详情
+    const getCommentDetail = (id) => {
+        switch_comment_detail.value = true
+        comment_details.length = 0
+        APIgetCommentDetails(id).then(res => {
+            console.log(res)
+            comment_details.item = res
+        })
+    }
+    // 提交评论修改
+    const dialogModifyComment = (content,status) => {
+        console.log(modify.Id)
+        APIputComment(modify.Id,{"content":content,"status":status}).then(res => {
+            console.log(res)
+            ElMessage.success("修改成功")
+        }).catch(err => {
+            ElMessage.error("提交失败")
+        })
+        switch_comment.value = false
+        ownerComment()
     }
 </script>
 <style lang="scss" scoped>
