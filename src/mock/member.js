@@ -4,6 +4,7 @@
  * 规则是当 status 为 1 时表示请求成功，为 0 时表示接口需要登录或者登录状态失效，需要重新登录
  * 请求出错时 error 会返回错误信息
  */
+
 export default [{
     url: '/mock/member/login',
     method: 'post',
@@ -24,7 +25,7 @@ export default [{
     method: 'get',
     response: option => {
         let permissions = []
-        if (option.query.account == 'admin') {
+       /*  if (option.query.account == 'admin') {
             permissions = [
                 '*'
             ]
@@ -36,7 +37,10 @@ export default [{
                 'supervise.workbench',
                 'supervise.workbench.workbench'
             ]
-        }
+        } */
+        permissions=['supervise',
+        'supervise.home',
+        'supervise.home.home','house']
         return {
             msg: '',
             code: 0,

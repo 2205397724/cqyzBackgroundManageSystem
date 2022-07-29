@@ -189,24 +189,12 @@ function handleLogin() {
                 }
                 if(data.auth_type==="pt"){
                     userStore.utype="pt"
-                    localStorage.setItem("utype","ptzxcvbnm159")
-                    userStore.isChooseCity=true
-                     sessionStorage.setItem("IS_chooseCity",true)
                 }
                 if(data.auth_type!=="pt"){
-                     userStore.utype=data.auth_type
-                     userStore.isChooseCity=false
-                     sessionStorage.setItem("IS_chooseCity",false)
-                    // APIgetUser_where_group().then(res=>{//获取登录用户所在用户组
-                    // let user_groupid_arr=[]
-                    // user_groupid_arr=res.data
-                    // console.log(res)
-                    userStore.getPermissions().then(res=>{
-                        console.log(res)
-                    })
+                    userStore.utype=data.auth_type
+                    userStore.isChooseCity=true
                 }
                 router.push(redirect.value)
-                location.reload()
             }).catch(() => {
 
                 loading.value = false

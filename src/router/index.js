@@ -133,7 +133,7 @@ const asyncRoutes = [{
         meta: {
             title: '管理',
             icon: 'manage',
-            // auth: ['supervise', '*']
+            auth: ['supervise', '*']
         },
         children: [
             superviseHome,

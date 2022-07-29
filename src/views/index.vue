@@ -121,30 +121,19 @@ const choose_city_end=()=>{
     switch_choose_city.value=false
 }
 const choose_city=()=>{//进入首页判断
-    userStore.isChooseCity=sessionStorage.getItem("IS_chooseCity")
+    userStore.getPermissions()
     if(userStore.isChooseCity){
-        switch_choose_city.value=false
+        console.log(userStore.isChooseCity)
+        switch_choose_city.value=true
         console.log("ssss")
     }else{
-        switch_choose_city.value=true
-        console.log("ss")
+        switch_choose_city.value=false
         // userStore.isChooseCity=false
-        APIgetCityNotPm().then(res=>{
+      /*   APIgetCityNotPm().then(res=>{
             console.log(res)
             city_list.arr=res.data
-        })
+        }) */
     }
-    // if(sessionStorage.getItem('IS_chooseCity')){
-    //     userStore.isChooseCity=sessionStorage.getItem('IS_chooseCity')
-    //     userStore.city=sessionStorage.getItem('city')
-    //     return
-    // }else{
-    //     switch_choose_city.value=true
-    //     APIgetCityNotPm().then(res=>{
-    //         console.log(res)
-    //         city_list.arr=res.data
-    //     })
-    // }
 }
 choose_city()
 const choose_cityFun=(val)=>{

@@ -2,7 +2,7 @@
     <div>
         <page-main>
             <div style="font-size: 22px;">
-                {{find_right_typeId_to_name(route.query.type)}}
+                {{route.query.title}}
             </div>
             <div class="flex-row flex-zhu-center flex-between" style="width: 200px;height: 60px;">
                 <div class="size-sm" style="color: #999;">备案编号: {{route.query.sno}}</div>
@@ -11,7 +11,7 @@
                     :active-value="1"
                     :inactive-value="0"
                     class="mb-2 switchStyle"
-                    disabled
+                    @change="switchRecordFun"
                     ></el-switch>
                 </div>
             </div>
@@ -25,8 +25,8 @@
                 <div class="flex-column" style="flex: 1;">
                     <span  style="color: #409eff;" class="size-base strong" >备案项目</span>
                     <div style="width: 90%;height: 1px;background-color: #dcdfe6;" class=" m-tb-10"></div>
-                    <span style="color: #909399;" class="size-base m-t-10">项目名称:{{}}</span>
-                    <span style="color: #909399;" class="size-base">项目地址:{{}}</span>
+                    <span style="color: #909399;" class="size-base m-t-10">项目名称:{{current_record_detail.item.zone_info.name}}</span>
+                    <span style="color: #909399;" class="size-base">项目地址:{{current_record_detail.item.zone_info.addr}}</span>
                 </div>
             </div>
             <div class="flex-column m-t-40">
@@ -34,14 +34,20 @@
                 <div style="width: 96%;height: 1px;background-color: #dcdfe6;" class="m-tb-10"></div>
                 <span style="color: #909399;" class="size-base m-t-10">建设用地规划许可证配套用地范围红线图</span>
                 <div>
+                   <div v-for="item in current_record_detail.item.affix" :key="item.key">
+                    <el-tag type="primary" style="width: 100px;text-align: center;margin-top: 10px;">{{item.name}}</el-tag>
+                   </div>
                     <div  class="flex-row">
                         <el-image v-for="(item,index) in current_record_detail.item.affix" :key="item.key" :src="'http://192.168.110.37:10090/zgj/'+item.key" lazy style="width: 100px;height: 100px;"
                         :preview-src-list="preImg.arr"
                         :initial-index="index"
-                        class="m-r-20 m-tb-20"></el-image>
+                        class="m-r-20 m-b-20"></el-image>
                     </div>
                 </div>
                 <span style="color: #909399;" class="size-base m-t-10">建筑工程规划许可证及附图</span>
+                <div v-for="item in current_record_detail.item.affix" :key="item.key">
+                    <el-tag type="primary" style="width: 100px;text-align: center;margin-top: 10px;">{{item.name}}</el-tag>
+                   </div>
                 <div  class="flex-row">
                         <el-image v-for="(item,index) in current_record_detail.item.affix" :key="item.key" :src="'http://192.168.110.37:10090/zgj/'+item.key" lazy style="width: 100px;height: 100px;"
                         :preview-src-list="preImg.arr"
@@ -57,10 +63,12 @@
 import {
     ref,reactive
 } from 'vue'
+import {ElMessage} from 'element-plus'
 import {useRoute} from 'vue-router'
 import {APIgetRecordList,
 APIgetRecordDetail,
-APIgetKindList} from '@/api/custom/custom'
+APIgetKindList,
+APIputRecord} from '@/api/custom/custom'
 const VITE_APP_FOLDER_SRC = import.meta.env.VITE_APP_FOLDER_SRC
 const route=useRoute()
 const preImg=reactive({
@@ -71,6 +79,13 @@ const all_filing_recordList=reactive({
 })
 const typeId_to=ref("")
 const recordKindList=reactive({arr:[]})
+//switch修改备案
+const switchRecordFun=(val)=>{
+    console.log(val)
+    APIputRecord(route.query.id,{status:parseInt(val)}).then(res=>{
+        ElMessage.success('修改成功')
+    })
+}
 //拿去备案类型列表
 const current_record_detail=reactive({
     item:{
@@ -91,6 +106,10 @@ const current_record_detail=reactive({
     startat: "",
     endat: "",
     status: 0,
+    zone_info:{
+        name:"",
+        addr:""
+    }
     }
 })
 const getRecordKindList = () => {

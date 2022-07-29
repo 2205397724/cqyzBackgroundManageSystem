@@ -103,6 +103,13 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                 <el-pagination
+    style="float: right;"
+    background
+    layout="prev, pager, next"
+    :total="50"
+
+  />
             </div>
             <!-- 修改弹窗 -->
          <el-dialog title="修改权限" v-model="switch_put_perms" show-close width="40%" @close="close_put_perms">

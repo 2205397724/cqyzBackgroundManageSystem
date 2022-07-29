@@ -148,7 +148,7 @@
         <el-row :gutter="10">
           <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <el-form-item label-width="85px" label="上级分类ID">
-              <el-input v-model="from_record.item.pid"  disabled/>
+              <el-input v-model="from_record.item.pid"/>
             </el-form-item>
           </el-col>
         </el-row>

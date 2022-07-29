@@ -979,7 +979,10 @@ export function APIputUser(id, data) {
 export function APIpostUser(data) {
     return api.post('/pt/user-account', data)
 }
-
+//获取业主身份的权限
+export function APIgetloginUserPerms(){
+    return api.get(`/me/mbr-perms`)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 产权
 // 列表
