@@ -327,16 +327,48 @@
         </template>
     </el-dialog>
     <!-- 添加书面票 -->
-    <el-dialog v-model="switch_addAnswer" title="添加书面票">
-        <div>证件号码：<el-input v-model="addticket.idcard"></el-input></div>
-        <div v-for="(item,index) in topic_details.item" :key="item.id">
-            <div>题号{{index+1}}：{{item.title}}</div>
-            <div class="m-l-40" v-for="(items,i) in item.opts" :key="items.id">
-                <el-radio-group v-model="addticket.answers[index].opt[i]">
-                    <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
-                </el-radio-group>
+    <el-dialog v-model="switch_addAnswer" title="添加书面票" fullscreen>
+        <el-scrollbar>
+            <div class="m-b-20">证件号码：<el-input v-model="addticket.idcard"></el-input></div>
+            <!-- 遍历题目 -->
+            <div v-for="(item,index) in topic_details.item" :key="item.id">
+                <!-- 单选题 -->
+                <div v-if="item.type === 1">
+                    <div>题号(单选题){{index+1}}、{{item.title}}</div>
+                    <div class="m-l-40" v-for="items in item.opts" :key="items.id">
+                        <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
+                            <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
+                        </el-radio-group> -->
+                        <el-radio-group v-model="addticket.answers[index].opt[0]">
+                            <el-radio :label="items.id" @click="emitTickets(item.id,index)">{{items.content}}</el-radio>
+                        </el-radio-group>
+                    </div>
+                </div>
+                <!-- 多选题 -->
+                <div v-else-if="item.type === 2">
+                    <div>题号(多选题){{index+1}}、{{item.title}}</div>
+                    <div class="m-l-40" v-for="(items,i) in item.opts" :key="items.id">
+                        <el-checkbox-group v-model="addticket.answers[index].opt">
+                            <el-checkbox :label="items.id" @click="emitTickets(item.id,index)">{{items.content}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+                <!-- 主观填空 -->
+                <div v-else-if="item.type === 3">
+                    <div>题号(主观题){{index+1}}、{{item.title}}</div>
+                    <div class="m-l-40 m-tb-10">
+                        <el-input v-model="addticket.answers[index].content" placeholder="请输入内容" @click="emitTickets(item.id,index)"/>
+                    </div>
+                </div>
+                <!-- 文字描述 -->
+                <!-- <div v-else>
+                    <div>题号(文字描述){{index+1}}：{{item.title}}</div>
+                    <div class="m-l-40">
+                        <el-input v-model="addticket.answers[index].content" placeholder="请输入内容" @click="emitTickets(item.id,index)"/>
+                    </div>
+                </div> -->
             </div>
-        </div>
+        </el-scrollbar>
         <template #footer>
             <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                 <el-button @click="switch_addAnswer=false">取消</el-button>
@@ -345,27 +377,69 @@
         </template>
     </el-dialog>
     <!-- 查看答卷详情 -->
-    <el-dialog v-model="switch_answer_detail" title="用户答卷详情">
-        <div>证件号码：{{answer_detail.item.idcard}}</div>
-        <div>电话：{{answer_detail.item.uinfo.mobile}}</div>
-        <div>
-            参与途径：
-            <span v-if="answer_detail.item.source == 1">线上参与</span>
-            <span v-if="answer_detail.item.source == 2">线下参与</span>
-        </div>
-        <div v-for="(item,index) in topic_details.item" :key="item.id">
-            <div>题号{{index+1}}：{{item.title}}</div>
-            <div class="m-l-40" v-for="items in item.opts" :key="items.id">
-                <span v-show="items.id == answer_detail.item.answertopics.ansansweropts.oid">{{items.content}}</span>
-                <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
-                    <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
-                </el-radio-group> -->
-            </div>
-        </div>
-        <!-- <div v-for="item in answer_detail.item.answertopics">
+    <el-dialog v-model="switch_answer_detail" title="用户答卷详情" fullscreen>
+        <el-scrollbar>
+            <div>证件号码：{{answer_detail.item.idcard}}</div>
+            <div v-if="answer_detail.item.uinfo">电话：{{answer_detail.item.uinfo.mobile}}</div>
             <div>
-                题目id：{{item.id}}
-                <span v-for="items in item.answeropts">题目选项id：{{items.oid}}</span>
+                参与途径：
+                <span v-if="answer_detail.item.source == 1">线上参与</span>
+                <span v-if="answer_detail.item.source == 2">线下参与</span>
+            </div>
+            <!-- 遍历题目 -->
+            <div v-for="(item,index) in topic_details.item" :key="item.id">
+                <!-- 单选题 -->
+                <div v-if="item.type === 1">
+                    <div>题号(单选题){{index+1}}、{{item.title}}</div>
+                    <div class="m-l-40" v-for="items in item.opts" :key="items.id">
+                        <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
+                            <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
+                        </el-radio-group> -->
+                        <el-radio-group v-model="ischecked">
+                            <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio>
+                        </el-radio-group>
+                    </div>
+                </div>
+                <!-- 多选题 -->
+                <div v-else-if="item.type === 2">
+                    <div>题号(多选题){{index+1}}、{{item.title}}</div>
+                    <div class="m-l-40" v-for="items in item.opts" :key="items.id">
+                        <!-- <el-checkbox-group v-if="addticket.answers[index]" v-model="addticket.answers[index].opt">
+                            <el-checkbox v-if="items" :label="items.id">{{items.content}}</el-checkbox>
+                        </el-checkbox-group> -->
+                        <el-checkbox-group v-model="checkList">
+                            <el-checkbox v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+                <!-- 主观填空 -->
+                <div v-else-if="item.type === 3">
+                    <div>题号(主观题){{index+1}}、{{item.title}}</div>
+                    <div class="m-l-40 m-tb-10">
+                        <el-input v-if="addticket.answers[index]" v-model="addticket.answers[index].content" placeholder="请输入内容"/>
+                        <!-- <el-input :placeholder="answer_detail.item.answertopics[index].content"/> -->
+                    </div>
+                </div>
+                <!-- 文字描述 -->
+                <!-- <div v-else>
+                    <div>题号(文字描述){{index+1}}：{{item.title}}</div>
+                    <div class="m-l-40">
+                        <el-input v-model="addticket.answers[index].content" placeholder="请输入内容"/>
+                    </div>
+                </div> -->
+            </div>
+        </el-scrollbar>
+        <!-- <div v-for="(item,index) in topic_details.item" :key="item.id" class="m-t-10">
+            <div>题号{{index+1}}：{{item.title}}</div>
+            <div class="m-l-40" v-for="items in item.opts" :key="items.id" >
+                <span
+                    v-if="answer_detail.item.answertopics[index]"
+                    v-show="showTopic(items.id,answer_detail.item.answertopics[index].answeropts)"
+                    >{{items.content}}</span>
+                <span>{{items.id}}</span>:
+                <span v-if="answer_detail.item.answertopics[index]">{{answer_detail.item.answertopics[index].answeropts}}</span>
+                <span>{{answer_detail.item.answertopics[index].answeropts}}</span>
+                <p>{{items.id}}:{{answer_detail.item.answertopics[index].answeropts[0].oid}}</p>
             </div>
         </div> -->
         <template #footer>
@@ -499,6 +573,9 @@
         item: ''
     })
     const value1 = ref([])
+    // 判断答卷选项是否选中
+    const ischecked = ref('1')
+    const checkList = ref(['1'])
     // 参与详情
     const radio = ref('全部')
     // 参与范围
@@ -543,6 +620,7 @@
             // 问卷题目
             topicsFunc()
         }else if(tab.props.name == 4){
+            // 未参与房屋
             notParticipate()
             // 问卷调查结果
             answerListFunc()
@@ -575,15 +653,7 @@
                 topic_details.item = res.data
             }
         })
-        // 根据问卷题目数量插入对象到answers中
-        // console.log('length',topic_details.item.length)
-        // 先判断数组长度是否相同
-        if(addticket.answers.length != topic_details.item.length) {
-            addticket.answers = []
-            for(let i=0;i<topic_details.item.length;i++) {
-                addticket.answers.push({'tid':'','opt':[]})
-            }
-        }
+        console.log('topic_details',topic_details)
     }
     // 获取问卷范围
     const rangeFunc = () => {
@@ -605,10 +675,24 @@
     })
     const getAnswerDetail = (id) => {
         switch_answer_detail.value = true
+        // 根据问卷题目数量插入对象到answers中
+        // 先判断数组长度是否相同
+        if(addticket.answers.length != topic_details.item.length) {
+            addticket.answers = []
+            for(let i=0;i<topic_details.item.length;i++) {
+                // 判断是选择题还是主观题
+                if(topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
+                    addticket.answers.push({'tid':'','opt':[]})
+                }else {
+                    addticket.answers.push({'tid':'','content':''})
+                }
+            }
+        }
         // console.log(id)
         APIgetSurveyAnswerDetail(id).then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             answer_detail.item = res.data
+            console.log('answer_detail.item',answer_detail.item)
         })
     }
     // 参与情况
@@ -629,10 +713,11 @@
         APIgetSurveyAnswerList(props.id,params).then(res => {
             // console.log(res.data)
             // answer_list = res.data[0]
-            // 清空答卷列表
+            // 清空答卷列表（线上、线下、总列表）
             answer_list.length = 0
             answer_list_on.length = 0
             answer_list_off.length = 0
+            // 线上线下参与数量
             participate.on_line = 0
             participate.off_line = 0
             res.data.forEach(element => {
@@ -647,6 +732,17 @@
             answer_list.push(...answer_list_on,...answer_list_off)
             // console.log(answer_list)
         })
+    }
+    // 判断选项是否存在于答卷详情,取每个选项的id判断是否存在于答卷中，存在则显示该道选项内容
+    const showTopic = (optid,answeropts) => {
+        let isShow = false
+        answeropts.forEach(element => {
+            console.log(optid,element.oid)
+            if(optid === element.oid) {
+                isShow = true
+            }
+        })
+        return isShow
     }
     // 切换标签，显示不同参与情况的列表
     const handleClick = (tab) => {
@@ -664,6 +760,20 @@
     //打开对话框添加书面票
     const addAnswer = () => {
         switch_addAnswer.value = true
+        // 根据问卷题目数量插入对象到answers中
+        // console.log('length',topic_details.item.length)
+        // 先判断数组长度是否相同
+        if(addticket.answers.length != topic_details.item.length) {
+            addticket.answers = []
+            for(let i=0;i<topic_details.item.length;i++) {
+                // 判断是选择题还是主观题
+                if(topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
+                    addticket.answers.push({'tid':'','opt':[]})
+                }else {
+                    addticket.answers.push({'tid':'','content':''})
+                }
+            }
+        }
     }
     // 获取未参与答卷的房屋作为未参与用户的数量
     let notParticipateLength = 0
@@ -766,8 +876,8 @@
         ]
     })
     // 点击选框事件
-    const emitTickets = (tid,opt,index) => {
-        // console.log('tid',tid)
+    const emitTickets = (tid,index) => {
+        // console.log('tid',tid,'opt',opt,'index',index)
         addticket.answers[index].tid = tid
         // addticket.answers.opt = opt
     }
@@ -775,6 +885,9 @@
         console.log("addticket",addticket)
         APIaddSurveyAnswer(props.id,addticket).then(res => {
             // console.log(res)
+            ElMessage.success("问卷提交成功")
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
 
@@ -791,6 +904,8 @@
         ArrSetRange.forEach(element => {
             APIaddSurveyRange(element).then(res => {
                 console.log(res)
+            }).catch(err => {
+                from_error.msg = err.data
             })
         })
     }
@@ -813,7 +928,9 @@
             APIgetHouseListSort({ houseable_type: 'units ', houseable_id: val.id }).then(res => {
                 console.log(res)
                 data_tab.arr=res.floors
-                console.log('bbb',data_tab.arr)
+                // console.log('bbb',data_tab.arr)
+            }).catch(err => {
+                from_error.msg = err.data
             })
         }
     }
@@ -831,6 +948,8 @@
                 comment_list.push(element)
             })
             console.log(comment_list)
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 修改评论
@@ -846,6 +965,8 @@
         APIgetCommentDetails(id).then(res => {
             console.log(res)
             comment_details.item = res
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 评论详情
@@ -855,6 +976,8 @@
         APIgetCommentDetails(id).then(res => {
             console.log(res)
             comment_details.item = res
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 提交评论修改
