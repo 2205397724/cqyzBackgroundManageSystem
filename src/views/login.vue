@@ -92,9 +92,10 @@
 </template>
 
 <script setup name="Login">
+import md5 from 'md5'
 const { proxy } = getCurrentInstance()
 const route = useRoute(), router = useRouter()
-
+import {ElMessage} from 'element-plus'
 import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
 import { useUserStore } from '@/store/modules/user'
@@ -160,6 +161,10 @@ function showPassword() {
 function handleLogin() {
     proxy.$refs.loginFormRef.validate(valid => {
         if (valid) {
+            if(user_utype.value==""){
+                ElMessage.error("请选择类型")
+                return
+            }
             loading.value = true
             let data = {
                 'auth_type': user_utype.value,
@@ -170,16 +175,6 @@ function handleLogin() {
             userStore.login(data).then(() => {
                 localStorage.removeItem("utype")
                 userStore.utype=data.auth_type
-                // APIgetUser_where_group().then(res => {
-                //     console.log(res)
-                //     let user_groupid_arr = []
-                //     res.data.forEach(item => {
-                //         user_groupid_arr.push(item.id)
-                //     })
-                //     let user_groupid_arr_promise = []
-                //     for (let i = 0;i < user_groupid_arr.length;i++)
-                //         console.log(user_groupid_arr)
-                // })
                 loading.value = false
                 localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
                 if (loginForm.value.remember) {
@@ -189,10 +184,14 @@ function handleLogin() {
                 }
                 if(data.auth_type==="pt"){
                     userStore.utype="pt"
+                    sessionStorage.setItem("utype",md5('pt'))
+                    sessionStorage.setItem("isChooseCity",false)
                 }
                 if(data.auth_type!=="pt"){
                     userStore.utype=data.auth_type
+                    sessionStorage.setItem("utype",'none')
                     userStore.isChooseCity=true
+                    sessionStorage.setItem("isChooseCity",true)
                 }
                 router.push(redirect.value)
             }).catch(() => {

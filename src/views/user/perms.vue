@@ -104,11 +104,15 @@
                     </el-table-column>
                 </el-table>
                  <el-pagination
-    style="float: right;"
-    background
-    layout="prev, pager, next"
-    :total="50"
-
+                 v-model:current-page="page"
+                 :page-size="per_page"
+                 style="float: right;"
+                 background
+                 layout="prev,next"
+                :total="30"
+                @size-change="current_per_page_change"
+                @prev-click="prev_click"
+                @next-click="next_click"
   />
             </div>
             <!-- 修改弹窗 -->
@@ -235,6 +239,7 @@ const from_post_perms_roles=reactive({
         role_ids:[""]
     }
 })
+const total=ref(50)
 watch(page,()=>{
     getTabListFun()
 })
@@ -267,6 +272,19 @@ const refreshFunc=()=>{
     page.value=1
     per_page.value=10
     getTabListFun()
+}
+//分页功能板块
+const current_page_change=(page)=>{
+    page.value++
+}
+const prev_click=(val)=>{
+    page.value=page.value++
+}
+const next_click=(val)=>{
+    page.value=page.value++
+}
+const current_per_page_change=(per_page)=>{
+   per_page.value=per_page
 }
 //关闭修改弹窗，清除表单数据
 const close_put_perms=()=>{
@@ -359,7 +377,14 @@ const deletePermsFun=(val)=>{
     })
 }
 const getTabListFun=()=>{
-    APIgetPermsList().then(res=>{
+    let params={
+        page:page.value,
+        per_page:per_page.value
+    }
+/*     APIgetPermsList().then(res=>{
+        total.value=res.data
+    }) */
+    APIgetPermsList(params).then(res=>{
         data_tab_list.arr=res.data
     })
 }

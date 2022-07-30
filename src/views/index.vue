@@ -84,11 +84,11 @@
                 </el-col>
             </el-row>
         </page-main>
-        <el-dialog title="请选择地区" v-model="switch_choose_city.item"
+        <el-dialog title="请选择地区" v-model="switch_choose_city"
         width="40%" :close-on-click-modal="false" :show-close="false">
-            <el-select v-model="choosed_city" placeholder="请选择城市" @change="choose_cityFun">
-              <el-option :label="city.name" :value="city.china_code" v-for="city in city_list.arr" :key="city.id"></el-option>
-            </el-select>
+            <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
+            :show-all-levels="false" style="width: 100%;"
+            ></el-cascader>
             <template #footer>
                 <el-button type="primary" @click="choose_city_end">确认</el-button>
             </template>
@@ -101,9 +101,17 @@ import {
     APIgetUserinfo,
     APIgetTipsnum,
     APIgetEventnum,
-    APIgetCityNotPm
+
 } from '@/api/custom/custom.js'
 import {ElMessage} from "element-plus"
+import area from '@/util/area'
+const choose_city_props=reactive({
+    item:{
+        value:'code',
+        label:'name',
+        children:'children'
+    }
+})
 const userStore=useUserOutsideStore()
 // 公共导入 cscs
 const switch_choose_city=ref(false)
@@ -119,28 +127,37 @@ const choose_city_end=()=>{
     }
     ElMessage.success("选择成功")
     switch_choose_city.value=false
+    sessionStorage.setItem("isChooseCity",false)
+    console.log(sessionStorage.getItem("china_code"))
+    console.log(sessionStorage.getItem("isChooseCity"))
 }
-const choose_city=()=>{//进入首页判断
-    userStore.getPermissions()
-    if(userStore.isChooseCity){
-        console.log(userStore.isChooseCity)
-        switch_choose_city.value=true
-        console.log("ssss")
-    }else{
+//
+const change_china_code=(val)=>{
+    sessionStorage.setItem('china_code',val)
+    userStore.china_code=val
+    choosed_city.value=val
+}
+//进入首页进行判断
+import {auth, authAll} from '../util/index'
+const choose_city=()=>{
+    if(auth('*')||sessionStorage.getItem("isChooseCity")){
+        sessionStorage.setItem("isChooseCity",false)
+        userStore.isChooseCity=false
         switch_choose_city.value=false
-        // userStore.isChooseCity=false
-      /*   APIgetCityNotPm().then(res=>{
-            console.log(res)
-            city_list.arr=res.data
-        }) */
+    }else{
+        city_list.arr=area
+        sessionStorage.setItem("isChooseCity",true)
+        userStore.isChooseCity=true
+        switch_choose_city.value=true
     }
+    console.log(sessionStorage.getItem("isChooseCity"))
 }
 choose_city()
-const choose_cityFun=(val)=>{
-    userStore.city=val
+const choose_cityFun=()=>{
+    userStore.china_code=choosed_city.value
     userStore.isChooseCity=true
-    sessionStorage.setItem('city',val)
-    sessionStorage.setItem('IS_chooseCity',true)
+    sessionStorage.setItem('china_code',choosed_city.value)
+    sessionStorage.setItem('IS_chooseCity',false)
 
 }
 import { reactive } from 'vue'

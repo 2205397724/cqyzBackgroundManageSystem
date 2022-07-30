@@ -10,7 +10,7 @@ let globalSettings = {
          * 3、鉴权指令：v-auth、v-auth-all
          * 4、鉴权函数：this.$auth()、this.$authAll()
          */
-        enablePermission: false,
+        enablePermission: true,
         // 是否开启后端返回路由数据
         enableBackendReturnRoute: false,
         // 是否开启载入进度条

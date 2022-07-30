@@ -746,8 +746,8 @@ export function APIdeleteGroupUser_perms(group, user, data) {
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 //权限管理
-export function APIgetPermsList() {
-    return api.get(`/perms`)
+export function APIgetPermsList(params) {
+    return api.get(`/perms`,{params:params})
 }
 export function APIgetPermsDetail(perm) {
     return api.get(`/perms/${perm}`)
@@ -817,8 +817,8 @@ export function APIdeleteRoles_perms(role, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
 // 列表
-export function APIgetGroupList() {
-    return api.get(`/groups`)
+export function APIgetGroupList(params) {
+    return api.get(`/groups`,{params:params})
 }
 // 删除
 export function APIdeleteGroup(id) {

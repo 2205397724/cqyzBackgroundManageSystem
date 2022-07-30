@@ -14,6 +14,7 @@
                 :default-checked-keys="[tree_item.id]"
                 :filter-node-method="filterNode"
                 @check="handleCheck"
+                @check-change="handleCheckChange"
             />
         </el-scrollbar>
     </div>
@@ -70,7 +71,7 @@ const loadNode = (node, resolve) => {
                 if (res.status == 200) {
                     for (let i in res.data) {
                         if (res.data[i].level < 5) {
-                            tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+                            tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code ,china_code:res.data[i].code})
                         } else {
                             tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
                         }
@@ -128,6 +129,11 @@ const handleCheck = (data, checked) => {
         return false
     }
     emit('checkFunc', '')
+}
+const handleCheckChange=(data,selfSelected,childrenSelected)=>{
+    if(selfSelected){
+        emit('checkChangeFunc',data)
+    }
 }
 </script>
 <style lang="scss">
