@@ -13,27 +13,35 @@
         </span>
         <span>结束时间：{{data_details.item.endat}}</span>
     </div>
+    <div>
+        <el-button @click="exchangeStatus('1')">筹备阶段</el-button>
+        <el-button @click="exchangeStatus('2')" type="primary">待审</el-button>
+        <el-button @click="exchangeStatus('3')" type="info">未开始</el-button>
+        <el-button @click="exchangeStatus('4')" type="success">进行中</el-button>
+        <el-button @click="exchangeStatus('5')" type="warning">暂停</el-button>
+        <el-button @click="exchangeStatus('6')" type="warning">终止</el-button>
+        <el-button @click="exchangeStatus('7')" type="danger">已结束</el-button>
+    </div>
     <el-tabs v-model="activeName" @tab-click="changePane">
         <el-tab-pane label="问卷主题" name="1">
             <el-scrollbar height="400px">
                 <div class="details-box">
-                    <div class="item">
-                        <div style="margin: auto 0;" class="left">内容</div>
-                        <p>{{data_details.item.content}}</p>
-                    </div>
-                    <div class="item">
-                        <div class="left">附件</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">是否开放</div><span>{{data_details.item.pub}}</span>
-                        <div class="left">是否匿名</div><span>{{data_details.item.pub}}</span>
-                        <div class="left">活动类型</div><span>{{data_details.item.type}}</span>
-                    </div>
-                    <div class="item">
-                        <div class="left">总票数</div><span>{{data_details.item.ticketall}}</span>
-                        <div class="left">总面积数</div><span>{{data_details.item.areaall}}</span>
-                        <div class="left">活动id</div><span>{{data_details.item.id}}</span>
-                    </div>
+                    <el-row>
+                        <el-col :span="8"><div class="item"><div class="left">内容</div><span>{{data_details.item.content}}</span></div></el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8"><div class="item"><div class="left">附件</div></div></el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="8"><div class="item"><div class="left">是否开放</div><span>{{data_details.item.pub}}</span></div></el-col>
+                        <el-col :span="8"><div class="item"><div class="left">是否匿名</div><span>{{data_details.item.pub}}</span></div></el-col>
+                        <el-col :span="8"><div class="item"><div class="left">活动类型</div><span>{{data_details.item.type}}</span></div></el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="8"><div class="item"><div class="left">总票数</div><span>{{data_details.item.ticketall}}</span></div></el-col>
+                        <el-col :span="8"><div class="item"><div class="left">总面积数</div><span>{{data_details.item.areaall}}</span></div></el-col>
+                        <el-col :span="8"><div class="item"><div class="left">活动id</div><span>{{data_details.item.id}}</span></div></el-col>
+                    </el-row>
                 </div>
                 <div class="record">
                     <h3>问卷记录</h3>
@@ -216,19 +224,20 @@
         </el-tab-pane>
         <el-tab-pane label="业主评论" name="5">
             <el-scrollbar height="400px">
-                <el-table :data="comment_list" style="width: 100%;">
-                    <el-table-column prop="content" width="200" label="评论内容"></el-table-column>
-                    <el-table-column prop="zan" label="点赞" width="100"></el-table-column>
-                    <el-table-column label="状态" width="150" align="center">
+                <el-table :data="comment_list" border style="width: 100%;">
+                    <el-table-column type="selection" width="50" />
+                    <el-table-column prop="content" label="评论内容" />
+                    <el-table-column prop="zan" label="点赞" width="100" />
+                    <el-table-column label="状态" width="100" align="center">
                         <template #default="scope">
-                            <el-button v-show="scope.row.status == 10" type="warning">未审核</el-button>
-                            <el-button v-show="scope.row.status == 20" type="success">已审核</el-button>
-                            <el-button v-show="scope.row.status == 30" type="danger">审核失败</el-button>
+                            <el-button v-if="scope.row.status == 10" size="small" round type="warning">未审核</el-button>
+                            <el-button v-else-if="scope.row.status == 20" size="small" round type="success">已审核</el-button>
+                            <el-button v-else="scope.row.status == 30" size="small" round type="danger">审核失败</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="score" label="评分" width="100"></el-table-column>
-                    <el-table-column prop="atuname" label="作者" width="100"></el-table-column>
-                    <el-table-column prop="updated_at" label="时间" ></el-table-column>
+                    <el-table-column prop="score" label="评分" width="100" />
+                    <el-table-column prop="atuname" label="作者" width="100" />
+                    <el-table-column prop="updated_at" label="时间段" width="200" />
                     <el-table-column fixed='right' width="200" label="操作">
                         <template #default="scope">
                             <el-button border size="small" @click="getCommentDetail(scope.row.id)">详情</el-button>
@@ -526,6 +535,7 @@
 
 <script setup>
     import {
+        APImodifySurveyStatus,
         APIgetChinaRegion,
         APIaddSurveyRange,
         APIgetSurveyDetails,
@@ -559,6 +569,15 @@
     const from_error = reactive({
         msg: {}
     })
+    // 修改问卷状态
+    const exchangeStatus = (status) => {
+        APImodifySurveyStatus(props.id,{"status":status}).then(res => {
+            console.log(res)
+            detailsFunc(props.id)
+        }).catch(err => {
+            from_error.msg = err.data
+        })
+    }
     // 详情
     let switch_details = ref(false)
     // 接收父组件传递过来的id
