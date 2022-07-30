@@ -123,19 +123,7 @@
                         <position-tree-third
                             :id="props.id"
                             :tree_item = "tree_item"
-                            @arrSetRange="arrSetRange"
-                            @checkFunc="checkFunc"
                         />
-                    </div>
-                    <!-- 房屋 -->
-                    <div class="houses p-l-20">
-                        <div style="width: 100%;">
-                            <div v-for="item in data_tab.arr" class="housesStyle">
-                                <span class="floor">{{item.floor_truth}}层</span>
-                                <!-- <span class="floorHouse" v-for="items in item.houses"><span><el-button>{{items.name}}</el-button></span></span> -->
-                                <span class="floorHouse" v-for="items in item.houses"><span @click="exchange(items.id)" :class="[isSelect?'hover':'']">{{items.name}}</span></span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </el-scrollbar>
@@ -191,7 +179,17 @@
                     <el-radio-button label="未参与">未参与({{participate.notParticipateLength}})</el-radio-button>>
                 </el-radio-group>
             </div>
-            <el-scrollbar height="400px">
+            <!-- 未参与情况 -->
+            <el-scrollbar v-if="radio == '未参与'" height="400px">
+                <el-table :data="notParticipateList" border style="width: 100%;">
+                    <el-table-column prop="name" label="房屋"></el-table-column>
+                    <el-table-column prop="addr" label="地址"></el-table-column>
+                    <el-table-column prop="houseable_type" label="类型"></el-table-column>
+                    <el-table-column prop="updated_at" label="更新时间"></el-table-column>
+                </el-table>
+            </el-scrollbar>
+            <!-- 参与情况 -->
+            <el-scrollbar v-else height="400px">
                 <el-table :data="answer_list" border style="width: 100%;">
                     <el-table-column label="用户端类型">
                         <template #default="scope">
@@ -223,6 +221,7 @@
             </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="业主评论" name="5">
+            <comment-switch :id="props.id" />
             <el-scrollbar height="400px">
                 <el-table :data="comment_list" border style="width: 100%;">
                     <el-table-column type="selection" width="50" />
@@ -257,7 +256,12 @@
                         <el-row :gutter="10">
                             <el-col>
                                 <el-form-item label="问卷题目"  label-width="120px">
-                                    <el-input v-model="topic_examine.item.title"></el-input>
+                                    <!-- <el-input v-model="topic_examine.item.title"></el-input> -->
+                                    <el-input
+                                        v-model="topic_examine.item.title"
+                                        type="textarea"
+                                        :autosize="{ minRows: 2, maxRows: 4 }"
+                                    ></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -287,43 +291,66 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-row :gutter="10">
+                        <el-row v-if="topic_examine.item.score_calc != 0" :gutter="10">
                             <el-col>
                                 <el-form-item label="题目分值"  label-width="120px">
-                                    <el-input v-model="topic_examine.item.score" placeholder=""></el-input>
+                                    <el-input v-model="topic_examine.item.score" placeholder="0"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
-                    <div class="m-l-40">
+                    <!-- 选择题 -->
+                    <div v-if="topic_examine.item.type == 1 || topic_examine.item.type == 2" class="m-l-40">
                         <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
                             <span class="size-lg strong" style="color: #409eff;flex: 1;">选项</span>
                             <el-button class="m-b-10" type="primary" size="small" @click="addopts()">增加选项</el-button>
                         </div>
                         <el-scrollbar height="140px">
-                        <el-row :gutter="24" v-for="(item,i) in opts">
-                            <el-col :span="14" class="flex">
-                                <span style="width: 40px;">选项内容</span>
-                                <el-input v-model="item.content"></el-input>
-                            </el-col>
-                            <el-col :span="4" class="flex">
-                                <span>排序</span>
-                                <el-input v-model="item.score" ></el-input>
-                            </el-col>
-                            <el-col :span="4" class="flex">
-                                <span>分值</span>
-                                <el-input v-model="item.sort"></el-input>
-                            </el-col>
-                            <el-popconfirm  title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="opts.splice(i,1)">
-                                <template #reference>
-                                    <el-button type="danger"  >
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </el-row>
+                            <el-row :gutter="24" v-for="(item,i) in opts" :key="item.id">
+                                <el-col :span="14" class="flex">
+                                    <span style="width: 40px;">选项内容</span>
+                                    <el-input v-model="item.content"></el-input>
+                                </el-col>
+                                <el-col :span="4" class="flex">
+                                    <span>排序</span>
+                                    <el-input v-model="item.score" ></el-input>
+                                </el-col>
+                                <el-col :span="4" class="flex">
+                                    <span>分值</span>
+                                    <el-input v-model="item.sort"></el-input>
+                                </el-col>
+                                <el-popconfirm  title="确定要删除当前项么?" cancel-button-type="info"
+                                    @confirm="opts.splice(i,1)">
+                                    <template #reference>
+                                        <el-button type="danger"  >
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </el-row>
                         </el-scrollbar>
+                    </div>
+                    <!-- 主观填空题 -->
+                    <div v-else-if="topic_examine.item.type == 3" class="m-l-40">
+                        <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                            <span class="size-lg strong" style="color: #409eff;flex: 1;">题目</span>
+                        </div>
+                        <el-input
+                            v-model="topic_examine.item.content"
+                            type="textarea"
+                            :autosize="{ minRows: 2, maxRows: 4 }"
+                        ></el-input>
+                    </div>
+                    <!-- 文字描述 -->
+                    <div v-else-if="topic_examine.item.type == 0" class="m-l-40">
+                        <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                            <span class="size-lg strong" style="color: #409eff;flex: 1;">文字描述</span>
+                        </div>
+                        <el-input
+                            v-model="topic_examine.item.title"
+                            type="textarea"
+                            :autosize="{ minRows: 2, maxRows: 4 }"
+                        ></el-input>
                     </div>
                 </div>
             </el-scrollbar>
@@ -356,7 +383,7 @@
                 <!-- 多选题 -->
                 <div v-else-if="item.type === 2">
                     <div>题号(多选题){{index+1}}、{{item.title}}</div>
-                    <div class="m-l-40" v-for="(items,i) in item.opts" :key="items.id">
+                    <div class="m-l-40" v-for="items in item.opts" :key="items.id">
                         <el-checkbox-group v-model="addticket.answers[index].opt">
                             <el-checkbox :label="items.id" @click="emitTickets(item.id,index)">{{items.content}}</el-checkbox>
                         </el-checkbox-group>
@@ -370,12 +397,9 @@
                     </div>
                 </div>
                 <!-- 文字描述 -->
-                <!-- <div v-else>
-                    <div>题号(文字描述){{index+1}}：{{item.title}}</div>
-                    <div class="m-l-40">
-                        <el-input v-model="addticket.answers[index].content" placeholder="请输入内容" @click="emitTickets(item.id,index)"/>
-                    </div>
-                </div> -->
+                <div v-else-if="item.type === 0">
+                    <div>(文字描述){{item.title}}</div>
+                </div>
             </div>
         </el-scrollbar>
         <template #footer>
@@ -404,8 +428,8 @@
                         <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
                             <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
                         </el-radio-group> -->
-                        <el-radio-group v-model="ischecked">
-                            <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio>
+                        <el-radio-group v-model="ischecked" v-if="answer_detail.item">
+                            <el-radio v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio>
                         </el-radio-group>
                     </div>
                 </div>
@@ -424,9 +448,9 @@
                 <!-- 主观填空 -->
                 <div v-else-if="item.type === 3">
                     <div>题号(主观题){{index+1}}、{{item.title}}</div>
-                    <div class="m-l-40 m-tb-10">
-                        <el-input v-if="addticket.answers[index]" v-model="addticket.answers[index].content" placeholder="请输入内容"/>
-                        <!-- <el-input :placeholder="answer_detail.item.answertopics[index].content"/> -->
+                    <div class="m-l-40 m-tb-10" v-if="answer_detail.item">
+                        <!-- <el-input v-if="addticket.answers[index]" v-model="addticket.answers[index].content" placeholder="请输入内容"/> -->
+                        <el-input :placeholder="answer_detail.item.answertopics[index].content"/>
                     </div>
                 </div>
                 <!-- 文字描述 -->
@@ -438,22 +462,9 @@
                 </div> -->
             </div>
         </el-scrollbar>
-        <!-- <div v-for="(item,index) in topic_details.item" :key="item.id" class="m-t-10">
-            <div>题号{{index+1}}：{{item.title}}</div>
-            <div class="m-l-40" v-for="items in item.opts" :key="items.id" >
-                <span
-                    v-if="answer_detail.item.answertopics[index]"
-                    v-show="showTopic(items.id,answer_detail.item.answertopics[index].answeropts)"
-                    >{{items.content}}</span>
-                <span>{{items.id}}</span>:
-                <span v-if="answer_detail.item.answertopics[index]">{{answer_detail.item.answertopics[index].answeropts}}</span>
-                <span>{{answer_detail.item.answertopics[index].answeropts}}</span>
-                <p>{{items.id}}:{{answer_detail.item.answertopics[index].answeropts[0].oid}}</p>
-            </div>
-        </div> -->
         <template #footer>
             <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                <el-button @click="switch_answer_detail=false">取消</el-button>
+                <el-button type="warning" plain @click="switch_answer_detail=false">取消</el-button>
             </div>
         </template>
     </el-dialog>
@@ -575,7 +586,9 @@
             console.log(res)
             detailsFunc(props.id)
         }).catch(err => {
-            from_error.msg = err.data
+            // console.log('err',err.response.data)
+            ElMessage.error("修改失败"+err.response.data.message)
+            // from_error.msg = err.data
         })
     }
     // 详情
@@ -796,15 +809,21 @@
     }
     // 获取未参与答卷的房屋作为未参与用户的数量
     let notParticipateLength = 0
+    let notParticipateList = reactive([])
     const notParticipate = () => {
+        notParticipateList.length = 0
         APIgetNotParticipate(props.id).then(res => {
             // console.log('aaa',res.data)
             participate.notParticipateLength = res.data.length
+            res.data.forEach(element => {
+                notParticipateList.push(element)
+            })
+            // console.log("notParticipateList",notParticipateList)
         })
     }
     // 添加问卷题目
     const addServeyTopic = () => {
-        console.log(props.id)
+        // console.log(props.id)
         str_title.value = '添加'
         switch_examine.value = true
         // 清除问卷的信息
@@ -904,30 +923,26 @@
         console.log("addticket",addticket)
         APIaddSurveyAnswer(props.id,addticket).then(res => {
             // console.log(res)
+            switch_addAnswer.value = false
             ElMessage.success("问卷提交成功")
         }).catch(err => {
             from_error.msg = err.data
         })
     }
 
-    // 接受传递的数据
-    let ArrSetRange
-    const arrSetRange = val => {
-        ArrSetRange = val
-        // console.log("Arr",ArrSetRange)
-    }
-    // 调用接口设置范围
-    const submit = () => {
-        // console.log(ArrSetRange)
-        // 遍历数组调用API接口添加数据
-        ArrSetRange.forEach(element => {
-            APIaddSurveyRange(element).then(res => {
-                console.log(res)
-            }).catch(err => {
-                from_error.msg = err.data
-            })
-        })
-    }
+    // // 调用接口设置范围
+    // const submit = () => {
+    //     // console.log(ArrSetRange)
+    //     // 遍历数组调用API接口添加数据
+    //     ArrSetRange.forEach(element => {
+    //         APIaddSurveyRange(element).then(res => {
+    //             console.log(res)
+    //             ElMessage.success("问卷范围设置成功")
+    //         }).catch(err => {
+    //             from_error.msg = err.data
+    //         })
+    //     })
+    // }
     const tree_item = ref({
     })
     // 调用tree树形组件初始的请求
@@ -937,22 +952,6 @@
         tree_item.value.type = 'region'
         tree_item.value.next_type = 'zone'
     })
-
-    let data_tab = reactive({
-        arr: []
-    })
-    const checkFunc = val => {
-        if(val.type == 'units') {
-            // 获取房屋数据按楼栋楼层
-            APIgetHouseListSort({ houseable_type: 'units ', houseable_id: val.id }).then(res => {
-                console.log(res)
-                data_tab.arr=res.floors
-                // console.log('bbb',data_tab.arr)
-            }).catch(err => {
-                from_error.msg = err.data
-            })
-        }
-    }
 
     // 业主评论
     let comment_list = reactive([])
@@ -984,6 +983,7 @@
         APIgetCommentDetails(id).then(res => {
             console.log(res)
             comment_details.item = res
+            comment_details.item.status += ''
         }).catch(err => {
             from_error.msg = err.data
         })
@@ -1054,9 +1054,6 @@
 .selected::before {
     border-color: rgb(64 158 255);
 }
-.bg {
-    background-color: #bfa;
-}
 //弹性布局
 .flex {
     display: flex;
@@ -1067,39 +1064,7 @@
     width: 300px;
     border-right: 1px solid #e9e9e9;
 }
-.houses {
-    position: absolute;
-    top: 20px;
-    left: 400px;
-    flex: 1;
-}
-.bgbfa {
-    background-color: #bfa;
-}
 .display {
     display: flex;
-}
-.housesStyle {
-    display: flex;
-    .floor {
-        width: 50px;
-        margin: auto 0;
-        text-align: center;
-        color: #ccc;
-    }
-    .floorHouse {
-        span {
-            display: inline-block;
-            text-align: center;
-            width: 100px;
-            margin: 5px;
-            padding: 15px;
-            background-color: #e6e6ee;
-        }
-        .hover {
-            background-color: #439dfd;
-            color: #fff;
-        }
-    }
 }
 </style>
