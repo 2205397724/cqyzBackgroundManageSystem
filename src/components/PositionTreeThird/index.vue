@@ -11,10 +11,17 @@
                 show-checkbox
                 :accordion="true"
                 :check-on-click-node="true"
-                :default-checked-keys="[tree_item.id]"
                 @check="handleCheck"
             />
         </el-scrollbar>
+        <div class="houses p-l-20">
+            <div style="width: 100%;">
+                <div v-for="item in data_tab.arr" :key="item.id" class="housesStyle">
+                    <span class="floor">{{item.floor_truth}}层</span>
+                    <span class="floorHouse" v-for="items in item.houses" :key="items.id"><span @click="addHouses(items.id)" :class="[isSelect ? 'hover' : '']">{{items.name}}</span></span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -29,7 +36,6 @@
     } from 'vue'
     const props = defineProps(['tree_item', 'type','id'])
     const type = ref(props.type)
-    const emit = defineEmits(['checkFunc','arrSetRange'])
     const { tree_item } = toRefs(props)
     const treeDetail = reactive({
         arr: {}
@@ -49,15 +55,18 @@
         // 单元
         APIgetUnitsListHouse,
         // 房屋
-        APIgetHouseListHouse
+        APIgetHouseListHouse,
+        APIgetHouseListSort
     } from '@/api/custom/custom.js'
     let nodeCopy = ''
+    // 加载子树数据的方法
     // node为当前点击的节点，resolve为数据加载完成的回调(必须调用)
     const loadNode = (node, resolve) => {
+        console.log('node',node)
         if (node.level == 0) {
             nodeCopy = node
             resolve([tree_item.value])
-            emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+            // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             return false
         }
 
@@ -105,7 +114,7 @@
                                 tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'buildings', id: res[i].id })
                             })
                         resolve(tree_arr)
-                        emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                        // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
                         tree_arr = []
                     })
                 break
@@ -130,14 +139,17 @@
                 })
                 break
                 // 房屋
+            // case 'houses':
+            //     APIgetHouseListHouse({ page: 1, per_page: 7, houseable_id: node.data.id }).then(res => {
+            //         let tree_arr = []
+            //             res.forEach((element,i) => {
+            //                 tree_arr.push({ name: res[i].name, id: res[i].id, type: 'houses', })
+            //             })
+            //         resolve(tree_arr)
+            //     })
+            //     break
             case 'houses':
-                APIgetHouseListHouse({ page: 1, per_page: 7, houseable_id: node.data.id }).then(res => {
-                    let tree_arr = []
-                        res.forEach((element,i) => {
-                            tree_arr.push({ name: res[i].name, id: res[i].id, type: 'houses', })
-                        })
-                    resolve(tree_arr)
-                })
+                resolve('')
                 break
         }
     }
@@ -157,12 +169,42 @@
             checkedFunc = treeRef.value.getCheckedNodes()
             checkedArr(checkedFunc)
             // console.log('已选节点:',checkedFunc)
-            // emit('checkedFunc', checkedFunc)
-            // 传递点击的节点数据
-            emit('checkFunc', data)
+            checkFunc(data)
             return false
         }
-        emit('checkFunc', '')
+    }
+
+    let data_tab = reactive({
+        arr: []
+    })
+    const checkFunc = val => {
+        if(val.type == 'units') {
+            // 获取房屋数据按楼栋楼层
+            APIgetHouseListSort({ houseable_type: 'units ', houseable_id: val.id }).then(res => {
+                // console.log(res)
+                data_tab.arr = res.floors
+                // console.log('bbb',data_tab.arr)
+            }).catch(err => {
+                from_error.msg = err.data
+            })
+        }
+    }
+    let isSelect = true
+    // 点击房屋添加到请求数组ArrSetRange内的arr1
+    const addHouses = (id) => {
+        isSelect = false
+        // 返回点击的房屋的索引，并删除arr1内对应元素
+        let index = arr1.findIndex((item) => {
+            return item.id == id
+        })
+        // if(index != -1) {
+        //     arr1.splice(index,1)
+        // }else {
+        //     arr1.push(id)
+        // }
+        // 房屋id
+        console.log(id,isSelect)
+        console.log("arr1",arr1,index)
     }
 
     // 从房屋到区域的数组
@@ -214,7 +256,7 @@
     // 处理五种数组
     let ArrSetRange = []//将请求信息插入数组内
     const dealArr = (arr,types) =>{
-        let setrange = {"sid":props.id,"can_type":1,"type":'',"tgt":[]}
+        let setrange = {"sid":props.id,"can_type":2,"type":'',"tgt":[]}
         setrange.tgt = []
         setrange.type = types
         arr.forEach(element => {
@@ -223,7 +265,20 @@
         ArrSetRange = []
         ArrSetRange.push(setrange)
         // console.log('111111',types,setrange,ArrSetRange)
-        emit('arrSetRange', ArrSetRange)
+    }
+
+    // 调用接口设置范围
+    const submit = () => {
+        // console.log(ArrSetRange)
+        // 遍历数组调用API接口添加数据
+        ArrSetRange.forEach(element => {
+            APIaddSurveyRange(element).then(res => {
+                console.log(res)
+                ElMessage.success("问卷范围设置成功")
+            }).catch(err => {
+                from_error.msg = err.data
+            })
+        })
     }
 </script>
 <style lang="scss">
@@ -233,6 +288,35 @@
         .el-tree-box {
             // width: max-content;
             // min-width: 100%;
+        }
+    }
+    .houses {
+        position: absolute;
+        top: 20px;
+        left: 400px;
+        flex: 1;
+    }
+    .housesStyle {
+        display: flex;
+        .floor {
+            width: 50px;
+            margin: auto 0;
+            text-align: center;
+            color: #ccc;
+        }
+        .floorHouse {
+            span {
+                display: inline-block;
+                text-align: center;
+                width: 100px;
+                margin: 5px;
+                padding: 15px;
+                background-color: #e6e6ee;
+            }
+            .hover {
+                background-color: #439dfd;
+                color: #fff;
+            }
         }
     }
 </style>
