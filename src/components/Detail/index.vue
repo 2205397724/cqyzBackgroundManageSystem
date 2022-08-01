@@ -247,9 +247,8 @@
     <!-- 修改添加问卷题目 -->
     <el-dialog v-model="switch_examine" :title="str_title" width="50%">
         <div>
-            <el-scrollbar style="height: 450px;">
-                <div class="details-box">
-                    <el-form :model="topic_examine.item" label-position="left">
+            <div class="details-box">
+                <el-form :model="topic_examine.item" label-position="left">
                         <el-row>
                             <el-col>
                                 <el-form-item label="问卷题目" label-width="80px">
@@ -295,64 +294,63 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                    </el-form>
-                    <!-- 选择题 -->
-                    <div v-if="topic_examine.item.type == 1 || topic_examine.item.type == 2">
-                        <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
-                            <span class="size-lg strong" style="color: #409eff;flex: 1;">选项</span>
-                            <el-button class="m-b-10" type="primary" size="small" @click="addopts()">增加选项</el-button>
-                        </div>
-                        <el-scrollbar height="140px">
-                            <el-row :gutter="24" v-for="(item,i) in opts" :key="item.id" class="m-b-10">
-                                <el-col :span="12" class="flex">
-                                    <span style="width: 80px;line-height: 32px;">选项内容</span>
-                                    <el-input v-model="item.content"></el-input>
-                                </el-col>
-                                <el-col :span="4" class="flex">
-                                    <span style="width: 60px;line-height: 32px;">排序</span>
-                                    <el-input v-model="item.score" ></el-input>
-                                </el-col>
-                                <el-col :span="4" class="flex">
-                                    <span style="width: 60px;line-height: 32px;">分值</span>
-                                    <el-input v-model="item.sort"></el-input>
-                                </el-col>
-                                <el-col :span="4">
-                                    <el-popconfirm  title="确定要删除当前项么?" cancel-button-type="info"
-                                        @confirm="opts.splice(i,1)">
-                                        <template #reference>
-                                            <el-button type="danger" >
-                                                删除
-                                            </el-button>
-                                        </template>
-                                    </el-popconfirm>
-                                </el-col>
-                            </el-row>
-                        </el-scrollbar>
+                </el-form>
+                <!-- 选择题 -->
+                <div v-if="topic_examine.item.type == 1 || topic_examine.item.type == 2">
+                    <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                        <span class="size-lg strong" style="color: #409eff;flex: 1;">选项</span>
+                        <el-button class="m-b-10" type="primary" size="small" @click="addopts()">增加选项</el-button>
                     </div>
-                    <!-- 主观填空题 -->
-                    <!-- <div v-else-if="topic_examine.item.type == 3" class="m-l-40">
-                        <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
-                            <span class="size-lg strong" style="color: #409eff;flex: 1;">题目</span>
-                        </div>
-                        <el-input
-                            v-model="topic_examine.item.content"
-                            type="textarea"
-                            :autosize="{ minRows: 2, maxRows: 4 }"
-                        ></el-input>
-                    </div> -->
-                    <!-- 文字描述 -->
-                    <!-- <div v-else-if="topic_examine.item.type == 0" class="m-l-40">
-                        <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
-                            <span class="size-lg strong" style="color: #409eff;flex: 1;">文字描述</span>
-                        </div>
-                        <el-input
-                            v-model="topic_examine.item.title"
-                            type="textarea"
-                            :autosize="{ minRows: 2, maxRows: 4 }"
-                        ></el-input>
-                    </div> -->
+                    <el-scrollbar height="140px">
+                        <el-row :gutter="24" v-for="(item,i) in opts" :key="item.id" class="m-b-10">
+                            <el-col :span="12" class="flex">
+                                <span style="width: 80px;line-height: 32px;">选项内容</span>
+                                <el-input v-model="item.content"></el-input>
+                            </el-col>
+                            <el-col :span="4" class="flex">
+                                <span style="width: 60px;line-height: 32px;">排序</span>
+                                <el-input v-model="item.score" ></el-input>
+                            </el-col>
+                            <el-col :span="4" class="flex">
+                                <span style="width: 60px;line-height: 32px;">分值</span>
+                                <el-input v-model="item.sort"></el-input>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-popconfirm  title="确定要删除当前项么?" cancel-button-type="info"
+                                    @confirm="opts.splice(i,1)">
+                                    <template #reference>
+                                        <el-button type="danger" >
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </el-col>
+                        </el-row>
+                    </el-scrollbar>
                 </div>
-            </el-scrollbar>
+                <!-- 主观填空题 -->
+                <!-- <div v-else-if="topic_examine.item.type == 3" class="m-l-40">
+                    <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                        <span class="size-lg strong" style="color: #409eff;flex: 1;">题目</span>
+                    </div>
+                    <el-input
+                        v-model="topic_examine.item.content"
+                        type="textarea"
+                        :autosize="{ minRows: 2, maxRows: 4 }"
+                    ></el-input>
+                </div> -->
+                <!-- 文字描述 -->
+                <!-- <div v-else-if="topic_examine.item.type == 0" class="m-l-40">
+                    <div class="width-100 m-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                        <span class="size-lg strong" style="color: #409eff;flex: 1;">文字描述</span>
+                    </div>
+                    <el-input
+                        v-model="topic_examine.item.title"
+                        type="textarea"
+                        :autosize="{ minRows: 2, maxRows: 4 }"
+                    ></el-input>
+                </div> -->
+            </div>
         </div>
         <template #footer>
             <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
@@ -363,7 +361,7 @@
     </el-dialog>
     <!-- 添加书面票 -->
     <el-dialog v-model="switch_addAnswer" title="添加书面票" >
-        <el-scrollbar>
+        <el-scrollbar  height="600px">
             <div class="m-b-20">证件号码：<el-input v-model="addticket.idcard"></el-input></div>
             <!-- 遍历题目 -->
             <div v-for="(item,index) in topic_details.item" :key="item.id">
@@ -407,7 +405,7 @@
     </el-dialog>
     <!-- 查看答卷详情 -->
     <el-dialog v-model="switch_answer_detail" title="用户答卷详情" >
-        <el-scrollbar>
+        <el-scrollbar height="600px">
             <div>证件号码：{{answer_detail.item.idcard}}</div>
             <div v-if="answer_detail.item.uinfo">电话：{{answer_detail.item.uinfo.mobile}}</div>
             <div>
@@ -422,30 +420,28 @@
                     <div>题号(单选题){{index+1}}、{{item.title}}</div>
                     <div class="m-l-40" v-for="items in item.opts" :key="items.id">
                         <el-radio-group v-model="ischecked" v-if="answer_detail.item">
-                            <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio>
+                            <!-- <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio> -->
+                            <el-radio :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{items.content}}</el-radio>
                         </el-radio-group>
-                        <div v-else>用户未参与该道题目</div>
                     </div>
                 </div>
                 <!-- 多选题 -->
                 <div v-else-if="item.type === 2">
                     <div>题号(多选题){{index+1}}、{{item.title}}</div>
-                    <div v-if="answer_detail.item">
-                        <div class="m-l-40" v-for="items in item.opts" :key="items.id">
-                            <el-checkbox-group v-model="checkList">
-                                <el-checkbox v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
+                    <div class="m-l-40" v-for="items in item.opts" :key="items.id">
+                        <el-checkbox-group v-model="checkList">
+                            <!-- <el-checkbox v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-checkbox> -->
+                            <el-checkbox v-if="answer_detail.item" :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{items.content}}</el-checkbox>
+                        </el-checkbox-group>
                     </div>
-                    <div class="m-l-40" v-else>用户未参与该道题目</div>
                 </div>
                 <!-- 主观填空 -->
                 <div v-else-if="item.type === 3">
                     <div>题号(主观题){{index+1}}、{{item.title}}</div>
                     <div class="m-l-40 m-tb-10" v-if="answer_detail.item">
                     <!-- 问卷提交后，若新增填空题，此处会报错，content为空 -->
-                        <el-input v-if="answer_detail.item.answertopics[index]" :placeholder="answer_detail.item.answertopics[index].content"/>
-                        <div v-else>用户未参与该道题目</div>
+                        <!-- <el-input v-if="answer_detail.item.answertopics[index]" :placeholder="answer_detail.item.answertopics[index].content"/> -->
+                        <el-input v-if="answer_detail.item.answertopics" :placeholder="showTopic(item.id,null,answer_detail.item.answertopics)"/>
                     </div>
                 </div>
                 <!-- 文字描述 -->
@@ -593,8 +589,11 @@
         item: ''
     })
     // 问卷题目
+    // const topic_details = reactive({
+    //     item: ''
+    // })
     const topic_details = reactive({
-        item: ''
+        item: [[],[],[],[]]
     })
     const value1 = ref([])
     // 判断答卷选项是否选中
@@ -672,10 +671,24 @@
         }
         // 问卷题目列表
         APIgetSurveyTopic(params).then(res => {
+            topic_details.item = [[],[],[],[]]
             console.log(res.data)
             if (res.status === 200) {
-                topic_details.item = res.data
+                // topic_details.item = res.data
             }
+            // 对题目进行排序
+            res.data.forEach(element => {
+                if(element.type === 0){
+                    topic_details.item[0].push(element)
+                }else if(element.type === 1){
+                    topic_details.item[1].push(element)
+                }else if(element.type === 2){
+                    topic_details.item[2].push(element)
+                }else if(element.type === 3){
+                    topic_details.item[3].push(element)
+                }
+            })
+            topic_details.item = [...topic_details.item[1],...topic_details.item[2],...topic_details.item[3],...topic_details.item[0]]
         })
         console.log('topic_details',topic_details)
     }
@@ -758,12 +771,30 @@
         })
     }
     // 判断选项是否存在于答卷详情,取每个选项的id判断是否存在于答卷中，存在则显示该道选项内容
-    const showTopic = (optid,answeropts) => {
+    // const showTopic = (optid,answeropts) => {
+    //     let isShow = false
+    //     answeropts.forEach(element => {
+    //         // console.log(optid,element.oid)
+    //         if(optid === element.oid) {
+    //             isShow = true
+    //         }
+    //     })
+    //     return isShow
+    // }
+    // 判断选项是否存在于答卷详情,先判断遍历题目id，再遍历选项id取每个选项的id判断是否存在于答卷中，存在则显示该道选项内容
+    const showTopic = (tid,optid,answertopics) => {
         let isShow = false
-        answeropts.forEach(element => {
-            // console.log(optid,element.oid)
-            if(optid === element.oid) {
-                isShow = true
+        answertopics.forEach(item => {
+            if(tid == item.tid) {
+                if(item.content) {
+                    // console.log(item.content)
+                    isShow = item.content
+                }
+                item.answeropts.forEach(element => {
+                    if(optid === element.oid) {
+                        isShow = true
+                    }
+                })
             }
         })
         return isShow
@@ -798,6 +829,7 @@
                 }
             }
         }
+        // console.log('aaaa',addticket)
     }
     // 获取未参与答卷的房屋作为未参与用户的数量
     let notParticipateLength = 0

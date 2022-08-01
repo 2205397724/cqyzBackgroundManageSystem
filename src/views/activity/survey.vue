@@ -43,7 +43,7 @@
         <el-radio-button label="已结束" ></el-radio-button>>
     </el-radio-group>
     <!-- 问卷列表 -->
-    <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+    <div>
         <el-table v-loading="loading_tab" :data="data_tab.arr"
             :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
             style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
@@ -150,7 +150,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :md="24" :lg="12">
-                                    <el-form-item label="是否多选" label-width="120px" prop="vmax" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                    <el-form-item label="同时投几项（0表示全投）" label-width="120px" prop="vmax" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                         <el-input
                                             v-model="from_examine.item.vmax"
                                             placeholder=""
