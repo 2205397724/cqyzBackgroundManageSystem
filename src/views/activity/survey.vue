@@ -58,10 +58,10 @@
                     <el-button v-else-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
                     <el-button v-else-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
                     <el-button v-else-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                    <el-button v-else="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                    <el-button v-else-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="问卷时间" align="center">
+            <el-table-column label="问卷时间" align="center" show-overflow-tooltip>
                 <template #default="scope">
                     <span>{{ scope.row.startat }} -  {{ scope.row.endat}} </span>
                 </template>

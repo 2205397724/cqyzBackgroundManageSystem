@@ -1,5 +1,6 @@
 <template>
     <div class="main-box">
+        <el-button type="primary" class="m-10" @click="submit">确认设置</el-button>
         <el-scrollbar max-height="100%">
             <el-tree
                 ref="treeRef"
@@ -18,7 +19,9 @@
             <div style="width: 100%;">
                 <div v-for="item in data_tab.arr" :key="item.id" class="housesStyle">
                     <span class="floor">{{item.floor_truth}}层</span>
-                    <span class="floorHouse" v-for="items in item.houses" :key="items.id"><span @click="addHouses(items.id)" :class="[isSelect ? 'hover' : '']">{{items.name}}</span></span>
+                    <span class="floorHouse" v-for="items in item.houses" :key="items.id">
+                        <span @click="addHouses(items.id)" :class="[isSelect ? 'hover' : '']">{{items.name}}</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -34,6 +37,9 @@
         defineProps,
         defineEmits
     } from 'vue'
+    import {
+        ElMessage
+    } from 'element-plus'
     const props = defineProps(['tree_item', 'type','id'])
     const type = ref(props.type)
     const { tree_item } = toRefs(props)
@@ -56,9 +62,13 @@
         APIgetUnitsListHouse,
         // 房屋
         APIgetHouseListHouse,
-        APIgetHouseListSort
+        APIgetHouseListSort,
+        APIaddSurveyRange
     } from '@/api/custom/custom.js'
     let nodeCopy = ''
+    const from_error = reactive({
+        msg: {}
+    })
     // 加载子树数据的方法
     // node为当前点击的节点，resolve为数据加载完成的回调(必须调用)
     const loadNode = (node, resolve) => {
@@ -139,17 +149,17 @@
                 })
                 break
                 // 房屋
-            // case 'houses':
-            //     APIgetHouseListHouse({ page: 1, per_page: 7, houseable_id: node.data.id }).then(res => {
-            //         let tree_arr = []
-            //             res.forEach((element,i) => {
-            //                 tree_arr.push({ name: res[i].name, id: res[i].id, type: 'houses', })
-            //             })
-            //         resolve(tree_arr)
-            //     })
-            //     break
             case 'houses':
-                resolve('')
+                APIgetHouseListHouse({ page: 1, per_page: 7, houseable_id: node.data.id }).then(res => {
+                    let tree_arr = []
+                        res.forEach((element,i) => {
+                            tree_arr.push({ name: res[i].name, id: res[i].id, type: 'houses', })
+                        })
+                    resolve(tree_arr)
+                })
+                break
+            default:
+                resolve()
                 break
         }
     }
@@ -166,6 +176,7 @@
             // 控制同一级只能单选
             // treeRef.value.setCheckedNodes([data])
             // 传递已选的节点的数组
+            checkedFunc = []
             checkedFunc = treeRef.value.getCheckedNodes()
             checkedArr(checkedFunc)
             // console.log('已选节点:',checkedFunc)
@@ -264,7 +275,7 @@
         })
         ArrSetRange = []
         ArrSetRange.push(setrange)
-        // console.log('111111',types,setrange,ArrSetRange)
+        console.log('111111',types,setrange,ArrSetRange)
     }
 
     // 调用接口设置范围
