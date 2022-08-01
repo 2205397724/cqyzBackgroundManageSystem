@@ -25,10 +25,10 @@ const opts = {
     // 资讯状态
     information_status: [{
         key: 0,
-        val: '未审核'
+        val: '未审'
     }, {
         key: 1,
-        val: '已审核'
+        val: '已审'
     }],
     // 评论 分割 100百分制、10分制、5分制、0不采用
     comment_scoreper: [{
@@ -210,6 +210,23 @@ const opts = {
         key: 8,
         val: '结案'
     }],
+    // 公式 状态
+    announce_status: [{
+        key: 1,
+        val: '筹备中'
+    }, {
+        key: 2,
+        val: '待审'
+    }, {
+        key: 3,
+        val: '未开始'
+    }, {
+        key: 4,
+        val: '进行中'
+    }, {
+        key: 5,
+        val: '已结束'
+    }],
     // 报名是否有效
     isvalid_opt: [{
         key: 0,
@@ -310,17 +327,17 @@ const opts = {
         key: 30,
         val: '报名'
     }],
-    //备案状态
-    record_status:[
-        {
-            key:0,
-            val:'未审核'
-        },
-        {
-            key:1,
-            val:'已审核'
-        }
-    ],
+    // //备案状态
+    // record_status:[
+    //     {
+    //         key:0,
+    //         val:'未审核'
+    //     },
+    //     {
+    //         key:1,
+    //         val:'已审核'
+    //     }
+    // ],
     // 流程启用
     flow_active: [{
         key: 1,
@@ -479,6 +496,19 @@ const opts = {
     }, {
         key: 6,
         val: '小区'
+    }],
+    article_lv_1: [{
+        key: 4,
+        val: '街道'
+    }, {
+        key: 5,
+        val: '社区'
+    }, {
+        key: 6,
+        val: '物业'
+    }, {
+        key: 7,
+        val: '业委会'
     }],
     // 公示任务派发频率
     article_rate: [{

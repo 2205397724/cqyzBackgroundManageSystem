@@ -2,100 +2,108 @@
     <div class="articletplarchive">
         <page-main>
             <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.name" class="head-btn" placeholder="名称" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加归档</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="name" label="归档名" width="180">
-                            <template #default="scope">
-                                <span>{{ scope.row.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="name" label="归档内容数量" width="180">
-                            <template #default="scope">
-                                <span> 0 </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="ID" width="250">
-                            <template #default="scope">
-                                <span>{{ scope.row.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="created_at" label="创建时间" width="180">
-                            <template #default="scope">
-                                <span>{{ scope.row.created_at }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="updated_at" label="更新时间" width="180">
-                            <template #default="scope">
-                                <span>{{ scope.row.updated_at }} </span>
-                            </template>
-                        </el-table-column>
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加归档
+                </el-button>
+            </div>
+            <div class="search">
+                <el-row>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <!-- <el-row>
+                            <el-col :xs="8" :sm="8" :md="6" :lg="8" :xl="8" class="searchKey"> -->
+                        <div class="size-base p-l-20">
+                            关键字:
+                            <!-- </el-col>
+                            <el-col :xs="8" :sm="8" :md="6" :lg="14" :xl="8"> -->
+                            <el-input v-model="data_search.name" class="head-btn search_tb p-l-5" placeholder="名称" />
+                        <!-- </el-col>
+                        </el-row> -->
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-10">
+                    <el-col :xs="4" :sm="8" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
+                        <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;"
+            >
+                <el-table-column prop="name" label="归档名" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.name }} </span>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column prop="name" label="归档内容数量" width="180">
+                    <span> {{ total2 }} </span>
+                </el-table-column> -->
+                <el-table-column prop="id" label="ID" width="250">
+                    <template #default="scope">
+                        <span>{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="创建时间" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.created_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="updated_at" label="更新时间" width="180">
+                    <template #default="scope">
+                        <span>{{ scope.row.updated_at }} </span>
+                    </template>
+                </el-table-column>
 
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="230">
-                            <template #default="scope">
+                <el-table-column />
+                <el-table-column fixed="right" label="操作" width="230">
+                    <template #default="scope">
+                        <el-button
+                            type="success" size="small"
+                            @click="openArticleFunc(scope.row)"
+                        >
+                            已归档公示
+                        </el-button>
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyArticleFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
                                 <el-button
-                                    type="success" size="small"
-                                    @click="openArticleFunc(scope.row)"
+                                    type="danger" size="small"
                                 >
-                                    已归档公示
+                                    删除
                                 </el-button>
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
                             </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -157,18 +165,22 @@
                 </el-table-column>
                 <el-table-column label="状态" width="180">
                     <template #default="scope">
-                        <span>{{ scope.row.status }} </span>
+                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary" style="margin-left: 6px;">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 2" class="btnNone noDeal" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
                     </template>
                 </el-table-column>
 
                 <el-table-column fixed="right" label="操作" width="160">
                     <template #default="scope">
-                        <el-button
-                            size="small"
-                            @click="lookDetails(scope.row)"
-                        >
-                            详情
-                        </el-button>
+                        <!-- <el-button
+                        size="small"
+                        @click="lookDetails(scope.row)"
+                    >
+                        详情
+                    </el-button> -->
                         <el-popconfirm
                             title="确定要删除当前项么?" cancel-button-type="info"
                             @confirm="deleteFuncDialog(scope.row)"
@@ -211,7 +223,8 @@
                         >
                             <div style="height: 100%;width: 100%;">
                                 <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                    <SearchArchive v-model:str="from_add.obj.article_id" />
+                                    <!-- <SearchArchive v-model:str="from_add.obj.article_id" /> -->
+                                    <SearchArchive @checkUserNameFunc="checkUserNameFunc" />
                                 </div>
                             </div>
                         </el-form-item>
@@ -277,6 +290,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -314,16 +328,9 @@ const searchFunc = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search.mobile = ''
-    data_search.username = ''
-    data_search.id_card = ''
     data_search.name = ''
-    data_search.gender = ''
-    data_search.status_cert = ''
-    data_search.house_id = ''
-    data_search.oauth_type = ''
-    data_search.region = ''
     getTabListFunc()
+
 }
 
 // 监听分页
@@ -337,20 +344,20 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
-                APIputArchive(from_examine.item.id, from_examine.item).then(res => {
+                APIputArchive(from_examine.item.id, from_examine.item).then(() => {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('修改成功')
                     switch_examine.value = false
-                }).catch(err => {
-                    from_error.msg = err.data
+                }).catch(() => {
+                    ElMessage.success('修改成功')
                 })
             } else {
-                APIpostArchive(from_examine.item).then(res => {
+                APIpostArchive(from_examine.item).then(() => {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('添加成功')
                     switch_examine.value = false
-                }).catch(err => {
-                    from_error.msg = err.data
+                }).catch(() => {
+                    ElMessage.error('添加失败')
                 })
             }
         } else {
@@ -403,11 +410,9 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteArchive(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+    APIdeleteArchive(val.id).then(() => {
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加档案
@@ -415,17 +420,12 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        property_owners: [],
-        house_id: '',
-        time_deal: '',
-        code_property: '',
-        code_room: '',
-        should_bind_house: ''
+        name: ''
     }
     switch_examine.value = true
 }
 // 修改
-const modifyResidentialFunc = val => {
+const modifyArticleFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     from_examine.item = {
@@ -444,29 +444,30 @@ const article_tab = reactive({
     obj: {}
 })
 const page2 = ref(1)
-const total2 = ref(74751)
+const total2 = ref(1)
 const per_page2 = ref(15)
 const openArticleFunc = val => {
     article_item.obj = val
     switch_article.value = true
-    refreshFuncArticle()
-}
-import {
-    APIgetListArchiveArticle,
-    // APIgetDetailsArchiveArticle,
-    APIpostArchiveArticle,
-    APIdeleteArchiveArticle
-} from '@/api/custom/custom.js'
-const refreshFuncArticle = () => {
-    page2.value = 1
     getListArchiveFunc()
 }
+import {
+    APIgetListArticleArchive,
+    // APIgetDetailsArchiveArticle,
+    APIpostArticleArchive,
+    APIdeleteArticleArchive
+} from '@/api/custom/custom.js'
+// const refreshFuncArticle = () => {
+//     page2.value = 1
+//     getListArchiveFunc()
+// }
 const getListArchiveFunc = () => {
     let params = {
         page: page2.value,
         per_page: per_page2.value
     }
-    APIgetListArchiveArticle(article_item.obj.id, params).then(res => {
+    APIgetListArticleArchive(article_item.obj.id, params).then(res => {
+        console.log(res)
         article_tab.arr = res
         total2.value = res.length
     })
@@ -483,67 +484,44 @@ const addArchiveFunc = () => {
     from_add.obj = {}
 }
 const addPostFunc = () => {
-    APIpostArchiveArticle(article_item.obj.id, from_add.obj).then(res => {
-        refreshFuncArticle()
+    APIpostArticleArchive(article_item.obj.id, from_add.obj).then(() => {
+        getListArchiveFunc()
         switch_add.value = false
-    }).catch(err => {
-        err_msg.obj = err.data
+    }).catch(() => {
+        ElMessage.error('添加失败')
     })
 }
 const switch_details = ref(false)
 const details_data = reactive({
     obj: {}
 })
-const lookDetails = val => {
-    console.log(val)
-    // APIgetDetailsArchiveArticle(article_item.obj.id, val.id).then(res => {
-    details_data.obj = val
-    // switch_details.value = true
-    // })
-}
 const deleteFuncDialog = val => {
-    APIdeleteArchiveArticle(article_item.obj.id, val.id).then(res => {
-        refreshFuncArticle()
+    APIdeleteArticleArchive(article_item.obj.id, val.id).then(() => {
+        getListArchiveFunc()
     })
 }
-
+// 选择用户组name
+const checkUserNameFunc = val => {
+    from_add.obj.article_id = val.id
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
-
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['announce_status']).then(res => {
+    opts_all.obj = res
+})
 </script>
 <style lang="scss">
-    .articletplarchive {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
-</style>
-<style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
+::v-deep .el-cascader {
+    width: 100% !important;
+}
+.noDeal {
+    margin-left: 6px;
+}
 </style>

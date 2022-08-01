@@ -70,18 +70,18 @@ const constantRoutes = [{
         }
     ]
     // 民事
-// 活动
+    // 活动
 import activityJointly from './modules/activity/jointly.js'
 import activitySurvey from './modules/activity/survey.js'
 import activityElect from './modules/activity/elect.js'
 import activityVote from './modules/activity/vote.js'
 // 公示
-import articletplArchive from './modules/articletpl/archive.js'
-import articletplArticle from './modules/articletpl/article.js'
-import articletplArticleread from './modules/articletpl/articleread.js'
-import articletplArticletpl from './modules/articletpl/articletpl.js'
-import articletplTask from './modules/articletpl/task.js'
-import articletplTasksd from './modules/articletpl/tasksd.js'
+import announceArchive from './modules/announce/archive.js'
+import announceManage from './modules/announce/announceManage.js'
+import announceCategory from './modules/announce/announceCategory.js'
+import announceAnnounce from './modules/announce/announce.js'
+import announceTask from './modules/announce/task.js'
+import announcelTasksd from './modules/announce/tasksd.js'
 // 管理
 import superviseHome from './modules/supervise/home.js'
 import superviseWorkbench from './modules/supervise/workbench.js'
@@ -125,15 +125,15 @@ import setupAPP from './modules/setup/APP.js'
 // 申请
 import joinPlatform from './modules/join/platform.js'
 import joinResidential from './modules/join/residential.js'
-//备案
+// 备案
 import recordManage from './modules/record/manange.js'
 import recordType from './modules/record/type'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [{
         meta: {
             title: '管理',
-            icon: 'manage',
-            // auth: ['supervise', '*']
+            icon: 'manage'
+                // auth: ['supervise', '*']
         },
         children: [
             superviseHome,
@@ -175,15 +175,15 @@ const asyncRoutes = [{
         meta: {
             title: '公示',
             icon: 'announce',
-            auth: ['articletpl', '*']
+            auth: ['announce', '*']
         },
         children: [
-            articletplArticle,
-            articletplArchive,
-            articletplArticleread,
-            articletplArticletpl,
-            articletplTask,
-            articletplTasksd
+            announceManage,
+            announceArchive,
+            announceCategory,
+            announceAnnounce,
+            announceTask,
+            announcelTasksd
         ]
     },
     {
@@ -196,7 +196,7 @@ const asyncRoutes = [{
             activityJointly,
             activityVote,
             activityElect,
-            activitySurvey,
+            activitySurvey
         ]
     },
     {
@@ -223,7 +223,7 @@ const asyncRoutes = [{
         },
         children: [
             recordManage,
-            recordType,
+            recordType
         ]
     },
     {

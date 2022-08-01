@@ -2,12 +2,12 @@
     <div style="height: 100%;display: inline-block;width: 100%;">
         <div
             class="tit-box"
-            :class="{'nostr':!props.str}"
+            :class="{'nostr':!userName}"
             style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ props.str?props.str:'请点击选择用户' }}</span>
+            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ userName?userName:'请点击选择用户' }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
 
@@ -127,8 +127,8 @@ import {
     APIgetUserList
 } from '@/api/custom/custom.js'
 const switch_list = ref(false)
-const props = defineProps(['str'])
-const emit = defineEmits(['update:str'])
+// const props = defineProps(['str'])
+const emit = defineEmits(['checkName'])
 // const name = ref('请点击选择房屋')
 const loading_tab = ref(false)
 const data_tab = reactive({
@@ -182,14 +182,15 @@ const getTabListFunc = () => {
         }
     })
 }
-
+const userName = ref('')
 const rowClickFunc = row => {
     // name.value = row.name
-    emit('update:str', row.id)
+    emit('checkName', row)
+    userName.value = row.username
     switch_list.value = false
 }
 const clearFunc = () => {
-    emit('update:str', '')
+    emit('checkName', '')
 }
 // 刷新
 const refreshFunc = () => {

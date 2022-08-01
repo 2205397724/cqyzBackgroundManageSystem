@@ -50,7 +50,7 @@
                         <span>{{ scope.row.content }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="评论人" width="110">
+                <el-table-column v-if="data_1.list.uname" label="评论人" width="110">
                     <template #default="scope">
                         <span>{{ scope.row.uname|| 'null' }} </span>
                     </template>
@@ -80,7 +80,7 @@
                         >
                             详情
                         </el-button>
-                        <el-popconfirm
+                        <!-- <el-popconfirm
                             title="确定要删除当前项么?"
                             cancel-button-type="info"
                             @confirm="data1FnDelete(scope.row.id)"
@@ -93,8 +93,9 @@
                                     删除
                                 </el-button>
                             </template>
-                        </el-popconfirm>
+                        </el-popconfirm> -->
                         <el-button
+                            type="primary"
                             size="small"
                             @click="popup2FnReply(scope.row)"
                         >
@@ -181,7 +182,7 @@
             :append-to-body="true"
         >
             <div class="details-box">
-                <div class="item">
+                <div v-if="popup3.details.uname" class="item">
                     <div class="left">评论人</div>
                     <div class="right">{{ popup3.details.uname }}</div>
                 </div>
@@ -246,20 +247,20 @@ import {
 const switchFnUse = val => {
     if (val) {
         APIpostCommentconfig(id.value, { scoreper: popup1.scoreper }).then(res => {
-            ElMessage.success(res.msg)
+            // ElMessage.success('已开启')
         })
         return false
     }
     APIdeleteCommentconfig(id.value).then(res => {
-        ElMessage.success(res.msg)
+        // ElMessage.success('已开启')
     })
 }
 const switchFnStatus = () => {
     APIgetCommentconfig(id.value).then(res => {
         popup1.using = false
-        if (res.data) {
+        if (res) {
             popup1.using = true
-            popup1.scoreper = res.data.scoreper
+            popup1.scoreper = res.scoreper
         }
     })
 }
@@ -279,11 +280,12 @@ import {
 const data1FnGetList = () => {
     let data = {
         page: data_1.page,
-        per_page: data_1.per_page
+        per_page: data_1.per_page,
+        tgtid: id.value
     }
-    APIgetCommentList(id.value, data).then(res => {
-        data_1.list = res.data.items
-        data_1.total = res.data.aggregation.total_cnt
+    APIgetCommentList(data).then(res => {
+        data_1.list = res
+        data_1.total = res.length
     })
 }
 watch(() => data_1.page, new_val => {
@@ -299,19 +301,19 @@ const popup2FnAdd = () => {
     popup2.error = {}
     if (popup2.title == '添加' || popup2.title == '回复') {
         APIpostComment(id.value, popup2.form).then(res => {
-            ElMessage.success(res.msg)
+            ElMessage.success('添加成功')
             popup2.switch = false
             data1FnGetList()
         }).catch(err => {
-            popup2.error = err.data
+            ElMessage.error('添加失败')
         })
     } else if (popup2.title == '修改') {
         APIputComment(popup2.form.id, popup2.form).then(res => {
-            ElMessage.success(res.msg)
+            ElMessage.success('修改成功')
             popup2.switch = false
             data1FnGetList()
         }).catch(err => {
-            popup2.error = err.data
+            ElMessage.error('添加失败')
         })
     }
 }
@@ -320,9 +322,9 @@ const popup2FnModify = val => {
     popup2.title = '修改'
     APIgetCommentDetails(val.id).then(res => {
         popup2.form = {
-            id: res.data.id,
-            content: res.data.content,
-            status: res.data.status
+            id: res.id,
+            content: res.content,
+            status: res.status
         }
         popup2.switch = true
     })
@@ -346,7 +348,7 @@ const popup3 = reactive({
 })
 const popup3FnDetails = id => {
     APIgetCommentDetails(id).then(res => {
-        popup3.details = res.data
+        popup3.details = res
         popup3.switch = true
     })
 }

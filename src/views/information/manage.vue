@@ -170,7 +170,6 @@
                                 :show-all-levels="false"
                                 :props="props"
                                 clearable
-                                @change="cascader_change"
                             >
                                 <template #default="{ node, data }">
                                     <span>{{ data.name }}</span>
@@ -328,18 +327,8 @@
                 <div class="item">
                     <div class="left">状态</div>
                     <div class="right">
-                        <el-switch
-                            v-model="data_1.details_data.status"
-
-                            style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审"
-                            inactive-text="未审"
-                            :active-value="1"
-                            :inactive-value="0"
-                            class="switchStyle"
-                        />
+                        <el-tag v-if=" data_1.details_data.status == 1" type="success" effect="dark" round class="btnNone">已审</el-tag>
+                        <el-tag v-if="data_1.details_data.status == 0" type="danger" effect="dark" round class="btnNone">未审</el-tag>
                     </div>
                 </div>
                 <div class="item">
@@ -407,11 +396,6 @@ const getFuncManageList = () => {
         data_1.total = res.length
         data_1.list = res
     })
-}
-//
-const cascader_change = val => {
-    data_1.add_form.cate_id = val
-    console.log(val)
 }
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
@@ -529,7 +513,7 @@ const clickFuncDetails = val => {
         }
         data_1.details_data = res
         data_1.details_switch = true
-        AudioContext.value = data_1.details_data.content.slice(3, -4)
+        AudioContext.value = data_1.details_data.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
         console.log(AudioContext.value)
     })
 }

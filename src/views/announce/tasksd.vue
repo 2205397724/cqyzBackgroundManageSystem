@@ -1,49 +1,74 @@
 <template>
     <div class="articletpletasksd">
         <page-main>
-            <el-row :gutter="10">
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <Cascaders v-model="data_search.obj.from" />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.tolv" class="head-btn" placeholder="指定单位" clearable>
-                        <!-- <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=6" label="街道" :value="4" />
-                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=9" label="社区" :value="5" />
-                        <el-option v-if="data_search.obj.from" v-show="data_search.obj.from.length<=12" label="小区" :value="6" /> -->
-                        <el-option v-for="item in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <CascaderType v-model="data_search.obj.cid" />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.isactive" class="head-btn" placeholder="是否启用" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-date-picker
-                        v-model="data_search.obj.runat"
-                        type="date"
-                        value-format="YYYY-MM-DD"
-                        placeholder="执行时间"
-                        style="width: 100%;"
-                        :default-value="new Date()"
-                    />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                </el-col>
-            </el-row>
-            <div v-show="switch_search" class="search-tips">
-                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                *搜索到相关结果共{{ total }}条。
+            <div>
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    制定计划
+                </el-button>
             </div>
-            <el-row :gutter="20" class="bottom-btn-box-2">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addResidentialFunc">制定计划</el-button>
-                </el-col>
-            </el-row>
+            <div :class="{search1: isSearch1,search2: isSearch2}">
+                <el-row :gutter="10">
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">发布人用户组：</div>
+
+                        <div class="searchUser search_tb">
+                            <div class="searchUserGroup">
+                                <SearchUserGroup ref="V-1" @checkName="checkNameFunc" />
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">任务接收对象等级：</div>
+                        <el-select v-model="data_search.obj.tolv" class="head-btn search_tb_1" placeholder="指定单位" clearable>
+                            <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">公示分类：</div>
+                        <div class="search_tb">
+                            <CascaderAnnounce v-model="data_search.obj.cid" />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick==true">
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">是否启用：</div>
+                        <el-select v-model="data_search.obj.isactive" class="head-btn search_tb" placeholder="是否启用" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">下次执行时间：</div>
+                        <el-date-picker
+                            v-model="data_search.obj.runat"
+                            type="date"
+                            value-format="YYYY-MM-DD"
+                            placeholder="下次执行时间"
+                            class="search_tb"
+                            :default-value="new Date()"
+                        />
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-10">
+                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div style="margin: auto; margin-top: 20px;" @click="btnClickFunc">
+                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                        <el-button v-if="btnClick==false" :icon="CaretTop" style="border: none;background-color: #fafafa;">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretBottom" style="border: none;background-color: #fafafa;">收起</el-button>
+                    </div>
+                </el-row>
+            </div>
             <el-table
                 v-loading="loading_tab"
                 :data="data_tab.arr"
@@ -55,29 +80,46 @@
                         <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
                     </template>
                 </el-table-column> -->
-                <el-table-column label="接收单位" width="120">
+                <el-table-column label="任务派发单位" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv,scope.row.tolv ) }}</span>
+                        <span style="margin-left: 10px;">{{ getNameFunc(userData.arr,scope.row.from) }}</span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="计划发布分类" width="250">
+                <el-table-column label="接收单位" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cate.name }}</span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv ) }}</span>
                     </template>
-                </el-table-column> -->
-                <el-table-column label="计划发布周期" width="160">
+                </el-table-column>
+                <el-table-column label="公示分类" width="150">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="计划发布周期">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_rate,scope.row.per ) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="开始执行时间" width="140">
+                <el-table-column label="下次执行时间" width="120">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.runat }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否启用" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.tasksd_use,scope.row.isactive ) }}</span>
+                        <el-switch
+                            v-model="scope.row.isactive"
+
+                            style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            active-text="是"
+                            inactive-text="否"
+                            :active-value="1"
+                            :inactive-value="0"
+                            inline-prompt
+                            @change="SwitchFunc(scope.row)"
+                        />
                     </template>
                 </el-table-column>
 
@@ -124,6 +166,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="add_dialog_close"
         >
             <el-form
                 ref="ruleFormRef"
@@ -132,24 +175,23 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="指定范围"
+                            label="任务派发单位"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
-                            <Cascaders v-model="from_examine.item.from" />
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                <SearchUserGroup ref="V" :name="userId" @checkName="checkNameFunc" />
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收单位"
+                            label="任务接收单位"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
                             <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="" clearable>
-                                <!-- <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=6" label="街道" :value="4" />
-                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=9" label="社区" :value="5" />
-                                <el-option v-if="from_examine.item.from" v-show="from_examine.item.from.length<=12" label="小区" :value="6" /> -->
-                                <el-option v-for="item in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -170,12 +212,12 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
-                            <CascaderType v-model="from_examine.item.cid" />
+                            <CascaderAnnounce v-model="from_examine.item.cid" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="开始执行时间"
+                            label="下次执行时间"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.runat?from_error.msg.runat[0]:''"
                         >
@@ -183,7 +225,7 @@
                                 v-model="from_examine.item.runat"
                                 type="date"
                                 value-format="YYYY-MM-DD"
-                                placeholder="开始执行时间"
+                                placeholder="执行时间"
                                 style="width: 100%;"
                                 :default-value="new Date()"
                             />
@@ -195,9 +237,18 @@
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.isactive?from_error.msg.isactive[0]:''"
                         >
-                            <el-select v-model="from_examine.item.isactive" class="head-btn" placeholder="是否启用" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
+                            <el-switch
+                                v-model="from_examine.item.isactive"
+
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                active-text="是"
+                                inactive-text="否"
+                                :active-value="1"
+                                :inactive-value="0"
+                                inline-prompt
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -221,28 +272,31 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">指定范围</div>
-                    <div class="right">{{ data_details.item.from }}</div>
+                    <div class="left">任务派发单位</div>
+                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">接收单位</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.tolv) }}</div>
+                    <div class="left">任务接收单位等级</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv_1,data_details.item.tolv) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">计划发布周期</div>
                     <div class="right">{{ getOptVal(opts_all.obj.article_rate,data_details.item.per ) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">计划发布分类ID</div>
-                    <div class="right">{{ data_details.item.cid }}</div>
+                    <div class="left">公示分类</div>
+                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">开始执行时间</div>
+                    <div class="left">下次执行时间</div>
                     <div class="right">{{ data_details.item.runat }}</div>
                 </div>
                 <div class="item">
                     <div class="left">是否启用</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.tasksd_use,data_details.item.isactive ) }}</div>
+                    <div class="right">
+                        <el-tag v-if=" data_details.item.isactive == 1" type="success" effect="dark" round class="btnNone">启用</el-tag>
+                        <el-tag v-if="data_details.item.isactive == 0" type="danger" effect="dark" round class="btnNone">不启用</el-tag>
+                    </div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -278,6 +332,8 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { useUserOutsideStore } from '@/store/modules/user'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -285,6 +341,7 @@ let switch_search = ref(false)
 let data_search = reactive({
     obj: {}
 })
+let btnClick = ref(false)
 // 详情
 let switch_details = ref(false)
 // 列表
@@ -317,6 +374,15 @@ const from_error = reactive({
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
+const isSearch1 = ref(false)
+const isSearch2 = ref(true)
+const btnClickFunc = () => {
+    btnClick.value = !btnClick.value
+    isSearch1.value = !isSearch1.value
+    isSearch2.value = !isSearch2.value
+}
+// const style1 = ref({})
+// // style1.value={height: 200px}
 const cascader_props = {
     multiple: false,
     emitPath: false,
@@ -364,7 +430,11 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const V_1 = ref(null)
+const refreshFunc_1 = () => {
+    V_1.value.clearFunc()
+    refreshFunc()
+}
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
@@ -386,18 +456,18 @@ const dialogExamineCloseFunc = formEl => {
             if (str_title.value == '修改计划') {
                 APIputTasksd(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('修改成功')
                     switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('修改失败')
                 })
             } else {
                 APIpostTasksd(from_examine.item).then(res => {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('添加成功')
                     switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('添加失败')
                 })
             }
         } else {
@@ -427,12 +497,23 @@ const getTabListFunc = () => {
         total.value = res.length
     })
 }
+
+// switch 状态改变事件
+const SwitchFunc = row => {
+    console.log(row)
+    from_examine.item = row
+    APIputTasksd(from_examine.item.id, from_examine.item)
+}
 // 删除
 const deleteFunc = val => {
     APIdeleteTasksd(val.id).then(res => {
         refreshFunc()
-        ElMessage.success(res.msg)
+        ElMessage.success('删除成功')
     })
+}
+const V = ref(null)
+const add_dialog_close = () => {
+    V.value.clearFunc()
 }
 // 添加
 const addResidentialFunc = () => {
@@ -444,20 +525,70 @@ const addResidentialFunc = () => {
         time_deal: '',
         code_property: '',
         code_room: '',
-        should_bind_house: ''
+        should_bind_house: '',
+        isactive: 0
     }
     switch_examine.value = true
 }
 // 修改
+const userId = ref('')
 const modifyResidentialFunc = val => {
+    // V.value.rowClickFunc()
     from_error.msg = {}
     str_title.value = '修改计划'
     APIgetTasksdDetails(val.id).then(res => {
         from_examine.item = res
+        userId.value = from_examine.item.from
         switch_examine.value = true
     })
 }
-
+// dialog关闭回调
+// const V = ref(null)
+// const add_dialog_close = () => {
+//     if (str_title.value == '添加计划') {
+//         V.value.clearFunc()
+//     }
+// }
+// 选择用户组name
+const userName = ref('')
+const userData = reactive({
+    arr: []
+})
+const checkNameFunc = val => {
+    console.log(val)
+    data_search.obj.from = val.id
+    from_examine.item.from = val.id
+}
+import {
+    APIgetGroupList
+} from '@/api/custom/custom.js'
+APIgetGroupList().then(res => {
+    if (res.status == 200) {
+        console.log(res)
+        loading_tab.value = false
+        userData.arr = res.data
+    }
+})
+const getNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+}
+// 获取类别名称
+let data_1 = reactive({
+    arr: []
+})
+import {
+    APIgetTypeList
+} from '@/api/custom/custom.js'
+// 获取公式列表api请求
+const main_type = ref('announce')
+APIgetTypeList(main_type.value).then(res => {
+    console.log(res)
+    data_1.arr = res
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -467,42 +598,8 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['article_lv', 'tasksd_use', 'article_rate']).then(res => {
+getOpts(['article_lv_1', 'tasksd_use', 'article_rate']).then(res => {
     opts_all.obj = res
 })
 
 </script>
-<style lang="scss">
-    .articletpletasksd {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
-</style>
-<style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
-</style>

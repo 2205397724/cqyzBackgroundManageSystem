@@ -75,8 +75,8 @@
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审核"
-                            inactive-text="未审核"
+                            active-text="已审"
+                            inactive-text="未审"
                             :active-value="1"
                             :inactive-value="0"
                             class="switchStyle"
@@ -187,8 +187,8 @@
                                 style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                active-text="已审核"
-                                inactive-text="未审核"
+                                active-text="已审"
+                                inactive-text="未审"
                                 :active-value="1"
                                 :inactive-value="0"
                                 class="switchStyle"
@@ -205,7 +205,7 @@
                                 <el-input v-model="data_1.add_form.setting" />
                             </el-form-item>
                         </el-col> -->
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label-width="70px"
                                 label="缩略图"
@@ -213,7 +213,7 @@
                             >
                                 <el-input v-model="data_1.add_form.thumb" />
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </template>
                 </el-row>
             </el-form>
@@ -224,60 +224,6 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 详情 -->
-        <!-- <el-dialog
-            v-model="data_1.details_switch"
-            title="详情"
-            width="50%"
-        >
-            <div class="">
-                <div class="item">
-                    <div class="left">标题名称</div>
-                    <div class="right">{{ data_1.details_data.title }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">编号</div>
-                    <div class="right">{{ data_1.details_data.sno }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">是否公开</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,data_1.details_data.pub) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">是否匿名</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,data_1.details_data.ano) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">分类</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,data_1.details_data.kind) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">小区id</div>
-                    <div class="right">{{ data_1.details_data.zid }}</div>
-                </div>
-                <div v-if="data_1.details_data.catpro" class="item">
-                    <div class="left">问题分类</div>
-                    <div class="right">{{ data_1.details_data.catpro }}</div>
-                </div>
-                <div v-if="data_1.details_data.catob" class="item">
-                    <div class="left">投诉对象</div>
-                    <div class="right">{{ data_1.details_data.catob }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">内容</div>
-                    <div class="right">{{ data_1.details_data.content }}</div>
-                </div>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="data_1.details_switch = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog> -->
     </div>
 </template>
 <script setup>
@@ -345,7 +291,7 @@ const clickFuncCategory = () => {
         })
     } else if (data_1.add_title == '修改') {
         data_1.add_form.setting = []
-        // data_1.add_form.thumb = ''
+        data_1.add_form.thumb = 'dfr'
         console.log(data_1.add_form)
         APIputInforCategory(data_1.add_form.id, data_1.add_form).then(res => {
             refreshFunc()
@@ -482,6 +428,6 @@ getOpts(['information_status']).then(res => {
 }
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
-    width: 70px !important;
+    width: 60px !important;
 }
 </style>

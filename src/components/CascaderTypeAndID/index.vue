@@ -89,7 +89,7 @@ const cascader_props = {
 }
 </script>
 <style lang="scss">
-    .totype-toval{
+    .totype-toval {
         width: 100%;
         display: inline-block;
         .el-cascader {

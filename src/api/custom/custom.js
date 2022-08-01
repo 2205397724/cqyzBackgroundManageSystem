@@ -17,7 +17,7 @@ export function APIdeleteCommentconfig(tgtid) {
 // 评论
 // 列表
 export function APIgetCommentList(params) {
-    return api2.get('/comment', params)
+    return api2.get('/comment', { params: params })
 }
 // 详情
 export function APIgetCommentDetails(id) {
@@ -433,16 +433,20 @@ export function APIputYwhActive(ywh, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示审核  /api/a/article/{article}/audit
 // 列表
-export function APIgetListArchiveAudit(archive, params) {
-    return api2.get(`/a/article/${archive}/audit`, { params: params })
+export function APIgetListArchiveAudit(params) {
+    return api2.get('/a-audit', { params: params })
 }
 // 详情
-export function APIgetDetailsArchiveAudit(archive, article) {
-    return api2.get(`/a/article/${archive}/audit/${article}`)
+export function APIgetDetailsArchiveAudit(id) {
+    return api2.get(`/a-audit/${id}`)
 }
-// 审核
-export function APIpostArchiveAudit(archive, data) {
-    return api2.post(`/a/article/${archive}/audit`, data)
+// 发起审核
+export function APIpostArchiveAudit(data) {
+    return api2.post('/a-audit', data)
+}
+// 审核操作
+export function APIputArchiveAudit(id, data) {
+    return api2.post(`/a-audit/${id}`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示归档
@@ -462,7 +466,16 @@ export function APIpostArchiveArticle(archive, data) {
 export function APIdeleteArchiveArticle(archive, article) {
     return api2.delete(`/a/archive/${archive}/article/${article}`)
 }
-
+// 所属档案的公示的列表
+export function APIgetListArticleArchive(archive, params) {
+    return api2.get(`/a/archive/${archive}/announce`, { params: params })
+}
+export function APIpostArticleArchive(archive, data) {
+    return api2.post(`/a/archive/${archive}/announce`, data)
+}
+export function APIdeleteArticleArchive(archive, aid) {
+    return api2.delete(`a/archive/${archive}/announce/${aid}`)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示阅读 /api/a/ Articleread
 // 列表
@@ -612,11 +625,11 @@ export function APIgetArchiveList(params) {
 }
 // 删除
 export function APIdeleteArchive(id) {
-    return api2.delete('/a/archive/' + id)
+    return api2.delete(`/a/archive/${id}`)
 }
 // 修改
 export function APIputArchive(id, data) {
-    return api2.put('/a/archive/' + id, data)
+    return api2.put(`/a/archive/${id}`, data)
 }
 // 添加
 export function APIpostArchive(data) {
@@ -677,20 +690,20 @@ export function APIdeleteInforManage(id) {
     return api2.delete(`/news/${id}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-//备案
-export function APIgetRecordList(params){
-    return api2.get(`/filing`,{params:params})
+// 备案
+export function APIgetRecordList(params) {
+    return api2.get('/filing', { params: params })
 }
-export function APIpostRecord(data){
-    return api2.post(`/filing`,data)
+export function APIpostRecord(data) {
+    return api2.post('/filing', data)
 }
-export function APIputRecord(id,data){
-    return api2.put(`/filing/${id}`,data)
+export function APIputRecord(id, data) {
+    return api2.put(`/filing/${id}`, data)
 }
-export function APIdeleteRecord(id){
+export function APIdeleteRecord(id) {
     return api2.delete(`/filing/${id}`)
 }
-export function APIgetRecordDetail(id){
+export function APIgetRecordDetail(id) {
     return api2.get(`/filing/${id}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -722,7 +735,7 @@ export function APIgetGroupUserDetails(gid, data) {
     return api.get(`/groups/${gid}/users`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-//组成员角色
+// 组成员角色
 export function APIgetGroupUser_Roles(gid, uid) {
     return api.get(`/groups/${gid}/users/${uid}/roles`)
 }
@@ -734,7 +747,7 @@ export function APIdeleteGroupUser_Roles(gid, uid, data) {
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
-//用户组成员权限
+// 用户组成员权限
 export function APIgetGroupUser_perms(group, user) {
     return api.get(`/groups/${group}/users/${user}/perms`)
 }
@@ -745,15 +758,15 @@ export function APIdeleteGroupUser_perms(group, user, data) {
     return api.delete(`/groups/${group}/users/${user}/perms`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-//权限管理
+// 权限管理
 export function APIgetPermsList() {
-    return api.get(`/perms`)
+    return api.get('/perms')
 }
 export function APIgetPermsDetail(perm) {
     return api.get(`/perms/${perm}`)
 }
 export function APIpostPerms(data) {
-    return api.post(`/perms`, data)
+    return api.post('/perms', data)
 }
 export function APIputPerms(id, data) {
     return api.put(`/perms/${id}`, data)
@@ -761,15 +774,15 @@ export function APIputPerms(id, data) {
 export function APIdeletePerms(id) {
     return api.delete(`/perms/${id}`)
 }
-//获取权限被赋予到的所有角色
+// 获取权限被赋予到的所有角色
 export function APIgetPerms_Roles(pid) {
     return api.get(`/perms/${pid}/roles`)
 }
-//将权限赋予给角色
+// 将权限赋予给角色
 export function APIpostPerms_Roles(pid, rid) {
     return api.post(`/perms/${pid}/roles`, rid)
 }
-//权限移除角色
+// 权限移除角色
 export function APIdeletePerms_Roles(pid, rid) {
     return api.delete(`/perms/${pid}/roles`, rid)
 }
@@ -787,15 +800,15 @@ export function APIdeleteGroupRoles(gid, data) {
     return api.delete(`/groups/${gid}/roles`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-//角色管理
+// 角色管理
 export function APIgetRolesList() {
-    return api.get(`/roles`)
+    return api.get('/roles')
 }
 export function APIgetRolesDetail(role) {
     return api.get(`/roles/${role}`)
 }
 export function APIpostRoles(data) {
-    return api.post(`/roles`, data)
+    return api.post('/roles', data)
 }
 export function APIputRoles(id, data) {
     return api.put(`/roles/${id}`, data)
@@ -818,7 +831,7 @@ export function APIdeleteRoles_perms(role, data) {
 // 用户组 /api/cc/{cc}/group
 // 列表
 export function APIgetGroupList() {
-    return api.get(`/groups`)
+    return api.get('/groups')
 }
 // 删除
 export function APIdeleteGroup(id) {
@@ -830,7 +843,7 @@ export function APIputGroup(id, data) {
 }
 // 添加
 export function APIpostGroup(data) {
-    return api.post(`/groups`, data)
+    return api.post('/groups', data)
 }
 // 详情
 export function APIgetGroupDetails(id) {
@@ -845,7 +858,7 @@ export function APIpostGroupPerms(gid, data) {
 export function APIdeleteGroupPerms(gid) {
     return api.delete(`/groups/${gid}/perms`)
 }
-//获取角色拥有所有权限
+// 获取角色拥有所有权限
 export function getRoles_perms(role) {
     return api.get(`/roles/${role}/perms`)
 }
@@ -858,7 +871,6 @@ export function deleteRoles_perms(role, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
 // 列表
-
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 类别
@@ -1005,9 +1017,9 @@ export function APIpostProperty(data) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // china
-//获取可服务的城市
-export function APIgetCityNotPm(){
-    return api.get(`/srv-city`)
+// 获取可服务的城市
+export function APIgetCityNotPm() {
+    return api.get('/srv-city')
 }
 // 列表
 export function APIgetChinaList(params) {
@@ -1238,17 +1250,17 @@ export function APIeditPassword(data) {
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-//分类
-export function APIpostkind(kind,data){
-    return api2.post(`/kind/${kind}/cat`,data)
+// 分类
+export function APIpostkind(kind, data) {
+    return api2.post(`/kind/${kind}/cat`, data)
 }
-export function APIgetKindList(kind,params){
-    return api2.get(`/kind/${kind}/cat`,{params:params})
+export function APIgetKindList(kind, params) {
+    return api2.get(`/kind/${kind}/cat`, { params: params })
 }
-export function APIputKind(kind,cat,data){
-    return api2.put(`/kind/${kind}/cat/${cat}`,data)
+export function APIputKind(kind, cat, data) {
+    return api2.put(`/kind/${kind}/cat/${cat}`, data)
 }
-export function APIdeleteKind(kind,cat){
+export function APIdeleteKind(kind, cat) {
     return api2.delete(`/kind/${kind}/cat/${cat}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -1333,19 +1345,19 @@ export function APIaddSurvey(params) {
 }
 // 删除问卷
 export function APIdeleteSurvey(id) {
-    return api.delete('/survey/'+ id)
+    return api.delete('/survey/' + id)
 }
 // 修改问卷信息
-export function APImodifySurvey(id,data) {
-    return api.put('/survey/'+id,data)
+export function APImodifySurvey(id, data) {
+    return api.put('/survey/' + id, data)
 }
 // 获得问卷详情
 export function APIgetSurveyDetails(id) {
-    return api.get('/survey/'+ id)
+    return api.get('/survey/' + id)
 }
-//修改问卷状态
-export function APImodifySurveyStatus(id,data) {
-    return api.put('/survey-status/'+id,data)
+// 修改问卷状态
+export function APImodifySurveyStatus(id, data) {
+    return api.put('/survey-status/' + id, data)
 }
 
 // 问卷设置范围列表
@@ -1358,31 +1370,30 @@ export function APIgetSurveyRange(params) {
 // }
 // 添加问卷设置范围
 export function APIaddSurveyRange(params) {
-    return api.post('/s/can',params)
+    return api.post('/s/can', params)
 }
 // // 删除问卷设置范围
 export function APIdeleteSurveyRange(params) {
-    return api.delete('/s/can',{ params: params })
+    return api.delete('/s/can', { params: params })
 }
-
 
 // 获取问卷题目列表
 export function APIgetSurveyTopic(params) {
-    return api.get('/s/topic',{ params: params })
+    return api.get('/s/topic', { params: params })
 }
 // 获取问卷题目详情
 export function APIgetSurveyTopicDetail(props) {
-    return api.get('/s/topic/'+props)
+    return api.get('/s/topic/' + props)
 }
 // 添加问卷题目
 export function APIaddSurveyTopic(params) {
-    return api.post('/s/topic/',params)
+    return api.post('/s/topic/', params)
 }
 // 修改问卷题目
-export function APImodifySurveyTopic(id,props) {
-    return api.put('/s/topic/'+id,props)
+export function APImodifySurveyTopic(id, props) {
+    return api.put('/s/topic/' + id, props)
 }
 // // 删除问卷题目
 export function APIdeleteSurveyTopic(props) {
-    return api.delete('/s/topic/'+props)
+    return api.delete('/s/topic/' + props)
 }

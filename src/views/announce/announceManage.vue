@@ -1,34 +1,43 @@
 <template>
     <div class="articletplarticle">
         <page-main>
-            <el-row :gutter="10">
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <CascaderType v-model="data_search.obj.cid" />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
-                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                            <SearchUserGroup v-model:str="data_search.obj.dep_id" />
-                        </div>
-                    </div>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.status" class="head-btn" placeholder="审核状态" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                </el-col>
-            </el-row>
-            <div v-show="switch_search" class="search-tips">
-                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                *搜索到相关结果共{{ total }}条。
+            <div>
+                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">发布公示</el-button>
             </div>
-            <div class="bottom-btn-box-2">
-                <el-button class="head-btn" type="primary" @click="addResidentialFunc">发布公示</el-button>
-                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[0].key;searchFunc()}">未处理</el-button>
-                <el-button class="head-btn" type="warning" @click="()=>{data_search.obj.status=opts_all.obj.status_all[1].key;searchFunc()}">处理中</el-button>
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="search_th">公示分类：</div>
+                        <div class="search_tb">
+                            <CascaderAnnounce v-model="data_search.obj.cid" />
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="search_th">发布人用户组：</div>
+
+                        <div class="searchUser search_tb">
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px; background-color: #fff;">
+                                <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
+                        <div class="search_th">状态：</div>
+
+                        <el-select v-model="data_search.obj.status" class="head-btn search_tb" placeholder="审核状态" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-10">
+                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                        <el-button style="margin-right: 10px;" @click="refreshFunc_1">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -41,12 +50,12 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="分类id" width="220">
+                <el-table-column label="公示分类">
                     <template #default="scope">
-                        <span>{{ scope.row.cid }}</span>
+                        <span>{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示对象">
+                <el-table-column label="公示对象" width="160">
                     <template #default="scope">
                         <span>{{ scope.row.toval }} </span>
                     </template>
@@ -56,29 +65,21 @@
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="用户组ID" width="220">
+                <el-table-column label="用户组">
                     <template #default="scope">
-                        <span>{{ scope.row.groupid }} </span>
+                        <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="90">
+                <el-table-column label="状态" width="150">
                     <template #default="scope">
-                        <el-switch
-                            v-model="scope.row.status"
-
-                            style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审"
-                            inactive-text="未审"
-                            :active-value="1"
-                            :inactive-value="0"
-                            class="switchStyle"
-                            @change="SwitchFunc(scope.row)"
-                        />
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="400">
+                <el-table-column fixed="right" label="操作" width="320">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -104,15 +105,8 @@
                         </el-popconfirm>
                         <el-button
                             size="small"
-                            type="info"
-                            @click="addArchiveFunc(scope.row)"
-                        >
-                            审核记录
-                        </el-button>
-                        <el-button
-                            :disabled="scope.row.status==opts_all.obj.status_all[1]"
-                            size="small"
-                            type="danger"
+                            type="primary"
+                            :disabled="scope.row.status == 1 ? false : true"
                             @click="passAudit(scope.row)"
                         >
                             审核
@@ -137,6 +131,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="add_dialog_close"
         >
             <el-form
                 ref="ruleFormRef"
@@ -157,11 +152,34 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
+                            label-width="120px"
+                            label="文号"
+                            :error="from_error.msg&&from_error.msg.proof?from_error.msg.proof[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.proof"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="公示对象类型"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
+                        >
+                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.key == from_examine.item.totype ? item.val : item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col> -->
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
                             label="公示分类"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
-                            <CascaderType v-model="from_examine.item.cid" />
+                            <CascaderAnnounce v-model="from_examine.item.cid" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -170,21 +188,17 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
                         >
-                            <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''" />
+                            <!-- <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''" /> -->
+                            <!-- <Cascaders v-model="from_examine.item.toval" /> -->
+                            <div
+                                style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;"
+                                @click="switch_choose_zone = true"
+                            >
+                                <span v-if="!selectedZone_id" style="margin-left: 11px; color: #aaa;">区域</span>
+                                <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                            </div>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="公示对象类型"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.reltype?from_error.msg.reltype[0]:''"
-                        >
-                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
-                                <el-option v-for="(item,i) in opts_all.obj.article_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-
                     <!-- <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12"> -->
                     <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
@@ -238,70 +252,17 @@
                         >
                             <div style="height: 100%;width: 100%;">
                                 <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                    <SearchUserGroup v-model:str="from_examine.item.groupid" />
+                                    <SearchUserGroup ref="V" @checkName="checkNameFunc" />
                                 </div>
                             </div>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="公示对象类型"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
-                        >
-                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
-                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="流程"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.step?from_error.msg.step[0]:''"
-                        >
-                            <div style="height: 100%;width: 100%;">
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                    <SearchFlowStep v-model:str="from_examine.item.step" />
-                                </div>
-                            </div>
-                        </el-form-item>
-                    </el-col> -->
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="关联任务ID"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.taskid?from_error.msg.taskid[0]:''"
-                        >
-                            <el-input
-                                v-model="from_examine.item.taskid"
-                                placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col> -->
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="审核状态"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
-                        >
-                            <el-select v-model="from_examine.item.status" placeholder="" clearable style="width: 100%;">
-                                <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label="公示内容"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''"
                         >
-                            <!-- <el-input
-                                v-model="from_examine.item.content"
-                                :autosize="{ minRows: 2, maxRows: 10 }"
-                                type="textarea"
-                                placeholder=""
-                            /> -->
                             <editor v-model="from_examine.item.content" style="width: 100%;" />
                         </el-form-item>
                     </el-col>
@@ -311,7 +272,7 @@
                         </div>
                         <div v-for="(item,i) in from_examine.item.affix" :key="i" class="serve-box">
                             <el-row :gutter="10">
-                                <el-col :xs="12" :sm="12">
+                                <el-col :xs="12" :sm="12" style="padding-top: 10px;">
                                     <el-form-item label="附件名称" :error="from_error.msg&&from_error.msg['affix.'+i+'.title']?from_error.msg['affix.'+i+'.title'][0]:''">
                                         <el-input
                                             v-model="item.title"
@@ -319,7 +280,7 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :xs="12" :sm="12">
+                                <el-col :xs="12" :sm="12" style="padding-top: 10px;">
                                     <el-form-item label="附件" :error="from_error.msg&&from_error.msg['affix.'+i+'.file']?from_error.msg['affix.'+i+'.file'][0]:''">
                                         <input v-show="false" :id="'fileRef'+i" :ref="'fileRef'+i" type="file" @change="(val)=>{fileChange(val,i)}">
                                         <el-button @click="chooseFile(i)">{{ item.file||'添加附件' }}</el-button>
@@ -362,7 +323,7 @@
                             </div>
                             <div class="item">
                                 <div class="left">公示分类</div>
-                                <div class="right">{{ data_details.item.cid }}</div>
+                                <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">公示对象</div>
@@ -374,12 +335,18 @@
                             </div>
                             <div class="item">
                                 <div class="left">发布人用户组</div>
-                                <div class="right">{{ data_details.item.groupid }}</div>
+                                <div class="right">{{ getNameFunc(userData.arr,data_details.item.groupid) }}</div>
                             </div>
-                            <!-- <div class="item">
-                                <div class="left">关联任务ID</div>
-                                <div class="right">{{ data_details.item.taskid }}</div>
-                            </div> -->
+                            <div class="item">
+                                <div class="left">状态</div>
+                                <div class="right">
+                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 2" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                </div>
+                            </div>
                             <div class="item">
                                 <div class="left">开始时间</div>
                                 <div class="right">{{ data_details.item.start_at }}</div>
@@ -402,51 +369,58 @@
                             </div>
                             <div class="item">
                                 <div class="left">公示内容</div>
-                                <div class="right">{{ data_details.item.content }}</div>
+                                <div class="right" v-html="data_details.item.content" />
                             </div>
                         </div>
                     </el-scrollbar>
                 </el-tab-pane>
-                <!-- <el-tab-pane label="其它信息" name="2">
+                <el-tab-pane label="审核记录" name="2">
                     <el-scrollbar height="400px">
-                        <div class="details-box">
-                            <div class="item">
-                                <div class="left">公示ID</div>
-                                <div class="right">{{ data_details.item.id }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">公示分类ID</div>
-                                <div class="right">{{ data_details.item.cid }}</div>
-                            </div>
-
-                            <div class="item">
-                                <div class="left">关联对象类型</div>
-                                <div class="right">{{ data_details.item.reltype }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">关联对象ID</div>
-                                <div class="right">{{ data_details.item.relval }}</div>
-                            </div>
-
-                            <div class="item">
-                                <div class="left">发布人用户组ID</div>
-                                <div class="right">{{ data_details.item.dep_id }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">等级</div>
-                                <div class="right">{{ data_details.item.lv }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">流程</div>
-                                <div class="right">{{ data_details.item.step }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">关联任务ID</div>
-                                <div class="right">{{ data_details.item.taskid }}</div>
-                            </div>
+                        <div>
+                            <el-timeline v-for="(item,index) in article_tab.arr" :key="index">
+                                <el-timeline-item :timestamp="item.created_at" placement="top">
+                                    <el-card>
+                                        <div class="details-box">
+                                            <div class="item">
+                                                <div class="left">ID</div>
+                                                <div class="right">{{ item.id }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">公示ID</div>
+                                                <div class="right">{{ item.tgt_id }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">发布对象</div>
+                                                <div class="right">{{ getNameFunc(userData.arr,item.group_id) }}</div>
+                                            </div>
+                                            <div v-if="details_audit.obj.reply" class="item">
+                                                <div class="left">答复</div>
+                                                <div class="right">{{ item.reply }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">状态</div>
+                                                <div class="right">
+                                                    <el-button v-if="item.status== 10" type="primary">未处理</el-button>
+                                                    <el-button v-if="item.status == 20" type="success">审核通过</el-button>
+                                                    <el-button v-if="item.status == 30" type="danger">审核失败</el-button>
+                                                </div>
+                                            </div>
+                                            <div v-if="item.remark" class="item">
+                                                <div class="left">备注</div>
+                                                <div class="right">{{ item.remark }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">修改时间</div>
+                                                <div class="right">{{ item.updated_at }}</div>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-timeline-item>
+                            </el-timeline>
                         </div>
+                        <div v-show="total2 <= 0" class="size-lx">此公式无审核信息</div>
                     </el-scrollbar>
-                </el-tab-pane>
+                <!-- </el-tab-pane>
                 <el-tab-pane label="附件" name="3">
                     <el-scrollbar height="400px">
                         <div class="details-box">
@@ -460,6 +434,7 @@
                         </div>
                     </el-scrollbar>
                 </el-tab-pane> -->
+                </el-tab-pane>
             </el-tabs>
 
             <template #footer>
@@ -468,107 +443,7 @@
                 </span>
             </template>
         </el-dialog>
-        <!-- 档案下的公示 -->
-        <el-dialog
-            v-model="switch_article"
-            title="审核"
-            width="70%"
-        >
-            <el-table
-                :data="article_tab.arr"
-                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
-            >
-                <el-table-column label="ID" width="250">
-                    <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示ID" width="250">
-                    <template #default="scope">
-                        <span>{{ scope.row.aid }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="通过" width="90">
-                    <template #default="scope">
-                        <span>{{ scope.row.pass }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="答复" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.reply }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="流程" width="90">
-                    <template #default="scope">
-                        <span>{{ scope.row.step }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="120">
-                    <template #default="scope">
-                        <el-button
-                            size="small"
-                            @click="lookDetails(scope.row)"
-                        >
-                            详情
-                        </el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column />
-            </el-table>
-            <el-pagination
-                v-model:current-page="page2"
-                layout="total,prev,pager,next,jumper,"
-                :total="total2"
-                :page-size="per_page2"
-                background
-                hide-on-single-page
-                style="padding-top: 20px;"
-            />
-        </el-dialog>
-        <!-- 详情 -->
-        <el-dialog
-            v-model="switch_audit"
-            title="详情"
-            width="50%"
-        >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">ID</div>
-                    <div class="right">{{ details_audit.obj.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示ID</div>
-                    <div class="right">{{ details_audit.obj.aid }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">发布人ID</div>
-                    <div class="right">{{ details_audit.obj.uid }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">通过</div>
-                    <div class="right">{{ details_audit.obj.pass }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">答复</div>
-                    <div class="right">{{ details_audit.obj.reply }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">流程</div>
-                    <div class="right">{{ details_audit.obj.step }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">发布人用户端</div>
-                    <div class="right">{{ details_audit.obj.utype }}</div>
-                </div>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="switch_audit = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <!-- 修改添加 -->
+        <!-- 审核 -->
         <el-dialog
             v-model="switch_pass"
             title="审核"
@@ -579,7 +454,7 @@
                 :model="from_pass.obj"
             >
                 <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" style="margin-bottom: 20px;">
-                    <el-step v-for="(item,i) in buzhoutiao.arr" :title="item.name" />
+                    <el-step v-for="(item,i) in buzhoutiao.arr" :key="i" :title="item.name" />
                 </el-steps>
                 <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" style="width: 100%;text-align: center;font-size: 16px;color: #aaa;">
                     当前公示已审核完成
@@ -591,10 +466,22 @@
                             label-width="100px"
                             :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
                         >
-                            <el-select v-model="from_pass.obj.pass" class="head-btn" placeholder="" clearable>
+                            <!-- <el-select v-model="from_pass.obj.status" class="head-btn" placeholder="" clearable>
                                 <el-option label="审核通过" value="1" />
                                 <el-option label="不通过" value="0" />
-                            </el-select>
+                            </el-select> -->
+                            <el-switch
+                                v-model="from_pass.obj.status"
+
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                active-text="通过"
+                                inactive-text="失败"
+                                :active-value="20"
+                                :inactive-value="30"
+                                class="switchStyle"
+                            />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -620,17 +507,23 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 选择公示对象 -->
+        <el-dialog v-model="switch_choose_zone" title="选择公示对象">
+            <el-scrollbar height="250px">
+                <position-tree-fourth :tree_item="tree_item" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
+            </el-scrollbar>
+        </el-dialog>
     </div>
 </template>
 <script setup>
-import CascaderTypeAndID from '@/components/CascaderTypeAndID/index.vue'
+// import CascaderTypeAndID from '@/components/CascaderTypeAndID/index.vue'
 // import SearchResidential from '@/components/SearchResidential/index.vue'
 // import CascaderType from '@/components/CascaderType/index.vue'
 import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
 // import SearchUser from '@/components/SearchUser/index.vue'
 // import SearchFlowStep from '@/components/SearchFlowStep/index.vue'
 
-const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
+// const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import {
     APIgetEventArticleList,
     APIgetEventArticleDetails,
@@ -647,6 +540,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -656,6 +550,11 @@ let data_search = reactive({
 })
 // 详情
 let switch_details = ref(false)
+// dialog关闭回调
+const V = ref(null)
+const add_dialog_close = () => {
+    V.value.clearFunc()
+}
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
@@ -666,6 +565,7 @@ let data_tab = reactive({
 let data_dialog = reactive({
     obj: {}
 })
+const AudioContext = ref('')
 // 详情
 const data_details = reactive({
     item: ''
@@ -681,7 +581,6 @@ let from_examine = reactive({
         custom: [],
         affix: [],
         groupcc: '',
-        relid: '',
         relid: '',
         groupid: ''
     }
@@ -700,22 +599,31 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
+    // V.value.clearFunc()
     page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
 }
+const V_1 = ref(null)
+const refreshFunc_1 = () => {
+    V_1.value.clearFunc()
+    refreshFunc()
+}
 // 详情
 const detailsFunc = val => {
+    page2.value = 1
+    getListArchiveFunc()
     data_dialog.obj = val
     APIgetEventArticleDetails(val.id).then(res => {
         data_details.item = res
-        res.affix = []
+        res.affixs = []
         for (let i in res.affix) {
             res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
         }
         switch_details.value = true
-        console.log(data_details.item)
+        // AudioContext.value = data_details.item.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
+        // console.log(data_details.item)
     })
 }
 // 监听分页
@@ -725,6 +633,7 @@ watch(page, () => {
 // 同意拒绝提交
 import { getFilesKeys } from '@/util/files.js'
 const dialogExamineCloseFunc = formEl => {
+    console.log(formEl)
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
@@ -741,8 +650,8 @@ const dialogExamineCloseFunc = formEl => {
                     //     taskid: ''
                     // }
                     from_examine.item.custom = []
-                    from_examine.item.groupcc = '500101'
-                    from_examine.item.taskid = '62dfacc69e8d7b0b5b7abea1'
+                    from_examine.item.relid = 'ggtr4535'
+                    from_examine.item.taskid = 'gdhfth454g'
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
                         ElMessage.success('修改成功')
@@ -767,12 +676,14 @@ const dialogExamineCloseFunc = formEl => {
                 }
                 if (str_title.value == '修改') {
                     from_examine.item.custom = []
-                    from_examine.item.groupcc = '500101'
-                    from_examine.item.taskid = '62dfacc69e8d7b0b5b7abea1'
+                    from_examine.item.relid = 'ggtr4535'
+                    from_examine.item.groupcc = 'hgfjht56'
+                    from_examine.item.taskid = 'gdhfth454g'
                     APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
                         ElMessage.success('修改成功')
                         switch_examine.value = false
+                        // from_examine.item.status=
                     }).catch(err => {
                         ElMessage.error('修改失败')
                     })
@@ -811,6 +722,7 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
+        console.log(total.value)
     })
 }
 // 删除
@@ -822,11 +734,11 @@ const deleteFunc = val => {
 }
 // 添加
 const addResidentialFunc = () => {
+    getChinaName()
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
         // 'title': '气总造毛',
-        'cid': '45gdfgt46gvfdt54fgrt45fg'
         // 'totype': 97,
         // 'toval': 'incididunt',
         // 'start_at': '2022-07-23 12:23:34',
@@ -849,11 +761,25 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
+let new_from = reactive({
+    item: {}
+})
 // 修改
 const modifyResidentialFunc = val => {
+    getChinaName()
     from_error.msg = {}
     str_title.value = '修改'
+    switch_examine.value = true
     APIgetEventArticleDetails(val.id).then(res => {
+        console.log(res)
+        // for (let key in res) {
+        //     // if (key !== 'status') {
+        //     from_examine.item[key] = val[key]
+        //     // }
+        // }
+        delete res.status
+        // console.log(from_examine.item)
+        console.log(res)
         from_examine.item = res
         switch_examine.value = true
     })
@@ -876,7 +802,6 @@ const addServiceFunc = index => {
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 审核
-const switch_article = ref(false)
 const article_item = reactive({
     obj: {}
 })
@@ -886,15 +811,6 @@ const article_tab = reactive({
 const page2 = ref(1)
 const total2 = ref(74751)
 const per_page2 = ref(15)
-const addArchiveFunc = val => {
-    article_item.obj = val
-    switch_article.value = true
-    refreshFuncArticle()
-}
-const refreshFuncArticle = () => {
-    page2.value = 1
-    getListArchiveFunc()
-}
 import {
     APIgetListArchiveAudit,
     APIgetDetailsArchiveAudit,
@@ -903,9 +819,13 @@ import {
 const getListArchiveFunc = () => {
     let params = {
         page: page2.value,
-        per_page: per_page2.value
+        per_page: per_page2.value,
+        tgt_id: article_item.obj.id,
+        tgt_type: 'announce',
+        group_id: article_item.obj.groupid
     }
-    APIgetListArchiveAudit(article_item.obj.id, params).then(res => {
+    APIgetListArchiveAudit(params).then(res => {
+        console.log(res)
         article_tab.arr = res
         total2.value = res.length
     })
@@ -915,7 +835,7 @@ const details_audit = reactive({
     obj: {}
 })
 const lookDetails = val => {
-    APIgetDetailsArchiveAudit(article_item.obj.id, val.id).then(res => {
+    APIgetDetailsArchiveAudit(val.id).then(res => {
         details_audit.obj = res
         switch_audit.value = true
     })
@@ -940,29 +860,39 @@ const passAudit = val => {
     err_msg.obj = {}
     // 获取详情
     APIgetEventArticleDetails(val.id).then(res => {
+        console.log(res)
         gongshixiangqing.obj = res
         // 获取步骤条
-        APIgetStepList(res.data.flowstep.fid).then(res2 => {
-            buzhoutiao.arr = res2
-            for (let i in res2) {
-                if (res.flowstep.id == res2[i].id) {
-                    nextTick(() => {
-                        active_bzt.value = i * 1
-                    })
-                    break
-                }
-            }
-        })
+        // APIgetStepList(res.data.flowstep.fid).then(res2 => {
+        //     buzhoutiao.arr = res2
+        //     for (let i in res2) {
+        //         if (res.flowstep.id == res2[i].id) {
+        //             nextTick(() => {
+        //                 active_bzt.value = i * 1
+        //             })
+        //             break
+        //         }
+        //     }
+        // })
     })
     switch_pass.value = true
 }
 const passToAuditFunc = () => {
-    APIpostArchiveAudit(gongshixiangqing.obj.id, from_pass.obj).then(res => {
-        // ElMessage.success(res.msg)
+    // let data = {
+    //     'tgt_type': 'announce',
+    //     'tgt_id': gongshixiangqing.obj.id,
+    //     'group_id': gongshixiangqing.obj.groupid
+    // }
+    from_pass.obj.tgt_type = 'announce'
+    from_pass.obj.tgt_id = gongshixiangqing.obj.id
+    from_pass.obj.group_id = gongshixiangqing.obj.groupid
+    APIpostArchiveAudit(from_pass.obj).then(res => {
+        ElMessage.success('审核成功')
         refreshFunc()
         passAudit(gongshixiangqing.obj)
+        switch_pass.value = false
     }).catch(err => {
-        err_msg.obj = err.data
+        ElMessage.success('审核失败')
     })
 }
 const fileChange = (val, i) => {
@@ -972,7 +902,81 @@ const chooseFile = i => {
     const file = document.getElementById('fileRef' + i)
     file.click()
 }
-
+// 选择公示对象
+const tree_item = ref({})
+const switch_choose_zone = ref(false)
+const selectedZone_id = ref('')
+import { APIgetChinaRegion } from '@/api/custom/custom.js'
+const getChinaName = () => {
+    APIgetChinaRegion().then(res => {
+        console.log(res)
+        tree_item.value.id = res.data[0].code
+        tree_item.value.name = res.data[0].name
+        tree_item.value.next_type = 'region'
+        tree_item.value.type = 'region'
+    })
+}
+const checkFunc = val => {
+    console.log(val)
+    if (val.type == 'zone') {
+        from_examine.item.toval = val.china_code
+        from_examine.item.totype = 6
+    } else {
+        from_examine.item.toval = val.id
+        if (val.id.length <= 6) {
+            from_examine.item.totype = 3
+        } else if (val.id.length <= 9) {
+            from_examine.item.totype = 4
+        } else if (val.id.length <= 12) {
+            from_examine.item.totype = 5
+        }
+    }
+    selectedZone_id.value = val.name
+}
+const checkChangeFunc = () => {
+    switch_choose_zone.value = false
+}
+// 选择用户组name
+const userName = ref('')
+const userData = reactive({
+    arr: []
+})
+const checkNameFunc = val => {
+    console.log(val)
+    data_search.obj.groupid = val.id
+    from_examine.item.groupid = val.id
+    userName.value = val.name
+}
+import {
+    APIgetGroupList
+} from '@/api/custom/custom.js'
+APIgetGroupList().then(res => {
+    if (res.status == 200) {
+        console.log(res)
+        loading_tab.value = false
+        userData.arr = res.data
+    }
+})
+const getNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+}
+// 获取类别名称
+let data_1 = reactive({
+    arr: []
+})
+import {
+    APIgetTypeList
+} from '@/api/custom/custom.js'
+// 获取公式列表api请求
+const main_type = ref('announce')
+APIgetTypeList(main_type.value).then(res => {
+    console.log(res)
+    data_1.arr = res
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -984,35 +988,30 @@ const opts_all = reactive({
         status_all: []
     }
 })
-getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).then(res => {
+getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', 'announce_status']).then(res => {
     opts_all.obj = res
 })
 </script>
 <style lang="scss">
-    .articletplarticle {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
+.serve-box {
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    position: relative;
+    .delete-service {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 999999;
+        cursor: pointer;
+        background-color: #fff;
     }
+}
+.el-form-item__content {
+    overflow: hidden;
+}
 </style>
 <style lang="scss" scoped>
 .search-tips {
@@ -1040,5 +1039,11 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all']).
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
     width: 60px !important;
+}
+.noDeal {
+    margin-left: 6px;
+}
+::v-deep .el-cascader {
+    width: 100% !important;
 }
 </style>

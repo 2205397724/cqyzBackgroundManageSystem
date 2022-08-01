@@ -1,13 +1,12 @@
 <template>
-    <div style="height: 100%;display: inline-block;width: 100%;">
+    <div class="head">
         <div
-            class="tit-box"
-            :class="{'nostr':!props.str}"
-            style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
+            class="tit-box head_th"
+            :class="{'nostr':!userName}"
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ props.str?props.str:'请点击选择用户组' }}</span>
+            <span class="head_tb">{{ userName?userName:'请点击选择用户组' }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
 
@@ -74,7 +73,7 @@
 
 <script setup>
 import Cascaders from '@/components/Cascaders/index.vue'
-const  code = ref('500101')
+const  code = ref('')
 const icon_hover = ref(false)
 import {
     reactive,
@@ -87,23 +86,27 @@ import {
 } from '@/api/custom/custom.js'
 const switch_list = ref(false)
 const props = defineProps({ 'str': { type: String, default: '' }, checkbox: { type: Boolean, default: false } })
-const emit = defineEmits(['update:str'])
+const emit = defineEmits(['update:str', 'checkName'])
 const loading_tab = ref(false)
 const data_tab = reactive({
     arr: []
 })
 // 打开弹窗
 const openDigFunc = () => {
+
     switch_list.value = true
     getTabListFunc()
 }
 watch(code, () => {
     getTabListFunc()
 })
+// const UserGroupClosed = () => {
+//     userName.value = ''
+// }
 // 获取列表
 const getTabListFunc = () => {
     loading_tab.value = true
-    APIgetGroupList(code.value).then(res => {
+    APIgetGroupList().then(res => {
         if (res.status == 200) {
             console.log(res)
             loading_tab.value = false
@@ -111,13 +114,20 @@ const getTabListFunc = () => {
         }
     })
 }
-
+const userName = ref('')
+const userId = ref('')
 const rowClickFunc = row => {
     if (!props.checkbox) {
-        emit('update:str', row.id)
+        emit('update:str', row.name)
+        console.log(props.str)
+        // console.log(props.str)
+        emit('checkName', row)
+        userName.value = row.name
+        userId.value = row.id
         switch_list.value = false
     }
 }
+//
 const users = reactive({
     arr: []
 })
@@ -134,7 +144,12 @@ const getUsers = () => {
 }
 const clearFunc = () => {
     emit('update:str', '')
+    userName.value = ''
 }
+defineExpose({
+    clearFunc,
+    userId
+})
 </script>
 <style lang="scss" scoped>
     .tit-box {
@@ -152,5 +167,26 @@ const clearFunc = () => {
     }
     .nostr {
         color: #aaa;
+    }
+    .head {
+        display: inline-block;
+        box-sizing: border-box;
+        border-radius: 4px;
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        background-color: #fff;
+        .head_th {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding-left: 11px;
+            .head_tb {
+                line-height: 1rem;
+                white-space: nowrap;
+            }
+        }
     }
 </style>

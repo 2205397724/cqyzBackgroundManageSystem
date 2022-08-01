@@ -1,0 +1,801 @@
+<template>
+    <div class="articletpltask">
+        <page-main>
+            <div>
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加任务
+                </el-button>
+            </div>
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="search_th">发布人用户组：</div>
+
+                        <div class="search_tb searchUser">
+                            <div class="searchUserGroup">
+                                <SearchUserGroup ref="V_2" @checkName="checkNameFunc" />
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="search_th">
+                            任务派发单位：
+                        </div>
+
+                        <el-select v-model="data_search.obj.tolv" class="head-btn search_tb" placeholder="指定单位" clearable>
+                            <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="search_th">公示分类：</div>
+                        <div class="search_tb">
+                            <CascaderAnnounce v-model="data_search.obj.cid" />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-10">
+                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+            >
+                <!-- <el-table-column label="公示类型" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.cate.name }} </span>
+                    </template>
+                </el-table-column> -->
+                <!-- <el-table-column label="任务范围" width="120">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
+                    </template>
+                </el-table-column> -->
+                <!-- <el-table-column label="任务部门" width="120">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.todata.name }} </span>
+                    </template>
+                </el-table-column> -->
+                <el-table-column label="任务ID" width="240">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.id }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="任务派发对象" width="150">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ getNameFunc(userData.arr,scope.row.from) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公示分类" width="150">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="接收对象等级" width="150">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="任务接收对象" width="150">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ getNameFunc(userData.arr,scope.row.to) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否完成" width="150">
+                    <template #default="scope">
+                        <el-tag v-if=" scope.row.iscpt" type="success" effect="dark" round>已完成</el-tag>
+                        <el-tag v-if=" scope.row.iscpt" class="m-l-10" type="default" round>查看{{ scope.row.aid }}</el-tag>
+                        <el-tag v-if="!scope.row.iscpt" type="danger" effect="dark" round>未完成</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="300">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyResidentialFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                        <el-button
+                            type="success" size="small"
+                            @click="upResidentialFunc(scope.row)"
+                        >
+                            发布公示
+                        </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page"
+                style="padding-top: 20px;"
+                layout="total,prev,pager,next,jumper,"
+                :total="total"
+                :page-size="per_page"
+                background
+                hide-on-single-page
+            />
+        </page-main>
+        <!-- 修改添加 -->
+        <el-dialog
+            v-model="switch_examine"
+            :title="str_title"
+            width="50%"
+            @closed="add_dialog_close"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="from_examine.item"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="任务派发对象"
+                            label-width="130px"
+                            :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
+                        >
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                <SearchUserGroup ref="V_1" :name="userId" @checkName="checkNameFunc" />
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="接收对象等级"
+                            label-width="130px"
+                            :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
+                        >
+                            <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="" clearable>
+                                <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="任务接收对象"
+                            label-width="130px"
+                            :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
+                        >
+                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                <SearchUserGroup ref="V" @checkName="checkNameFunc" />
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="分类"
+                            label-width="130px"
+                            :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
+                        >
+                            <CascaderAnnounce v-model="from_examine.item.cid" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_examine=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 详情 -->
+        <el-dialog
+            v-model="switch_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">任务ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">任务派发对象</div>
+                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">公示分类</div>
+                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">接收对象等级</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv_1,data_details.item.tolv) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">任务接收对象</div>
+                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.to) }}</div>
+                </div>
+                <!-- <div class="item">
+                    <div class="left">任务单位</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.tolv ) }}</div>
+                </div> -->
+                <!-- <div class="item">
+                    <div class="left">任务部门</div>
+                    <div class="right">{{ data_details.item.todata.name }}</div>
+                </div> -->
+                <!-- <div class="item">
+                    <div class="left">公示分类</div>
+                    <div class="right">{{ data_details.item.cate.name }}</div>
+                </div> -->
+                <div class="item">
+                    <div class="left">是否完成</div>
+                    <div class="right">
+                        <el-tag v-if=" data_details.item.iscpt" type="success" effect="dark" round class="btnNone">已完成</el-tag>
+                        <el-tag v-if=" data_details.item.iscpt" class="m-l-10 btnNone" type="default" round>查看{{ data_details.item.aid }}</el-tag>
+                        <el-tag v-if="!data_details.item.iscpt" type="danger" effect="dark" round class="btnNone">未完成</el-tag>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_details = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 发布公示 -->
+        <el-dialog
+            v-model="switch_announce"
+            title="发布公示"
+            width="50%"
+        >
+            <el-form
+                ref="ruleFormRef"
+                :model="from_examine.item"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="120px"
+                            label="公示主题"
+                            :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
+                        >
+                            <el-input
+                                v-model="announce.item.title"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="120px"
+                            label="文号"
+                            :error="from_error.msg&&from_error.msg.proof?from_error.msg.proof[0]:''"
+                        >
+                            <el-input
+                                v-model="announce.item.proof"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="公示对象类型"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
+                        >
+                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
+                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.key == from_examine.item.totype ? item.val : item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col> -->
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="公示分类"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
+                        >
+                            <CascaderAnnounce v-model="announce.item.cid" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="公示对象"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
+                        >
+                            <!-- <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''" /> -->
+                            <!-- <Cascaders v-model="from_examine.item.toval" /> -->
+                            <div
+                                style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;"
+                                @click="switch_choose_zone = true"
+                            >
+                                <span v-if="!selectedZone_id" style="margin-left: 11px; color: #aaa;">区域</span>
+                                <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <!-- <el-col v-if="from_examine.item.reltype||from_examine.item.reltype===0" :xs="24" :sm="24" :md="24" :lg="12" :xl="12"> -->
+                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="关联对象"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.relval?from_error.msg.relval[0]:''"
+                        >
+                            <el-input
+                                v-model="from_examine.item.relid"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col> -->
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="开始时间"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.start_at?from_error.msg.start_at[0]:''"
+                        >
+                            <el-date-picker
+                                v-model="announce.item.start_at"
+                                type="datetime"
+                                value-format="YYYY-MM-DD HH:mm:ss"
+                                placeholder=""
+                                style="width: 100%;"
+                                :default-value="new Date()"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="结束时间"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.end_at?from_error.msg.end_at[0]:''"
+                        >
+                            <el-date-picker
+                                v-model="announce.item.end_at"
+                                type="datetime"
+                                value-format="YYYY-MM-DD HH:mm:ss"
+                                placeholder=""
+                                style="width: 100%;"
+                                :default-value="new Date()"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="发布人用户组"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.dep_id?from_error.msg.dep_id[0]:''"
+                        >
+                            <div style="height: 100%;width: 100%;">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                                    <SearchUserGroup @checkName="checkNameFunc" />
+                                </div>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="公示内容"
+                            label-width="120px"
+                            :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''"
+                        >
+                            <editor v-model="announce.item.content" style="width: 100%;" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <div style="margin-bottom: 10px;">
+                            <el-button type="primary" plain @click="addServiceFunc">添加附件</el-button>
+                        </div>
+                        <div v-for="(item,i) in announce.item.affix" :key="i" class="serve-box">
+                            <el-row :gutter="10">
+                                <el-col :xs="12" :sm="12" style="padding-top: 10px;">
+                                    <el-form-item label="附件名称" :error="from_error.msg&&from_error.msg['affix.'+i+'.title']?from_error.msg['affix.'+i+'.title'][0]:''">
+                                        <el-input
+                                            v-model="item.title"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="12" :sm="12" style="padding-top: 10px;">
+                                    <el-form-item label="附件" :error="from_error.msg&&from_error.msg['affix.'+i+'.file']?from_error.msg['affix.'+i+'.file'][0]:''">
+                                        <input v-show="false" :id="'fileRef'+i" :ref="'fileRef'+i" type="file" @change="(val)=>{fileChange(val,i)}">
+                                        <el-button @click="chooseFile(i)">{{ item.file||'添加附件' }}</el-button>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <div class="delete-service" @click="deleteServiceFunc(i)">
+                                <el-icon :size="20" color="#F56C6C">
+                                    <el-icon-circle-close />
+                                </el-icon>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_announce=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc1(ruleFormRef)">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 选择公示对象 -->
+        <el-dialog v-model="switch_choose_zone" title="选择公示对象">
+            <el-scrollbar height="250px">
+                <position-tree-fourth :tree_item="tree_item" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
+            </el-scrollbar>
+        </el-dialog>
+    </div>
+</template>
+<script setup>
+import {
+    APIgetTaskList,
+    APIgetTaskDetails,
+    APIdeleteTask,
+    APIputTask,
+    APIpostTask
+} from '@/api/custom/custom.js'
+import {
+    reactive,
+    ref,
+    watch
+} from 'vue'
+import {
+    ElMessage
+} from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 数据
+// 搜索
+let switch_search = ref(false)
+let data_search = reactive({
+    obj: {}
+})
+// 详情
+let switch_details = ref(false)
+// 列表
+let ruleFormRef = ref('')
+let loading_tab = ref(false)
+let data_tab = reactive({
+    arr: []
+})
+// 操作事件 列表单个行数据
+let data_dialog = reactive({
+    obj: {}
+})
+// 详情
+const data_details = reactive({
+    item: ''
+})
+// dialog关闭回调
+const V = ref(null)
+const V_1 = ref(null)
+const add_dialog_close = () => {
+    V.value.clearFunc()
+    V_1.value.clearFunc()
+}
+// 分页
+let total = ref(100)
+let per_page = ref(15)
+let page = ref(1)
+// 添加，修改
+let switch_examine = ref(false)
+let from_examine = reactive({
+    item: {}
+})
+const str_title = ref('添加')
+const from_error = reactive({
+    msg: {}
+})
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 方法
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+}
+// 刷新
+const V_2 = ref(null)
+const refreshFunc = () => {
+    page.value = 1
+    switch_search.value = false
+    data_search.obj = {}
+    getTabListFunc()
+}
+const refreshFunc_1 = () => {
+    V_2.value.clearFunc()
+    refreshFunc()
+}
+// 详情
+const detailsFunc = val => {
+    data_dialog.obj = val
+    APIgetTaskDetails(val.id).then(res => {
+        data_details.item = res
+        switch_details.value = true
+    })
+}
+
+// 监听分页
+watch(page, () => {
+    getTabListFunc()
+})
+// 同意拒绝提交
+const dialogExamineCloseFunc = formEl => {
+    from_error.msg = {}
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            if (str_title.value == '修改') {
+                console.log(from_examine.item)
+                APIputTask(from_examine.item.id, from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('修改失败')
+                })
+            } else {
+                console.log(str_father)
+                APIpostTask(from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('添加失败')
+                })
+            }
+        } else {
+            return false
+        }
+    })
+}
+// 获取列表api请求
+const getTabListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
+                continue
+            }
+            params[key] = data_search.obj[key]
+        }
+    }
+    loading_tab.value = true
+    APIgetTaskList(params).then(res => {
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
+    })
+}
+// 删除
+const deleteFunc = val => {
+    APIdeleteTask(val.id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
+    })
+}
+// 发布公示
+const switch_announce = ref(false)
+const announce = reactive({
+    item: {}
+})
+const selectedZone_id = ref('')
+const switch_choose_zone = ref(false)
+const upResidentialFunc = row => {
+    announce.item = {}
+    announce.item.taskid = row.id
+    getChinaName()
+    switch_announce.value = true
+}
+const tree_item = ref({})
+import { APIgetChinaRegion } from '@/api/custom/custom.js'
+const getChinaName = () => {
+    APIgetChinaRegion().then(res => {
+        console.log(res)
+        tree_item.value.id = res.data[0].code
+        tree_item.value.name = res.data[0].name
+        tree_item.value.next_type = 'region'
+        tree_item.value.type = 'region'
+    })
+}
+const checkFunc = val => {
+    console.log(val)
+    if (val.type == 'zone') {
+        announce.item.toval = val.china_code
+        announce.item.totype = 6
+    } else {
+        announce.item.toval = val.id
+        if (val.id.length <= 6) {
+            announce.item.totype = 3
+        } else if (val.id.length <= 9) {
+            announce.item.totype = 4
+        } else if (val.id.length <= 12) {
+            announce.item.totype = 5
+        }
+    }
+    selectedZone_id.value = val.name
+}
+const checkChangeFunc = () => {
+    switch_choose_zone.value = false
+}
+const fileChange = (val, i) => {
+    announce.item.affix[i].file = val.target.files[0].name
+}
+import { APIpostEventArticle } from '@/api/custom/custom.js'
+const dialogExamineCloseFunc1 = formEl => {
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            let files_arr = []
+            for (let i in announce.item.affix) {
+                files_arr.push(announce.item.affix[i].file)
+            }
+            announce.item.custom = []
+            announce.item.relid = 'ggtr4535'
+            console.log(announce)
+            APIpostEventArticle(announce.item).then(res => {
+                refreshFunc()
+                ElMessage.success('发布成功')
+                switch_announce.value = false
+            }).catch(err => {
+                ElMessage.error('发布失败')
+            })
+        }
+    })
+}
+// 添加 附件
+const addServiceFunc = index => {
+    let data = {
+        'title': '',
+        'file': ''
+    }
+    if (!announce.item.affix) {
+        announce.item.affix = []
+    }
+    announce.item.affix.push(data)
+}
+const chooseFile = i => {
+    const file = document.getElementById('fileRef' + i)
+    file.click()
+}
+// 删除 附件
+const deleteServiceFunc = index => {
+    announce.item.affix.splice(index, 1)
+}
+// 添加
+const addResidentialFunc = () => {
+
+    from_error.msg = {}
+    str_title.value = '添加'
+    from_examine.item = {
+        // property_owners: [],
+        // house_id: '',
+        // time_deal: '',
+        // code_property: '',
+        // code_room: '',
+        // should_bind_house: '',
+        // from: 'tgt54bvfg564545ggtgt34gh',
+        // tolv: 4,
+        // to: '43tdtg54y6h6',
+        // cid: '37vfgdgrt5465gftyy67fg45'
+    }
+    switch_examine.value = true
+}
+// 修改
+const modifyResidentialFunc = val => {
+    from_error.msg = {}
+    str_title.value = '修改'
+    APIgetTaskDetails(val.id).then(res => {
+        from_examine.item = res
+        switch_examine.value = true
+    })
+
+}
+// 选择用户组name
+const userName = ref('')
+const userData = reactive({
+    arr: []
+})
+const checkNameFunc = val => {
+    console.log(val)
+    data_search.obj.from = val.id
+    from_examine.item.from = val.id
+    from_examine.item.to = val.id
+    userName.value = val.name
+}
+import {
+    APIgetGroupList
+} from '@/api/custom/custom.js'
+APIgetGroupList().then(res => {
+    if (res.status == 200) {
+        console.log(res)
+        loading_tab.value = false
+        userData.arr = res.data
+    }
+})
+const getNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+}
+// 获取类别名称
+let data_1 = reactive({
+    arr: []
+})
+import {
+    APIgetTypeList
+} from '@/api/custom/custom.js'
+// 获取公式列表api请求
+const main_type = ref('announce')
+APIgetTypeList(main_type.value).then(res => {
+    console.log(res)
+    data_1.arr = res
+})
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 执行
+refreshFunc()
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['article_lv_1', 'task_ok']).then(res => {
+    opts_all.obj = res
+})
+
+</script>
+<style lang="scss">
+.serve-box {
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    position: relative;
+    .delete-service {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 999999;
+        cursor: pointer;
+        background-color: #fff;
+    }
+}
+.el-form-item__content {
+    overflow: hidden;
+}
+
+</style>

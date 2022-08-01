@@ -2,93 +2,104 @@
     <div class="articletparticletpl">
         <page-main>
             <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.obj.name" class="head-btn" placeholder="名称" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <CascaderType v-model="data_search.obj.cid" />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加模板</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="name" label="名称" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="ID" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cid" label="分类ID" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.cid }} </span>
-                            </template>
-                        </el-table-column>
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加模板
+                </el-button>
+            </div>
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <!-- <el-row>
+                            <el-col :xs="8" :sm="8" :md="6" :lg="8" :xl="8" class="searchKey"> -->
+                        <div class="size-base p-l-20">
+                            关键字:
+                            <!-- </el-col>
+                            <el-col :xs="8" :sm="8" :md="6" :lg="14" :xl="8"> -->
+                            <el-input v-model="data_search.obj.name" class=".head-btn search_tb p-l-5" placeholder="名称" clearable />
+                        <!-- </el-col>
+                        </el-row> -->
+                        </div>
+                    </el-col>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">公示分类：</div>
+                        <div class="search_tb">
+                            <CascaderAnnounce v-model="data_search.obj.cid" />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-10">
+                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
+                        <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;"
+            >
+                <el-table-column prop="name" label="名称" width="180">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="ID" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="cid" label="公示分类" width="250">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
+                    </template>
+                </el-table-column>
 
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
+                <el-table-column />
+                <el-table-column fixed="right" label="操作" width="200">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyResidentialFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
                                 </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
                             </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -121,27 +132,14 @@
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.cat_dep?from_error.msg.cid[0]:''"
                             >
-                                <CascaderType v-model="from_examine.item.cid" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="流程"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.cat_art?from_error.msg.fid[0]:''"
-                            >
-                                <div style="height: 100%;width: 100%;">
-                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                        <SearchFlow v-model:str="from_examine.item.fid" />
-                                    </div>
-                                </div>
+                                <CascaderAnnounce v-model="from_examine.item.cid" />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <div style="margin-bottom: 10px;">
                                 <el-button style="margin-right: 10px;" @click="addServiceFunc">添加模板字段</el-button>
                             </div>
-                            <div v-for="(item,i) in from_examine.item.fields" class="serve-box">
+                            <div v-for="(item,i) in from_examine.item.fields" :key="i" class="serve-box">
                                 <el-row :gutter="10">
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                         <el-form-item label="字段名称" :error="from_error.msg&&from_error.msg['fields.'+i+'.label']?from_error.msg['fields.'+i+'.label'][0]:''">
@@ -164,7 +162,7 @@
                                     <el-button style="margin-right: 10px;" @click="addServiceOptFunc(i)">添加选项字段</el-button>
                                 </div>
                                 <template v-if="from_examine.item.fields[i].prop&&from_examine.item.fields[i].prop.arr">
-                                    <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" style="position: relative;width: 100%;">
+                                    <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" :key="j" style="position: relative;width: 100%;">
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                                 <el-form-item :label="'键Key'+j">
@@ -183,8 +181,8 @@
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
-                                        <div style="position: absolute;top: -10px;right: -10px;z-index: 1;cursor: pointer;" @click="deleteServiceOptFunc(i,j)">
-                                            <el-icon :size="20" color="#aaaaaa">
+                                        <div style="position: absolute;top: -10px;right: -10px;z-index: 9999;cursor: pointer;background-color: #fff;" @click="deleteServiceOptFunc(i,j)">
+                                            <el-icon :size="20" color="#F56C6C">
                                                 <el-icon-circle-close />
                                             </el-icon>
                                         </div>
@@ -219,31 +217,27 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">分类ID</div>
-                    <div class="right">{{ data_details.item.cid }}</div>
+                    <div class="left">公示分类</div>
+                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">流程ID</div>
-                    <div class="right">{{ data_details.item.fid }}</div>
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
                 <div class="item">
                     <div class="left">模板字段</div>
                     <div class="right">
-                        <div v-for="(item,i) in data_details.item.fields" style="border-bottom: 1px solid #eee;margin-bottom: 8px;">
+                        <div v-for="(item,i) in data_details.item.fields" :key="i" style="border-bottom: 1px solid #eee;margin-bottom: 8px;">
                             <div>
                                 字段名称：{{ item.label }}
                             </div>
                             <div>
                                 字段类别：{{ item.type }}
                             </div>
-                            <!-- <div v-for="(child,j) in item.prop.arr" style="display: flex;">
-                                <div style="flex: 1;">
-                                    键Key：{{ child.key }}
-                                </div>
-                                <div style="flex: 1;">
-                                    值Val：{{ child.val }}
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -257,7 +251,6 @@
     </div>
 </template>
 <script setup>
-import SearchFlow from '@/components/SearchFlow/index.vue'
 import CascaderType from '@/components/CascaderType/index.vue'
 import {
     APIgetArticletplList,
@@ -323,6 +316,7 @@ const addServiceFunc = index => {
             arr: []
         }
     }
+    console.log(from_examine.item.fields)
     from_examine.item.fields.push(data)
 }
 // 删除 选项字段
@@ -341,13 +335,14 @@ const addServiceOptFunc = index => {
     from_examine.item.fields[index].prop.arr.push(data)
 }
 
-import {
-    APIgetTypeList
-} from '@/api/custom/custom.js'
-const options = reactive({ arr: [] })
-APIgetTypeList('announce').then(res => {
-    options.arr = res.data
-})
+// import {
+//     APIgetTypeList
+// } from '@/api/custom/custom.js'
+import { Search, Plus } from '@element-plus/icons-vue'
+// const options = reactive({ arr: [] })
+// APIgetTypeList('announce').then(res => {
+//     options.arr = res.data
+// })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -363,7 +358,6 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
@@ -372,10 +366,7 @@ const detailsFunc = val => {
         switch_details.value = true
     })
 }
-// 监听分页
-watch(page, () => {
-    getTabListFunc()
-}, { immediate: true, deep: true })
+
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
@@ -385,18 +376,18 @@ const dialogExamineCloseFunc = formEl => {
             if (str_title.value == '修改') {
                 APIputArticletpl(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('修改成功')
                     switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('修改失败')
                 })
             } else {
                 APIpostArticletpl(from_examine.item).then(res => {
                     refreshFunc()
-                    ElMessage.success(res.msg)
+                    ElMessage.success('添加成功')
                     switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('添加失败')
                 })
             }
         } else {
@@ -451,7 +442,7 @@ const getTabListFunc = () => {
 const deleteFunc = val => {
     APIdeleteArticletpl(val.id).then(res => {
         refreshFunc()
-        ElMessage.success(res.msg)
+        ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -459,22 +450,7 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        // fields: []
-        'name': '大风书本',
-        'cid': '71cdfdggtfh556hgf56hgfh6',
-        'fields': [
-            {
-                'label': 'Lorem',
-                'type': 'Excepteur'
-            },
-            {
-                'label': 'aliqua sed',
-                'type': 'proident'
-            }
-        ],
-        'id': '32fer4354fdf5453gvdgfh34',
-        'created_at': '2022-7-25 15:00',
-        'updated_at': '2022-7-25 15:03'
+        fields: []
     }
     switch_examine.value = true
 }
@@ -487,42 +463,54 @@ const modifyResidentialFunc = val => {
         switch_examine.value = true
     })
 }
-
+// 获取类别名称
+let data_1 = reactive({
+    arr: []
+})
+import {
+    APIgetTypeList
+} from '@/api/custom/custom.js'
+// 获取公式列表api请求
+const main_type = ref('announce')
+APIgetTypeList(main_type.value).then(res => {
+    console.log(res)
+    data_1.arr = res
+})
+const getNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
+// 监听分页
+watch(page, () => {
+    getTabListFunc()
+}, { immediate: true, deep: true })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 
 </script>
 <style lang="scss">
-    .articletparticletpl {
-        .el-cascader {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
+.serve-box {
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    position: relative;
+    .delete-service {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 999999;
+        cursor: pointer;
+        background-color: #fff;
     }
-</style>
-<style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
+}
+::v-deep .el-cascader {
+    width: 100% !important;
+}
 </style>
