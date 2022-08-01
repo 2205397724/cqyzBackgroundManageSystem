@@ -250,16 +250,18 @@
     import {
         ElMessage
     } from 'element-plus'
+    import { log } from 'console';
+    import { valid } from 'mockjs';
     const value = ref('')
     // 选项数据
     const options = [
-    {value: 1,label: '筹备阶段',},
-    {value: 2,label: '待审',},
-    {value: 3,label: '未开始',},
-    {value: 4,label: '进行中',},
-    {value: 5,label: '暂停',},
-    {value: 6,label: '终止',},
-    {value: 7,label: '已结束',},
+        {value: 1,label: '筹备阶段',},
+        {value: 2,label: '待审',},
+        {value: 3,label: '未开始',},
+        {value: 4,label: '进行中',},
+        {value: 5,label: '暂停',},
+        {value: 6,label: '终止',},
+        {value: 7,label: '已结束',},
     ]
     // 搜索
     let switch_search = ref(false)
@@ -367,6 +369,8 @@
                 total.value = data_tab.arr.length
             }
             // console.log(data_tab.arr)
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 监听分页
@@ -397,7 +401,6 @@
                         APImodifySurveyStatus(id,{"status":from_examine.item.status}).then(res => {
                             refreshFunc()
                         })
-
                     }).catch(err => {
                         from_error.msg = err.data
                     })
@@ -441,6 +444,8 @@
                 total.value = data_tab.arr.length
             }
             console.log(data_tab.arr)
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 添加问卷
@@ -461,6 +466,8 @@
             refreshFunc()
             // ElMessage.success(res.statusText)
             ElMessage.success("删除成功")
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 修改问卷
@@ -474,6 +481,8 @@
                 from_examine.item.status += ''
                 switch_examine.value = true
             }
+        }).catch(err => {
+            from_error.msg = err.data
         })
     }
     // 搜索

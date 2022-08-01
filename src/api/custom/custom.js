@@ -16,8 +16,11 @@ export function APIdeleteCommentconfig(tgtid) {
 }
 // 评论
 // 列表
+// export function APIgetCommentList(params) {
+//     return api2.get('/comment', params)
+// }
 export function APIgetCommentList(params) {
-    return api2.get('/comment', params)
+    return api2.get('/comment', {params:params})
 }
 // 详情
 export function APIgetCommentDetails(id) {
@@ -1385,7 +1388,24 @@ export function APIaddSurveyTopic(params) {
 export function APImodifySurveyTopic(id,props) {
     return api.put('/s/topic/'+id,props)
 }
-// // 删除问卷题目
+// 删除问卷题目
 export function APIdeleteSurveyTopic(props) {
     return api.delete('/s/topic/'+props)
+}
+
+//获取答卷管理列表
+export function APIgetSurveyAnswerList(id,params) {
+    return api.get('/s/'+id+'/answer',{ params : params})
+}
+//获取答卷管理详情
+export function APIgetSurveyAnswerDetail(id) {
+    return api.get('/s/answer/'+id)
+}
+//录入线下参与答卷
+export function APIaddSurveyAnswer(id,params) {
+    return api.post('/s/'+id+'/answer',params)
+}
+// 获取未参与答卷的房屋
+export function APIgetNotParticipate(id) {
+    return api.get('/s/'+id+'/doesnt')
 }

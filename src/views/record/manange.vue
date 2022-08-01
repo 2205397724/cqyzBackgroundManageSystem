@@ -88,11 +88,11 @@
           'font-size': '12px',
         }"
         style="
-                                        width: 100%;
-                                        min-height: 300px;
-                                        overflow: auto;
-                                        border: 1px solid #ebeef4;
-                                        box-sizing: border-box;
+                                                                                width: 100%;
+                                                                                min-height: 300px;
+                                                                                overflow: auto;
+                                                                                border: 1px solid #ebeef4;
+                                                                                box-sizing: border-box;
 "
       >
         <el-table-column label="备案名称" width="220">
@@ -141,10 +141,10 @@
               <router-link
                 class="el-button m-lr-10"
                 style="
-                                                                        text-decoration: inherit;
-                                                                        color: inherit;
-                                                                        width: 52px;
-                                                                        height: 26px;
+                                                                                                                                                text-decoration: inherit;
+                                                                                                                                                color: inherit;
+                                                                                                                                                width: 52px;
+                                                                                                                                                height: 26px;
 "
                 :to="{
                   name: 'recordManangeDetail',
@@ -210,10 +210,10 @@
               <el-form-item label-width="70px" label="备案小区">
                 <div
                   style="
-                                                                                width: 100%;
-                                                                                height: 32px;
-                                                                                border: 1px solid #dcdfe6;
-                                                                                border-radius: 4px;
+                                                                                                                                                                width: 100%;
+                                                                                                                                                                height: 32px;
+                                                                                                                                                                border: 1px solid #dcdfe6;
+                                                                                                                                                                border-radius: 4px;
 "
                   @click="click_add_record_zone_id"
                 >
@@ -628,14 +628,16 @@ const data_1 = reactive({
   add_switch: false,
 });
 //城市接口
-import { APIgetChinaRegion } from "@/api/custom/custom.js";
-APIgetChinaRegion().then((res) => {
-  console.log(res);
-  tree_item.value.id = res.data[0].code;
-  tree_item.value.name = res.data[0].name;
-  tree_item.value.next_type = "region";
-  tree_item.value.type = "region";
-});
+import {
+    APIgetChinaRegion
+} from '@/api/custom/custom.js'
+APIgetChinaRegion().then(res => {
+    console.log(res)
+    tree_item.value.id = res.data[0].code
+    tree_item.value.name = res.data[0].name
+    tree_item.value.next_type = 'region'
+    tree_item.value.type = 'region'
+})
 //switch开关
 const switchRecordFun = (status, val) => {
   let params = {};
