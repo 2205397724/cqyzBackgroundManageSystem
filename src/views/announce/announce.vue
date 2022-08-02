@@ -12,15 +12,9 @@
             <div class="search">
                 <el-row :gutter="10">
                     <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <!-- <el-row>
-                            <el-col :xs="8" :sm="8" :md="6" :lg="8" :xl="8" class="searchKey"> -->
                         <div class="size-base p-l-20">
-                            关键字:
-                            <!-- </el-col>
-                            <el-col :xs="8" :sm="8" :md="6" :lg="14" :xl="8"> -->
+                            名称:
                             <el-input v-model="data_search.obj.name" class=".head-btn search_tb p-l-5" placeholder="名称" clearable />
-                        <!-- </el-col>
-                        </el-row> -->
                         </div>
                     </el-col>
                     <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
@@ -30,7 +24,7 @@
                         </div>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-10">
+                <el-row class="m-t-20">
                     <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
                         <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                     </el-col>
@@ -212,35 +206,37 @@
             width="50%"
         >
             <div class="details-box">
-                <div class="item">
-                    <div class="left">模板ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示分类</div>
-                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details.item.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">更新时间</div>
-                    <div class="right">{{ data_details.item.updated_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">模板字段</div>
-                    <div class="right">
-                        <div v-for="(item,i) in data_details.item.fields" :key="i" style="border-bottom: 1px solid #eee;margin-bottom: 8px;">
-                            <div>
-                                字段名称：{{ item.label }}
-                            </div>
-                            <div>
-                                字段类别：{{ item.type }}
+                <el-scrollbar height="300px">
+                    <div class="item">
+                        <div class="left">模板ID</div>
+                        <div class="right">{{ data_details.item.id }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">公示分类</div>
+                        <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">创建时间</div>
+                        <div class="right">{{ data_details.item.created_at }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">更新时间</div>
+                        <div class="right">{{ data_details.item.updated_at }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">模板字段</div>
+                        <div class="right">
+                            <div v-for="(item,i) in data_details.item.fields" :key="i" style="border-bottom: 1px solid #eee;margin-bottom: 15px;">
+                                <div class="m-b-5">
+                                    字段名称：{{ item.label }}
+                                </div>
+                                <div>
+                                    字段类别：{{ item.type }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </el-scrollbar>
             </div>
             <template #footer>
                 <span class="dialog-footer">

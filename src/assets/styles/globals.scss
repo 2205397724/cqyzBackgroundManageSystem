@@ -156,8 +156,14 @@ textarea {
 .m-40 {
     margin: 40px;
 }
+.m-t-5 {
+    margin-top: 5px;
+}
 .m-t-10 {
     margin-top: 10px;
+}
+.m-b-5 {
+    margin-bottom: 5px;
 }
 .m-b-10 {
     margin-bottom: 10px;
@@ -461,14 +467,21 @@ textarea {
 }
 .search2 {
     background-color: #fafafa;
-    height: 160px;
+    height: 170px;
     width: 100%;
     padding: 20px;
     margin-bottom: 15px;
 }
 .search1 {
     background-color: #fafafa;
-    height: 200px;
+    height: 215px;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+.search3 {
+    background-color: #fafafa;
+    height: 220px;
     width: 100%;
     padding: 20px;
     margin-bottom: 15px;

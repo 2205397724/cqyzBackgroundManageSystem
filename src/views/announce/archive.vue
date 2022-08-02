@@ -15,7 +15,7 @@
                         <!-- <el-row>
                             <el-col :xs="8" :sm="8" :md="6" :lg="8" :xl="8" class="searchKey"> -->
                         <div class="size-base p-l-20">
-                            关键字:
+                            名称:
                             <!-- </el-col>
                             <el-col :xs="8" :sm="8" :md="6" :lg="14" :xl="8"> -->
                             <el-input v-model="data_search.name" class="head-btn search_tb p-l-5" placeholder="名称" />
@@ -24,7 +24,7 @@
                         </div>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-10">
+                <el-row class="m-t-20">
                     <el-col :xs="4" :sm="8" :md="6" :lg="3" :xl="8">
                         <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                     </el-col>

@@ -208,7 +208,7 @@ const opts = {
         val: '已办结'
     }, {
         key: 8,
-        val: '结案'
+        val: '已结案'
     }],
     // 公式 状态
     announce_status: [{

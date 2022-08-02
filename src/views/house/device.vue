@@ -2,128 +2,139 @@
     <div class="articletparticletpl">
         <page-main>
             <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.obj.name" class="head-btn" placeholder="设备名称" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.obj.type" class="head-btn" placeholder="类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.obj.status" class="head-btn" placeholder="状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.obj.show" class="head-btn" placeholder="是否显示" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="id" label="设备名称" width="180">
-                            <template #default="scope">
-                                <span>{{ scope.row.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="设备编号">
-                            <template #default="scope">
-                                <span>{{ scope.row.sno }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="所在小区">
-                            <template #default="scope">
-                                <span>{{ scope.row.sno }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cid" label="类型" width="90">
-                            <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cid" label="状态" width="90">
-                            <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.device_status,scope.row.status) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="是否显示" width="90">
-                            <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="档案" width="90">
-                            <template #default="scope">
-                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceArchive(scope.row)">档案</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="维保记录" width="120">
-                            <template #default="scope">
-                                <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair(scope.row)">维保记录</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加</el-button>
+            </div>
+            <div :class="{search1: isSearch1,search2: isSearch2}">
+                <el-row>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="size-base p-l-20">
+                            设备名称:
+                            <el-input v-model="data_search.obj.name" class="head-btn search_tb p-l-5" placeholder="设备名称" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">设备类型：</div>
+                        <el-select v-model="data_search.obj.type" class="head-btn search_tb" placeholder="类型" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">状态：</div>
+                        <el-select v-model="data_search.obj.status" class="head-btn search_tb" placeholder="状态" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick==true" class="m-t-5">
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">是否启用：</div>
+                        <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div style="margin: auto; margin-top: 20px;" @click="btnClickFunc">
+                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                        <el-button v-if="btnClick==false" :icon="CaretTop" style="border: none;background-color: #fafafa;">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretBottom" style="border: none;background-color: #fafafa;">收起</el-button>
+                    </div>
+                </el-row>
+            </div>
+            <div>
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;"
+                >
+                    <el-table-column prop="id" label="设备名称" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.name }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="设备编号">
+                        <template #default="scope">
+                            <span>{{ scope.row.sno }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="所在小区">
+                        <template #default="scope">
+                            <span>{{ scope.row.sno }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="cid" label="类型" width="90">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="cid" label="状态" width="90">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.device_status,scope.row.status) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="是否显示" width="90">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="档案" width="90">
+                        <template #default="scope">
+                            <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceArchive(scope.row)">档案</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="维保记录" width="120">
+                        <template #default="scope">
+                            <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair(scope.row)">维保记录</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+            </div>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -449,6 +460,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -515,6 +527,14 @@ APIgetTypeList('announce').then(res => {
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
+let btnClick = ref(false)
+const isSearch1 = ref(false)
+const isSearch2 = ref(true)
+const btnClickFunc = () => {
+    btnClick.value = !btnClick.value
+    isSearch1.value = !isSearch1.value
+    isSearch2.value = !isSearch2.value
+}
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {

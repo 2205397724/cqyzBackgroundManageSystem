@@ -29,12 +29,12 @@
                         </el-select>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-10">
+                <el-row class="m-t-20">
                     <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
                         <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                     </el-col>
-                    <el-col v-show="switch_search" class="" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
-                        <el-button style="margin-right: 10px;" @click="refreshFunc_1">重置</el-button>
+                    <el-col v-show="switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
                         *搜索到相关结果共{{ total }}条。
                     </el-col>
                 </el-row>
@@ -360,7 +360,7 @@
                                 <div class="right">{{ data_details.item.affix.title }}</div>
                             </div> -->
                             <div class="item">
-                                <div class="left">附件图</div>
+                                <div class="left">附件</div>
                                 <div class="right">
                                     <el-image
                                         v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"

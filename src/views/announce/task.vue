@@ -16,7 +16,7 @@
 
                         <div class="search_tb searchUser">
                             <div class="searchUserGroup">
-                                <SearchUserGroup ref="V_2" @checkName="checkNameFunc" />
+                                <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
                             </div>
                         </div>
                     </el-col>
@@ -36,7 +36,7 @@
                         </div>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-10">
+                <el-row class="m-t-20">
                     <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
                         <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                     </el-col>
@@ -184,7 +184,7 @@
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
                             <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                <SearchUserGroup ref="V" @checkName="checkNameFunc" />
+                                <SearchUserGroup ref="V" @checkName="checkNameFunc_1" />
                             </div>
                         </el-form-item>
                     </el-col>
@@ -561,7 +561,7 @@ const dialogExamineCloseFunc = formEl => {
                     ElMessage.error('修改失败')
                 })
             } else {
-                console.log(str_father)
+                // console.log(str_father)
                 APIpostTask(from_examine.item).then(res => {
                     refreshFunc()
                     ElMessage.success('添加成功')
@@ -722,16 +722,21 @@ const modifyResidentialFunc = val => {
 
 }
 // 选择用户组name
-const userName = ref('')
+// const userName = ref('')
 const userData = reactive({
     arr: []
 })
-const checkNameFunc = val => {
-    console.log(val)
+const checkNameFunc_2 = val => {
     data_search.obj.from = val.id
+}
+const checkNameFunc = val => {
+
     from_examine.item.from = val.id
+    console.log(from_examine.item.from)
+}
+const checkNameFunc_1 = val => {
     from_examine.item.to = val.id
-    userName.value = val.name
+    console.log(from_examine.item.to)
 }
 import {
     APIgetGroupList

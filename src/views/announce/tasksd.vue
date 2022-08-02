@@ -33,7 +33,7 @@
                         </div>
                     </el-col>
                 </el-row>
-                <el-row v-if="btnClick==true">
+                <el-row v-if="btnClick==true" class="m-t-5">
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="search_th">是否启用：</div>
                         <el-select v-model="data_search.obj.isactive" class="head-btn search_tb" placeholder="是否启用" clearable>
@@ -52,7 +52,7 @@
                         />
                     </el-col>
                 </el-row>
-                <el-row class="m-t-10">
+                <el-row class="m-t-20">
                     <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
                         <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                     </el-col>

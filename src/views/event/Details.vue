@@ -34,7 +34,7 @@
                                     <div class="left content">附件</div>
                                     <div class="right">
                                         <!-- 两种模式任君选择 -->
-                                        <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover" />
+                                        <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover" />
                                     <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                         </div> -->
@@ -92,7 +92,7 @@
                                                     {{ item.logable.content }}
                                                 </div>
                                                 <div>
-                                                    <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover" />
+                                                    <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover" />
                                                 </div>
                                             </div>
                                         </el-card>
@@ -104,7 +104,25 @@
                     </el-tab-pane>
                     <el-tab-pane label="业主评论" name="3">
                         <el-scrollbar height="800px">
-                            <comment-switch :id="route.query.id" />
+                            <!-- <comment-switch :id="route.query.id" /> -->
+                            <div class="isComment">
+                                <span>是否开启评论：</span>
+                                <el-switch
+                                    v-model="popup1.using"
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    inline-prompt
+                                    active-text="开"
+                                    inactive-text="关"
+                                    @change="switchFnUse"
+                                />
+                                <div class="radioGroup">
+                                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(true)">
+                                        <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="item.key" size="large">{{ item.val }}</el-radio>
+                                    </el-radio-group>
+                                </div>
+                            </div>
                             <div>
                                 <el-table
                                     ref="multipleTableRef"
@@ -118,16 +136,16 @@
                                             <span>{{ scope.row.content }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="点赞" width="100">
+                                    <el-table-column v-if="tableData.arr.uname" label="评论人" width="110">
                                         <template #default="scope">
-                                            <span>{{ scope.row.zan }} </span>
+                                            <span>{{ scope.row.uname|| 'null' }} </span>
                                         </template>
                                     </el-table-column>
                                     <el-table-column label="状态" width="150">
                                         <template #default="scope">
-                                            <el-button v-show="scope.row.status == 10" type="warning">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 20" type="success">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 30" type="danger">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
+                                            <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
+                                            <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
+                                            <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
                                         </template>
                                     </el-table-column>
                                     <el-table-column label="评分" width="100">
@@ -135,50 +153,53 @@
                                             <span>{{ scope.row.score }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="作者" width="100">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.atuname }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="时间">
+                                    <el-table-column label="评论时间">
                                         <template #default="scope">
                                             <span>{{ scope.row.created_at }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column fixed="right" label="操作" with="250">
+                                    <el-table-column fixed="right" label="操作" with="200">
                                         <template #default="scope">
                                             <el-button
                                                 v-show="scope.row.status == 10"
-                                                type="primary"
+                                                type="primary" size="small"
                                                 @click="toggleSelection(scope.row)"
                                             >
                                                 审核
                                             </el-button>
                                             <el-button
                                                 v-if="scope.row.status == 20 || scope.row.status == 30"
-                                                type="success"
+                                                type="success" size="small"
                                                 @click="toggleSelection(scope.row)"
                                             >
                                                 修改
                                             </el-button>
                                             <el-button
+                                                size="small"
                                                 @click="clickFuncDetail(scope.row)"
                                             >
                                                 详情
                                             </el-button>
                                             <el-button
-                                                type="danger"
+                                                type="primary"
+                                                size="small"
+                                                @click="popup2FnReply(scope.row)"
+                                            >
+                                                回复
+                                            </el-button>
+                                            <!-- <el-button
+                                                type="danger" size="small"
                                                 @click="toggleDelete(scope.row)"
                                             >
                                                 删除
-                                            </el-button>
+                                            </el-button> -->
                                         </template>
                                     </el-table-column>
                                 </el-table>
                             </div>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <el-tab-pane label="评分" name="4">
+                    <!-- <el-tab-pane label="评分" name="4">
                         <div>
                             <el-rate
                                 v-model="score"
@@ -188,10 +209,53 @@
                                 score-template="{value} 分"
                             />
                         </div>
-                    </el-tab-pane>
+                    </el-tab-pane> -->
                 </el-tabs>
             </div>
         </page-main>
+        <!-- 修改添加 -->
+        <el-dialog
+            v-model="popup2.switch"
+            title="回复"
+            width="50%"
+            :append-to-body="true"
+        >
+            <el-form
+                :model="popup2.form"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="打分"
+                            :error="popup2.error&&popup2.error.score?popup2.error.score[0]:''"
+                        >
+                            <el-input-number v-model="popup2.form.score" :step="1" :max="popup1.scoreper" :min="0" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="70px"
+                            label="内容"
+                            :error="popup2.error&&popup2.error.content?popup2.error.content[0]:''"
+                        >
+                            <el-input
+                                v-model="popup2.form.content"
+                                :autosize="{ minRows: 2, maxRows: 6 }"
+                                type="textarea"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="closed">
+                    <el-button @click="popup2.switch=false">取消</el-button>
+                    <el-button type="primary" @click="popup2FnAdd">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
         <!-- 回复 -->
         <el-dialog
             v-model="popup_3.switch"
@@ -263,7 +327,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="closed">
                     <el-button @click="popup_3.switch=false">取消</el-button>
                     <el-button type="primary" @click="popupFuncAdd3">确定</el-button>
                 </div>
@@ -292,7 +356,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="closed">
                     <el-button @click="popup_1.switch=false">取消</el-button>
                     <el-button type="primary" @click="popupFuncAdd">确定</el-button>
                 </div>
@@ -319,7 +383,9 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                </el-row>
+                <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                         <el-form-item
                             label-width="70px"
                             label="投诉内容"
@@ -328,7 +394,7 @@
                             <el-input
                                 v-model="data_1.add_form.content"
                                 class="head-btn"
-                                :autosize="{ minRows: 2, maxRows: 6 }"
+                                :autosize="{ minRows: 4, maxRows: 8 }"
                                 type="textarea"
                                 placeholder=""
                             />
@@ -337,7 +403,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="closed">
                     <el-button @click="data1_switch=false">取消</el-button>
                     <el-button type="primary" @click="clickFuncAddVote">确定</el-button>
                 </div>
@@ -353,10 +419,6 @@
                 <div class="item">
                     <div class="left">评分</div>
                     <div class="right">{{ data_1.add_form.score }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">点赞数</div>
-                    <div class="right">{{ data_1.add_form.zan }}</div>
                 </div>
                 <div class="item">
                     <div class="left">评论状态</div>
@@ -646,6 +708,56 @@ const tableData = reactive({
 //     })
 // }
 // 审核
+// 是否开启评论
+const popup1 = reactive({
+    switch: false,
+    using: false,
+    scoreper: 0
+})
+import {
+    APIgetCommentconfig,
+    APIpostCommentconfig,
+    APIdeleteCommentconfig,
+    APIpostComment
+} from '@/api/custom/custom.js'
+const switchFnUse = val => {
+    if (val) {
+        APIpostCommentconfig(route.query.id, { scoreper: popup1.scoreper }).then(res => {
+            // ElMessage.success('已开启')
+        })
+        return false
+    }
+    APIdeleteCommentconfig(route.query.id).then(res => {
+        // ElMessage.success('已开启')
+    })
+}
+const popup2 = reactive({
+    switch: false,
+    error: {},
+    form: {}
+})
+const popup2FnReply = val => {
+    popup2.error = {}
+    popup2.form = {
+        content: '',
+        atuid: val.uid,
+        atutype: val.utype,
+        score: 0,
+        tagid: val.id
+
+    }
+    popup2.switch = true
+}
+const popup2FnAdd = () => {
+    popup2.error = {}
+    APIpostComment(route.query.id, popup2.form).then(res => {
+        ElMessage.success('回复成功')
+        popup2.switch = false
+        getFuncCommentList()
+    }).catch(err => {
+        ElMessage.error('回复失败')
+    })
+}
 // 评论审核
 const status = ref(0)
 const data_1 = reactive({
@@ -780,7 +892,7 @@ const newcatob = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status']).then(res => {
+getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status', 'comment_scoreper']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.kind[1].key).then(res => {
         console.log(res)
@@ -832,6 +944,26 @@ import { Delete, Edit } from '@element-plus/icons-vue'
     }
     .el-button {
         margin-right: 20px;
+    }
+    .closed {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+    }
+    .radioGroup {
+        margin-left: 20px;
+        display: inline-block;
+    }
+    .isComment {
+        display: flex;
+        align-items: center;
+        margin: 10px 0 15px;
+    }
+    .image {
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
     }
 
     /* .el-button--primary {
