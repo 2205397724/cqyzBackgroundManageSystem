@@ -241,6 +241,7 @@
         APImodifySurvey,
         APImodifySurveyStatus,
         APIgetSurveyDetails,
+        APIaddSurveyRange
     } from '@/api/custom/custom.js'
     import {
         reactive,

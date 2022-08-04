@@ -93,6 +93,7 @@
 
 <script setup name="Login">
 import md5 from 'md5'
+import {APIgetLoginUserGroup} from '@/api/custom/custom'
 const { proxy } = getCurrentInstance()
 const route = useRoute(), router = useRouter()
 import {ElMessage} from 'element-plus'
@@ -193,6 +194,11 @@ function handleLogin() {
                     userStore.isChooseCity=true
                     sessionStorage.setItem("isChooseCity",true)
                 }
+                APIgetLoginUserGroup().then(res=>{
+                    console.log(res)
+                    userStore.groupChinaCode=res.data.region_cc
+                    localStorage.setItem("groupChinaCode",res.data[0].region_cc)
+                })
                 router.push(redirect.value)
             }).catch(() => {
 

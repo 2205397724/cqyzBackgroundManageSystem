@@ -32,28 +32,15 @@
             <div class="flex-column m-t-40">
                 <span style="color: #409eff;" class="size-base strong">备案资料</span>
                 <div style="width: 96%;height: 1px;background-color: #dcdfe6;" class="m-tb-10"></div>
-                <span style="color: #909399;" class="size-base m-t-10">建设用地规划许可证配套用地范围红线图</span>
-                <div>
-                   <div v-for="item in current_record_detail.item.affix" :key="item.key">
-                    <el-tag type="primary" style="width: 100px;text-align: center;margin-top: 10px;">{{item.name}}</el-tag>
-                   </div>
+                <div v-for="(item,index) in current_record_detail.item.affix" :key="item.key">
+                   <div  style="color: #909399;" class="size-base m-tb-10">{{item.name}}</div>
                     <div  class="flex-row">
-                        <el-image v-for="(item,index) in current_record_detail.item.affix" :key="item.key" :src="'http://192.168.110.37:10090/zgj/'+item.key" lazy style="width: 100px;height: 100px;"
+                        <el-image  :src="'http://192.168.110.37:10090/zgj/'+item.key" lazy style="width: 100px;height: 100px;"
                         :preview-src-list="preImg.arr"
                         :initial-index="index"
                         class="m-r-20 m-b-20"></el-image>
                     </div>
                 </div>
-                <span style="color: #909399;" class="size-base m-t-10">建筑工程规划许可证及附图</span>
-                <div v-for="item in current_record_detail.item.affix" :key="item.key">
-                    <el-tag type="primary" style="width: 100px;text-align: center;margin-top: 10px;">{{item.name}}</el-tag>
-                   </div>
-                <div  class="flex-row">
-                        <el-image v-for="(item,index) in current_record_detail.item.affix" :key="item.key" :src="'http://192.168.110.37:10090/zgj/'+item.key" lazy style="width: 100px;height: 100px;"
-                        :preview-src-list="preImg.arr"
-                        :initial-index="index"
-                        class="m-r-20 m-tb-20"></el-image>
-                    </div>
             </div>
         </page-main>
     </div>

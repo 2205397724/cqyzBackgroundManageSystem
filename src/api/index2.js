@@ -50,14 +50,7 @@ api.interceptors.request.use(
         var secret = 'secret'
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
-        // if(userOutsideStore.utype=='ptzxcvbnm159'){
-        //     userOutsideStore.isChooseCity=true
-        // }else{
-            request.headers['X-Cc'] = '500101'//userOutsideStore.city
-        // }
-
-        // if(!request.headers['X-Cc']){
-        //     userOutsideStore.isChooseCity=false
+            request.headers['X-Cc'] = localStorage.getItem("groupChinaCode")
         // }
             // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {

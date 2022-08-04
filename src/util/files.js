@@ -12,6 +12,7 @@ export function getFilesKeys(files, folder) {
             'folder': folder,
             'number': files.length
         }).then(res => {
+            console.log(res)
             const atemp = []
             for (let i in files) {
                 const formData = new FormData()

@@ -120,12 +120,12 @@
                         </el-table-column>
                         <el-table-column />
                     </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
+                     <el-pagination
+                        style="float: right;"
                         v-model:current-page="page"
-                        layout="prev,next"
+                        layout="prev,next,jumper"
                         :page-size="per_page"
+                        :total="50"
                         background
                         @next-click="next_click_page"
                         @prev-click="prev_click_page"
@@ -332,16 +332,16 @@ const data_details = reactive({
 })
 // 分页
 let total = ref(100)
-let per_page = ref(8)
+let per_page = ref(10)
 let page = ref(1)
-const next_click_page=()=>{
-    page=page+1
+/* const next_click_page=()=>{
+    page.value=page.value+1
 }
 const prev_click_page=()=>{
     if(page>1){
-        page=page-1
+        page.value=page.value-1
     }
-}
+} */
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -498,7 +498,7 @@ const getTabListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     loading_tab.value = true
-    APIgetUserList().then(res => {
+    APIgetUserList(params).then(res => {
             console.log(res)
             loading_tab.value = false
             data_tab.arr = res.data

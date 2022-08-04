@@ -50,7 +50,10 @@ body {
         transform: translateX(-50%) !important;
     }
 }
-
+//el-scrollbar高度、
+.el-scrollbar-height-normal {
+    height: 500px;
+}
 // textarea 字体跟随系统
 textarea {
     font-family: inherit;

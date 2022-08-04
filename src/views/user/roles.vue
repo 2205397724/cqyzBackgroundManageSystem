@@ -21,14 +21,14 @@
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="角色ID" style="min-width: 250px;">
+                    <el-table-column prop="id" label="角色ID" width="230px">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="group_id" label="所属用户组" style="min-width: 250px;">
+                    <el-table-column prop="group_id" label="所属用户组" width="230px">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
+                            <span style="margin-left: 10px;">{{ find_groupid_name(scope.row.group_id)  }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="spec" label="特有标识" width="180">
@@ -63,6 +63,16 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                 <el-pagination
+                        style="float: right;"
+                        v-model:current-page="page"
+                        layout="prev,next,jumper"
+                        :page-size="per_page"
+                        :total="50"
+                        background
+                        @next-click="next_click_page"
+                        @prev-click="prev_click_page"
+                    />
             </div>
         <!-- 添加修改 -->
          <el-dialog :title="add_or_post_text" v-model="switch_add_post" show-close width="40%" @close="close_post_put">
@@ -172,7 +182,8 @@ payRoles_perms,
 deleteRoles_perms,
 APIgetRoles_perms,
 APIpostRoles_perms,
-APIdeleteRoles_perms
+APIdeleteRoles_perms,
+APIgetGroupList
 } from '@/api/custom/custom.js'
 const page=ref(1)
 const per_page=ref(10)
@@ -197,13 +208,14 @@ const data_tab_roles_perms=reactive({
 })
 const refreshFunc=()=>{
     page.value=1
-    per_page.value=5
+    per_page.value=10
     switch_add_post.value=false
     getTabListFunc()
 }
 const current_roles_perms=reactive({
     id:""
 })
+//分页板块
 watch(page,()=>{
     getTabListFunc
 })
@@ -220,7 +232,22 @@ const post_roles_perms=()=>{
         }
     })
 }
-//
+//根据用户组ID找到对应name
+const find_groupid_name=(val)=>{
+    APIgetGroupList().then(res=>{
+        console.log(res)
+        let name=""
+        res.data.forEach((item)=>{
+            for(let key in item){
+                if(key=='id'&&item['id']==val){
+                    name=item.name
+                }
+            }
+        })
+        return name
+    })
+}
+//关闭dialog事件
 const close_post_put=()=>{
     from_data.item={}
 }
@@ -296,7 +323,11 @@ const add_post_submit=formEl=>{
 }
 //获取角色列表
 const getTabListFunc=()=>{
-    APIgetRolesList().then(res=>{
+    let params={
+        page:page.value,
+        per_page:per_page.value
+    }
+    APIgetRolesList(params).then(res=>{
         data_tab.arr=res.data
         console.log(res)
     })

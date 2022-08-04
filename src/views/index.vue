@@ -86,9 +86,13 @@
         </page-main>
         <el-dialog title="请选择地区" v-model="switch_choose_city"
         width="40%" :close-on-click-modal="false" :show-close="false">
-            <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
+           <!--  <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
             :show-all-levels="false" style="width: 100%;"
-            ></el-cascader>
+            ></el-cascader> -->
+            <!-- <position-tree-fourth :tree_item="tree_item" @checkFunc="checkFunc"></position-tree-fourth> -->
+            <el-select v-model="choosed_city" placeholder="请选择区域">
+              <el-option :label="item.name" :value="item.china_code" v-for="item in city_list.arr" :key="item.ip"></el-option>
+            </el-select>
             <template #footer>
                 <el-button type="primary" @click="choose_city_end">确认</el-button>
             </template>
@@ -101,7 +105,8 @@ import {
     APIgetUserinfo,
     APIgetTipsnum,
     APIgetEventnum,
-
+    APIgetLoginUserGroup,
+    APIgetCityNotPm
 } from '@/api/custom/custom.js'
 import {ElMessage} from "element-plus"
 import area from '@/util/area'
@@ -112,6 +117,7 @@ const choose_city_props=reactive({
         children:'children'
     }
 })
+
 const userStore=useUserOutsideStore()
 // 公共导入 cscs
 const switch_choose_city=ref(false)
@@ -120,22 +126,38 @@ const choosed_city=ref("")
 const city_list=reactive({
     arr:[]
 })
+//获取城市配置
+const getCityList=()=>{
+    APIgetCityNotPm().then(res=>{
+        city_list.arr=res.data
+        console.log(res)
+    })
+}
+//选择地区弹出框
+const tree_item = ref({
+  id: "50",
+  name: "重庆市",
+  next_type: "region",
+  type: "region",
+});
+const checkFunc = (val) => {
+  choosed_city.value=val.china_code
+  console.log(val);
+  userStore.china_code=val.china_code
+  localStorage.setItem("china_code",val.china_code)
+};
+//选择 后确认按钮
 const choose_city_end=()=>{
     if(!choosed_city.value){
         ElMessage.error("请选择城市")
         return
     }
+    userStore.china_code=choosed_city.value
+    localStorage.setItem("china_code",choosed_city.value)
     ElMessage.success("选择成功")
     switch_choose_city.value=false
     sessionStorage.setItem("isChooseCity",false)
-    console.log(sessionStorage.getItem("china_code"))
-    console.log(sessionStorage.getItem("isChooseCity"))
-}
-//
-const change_china_code=(val)=>{
-    sessionStorage.setItem('china_code',val)
-    userStore.china_code=val
-    choosed_city.value=val
+
 }
 //进入首页进行判断
 import {auth, authAll} from '../util/index'
@@ -145,7 +167,7 @@ const choose_city=()=>{
         userStore.isChooseCity=false
         switch_choose_city.value=false
     }else{
-        city_list.arr=area
+        getCityList()
         sessionStorage.setItem("isChooseCity",true)
         userStore.isChooseCity=true
         switch_choose_city.value=true
@@ -154,11 +176,9 @@ const choose_city=()=>{
 }
 choose_city()
 const choose_cityFun=()=>{
-    userStore.china_code=choosed_city.value
     userStore.isChooseCity=true
-    sessionStorage.setItem('china_code',choosed_city.value)
     sessionStorage.setItem('IS_chooseCity',false)
-
+    console.log(sessionStorage.getItem("china_code"))
 }
 import { reactive } from 'vue'
 // const refreshCurPage=()=>{

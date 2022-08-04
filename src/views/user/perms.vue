@@ -108,7 +108,7 @@
                  :page-size="per_page"
                  style="float: right;"
                  background
-                 layout="prev,next"
+                 layout="prev,next,jumper"
                 :total="30"
                 @size-change="current_per_page_change"
                 @prev-click="prev_click"

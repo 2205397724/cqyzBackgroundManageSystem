@@ -17,7 +17,8 @@ export const useUserStore = defineStore(
         permissions: [],
         utype: "",
         china_code: "",
-        isChooseCity: false
+        isChooseCity: false,
+        groupChinaCode:""
     }),
     getters: {
         isLogin: state => {

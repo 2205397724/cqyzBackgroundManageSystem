@@ -791,8 +791,8 @@ export function APIdeleteGroupRoles(gid, data) {
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 //角色管理
-export function APIgetRolesList() {
-    return api.get(`/roles`)
+export function APIgetRolesList(params) {
+    return api.get(`/roles`,{params:params})
 }
 export function APIgetRolesDetail(role) {
     return api.get(`/roles/${role}`)
@@ -985,6 +985,10 @@ export function APIpostUser(data) {
 //获取业主身份的权限
 export function APIgetloginUserPerms(){
     return api.get(`/me/mbr-perms`)
+}
+//获取我的所在用户组
+export function APIgetLoginUserGroup(){
+    return api.get(`/me/groups`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 产权
