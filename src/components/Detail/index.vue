@@ -244,11 +244,6 @@
         APIgetSurveyRange,
         APIdeleteSurveyRange,
         APIgetSurveyTopic,
-        // 问卷结果
-        APIgetSurveyAnswerList,
-        APIgetSurveyAnswerDetail,
-        APIaddSurveyAnswer,
-        APIgetNotParticipate,
         // 评论
         APIgetCommentList,
         APIgetCommentDetails,
@@ -300,7 +295,6 @@ import SurveyAnswer from '../SurveyAnswer/index.vue';
     })
 
 
-    let switch_addAnswer = ref(false)
     let switch_answer_detail = ref(false)
     let switch_comment = ref(false)
     let switch_comment_detail = ref(false)
@@ -321,11 +315,7 @@ import SurveyAnswer from '../SurveyAnswer/index.vue';
             // 问卷题目
             // topicsFunc()
         }else if(tab.props.name == 4){
-            // 未参与房屋
-            notParticipate()
-            // 问卷调查结果
-            answerListFunc()
-            topicsFunc()
+            // topicsFunc()
         }else{
             // 业主评论
             ownerComment()
@@ -382,32 +372,6 @@ import SurveyAnswer from '../SurveyAnswer/index.vue';
             console.log(data_range.arr.length)
         }).catch(err => {
             from_error.msg = err.data
-        })
-    }
-    // 获取问卷结果详情
-    let answer_detail = reactive({
-        item:''
-    })
-    const getAnswerDetail = (id) => {
-        switch_answer_detail.value = true
-        // 根据问卷题目数量插入对象到answers中
-        // 先判断数组长度是否相同
-        if(addticket.answers.length != topic_details.item.length) {
-            addticket.answers = []
-            for(let i=0;i<topic_details.item.length;i++) {
-                // 判断是选择题还是主观题
-                if(topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
-                    addticket.answers.push({'tid':'','opt':[]})
-                }else {
-                    addticket.answers.push({'tid':'','content':''})
-                }
-            }
-        }
-        // console.log(id)
-        APIgetSurveyAnswerDetail(id).then(res => {
-            // console.log(res.data)
-            answer_detail.item = res.data
-            console.log('answer_detail.item',answer_detail.item)
         })
     }
     // 删除问卷范围
