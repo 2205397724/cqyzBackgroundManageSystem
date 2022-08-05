@@ -1,6 +1,12 @@
 <template>
   <div class="main-box">
-    <el-dialog title="" v-model="showabled" width="60%" class="dialog" @close="dialogClose">
+    <el-dialog
+      title=""
+      v-model="showabled"
+      width="60%"
+      class="dialog"
+      @close="dialogClose"
+    >
       <div class="tree" style="display: inline-block;">
         <el-scrollbar max-height="500px">
           <el-tree
@@ -19,22 +25,39 @@
         </el-scrollbar>
       </div>
       <div class="table" v-if="showFamily">
-        <div class="header">{{unitsDetail.item.name}}</div>
+        <div class="header">{{ unitsDetail.item.name }}</div>
         <el-scrollbar style="height: 504px;">
-        <div >
-            <div class="house_box" v-for="(floor,index) in floors.arr" :key="index">
-                <div class="floor">{{floor.floor_truth}}</div>
-                <div class="house_item">
-                    <div :class="{item:true,bg:selected_house.arr.includes(house.id)}" v-for="house in floor.houses" :key="house.id"
-                    @click="selectedHouseFun(house.id)"
-                    >{{house.house_num}}</div>
+          <div>
+            <div
+              class="house_box"
+              v-for="(floor, index) in floors.arr"
+              :key="index"
+            >
+              <div class="floor">{{ floor.floor_truth }}</div>
+              <div class="house_item">
+                <div
+                  :class="{
+                    item: true,
+                    bg: selected_house.arr.includes(house.id),
+                  }"
+                  v-for="house in floor.houses"
+                  :key="house.id"
+                  @click="selectedHouseFun(house.id)"
+                >
+                  {{ house.house_num }}
                 </div>
+              </div>
             </div>
-        </div>
+          </div>
         </el-scrollbar>
       </div>
       <template #footer>
-        <el-button type="primary" @click="submit">确认</el-button>
+        <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;">
+          <el-option :label="item.value" :value="item.type" v-for="item in do_type.item" :key="item.type"></el-option>
+        </el-select>
+        <el-button type="primary" @click="submit" :disabled="!selected_do_type"
+          >确认</el-button
+        >
       </template>
     </el-dialog>
   </div>
@@ -42,52 +65,67 @@
 
 <script setup>
 // {id:500101,name:'总title',type:'region'}
-import {ElMessage} from 'element-plus'
-import { ref, toRefs, reactive, defineProps, defineEmits,watch } from "vue";
-const props = defineProps(["tree_item", "type", "showabled","surveyid"]);
-const showFamily=ref(false)
+import { ElMessage } from "element-plus";
+import { ref, toRefs, reactive, defineProps, defineEmits, watch } from "vue";
+const props = defineProps(["tree_item", "type", "showabled", "surveyid"]);
+const showFamily = ref(false);
 const type = reactive(props.type);
-const emit = defineEmits(["checkFunc","update:showabled"]);
-const { tree_item ,showabled} = toRefs(props);
+const emit = defineEmits(["checkFunc", "update:showabled"]);
+const { tree_item, showabled } = toRefs(props);
 const treeDetail = reactive({
   arr: {},
 });
-const range=ref(0)//活动参与范围
-watch(showabled,newVal=>{
-    showabled.value=newVal.value
-})
-const selected_all=reactive({
-    arr:[]
-})
-const selected_house=reactive({//选择的房子
-    arr:[]
-})
-const selected_units=reactive({
-    arr:[]
-})
-const selected_building=reactive({
-    arr:[]
-})
-const selected_zone=reactive({
-    arr:[]
-})
-const selected_region=reactive({
-    arr:[]
-})
-const unitsDetail=reactive({
-    item:{}
-})
-const floors=reactive({
-    arr:[]
-})
+const range = ref(0); //活动参与范围
+watch(showabled, (newVal) => {
+  showabled.value = newVal.value;
+});
+const selected_all = reactive({
+  arr: [],
+});
+const selected_house = reactive({
+  //选择的房子
+  arr: [],
+});
+const selected_units = reactive({
+  arr: [],
+});
+const selected_building = reactive({
+  arr: [],
+});
+const selected_zone = reactive({
+  arr: [],
+});
+const selected_region = reactive({
+  arr: [],
+});
+const unitsDetail = reactive({
+  item: {},
+});
+const floors = reactive({
+  arr: [],
+});
 const tree_props = {
   label: "name",
   children: "children",
   isLeaf: "leaf",
 };
-const dialogClose=()=>{
-    emit("update:showabled",false)
-}
+//选择可操作类型
+const selected_do_type=ref(1)
+const do_type = reactive({
+  item: [
+    {
+      type: 1,
+      value: "指定范围可查看",
+    },
+    {
+      type: 2,
+      value: "指定范围可参与",
+    },
+  ],
+});
+const dialogClose = () => {
+  emit("update:showabled", false);
+};
 import {
   APIgetChinaRegion,
   APIgetResidentialListHouse,
@@ -98,7 +136,7 @@ import {
   APIgetHouseListSort,
   APIgetResidentialDetailsHouse,
   APIgetBuildDetailsHouse,
-  APIaddSurveyRange
+  APIaddSurveyRange,
 } from "@/api/custom/custom.js";
 let nodeCopy = "";
 // type: region区域 zone小区 building楼栋 units单元
@@ -107,82 +145,97 @@ const filterNode = (value, data, node) => {
   //     return false
   // }
 };
-const house_detail=reactive({
-    item:{}
-})
+const house_detail = reactive({
+  item: {},
+});
 //选择的目标
-const selectedHouseFun=(houseid)=>{
-    if(selected_house.arr.includes(houseid)){
-        let index=selected_house.arr.indexOf(houseid)
-        selected_house.arr.splice(index,1)
-    }else{
-        selected_house.arr.push(houseid)
-    }
-}
+const selectedHouseFun = (houseid) => {
+  if (selected_house.arr.includes(houseid)) {
+    let index = selected_house.arr.indexOf(houseid);
+    selected_house.arr.splice(index, 1);
+  } else {
+    selected_house.arr.push(houseid);
+  }
+};
 //提交选择
-const submit=()=>{
-    let all=treeRef.value.getCheckedNodes()
-    all.forEach(item=>{
-        switch(item.type){
-            case 'region':
-                selected_region.arr.push(item.id)
-                break
-            case 'zone':
-                selected_zone.arr.push(item.id)
-                break
-            case 'building':
-                selected_building.arr.push(item.id)
-                break
-            case 'units':
-                selected_units.arr.push(item.id)
-                break
-        }
+const submit = () => {
+  let all = treeRef.value.getCheckedNodes();
+  all.forEach((item) => {
+    switch (item.type) {
+      case "region":
+        selected_region.arr.push(item.id);
+        break;
+      case "zone":
+        selected_zone.arr.push(item.id);
+        break;
+      case "building":
+        selected_building.arr.push(item.id);
+        break;
+      case "units":
+        selected_units.arr.push(item.id);
+        break;
+    }
+  });
+  let promiseAll = [];
+  if (selected_region.arr.length > 0) {
+    promiseAll.push(
+      APIaddSurveyRange({
+        sid: props.surveyid,
+        can_type: selected_do_type.value,
+        type: 5,
+        tgt: selected_region.arr,
+      })
+    );
+  }
+  if (selected_zone.arr.length > 0) {
+    promiseAll.push(
+      APIaddSurveyRange({
+        sid: props.surveyid,
+        can_type: selected_do_type.value,
+        type: 4,
+        tgt: selected_zone.arr,
+      })
+    );
+  }
+  if (selected_building.arr.length > 0) {
+    promiseAll.push(
+      APIaddSurveyRange({
+        sid: props.surveyid,
+        can_type: selected_do_type.value,
+        type: 3,
+        tgt: selected_building.arr,
+      })
+    );
+  }
+  if (selected_units.arr.length > 0) {
+    promiseAll.push(
+      APIaddSurveyRange({
+        sid: props.surveyid,
+        can_type: selected_do_type.value,
+        type: 2,
+        tgt: selected_units.arr,
+      })
+    );
+  }
+  if (selected_house.arr.length > 0) {
+    promiseAll.push(
+      APIaddSurveyRange({
+        sid: props.surveyid,
+        can_type: selected_do_type.value,
+        type: 1,
+        tgt: selected_house.arr,
+      })
+    );
+  }
+  Promise.all(promiseAll)
+    .then((res) => {
+      //并发接口
+      ElMessage.success("设置成功");
     })
-    let promiseAll=[]
-    if(selected_region.arr.length>0){
-        promiseAll.push(APIaddSurveyRange({
-            sid:props.surveyid,
-            can_type:1,
-            type:5,
-            tgt:selected_region.arr
-        }))
-    }
-    if(selected_zone.arr.length>0){
-        promiseAll.push(APIaddSurveyRange({
-            sid:props.surveyid,
-            can_type:1,
-            type:4,
-            tgt:selected_zone.arr
-        }))
-    }
-    if(selected_building.arr.length>0){
-        promiseAll.push(APIaddSurveyRange({
-            sid:props.surveyid,
-            can_type:1,
-            type:3,
-            tgt:selected_building.arr
-        }))
-    }
-    if(selected_units.arr.length>0){
-        promiseAll.push(APIaddSurveyRange({
-            sid:props.surveyid,
-            can_type:1,
-            type:2,
-            tgt:selected_units.arr
-        }))
-    }
-    if(selected_house.arr.length>0){
-        promiseAll.push(APIaddSurveyRange({
-            sid:props.surveyid,
-            can_type:1,
-            type:1,
-            tgt:selected_house.arr
-        }))
-    }
-    Promise.all(promiseAll).then(res=>{//并发接口
-        ElMessage.success("设置成功")
-    })
-}
+    .catch((e) => {
+      ElMessage.error("设置失败请重试");
+    });
+};
 const loadNode = (node, resolve) => {
   if (node.level == 0) {
     nodeCopy = node;
@@ -275,7 +328,7 @@ const loadNode = (node, resolve) => {
             id: res[i].id,
             type: "units",
             next_type: "house",
-            leaf:true
+            leaf: true,
           });
         }
         resolve(tree_arr);
@@ -295,96 +348,105 @@ watch(
   },
   { immediate: true, deep: true }
 );
-const handleCheck = (data, checked) => {//点击复选框触发
-    selected_all.arr.push(data)//选中的数组往里面push值
-    treeRef.value.setCheckedNodes(selected_all.arr);
-    emit("checkFunc", data);
+const handleCheck = (data, checked) => {
+  //点击复选框触发
+  selected_all.arr.push(data); //选中的数组往里面push值
+  treeRef.value.setCheckedNodes(selected_all.arr);
+  emit("checkFunc", data);
 };
-const handleCheckChange = (data, selfSelected, childrenSelected) => {//点击节点触发
-    selected_all.arr.forEach((item,index)=>{//实现多选时复选框二次点击取消选中
-        if(item['id']==data.id){
-            selected_all.arr.splice(index,1)
-            treeRef.value.setCheckedNodes(selected_all.arr)
-        }
-    })
-    if(data.type=='region'){
-       console.log(data)
+const handleCheckChange = (data, selfSelected, childrenSelected) => {
+  //点击节点触发
+  selected_all.arr.forEach((item, index) => {
+    //实现多选时复选框二次点击取消选中
+    if (item["id"] == data.id) {
+      selected_all.arr.splice(index, 1);
+      treeRef.value.setCheckedNodes(selected_all.arr);
     }
-    if(data.type=='zone'){
-        APIgetResidentialDetailsHouse(data.id).then(res=>{
-            console.log(res)
-            emit("checkChangeFunc",res)
-        })
-    }
-    if(data.type=='building'){
-        APIgetBuildDetailsHouse(data.id).then(res=>{
-            console.log(res)
-            emit("checkChangeFunc",res)
-        })
-    }
-    if(data.type=='units'){
-        showFamily.value=true
-        emit("checkChangeFunc", data);
-        unitsDetail.item=data
-        APIgetHouseListSort({houseable_type:'units',houseable_id:data.id}).then(res=>{
-            console.log(res)
-            floors.arr=res.floors
-        })
-    }
+  });
+  if (data.type == "region") {
+    console.log(data);
+  }
+  if (data.type == "zone") {
+    APIgetResidentialDetailsHouse(data.id).then((res) => {
+      console.log(res);
+      emit("checkChangeFunc", res);
+    });
+  }
+  if (data.type == "building") {
+    APIgetBuildDetailsHouse(data.id).then((res) => {
+      console.log(res);
+      emit("checkChangeFunc", res);
+    });
+  }
+  if (data.type == "units") {
+    showFamily.value = true;
+    emit("checkChangeFunc", data);
+    unitsDetail.item = data;
+    APIgetHouseListSort({
+      houseable_type: "units",
+      houseable_id: data.id,
+    }).then((res) => {
+      console.log(res);
+      floors.arr = res.floors;
+    });
+  }
 };
 </script>
 <style lang="scss">
 .main-box {
     height: 100%;
     height: 500px;
-    .tree {
-        width: 35%;
-        display: inline-block;
-    }
-    .table {
-        display: inline-block;
-        width: 65%;
-        height: 500px;
-        position: absolute;
-        .header {
-            width: 100%;
-            height: 40px;
-            text-align: center;
-            font-size: 22px;
+    .dialog {
+        position: relative;
+        .tree {
+            width: 35%;
+            display: inline-block;
         }
-        .house_box {
-            height: 51px;
-            width: 99%;
-            border: 2px solid #999;
-            border-bottom: none;
-            display: flex;
-            &:last-child {
-                border-bottom: 2px solid #999;
-            }
-            .floor {
-                width: 56px;
-                height: 50px;
-                border-right: 1px solid #999;
+        .table {
+            display: inline-block;
+            width: 65%;
+            height: 500px;
+            position: absolute;
+            .header {
+                width: 100%;
+                height: 40px;
                 text-align: center;
-                line-height: 50px;
-                background-color: #424141;
-                color: white;
-                font-size: 20px;
+                font-size: 22px;
             }
-            .house_item {
-                width: 90%;
+            .house_box {
+                height: 51px;
+                width: 99%;
+                border: 2px solid #999;
+                border-bottom: none;
                 display: flex;
-                align-items: center;
-                .item {
-                    margin-left: 10px;
-                    width: 40px;
-                    height: 40px;
-                    border: 1px solid #999;
-                    font-size: 20px;
-                    line-height: 40px;
+                &:last-child {
+                    border-bottom: 2px solid #999;
+                }
+                .floor {
+                    width: 56px;
+                    height: 50px;
+                    border-right: 1px solid #999;
                     text-align: center;
-                    &.bg {
-                        background-color: #409eff;
+                    line-height: 50px;
+                    background-color: #424141;
+                    color: white;
+                    font-size: 20px;
+                }
+                .house_item {
+                    width: 90%;
+                    display: flex;
+                    align-items: center;
+                    .item {
+                        margin-left: 10px;
+                        width: 40px;
+                        height: 40px;
+                        border: 1px solid #999;
+                        font-size: 20px;
+                        line-height: 40px;
+                        text-align: center;
+                        &.bg {
+                            background-color: #409eff;
+                        }
                     }
                 }
             }

@@ -235,7 +235,6 @@ const post_roles_perms=()=>{
 //根据用户组ID找到对应name
 const find_groupid_name=(val)=>{
     APIgetGroupList().then(res=>{
-        console.log(res)
         let name=""
         res.data.forEach((item)=>{
             for(let key in item){
