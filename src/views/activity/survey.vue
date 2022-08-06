@@ -1,5 +1,6 @@
 <template>
     <div>
+<<<<<<< HEAD
         <page-main>
             <!-- 添加问卷 -->
             <div>
@@ -179,6 +180,181 @@
                                     <el-col :md="24" :lg="12">
                                         <el-form-item label="状态" label-width="120px" prop="status" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <!-- <el-input
+=======
+        <el-row :gutter="20" class="bottom-btn-box-1">
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                <el-button class="head-btn" style="width: 150px;height: 40px;" type="primary" @click="addResidentialFunc()">
+                    <el-icon size="16px" class="m-r-10">
+                        <svg-icon name="plus"></svg-icon>
+                    </el-icon>
+                    添加问卷
+                </el-button>
+            </el-col>
+        </el-row>
+    </div>
+    <!-- 搜索框 -->
+    <div class="m-tb-10 p-tb-30 p-l-40" style="background-color: #fafafa;">
+        <span style="margin: 0 20px;">关键字</span>
+        <el-input v-model="data_search.obj.name" class="input-b-r" placeholder="标题名称" clearable></el-input>
+        <el-select v-model="data_search.obj.status" class="input-b-r" placeholder="状态">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <el-select v-model="data_search.obj.utype" class="input-b-r" placeholder="用户类型">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <br />
+        <el-button class="head-btn" type="primary" style="margin-left: 90px;" @click="searchFunc">
+            <svg-icon name="search"></svg-icon>筛选
+        </el-button>
+        <div>
+            <span v-show="switch_search" class="font-grey m-l-40">累计搜索到相关结果共<span style="font-size: 24px;">{{ total }}</span>条。</span>
+        </div>
+    </div>
+    <el-radio-group v-model="activeName" size="large" class="m-b-20" @change="handleClick">
+        <el-radio-button label="全部" ></el-radio-button>>
+        <el-radio-button label="筹备阶段" ></el-radio-button>>
+        <el-radio-button label="待审" ></el-radio-button>>
+        <el-radio-button label="未开始" ></el-radio-button>>
+        <el-radio-button label="进行中" ></el-radio-button>>
+        <el-radio-button label="暂停" ></el-radio-button>>
+        <el-radio-button label="终止" ></el-radio-button>>
+        <el-radio-button label="已结束" ></el-radio-button>>
+    </el-radio-group>
+    <!-- 问卷列表 -->
+    <div>
+        <el-table v-loading="loading_tab" :data="data_tab.arr"
+            :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+            style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
+        >
+            <el-table-column prop="name" label="问卷标题" width="150px"></el-table-column>
+            <el-table-column prop="content" label="问卷内容" width="350px"></el-table-column>
+            <el-table-column label="问卷状态" width="200px"  align="center">
+                <template #default="scope">
+                    <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
+                    <el-button v-else-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
+                    <el-button v-else-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
+                    <el-button v-else-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
+                    <el-button v-else-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
+                    <el-button v-else-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
+                    <el-button v-else-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="问卷时间" align="center" show-overflow-tooltip>
+                <template #default="scope">
+                    <span>{{ scope.row.startat }} -  {{ scope.row.endat}} </span>
+                </template>
+            </el-table-column>
+            <el-table-column fixed="right" width="250px" label="操作">
+                <template #default="scope">
+                    <el-button type="primary" size="small" @click="modifySurvey(scope.row)">
+                    修改
+                    </el-button>
+                    <el-button size="small" @click="detailsFunc(scope.row)">
+                    详情
+                    </el-button>
+                    <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                        @confirm="deleteFunc(scope.row)">
+                        <template #reference>
+                            <el-button type="danger" size="small" >
+                                删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <!-- 修改添加 -->
+    <el-dialog v-model="switch_examine" :title="str_title" width="50%">
+            <div>
+                <el-scrollbar style="height: 400px;">
+                    <div class="details-box p-lr-10">
+                        <el-form ref="ruleFormRef" :model="from_examine.item">
+                            <el-row :gutter="10">
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="区域类型" label-width="120px" prop="author_type" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.author_type"
+                                            placeholder=""
+                                        ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="区域对应值" label-width="120px" prop="author_tgt" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.author_tgt"
+                                            placeholder=""
+                                        ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="区域代码" label-width="120px" prop="author_cc" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.author_cc"
+                                            placeholder=""
+                                        ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="开始时间" label-width="120px" prop="author_tgt" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-date-picker
+                                            v-model="value1"
+                                            type="datetime"
+                                            :placeholder="from_examine.item.startat"
+                                            format="YYYY-MM-DD hh:mm:ss"
+                                            value-format="YYYY-MM-DD hh:mm:ss"
+                                            style="width: 100%;"
+                                        ></el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="结束时间" label-width="120px" prop="endat" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-date-picker
+                                            v-model="value2"
+                                            type="datetime"
+                                            :placeholder="from_examine.item.endat"
+                                            format="YYYY-MM-DD hh:mm:ss"
+                                            value-format="YYYY-MM-DD hh:mm:ss"
+                                            style="width: 100%;"
+                                        ></el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总票数" label-width="120px" prop="ticketall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.ticketall"
+                                            placeholder=""
+                                        ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="同时投几项（0表示全投）" label-width="120px" prop="vmax" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.vmax"
+                                            placeholder=""
+                                        ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总面积" label-width="120px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.areaall"
+                                            placeholder=""
+                                        ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="开放—关闭" label-width="120px" prop="pub" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-radio-group v-model="from_examine.item.pub" class="ml-4">
+                                            <el-radio label="1" size="large">开放</el-radio>
+                                            <el-radio label="0" size="large">关闭</el-radio>
+                                        </el-radio-group>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="状态" label-width="120px" prop="status" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <!-- <el-input
+>>>>>>> test
                                             v-model="from_examine.item.status"
                                             placeholder=""
                                         ></el-input> -->

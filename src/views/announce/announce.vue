@@ -16,7 +16,7 @@
                             <div class="search_th">
                                 名称：
                             </div>
-                            <el-input v-model="data_search.obj.name" class=".head-btn search_tb" placeholder="名称" clearable />
+                            <el-input v-model="data_search.obj.name" class="search_tb" placeholder="名称" clearable />
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">

@@ -183,7 +183,7 @@
                         <el-col :xs="24" :md="12" :lg="8">
                             <div class="searchBox">
                                 <div class="search_th">标题名称：</div>
-                                <el-input v-model="data_search.obj.title" class="head-btn search_tb" placeholder="标题名称" clearable />
+                                <el-input v-model="data_search.obj.title" class="search_tb" placeholder="标题名称" clearable />
                             </div>
                         </el-col>
                         <el-col :xs="24" :md="12" :lg="8">
@@ -207,7 +207,7 @@
                                     <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                                 </div>
                                 <div v-show="switch_search == true" class="w_70% m-l-30">
-                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                    <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
                             </div>
@@ -563,17 +563,21 @@ APIgetActivityEventDetails(route.query.id).then(res => {
 const switch_search = ref(false)
 const searchFunc = () => {
     switch_search.value = true
-    if (activeName.value == '5') {
-        getTabListFunc()
-    } else {
-        getSurveyListFunc(activeName.value)
-    }
     data_search.obj.name = name
+    // if (activeName.value == '5') {
+    getTabListFunc()
+    // } else {
+    getSurveyListFunc(activeName.value)
+    // }
 }
+// :disabled="activeName !== '5' ? true : false"
 // 刷新
 const refreshFunc = () => {
     page.value = 1
     getActivitiesEventList()
+    getTabListFunc()
+    getSurveyListFunc(activeName.value)
+    switch_search.value = false
 }
 import {
     APIgetSurvey,
@@ -644,10 +648,11 @@ const name = computed(() => {
 })
 // 添加活动
 const addActiviesFunc = () => {
-    data_search.obj = {}
-    getTabListFunc()
-    // getSurveyListFunc()
     switch_list.value = true
+    data_search.obj = {}
+    activeName.value == '5'
+    getTabListFunc()
+    getSurveyListFunc(activeName.value)
 }
 const rowClickFunc = row => {
 
