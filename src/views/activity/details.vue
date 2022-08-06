@@ -5,12 +5,35 @@
             <p v-if="dataForm.item.desc">
                 {{ dataForm.item.desc }}
             </p>
-            <div class="m-t-20 m-b-20">
+            <div class="m-t-20 m-b-30">
                 <!-- <el-button-group> -->
                 <el-button type="primary" style="width: 150px;" @click="addActiviesFunc">
                     添加关联活动
                 </el-button>
             </div>
+            <div>
+                <el-scrollbar height="800px">
+                                    <el-timeline>
+                                        <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" type="primary">
+                                            <el-card>
+                                                <div>
+                                                    <div class="size-lg">{{item.docable.title}}</div>
+                                                    <div class="m-t-10 m-b-10">
+                                                        <el-tag round v-if="item.tgt_type == 'announce'" size="large">公示</el-tag>
+                                                        <el-tag round v-if="item.docable.type == 1" size="large">联名活动</el-tag>
+                                                        <el-tag round v-if="item.docable.type == 2" size="large">表决活动</el-tag>
+                                                        <el-tag round v-if="item.docable.type == 3" size="large">选举活动</el-tag>
+                                                        <el-tag round v-if="item.docable.type == 4" size="large">问卷活动</el-tag>
+                                                    </div>
+                                                    <div>
+                                                            <span style="color: #b7b1b1;">操作人员: {{ item.docable.uinfo.name }}</span>
+                                                    </div>
+                                                </div>
+                                            </el-card>
+                                        </el-timeline-item>
+                                    </el-timeline>
+                                    </el-scrollbar>
+                                </div>
             <!-- <div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="基础信息" name="1">
@@ -266,28 +289,6 @@
                         </el-tab-pane>
                         <el-tab-pane label="联名" name="1">
                             <el-scrollbar height="800px">
-                                <!-- <div>
-                                    <el-timeline>
-                                        <el-timeline-item v-for="(item,index) in dataForm.item.totlogs" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
-                                            <el-card>
-                                                <div>
-                                                    <div>
-                                                        <div class="sno m-b-10">
-                                                            <span>操作人员: {{ Name }}</span>
-                                                            <span class="m-l-60">事件：{{ item.content }}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="m-b-10">
-                                                        {{ item.logable.content }}
-                                                    </div>
-                                                    <div>
-                                                        <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
-                                                    </div>
-                                                </div>
-                                            </el-card>
-                                        </el-timeline-item>
-                                    </el-timeline>
-                                </div> -->
                                 <el-table
                                     v-loading="loading_tab"
                                     :data="data_tab.arr"
@@ -506,6 +507,21 @@
                     />
                 </div>
             </el-dialog>
+            <el-dialog
+                v-model="switch_sure"
+                title="确认"
+                width="30%"
+            >
+            <div>
+                <!-- <img src="../../assets/images/xth.png"/> -->
+            是否确认添加此活动！</div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_sure=false">取消</el-button>
+                    <el-button type="primary" @click="clickFuncAddVote">确定</el-button>
+                </div>
+            </template>
+            </el-dialog>
         </page-main>
     </div>
 </template>
@@ -533,7 +549,7 @@ import {
     // APIpostComplaint
 } from '@/api/custom/custom.js'
 const page = ref(1)
-const tota = ref(1)
+const total = ref(0)
 const per_page = ref(15)
 const dataForm = reactive({
     item: {}
@@ -545,15 +561,24 @@ const data_tab = reactive({
     arr: []
 })
 const activity_tab = reactive({
-    obj: {}
+    arr: [{
+        docable:{
+            uinfo: {
+                name: ''
+            }
+        }
+    }]
 })
 const switch_list = ref(false)
-const Name = ref('')
 const activeName = ref('5')
 const data_search = reactive({
     obj: {}
 })
+const switch_sure=ref(false)
 const loading_tab = ref(false)
+const currentActivity=reactive({
+    item: {}
+})
 // 详情
 APIgetActivityEventDetails(route.query.id).then(res => {
     console.log(res)
@@ -574,10 +599,13 @@ const searchFunc = () => {
 // 刷新
 const refreshFunc = () => {
     page.value = 1
+    data_search.obj={}
     getActivitiesEventList()
     getTabListFunc()
     getSurveyListFunc(activeName.value)
     switch_search.value = false
+    // clickFuncAddVote()
+    console.log();
 }
 import {
     APIgetSurvey,
@@ -609,7 +637,7 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_announce.arr = res
-        // total.value = res.length
+        total.value = res.length
     })
 }
 const getSurveyListFunc = val => {
@@ -634,7 +662,7 @@ const getSurveyListFunc = val => {
             if (res.status === 200) {
                 loading_tab.value = false
                 data_tab.arr = res.data
-                // total.value = data_tab.arr.length
+                total.value = res.data.length
             }
         })
     }
@@ -649,14 +677,15 @@ const name = computed(() => {
 // 添加活动
 const addActiviesFunc = () => {
     switch_list.value = true
+    activeName.value = '5'
     data_search.obj = {}
-    activeName.value == '5'
     getTabListFunc()
     getSurveyListFunc(activeName.value)
 }
 const rowClickFunc = row => {
-
-    switch_list.value = false
+    console.log(row)
+    currentActivity.item=row
+    switch_sure.value = true
 }
 const getNameFunc = (arr, key) => {
     for (let i in arr) {
@@ -692,6 +721,46 @@ APIgetGroupList().then(res => {
         userData.arr = res.data
     }
 })
+// 确认添加
+const createdAt=reactive({
+    // arr: [{
+    //     uinfo: [{
+    //         name: ""
+    //         }]
+    // }]
+    arr: []
+})
+const activityName=ref('')
+const jointlyName=ref('')
+const voteName=ref('')
+const electName=ref('')
+const surveyName=ref('')
+const clickFuncAddVote=()=>{
+    let data={
+            tgt_id:currentActivity.item.id,
+            tgt_type: ''
+        }
+    if(activeName.value == '5'){
+        data.tgt_type='announce'
+    APIpostActivitiesEvent(route.query.id, data).then(() => {
+        getActivitiesEventList()
+        switch_sure.value = false
+        ElMessage.success('添加成功')
+    }).catch(() => {
+        ElMessage.error('添加失败')
+    })
+    activity_tab.created_at=currentActivity.item.created_at
+    }else{
+        data.tgt_type='survey'
+        APIpostActivitiesEvent(route.query.id, data).then(() => {
+        getActivitiesEventList()
+        switch_sure.value = false
+        ElMessage.success('添加成功')
+    }).catch(() => {
+        ElMessage.error('添加失败')
+    })
+    }
+}
 // 监听分页
 watch(page, () => {
     getActivitiesEventList()

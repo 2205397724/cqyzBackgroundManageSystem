@@ -763,7 +763,7 @@ export function APIdeleteGroupUser_perms(group, user, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 //权限管理
 export function APIgetPermsList(params) {
-    return api.get(`/perms`,{params:params})
+    return api.get(`/perms`, { params: params })
 }
 export function APIgetPermsDetail(perm) {
     return api.get(`/perms/${perm}`)
@@ -805,7 +805,7 @@ export function APIdeleteGroupRoles(gid, data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 //角色管理
 export function APIgetRolesList(params) {
-    return api.get(`/roles`,{params:params})
+    return api.get(`/roles`, { params: params })
 }
 export function APIgetRolesDetail(role) {
     return api.get(`/roles/${role}`)
@@ -834,7 +834,7 @@ export function APIdeleteRoles_perms(role, data) {
 // 用户组 /api/cc/{cc}/group
 // 列表
 export function APIgetGroupList(params) {
-    return api.get(`/groups`,{params:params})
+    return api.get(`/groups`, { params: params })
 }
 // 删除
 export function APIdeleteGroup(id) {
@@ -983,7 +983,7 @@ export function APIgetUserDetails(id) {
     return api.get('/users/' + id)
 }
 // 删除
-export function APIdeleteUser(type,id) {
+export function APIdeleteUser(type, id) {
     return api.delete(`/account/${type}/${id}`)
 }
 // 修改
@@ -991,15 +991,15 @@ export function APIputUser(id, data) {
     return api.put(`/user/${id}/account`, data)
 }
 // 添加
-export function APIpostUser(type,data) {
+export function APIpostUser(type, data) {
     return api.post(`/user-account/${type}`, data)
 }
 //获取业主身份的权限
-export function APIgetloginUserPerms(){
+export function APIgetloginUserPerms() {
     return api.get(`/me/mbr-perms`)
 }
 //获取我的所在用户组
-export function APIgetLoginUserGroup(){
+export function APIgetLoginUserGroup() {
     return api.get(`/me/groups`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -1451,8 +1451,8 @@ export function APIgetActivitiesEventList(vein, params) {
     return api2.get(`/vein/${vein}/docs`, { params: params })
 }
 // 删除
-export function APIdeleteActivitiesEvent(vein) {
-    return api2.delete(`/vein/${vein}/docs`)
+export function APIdeleteActivitiesEvent(vein, data) {
+    return api2.delete(`/vein/${vein}/docs`, data)
 }
 // 添加
 export function APIpostActivitiesEvent(vein, data) {
