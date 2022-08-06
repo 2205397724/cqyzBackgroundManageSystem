@@ -487,7 +487,8 @@ const activities_item = reactive({
 })
 import {
     APIgetActivitiesEventList,
-    APIpostActivitiesEvent } from '@/api/custom/custom.js'
+    APIpostActivitiesEvent,
+    APIdeleteActivitiesEvent } from '@/api/custom/custom.js'
 const getActivitiesEventList = () => {
     APIgetActivitiesEventList(activities_item.obj.id).then(res => {
         console.log(res)
@@ -515,6 +516,17 @@ const addPostFunc = () => {
         ElMessage.success('添加成功')
     }).catch(() => {
         ElMessage.error('添加失败')
+    })
+}
+const deleteFuncDialog=val=>{
+    console.log(val)
+    let data={
+        tgt_id: val.tgtid,
+        tgt_type: val.tgt_type
+    }
+    APIdeleteActivitiesEvent(val.vid,data).then(res=>{
+         refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 选择用户组name
