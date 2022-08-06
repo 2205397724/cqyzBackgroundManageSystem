@@ -709,7 +709,51 @@ const opts = {
     }, {
         key: 2,
         val: '小区ID'
-    }]
+    }],
+    // 活动事件类型
+    activityEvent_type: [{
+        key: 0,
+        val: 'announce',
+        leb: 'announce'
+    }, {
+        key: 1,
+        val: 'survey',
+        leb: 'survey'
+            // }, {
+            //     key: 2,
+            //     val: 'survey',
+            //     leb: 'jointly'
+            // }, {
+            //     key: 3,
+            //     val: 'survey',
+            //     leb: 'vote'
+            // }, {
+            //     key: 4,
+            //     val: 'survey',
+            //     leb: 'elect'
+    }],
+    activity_type: [{
+        key: 1,
+        val: 'survey'
+    }, {
+        key: 2,
+        val: 'jointly'
+    }, {
+        key: 3,
+        val: 'vote'
+    }, {
+        key: 4,
+        val: 'elect'
+    }],
+    activityStatus: [
+        { key: 1, val: '筹备阶段' },
+        { key: 2, val: '待审' },
+        { key: 3, val: '未开始' },
+        { key: 4, val: '进行中' },
+        { key: 5, val: '暂停' },
+        { key: 6, val: '终止' },
+        { key: 7, val: '已结束' }
+    ]
 }
 
 export async function getOpts(arr) {

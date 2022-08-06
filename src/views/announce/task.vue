@@ -11,38 +11,46 @@
             </div>
             <div class="search">
                 <el-row :gutter="10">
-                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
-                        <div class="search_th">发布人用户组：</div>
-
-                        <div class="search_tb searchUser">
-                            <div class="searchUserGroup">
-                                <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">发布人用户组：</div>
+                            <div class="search_tb searchUser">
+                                <div class="searchUserGroup">
+                                    <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
+                                </div>
                             </div>
                         </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
-                        <div class="search_th">
-                            任务派发单位：
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                任务派发单位：
+                            </div>
+                            <el-select v-model="data_search.obj.tolv" class="head-btn search_tb" placeholder="指定单位" clearable>
+                                <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </div>
-
-                        <el-select v-model="data_search.obj.tolv" class="head-btn search_tb" placeholder="指定单位" clearable>
-                            <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
-                        <div class="search_th">公示分类：</div>
-                        <div class="search_tb">
-                            <CascaderAnnounce v-model="data_search.obj.cid" />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">公示分类：</div>
+                            <div class="search_tb">
+                                <CascaderAnnounce v-model="data_search.obj.cid" />
+                            </div>
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
-                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                    </el-col>
-                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
-                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                        *搜索到相关结果共{{ total }}条。
+                    <el-col :xs="12" :md="12" :lg="10">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                *搜索到相关结果共{{ total }}条。
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -50,46 +58,31 @@
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+                class="tab_1"
             >
-                <!-- <el-table-column label="公示类型" width="250">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cate.name }} </span>
-                    </template>
-                </el-table-column> -->
-                <!-- <el-table-column label="任务范围" width="120">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
-                    </template>
-                </el-table-column> -->
-                <!-- <el-table-column label="任务部门" width="120">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.todata.name }} </span>
-                    </template>
-                </el-table-column> -->
                 <el-table-column label="任务ID" width="240">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }}</span>
+                        <span class="m-l-10">{{ scope.row.id }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="任务派发对象" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getNameFunc(userData.arr,scope.row.from) }}</span>
+                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="公示分类" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
+                        <span class="m-l-10">{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="接收对象等级" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv) }}</span>
+                        <span class="m-l-10">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="任务接收对象" width="150">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getNameFunc(userData.arr,scope.row.to) }}</span>
+                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.to) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否完成" width="150">
@@ -135,7 +128,7 @@
             </el-table>
             <el-pagination
                 v-model:current-page="page"
-                style="padding-top: 20px;"
+                class="p-t-20"
                 layout="total,prev,pager,next,jumper,"
                 :total="total"
                 :page-size="per_page"
@@ -161,7 +154,7 @@
                             label-width="130px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <div class="searchUserGroup">
                                 <SearchUserGroup ref="V_1" :name="userId" @checkName="checkNameFunc" />
                             </div>
                         </el-form-item>
@@ -183,7 +176,7 @@
                             label-width="130px"
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <div class="searchUserGroup">
                                 <SearchUserGroup ref="V" @checkName="checkNameFunc_1" />
                             </div>
                         </el-form-item>
@@ -200,7 +193,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
@@ -303,17 +296,6 @@
                             />
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="公示对象类型"
-                            label-width="120px"
-                            :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
-                        >
-                            <el-select v-model="from_examine.item.totype" placeholder="" clearable style="width: 100%;">
-                                <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.key == from_examine.item.totype ? item.val : item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label="公示分类"
@@ -332,11 +314,11 @@
                             <!-- <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''" /> -->
                             <!-- <Cascaders v-model="from_examine.item.toval" /> -->
                             <div
-                                style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;"
+                                class="total"
                                 @click="switch_choose_zone = true"
                             >
-                                <span v-if="!selectedZone_id" style="margin-left: 11px; color: #aaa;">区域</span>
-                                <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                <span v-if="!selectedZone_id" class="selecChina">区域</span>
+                                <span class="m-l-10">{{ selectedZone_id }}</span>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -364,7 +346,7 @@
                                 type="datetime"
                                 value-format="YYYY-MM-DD HH:mm:ss"
                                 placeholder=""
-                                style="width: 100%;"
+                                class="w_100"
                                 :default-value="new Date()"
                             />
                         </el-form-item>
@@ -380,7 +362,7 @@
                                 type="datetime"
                                 value-format="YYYY-MM-DD HH:mm:ss"
                                 placeholder=""
-                                style="width: 100%;"
+                                class="w_100"
                                 :default-value="new Date()"
                             />
                         </el-form-item>
@@ -391,8 +373,8 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.dep_id?from_error.msg.dep_id[0]:''"
                         >
-                            <div style="height: 100%;width: 100%;">
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <div class="wh_100">
+                                <div class="searchUserGroup">
                                     <SearchUserGroup @checkName="checkNameFunc" />
                                 </div>
                             </div>
@@ -404,16 +386,16 @@
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''"
                         >
-                            <editor v-model="announce.item.content" style="width: 100%;" />
+                            <editor v-model="announce.item.content" class="w_100" />
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <div style="margin-bottom: 10px;">
+                        <div class="m-b-10">
                             <el-button type="primary" plain @click="addServiceFunc">添加附件</el-button>
                         </div>
                         <div v-for="(item,i) in announce.item.affix" :key="i" class="serve-box">
                             <el-row :gutter="10">
-                                <el-col :xs="12" :sm="12" style="padding-top: 10px;">
+                                <el-col :xs="12" :sm="12" class="p-t-10">
                                     <el-form-item label="附件名称" :error="from_error.msg&&from_error.msg['affix.'+i+'.title']?from_error.msg['affix.'+i+'.title'][0]:''">
                                         <el-input
                                             v-model="item.title"
@@ -421,7 +403,7 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :xs="12" :sm="12" style="padding-top: 10px;">
+                                <el-col :xs="12" :sm="12" class="p-t-10">
                                     <el-form-item label="附件" :error="from_error.msg&&from_error.msg['affix.'+i+'.file']?from_error.msg['affix.'+i+'.file'][0]:''">
                                         <input v-show="false" :id="'fileRef'+i" :ref="'fileRef'+i" type="file" @change="(val)=>{fileChange(val,i)}">
                                         <el-button @click="chooseFile(i)">{{ item.file||'添加附件' }}</el-button>
@@ -438,7 +420,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_announce=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc1(ruleFormRef)">确定</el-button>
                 </div>
@@ -802,5 +784,14 @@ getOpts(['article_lv_1', 'task_ok']).then(res => {
 .el-form-item__content {
     overflow: hidden;
 }
-
+.total {
+    width: 100%;
+    height: 32px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+}
+.selecChina {
+    margin-left: 11px;
+    color: #aaa;
+}
 </style>

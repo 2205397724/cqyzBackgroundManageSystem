@@ -1,7 +1,6 @@
 <template>
-<div>
+   <div>
     <page-main>
-    <!-- 添加问卷 -->
     <div>
         <el-row :gutter="20" class="bottom-btn-box-1">
             <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
@@ -179,61 +178,61 @@
                                             v-model="from_examine.item.status"
                                             placeholder=""
                                         ></el-input> -->
-                                        <el-radio-group v-model="from_examine.item.status" class="ml-4">
-                                            <el-radio label="1">筹备阶段</el-radio>
-                                            <el-radio label="2">待审</el-radio>
-                                            <el-radio label="3">未开始</el-radio>
-                                            <el-radio label="4">进行中</el-radio>
-                                            <el-radio label="5">暂停</el-radio>
-                                            <el-radio label="6">终止</el-radio>
-                                            <el-radio label="7">已结束</el-radio>
-                                        </el-radio-group>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :md="24" :lg="12">
-                                    <el-form-item label="标题" label-width="120px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                        <el-input
-                                            v-model="from_examine.item.name"
-                                            placeholder=""
-                                        ></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :md="24" :lg="24">
-                                    <el-form-item label="问卷内容" label-width="120px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                        <el-input
-                                            v-model="from_examine.item.content"
-                                            type="textarea"
-                                            :autosize="{ minRows: 4, maxRows: 16 }"
-                                            placeholder=""
-                                            style="width: 100%;"
-                                        ></el-input>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
+                                            <el-radio-group v-model="from_examine.item.status" class="ml-4">
+                                                <el-radio label="1">筹备阶段</el-radio>
+                                                <el-radio label="2">待审</el-radio>
+                                                <el-radio label="3">未开始</el-radio>
+                                                <el-radio label="4">进行中</el-radio>
+                                                <el-radio label="5">暂停</el-radio>
+                                                <el-radio label="6">终止</el-radio>
+                                                <el-radio label="7">已结束</el-radio>
+                                            </el-radio-group>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :md="24" :lg="12">
+                                        <el-form-item label="标题" label-width="120px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                            <el-input
+                                                v-model="from_examine.item.name"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :md="24" :lg="24">
+                                        <el-form-item label="问卷内容" label-width="120px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                            <el-input
+                                                v-model="from_examine.item.content"
+                                                type="textarea"
+                                                :autosize="{ minRows: 4, maxRows: 16 }"
+                                                placeholder=""
+                                                style="width: 100%;"
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                        </div>
+                    </el-scrollbar>
+                </div>
+                <template #footer>
+                    <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                        <el-button @click="switch_examine=false">取消</el-button>
+                        <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,id)">确定</el-button>
                     </div>
-                </el-scrollbar>
-            </div>
-        <template #footer>
-            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                <el-button @click="switch_examine=false">取消</el-button>
-                <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,id)">确定</el-button>
-            </div>
-        </template>
-    </el-dialog>
-    <!-- 详情 -->
-    <el-dialog  v-model="switch_details" :title="data_details.item.name" width="80%" destroy-on-close="true">
-        <Detail :id="data_details.item.id"></Detail>
-        <template #footer>
-            <el-button  type="warning" plain @click="switch_details = false">取消</el-button>
-        </template>
-    </el-dialog>
-    </page-main>
-</div>
+                </template>
+            </el-dialog>
+            <!-- 详情 -->
+            <el-dialog v-model="switch_details" :title="data_details.item.name" width="80%" destroy-on-close="true">
+                <Detail :id="data_details.item.id" />
+                <template #footer>
+                    <el-button type="warning" plain @click="switch_details = false">取消</el-button>
+                </template>
+            </el-dialog>
 
+        </page-main>
+    </div>
 </template>
 
-<script lang="ts" setup>
+<script  setup>
     import {
         APIgetSurvey,
         APIaddSurvey,
@@ -312,188 +311,178 @@
             // 'created_at': '2022-07-13 11:00:00',
         }
     })
-    // 开始结束时间
-    const value1 = ref('')
-    const value2 = ref('')
-    // 修改弹出框的标题
-    const str_title = ref('添加')
-    const from_error = reactive({
-        msg: {}
+    // switch_details.value = true
+// Tabs标签页点击切换事件,切换显示不同状态的问卷
+// 切换标签后，根据label的值进行if判断，切换不同状态问卷
+const handleClick = tab => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        status: ''
+    }
+    // tab未label的值
+    if (tab === '筹备阶段') {
+        params.status = 1
+    } else if (tab === '待审') {
+        params.status = 2
+    } else if (tab === '未开始') {
+        params.status = 3
+    } else if (tab === '进行中') {
+        params.status = 4
+    } else if (tab === '暂停') {
+        params.status = 5
+    } else if (tab === '终止') {
+        params.status = 6
+    } else if (tab === '已结束') {
+        params.status = 7
+    } else {
+        return getTabListFunc()
+    }
+    APIgetSurvey(params).then(res => {
+        if (res.status === 200) {
+            loading_tab.value = false
+            data_tab.arr = res.data
+            total.value = data_tab.arr.length
+        }
+        // console.log(data_tab.arr)
+    }).catch(err => {
+        from_error.msg = err.data
     })
-    // 刷新
-    const refreshFunc = () => {
-        page.value = 1
-        getTabListFunc()
-    }
-    // 详情
-    const detailsFunc = val => {
-        data_details.item = ''
-        console.log(val.id)
-        APIgetSurveyDetails(val.id).then(res => {
-            if (res.status === 200) {
-                data_details.item = res.data
-                switch_details.value = true
+}
+// 监听分页
+watch(page, () => {
+    getTabListFunc()
+})
+// 同意拒绝提交
+const dialogExamineCloseFunc = (formEl, id) => {
+    from_error.msg = {}
+    id = from_examine.item.id
+    // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
+    from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
+    from_examine.item.endat = value2.value._value ? value2.value._value : from_examine.item.endat
+    from_error.msg = {}
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            if (str_title.value == '修改') {
+                console.log(from_examine.item)
+                APImodifySurvey(id, from_examine.item).then(res => {
+                    if (res.status === 200) {
+                        refreshFunc()
+                        // ElMessage.success(res.statusText)
+                        ElMessage.success('修改成功')
+                        switch_examine.value = false
+                    }
+                    // 如果传递了状态码，就修改状态信息
+                    APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
+                        refreshFunc()
+                    })
+                }).catch(err => {
+                    from_error.msg = err.data
+                })
+            } else {
+                APIaddSurvey(from_examine.item).then(res => {
+                    refreshFunc()
+                    // ElMessage.success(res.msg)
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    from_error.msg = err.data
+                })
             }
-        })
-        // switch_details.value = true
-    }
-    // Tabs标签页点击切换事件,切换显示不同状态的问卷
-    // 切换标签后，根据label的值进行if判断，切换不同状态问卷
-    const handleClick = (tab) => {
-        let params = {
-            page: page.value,
-            per_page: per_page.value,
-            status:''
+        } else {
+            return false
         }
-        // tab未label的值
-        if(tab === "筹备阶段") {
-            params.status = 1
-        }else if(tab === "待审"){
-            params.status = 2
-        }else if(tab === "未开始"){
-            params.status = 3
-        }else if(tab === "进行中") {
-            params.status = 4
-        }else if(tab === "暂停"){
-            params.status = 5
-        }else if(tab === "终止"){
-            params.status = 6
-        }else if(tab === "已结束"){
-            params.status = 7
-        }else {
-            return getTabListFunc()
-        }
-        APIgetSurvey(params).then(res => {
-            if (res.status === 200) {
-                loading_tab.value = false
-                data_tab.arr = res.data
-                total.value = data_tab.arr.length
-            }
-            // console.log(data_tab.arr)
-        }).catch(err => {
-            from_error.msg = err.data
-        })
-    }
-    // 监听分页
-    watch(page, () => {
-        getTabListFunc()
     })
-    // 同意拒绝提交
-    const dialogExamineCloseFunc = (formEl,id) => {
-        from_error.msg = {}
-        id = from_examine.item.id
-        // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
-        from_examine.item.startat = value1._value ? value1._value : from_examine.item.startat
-        from_examine.item.endat = value2._value ? value2._value : from_examine.item.endat
-        from_error.msg = {}
-        if (!formEl) return
-        formEl.validate(valid => {
-            if(valid){
-                if(str_title.value == '修改'){
-                    console.log(from_examine.item)
-                    APImodifySurvey(id,from_examine.item).then(res => {
-                        if (res.status === 200) {
-                            refreshFunc()
-                            // ElMessage.success(res.statusText)
-                            ElMessage.success('修改成功')
-                            switch_examine.value = false
-                        }
-                        // 如果传递了状态码，就修改状态信息
-                        APImodifySurveyStatus(id,{"status":from_examine.item.status}).then(res => {
-                            refreshFunc()
-                        })
-                    }).catch(err => {
-                        from_error.msg = err.data
-                    })
-                }else {
-                    APIaddSurvey(from_examine.item).then(res => {
-                        if (!res.code) {
-                            refreshFunc()
-                            // ElMessage.success(res.msg)
-                            ElMessage.success('添加成功')
-                            switch_examine.value = false
-                        }
-                    }).catch(err => {
-                        from_error.msg = err.data
-                    })
-                }
-            }else {
-                return false
-            }
-        })
+}
+// 获取列表api请求
+const getTabListFunc = () => {
+    // 请求信息
+    let params = {
+        page: page.value,
+        per_page: per_page.value
     }
-    // 获取列表api请求
-    const getTabListFunc = () => {
-        // 请求信息
-        let params = {
-            page: page.value,
-            per_page: per_page.value
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
+                continue
+            }
+            params[key] = data_search.obj[key]
         }
-        for (let key in data_search.obj) {
-            if (data_search.obj[key] || data_search.obj[key] === 0) {
-                if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
-                    continue
-                }
-                params[key] = data_search.obj[key]
-            }
+    }
+    loading_tab.value = true
+    APIgetSurvey(params).then(res => {
+        if (res.status === 200) {
+            loading_tab.value = false
+            data_tab.arr = res.data
+            total.value = data_tab.arr.length
         }
-        loading_tab.value = true
-        APIgetSurvey(params).then(res => {
-            if (res.status === 200) {
-                loading_tab.value = false
-                data_tab.arr = res.data
-                total.value = data_tab.arr.length
-            }
-            console.log(data_tab.arr)
-        }).catch(err => {
-            from_error.msg = err.data
-        })
+        console.log(data_tab.arr)
+    }).catch(err => {
+        from_error.msg = err.data
+    })
+}
+// 添加问卷
+const addResidentialFunc = () => {
+    from_error.msg = {}
+    str_title.value = '添加'
+    from_examine.item = {
+        type: 1,
+        areaall: 51,
+        author_cc: '500101001003',
+        author_cc_name: '王家坡社区',
+        author_tgt: '62bd6f76ee071f1789147d41',
+        author_tgt_region: null,
+        author_type: 1,
+        content: '明年结婚后',
+        created_at: '2022-08-04 08:52:21',
+        endat: '2022-08-31 12:00:00',
+        id: '62eb1845cb6268571f43d368',
+        name: '几天后',
+        pub: 1,
+        startat: '2022-08-01 12:00:00',
+        status: 2,
+        ticketall: 20,
+        uid: '62bc2250cda5d91c771a1de1',
+        updated_at: '2022-08-04 08:52:21',
+        utype: 'pt',
+        vmax: 0
     }
-    // 添加问卷
-    const addResidentialFunc = () => {
-        from_error.msg = {}
-        str_title.value = '添加'
-        // from_examine.item = {}
-        // 清空添加问卷内的内容
-        from_examine.item.name = ''
-        from_examine.item.startat = ''
-        from_examine.item.endat = ''
-        from_examine.item.content =''
-        switch_examine.value = true
-    }
-    // 删除
-    const deleteFunc = val => {
-        APIdeleteSurvey(val.id).then(res => {
-            refreshFunc()
-            // ElMessage.success(res.statusText)
-            ElMessage.success("删除成功")
-        }).catch(err => {
-            from_error.msg = err.data
-        })
-    }
-    // 修改问卷
-    const modifySurvey = val => {
-        from_error.msg = {}
-        str_title.value = '修改'
-        APIgetSurveyDetails(val.id).then(res => {
-            if (res.status == 200) {
-                from_examine.item = res.data
-                from_examine.item.pub += ''
-                from_examine.item.status += ''
-                switch_examine.value = true
-            }
-        }).catch(err => {
-            from_error.msg = err.data
-        })
-    }
-    // 搜索
-    const searchFunc = () => {
-        page.value = 1
-        switch_search.value = true
-        getTabListFunc()
-        // console.log('aaa')
-        // 搜索结束后，清空筛选条件
-        data_search.obj = {}
-    }
-    refreshFunc()
+    switch_examine.value = true
+}
+// 删除
+const deleteFunc = val => {
+    APIdeleteSurvey(val.id).then(res => {
+        refreshFunc()
+        // ElMessage.success(res.statusText)
+        ElMessage.success('删除成功')
+    }).catch(err => {
+        from_error.msg = err.data
+    })
+}
+// 修改问卷
+const modifySurvey = val => {
+    from_error.msg = {}
+    str_title.value = '修改'
+    APIgetSurveyDetails(val.id).then(res => {
+        if (res.status == 200) {
+            from_examine.item = res.data
+            from_examine.item.pub += ''
+            from_examine.item.status += ''
+            switch_examine.value = true
+        }
+    }).catch(err => {
+        from_error.msg = err.data
+    })
+}
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+    // console.log('aaa')
+    // 搜索结束后，清空筛选条件
+    data_search.obj = {}
+}
+refreshFunc()
 </script>

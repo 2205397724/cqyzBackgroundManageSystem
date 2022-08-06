@@ -1006,19 +1006,19 @@ export function APIgetLoginUserGroup(){
 // 产权
 // 列表
 export function APIgetPropertyList(params) {
-    return api2.get('/house-property-log', { params: params })
+    return api2.get('/house-property', { params: params })
 }
 // 详情
 export function APIgetPropertyDetails(log) {
-    return api2.get(`/house-property-log/${log}`)
+    return api2.get(`/house-property/${log}`)
 }
 // 删除
 export function APIdeleteProperty(log) {
-    return api2.delete(`/house-property-log/${log}`)
+    return api2.delete(`/house-property/${log}`)
 }
 // 修改
 export function APIputProperty(id, data) {
-    return api2.put('/house-property/', data)
+    return api2.put(`/house-property/${id}`, data)
 }
 // 添加
 export function APIpostProperty(data) {
@@ -1423,4 +1423,38 @@ export function APIaddSurveyAnswer(id, params) {
 // 获取未参与答卷的房屋
 export function APIgetNotParticipate(id) {
     return api.get('/s/' + id + '/doesnt')
+}
+// 事件脉络
+// 事件
+// 列表
+export function APIgetActivityEventList(params) {
+    return api2.get('/vein', { params: params })
+}
+// 详情
+export function APIgetActivityEventDetails(id) {
+    return api2.get(`/vein/${id}`)
+}
+// 删除
+export function APIdeleteActivityEvent(id) {
+    return api2.delete(`/vein/${id}`)
+}
+// 修改
+export function APIputActivityEvent(id, data) {
+    return api2.put(`/vein/${id}`, data)
+}
+// 添加
+export function APIpostActivityEvent(data) {
+    return api2.post('/vein', data)
+}
+// 事件活动
+export function APIgetActivitiesEventList(vein, params) {
+    return api2.get(`/vein/${vein}/docs`, { params: params })
+}
+// 删除
+export function APIdeleteActivitiesEvent(vein) {
+    return api2.delete(`/vein/${vein}/docs`)
+}
+// 添加
+export function APIpostActivitiesEvent(vein, data) {
+    return api2.post(`/vein/${vein}/docs`, data)
 }

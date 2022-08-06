@@ -2,36 +2,46 @@
     <div class="articletparticletpl">
         <page-main>
             <div>
-                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">发布公示</el-button>
+                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加档案</el-button>
             </div>
             <div class="search">
                 <el-row :gutter="10">
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            设备ID:
-                            <el-input v-model="data_search.obj.did" class="head-btn search_tb p-l-5" placeholder="设备ID" clearable />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                设备ID：
+                            </div>
+                            <el-input v-model="data_search.obj.did" class="head-btn search_tb" placeholder="设备ID" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            档案名称:
-                            <el-input v-model="data_search.obj.title" class="head-btn search_tb p-l-5" placeholder="档案名称" clearable />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                档案名称：
+                            </div>
+                            <el-input v-model="data_search.obj.title" class="head-btn search_tb" placeholder="档案名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
-                        <div class="search_th">是否显示：</div>
-                        <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
-                            <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">是否显示：</div>
+                            <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
+                                <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
-                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                    </el-col>
-                    <el-col v-show="switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
-                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ total }}条。
+                    <el-col :xs="12" :md="12" :lg="10">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                *搜索到相关结果共{{ total }}条。
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -40,7 +50,7 @@
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    style="width: 100%;min-height: 300px;"
+                    class="tab"
                 >
                     <el-table-column prop="id" label="档案名称" width="120">
                         <template #default="scope">
@@ -92,7 +102,7 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <div style="padding-top: 20px;">
+            <div class="p-t-20">
                 <el-pagination
                     v-model:current-page="page"
                     layout="total,prev,pager,next,jumper,"
@@ -158,7 +168,7 @@
                         </el-col>
                         <el-col :xs="24"><div class="details-tit-sm m-b-10">档案内容</div></el-col>
                         <el-col :md="24" :lg="24">
-                            <div style="margin-bottom: 10px;">
+                            <div class="m-b-10">
                                 <el-button type="primary" plain @click="addServiceFunc">添加档案内容</el-button>
                             </div>
                             <div v-for="(item,i) in from_examine.item.content" :key="i" class="serve-box">
@@ -208,7 +218,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>

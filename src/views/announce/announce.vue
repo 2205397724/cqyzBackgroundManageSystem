@@ -11,26 +11,34 @@
             </div>
             <div class="search">
                 <el-row :gutter="10">
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            名称:
-                            <el-input v-model="data_search.obj.name" class=".head-btn search_tb p-l-5" placeholder="名称" clearable />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                名称：
+                            </div>
+                            <el-input v-model="data_search.obj.name" class="search_tb" placeholder="名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">公示分类：</div>
-                        <div class="search_tb">
-                            <CascaderAnnounce v-model="data_search.obj.cid" />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">公示分类：</div>
+                            <div class="search_tb">
+                                <CascaderAnnounce v-model="data_search.obj.cid" />
+                            </div>
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
-                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                    </el-col>
-                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
-                        <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ total }}条。
+                    <el-col :xs="12" :md="12" :lg="10">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                *搜索到相关结果共{{ total }}条。
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -38,21 +46,21 @@
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;"
+                class="tab_1"
             >
                 <el-table-column prop="name" label="名称" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span class="m-l-10">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span class="m-l-10">{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cid" label="公示分类" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
+                        <span class="m-l-10">{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
                     </template>
                 </el-table-column>
 
@@ -85,7 +93,7 @@
                 </el-table-column>
                 <el-table-column />
             </el-table>
-            <div style="padding-top: 20px;">
+            <div class="p-t-20">
                 <el-pagination
                     v-model:current-page="page"
                     layout="total,prev,pager,next,jumper,"
@@ -130,8 +138,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <div style="margin-bottom: 10px;">
-                                <el-button style="margin-right: 10px;" @click="addServiceFunc">添加模板字段</el-button>
+                            <div class="m-b-10">
+                                <el-button class="m-r-10" @click="addServiceFunc">添加模板字段</el-button>
                             </div>
                             <div v-for="(item,i) in from_examine.item.fields" :key="i" class="serve-box">
                                 <el-row :gutter="10">
@@ -152,11 +160,11 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <div style="margin-bottom: 10px;">
-                                    <el-button style="margin-right: 10px;" @click="addServiceOptFunc(i)">添加选项字段</el-button>
+                                <div class="m-b-10">
+                                    <el-button class="m-r-10" @click="addServiceOptFunc(i)">添加选项字段</el-button>
                                 </div>
                                 <template v-if="from_examine.item.fields[i].prop&&from_examine.item.fields[i].prop.arr">
-                                    <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" :key="j" style="position: relative;width: 100%;">
+                                    <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" :key="j" class="options">
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                                 <el-form-item :label="'键Key'+j">
@@ -175,7 +183,7 @@
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
-                                        <div style="position: absolute;top: -10px;right: -10px;z-index: 9999;cursor: pointer;background-color: #fff;" @click="deleteServiceOptFunc(i,j)">
+                                        <div class="icon_1" @click="deleteServiceOptFunc(i,j)">
                                             <el-icon :size="20" color="#F56C6C">
                                                 <el-icon-circle-close />
                                             </el-icon>
@@ -193,7 +201,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
@@ -226,7 +234,7 @@
                     <div class="item">
                         <div class="left">模板字段</div>
                         <div class="right">
-                            <div v-for="(item,i) in data_details.item.fields" :key="i" style="border-bottom: 1px solid #eee;margin-bottom: 15px;">
+                            <div v-for="(item,i) in data_details.item.fields" :key="i" class="label">
                                 <div class="m-b-5">
                                     字段名称：{{ item.label }}
                                 </div>
@@ -263,6 +271,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -334,7 +343,6 @@ const addServiceOptFunc = index => {
 // import {
 //     APIgetTypeList
 // } from '@/api/custom/custom.js'
-import { Search, Plus } from '@element-plus/icons-vue'
 // const options = reactive({ arr: [] })
 // APIgetTypeList('announce').then(res => {
 //     options.arr = res.data
@@ -508,5 +516,21 @@ watch(page, () => {
 }
 ::v-deep .el-cascader {
     width: 100% !important;
+}
+.options {
+    position: relative;
+    width: 100%;
+}
+.icon_1 {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 9999;
+    cursor: pointer;
+    background-color: #fff;
+}
+.label {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
 }
 </style>

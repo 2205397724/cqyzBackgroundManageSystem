@@ -1,81 +1,92 @@
 <template>
     <div class="keep-on-record">
-        <page-main class="tit-box-box">
-            <div class="tit-box" :class="{'on':!search_str.obj.tit_on}" @click="search_str.obj.tit_on=''">
-                <div class="tit">
-                    <div>企业备案</div>
-                </div>
-            </div>
-            <div class="tit-box" :class="{'on':search_str.obj.tit_on==1}" @click="search_str.obj.tit_on=1">
-                <div class="tit">待审备案</div>
-                <div v-if="total" class="tips">{{ total }}</div>
-            </div>
-        </page-main>
         <page-main>
+            <div>
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加企业
+                </el-button>
+            </div>
             <div class="search">
-                <el-row>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            关键字:
-                            <el-input v-model="search_str.obj.keyword" class=".head-btn search_tb p-l-5" placeholder="" clearable />
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                关键字：
+                            </div>
+                            <el-input v-model="search_str.obj.keyword" class="head-btn search_tb" placeholder="" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
-                        <div class="search_th">区域代码：</div>
-                        <div class="search_tb">
-                            <Cascaders v-model="search_str.obj.china_code" />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">用户名：</div>
+                            <div class="search_tb">
+                                <div class="searchUserGroup">
+                                    <SearchUser ref="V" @checkName="checkUsersNameFunc" />
+                                </div>
+                            </div>
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
-                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                    </el-col>
-                    <el-col v-show="switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
-                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ total }}条。
+                    <el-col :xs="12" :md="12" :lg="10">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                *搜索到相关结果共{{ total }}条。
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
             <el-table
                 :data="from_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
+                class="tab_1"
             >
-                <el-table-column prop="name" label="企业名称" width="180" />
-                <el-table-column prop="user_id" label="user_id" width="250" />
-                <el-table-column prop="social_code" label="社会责任代码" width="140">
+                <el-table-column prop="logo" label="企业图标" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.social_code }} </span>
+                        <span class="m-l-10">{{ scope.row.logo }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="type" label="企业类型" width="140">
+                <el-table-column prop="name" label="企业名称" />
+                <el-table-column prop="user_id" label="用户名">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
+                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.user_id) }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="social_code" label="社会信用代码" width="140">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ scope.row.social_code }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="type" label="企业类型">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="logo" label="企业图标" width="140">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.logo }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="legal" label="legal" width="140">
+                <!-- <el-table-column prop="legal" label="法人" width="140">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.legal }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="contact" label="联系方式" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.contact }} </span>
+                        <span class="m-l-10">{{ scope.row.contact }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="desc" label="简介" width="140">
+                <!-- <el-table-column prop="desc" label="简介" width="140">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
                     </template>
-                </el-table-column>
-                <el-table-column />
+                </el-table-column> -->
+                <!-- <el-table-column /> -->
                 <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
@@ -110,7 +121,7 @@
                 :page-size="per_page"
                 background
                 hide-on-single-page
-                style="padding-top: 20px;"
+                class="p-t-20"
             />
         </page-main>
         <!-- 修改添加 -->
@@ -118,6 +129,7 @@
             v-model="switch_add"
             :title="str_title"
             width="50%"
+            @closed="add_dialog_close"
         >
             <div>
                 <el-form
@@ -126,8 +138,60 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="logo"
-                                label-width="70px"
+                                label="用户名"
+                                label-width="120px"
+                                :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
+                            >
+                                <div class="wh_100">
+                                    <div class="searchUserGroup">
+                                        <SearchUser ref="V_1" @checkName="checkUsersNameFunc" />
+                                    </div>
+                                </div>
+                                <!-- <el-input
+                                    v-model="from_add.obj.logo"
+                                    placeholder=""
+                                /> -->
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="公司名称"
+                                label-width="120px"
+                                :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_add.obj.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="社会信用代码"
+                                label-width="120px"
+                                :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_add.obj.social_code"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="公司类型"
+                                label-width="120px"
+                                :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
+                            >
+                                <el-select v-model="from_add.obj.type" class="head-btn search_tb" placeholder="审核状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.enterprise_type" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="企业图标"
+                                label-width="120px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <el-input
@@ -136,10 +200,22 @@
                                 />
                             </el-form-item>
                         </el-col>
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="法人"
+                                label-width="120px"
+                                :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_add.obj.legal"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col> -->
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="联系方式"
-                                label-width="70px"
+                                label-width="120px"
                                 :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
                             >
                                 <el-input
@@ -151,11 +227,12 @@
                         <el-col :md="24" :lg="24">
                             <el-form-item
                                 label="简介"
+                                label-width="120px"
                                 :error="err_add.obj&&err_add.obj.desc?err_add.obj.desc[0]:''"
                             >
                                 <el-input
                                     v-model="from_add.obj.desc"
-                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    :autosize="{ minRows: 4, maxRows: 6 }"
                                     type="textarea"
                                     placeholder=""
                                 />
@@ -165,7 +242,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_add=false">取消</el-button>
                     <el-button type="primary" @click="postFunc">确定</el-button>
                 </div>
@@ -183,8 +260,8 @@
                     <div class="right">{{ details_item.obj.id }} </div>
                 </div>
                 <div class="item">
-                    <div class="left">user_id</div>
-                    <div class="right">{{ details_item.obj.user_id }} </div>
+                    <div class="left">用户名</div>
+                    <div class="right">{{ getNameFunc(userData.arr,details_item.obj.user_id) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">企业名称</div>
@@ -202,10 +279,10 @@
                     <div class="left">图标</div>
                     <div class="right">{{ details_item.obj.logo }} </div>
                 </div>
-                <div class="item">
-                    <div class="left">legal</div>
+                <!-- <div class="item">
+                    <div class="left">法人</div>
                     <div class="right">{{ details_item.obj.legal }} </div>
-                </div>
+                </div> -->
                 <div class="item">
                     <div class="left">联系方式</div>
                     <div class="right">{{ details_item.obj.contact }} </div>
@@ -214,10 +291,10 @@
                     <div class="left">简介</div>
                     <div class="right">{{ details_item.obj.desc }} </div>
                 </div>
-                <div class="item">
+                <!-- <div class="item">
                     <div class="left">extra</div>
                     <div class="right">{{ details_item.obj.extra }} </div>
-                </div>
+                </div> -->
                 <div class="item">
                     <div class="left">创建时间</div>
                     <div class="right">{{ details_item.obj.created_at }} </div>
@@ -259,6 +336,11 @@ const refreshFunc = () => {
     search_str.obj = {}
     switch_search.value = false
     getTabListFunc()
+}
+const V = ref(null)
+const refreshFunc_1 = () => {
+    V.value.clearFunc()
+    refreshFunc()
 }
 const from_tab = reactive({
     arr: []
@@ -306,15 +388,35 @@ const from_add = reactive({
 const err_add = reactive({
     obj: {}
 })
+const checkUsersNameFunc = val => {
+    console.log(val)
+    search_str.obj.user_id = val.id
+    from_add.obj.user_id = val.id
+}
+// dialog关闭回调
+const V_1 = ref(null)
+const add_dialog_close = () => {
+    V_1.value.clearFunc()
+}
+// // 添加
+// const addFunc = () => {
+//     from_add.obj = {}
+//     err_add.obj = {}
+//     str_title.value = '添加'
+//     switch_add.value = true
+// }
 // 添加
-const addFunc = () => {
+const addResidentialFunc = () => {
     from_add.obj = {}
     err_add.obj = {}
     str_title.value = '添加'
     switch_add.value = true
+
 }
 const modifyFunc = val => {
-    from_add.obj = val
+    APIgetEnterpriseDetails(val.id).then(res => {
+        from_add.obj = res.data
+    })
     err_add.obj = {}
     str_title.value = '修改'
     switch_add.value = true
@@ -332,56 +434,47 @@ const detailsFunc = val => {
 const deleteFunc = val => {
     APIdeleteEnterprise(val.id).then(res => {
         refreshFunc()
-        ElMessage.success(res.msg)
+        ElMessage.success('删除成功')
     })
 }
-// from_add.obj = {
-//     user_id: '5sd54ggfer56gfggjh5546fg',
-//     name: '马式经',
-//     social_code: '20',
-//     type: 12,
-//     logo: 'consequat aliqua eiusmod dolore adipisicing',
-//     legal: 'minim culpa',
-//     contact: 'ea nisi voluptate',
-//     desc: 'labore non',
-//     extra: {}
-// }
-// APIpostEnterprise(from_add.obj).then(res => {
-//     refreshFunc()
-//     ElMessage.success(res.msg)
-//     switch_add.value = false
-// }).catch(err => {
-//     err_add.obj = err.data
-// })
 // 提交
 const postFunc = () => {
     if (str_title.value == '添加') {
-        // from_add.obj = {
-        //     'user_id': '5',
-        //     'name': '马式经',
-        //     'social_code': '20',
-        //     'type': 12,
-        //     'logo': 'consequat aliqua eiusmod dolore adipisicing',
-        //     'legal': 'minim culpa',
-        //     'contact': 'ea nisi voluptate',
-        //     'desc': 'labore non',
-        //     'extra': {}
-        // }
-        // APIpostEnterprise(from_add.obj).then(res => {
-        //     refreshFunc()
-        //     ElMessage.success(res.msg)
-        //     switch_add.value = false
-        // }).catch(err => {
-        //     err_add.obj = err.data
-        // })
-    } else if (str_title.value == '修改') {
-        APIputEnterprise(from_add.obj.id, from_add.obj).then(res => {
+        APIpostEnterprise(from_add.obj).then(res => {
             refreshFunc()
-            ElMessage.success(res.msg)
+            ElMessage.success('添加成功')
             switch_add.value = false
         }).catch(err => {
-            err_add.obj = err.data
+            ElMessage.error('添加失败')
         })
+    } else if (str_title.value == '修改') {
+        APIputEnterprise(from_add.obj.id, from_add.obj).then(() => {
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_add.value = false
+        }).catch(() => {
+            ElMessage.error('修改失败')
+        })
+    }
+}
+// 选择用户名
+const userData = reactive({
+    arr: []
+})
+import {
+    APIgetUserList
+} from '@/api/custom/custom.js'
+APIgetUserList().then(res => {
+    if (res.status == 200) {
+        console.log(res)
+        userData.arr = res.data
+    }
+})
+const getNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].username
+        }
     }
 }
 refreshFunc()

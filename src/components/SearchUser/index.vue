@@ -2,13 +2,8 @@
     <div style="height: 100%;display: inline-block;width: 100%;">
         <div
             class="tit-box"
-<<<<<<< HEAD
-            :class="{'nostr':!props.str}"
-            style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;boder: 1px solid #dcdfe6;"
-=======
             :class="{'nostr':!userName}"
             style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
->>>>>>> test
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
@@ -66,45 +61,47 @@
                 *搜索到相关结果共{{ total }}条。
             </div>
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击用户所在行选择该用户</div>
-            <el-table
-                v-loading="loading_tab"
-                :data="data_tab.arr"
-                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                @row-click="rowClickFunc"
-            >
-                <el-table-column prop="username" label="用户名" width="180">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.username }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="mobile" label="手机号" width="180">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="用户ID" width="250">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="id_card" label="身份证号" width="220">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="gender" label="性别" width="90">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.gender,scope.row.gender) }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="status_cert" label="认证状态" width="120">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column />
-            </el-table>
+            <el-scrollbar height="450px">
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                    @row-click="rowClickFunc"
+                >
+                    <el-table-column prop="username" label="用户名" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.username }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="mobile" label="手机号" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="用户ID" width="250">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id_card" label="身份证号" width="220">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="gender" label="性别" width="90">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.gender,scope.row.gender) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_cert" label="认证状态" width="120">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+            </el-scrollbar>
             <div style="padding-top: 20px;">
                 <el-pagination
                     v-model:current-page="page"
@@ -196,7 +193,11 @@ const rowClickFunc = row => {
 }
 const clearFunc = () => {
     emit('checkName', '')
+    userName.value = ''
 }
+defineExpose({
+    clearFunc
+})
 // 刷新
 const refreshFunc = () => {
     page.value = 1
