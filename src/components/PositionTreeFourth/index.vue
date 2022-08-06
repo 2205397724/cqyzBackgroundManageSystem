@@ -31,7 +31,7 @@ import {
 } from 'vue'
 const props = defineProps(['tree_item', 'type'])
 const type = ref(props.type)
-const emit = defineEmits(['checkFunc'])
+const emit = defineEmits(['checkFunc', 'checkFuncDate', 'checkChangeFunc'])
 const { tree_item } = toRefs(props)
 const treeDetail = reactive({
     arr: {}
@@ -66,12 +66,12 @@ const loadNode = (node, resolve) => {
         case 'region':
             APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
                 treeDetail.arr = res.data
-                console.log(res)
+                // console.log(res)
                 let tree_arr = []
                 if (res.status == 200) {
                     for (let i in res.data) {
                         if (res.data[i].level < 5) {
-                            tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code ,china_code:res.data[i].code})
+                            tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
                         } else {
                             tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
                         }

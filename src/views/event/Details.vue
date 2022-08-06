@@ -34,7 +34,7 @@
                                     <div class="left content">附件</div>
                                     <div class="right">
                                         <!-- 两种模式任君选择 -->
-                                        <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover" />
+                                        <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover" />
                                     <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                         </div> -->
@@ -85,14 +85,14 @@
                                                 <div>
                                                     <div class="sno m-b-10">
                                                         <span>操作人员: {{ Name }}</span>
-                                                        <span class="m-l-40">事件：{{ item.content }}</span>
+                                                        <span class="m-l-60">事件：{{ item.content }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="m-b-10">
                                                     {{ item.logable.content }}
                                                 </div>
                                                 <div>
-                                                    <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover" />
+                                                    <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover" />
                                                 </div>
                                             </div>
                                         </el-card>
@@ -104,7 +104,25 @@
                     </el-tab-pane>
                     <el-tab-pane label="业主评论" name="3">
                         <el-scrollbar height="800px">
-                            <comment-switch :id="route.query.id" />
+                            <!-- <comment-switch :id="route.query.id" /> -->
+                            <div class="isComment">
+                                <span>是否开启评论：</span>
+                                <el-switch
+                                    v-model="popup1.using"
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                    inline-prompt
+                                    active-text="开"
+                                    inactive-text="关"
+                                    @change="switchFnUse"
+                                />
+                                <div class="radioGroup">
+                                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(true)">
+                                        <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="item.key" size="large">{{ item.val }}</el-radio>
+                                    </el-radio-group>
+                                </div>
+                            </div>
                             <div>
                                 <el-table
                                     ref="multipleTableRef"
@@ -118,16 +136,16 @@
                                             <span>{{ scope.row.content }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="点赞" width="100">
+                                    <el-table-column v-if="tableData.arr.uname" label="评论人" width="110">
                                         <template #default="scope">
-                                            <span>{{ scope.row.zan }} </span>
+                                            <span>{{ scope.row.uname|| 'null' }} </span>
                                         </template>
                                     </el-table-column>
                                     <el-table-column label="状态" width="150">
                                         <template #default="scope">
-                                            <el-button v-show="scope.row.status == 10" type="warning">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 20" type="success">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 30" type="danger">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-button>
+                                            <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
+                                            <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
+                                            <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
                                         </template>
                                     </el-table-column>
                                     <el-table-column label="评分" width="100">
@@ -135,50 +153,53 @@
                                             <span>{{ scope.row.score }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="作者" width="100">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.atuname }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="时间">
+                                    <el-table-column label="评论时间">
                                         <template #default="scope">
                                             <span>{{ scope.row.created_at }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column fixed="right" label="操作" with="250">
+                                    <el-table-column fixed="right" label="操作" with="200">
                                         <template #default="scope">
                                             <el-button
                                                 v-show="scope.row.status == 10"
-                                                type="primary"
+                                                type="primary" size="small"
                                                 @click="toggleSelection(scope.row)"
                                             >
                                                 审核
                                             </el-button>
                                             <el-button
                                                 v-if="scope.row.status == 20 || scope.row.status == 30"
-                                                type="success"
+                                                type="success" size="small"
                                                 @click="toggleSelection(scope.row)"
                                             >
                                                 修改
                                             </el-button>
                                             <el-button
+                                                size="small"
                                                 @click="clickFuncDetail(scope.row)"
                                             >
                                                 详情
                                             </el-button>
                                             <el-button
-                                                type="danger"
+                                                type="primary"
+                                                size="small"
+                                                @click="popup2FnReply(scope.row)"
+                                            >
+                                                回复
+                                            </el-button>
+                                            <!-- <el-button
+                                                type="danger" size="small"
                                                 @click="toggleDelete(scope.row)"
                                             >
                                                 删除
-                                            </el-button>
+                                            </el-button> -->
                                         </template>
                                     </el-table-column>
                                 </el-table>
                             </div>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <el-tab-pane label="评分" name="4">
+                    <!-- <el-tab-pane label="评分" name="4">
                         <div>
                             <el-rate
                                 v-model="score"
@@ -188,254 +209,295 @@
                                 score-template="{value} 分"
                             />
                         </div>
-                    </el-tab-pane>
+                    </el-tab-pane> -->
                 </el-tabs>
             </div>
         </page-main>
-    </div>
-    <!-- 回复 -->
-    <el-dialog
-        v-model="popup_3.switch"
-        :title="popup_3.title"
-        width="40%"
-    >
-        <el-form
-            :model="replayLogable.item"
+        <!-- 修改添加 -->
+        <el-dialog
+            v-model="popup2.switch"
+            title="回复"
+            width="50%"
+            :append-to-body="true"
         >
-            <el-row :gutter="10">
-                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                    <el-form-item
-                        label="处理对象" prop="name"
-                        :error="popup_3.msg&&popup_3.msg.type?popup_3.msg.type[0]:''"
-                    >
-                        <el-select v-model="popup_3.form.type" class="head-btn" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                    <el-form-item
-                        label-width="70px"
-                        label="标记"
-                        :error="popup_3.msg&&popup_3.msg.flg?popup_3.msg.flg[0]:''"
-                    >
-                        <el-select v-model="popup_3.form.flg" class="head-btn" clearable placeholder="">
-                            <el-option v-for="(item,i) in opts_all.obj.flg_type" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item
-                        label-width="70px"
-                        label="回复附件"
-                        :error="popup_3.msg&&popup_3.msg.affix?popup_3.msg.affix[0]:''"
-                    >
-                        <el-upload
-                            ref="uploadRef"
-                            action="***"
-                            :auto-upload="false"
-                            :file-list="file_list3"
-                            :on-change="(file,files)=>{
-                                file_list3 = files
-                            }"
-                            :on-remove="(file,files)=>{
-                                file_list3 = files
-                            }"
+            <el-form
+                :model="popup2.form"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="打分"
+                            :error="popup2.error&&popup2.error.score?popup2.error.score[0]:''"
                         >
-                            <el-button type="primary">选择附件</el-button>
-                        </el-upload>
-                    </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item
-                        label-width="70px"
-                        label="回复内容"
-                        :error="popup_3.msg&&popup_3.msg.content?popup_3.msg.content[0]:''"
-                    >
-                        <el-input
-                            v-model="popup_3.form.content"
-                            class="head-btn"
-                            :autosize="{ minRows: 2, maxRows: 6 }"
-                            type="textarea"
-                            placeholder=""
-                        />
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-        <template #footer>
-            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                <el-button @click="popup_3.switch=false">取消</el-button>
-                <el-button type="primary" @click="popupFuncAdd3">确定</el-button>
-            </div>
-        </template>
-    </el-dialog>
-    <!-- 转办  -->
-    <el-dialog
-        v-model="popup_1.switch"
-        title="转办"
-        width="400px"
-    >
-        <el-form
-            :model="popup_1.form"
+                            <el-input-number v-model="popup2.form.score" :step="1" :max="popup1.scoreper" :min="0" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="70px"
+                            label="内容"
+                            :error="popup2.error&&popup2.error.content?popup2.error.content[0]:''"
+                        >
+                            <el-input
+                                v-model="popup2.form.content"
+                                :autosize="{ minRows: 2, maxRows: 6 }"
+                                type="textarea"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="closed">
+                    <el-button @click="popup2.switch=false">取消</el-button>
+                    <el-button type="primary" @click="popup2FnAdd">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 回复 -->
+        <el-dialog
+            v-model="popup_3.switch"
+            :title="popup_3.title"
+            width="40%"
         >
-            <el-row :gutter="10">
-                <el-col :xs="24" :sm="24" :md="24">
-                    <el-form-item
-                        label="投诉转办对象" prop="name"
-                        :error="popup_1.msg&&popup_1.msg.type?popup_1.msg.type[0]:''"
-                    >
-                        <el-select v-model="popup_1.form.type" class="head-btn" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-        <template #footer>
-            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                <el-button @click="popup_1.switch=false">取消</el-button>
-                <el-button type="primary" @click="popupFuncAdd">确定</el-button>
-            </div>
-        </template>
-    </el-dialog>
-    <!--审核 /修改 -->
-    <el-dialog
-        v-model="data_1.add_switch"
-        :title="data_1.add_title"
-        width="50%"
-    >
-        <el-form
-            :model="tableData.arr"
+            <el-form
+                :model="replayLogable.item"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label="处理对象" prop="name"
+                            :error="popup_3.msg&&popup_3.msg.type?popup_3.msg.type[0]:''"
+                        >
+                            <el-select v-model="popup_3.form.type" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="标记"
+                            :error="popup_3.msg&&popup_3.msg.flg?popup_3.msg.flg[0]:''"
+                        >
+                            <el-select v-model="popup_3.form.flg" class="head-btn" clearable placeholder="">
+                                <el-option v-for="(item,i) in opts_all.obj.flg_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="70px"
+                            label="回复附件"
+                            :error="popup_3.msg&&popup_3.msg.affix?popup_3.msg.affix[0]:''"
+                        >
+                            <el-upload
+                                ref="uploadRef"
+                                action="***"
+                                :auto-upload="false"
+                                :file-list="file_list3"
+                                :on-change="(file,files)=>{
+                                    file_list3 = files
+                                }"
+                                :on-remove="(file,files)=>{
+                                    file_list3 = files
+                                }"
+                            >
+                                <el-button type="primary">选择附件</el-button>
+                            </el-upload>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="70px"
+                            label="回复内容"
+                            :error="popup_3.msg&&popup_3.msg.content?popup_3.msg.content[0]:''"
+                        >
+                            <el-input
+                                v-model="popup_3.form.content"
+                                class="head-btn"
+                                :autosize="{ minRows: 2, maxRows: 6 }"
+                                type="textarea"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="closed">
+                    <el-button @click="popup_3.switch=false">取消</el-button>
+                    <el-button type="primary" @click="popupFuncAdd3">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 转办  -->
+        <el-dialog
+            v-model="popup_1.switch"
+            title="转办"
+            width="400px"
         >
-            <el-row :gutter="10">
-                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                    <el-form-item
-                        label-width="70px"
-                        label="状态"
-                        :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                    >
-                        <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                            <el-option v-for="(item) in opts_all.obj.comment_status" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                    <el-form-item
-                        label-width="70px"
-                        label="投诉内容"
-                        :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
-                    >
-                        <el-input
-                            v-model="data_1.add_form.content"
-                            class="head-btn"
-                            :autosize="{ minRows: 2, maxRows: 6 }"
-                            type="textarea"
-                            placeholder=""
-                        />
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-        <template #footer>
-            <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                <el-button @click="data1_switch=false">取消</el-button>
-                <el-button type="primary" @click="clickFuncAddVote">确定</el-button>
-            </div>
-        </template>
-    </el-dialog>
-    <!-- 详情 -->
-    <el-dialog
-        v-model="comment.switch_details"
-        title="详情"
-        width="50%"
-    >
-        <div class="details-box">
-            <div class="item">
-                <div class="left">评分</div>
-                <div class="right">{{ data_1.add_form.score }}</div>
-            </div>
-            <div class="item">
-                <div class="left">点赞数</div>
-                <div class="right">{{ data_1.add_form.zan }}</div>
-            </div>
-            <div class="item">
-                <div class="left">评论状态</div>
-                <div class="right">{{ getOptVal(opts_all.obj.comment_status,data_1.add_form.status) }}</div>
-            </div>
-            <div class="item">
-                <div class="left">评论时间</div>
-                <div class="right">{{ data_1.add_form.created_at }}</div>
-            </div>
-            <div class="item">
-                <div class="left">修改时间</div>
-                <div class="right">{{ data_1.add_form.updated_at }}</div>
-            </div>
-            <div class="item">
-                <div class="left">评论内容</div>
-                <div class="right">{{ data_1.add_form.content }}</div>
-            </div>
-        </div>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="comment.switch_details = false">取消</el-button>
-            </span>
-        </template>
-    </el-dialog>
-    <!-- 投诉回复 -->
-    <el-dialog
-        v-model="examine_switch"
-        title="回复"
-        width="50%"
-    >
-        <div class="details-box">
-            <div class="item">
-                <div class="left">是否确认审核</div>
-                <div class="right">
-                    <el-radio v-model="statusValue" label="1">是</el-radio>
-                    <el-radio v-model="statusValue" label="0">否</el-radio>
+            <el-form
+                :model="popup_1.form"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24">
+                        <el-form-item
+                            label="投诉转办对象" prop="name"
+                            :error="popup_1.msg&&popup_1.msg.type?popup_1.msg.type[0]:''"
+                        >
+                            <el-select v-model="popup_1.form.type" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="closed">
+                    <el-button @click="popup_1.switch=false">取消</el-button>
+                    <el-button type="primary" @click="popupFuncAdd">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!--审核 /修改 -->
+        <el-dialog
+            v-model="data_1.add_switch"
+            :title="data_1.add_title"
+            width="50%"
+        >
+            <el-form
+                :model="tableData.arr"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="状态"
+                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
+                        >
+                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
+                                <el-option v-for="(item) in opts_all.obj.comment_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item
+                            label-width="70px"
+                            label="投诉内容"
+                            :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
+                        >
+                            <el-input
+                                v-model="data_1.add_form.content"
+                                class="head-btn"
+                                :autosize="{ minRows: 4, maxRows: 8 }"
+                                type="textarea"
+                                placeholder=""
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="closed">
+                    <el-button @click="data1_switch=false">取消</el-button>
+                    <el-button type="primary" @click="clickFuncAddVote">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 详情 -->
+        <el-dialog
+            v-model="comment.switch_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">评分</div>
+                    <div class="right">{{ data_1.add_form.score }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">评论状态</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.comment_status,data_1.add_form.status) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">评论时间</div>
+                    <div class="right">{{ data_1.add_form.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">修改时间</div>
+                    <div class="right">{{ data_1.add_form.updated_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">评论内容</div>
+                    <div class="right">{{ data_1.add_form.content }}</div>
                 </div>
             </div>
-            <div class="item">
-                <div class="left">留言</div>
-                <!-- <div class="right">{{ dataForm.item.content }}</div> -->
-                <el-input v-model="dataForm.item.content" :autosize="{ minRows: 2, maxRows: 6 }" type="textarea" class="right" />
-            </div>
-        </div>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="examine_switch = false">取消</el-button>
-                <el-button @click="examineSure">确定</el-button>
-            </span>
-        </template>
-    </el-dialog>
-    <!-- 投诉结案 -->
-    <el-dialog
-        v-model="setting_switch"
-        title="结案"
-        width="50%"
-    >
-        <div class="details-box">
-            <div class="item">
-                <div class="left">是否确认结案</div>
-                <div class="right">
-                    <el-radio v-model="statusValue_1" label="8">是</el-radio>
-                    <el-radio v-model="statusValue_1" label="0">否</el-radio>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="comment.switch_details = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 投诉回复 -->
+        <el-dialog
+            v-model="examine_switch"
+            title="回复"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">是否确认审核</div>
+                    <div class="right">
+                        <el-radio v-model="statusValue" label="1">是</el-radio>
+                        <el-radio v-model="statusValue" label="0">否</el-radio>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">留言</div>
+                    <!-- <div class="right">{{ dataForm.item.content }}</div> -->
+                    <el-input v-model="dataForm.item.content" :autosize="{ minRows: 2, maxRows: 6 }" type="textarea" class="right" />
                 </div>
             </div>
-            <div class="item">
-                <div class="left">留言</div>
-                <!-- <div class="right">{{ dataForm.item.content }}</div> -->
-                <el-input v-model="dataForm.item.content" :autosize="{ minRows: 2, maxRows: 6 }" type="textarea" class="right" />
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="examine_switch = false">取消</el-button>
+                    <el-button @click="examineSure">确定</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 投诉结案 -->
+        <el-dialog
+            v-model="setting_switch"
+            title="结案"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">是否确认结案</div>
+                    <div class="right">
+                        <el-radio v-model="statusValue_1" label="8">是</el-radio>
+                        <el-radio v-model="statusValue_1" label="0">否</el-radio>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">留言</div>
+                    <!-- <div class="right">{{ dataForm.item.content }}</div> -->
+                    <el-input v-model="dataForm.item.content" :autosize="{ minRows: 2, maxRows: 6 }" type="textarea" class="right" />
+                </div>
             </div>
-        </div>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="setting_switch = false">取消</el-button>
-                <el-button @click="settingSure">确定</el-button>
-            </span>
-        </template>
-    </el-dialog>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="setting_switch = false">取消</el-button>
+                    <el-button @click="settingSure">确定</el-button>
+                </span>
+            </template>
+        </el-dialog>
+    </div>
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
@@ -461,7 +523,11 @@ import {
     // APIpostComplaint
 } from '@/api/custom/custom.js'
 const dataForm = reactive({
-    item: ''
+    item: {
+        uinfo: {
+            name: ''
+        }
+    }
 })
 const popup_3 = reactive({
     switch: false,
@@ -495,7 +561,7 @@ APIgetComplaintDetails(route.query.id, { log: 'all' }).then(res => {
             res.totlogs[i].logable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.totlogs[i].logable.affix[j])
         }
     }
-    Name.value = dataForm.item.inifo['name']
+    Name.value = dataForm.item.uinfo.name
     replayTotlogs.item = dataForm.item.totlogs
     replayLogable.item = replayTotlogs.item.logable
     console.log(replayTotlogs.item)
@@ -642,6 +708,56 @@ const tableData = reactive({
 //     })
 // }
 // 审核
+// 是否开启评论
+const popup1 = reactive({
+    switch: false,
+    using: false,
+    scoreper: 0
+})
+import {
+    APIgetCommentconfig,
+    APIpostCommentconfig,
+    APIdeleteCommentconfig,
+    APIpostComment
+} from '@/api/custom/custom.js'
+const switchFnUse = val => {
+    if (val) {
+        APIpostCommentconfig(route.query.id, { scoreper: popup1.scoreper }).then(res => {
+            // ElMessage.success('已开启')
+        })
+        return false
+    }
+    APIdeleteCommentconfig(route.query.id).then(res => {
+        // ElMessage.success('已开启')
+    })
+}
+const popup2 = reactive({
+    switch: false,
+    error: {},
+    form: {}
+})
+const popup2FnReply = val => {
+    popup2.error = {}
+    popup2.form = {
+        content: '',
+        atuid: val.uid,
+        atutype: val.utype,
+        score: 0,
+        tagid: val.id
+
+    }
+    popup2.switch = true
+}
+const popup2FnAdd = () => {
+    popup2.error = {}
+    APIpostComment(route.query.id, popup2.form).then(res => {
+        ElMessage.success('回复成功')
+        popup2.switch = false
+        getFuncCommentList()
+    }).catch(err => {
+        ElMessage.error('回复失败')
+    })
+}
 // 评论审核
 const status = ref(0)
 const data_1 = reactive({
@@ -738,7 +854,10 @@ const score = ref(3)
 // })
 // 获取评论列表
 const getFuncCommentList = () => {
-    APIgetCommentList({ tgtid: route.query.id }).then(res => {
+    let params = {
+        tgtid: route.query.id
+    }
+    APIgetCommentList(params).then(res => {
         console.log(res)
         tableData.arr = res
     })
@@ -773,7 +892,7 @@ const newcatob = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status']).then(res => {
+getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status', 'comment_scoreper']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.kind[1].key).then(res => {
         console.log(res)
@@ -825,6 +944,26 @@ import { Delete, Edit } from '@element-plus/icons-vue'
     }
     .el-button {
         margin-right: 20px;
+    }
+    .closed {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+    }
+    .radioGroup {
+        margin-left: 20px;
+        display: inline-block;
+    }
+    .isComment {
+        display: flex;
+        align-items: center;
+        margin: 10px 0 15px;
+    }
+    .image {
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
     }
 
     /* .el-button--primary {

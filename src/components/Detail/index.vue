@@ -28,13 +28,13 @@
       <span>结束时间：{{ data_details.item.endat }}</span>
     </div>
     <div>
-      <el-button @click="exchangeStatus('1')">筹备阶段</el-button>
-      <el-button @click="exchangeStatus('2')" type="primary">待审</el-button>
-      <el-button @click="exchangeStatus('3')" type="info">未开始</el-button>
-      <el-button @click="exchangeStatus('4')" type="success">进行中</el-button>
-      <el-button @click="exchangeStatus('5')" type="warning">暂停</el-button>
-      <el-button @click="exchangeStatus('6')" type="warning">终止</el-button>
-      <el-button @click="exchangeStatus('7')" type="danger">已结束</el-button>
+        <el-button size="small" @click="exchangeStatus('1')">筹备阶段</el-button>
+        <el-button size="small" @click="exchangeStatus('2')" type="primary">待审</el-button>
+        <el-button size="small" @click="exchangeStatus('3')" type="info">未开始</el-button>
+        <el-button size="small" @click="exchangeStatus('4')" type="success">进行中</el-button>
+        <el-button size="small" @click="exchangeStatus('5')" type="warning">暂停</el-button>
+        <el-button size="small" @click="exchangeStatus('6')" type="warning">终止</el-button>
+        <el-button size="small" @click="exchangeStatus('7')" type="danger">已结束</el-button>
     </div>
     <el-tabs v-model="activeName" @tab-click="changePane">
       <el-tab-pane label="问卷主题" name="1">
@@ -107,612 +107,90 @@
                 </div>
               </div>
             </div>
-            <div class="steps-column m-l-40">
-              <div class="steps-column-item">
-                <div>
-                  <text>时间:2022-07-14 12:00:00</text>
-                </div>
-                <div>
-                  操作人员：街道 主任 王先生
-                  <span class="m-l-40">事件：审核</span>
-                </div>
-              </div>
-            </div>
-            <div class="steps-column m-l-40">
-              <div class="steps-column-item">
-                <div>
-                  <text>时间:2022-07-14 12:00:00</text>
-                </div>
-                <div>
-                  操作人员：街道 主任 王先生
-                  <span class="m-l-40">事件：审核</span>
-                </div>
-              </div>
-            </div>
           </div>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="设置参与范围" name="2">
-        <el-scrollbar height="400px">
-          <!-- <div>
-                    <el-button type="primary" size="large" @click="addServeyTopic()">添加问卷范围</el-button>
-                </div> -->
-          <el-table
-            :data="data_range.arr"
-            :header-cell-style="{
-              background: '#fbfbfb',
-              color: '#999999',
-              'font-size': '12px',
-            }"
-            width="100%"
-          >
-            <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column prop="tgt_name" label="地区范围"></el-table-column>
-            <el-table-column label="活动参与范围类型">
-              <template #default="scope">
-                <span v-if="scope.row.type === 1">房屋</span>
-                <span v-if="scope.row.type === 2">单元</span>
-                <span v-if="scope.row.type === 3">楼栋</span>
-                <span v-if="scope.row.type === 4">小区</span>
-                <span v-if="scope.row.type === 5">区域</span>
-                <span>{{ scope.row.type }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column fixed="right" width="250px" label="操作">
-              <template #default="scope">
-                <el-popconfirm
-                  title="确定要删除当前项么?"
-                  cancel-button-type="info"
-                  @confirm="deleteRange(scope.row)"
+            </el-scrollbar>
+        </el-tab-pane>
+        <el-tab-pane label="设置参与范围" name="2" >
+            <el-scrollbar height="400px">
+                <el-button type="primary" @click="detail_set_area" class="m-tb-10">设置</el-button>
+               <el-table :data="data_range.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    width="100%"
                 >
-                  <template #reference>
-                    <el-button type="danger"> 删除 </el-button>
-                  </template>
-                </el-popconfirm>
-                <el-button type="primary" @click="detail_set_area"
-                  >设置</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="添加参与范围" name="6">
-        <el-button type="primary" class="m-10" @click="submit"
-          >确认设置</el-button
-        >
-        <el-scrollbar height="400px">
-          <!-- 树形结构 -->
-          <div class="tree-item">
-            <div style="height: calc(100% - 60px);">
-              <position-tree-third :id="props.id" :tree_item="tree_item" />
-            </div>
-          </div>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="问卷题目" name="3">
-        <el-scrollbar height="400px">
-          <div>
-            <el-button type="primary" @click="addServeyTopic()"
-              >添加问卷题目</el-button
-            >
-          </div>
-          <el-table
-            :data="topic_details.item"
-            :header-cell-style="{
-              background: '#fbfbfb',
-              color: '#999999',
-              'font-size': '12px',
-            }"
-            width="100%"
-          >
-            <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column prop="title" label="题目"></el-table-column>
-            <el-table-column prop="type" label="题目选项类型">
-              <template #default="scope">
-                <span v-if="scope.row.type == 1">单选</span>
-                <span v-else-if="scope.row.type == 2">多选</span>
-                <span v-else-if="scope.row.type == 3">主观填空</span>
-                <span v-else="scope.row.type == 0">文字描述</span>
-              </template>
-            </el-table-column>
-            <el-table-column fixed="right" width="250px" label="操作">
-              <template #default="scope">
-                <el-button
-                  border
-                  type="primary"
-                  size="small"
-                  @click="modifyServeyTopic(scope.row)"
-                >
-                  修改
-                </el-button>
-                <el-popconfirm
-                  title="确定要删除当前项么?"
-                  cancel-button-type="info"
-                  @confirm="deleteFunc(scope.row)"
-                >
-                  <template #reference>
-                    <el-button type="danger" size="small"> 删除 </el-button>
-                  </template>
-                </el-popconfirm>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="问卷调查结果" name="4">
-        <div class="m-b-20">
-          <el-button
-            class="m-r-20"
-            type="primary"
-            style="padding: 19px 18px; position: relative; top: 5px;"
-            @click="addAnswer()"
-          >
-            添加书面票
-          </el-button>
-          <el-radio-group v-model="radio" size="large" @change="handleClick">
-            <el-radio-button label="全部">全部</el-radio-button>>
-            <el-radio-button label="线上参与"
-              >线上参与({{ participate.on_line }})</el-radio-button
-            >>
-            <el-radio-button label="线下参与"
-              >线下参与({{ participate.off_line }})</el-radio-button
-            >>
-            <el-radio-button label="未参与"
-              >未参与({{ participate.notParticipateLength }})</el-radio-button
-            >>
-          </el-radio-group>
-        </div>
-        <!-- 未参与情况 -->
-        <el-scrollbar v-if="radio == '未参与'" height="400px">
-          <el-table :data="notParticipateList" border style="width: 100%;">
-            <el-table-column prop="name" label="房屋"></el-table-column>
-            <el-table-column prop="addr" label="地址"></el-table-column>
-            <el-table-column
-              prop="houseable_type"
-              label="类型"
-            ></el-table-column>
-            <el-table-column
-              prop="updated_at"
-              label="更新时间"
-            ></el-table-column>
-          </el-table>
-        </el-scrollbar>
-        <!-- 参与情况 -->
-        <el-scrollbar v-else height="400px">
-          <el-table :data="answer_list" border style="width: 100%;">
-            <el-table-column label="用户端类型">
-              <template #default="scope">
-                <span v-if="scope.row.uinfo.auth_type === 'pt'">总平台端</span>
-                <span v-else-if="scope.row.uinfo.auth_type === 'ptr'"
-                  >区域平台端</span
-                >
-                <span v-else-if="scope.row.uinfo.auth_type === 'gov'"
-                  >管理端</span
-                >
-                <span v-else-if="scope.row.uinfo.auth_type === 'pm'"
-                  >物业端</span
-                >
-                <span v-else>业主端</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="uinfo.name" label="答题人"></el-table-column>
-            <el-table-column prop="uinfo.mobile" label="电话"></el-table-column>
-            <el-table-column prop="idcard" label="idcard"></el-table-column>
-            <el-table-column
-              prop="updated_at"
-              label="参与时间"
-            ></el-table-column>
-            <el-table-column label="参与途径">
-              <template #default="scope">
-                <span v-if="scope.row.source === 1">线上参与</span>
-                <span v-else-if="scope.row.source === 2">线下参与</span>
-                <!-- <span v-else>未设置</span> -->
-                <span v-else>未参与</span>
-              </template>
-            </el-table-column>
-            <el-table-column fixed="right" width="180px" label="操作">
-              <template #default="scope">
-                <el-button
-                  type="primary"
-                  :icon="Search"
-                  size="small"
-                  @click="getAnswerDetail(scope.row.id)"
-                  >查看</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="业主评论" name="5">
-        <comment-switch :id="props.id" />
-        <el-scrollbar height="400px">
-          <el-table :data="comment_list" border style="width: 100%;">
-            <el-table-column type="selection" width="50" />
-            <el-table-column prop="content" label="评论内容" />
-            <el-table-column prop="zan" label="点赞" width="100" />
-            <el-table-column label="状态" width="100" align="center">
-              <template #default="scope">
-                <el-button
-                  v-if="scope.row.status == 10"
-                  size="small"
-                  round
-                  type="warning"
-                  >未审核</el-button
-                >
-                <el-button
-                  v-else-if="scope.row.status == 20"
-                  size="small"
-                  round
-                  type="success"
-                  >已审核</el-button
-                >
-                <el-button
-                  v-else="scope.row.status == 30"
-                  size="small"
-                  round
-                  type="danger"
-                  >审核失败</el-button
-                >
-              </template>
-            </el-table-column>
-            <el-table-column prop="score" label="评分" width="100" />
-            <el-table-column prop="atuname" label="作者" width="100" />
-            <el-table-column prop="updated_at" label="时间段" width="200" />
-            <el-table-column fixed="right" width="200" label="操作">
-              <template #default="scope">
-                <el-button
-                  border
-                  size="small"
-                  @click="getCommentDetail(scope.row.id)"
-                  >详情</el-button
-                >
-                <el-button
-                  border
-                  type="primary"
-                  size="small"
-                  @click="modifyComment(scope.row.id)"
-                  >修改</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-scrollbar>
-      </el-tab-pane>
-    </el-tabs>
-    <!-- 修改添加问卷题目 -->
-    <el-dialog v-model="switch_examine" :title="str_title" width="50%">
-      <div>
-        <el-scrollbar style="height: 450px;">
-          <div class="details-box p-lr-10">
-            <el-form :model="topic_examine.item">
-              <el-row :gutter="10">
-                <el-col>
-                  <el-form-item label="问卷题目" label-width="120px">
-                    <!-- <el-input v-model="topic_examine.item.title"></el-input> -->
-                    <el-input
-                      v-model="topic_examine.item.title"
-                      type="textarea"
-                      :autosize="{ minRows: 2, maxRows: 4 }"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col>
-                  <el-form-item label="类型" label-width="120px">
-                    <el-radio-group
-                      class="ml-4"
-                      v-model="topic_examine.item.type"
-                    >
-                      <el-radio label="1" size="large">单选</el-radio>
-                      <el-radio label="2" size="large">多选</el-radio>
-                      <el-radio label="3" size="large">主观填空</el-radio>
-                      <el-radio label="0" size="large">文字描述</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col>
-                  <el-form-item label="计分方式" label-width="120px">
-                    <el-radio-group
-                      class="ml-4"
-                      v-model="topic_examine.item.score_calc"
-                    >
-                      <el-radio label="0" size="large">不计分</el-radio>
-                      <el-radio label="1" size="large">取最小值</el-radio>
-                      <el-radio label="2" size="large">取最大值</el-radio>
-                      <el-radio label="3" size="large"
-                        >取平均值四舍五入</el-radio
-                      >
-                      <el-radio label="4" size="large"
-                        >取平均值向下取整</el-radio
-                      >
-                      <el-radio label="5" size="large"
-                        >取平均值向上取整</el-radio
-                      >
-                    </el-radio-group>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row v-if="topic_examine.item.score_calc != 0" :gutter="10">
-                <el-col>
-                  <el-form-item label="题目分值" label-width="120px">
-                    <el-input
-                      v-model="topic_examine.item.score"
-                      placeholder="0"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <!-- 选择题 -->
-            <div
-              v-if="
-                topic_examine.item.type == 1 || topic_examine.item.type == 2
-              "
-              class="m-l-40"
-            >
-              <div
-                class="width-100 m-b-10 display"
-                style="border-bottom: solid 1px #e4e7ed;"
-              >
-                <span class="size-lg strong" style="color: #409eff; flex: 1;"
-                  >选项</span
-                >
-                <el-button
-                  class="m-b-10"
-                  type="primary"
-                  size="small"
-                  @click="addopts()"
-                  >增加选项</el-button
-                >
-              </div>
-              <el-scrollbar height="140px">
-                <el-row :gutter="24" v-for="(item, i) in opts" :key="item.id">
-                  <el-col :span="14" class="flex">
-                    <span style="width: 40px;">选项内容</span>
-                    <el-input v-model="item.content"></el-input>
-                  </el-col>
-                  <el-col :span="4" class="flex">
-                    <span>排序</span>
-                    <el-input v-model="item.score"></el-input>
-                  </el-col>
-                  <el-col :span="4" class="flex">
-                    <span>分值</span>
-                    <el-input v-model="item.sort"></el-input>
-                  </el-col>
-                  <el-popconfirm
-                    title="确定要删除当前项么?"
-                    cancel-button-type="info"
-                    @confirm="opts.splice(i, 1)"
-                  >
-                    <template #reference>
-                      <el-button type="danger"> 删除 </el-button>
-                    </template>
-                  </el-popconfirm>
-                </el-row>
-              </el-scrollbar>
-            </div>
-            <!-- 主观填空题 -->
-            <div v-else-if="topic_examine.item.type == 3" class="m-l-40">
-              <div
-                class="width-100 m-b-10 display"
-                style="border-bottom: solid 1px #e4e7ed;"
-              >
-                <span class="size-lg strong" style="color: #409eff; flex: 1;"
-                  >题目</span
-                >
-              </div>
-              <el-input
-                v-model="topic_examine.item.content"
-                type="textarea"
-                :autosize="{ minRows: 2, maxRows: 4 }"
-              ></el-input>
-            </div>
-            <!-- 文字描述 -->
-            <div v-else-if="topic_examine.item.type == 0" class="m-l-40">
-              <div
-                class="width-100 m-b-10 display"
-                style="border-bottom: solid 1px #e4e7ed;"
-              >
-                <span class="size-lg strong" style="color: #409eff; flex: 1;"
-                  >文字描述</span
-                >
-              </div>
-              <el-input
-                v-model="topic_examine.item.title"
-                type="textarea"
-                :autosize="{ minRows: 2, maxRows: 4 }"
-              ></el-input>
-            </div>
-          </div>
-        </el-scrollbar>
-      </div>
-      <template #footer>
-        <div
-          style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
-"
-        >
-          <el-button @click="switch_examine = false">取消</el-button>
-          <el-button type="primary" @click="dialogExamineCloseFunc(id)"
-            >确定</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
-    <!-- 添加书面票 -->
-    <el-dialog v-model="switch_addAnswer" title="添加书面票" fullscreen>
-      <el-scrollbar>
-        <div class="m-b-20">
-          证件号码：<el-input v-model="addticket.idcard"></el-input>
-        </div>
-        <!-- 遍历题目 -->
-        <div v-for="(item, index) in topic_details.item" :key="item.id">
-          <!-- 单选题 -->
-          <div v-if="item.type === 1">
-            <div>题号(单选题){{ index + 1 }}、{{ item.title }}</div>
-            <div class="m-l-40" v-for="items in item.opts" :key="items.id">
-              <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
-                            <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
-                        </el-radio-group> -->
-              <el-radio-group v-model="addticket.answers[index].opt[0]">
-                <el-radio
-                  :label="items.id"
-                  @click="emitTickets(item.id, index)"
-                  >{{ items.content }}</el-radio
-                >
-              </el-radio-group>
-            </div>
-          </div>
-          <!-- 多选题 -->
-          <div v-else-if="item.type === 2">
-            <div>题号(多选题){{ index + 1 }}、{{ item.title }}</div>
-            <div class="m-l-40" v-for="items in item.opts" :key="items.id">
-              <el-checkbox-group v-model="addticket.answers[index].opt">
-                <el-checkbox
-                  :label="items.id"
-                  @click="emitTickets(item.id, index)"
-                  >{{ items.content }}</el-checkbox
-                >
-              </el-checkbox-group>
-            </div>
-          </div>
-          <!-- 主观填空 -->
-          <div v-else-if="item.type === 3">
-            <div>题号(主观题){{ index + 1 }}、{{ item.title }}</div>
-            <div class="m-l-40 m-tb-10">
-              <el-input
-                v-model="addticket.answers[index].content"
-                placeholder="请输入内容"
-                @click="emitTickets(item.id, index)"
-              />
-            </div>
-          </div>
-          <!-- 文字描述 -->
-          <div v-else-if="item.type === 0">
-            <div>(文字描述){{ item.title }}</div>
-          </div>
-        </div>
-      </el-scrollbar>
-      <template #footer>
-        <div
-          style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
-"
-        >
-          <el-button @click="switch_addAnswer = false">取消</el-button>
-          <el-button type="primary" @click="dialogAddSurveyAnswer()"
-            >确定</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
-    <!-- 查看答卷详情 -->
-    <el-dialog v-model="switch_answer_detail" title="用户答卷详情" fullscreen>
-      <el-scrollbar>
-        <div>证件号码：{{ answer_detail.item.idcard }}</div>
-        <div v-if="answer_detail.item.uinfo">
-          电话：{{ answer_detail.item.uinfo.mobile }}
-        </div>
-        <div>
-          参与途径：
-          <span v-if="answer_detail.item.source == 1">线上参与</span>
-          <span v-if="answer_detail.item.source == 2">线下参与</span>
-        </div>
-        <!-- 遍历题目 -->
-        <div v-for="(item, index) in topic_details.item" :key="item.id">
-          <!-- 单选题 -->
-          <div v-if="item.type === 1">
-            <div>题号(单选题){{ index + 1 }}、{{ item.title }}</div>
-            <div class="m-l-40" v-for="items in item.opts" :key="items.id">
-              <!-- <el-radio-group v-model="addticket.answers[index].opt[i]">
-                            <el-radio :label="items.id" @click="emitTickets(item.id,items.id,index)">{{items.content}}</el-radio>
-                        </el-radio-group> -->
-              <el-radio-group v-model="ischecked" v-if="answer_detail.item">
-                <el-radio
-                  v-if="answer_detail.item"
-                  :label="
-                    showTopic(
-                      items.id,
-                      answer_detail.item.answertopics[index].answeropts
-                    )
-                      ? '1'
-                      : '0'
-                  "
-                  disabled
-                  >{{ items.content }}</el-radio
-                >
-              </el-radio-group>
-            </div>
-          </div>
-          <!-- 多选题 -->
-          <div v-else-if="item.type === 2">
-            <div>题号(多选题){{ index + 1 }}、{{ item.title }}</div>
-            <div class="m-l-40" v-for="items in item.opts" :key="items.id">
-              <!-- <el-checkbox-group v-if="addticket.answers[index]" v-model="addticket.answers[index].opt">
-                            <el-checkbox v-if="items" :label="items.id">{{items.content}}</el-checkbox>
-                        </el-checkbox-group> -->
-              <el-checkbox-group v-model="checkList">
-                <el-checkbox
-                  v-if="answer_detail.item"
-                  :label="
-                    showTopic(
-                      items.id,
-                      answer_detail.item.answertopics[index].answeropts
-                    )
-                      ? '1'
-                      : '0'
-                  "
-                  disabled
-                  >{{ items.content }}</el-checkbox
-                >
-              </el-checkbox-group>
-            </div>
-          </div>
-          <!-- 主观填空 -->
-          <div v-else-if="item.type === 3">
-            <div>题号(主观题){{ index + 1 }}、{{ item.title }}</div>
-            <div class="m-l-40 m-tb-10" v-if="answer_detail.item">
-              <!-- <el-input v-if="addticket.answers[index]" v-model="addticket.answers[index].content" placeholder="请输入内容"/> -->
-              <el-input
-                :placeholder="answer_detail.item.answertopics[index].content"
-              />
-            </div>
-          </div>
-          <!-- 文字描述 -->
-          <!-- <div v-else>
-                    <div>题号(文字描述){{index+1}}：{{item.title}}</div>
-                    <div class="m-l-40">
-                        <el-input v-model="addticket.answers[index].content" placeholder="请输入内容"/>
+                    <el-table-column type="index" width="50"></el-table-column>
+                    <el-table-column prop="tgt_name" label="地区范围"></el-table-column>
+                    <el-table-column label="活动参与范围类型" >
+                        <template #default="scope">
+                            <span v-if="scope.row.type === 1">房屋</span>
+                            <span v-if="scope.row.type === 2">单元</span>
+                            <span v-if="scope.row.type === 3">楼栋</span>
+                            <span v-if="scope.row.type === 4">小区</span>
+                            <span v-if="scope.row.type === 5">区域</span>
+                            <span>{{scope.row.type}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed='right' width="250px" label="操作">
+                        <template #default="scope">
+                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteRange(scope.row)">
+                                <template #reference>
+                                    <el-button type="danger" size="small" >
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-scrollbar>
+        </el-tab-pane>
+        <el-tab-pane label="添加参与范围" name="6" >
+            <!-- <el-button type="primary" class="m-10" @click="submit">确认设置</el-button> -->
+            <el-scrollbar height="400px">
+                <!-- 树形结构 -->
+                <div class="tree-item" >
+                    <div style="height: calc(100% - 60px);">
+                        <position-tree-third
+                            :id="props.id"
+                            :tree_item = "tree_item"
+                        />
                     </div>
-                </div> -->
-        </div>
-      </el-scrollbar>
-      <template #footer>
-        <div
-          style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
-"
-        >
-          <el-button type="warning" plain @click="switch_answer_detail = false"
-            >取消</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
+                </div>
+            </el-scrollbar>
+        </el-tab-pane>
+        <el-tab-pane label="问卷题目" name="3">
+            <SurveyQuestions :id="props.id"></SurveyQuestions>
+        </el-tab-pane>
+        <el-tab-pane label="问卷调查结果" name="4">
+            <SurveyAnswer :id="props.id"></SurveyAnswer>
+        </el-tab-pane>
+        <el-tab-pane label="业主评论" name="5">
+            <comment-switch :id="props.id" />
+            <el-scrollbar height="400px">
+                <el-table :data="comment_list" style="width: 100%;">
+                    <el-table-column type="selection" width="50" />
+                    <el-table-column prop="content" label="评论内容" />
+                    <el-table-column prop="zan" label="点赞" width="100" />
+                    <el-table-column label="状态" width="100" align="center">
+                        <template #default="scope">
+                            <el-button v-if="scope.row.status == 10" size="small" round type="warning">未审核</el-button>
+                            <el-button v-else-if="scope.row.status == 20" size="small" round type="success">已审核</el-button>
+                            <el-button v-else-if="scope.row.status == 30" size="small" round type="danger">审核失败</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="score" label="评分" width="100" />
+                    <el-table-column prop="atuname" label="作者" width="100" />
+                    <el-table-column prop="updated_at" label="时间段" width="200" />
+                    <el-table-column fixed='right' width="200" label="操作">
+                        <template #default="scope">
+                            <el-button border size="small" @click="getCommentDetail(scope.row.id)">详情</el-button>
+                            <el-button border type="primary" size="small" @click="modifyComment(scope.row.id)">修改</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-scrollbar>
+        </el-tab-pane>
+    </el-tabs>
     <!-- 修改问卷评论 -->
     <el-dialog v-model="switch_comment" title="修改问卷评论">
       <div class="details-box p-lr-10">
@@ -743,10 +221,10 @@
       <template #footer>
         <div
           style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                align-items: center;
+                                                width: 100%;
 "
         >
           <el-button @click="switch_comment = false">取消</el-button>
@@ -804,10 +282,10 @@
       <template #footer>
         <div
           style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                align-items: center;
+                                                width: 100%;
 "
         >
           <el-button @click="switch_comment_detail = false">取消</el-button>

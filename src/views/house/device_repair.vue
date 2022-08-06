@@ -2,104 +2,108 @@
     <div class="articletparticletpl">
         <page-main>
             <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.obj.did" class="head-btn" placeholder="设备id" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.obj.type" class="head-btn" placeholder="类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="id" label="维保名称">
-                            <template #default="scope">
-                                <span>{{ scope.row.title }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="维保id">
-                            <template #default="scope">
-                                <span>{{ scope.row.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="设备id">
-                            <template #default="scope">
-                                <span>{{ scope.row.did }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cid" label="类型" width="90">
-                            <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.repair_type,scope.row.type) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="是否显示" width="90">
-                            <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">发布公示</el-button>
+            </div>
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="size-base p-l-20">
+                            设备id:
+                            <el-input v-model="data_search.obj.did" class="head-btn search_tb p-l-5" placeholder="设备id" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">类型：</div>
+                        <el-select v-model="data_search.obj.type" class="head-btn search_tb" placeholder="类型" clearable>
+                            <el-option v-for="(item,i) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                        <el-button
+                            class="m-l-20" type="primary" :icon="Search" @click="searchFunc"
+                        >
+                            筛选
+                        </el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+            </div>
+            <div>
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;"
+                >
+                    <el-table-column prop="id" label="维保名称">
+                        <template #default="scope">
+                            <span>{{ scope.row.title }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="维保id">
+                        <template #default="scope">
+                            <span>{{ scope.row.id }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="设备id">
+                        <template #default="scope">
+                            <span>{{ scope.row.did }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="cid" label="类型" width="90">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.repair_type,scope.row.type) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="是否显示" width="90">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+            </div>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -255,7 +259,7 @@
                         <el-image
                             v-for="(item,i) in data_details.item.affixs" :preview-src-list="data_details.item.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
                         />
-                        <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                    <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                         </div> -->
                     </div>
@@ -293,6 +297,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -359,12 +364,12 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetDeviceRepairDetails(val.id).then(res => {
-            res.affixs = []
-            for (let i in res.affix) {
-                res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])
-            }
-            data_details.item = res
-            switch_details.value = true
+        res.affixs = []
+        for (let i in res.affix) {
+            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])
+        }
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // 监听分页
@@ -378,17 +383,17 @@ import { getFilesKeys } from '@/util/files.js'
 const fromFnUpload = () => {
     if (str_title.value == '修改') {
         APIputDeviceRepair(from_examine.item.id, from_examine.item).then(res => {
-                refreshFunc()
-                ElMessage.success('修改成功')
-                switch_examine.value = false
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_examine.value = false
         }).catch(err => {
-                ElMessage.error('修改失败')
+            ElMessage.error('修改失败')
         })
     } else {
         APIpostDeviceRepair(from_examine.item).then(res => {
-                refreshFunc()
-                ElMessage.success('添加成功')
-                switch_examine.value = false
+            refreshFunc()
+            ElMessage.success('添加成功')
+            switch_examine.value = false
         }).catch(err => {
             ElMessage.error('添加失败')
         })
@@ -454,16 +459,16 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetDeviceRepairList(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteDeviceRepair(val.id).then(res => {
-            refreshFunc()
-            ElMessage.success('删除成功')
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -481,17 +486,17 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceRepairDetails(val.id).then(res => {
-            from_examine.item = res
-            let arr = []
-            for (let i in res.affix) {
-                if (res.affix[i]) {
-                    arr.push({
-                        name: res.affix[i]
-                    })
-                }
+        from_examine.item = res
+        let arr = []
+        for (let i in res.affix) {
+            if (res.affix[i]) {
+                arr.push({
+                    name: res.affix[i]
+                })
             }
-            file_list.value = arr
-            switch_examine.value = true
+        }
+        file_list.value = arr
+        switch_examine.value = true
     })
 }
 

@@ -2,156 +2,138 @@
     <div class="propertypropertylist">
         <page-main>
             <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" style="box-sizing: border-box;padding-bottom: 10px;font-size: 12px;">
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加产权
+                </el-button>
+            </div>
+            <div :class="{search3: isSearch3,search2: isSearch2}">
+                <el-row :gutter="10">
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">房屋id：</div>
+
+                        <div class="searchUser search_tb">
+                            <div class="searchUserGroup">
                                 <SearchHouse v-model:str="data_search.obj.house_id" />
                             </div>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-input v-model="data_search.obj.code_property" class="head-btn" placeholder="产权证号" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-input v-model="data_search.obj.code_room" class="head-btn" placeholder="地房籍号" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="4">
-                            <el-input v-model="data_search.obj.owner_name" class="head-btn" placeholder="产权人姓名" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="4">
-                            <el-input v-model="data_search.obj.owner_id_card" class="head-btn" placeholder="产权人证件号" clearable />
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="4">
-                            <el-input v-model="data_search.obj.owner_mobile" class="head-btn" placeholder="产权人手机号" clearable />
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.obj.is_bind_house" class="head-btn" placeholder="*是否绑定房屋" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.house_has_house" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.time_deal"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="交易时间"
-                                    end-placeholder="交易时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.created_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="创建时间"
-                                    end-placeholder="创建时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="24" :sm="12" :md="12" :lg="8" :xl="6" class="el-cascader-box-my">
-                            <div class="head-btn">
-                                <el-date-picker
-                                    v-model="data_search.obj.updated_at"
-                                    type="daterange"
-                                    range-separator="-"
-                                    start-placeholder="更新时间"
-                                    end-placeholder="更新时间"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </div>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="showForm">更多搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加产权</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="house_id" label="房屋ID" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.house_id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="code_property" label="产权证号" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.code_property }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="code_room" label="地房籍号" width="250">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.code_room }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="time_deal" label="交易时间" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.time_deal }} </span>
-                            </template>
-                        </el-table-column>
+                        </div>
+                    </el-col>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="size-base p-l-20">
+                            产权证号:
+                            <el-input v-model="data_search.obj.code_property" class="head-btn search_tb p-l-5" placeholder="产权证号" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="size-base p-l-20">
+                            地房籍号:
+                            <el-input v-model="data_search.obj.code_room" class="head-btn search_tb p-l-5" placeholder="地房籍号" clearable />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick==true" class="m-t-5">
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">
+                            产权人姓名：
+                            <el-input v-model="data_search.obj.owner_name" class="head-btn search_tb p-l-5 " placeholder="产权人姓名" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="search_th">交易时间：</div>
+                        <el-date-picker
+                            v-model="data_search.obj.time_deal"
+                            type="daterange"
+                            range-separator="-"
+                            start-placeholder="交易时间"
+                            end-placeholder="交易时间"
+                            style="width: 250px; margin-top: 5px;"
+                            value-format="YYYY-MM-DD"
+                        />
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div style="margin: auto; margin-top: 20px;" @click="btnClickFunc">
+                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                        <el-button v-if="btnClick==false" :icon="CaretTop" style="border: none;background-color: #fafafa;">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretBottom" style="border: none;background-color: #fafafa;">收起</el-button>
+                    </div>
+                </el-row>
+            </div>
+            <div>
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;"
+                >
+                    <el-table-column prop="house_id" label="房屋ID" width="250">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.house_id }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="code_property" label="产权证号" width="250">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.code_property }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="code_room" label="地房籍号" width="250">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.code_room }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="time_deal" label="交易时间" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.time_deal }} </span>
+                        </template>
+                    </el-table-column>
 
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                    <el-table-column />
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+            </div>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -373,6 +355,7 @@ import {
     watch
 } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const searchVisible = ref(false)
 // 数据
@@ -410,6 +393,14 @@ const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
+let btnClick = ref(false)
+const isSearch3 = ref(false)
+const isSearch2 = ref(true)
+const btnClickFunc = () => {
+    btnClick.value = !btnClick.value
+    isSearch3.value = !isSearch3.value
+    isSearch2.value = !isSearch2.value
+}
 // 搜索
 const searchFunc = () => {
     page.value = 1

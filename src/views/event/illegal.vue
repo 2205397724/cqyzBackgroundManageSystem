@@ -2,32 +2,33 @@
     <div class="articletparticletpl">
         <page-main>
             <div>
-                <div>
+                <div class="search">
                     <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-input v-model="data_search.obj.cid" class="head-btn" placeholder="违建对象id" clearable />
+                        <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                            <div class="search_th">违建对象：</div>
+                            <div class="searchUser search_tb">
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px; background-color: #fff;">
+                                    <SearchHouse v-model:str="data_search.obj.tgt" />
+                                </div>
+                            </div>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.obj.status" class="head-btn" placeholder="处理状态" clearable>
+                        <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
+                            <div class="search_th">处理状态：</div>
+                            <el-select v-model="data_search.obj.status" class="head-btn search_tb" placeholder="状态" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                            <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">搜索</el-button>
+                        </el-col>
+                        <el-col v-show="switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                            <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                            *搜索到相关结果共{{ total }}条。
                         </el-col>
                     </el-row>
                 </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <!-- <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加</el-button>
-                        </el-col>
-                    </el-row>
-                </div> -->
                 <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                     <el-table
                         v-loading="loading_tab"
@@ -35,24 +36,26 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="ID" >
+                        <el-table-column prop="id" label="违建ID">
                             <template #default="scope">
                                 <span>{{ scope.row.id }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="违建对象ID">
+                        <el-table-column prop="cid" label="违建对象">
                             <template #default="scope">
-                                <span>{{ scope.row.cid }} </span>
+                                <span>{{ scope.row.tgt }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cid" label="违建类型" width="120">
+                        <el-table-column prop="type" label="违建类型" width="120">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.illegal_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="cid" label="状态" width="100">
+                        <el-table-column prop="status" label="状态" width="100">
                             <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </span>
+                                <el-tag v-show="scope.row.status == 10" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </el-tag>
                             </template>
                         </el-table-column>
                         <el-table-column />
@@ -120,17 +123,17 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" >
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label-width="70px"
-                                label="违建ID"
+                                label="违建对象"
                                 :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
                             >
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;" v-show="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(from_examine.item.type==opts_all.obj.illegal_type[0].key)">
-                                <SearchHouse v-model:str="from_examine.item.cid" />
-                            </div>
-                        </el-form-item>
-                    </el-col>
+                                <div v-show="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(from_examine.item.type==opts_all.obj.illegal_type[0].key)" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchHouse v-model:str="from_examine.item.tgt" />
+                                </div>
+                            </el-form-item>
+                        </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="处理状态"
@@ -160,12 +163,12 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">ID</div>
+                    <div class="left">违建ID</div>
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">违建对象ID</div>
-                    <div class="right">{{ data_details.item.cid }}</div>
+                    <div class="left">违建对象</div>
+                    <div class="right">{{ data_details.item.tgt }}</div>
                 </div>
                 <div class="item">
                     <div class="left">违建类型</div>
@@ -209,6 +212,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -251,7 +255,7 @@ import {
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
-        options.arr = res
+    options.arr = res
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
@@ -273,8 +277,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetIllegalDetails(val.id).then(res => {
-            data_details.item = res
-            switch_details.value = true
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // 监听分页
@@ -289,18 +293,18 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputIllegal(from_examine.item.id, from_examine.item).then(res => {
-                        refreshFunc()
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     ElMessage.success('修改失败')
                 })
             } else {
                 console.log(from_examine.item)
-                APIpostIllegal("62cbf190ee857750a615a1d5",from_examine.item).then(res => {
-                        refreshFunc()
-                        ElMessage.success('添加成功')
-                        switch_examine.value = false
+                APIpostIllegal('62cbf190ee857750a615a1d5', from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     ElMessage.success('添加失败')
                 })
@@ -314,7 +318,7 @@ const dialogExamineCloseFunc = formEl => {
 const getTabListFunc = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value,
+        per_page: per_page.value
         // cid: "62cbf190ee857750a615a1d5",
         // status: 10
     }
@@ -350,16 +354,16 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetIllegalList(params).then(res => {
         console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteIllegal(val.id).then(res => {
-            refreshFunc()
-            ElMessage.success('删除成功')
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加模板
@@ -376,9 +380,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetIllegalDetails(val.id).then(res => {
-            console.log(res.cid)
-            from_examine.item = res
-            switch_examine.value = true
+        console.log(res.cid)
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 

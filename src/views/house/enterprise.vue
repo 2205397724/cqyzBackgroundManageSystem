@@ -12,18 +12,31 @@
             </div>
         </page-main>
         <page-main>
-            <div style="margin-bottom: 10px;">
-                <Cascaders v-model="search_str.obj.china_code" style="margin-bottom: 10px;margin-right: 10px;width: 200px;" />
-                <el-input v-model="search_str.obj.keyword" style="margin-bottom: 10px;margin-right: 10px;width: 200px;" placeholder="关键字" clearable />
-                <el-button style="margin-bottom: 10px;margin-right: 10px;" type="primary" @click="searchFunc">搜索</el-button>
+            <div class="search">
+                <el-row>
+                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
+                        <div class="size-base p-l-20">
+                            关键字:
+                            <el-input v-model="search_str.obj.keyword" class=".head-btn search_tb p-l-5" placeholder="" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="search_th">区域代码：</div>
+                        <div class="search_tb">
+                            <Cascaders v-model="search_str.obj.china_code" />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                    </el-col>
+                    <el-col v-show="switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
             </div>
-            <div v-show="switch_search" style="color: #aaa; font-size: 14px; margin-bottom: 10px;">
-                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                *搜索到相关结果共{{ total }}条。
-            </div>
-            <!-- <div style="margin-bottom: 10px;">
-                <el-button type="primary" @click="addFunc">添加企业</el-button>
-            </div> -->
             <el-table
                 :data="from_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -226,6 +239,7 @@
 import Cascaders from '@/components/Cascaders/index.vue'
 import { reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Search } from '@element-plus/icons-vue'
 const search_str = reactive({
     obj: {}
 })

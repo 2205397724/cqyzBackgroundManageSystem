@@ -2,29 +2,8 @@
     <div class="vote">
         <page-main>
             <div>
-                <el-input v-model="data_1.search.title" class="input-b-r" placeholder="报修名称" clearable />
-                <el-select v-model="data_1.search.status" class="input-b-r" clearable placeholder="状态">
-                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                </el-select>
                 <el-button
-                    class="btn-b-r" type="primary"
-                    @click="()=>{
-                        data_1.switch_search = true;
-                        data_1.page = 1;
-                        getFuncVoteList()
-                    }"
-                >
-                    搜索
-                </el-button>
-            </div>
-            <div v-show="data_1.switch_search" style="margin-bottom: 10px;">
-                <el-button style="margin-right: 10px;" @click="refreshFunc()">重置</el-button>
-                *搜索到相关结果共{{ data_1.total }}条。
-            </div>
-            <div>
-                <el-button
-                    class="head-btn" type="primary"
-                    @click="()=>{
+                    class="head-btn" type="primary" :icon="Plus" @click="()=>{
                         data_1.add_form={status:opts_all.obj.toushu_status[0].key};
                         data_1.add_error={};
                         data_1.add_switch=true;
@@ -34,6 +13,40 @@
                 >
                     添加报修
                 </el-button>
+            </div>
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
+                        <div class="size-base p-l-20">
+                            报修名称：
+                            <el-input v-model="data_1.search.title" class="head-btn search_tb p-l-5" placeholder="报修名称" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
+                        <div class="search_th">报修状态：</div>
+                        <el-select v-model="data_1.search.status" class="head-btn search_tb" clearable placeholder="状态">
+                            <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                        <el-button
+                            class="m-l-20" type="primary" :icon="Search"
+                            @click="()=>{
+                                data_1.switch_search = true;
+                                data_1.page = 1;
+                                getFuncVoteList()
+                            }"
+                        >
+                            筛选
+                        </el-button>
+                    </el-col>
+                    <el-col v-show="data_1.switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        *搜索到相关结果共{{ data_1.total }}条。
+                    </el-col>
+                </el-row>
             </div>
             <el-table
                 :data="data_1.list"
@@ -45,19 +58,27 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="报修id" >
+                <el-table-column label="报修id">
                     <template #default="scope">
                         <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="小区id" >
+                <el-table-column label="小区id">
                     <template #default="scope">
                         <span>{{ scope.row.zid }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态" width="90">
                     <template #default="scope">
-                        <span>{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </span>
+                        <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否匿名" width="90">
@@ -274,11 +295,11 @@
                     <div class="left">小区id</div>
                     <div class="right">{{ data_1.details_data.zid }}</div>
                 </div>
-                <div class="item" v-if="data_1.details_data.catpro">
+                <div v-if="data_1.details_data.catpro" class="item">
                     <div class="left">问题分类</div>
                     <div class="right">{{ data_1.details_data.catpro }}</div>
                 </div>
-                <div class="item" v-if="data_1.details_data.catob">
+                <div v-if="data_1.details_data.catob" class="item">
                     <div class="left">投诉对象</div>
                     <div class="right">{{ data_1.details_data.catob }}</div>
                 </div>
@@ -304,6 +325,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetComplaintList,
@@ -614,8 +636,8 @@ import {
 const popupFuncAdd4 = val => {
     popup_4.msg = {}
     let data = {
-        type:popup_4.form.type,
-        status:popup_4.form.status
+        type: popup_4.form.type,
+        status: popup_4.form.status
     }
     APIpostIllegal(popup_4.form.id, popup_4.form).then(res => {
         ElMessage.success('添加违建成功')
@@ -651,7 +673,7 @@ const opts_all = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['flg_type','tousu_type_kind' ,'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
+getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
     opts_all.obj = res
     APIgetTypeList(opts_all.obj.kind[1].key).then(res => {
         console.log(res)
