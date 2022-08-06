@@ -2,51 +2,63 @@
     <div class="articletparticletpl">
         <page-main>
             <div>
-                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加</el-button>
+                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加设备</el-button>
             </div>
-            <div :class="{search1: isSearch1,search2: isSearch2}">
-                <el-row>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            设备名称:
-                            <el-input v-model="data_search.obj.name" class="head-btn search_tb p-l-5" placeholder="设备名称" clearable />
+            <div :class="{search3: isSearch3,search2: isSearch2}">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                设备名称：
+                            </div>
+                            <el-input v-model="data_search.obj.name" class="head-btn search_tb" placeholder="设备名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">设备类型：</div>
-                        <el-select v-model="data_search.obj.type" class="head-btn search_tb" placeholder="类型" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">设备类型：</div>
+                            <el-select v-model="data_search.obj.type" class="head-btn search_tb" placeholder="类型" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">状态：</div>
-                        <el-select v-model="data_search.obj.status" class="head-btn search_tb" placeholder="状态" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">状态：</div>
+                            <el-select v-model="data_search.obj.status" class="head-btn search_tb" placeholder="状态" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </div>
                     </el-col>
                 </el-row>
-                <el-row v-if="btnClick==true" class="m-t-5">
-                    <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">是否启用：</div>
-                        <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
-                            <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">是否启用：</div>
+                            <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="8">
-                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                    </el-col>
-                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
-                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ total }}条。
+                    <el-col :xs="12" :md="12" :lg="10">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                *搜索到相关结果共{{ total }}条。
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <div style="margin: auto; margin-top: 20px;" @click="btnClickFunc">
+                    <div class="searchPlay" @click="btnClickFunc">
                         <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                        <el-button v-if="btnClick==false" :icon="CaretTop" style="border: none;background-color: #fafafa;">展开</el-button>
-                        <el-button v-if="btnClick==true" :icon="CaretBottom" style="border: none;background-color: #fafafa;">收起</el-button>
+                        <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
                     </div>
                 </el-row>
             </div>
@@ -55,7 +67,7 @@
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    style="width: 100%;min-height: 300px;"
+                    class="tab"
                 >
                     <el-table-column prop="id" label="设备名称" width="180">
                         <template #default="scope">
@@ -89,12 +101,12 @@
                     </el-table-column>
                     <el-table-column prop="id" label="档案" width="90">
                         <template #default="scope">
-                            <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceArchive(scope.row)">档案</div>
+                            <div class="archive" @click="deviceArchive(scope.row)">档案</div>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="维保记录" width="120">
                         <template #default="scope">
-                            <div style="color: #00daff; font-weight: bold; cursor: pointer;" @click="deviceRepair(scope.row)">维保记录</div>
+                            <div class="archive" @click="deviceRepair(scope.row)">维保记录</div>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
@@ -126,7 +138,7 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <div style="padding-top: 20px;">
+            <div class="p-t-20">
                 <el-pagination
                     v-model:current-page="page"
                     layout="total,prev,pager,next,jumper,"
@@ -259,11 +271,11 @@
                         </el-col>
                         <el-col :xs="24"><div class="details-tit-sm m-b-10">自定义字段</div></el-col>
                         <el-col :md="24" :lg="24">
-                            <div style="margin-bottom: 10px;">
+                            <div class="m-b-10">
                                 <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
                             </div>
-                            <div v-for="(item,i) in from_examine.item.extra" class="serve-box">
-                                <el-row :gutter="10" style="padding-top: 20px;">
+                            <div v-for="(item,i) in from_examine.item.extra" :key="i" class="serve-box">
+                                <el-row :gutter="10" class="p-t-20">
                                     <el-col :xs="12" :sm="12">
                                         <el-form-item label="字段名" :error="from_error.msg&&from_error.msg['extra.'+i+'.lab']?from_error.msg['extra.'+i+'.lab'][0]:''">
                                             <el-input
@@ -292,7 +304,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
@@ -528,11 +540,11 @@ APIgetTypeList('announce').then(res => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 let btnClick = ref(false)
-const isSearch1 = ref(false)
+const isSearch3 = ref(false)
 const isSearch2 = ref(true)
 const btnClickFunc = () => {
     btnClick.value = !btnClick.value
-    isSearch1.value = !isSearch1.value
+    isSearch3.value = !isSearch3.value
     isSearch2.value = !isSearch2.value
 }
 // 获取列表api请求
@@ -751,5 +763,10 @@ const addServiceFunc = index => {
         color: #aaa;
         font-size: 14px;
         margin-bottom: 20px;
+    }
+    .archive {
+        color: #00daff;
+        font-weight: bold;
+        cursor: pointer;
     }
 </style>

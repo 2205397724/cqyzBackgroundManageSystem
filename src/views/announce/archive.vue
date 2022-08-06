@@ -10,27 +10,27 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <!-- <el-row>
-                            <el-col :xs="8" :sm="8" :md="6" :lg="8" :xl="8" class="searchKey"> -->
-                        <div class="size-base p-l-20">
-                            名称:
-                            <!-- </el-col>
-                            <el-col :xs="8" :sm="8" :md="6" :lg="14" :xl="8"> -->
-                            <el-input v-model="data_search.name" class="head-btn search_tb p-l-5" placeholder="名称" />
-                        <!-- </el-col>
-                        </el-row> -->
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                名称：
+                            </div>
+                            <el-input v-model="data_search.name" class="head-btn search_tb" placeholder="名称" />
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="8" :md="6" :lg="3" :xl="8">
-                        <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                    </el-col>
-                    <el-col v-show="switch_search" class="" :xs="12" :sm="8" :md="6" :lg="21" :xl="8">
-                        <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ total }}条。
+                    <el-col :xs="12" :md="12" :lg="10">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                *搜索到相关结果共{{ total }}条。
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -38,7 +38,7 @@
                 v-loading="loading_tab"
                 :data="data_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;"
+                class="tab_1"
             >
                 <el-table-column prop="name" label="归档名" width="180">
                     <template #default="scope">
@@ -95,7 +95,7 @@
                 </el-table-column>
                 <el-table-column />
             </el-table>
-            <div style="padding-top: 20px;">
+            <div class="m-t-20">
                 <el-pagination
                     v-model:current-page="page"
                     layout="total,prev,pager,next,jumper,"
@@ -131,7 +131,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
@@ -151,7 +151,7 @@
             <el-table
                 :data="article_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid #ebeef4;box-sizing: border-box;"
+                class="tab_1"
             >
                 <el-table-column label="公示主题" width="180">
                     <template #default="scope">
@@ -165,7 +165,7 @@
                 </el-table-column>
                 <el-table-column label="状态" width="180">
                     <template #default="scope">
-                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary" style="margin-left: 6px;">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
                         <el-button v-show="scope.row.status == 2" class="btnNone noDeal" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
                         <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
                         <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
@@ -202,7 +202,7 @@
                 :page-size="per_page2"
                 background
                 hide-on-single-page
-                style="padding-top: 20px;"
+                class="p-t-20"
             />
         </el-dialog>
         <!-- 归档添加 -->
@@ -221,8 +221,8 @@
                             label="选择公示"
                             :error="err_msg.obj&&err_msg.obj.article_id?err_msg.obj.article_id[0]:''"
                         >
-                            <div style="height: 100%;width: 100%;">
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
+                            <div class="wh_100">
+                                <div class="searchUserGroup">
                                     <!-- <SearchArchive v-model:str="from_add.obj.article_id" /> -->
                                     <SearchArchive @checkUserNameFunc="checkUserNameFunc" />
                                 </div>
@@ -232,7 +232,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_add=false">取消</el-button>
                     <el-button type="primary" @click="addPostFunc">确定</el-button>
                 </div>

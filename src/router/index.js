@@ -72,6 +72,7 @@ const constantRoutes = [{
     // 民事
     // 活动
 import activityJointly from './modules/activity/jointly.js'
+import activityEvent from './modules/activity/event.js'
 import activitySurvey from './modules/activity/survey.js'
 import activityElect from './modules/activity/elect.js'
 import activityVote from './modules/activity/vote.js'
@@ -193,6 +194,7 @@ const asyncRoutes = [{
             auth: ['activity', '*']
         },
         children: [
+            activityEvent,
             activityJointly,
             activityVote,
             activityElect,

@@ -34,7 +34,7 @@
                                     <div class="left content">附件</div>
                                     <div class="right">
                                         <!-- 两种模式任君选择 -->
-                                        <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover" />
+                                        <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
                                     <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                         </div> -->
@@ -92,7 +92,7 @@
                                                     {{ item.logable.content }}
                                                 </div>
                                                 <div>
-                                                    <el-image v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover" />
+                                                    <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
                                                 </div>
                                             </div>
                                         </el-card>

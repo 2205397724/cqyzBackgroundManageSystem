@@ -128,7 +128,7 @@ const handleCheck = (data, checked) => {
         emit('checkFuncDate', data)
         return false
     }
-    emit('checkFunc', 'data')
+    emit('checkFunc', '')
 }
 const handleCheckChange = (data, selfSelected, childrenSelected) => {
     if (selfSelected) {
