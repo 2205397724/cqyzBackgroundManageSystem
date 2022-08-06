@@ -328,6 +328,26 @@ const loadNode = (node, resolve) => {
             id: res[i].id,
             type: "units",
             next_type: "house",
+          });
+        }
+        resolve(tree_arr);
+        emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
+      });
+      break;
+      case "house":
+      APIgetHouseListSort({
+        page: 1,
+        per_page: 7,
+        houseable_type: "units",
+        houseable_id: node.data.id,
+      }).then((res) => {
+        let tree_arr = [];
+        for (let i in res) {
+          tree_arr.push({
+            name: res[i].name,
+            id: res[i].id,
+            type: "house",
+            next_type: "house",
             leaf: true,
           });
         }
@@ -379,6 +399,7 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
     });
   }
   if (data.type == "units") {
+    console.log("ddddddddddddd")
     showFamily.value = true;
     emit("checkChangeFunc", data);
     unitsDetail.item = data;
