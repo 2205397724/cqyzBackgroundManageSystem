@@ -125,7 +125,7 @@
                         v-model:current-page="page"
                         layout="prev,next,jumper"
                         :page-size="per_page"
-                        :total="50"
+                        :total="150"
                         background
                         @next-click="next_click_page"
                         @prev-click="prev_click_page"

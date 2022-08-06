@@ -109,6 +109,7 @@ import {
     APIgetCityNotPm
 } from '@/api/custom/custom.js'
 import {ElMessage} from "element-plus"
+import md5 from 'md5'
 import area from '@/util/area'
 const choose_city_props=reactive({
     item:{
@@ -162,7 +163,7 @@ const choose_city_end=()=>{
 //进入首页进行判断
 import {auth, authAll} from '../util/index'
 const choose_city=()=>{
-    if(auth('*')||sessionStorage.getItem("isChooseCity")){
+    if(sessionStorage.getItem("utype")==md5('pt')||sessionStorage.getItem("isChooseCity")){
         sessionStorage.setItem("isChooseCity",false)
         userStore.isChooseCity=false
         switch_choose_city.value=false

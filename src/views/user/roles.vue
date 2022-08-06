@@ -18,25 +18,25 @@
                 >
                     <el-table-column prop="name" label="角色名称" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                            <span >{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="角色ID" width="230px">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                            <span >{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="group_id" label="所属用户组" width="230px">
+                    <el-table-column prop="group_id" label="所属用户组">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ find_groupid_name(scope.row.group_id)  }} </span>
+                            <span >{{ find_groupid_name(scope.row.group_id)  }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="spec" label="特有标识" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.spec }} </span>
+                            <span >{{ scope.row.spec }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="270">
+                    <el-table-column fixed="right" label="操作" width="270px">
                         <template #default="scope">
                             <el-button
                                 type="primary" size="small"
@@ -76,33 +76,42 @@
             </div>
         <!-- 添加修改 -->
          <el-dialog :title="add_or_post_text" v-model="switch_add_post" show-close width="40%" @close="close_post_put">
-            <el-form :model="from_data.item" label-width="90px" label-position="left" ref="ruleFormRef">
+            <el-form :model="from_data.item" label-width="90px"
+            :rules="addPutRules"
+            label-position="left" ref="ruleFormRefAddPut">
                 <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                     <el-form-item label="角色名称" prop="name">
                         <el-input v-model="from_data.item.name"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                     <el-form-item label="特有标识" prop="spec">
                         <el-input v-model="from_data.item.spec"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
-                <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                    <el-form-item label="所属用户组" prop="group_id">
-                        <el-input v-model="from_data.item.group_id"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="90px" label="用户组">
+                            <GroupListTabs
+                             @change="
+                                (val) => {
+                                    from_data.item.group_id = val.id;
+                                }
+                            "
+                            :placeholder="'请选择用户组'"
+                            />
+                        </el-form-item>
+            </el-col>
+          </el-row>
             </el-form>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_add_post=false">取消</el-button>
-                    <el-button type="primary" @click="add_post_submit(ruleFormRef)">确定</el-button>
+                    <el-button type="primary" @click="add_post_submit">确定</el-button>
                 </div>
             </template>
          </el-dialog>
@@ -123,27 +132,27 @@
                     :tree-props="{ children: 'children' }"
                     style="width: 100%;min-height: 300px;"
                 >
-                    <el-table-column prop="name" label="权限名称" width="180">
+                    <el-table-column prop="name" label="权限名称" width="180px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="权限ID" style="min-width: 230px;">
+                    <el-table-column prop="id" label="权限ID" width="240px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="utype" label="utype" width="180">
+                    <el-table-column prop="utype" label="utype" width="180px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.utype }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="desc" label="权限描述" width="180">
+                    <el-table-column prop="desc" label="权限描述" width="180px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" label="操作" width="100px">
                         <template #default="scope">
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
@@ -215,6 +224,18 @@ const refreshFunc=()=>{
 const current_roles_perms=reactive({
     id:""
 })
+//表单校验
+// const addPutRules=reactive({
+//     name:[
+//         {require:true,message:"请输入角色名称",triggerL:'blur'},
+//     ],
+//     spec:[
+//         {require:true,message:"请输入角色d标识",triggerL:'blur'},
+//     ],
+//     group_id:[
+//         {require:true,message:"请输入角色名称",triggerL:'blur'},
+//     ]
+// })
 //分页板块
 watch(page,()=>{
     getTabListFunc
@@ -233,19 +254,23 @@ const post_roles_perms=()=>{
     })
 }
 //根据用户组ID找到对应name
-const find_groupid_name=(val)=>{
+const groupList=reactive({arr:[]})
+const getGroupList=()=>{
     APIgetGroupList().then(res=>{
-        let name=""
-        res.data.forEach((item)=>{
-            for(let key in item){
-                if(key=='id'&&item['id']==val){
-                    name=item.name
-                }
-            }
-        })
-        return name
+        groupList.arr=res.data
     })
 }
+getGroupList()
+const find_groupid_name=(val)=>{
+    let name=""
+        groupList.arr.forEach((item)=>{
+                if(item['id']==val){
+                    name=item.name
+                }
+        })
+    return name
+}
+
 //关闭dialog事件
 const close_post_put=()=>{
     from_data.item={}
@@ -287,10 +312,8 @@ const addRolesFun=()=>{
     add_or_post_text.value="添加"
 }
 //添加修改submit
-const add_post_submit=formEl=>{
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
+const add_post_submit=()=>{
+        if (from_data.item.name&&from_data.item.spec&&from_data.item.group_id) {
             if (add_or_post_text.value == '修改') {
                 loading_tab.value=true
                 APIputRoles(from_data.item.id, from_data.item).then(res => {
@@ -317,8 +340,9 @@ const add_post_submit=formEl=>{
                    loading_tab.value=false
                 })
             }
+        }else{
+            ElMessage.error("请输入完整信息")
         }
-})
 }
 //获取角色列表
 const getTabListFunc=()=>{

@@ -196,7 +196,7 @@ function handleLogin() {
                 }
                 APIgetLoginUserGroup().then(res=>{
                     console.log(res)
-                    userStore.groupChinaCode=res.data.region_cc
+                    userStore.groupChinaCode=res.data[0].region_cc
                     localStorage.setItem("groupChinaCode",res.data[0].region_cc)
                 })
                 router.push(redirect.value)

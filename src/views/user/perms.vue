@@ -7,38 +7,6 @@
                   <el-button @click="addPerms" type="primary" class="m-b-10">添加权限</el-button>
                 </el-col>
             </el-row>
-            <el-dialog v-model="switch_add_perms" title="添加权限">
-                <el-row>
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                  <el-input style="min-width: 500px;" class="m-tb-10" v-model="from_add_perms.item.name">
-                    <template #prepend>
-                        权限名称
-                    </template>
-                  </el-input>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                  <el-input style="min-width: 500px;" class="m-b-10" v-model="from_add_perms.item.utype" placeholder="gov管理端、pm物业端、mbr业主端">
-                    <template #prepend>
-                        权限所属
-                    </template>
-                  </el-input>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                  <el-input style="min-width: 500px;" v-model="from_add_perms.item.desc" class="m-b-20">
-                    <template #prepend>
-                        权限描述
-                    </template>
-                  </el-input>
-                </el-col>
-            </el-row>
-            <template #footer>
-                <el-button type="primary" @click="addPerms_submit">确认</el-button>
-            </template>
-            </el-dialog>
         </div>
          <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                 <el-table
@@ -88,7 +56,7 @@
                                 type="success" size="small"
                                 @click="postPerms_rolesFun(scope.row)"
                             >
-                                赋予角色
+                                授予角色
                             </el-button>
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
@@ -115,27 +83,60 @@
                 @next-click="next_click"
   />
             </div>
+        <!-- 添加权限弹窗 -->
+        <el-dialog v-model="switch_add_perms" title="添加权限">
+            <el-form :model="from_add_perms.item">
+              <el-row>
+                <el-col :xs="8" :sm="12" :md="12" :lg="24">
+                  <el-form-item label="权限名称" prop="name">
+                    <el-input v-model="from_add_perms.item.name"></el-input>
+                  </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :xs="8" :sm="12" :md="12" :lg="24">
+                   <el-form-item label="权限类型" prop="utype">
+                    <el-select v-model="from_add_perms.item.utype">
+                        <el-option :label="item.val" :value="item.key" v-for="item in put_perms_utype.arr" :key="item.key"></el-option>
+                    </el-select>
+                   </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :xs="8" :sm="23" :md="23" :lg="24">
+                  <el-form-item label="权限描述" prop="desc">
+                     <el-input v-model="from_add_perms.item.desc"></el-input>
+                  </el-form-item>
+                </el-col>
+            </el-row>
+            </el-form>
+            <template #footer>
+                <el-button type="primary" @click="addPerms_submit">确认</el-button>
+            </template>
+            </el-dialog>
             <!-- 修改弹窗 -->
          <el-dialog title="修改权限" v-model="switch_put_perms" show-close width="40%" @close="close_put_perms">
             <el-form :model="from_add_perms.item" label-width="90px" label-position="left" ref="ruleFormRef">
                 <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                     <el-form-item label="权限名称" prop="name">
                         <el-input v-model="from_add_perms.item.name"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                     <el-form-item label="权限描述" prop="desc">
                         <el-input v-model="from_add_perms.item.desc"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                     <el-form-item label="权限所属" prop="utype">
-                        <el-input v-model="from_add_perms.item.utype"></el-input>
+                        <el-select v-model="from_add_perms.item.utype">
+                            <el-option :label="item.val" :value="item.key" v-for="item in put_perms_utype.arr" :key="item.key"></el-option>
+                        </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -160,25 +161,25 @@
                 >
                     <el-table-column prop="name" label="角色名称" width="180">
                         <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.name }} </span>
+                            <span >{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="角色ID"  style="min-width: 230px;">
+                    <el-table-column prop="id" label="角色ID"  width="240px">
                         <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.id }} </span>
+                            <span >{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="group_id" label="所属用户组"  style="min-width: 230px;">
+                    <el-table-column prop="group_id" label="所属用户组"  width="240px">
                         <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.group_id }} </span>
+                            <span >{{ scope.row.group_id }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="spec" label="特有标识" width="180">
                         <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.spec }} </span>
+                            <span >{{ scope.row.spec }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" label="操作" >
                         <template #default="scope">
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
@@ -333,6 +334,16 @@ const postPerms_roles=()=>{
     })
 }
 //修改权限
+const put_perms_utype=reactive({arr:[{
+        key:'gov',
+        val:'管理端'
+    },{
+        key:'pm',
+        val:"物业端"
+    },{
+        key:"mbr",
+        val:"业主端"
+    }]})
 const postPermsFun=(val)=>{
     from_add_perms.item.id=val.id
     switch_put_perms.value=true
@@ -388,6 +399,8 @@ const getTabListFun=()=>{
         data_tab_list.arr=res.data
     })
 }
+import {getOptVal,getOpts} from "@/util/opts"
+getOpts(['terminal_perms'])
 refreshFunc()
 </script>
 

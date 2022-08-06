@@ -88,11 +88,11 @@
           'font-size': '12px',
         }"
         style="
-                                                                                width: 100%;
-                                                                                min-height: 300px;
-                                                                                overflow: auto;
-                                                                                border: 1px solid #ebeef4;
-                                                                                box-sizing: border-box;
+                                                                                                                                                                width: 100%;
+                                                                                                                                                                min-height: 300px;
+                                                                                                                                                                overflow: auto;
+                                                                                                                                                                border: 1px solid #ebeef4;
+                                                                                                                                                                box-sizing: border-box;
 "
       >
         <el-table-column label="备案名称" width="220">
@@ -141,10 +141,10 @@
               <router-link
                 class="el-button m-lr-10"
                 style="
-                                                                                                                                                text-decoration: inherit;
-                                                                                                                                                color: inherit;
-                                                                                                                                                width: 52px;
-                                                                                                                                                height: 26px;
+                                                                                                                                                                                                                                                                                                text-decoration: inherit;
+                                                                                                                                                                                                                                                                                                color: inherit;
+                                                                                                                                                                                                                                                                                                width: 52px;
+                                                                                                                                                                                                                                                                                                height: 26px;
 "
                 :to="{
                   name: 'recordManangeDetail',
@@ -193,7 +193,7 @@
       <el-scrollbar height="600px">
         <el-form ref="ruleFormRef" :model="from_record.item">
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="类型">
                 <el-cascader
                   :options="recordKindList.arr"
@@ -206,14 +206,14 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="备案小区">
                 <div
                   style="
-                                                                                                                                                                width: 100%;
-                                                                                                                                                                height: 32px;
-                                                                                                                                                                border: 1px solid #dcdfe6;
-                                                                                                                                                                border-radius: 4px;
+                                                                                                                                                                                                                                                                                                                                width: 100%;
+                                                                                                                                                                                                                                                                                                                                height: 32px;
+                                                                                                                                                                                                                                                                                                                                border: 1px solid #dcdfe6;
+                                                                                                                                                                                                                                                                                                                                border-radius: 4px;
 "
                   @click="click_add_record_zone_id"
                 >
@@ -223,7 +223,7 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="备案主体">
                 <GroupListTabs
                   @change="
@@ -231,12 +231,13 @@
                       from_record.item.group_id = val.id;
                     }
                   "
+                  :placeholder="'请选择备案主体'"
                 />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="备案主题">
                 <el-input
                   :value="add_record_title_computed"
@@ -246,7 +247,7 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="状态">
                 <el-switch
                   v-if="add_put_title == '修改备案'"
@@ -271,16 +272,16 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="备案编号">
                 <el-input v-model="from_record.item.sno" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
               <el-form-item label-width="70px" label="说明">
-                <el-input v-model="from_record.item.desc" />
+                <el-input v-model="from_record.item.desc"  type="textarea"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -316,7 +317,7 @@
                   </el-upload>
                 </el-form-item>
               </el-col>
-              <el-col :xs="12" :sm="12">
+              <el-col :xs="12" :sm="12" >
                 <el-form-item label-width="70px" label="文件类型">
                   <el-input v-model="item.type" placeholder="" />
                 </el-form-item>

@@ -3,7 +3,7 @@
         <div
             class="tit-box"
             :class="{'nostr':!props.str}"
-            style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
+            style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;boder: 1px solid #dcdfe6;"
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
@@ -103,8 +103,8 @@
             <div style="padding-top: 20px;">
                 <el-pagination
                     v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
+                    layout="prev,next,jumper,"
+                    :total="200"
                     :page-size="per_page"
                     background
                     hide-on-single-page
@@ -173,7 +173,7 @@ const getTabListFunc = () => {
     //         data_tab.arr = res
     //         total.value = res.length
     // })
-    APIgetUserList().then(res => {
+    APIgetUserList(params).then(res => {
         if (res.status == 200) {
             console.log(res)
             loading_tab.value = false

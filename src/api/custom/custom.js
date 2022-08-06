@@ -968,19 +968,19 @@ export function APIgetUserList(params) {
 }
 // 详情
 export function APIgetUserDetails(id) {
-    return api.get('/pt/user-account/' + id)
+    return api.get('/users/' + id)
 }
 // 删除
-export function APIdeleteUser(id) {
-    return api.delete('/pt/user-account/' + id)
+export function APIdeleteUser(type,id) {
+    return api.delete(`/account/${type}/${id}`)
 }
 // 修改
 export function APIputUser(id, data) {
-    return api.put('/pt/user-account/' + id, data)
+    return api.put(`/user/${id}/account`, data)
 }
 // 添加
-export function APIpostUser(data) {
-    return api.post('/pt/user-account', data)
+export function APIpostUser(type,data) {
+    return api.post(`/user-account/${type}`, data)
 }
 //获取业主身份的权限
 export function APIgetloginUserPerms(){

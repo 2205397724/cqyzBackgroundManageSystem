@@ -52,7 +52,7 @@
         </el-scrollbar>
       </div>
       <template #footer>
-        <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;">
+        <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;" effect="dark">
           <el-option :label="item.value" :value="item.type" v-for="item in do_type.item" :key="item.type"></el-option>
         </el-select>
         <el-button type="primary" @click="submit" :disabled="!selected_do_type"
@@ -396,57 +396,54 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
 .main-box {
     height: 100%;
     height: 500px;
-    .dialog {
-        position: relative;
-        .tree {
-            width: 35%;
-            display: inline-block;
+    .tree {
+        width: 35%;
+        display: inline-block;
+    }
+    .table {
+        display: inline-block;
+        width: 65%;
+        height: 500px;
+        position: absolute;
+        .header {
+            width: 100%;
+            height: 40px;
+            text-align: center;
+            font-size: 22px;
         }
-        .table {
-            display: inline-block;
-            width: 65%;
-            height: 500px;
-            position: absolute;
-            .header {
-                width: 100%;
-                height: 40px;
-                text-align: center;
-                font-size: 22px;
+        .house_box {
+            height: 51px;
+            width: 99%;
+            border: 2px solid #999;
+            border-bottom: none;
+            display: flex;
+            &:last-child {
+                border-bottom: 2px solid #999;
             }
-            .house_box {
-                height: 51px;
-                width: 99%;
-                border: 2px solid #999;
-                border-bottom: none;
+            .floor {
+                width: 56px;
+                height: 50px;
+                border-right: 1px solid #999;
+                text-align: center;
+                line-height: 50px;
+                background-color: #424141;
+                color: white;
+                font-size: 20px;
+            }
+            .house_item {
+                width: 90%;
                 display: flex;
-                &:last-child {
-                    border-bottom: 2px solid #999;
-                }
-                .floor {
-                    width: 56px;
-                    height: 50px;
-                    border-right: 1px solid #999;
-                    text-align: center;
-                    line-height: 50px;
-                    background-color: #424141;
-                    color: white;
+                align-items: center;
+                .item {
+                    margin-left: 10px;
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid #999;
                     font-size: 20px;
-                }
-                .house_item {
-                    width: 90%;
-                    display: flex;
-                    align-items: center;
-                    .item {
-                        margin-left: 10px;
-                        width: 40px;
-                        height: 40px;
-                        border: 1px solid #999;
-                        font-size: 20px;
-                        line-height: 40px;
-                        text-align: center;
-                        &.bg {
-                            background-color: #409eff;
-                        }
+                    line-height: 40px;
+                    text-align: center;
+                    &.bg {
+                        background-color: #409eff;
                     }
                 }
             }

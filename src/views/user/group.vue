@@ -3,8 +3,11 @@
     <page-main>
       <el-row :gutter="10">
         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+            <el-input v-model="data_search.item.name" placeholder="用户组名称"></el-input>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
           <el-cascader
-            v-model="region_code"
+            v-model="data_search.item.region_cc"
             class="head-btn"
             placeholder="区域"
             :props="cascader_props"
@@ -14,16 +17,17 @@
           />
         </el-col>
         <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-          <el-input
-            placeholder="类型"
-            v-model="data_search.item.type"
-          ></el-input>
-        </el-col>
-        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-          <el-input
-            placeholder="区域类型"
-            v-model="data_search.item.region_type"
-          ></el-input>
+          <el-select
+                  v-model="data_search.item.type"
+                  placeholder="请选择类型"
+                >
+                  <el-option
+                    v-for="item in opts_all.obj.toushu_return_type"
+                    :key="item.key"
+                    :value="item.key"
+                    :label="item.val"
+                  />
+                </el-select>
         </el-col>
       </el-row>
       <el-row>
@@ -38,7 +42,7 @@
               <el-button
                 style="margin-right: 10px;"
                 type="primary"
-                @click="refreshFunc()"
+                @click="refreshSearch()"
                 >重置</el-button
               >
               *搜索到相关结果共{{ data_search.item.total }}条。
@@ -58,10 +62,10 @@
       </el-row>
       <div
         style="
-                    width: 100%;
-                    overflow: auto;
-                    border: 1px solid #ebeef4;
-                    box-sizing: border-box;
+                                        width: 100%;
+                                        overflow: auto;
+                                        border: 1px solid #ebeef4;
+                                        box-sizing: border-box;
 "
       >
         <el-table
@@ -228,10 +232,10 @@
                                 /> -->
                 <div
                   style="
-                                        width: 100%;
-                                        height: 32px;
-                                        border: 1px solid #dcdfe6;
-                                        border-radius: 4px;
+                                                                                width: 100%;
+                                                                                height: 32px;
+                                                                                border: 1px solid #dcdfe6;
+                                                                                border-radius: 4px;
 "
                   @click="click_add_group_zone_id"
                 >
@@ -245,10 +249,10 @@
       <template #footer>
         <div
           style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                align-items: center;
+                                                width: 100%;
 "
         >
           <el-button @click="switch_examine = false">取消</el-button>
@@ -291,11 +295,11 @@
           'font-size': '12px',
         }"
         style="
-                    width: 100%;
-                    min-height: 300px;
-                    margin-bottom: 10px;
-                    border: 1px solid #ebeef5;
-                    border-radius: 6px;
+                                        width: 100%;
+                                        min-height: 300px;
+                                        margin-bottom: 10px;
+                                        border: 1px solid #ebeef5;
+                                        border-radius: 6px;
 "
         max-height="400"
       >
@@ -397,29 +401,9 @@
       <div>
         <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
           <el-row :gutter="10">
-            <el-col :md="24" :lg="12">
-              <el-form-item label="用户ID" prop="id" label-width="250px">
-                <div
-                  style="
-                                        height: 100%;
-                                        width: 100%;
-                                        box-sizing: border-box;
-                                        padding-bottom: 10px;
-"
-                >
-                  <div
-                    style="
-                                            box-sizing: border-box;
-                                            border-radius: 4px;
-                                            border: 1px solid #dcdfe6;
-                                            width: 100%;
-                                            height: 100%;
-                                            font-size: 14px;
-"
-                  >
+            <el-col :sm="24" :md="24" :lg="12">
+              <el-form-item label="用户ID" prop="id">
                     <SearchUser v-model:str="from_opt_val.obj.user_id" />
-                  </div>
-                </div>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -438,10 +422,10 @@
       <template #footer>
         <div
           style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                align-items: center;
+                                                width: 100%;
 "
         >
           <el-button type="primary" @click="dialogOptValFunc">确定</el-button>
@@ -839,6 +823,12 @@ let from_examine = reactive({
   },
 });
 //检索查询板块
+const refreshSearch=()=>{
+    data_search.item.switch=false
+    APIgetGroupList().then((res) => {
+    data_tab.arr = res.data;
+  });
+}
 const data_search = reactive({
   item: {
     type: "",
@@ -853,14 +843,16 @@ const data_search = reactive({
 const data_searchFun = () => {
   let params = {};
   for (let key in data_search.item) {
-    if (data_search.item[key]) {
-      params[key] = data_search.item.key;
+    if (data_search.item[key]&&key!=='switch') {
+      params[key] = data_search.item[key];
     }
   }
   data_search.item.switch = true;
+  console.log(params)
   APIgetGroupList(params).then((res) => {
-    opt_tab.arr = res.data;
-    data_search.item.total = res.data.length;
+    console.log(res)
+    data_tab.arr = res.data;
+    data_search.item.total =  res.data.length
   });
 };
 let from_addRoles = reactive({

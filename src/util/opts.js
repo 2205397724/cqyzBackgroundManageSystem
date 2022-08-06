@@ -396,6 +396,16 @@ const opts = {
         key: 'gov',
         val: '行政管理端'
     }],
+    terminal_perms:[{
+        key:'gov',
+        val:'管理端'
+    },{
+        key:'pm',
+        val:"物业端"
+    },{
+        key:"mbr",
+        val:"业主端"
+    }],
     // 用户端类型
     terminal_num: [{
         key: 1,

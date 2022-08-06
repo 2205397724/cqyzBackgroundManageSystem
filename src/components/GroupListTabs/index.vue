@@ -1,6 +1,7 @@
 <template>
    <div @click="click" style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;">
-     <span style="margin-left: 11px;">{{selectGroup_name.item}}</span>
+     <span v-if="!selectGroup_name.item" style="margin-left: 11px;color: #dcdfe6;">{{placeholder}}</span>
+     <span style="margin-left: 11px;" v-else>{{selectGroup_name.item}}</span>
      <el-dialog title="选择备案主体" v-model="switchTabs">
         <el-tabs>
           <el-tab-pane label="住建">
@@ -62,7 +63,7 @@
 
 <script setup>
 import{
-    ref,reactive,watch,defineEmits,defineProps
+    ref,reactive,watch,defineEmits,defineProps,
 } from 'vue'
 import {
     APIgetGroupList
@@ -73,19 +74,14 @@ const groupType_5=reactive({arr:[]})
 const groupType_6=reactive({arr:[]})
 const groupType_7=reactive({arr:[]})
 const groupType_99=reactive({arr:[]})
-const prop=defineProps({modelValue:{ type: [String, Array], default: '' }})
-
+//props 参数说明   placeholder:未选择时的文字描述
+const prop=defineProps({placeholder:{type:String,default:"请选择"}})
+const {placeholder}=prop
 const emit=defineEmits(['change'])
 const switchTabs=ref(false)
 const tab_group_list=reactive({
     arr:[]
 })
-/* watch(selectGroup_name,new_val=>{
-    e
-})
-watch(prop,new_val=>{
-    selectGroup_name.item=new_val.modelValue
-}) */
 const getGroupList=()=>{
     APIgetGroupList().then(res=>{
         tab_group_list.arr=res.data
@@ -108,7 +104,7 @@ const getGroupList=()=>{
     })
 }
 const selectGroup_name=reactive({
-    item:"请选择类型"
+    item:""
 })
 const clickTag=(item)=>{
     selectGroup_name.item=item.name
