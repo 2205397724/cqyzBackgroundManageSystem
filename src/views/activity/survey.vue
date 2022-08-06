@@ -1,6 +1,6 @@
 <template>
    <div>
-    <page-main>
+   <page-main>
     <div>
         <el-row :gutter="20" class="bottom-btn-box-1">
             <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
@@ -227,91 +227,113 @@
                     <el-button type="warning" plain @click="switch_details = false">取消</el-button>
                 </template>
             </el-dialog>
-
         </page-main>
     </div>
 </template>
 
-<script  setup>
-    import {
-        APIgetSurvey,
-        APIaddSurvey,
-        APIdeleteSurvey,
-        APImodifySurvey,
-        APImodifySurveyStatus,
-        APIgetSurveyDetails,
-        APIaddSurveyRange
-    } from '@/api/custom/custom.js'
-    import {
-        reactive,
-        ref,
-        watch
-    } from 'vue'
-    import {
-        ElMessage
-    } from 'element-plus'
-    import { log } from 'console';
-    import { valid } from 'mockjs';
-    const value = ref('')
-    // 选项数据
-    const options = [
-        {value: 1,label: '筹备阶段',},
-        {value: 2,label: '待审',},
-        {value: 3,label: '未开始',},
-        {value: 4,label: '进行中',},
-        {value: 5,label: '暂停',},
-        {value: 6,label: '终止',},
-        {value: 7,label: '已结束',},
-    ]
-    // 搜索
-    let switch_search = ref(false)
-    let data_search = reactive({
-        obj: {}
-    })
-    // 标签页
-    const activeName = ref('全部')
-    // 列表
-    let ruleFormRef = ref('')
-    // 是否加载中（element UI）
-    let loading_tab = ref(false)
-    let data_tab = reactive({
-        arr: []
-    })
-    // 详情
-    const data_details = reactive({
-        item: ''
-    })
-    // 分页
-    let total = ref(100)
-    let per_page = ref(15)
-    let page = ref(1)
-    // 详情
-    let switch_details = ref(false)
-    // 添加 修改
-    let switch_examine = ref(false)
-    let from_examine = reactive({
-        item: {
-            // 'type':83,
-            // 'author_type': 1,
-            // 'author_tgt': '62bd6f76ee071f1789147d41',
-            // 'author_cc': '500101001002',
-            // 'name': '高温补贴征集',
-            // 'startat':'2022-07-13 11:00:00',
-            // 'endat': '2022-08-13 11:00:00',
-            // 'content':'是否需要安装空调',
-            // 'ticketall':2,
-            // 'areaall':42,
-            // 'pub':1,
-            // 'status':1,
-            // 'vmax':14,
-            // 'uid':"62d0c1f95c611c26d344b114",
-            // 'utype':'mbr',
-            // 'id':'62bd6f76ee071f1789147d41',
-            // 'updated_at': '2022-07-13 11:00:00',
-            // 'created_at': '2022-07-13 11:00:00',
+<script lang="ts" setup>
+import {
+    APIgetSurvey,
+    APIaddSurvey,
+    APIdeleteSurvey,
+    APImodifySurvey,
+    APImodifySurveyStatus,
+    APIgetSurveyDetails
+} from '@/api/custom/custom.js'
+import {
+    reactive,
+    ref,
+    watch
+} from 'vue'
+import {
+    ElMessage
+} from 'element-plus'
+import { log } from 'console'
+import { valid } from 'mockjs'
+const value = ref('')
+// 选项数据
+const options = [
+    { value: 1, label: '筹备阶段' },
+    { value: 2, label: '待审' },
+    { value: 3, label: '未开始' },
+    { value: 4, label: '进行中' },
+    { value: 5, label: '暂停' },
+    { value: 6, label: '终止' },
+    { value: 7, label: '已结束' }
+]
+// 搜索
+let switch_search = ref(false)
+let data_search = reactive({
+    obj: {}
+})
+// 标签页
+const activeName = ref('全部')
+// 列表
+let ruleFormRef = ref('')
+// 是否加载中（element UI）
+let loading_tab = ref(false)
+let data_tab = reactive({
+    arr: []
+})
+// 详情
+const data_details = reactive({
+    item: ''
+})
+// 分页
+let total = ref(100)
+let per_page = ref(15)
+let page = ref(1)
+// 详情
+let switch_details = ref(false)
+// 添加 修改
+let switch_examine = ref(false)
+let from_examine = reactive({
+    item: {
+        // 'type':83,
+        // 'author_type': 1,
+        // 'author_tgt': '62bd6f76ee071f1789147d41',
+        // 'author_cc': '500101001002',
+        // 'name': '高温补贴征集',
+        // 'startat':'2022-07-13 11:00:00',
+        // 'endat': '2022-08-13 11:00:00',
+        // 'content':'是否需要安装空调',
+        // 'ticketall':2,
+        // 'areaall':42,
+        // 'pub':1,
+        // 'status':1,
+        // 'vmax':14,
+        // 'uid':"62d0c1f95c611c26d344b114",
+        // 'utype':'mbr',
+        // 'id':'62bd6f76ee071f1789147d41',
+        // 'updated_at': '2022-07-13 11:00:00',
+        // 'created_at': '2022-07-13 11:00:00',
+    }
+})
+// 开始结束时间
+const value1 = ref('')
+const value2 = ref('')
+// 修改弹出框的标题
+const str_title = ref('添加')
+const from_error = reactive({
+    msg: {}
+})
+// 刷新
+const refreshFunc = () => {
+    page.value = 1
+    getTabListFunc()
+}
+// 详情
+const detailsFunc = val => {
+    data_details.item = ''
+    console.log(val.id)
+    APIgetSurveyDetails(val.id).then(res => {
+        if (res.status === 200) {
+            data_details.item = res.data
+            switch_details.value = true
         }
     })
     // switch_details.value = true
+}
 // Tabs标签页点击切换事件,切换显示不同状态的问卷
 // 切换标签后，根据label的值进行if判断，切换不同状态问卷
 const handleClick = tab => {
