@@ -13,6 +13,7 @@
             ref="treeRef"
             class="el-tree-box"
             node-key="id"
+            :default-checked-keys="defaultChecked.arr"
             :props="tree_props"
             :load="loadNode"
             lazy
@@ -157,6 +158,8 @@ const selectedHouseFun = (houseid) => {
     selected_house.arr.push(houseid);
   }
 };
+//默认选择地区数组
+const defaultChecked=reactive({arr:[]})
 //提交选择
 const submit = () => {
   let all = treeRef.value.getCheckedNodes();
@@ -245,19 +248,23 @@ const loadNode = (node, resolve) => {
   }
   switch (node.data.next_type) {
     case "region":
-      APIgetChinaRegion({ p_code: node.data.id }).then((res) => {
+      APIgetChinaRegion({ p_code: node.data.id ,sid:props.surveyid,can_type:2}).then((res) => {
         treeDetail.arr = res.data;
         console.log(res);
         let tree_arr = [];
         if (res.status == 200) {
           for (let i in res.data) {
             if (res.data[i].level < 5) {
+              if(res.data[i].can_exist){
+                defaultChecked.arr.push(res.data[i].id)
+              }
               tree_arr.push({
                 name: res.data[i].name,
                 type: "region",
                 next_type: "region",
                 id: res.data[i].code,
                 china_code: res.data[i].code,
+                can_exist:res.data[i].can_exist
               });
             } else {
               tree_arr.push({
@@ -269,6 +276,7 @@ const loadNode = (node, resolve) => {
             }
           }
         }
+                console.log(defaultChecked.arr)
         resolve(tree_arr);
         emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
       });
@@ -278,16 +286,22 @@ const loadNode = (node, resolve) => {
         page: 1,
         per_page: 7,
         china_code: node.data.id,
+        sid:props.surveyid,
+        can_type:2
       }).then((res) => {
         console.log(res);
         let tree_arr = [];
         for (let i in res) {
+          if(res[i].can_exist){
+            defaultChecked.arr.push(res[i].id)
+          }
           tree_arr.push({
             name: res[i].name,
             type: "zone",
             next_type: "building",
             id: res[i].id,
             china_code: res[i].china_code,
+            can_exist:res[i].can_exist
           });
         }
         resolve(tree_arr);
@@ -300,17 +314,22 @@ const loadNode = (node, resolve) => {
         page: 1,
         per_page: 7,
         zone_id: node.data.id,
+        sid:props.surveyid,
+        can_type:2
       }).then((res) => {
         let tree_arr = [];
         for (let i in res) {
+            if(res[i].can_exist){
+            defaultChecked.arr.push(res[i].id)
+          }
           tree_arr.push({
             name: res[i].name,
             type: "building",
             next_type: "units",
             id: res[i].id,
+            can_exist:res[i].can_exist
           });
         }
-
         emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
         resolve(tree_arr);
       });
@@ -320,14 +339,20 @@ const loadNode = (node, resolve) => {
         page: 1,
         per_page: 7,
         building_id: node.data.id,
+        sid:props.surveyid,
+        can_type:2
       }).then((res) => {
         let tree_arr = [];
         for (let i in res) {
+            if(res[i].can_exist){
+            defaultChecked.arr.push(res[i].id)
+          }
           tree_arr.push({
             name: res[i].name,
             id: res[i].id,
             type: "units",
             next_type: "house",
+            can_exist:res[i].can_exist
           });
         }
         resolve(tree_arr);
@@ -340,15 +365,22 @@ const loadNode = (node, resolve) => {
         per_page: 7,
         houseable_type: "units",
         houseable_id: node.data.id,
+        sid:props.surveyid,
+        can_type:2,
       }).then((res) => {
         let tree_arr = [];
         for (let i in res) {
+            if(res[i].can_exist){
+            defaultChecked.arr.push(res[i].id)
+          }
           tree_arr.push({
             name: res[i].name,
             id: res[i].id,
             type: "house",
             next_type: "house",
-            leaf: true,
+
+            can_exist:res[i].can_exist,
+            leaf: true
           });
         }
         resolve(tree_arr);
@@ -399,7 +431,6 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
     });
   }
   if (data.type == "units") {
-    console.log("ddddddddddddd")
     showFamily.value = true;
     emit("checkChangeFunc", data);
     unitsDetail.item = data;

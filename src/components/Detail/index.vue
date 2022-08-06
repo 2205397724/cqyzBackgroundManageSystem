@@ -111,9 +111,8 @@
             </el-scrollbar>
         </el-tab-pane>
         <el-tab-pane label="设置参与范围" name="2" >
-            <el-scrollbar height="400px">
-                <el-button type="primary" @click="detail_set_area" class="m-tb-10">设置</el-button>
-               <el-table :data="data_range.arr"
+                <el-button type="primary" @click="detail_set_area" class="m-tb-10" style="position: relative;">设置</el-button>
+               <!-- <el-table :data="data_range.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     width="100%"
                 >
@@ -141,8 +140,79 @@
                             </el-popconfirm>
                         </template>
                     </el-table-column>
-                </el-table>
-            </el-scrollbar>
+                </el-table> -->
+
+                <el-row>
+                  <el-col :sm="6" :md="6" :lg="6">
+                    <div class="set_range_box">
+                        <div>
+                            <div class="m-b-10">已选择区域</div>
+                        </div>
+                        <el-scrollbar height="300px">
+                            <div class="region_box">
+                            <div v-for="item in data_range.arr" :key="item.id">
+                                <div class="region_box_item" v-if="item.type==5">
+                                    {{item.tgt_name}}
+                                    <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                        @confirm="deleteRange(item)">
+                                        <template #reference>
+                                            <div class="region_box_item_del">✖</div>
+                                        </template>
+                                    </el-popconfirm>
+                                </div>
+
+                            </div>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                  </el-col>
+                  <el-col  :sm="6" :md="6" :lg="6">
+                    <div class="set_range_box">
+                        <div class="m-b-10">
+                            <div>已选择小区和房屋</div>
+                        </div>
+                        <el-scrollbar  height="300px">
+                            <div class="region_box">
+                            <div v-for="item in data_range.arr" :key="item.id">
+                                <div class="region_box_item" v-if="item.type==4" @click="clickZone(item)">
+                                    {{item.tgt_name}}
+                                    <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                        @confirm="deleteRange(item)">
+                                        <template #reference>
+                                            <div class="region_box_item_del">✖</div>
+                                        </template>
+                                    </el-popconfirm>
+                                </div>
+
+                            </div>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                  </el-col>
+                  <el-col  :sm="12" :md="12" :lg="12">
+                    <div class="set_range_box">
+                        <div>
+                            <div>已选择区域</div>
+                        </div>
+                    </div>
+                    <el-scrollbar  height="300px">
+                            <div class="region_box">
+                            <div v-for="item in data_range_zone.arr" :key="item.id">
+                                <div class="region_box_item">
+                                    {{item.name}}
+                                    <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                        @confirm="deleteRange(item)">
+                                        <template #reference>
+                                            <div class="region_box_item_del">✖</div>
+                                        </template>
+                                    </el-popconfirm>
+                                </div>
+
+                            </div>
+                            </div>
+                        </el-scrollbar>
+                  </el-col>
+                </el-row>
         </el-tab-pane>
         <el-tab-pane label="添加参与范围" name="6" >
             <!-- <el-button type="primary" class="m-10" @click="submit">确认设置</el-button> -->
@@ -221,10 +291,10 @@
       <template #footer>
         <div
           style="
-                                                display: flex;
-                                                justify-content: flex-end;
-                                                align-items: center;
-                                                width: 100%;
+                                                                                                display: flex;
+                                                                                                justify-content: flex-end;
+                                                                                                align-items: center;
+                                                                                                width: 100%;
 "
         >
           <el-button @click="switch_comment = false">取消</el-button>
@@ -282,26 +352,16 @@
       <template #footer>
         <div
           style="
-                                                display: flex;
-                                                justify-content: flex-end;
-                                                align-items: center;
-                                                width: 100%;
+                                                                                                display: flex;
+                                                                                                justify-content: flex-end;
+                                                                                                align-items: center;
+                                                                                                width: 100%;
 "
         >
           <el-button @click="switch_comment_detail = false">取消</el-button>
         </div>
       </template>
     </el-dialog>
-    <!-- 设置范围弹窗 -->
-    <!-- <el-dialog title="" v-model="switch_set_area">
-       <div style="width:35%">
-        <el-scrollbar class="el-scrollbar-height-normal">
-            <PositionTreeFive :tree_item="tree_item" @checkFunc="checkFunc"
-            @checkChangeFunc="checkChangeFunc"
-            />
-        </el-scrollbar>
-       </div>
-    </el-dialog> -->
     <PositionTreeFive
       :tree_item="tree_item"
       @checkFunc="checkFunc"
@@ -336,6 +396,7 @@ import {
   APIgetCommentList,
   APIgetCommentDetails,
   APIputComment,
+  APIgetBuildListHouse,
 } from "@/api/custom/custom.js";
 // 导入图标
 import { Edit, Search } from "@element-plus/icons-vue";
@@ -395,6 +456,9 @@ const radio = ref("全部");
 let data_range = reactive({
   arr: [],
 });
+const data_range_zone=reactive({
+    arr:[]
+})
 // 添加问卷题目
 const str_title = ref("添加");
 let switch_examine = ref(false);
@@ -476,12 +540,21 @@ const rangeFunc = () => {
   APIgetSurveyRange(params)
     .then((res) => {
       data_range.arr = res.data;
-      console.log(data_range.arr.length);
+      console.log(data_range.arr)
+
     })
     .catch((err) => {
       from_error.msg = err.data;
     });
 };
+//问卷范围点击小区事件
+const clickZone=(val)=>{
+    APIgetBuildListHouse({zone_id:val.id}).then(res=>{
+        data_range_zone.arr=res
+
+        console.log(res)
+    })
+}
 // 获取问卷结果详情
 let answer_detail = reactive({
   item: "",
@@ -854,5 +927,36 @@ const dialogModifyComment = (content, status) => {
 }
 .display {
     display: flex;
+}
+.set_range_box {
+    height: 100%;
+    font-size: 20px;
+    color: #aaa;
+    .region_box {
+        .region_box_item {
+            text-align: center;
+            background-color: #ecf5ff;
+            color: #409eff;
+            width: 85%;
+            height: 40px;
+            font-size: 15px;
+            margin-bottom: 10px;
+            line-height: 40px;
+            border-radius: 10px;
+            position: relative;
+            margin-top: 10px;
+            .region_box_item_del {
+                width: 20px;
+                height: 20px;
+                line-height: 19px;
+                position: absolute;
+                right: -6px;
+                top: -7px;
+                border-radius: 50%;
+                border: 1px solid #409eff;
+                cursor: pointer;
+            }
+        }
+    }
 }
 </style>
