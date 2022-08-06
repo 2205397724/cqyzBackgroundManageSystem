@@ -52,10 +52,10 @@
         </el-scrollbar>
       </div>
       <template #footer>
-        <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;" effect="dark">
+        <!-- <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;" effect="dark">
           <el-option :label="item.value" :value="item.type" v-for="item in do_type.item" :key="item.type"></el-option>
-        </el-select>
-        <el-button type="primary" @click="submit" :disabled="!selected_do_type"
+        </el-select> -->
+        <el-button type="primary" @click="submit"
           >确认</el-button
         >
       </template>
@@ -110,7 +110,7 @@ const tree_props = {
   isLeaf: "leaf",
 };
 //选择可操作类型
-const selected_do_type=ref(1)
+const selected_do_type=ref(2)
 const do_type = reactive({
   item: [
     {

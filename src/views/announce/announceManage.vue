@@ -72,27 +72,11 @@
                 </el-table-column>
                 <el-table-column label="状态" width="150">
                     <template #default="scope">
-<<<<<<< HEAD:src/views/articletpl/article.vue
-                        <el-switch
-                            v-model="scope.row.status"
-
-                            style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                            active-text="已审"
-                            inactive-text="未审"
-                            :active-value="1"
-                            :inactive-value="0"
-                            class="switchStyle"
-
-                        />
-=======
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
->>>>>>> test:src/views/announce/announceManage.vue
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="320">
@@ -737,12 +721,8 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-<<<<<<< HEAD:src/views/articletpl/article.vue
-
-=======
         total.value = res.length
         console.log(total.value)
->>>>>>> test:src/views/announce/announceManage.vue
     })
 }
 // 删除
