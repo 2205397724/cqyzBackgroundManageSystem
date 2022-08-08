@@ -50,10 +50,12 @@ body {
         transform: translateX(-50%) !important;
     }
 }
+
 //el-scrollbar高度、
 .el-scrollbar-height-normal {
     height: 500px;
 }
+
 // textarea 字体跟随系统
 textarea {
     font-family: inherit;
@@ -540,10 +542,10 @@ textarea {
     width: 80%;
 }
 .w_70 {
-    width: 70px;
+    width: 70%;
 }
 .w_30 {
-    width: 30px;
+    width: 30%;
 }
 .wh_100p {
     width: 100px;
@@ -579,4 +581,8 @@ textarea {
 }
 .flx {
     display: flex;
+}
+.searchDetail {
+    display: inline-block;
+    width: 200px;
 }

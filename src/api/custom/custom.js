@@ -761,9 +761,9 @@ export function APIdeleteGroupUser_perms(group, user, data) {
     return api.delete(`/groups/${group}/users/${user}/perms`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-//权限管理
+// 权限管理
 export function APIgetPermsList(params) {
-    return api.get(`/perms`, { params: params })
+    return api.get('/perms', { params: params })
 }
 export function APIgetPermsDetail(perm) {
     return api.get(`/perms/${perm}`)
@@ -803,9 +803,9 @@ export function APIdeleteGroupRoles(gid, data) {
     return api.delete(`/groups/${gid}/roles`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
-//角色管理
+// 角色管理
 export function APIgetRolesList(params) {
-    return api.get(`/roles`, { params: params })
+    return api.get('/roles', { params: params })
 }
 export function APIgetRolesDetail(role) {
     return api.get(`/roles/${role}`)
@@ -834,7 +834,7 @@ export function APIdeleteRoles_perms(role, data) {
 // 用户组 /api/cc/{cc}/group
 // 列表
 export function APIgetGroupList(params) {
-    return api.get(`/groups`, { params: params })
+    return api.get('/groups', { params: params })
 }
 // 删除
 export function APIdeleteGroup(id) {
@@ -971,7 +971,30 @@ export function APIputEnterprise(id, data) {
 export function APIpostEnterprise(data) {
     return api.post('/com', data)
 }
-
+// 企业端
+// 添加
+export function APIpostEnterpriseApply(data) {
+    return api.post('/me/lic-com-apply', data)
+}
+// 详情
+export function APIgetEnterpriseApplyDetails(apply) {
+    return api.get(`/com-apply/${apply}`)
+}
+// 审核
+export function APIpostEnterpriseExamine(apply, data) {
+    return api.post(`com-apply-audit/${apply}`, data)
+}
+// +管理端申请列表
+export function APIgetEnterpriseApplyList(params) {
+    return api.get('/com-apply', { params: params })
+}
+export function APIgetEnterpriseApplyDetailsList(apply) {
+    return api.get(`/com-apply/${apply}`)
+}
+// 添加
+export function APIpostAmageApply(apply, data) {
+    return api.post(`com-apply-audit/${apply}`, data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户
 // 列表
@@ -994,13 +1017,13 @@ export function APIputUser(id, data) {
 export function APIpostUser(type, data) {
     return api.post(`/user-account/${type}`, data)
 }
-//获取业主身份的权限
+// 获取业主身份的权限
 export function APIgetloginUserPerms() {
-    return api.get(`/me/mbr-perms`)
+    return api.get('/me/mbr-perms')
 }
-//获取我的所在用户组
+// 获取我的所在用户组
 export function APIgetLoginUserGroup() {
-    return api.get(`/me/groups`)
+    return api.get('/me/groups')
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 产权

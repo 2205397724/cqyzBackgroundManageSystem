@@ -13,516 +13,403 @@
             </div>
             <div>
                 <el-scrollbar height="800px">
-                                    <el-timeline>
-                                        <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" type="primary">
-                                            <el-card>
-                                                <div>
-                                                    <div class="size-lg">{{item.docable.title}}</div>
-                                                    <div class="m-t-10 m-b-10">
-                                                        <el-tag round v-if="item.tgt_type == 'announce'" size="large">公示</el-tag>
-                                                        <el-tag round v-if="item.docable.type == 1" size="large">联名活动</el-tag>
-                                                        <el-tag round v-if="item.docable.type == 2" size="large">表决活动</el-tag>
-                                                        <el-tag round v-if="item.docable.type == 3" size="large">选举活动</el-tag>
-                                                        <el-tag round v-if="item.docable.type == 4" size="large">问卷活动</el-tag>
-                                                    </div>
-                                                    <div>
-                                                            <span style="color: #b7b1b1;">操作人员: {{ item.docable.uinfo.name }}</span>
-                                                    </div>
-                                                </div>
-                                            </el-card>
-                                        </el-timeline-item>
-                                    </el-timeline>
-                                    </el-scrollbar>
-                                </div>
-            <!-- <div>
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <el-tab-pane label="基础信息" name="1">
-                        <el-scrollbar height="800px">
-                            <div class="details-box">
-                                <div class="item">
-                                    <div class="left content">内容</div>
-                                    <div class="right">{{ dataForm.item.content }}</div>
-                                </div>
-                                <div class="box">
-                                    <div>
-                                        <div class="item">
-                                            <div class="left">是否公开</div>
-                                            <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="left">小区id</div>
-                                            <div class="right">{{ dataForm.item.zid }}</div>
+                    <el-timeline>
+                        <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" type="primary">
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteActivityFunc(item)"
+                            >
+                                <template #reference>
+                                    <div class="serve-box">
+                                        <div class="delete-service">
+                                            <el-icon :size="20" color="#F56C6C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div class="item">
-                                            <div class="left">是否匿名</div>
-                                            <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,dataForm.item.ano) }}</div>
-                                        </div>
-                                        <div v-if="dataForm.item.catpro" class="item">
-                                            <div class="left">问题分类</div>
-                                            <div class="right">{{ newcatpro.item.name }}</div>
-                                        </div>
+                                </template>
+                            </el-popconfirm>
+                            <el-card @click="activitydetailsFunc(item)">
+                                <div>
+                                    <div v-if="item.docable.hasOwnProperty('title')" class="size-lg">{{ item.docable.title }}</div>
+                                    <div class="size-lg" else>{{ item.docable.name }}</div>
+                                    <div class="m-t-10 m-b-10">
+                                        <el-tag v-if="item.tgt_type == 'announce'" round size="large">公示</el-tag>
+                                        <el-tag v-if="item.docable.type == 1" round size="large">联名活动</el-tag>
+                                        <el-tag v-if="item.docable.type == 2" round size="large">表决活动</el-tag>
+                                        <el-tag v-if="item.docable.type == 3" round size="large">选举活动</el-tag>
+                                        <el-tag v-if="item.docable.type == 4" round size="large">问卷活动</el-tag>
                                     </div>
-                                    <div>
-                                        <div class="item">
-                                            <div class="left">分类</div>
-                                            <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,dataForm.item.kind) }}</div>
-                                        </div>
-                                        <div v-if="dataForm.item.catob" class="item">
-                                            <div class="left">投诉对象</div>
-                                            <div class="right">{{ newcatob.item.name }}</div>
-                                        </div>
+                                    <div v-if="item.docable.hasOwnProperty('uinfo')">
+                                        <span style="color: #b7b1b1;">操作人员: {{ item.docable.uinfo.name }}</span>
                                     </div>
                                 </div>
+                            </el-card>
+                        </el-timeline-item>
+                    </el-timeline>
+                </el-scrollbar>
+            </div>
+        </page-main>
+        <el-dialog
+            v-model="switch_list"
+            title="添加活动"
+            width="70%"
+        >
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">标题名称：</div>
+                            <el-input v-model="data_search.obj.title" class="search_tb" placeholder="标题名称" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">起始时间：</div>
+                            <el-date-picker
+                                v-model="data_search.obj.created_at"
+                                type="date"
+                                value-format="YYYY-MM-DD"
+                                placeholder="起始时间"
+                                class="search_tb"
+                                :default-value="new Date()"
+                            />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :sm="12" :md="12" :lg="12">
+                        <div class="flx">
+                            <div class="w_30%">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
-                        </el-scrollbar>
-                    </el-tab-pane>
-                    <el-tab-pane label="处理记录" name="2">
-                        <el-scrollbar height="800px">
-                            <div>
-                                <el-timeline>
-                                    <el-timeline-item v-for="(item,index) in dataForm.item.totlogs" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
-                                        <el-card>
-                                            <div>
-                                                <div>
-                                                    <div class="sno m-b-10">
-                                                        <span>操作人员: {{ Name }}</span>
-                                                        <span class="m-l-60">事件：{{ item.content }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="m-b-10">
-                                                    {{ item.logable.content }}
-                                                </div>
-                                                <div>
-                                                    <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
-                                                </div>
-                                            </div>
-                                        </el-card>
-                                    </el-timeline-item>
-                                </el-timeline>
-                            </div>
-                        </el-scrollbar>
-                    </el-tab-pane>
-                    <el-tab-pane label="业主评论" name="3">
-                        <el-scrollbar height="800px">
-                            <div class="isComment">
-                                <span>是否开启评论：</span>
-                                <el-switch
-                                    v-model="popup1.using"
-                                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                    inline-prompt
-                                    active-text="开"
-                                    inactive-text="关"
-                                    @change="switchFnUse"
-                                />
-                                <div class="radioGroup">
-                                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(true)">
-                                        <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="item.key" size="large">{{ item.val }}</el-radio>
-                                    </el-radio-group>
-                                </div>
-                            </div>
-                            <div>
-                                <el-table
-                                    ref="multipleTableRef"
-                                    :data="tableData.arr"
-                                    style="width: 100%;"
-                                    @selection-change="handleSelectionChange"
-                                >
-                                    <el-table-column type="selection" width="50" />
-                                    <el-table-column label="评论内容" width="200" show-overflow-tooltip="true">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.content }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column v-if="tableData.arr.uname" label="评论人" width="110">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.uname|| 'null' }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="150">
-                                        <template #default="scope">
-                                            <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
-                                            <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
-                                            <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="评分" width="100">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.score }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="评论时间">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.created_at }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column fixed="right" label="操作" with="200">
-                                        <template #default="scope">
-                                            <el-button
-                                                v-show="scope.row.status == 10"
-                                                type="primary" size="small"
-                                                @click="toggleSelection(scope.row)"
-                                            >
-                                                审核
-                                            </el-button>
-                                            <el-button
-                                                v-if="scope.row.status == 20 || scope.row.status == 30"
-                                                type="success" size="small"
-                                                @click="toggleSelection(scope.row)"
-                                            >
-                                                修改
-                                            </el-button>
-                                            <el-button
-                                                size="small"
-                                                @click="clickFuncDetail(scope.row)"
-                                            >
-                                                详情
-                                            </el-button>
-                                            <el-button
-                                                type="primary"
-                                                size="small"
-                                                @click="popup2FnReply(scope.row)"
-                                            >
-                                                回复
-                                            </el-button>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </div>
-                        </el-scrollbar>
-                    </el-tab-pane>
-                </el-tabs>
-            </div> -->
-            <el-dialog
-                v-model="switch_list"
-                title="添加活动"
-                width="70%"
-            >
-                <div class="search">
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">标题名称：</div>
-                                <el-input v-model="data_search.obj.title" class="search_tb" placeholder="标题名称" clearable />
-                            </div>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">起始时间：</div>
-                                <el-date-picker
-                                    v-model="data_search.obj.created_at"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder="起始时间"
-                                    class="search_tb"
-                                    :default-value="new Date()"
-                                />
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <el-row class="m-t-20">
-                        <el-col :xs="12" :md="12" :lg="10">
-                            <div class="flx">
-                                <div class="w_30%">
-                                    <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                </div>
-                                <div v-show="switch_search == true" class="w_70% m-l-30">
-                                    <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <div class="searchDetail">
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
                             </div>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div>
-                    <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <el-tab-pane label="公示" name="5">
-                            <el-scrollbar height="500px">
-                                <el-table
-                                    v-loading="loading_tab"
-                                    :data="data_announce.arr"
-                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                                    @row-click="rowClickFunc"
-                                >
-                                    <el-table-column label="公示主题">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.title }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="公示id" width="240">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.id }}</span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="公示分类">
-                                        <template #default="scope">
-                                            <span>{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="公示对象类型" width="70">
-                                        <template #default="scope">
-                                            <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="用户组ID">
-                                        <template #default="scope">
-                                            <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="100">
-                                        <template #default="scope">
-                                            <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 2" class="btnNone m-l-5" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                            <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                        </template>
-                                    </el-table-column>
-
-                                    <el-table-column />
-                                </el-table>
-                            </el-scrollbar>
-                        </el-tab-pane>
-                        <el-tab-pane label="联名" name="1">
-                            <el-scrollbar height="800px">
-                                <el-table
-                                    v-loading="loading_tab"
-                                    :data="data_tab.arr"
-                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                                    @row-click="rowClickFunc"
-                                >
-                                    <el-table-column prop="name" label="标题名称" />
-                                    <el-table-column label="所在区域">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.author_cc_name }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="区域类型" width="150">
-                                        <template #default="scope">
-                                            <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="起始时间">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.created_at }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="150">
-                                        <template #default="scope">
-                                            <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                            <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                            <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                            <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                            <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                            <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                            <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column />
-                                </el-table>
-                            </el-scrollbar>
-                        </el-tab-pane>
-                        <el-tab-pane label="表决" name="2">
-                            <el-scrollbar height="800px">
-                                <el-table
-                                    v-loading="loading_tab"
-                                    :data="data_tab.arr"
-                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                                    @row-click="rowClickFunc"
-                                >
-                                    <el-table-column prop="name" label="标题名称" />
-                                    <el-table-column label="所在区域">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.author_cc_name }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="区域类型" width="150">
-                                        <template #default="scope">
-                                            <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="起始时间">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.created_at }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="150">
-                                        <template #default="scope">
-                                            <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                            <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                            <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                            <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                            <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                            <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                            <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column />
-                                </el-table>
-                            </el-scrollbar>
-                        </el-tab-pane>
-                        <el-tab-pane label="选举" name="3">
-                            <el-scrollbar height="800px">
-                                <el-table
-                                    v-loading="loading_tab"
-                                    :data="data_tab.arr"
-                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                                    @row-click="rowClickFunc"
-                                >
-                                    <el-table-column prop="name" label="标题名称" />
-                                    <el-table-column label="所在区域">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.author_cc_name }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="区域类型" width="150">
-                                        <template #default="scope">
-                                            <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="起始时间">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.created_at }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="150">
-                                        <template #default="scope">
-                                            <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                            <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                            <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                            <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                            <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                            <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                            <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column />
-                                </el-table>
-                            </el-scrollbar>
-                        </el-tab-pane>
-                        <el-tab-pane label="问卷" name="4">
-                            <el-scrollbar height="800px">
-                                <el-table
-                                    v-loading="loading_tab"
-                                    :data="data_tab.arr"
-                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                                    @row-click="rowClickFunc"
-                                >
-                                    <el-table-column prop="name" label="标题名称" />
-                                    <el-table-column label="所在区域">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.author_cc_name }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="区域类型" width="150">
-                                        <template #default="scope">
-                                            <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="起始时间">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.created_at }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="150">
-                                        <template #default="scope">
-                                            <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                            <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                            <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                            <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                            <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                            <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                            <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column />
-                                </el-table>
-                            </el-scrollbar>
-                        </el-tab-pane>
-                    <!-- <el-tab-pane label="评分" name="4">
-                        <div>
-                            <el-rate
-                                v-model="score"
-                                disabled
-                                show-score
-                                text-color="#ff9900"
-                                score-template="{value} 分"
-                            />
                         </div>
-                    </el-tab-pane> -->
-                    </el-tabs>
-                </div>
-                <!-- <el-table
-                    v-loading="loading_tab"
-                    :data="data_tab.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                    @row-click="rowClickFunc"
-                >
-                    <el-table-column prop="name" label="标题名称" width="150px" />
-                    <el-table-column label="活动类型" width="220">
-                        <template #default="scope">
-                            <span>{{ getOptVal(opts_all.obj.activity_type,scope.row.type) }}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="所在区域" width="220">
-                        <template #default="scope">
-                            <span>{{ scope.row.author_cc }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="起始时间" width="70">
-                        <template #default="scope">
-                            <span>{{ scope.row.created_at }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="状态" width="150">
-                        <template #default="scope">
-                            <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                            <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                            <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                            <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                            <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                            <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                            <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
-                        </template>
-                    </el-table-column>
-                    <el-table-column />
-                </el-table> -->
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
-            </el-dialog>
-            <el-dialog
-                v-model="switch_sure"
-                title="确认"
-                width="30%"
-            >
+                    </el-col>
+                </el-row>
+            </div>
+            <div>
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane label="公示" name="5">
+                        <el-scrollbar height="500px">
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_announce.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                @row-click="rowClickFunc"
+                            >
+                                <el-table-column label="公示主题">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.title }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="公示id" width="240">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.id }}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="公示分类">
+                                    <template #default="scope">
+                                        <span>{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="公示对象类型" width="70">
+                                    <template #default="scope">
+                                        <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="用户组ID">
+                                    <template #default="scope">
+                                        <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="状态" width="100">
+                                    <template #default="scope">
+                                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                        <el-button v-show="scope.row.status == 2" class="btnNone m-l-5" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                        <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                        <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                        <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column />
+                            </el-table>
+                        </el-scrollbar>
+                    </el-tab-pane>
+                    <el-tab-pane label="联名" name="1">
+                        <el-scrollbar height="800px">
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                @row-click="rowClickFunc"
+                            >
+                                <el-table-column prop="name" label="标题名称" />
+                                <el-table-column label="所在区域">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.author_cc_name }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="区域类型" width="150">
+                                    <template #default="scope">
+                                        <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="起始时间">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.created_at }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="状态" width="150">
+                                    <template #default="scope">
+                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
+                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
+                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
+                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
+                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
+                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
+                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column />
+                            </el-table>
+                        </el-scrollbar>
+                    </el-tab-pane>
+                    <el-tab-pane label="表决" name="2">
+                        <el-scrollbar height="800px">
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                @row-click="rowClickFunc"
+                            >
+                                <el-table-column prop="name" label="标题名称" />
+                                <el-table-column label="所在区域">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.author_cc_name }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="区域类型" width="150">
+                                    <template #default="scope">
+                                        <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="起始时间">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.created_at }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="状态" width="150">
+                                    <template #default="scope">
+                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
+                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
+                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
+                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
+                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
+                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
+                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column />
+                            </el-table>
+                        </el-scrollbar>
+                    </el-tab-pane>
+                    <el-tab-pane label="选举" name="3">
+                        <el-scrollbar height="800px">
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                @row-click="rowClickFunc"
+                            >
+                                <el-table-column prop="name" label="标题名称" />
+                                <el-table-column label="所在区域">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.author_cc_name }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="区域类型" width="150">
+                                    <template #default="scope">
+                                        <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="起始时间">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.created_at }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="状态" width="150">
+                                    <template #default="scope">
+                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
+                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
+                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
+                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
+                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
+                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
+                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column />
+                            </el-table>
+                        </el-scrollbar>
+                    </el-tab-pane>
+                    <el-tab-pane label="问卷" name="4">
+                        <el-scrollbar height="800px">
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                @row-click="rowClickFunc"
+                            >
+                                <el-table-column prop="name" label="标题名称" />
+                                <el-table-column label="所在区域">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.author_cc_name }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="区域类型" width="150">
+                                    <template #default="scope">
+                                        <span>{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.author_type) }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="起始时间">
+                                    <template #default="scope">
+                                        <span>{{ scope.row.created_at }} </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="状态" width="150">
+                                    <template #default="scope">
+                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
+                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
+                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
+                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
+                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
+                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
+                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column />
+                            </el-table>
+                        </el-scrollbar>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
+            </div>
+        </el-dialog>
+        <el-dialog
+            v-model="switch_sure"
+            title="确认"
+            width="30%"
+        >
             <div>
                 <!-- <img src="../../assets/images/xth.png"/> -->
-            是否确认添加此活动！</div>
+                是否确认添加此活动！
+            </div>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_sure=false">取消</el-button>
                     <el-button type="primary" @click="clickFuncAddVote">确定</el-button>
                 </div>
             </template>
-            </el-dialog>
-        </page-main>
+        </el-dialog>
+        <!-- 公示详情 -->
+        <el-dialog
+            v-model="switch_announce"
+            title="公示详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">公示主题</div>
+                    <div class="right">{{ data_details.item.title }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">公示ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">公示分类</div>
+                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">公示对象</div>
+                    <div class="right">{{ data_details.item.toval }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">公示对象类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">发布人用户组</div>
+                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.groupid) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">状态</div>
+                    <div class="right">
+                        <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                        <el-tag v-show="data_details.item.status == 2" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                        <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                        <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                        <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">开始时间</div>
+                    <div class="right">{{ data_details.item.start_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">结束时间</div>
+                    <div class="right">{{ data_details.item.end_at }}</div>
+                </div>
+                <!-- <div class="item">
+                                <div class="left">附件名称</div>
+                                <div class="right">{{ data_details.item.affix.title }}</div>
+                            </div> -->
+                <div class="item">
+                    <div class="left">附件</div>
+                    <div class="right">
+                        <img
+                            v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" :src="item" fit="cover"
+                        >
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">公示内容</div>
+                    <div class="right" v-html="data_details.item.content" />
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_announce = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="switch_survey" :title="data_details_1.item.name" width="80%" destroy-on-close="true">
+            <Detail :id="data_details_1.item.id" />
+            <template #footer>
+                <el-button type="warning" plain @click="switch_survey = false">取消</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -562,7 +449,7 @@ const data_tab = reactive({
 })
 const activity_tab = reactive({
     arr: [{
-        docable:{
+        docable: {
             uinfo: {
                 name: ''
             }
@@ -574,9 +461,9 @@ const activeName = ref('5')
 const data_search = reactive({
     obj: {}
 })
-const switch_sure=ref(false)
+const switch_sure = ref(false)
 const loading_tab = ref(false)
-const currentActivity=reactive({
+const currentActivity = reactive({
     item: {}
 })
 // 详情
@@ -599,19 +486,20 @@ const searchFunc = () => {
 // 刷新
 const refreshFunc = () => {
     page.value = 1
-    data_search.obj={}
+    data_search.obj = {}
     getActivitiesEventList()
     getTabListFunc()
     getSurveyListFunc(activeName.value)
     switch_search.value = false
     // clickFuncAddVote()
-    console.log();
+    console.log()
 }
 import {
     APIgetSurvey,
     APIgetEventArticleList,
     APIgetActivitiesEventList,
-    APIpostActivitiesEvent } from '@/api/custom/custom.js'
+    APIpostActivitiesEvent,
+    APIdeleteActivitiesEvent } from '@/api/custom/custom.js'
 const getActivitiesEventList = () => {
     APIgetActivitiesEventList(route.query.id).then(res => {
         console.log(res)
@@ -681,10 +569,11 @@ const addActiviesFunc = () => {
     data_search.obj = {}
     getTabListFunc()
     getSurveyListFunc(activeName.value)
+    switch_search.value = false
 }
 const rowClickFunc = row => {
     console.log(row)
-    currentActivity.item=row
+    currentActivity.item = row
     switch_sure.value = true
 }
 const getNameFunc = (arr, key) => {
@@ -722,43 +611,62 @@ APIgetGroupList().then(res => {
     }
 })
 // 确认添加
-const createdAt=reactive({
-    // arr: [{
-    //     uinfo: [{
-    //         name: ""
-    //         }]
-    // }]
-    arr: []
-})
-const activityName=ref('')
-const jointlyName=ref('')
-const voteName=ref('')
-const electName=ref('')
-const surveyName=ref('')
-const clickFuncAddVote=()=>{
-    let data={
-            tgt_id:currentActivity.item.id,
-            tgt_type: ''
-        }
-    if(activeName.value == '5'){
-        data.tgt_type='announce'
-    APIpostActivitiesEvent(route.query.id, data).then(() => {
-        getActivitiesEventList()
-        switch_sure.value = false
-        ElMessage.success('添加成功')
-    }).catch(() => {
-        ElMessage.error('添加失败')
-    })
-    activity_tab.created_at=currentActivity.item.created_at
-    }else{
-        data.tgt_type='survey'
+const clickFuncAddVote = () => {
+    let data = {
+        tgt_id: currentActivity.item.id,
+        tgt_type: ''
+    }
+    if (activeName.value == '5') {
+        data.tgt_type = 'announce'
         APIpostActivitiesEvent(route.query.id, data).then(() => {
-        getActivitiesEventList()
-        switch_sure.value = false
-        ElMessage.success('添加成功')
-    }).catch(() => {
-        ElMessage.error('添加失败')
+            getActivitiesEventList()
+            switch_sure.value = false
+            ElMessage.success('添加成功')
+        }).catch(() => {
+            ElMessage.error('添加失败')
+        })
+        activity_tab.created_at = currentActivity.item.created_at
+    } else {
+        data.tgt_type = 'survey'
+        APIpostActivitiesEvent(route.query.id, data).then(() => {
+            getActivitiesEventList()
+            switch_sure.value = false
+            ElMessage.success('添加成功')
+        }).catch(() => {
+            ElMessage.error('添加失败')
+        })
+    }
+    switch_list.value = false
+}
+// 删除活动事件
+const deleteActivityFunc = val => {
+    console.log(val)
+    APIdeleteActivitiesEvent(val.vid, { data: { tgt_id: val.tgt_id, tgt_type: val.tgt_type } }).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
+}
+// 公示详情
+const switch_announce = ref(false)
+const switch_survey = ref(false)
+const data_details = reactive({
+    item: {}
+})
+const data_details_1 = reactive({
+    item: {}
+})
+const activitydetailsFunc = item => {
+    if (item.tgt_type == 'announce') {
+        switch_announce.value = true
+        item.docable.affixs = []
+        for (let i in item.docable.affix) {
+            item.docable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + item.docable.affix[i].file)
+        }
+        data_details.item = item.docable
+        console.log(item.docable)
+    } else {
+        switch_survey.value = true
+        data_details_1.item = item.docable
     }
 }
 // 监听分页
@@ -777,8 +685,24 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
     opts_all.obj = res
 })
 </script>
-<style scoped>
+<style lang="scss" scoped>
     ::v-deep .el-button + .el-button {
         margin-bottom: 5px;
+    }
+    .serve-box {
+        /* border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px; */
+        position: relative;
+        .delete-service {
+            position: absolute;
+            left: -33px;
+            top: -24px;
+            z-index: 99;
+            cursor: pointer;
+            background-color: #fff;
+        }
     }
 </style>

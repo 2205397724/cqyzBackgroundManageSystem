@@ -16,7 +16,7 @@
                             <div class="search_th">
                                 关键字：
                             </div>
-                            <el-input v-model="search_str.obj.keyword" class="head-btn search_tb" placeholder="" clearable />
+                            <el-input v-model="search_str.obj.keyword" class="search_tb" placeholder="" clearable />
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">
@@ -51,7 +51,9 @@
             >
                 <el-table-column prop="logo" label="企业图标" width="140">
                     <template #default="scope">
-                        <span class="m-l-10">{{ scope.row.logo }} </span>
+                        <span class="m-l-10">
+                            <img :src="scope.row.logo" alt="" style="width: 25px;">
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="企业名称" />
@@ -87,8 +89,14 @@
                     </template>
                 </el-table-column> -->
                 <!-- <el-table-column /> -->
-                <el-table-column fixed="right" label="操作" width="200">
+                <el-table-column fixed="right" label="操作" width="300">
                     <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="applyFunc(scope.row)"
+                        >
+                            企业申请
+                        </el-button>
                         <el-button
                             type="primary" size="small"
                             @click="modifyFunc(scope.row)"
@@ -194,10 +202,19 @@
                                 label-width="120px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.logo"
-                                    placeholder=""
-                                />
+                                <el-upload
+                                    action="***"
+                                    :auto-upload="false"
+                                    :file-list="file_list"
+                                    :on-change="(file,files)=>{
+                                        file_list = files
+                                    }"
+                                    :on-remove="(file,files)=>{
+                                        file_list = files
+                                    }"
+                                >
+                                    <el-button type="primary">选择图标</el-button>
+                                </el-upload>
                             </el-form-item>
                         </el-col>
                         <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -277,7 +294,12 @@
                 </div>
                 <div class="item">
                     <div class="left">图标</div>
-                    <div class="right">{{ details_item.obj.logo }} </div>
+                    <div class="right">
+                        <!-- <el-image
+                            v-for="(item,i) in details_item.obj.logo" :key="i" :preview-src-list="details_item.obj.logo" class="wh_100p m-r-10" :src="item" fit="cover"
+                        /> -->
+                        <img :src="details_item.obj.logo" alt="" style="width: 40px;">
+                    </div>
                 </div>
                 <!-- <div class="item">
                     <div class="left">法人</div>
@@ -308,6 +330,181 @@
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
                 </span>
+            </template>
+        </el-dialog>
+        <el-dialog
+            v-model="switch_replay"
+            title="企业申请列表"
+            width="70%"
+        >
+            <el-table
+                :data="data_applyList.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                class="tab_1"
+            >
+                <el-table-column prop="name" label="企业名称" />
+                <el-table-column prop="user_id" label="用户名">
+                    <template #default="scope">
+                        <span v-if="getNameFunc(userData.arr,scope.row.user_id)" class="m-l-10">{{ getNameFunc(userData.arr,scope.row.user_id) }} </span>
+                        <span class="m-l-10" else>{{ scope.row.user_id }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="type" label="企业类型">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="type" label="处理状态">
+                    <template #default="scope">
+                        <el-tag v-if="scope.row.process_status == 10" type="warning" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 15" type="primary" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 20" type="success" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 30" type="danger" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="150">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="examineFunc(scope.row)"
+                        >
+                            审核
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc_1(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_replay = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 申请详情 -->
+        <el-dialog
+            v-model="switch_details_1"
+            title="申请详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">企业名称</div>
+                    <div class="right">{{ apply_details.obj.name }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">用户名</div>
+                    <div v-if="getNameFunc(userData.arr,apply_details.obj.user_id)" class="right">{{ getNameFunc(userData.arr,apply_details.obj.user_id) }} </div>
+                    <div class="right" else>{{ apply_details.obj.user_id }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">企业类型</div>
+                    <div class="right">{{ apply_details.obj.type }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">处理状态</div>
+                    <div class="right">
+                        <el-tag v-if="apply_details.obj.process_status == 10" type="warning" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                        <el-tag v-if="apply_details.obj.process_status == 15" type="primary" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                        <el-tag v-if="apply_details.obj.process_status == 20" type="success" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                        <el-tag v-if="apply_details.obj.process_status == 30" type="danger" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                    </div>
+                </div>
+                <!-- <div class="item">
+                    <div class="left">图标</div>
+                    <div class="right">
+                        <img :src="apply_details.obj.logo" alt="" style="width: 40px;">
+                    </div>
+                </div> -->
+                <!-- <div class="item">
+                    <div class="left">法人</div>
+                    <div class="right">{{ details_item.obj.legal }} </div>
+                </div> -->
+                <div class="item">
+                    <div class="left">申请时间</div>
+                    <div class="right">{{ apply_details.obj.created_at }} </div>
+                </div>
+                <div v-if="apply_details.obj.reply" class="item">
+                    <div class="left">回复内容</div>
+                    <div class="right">{{ apply_details.obj.reply }} </div>
+                </div>
+                <div style="border: 1px solid #ccc;">
+                    相关信息
+                    <div class="item">
+                        <div class="left">申请人</div>
+                        <div class="right">{{ apply_details.obj.content.legal }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">申请地址</div>
+                        <div class="right">{{ apply_details.obj.content.com_addr }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">营业执照</div>
+                        <div class="right">
+                            <img :src="apply_details.obj.content.biz_lic" alt="" style="width: 120px;">
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">社会信用代码</div>
+                        <div class="right">{{ apply_details.obj.content.social_code }} </div>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_details_1 = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 审核  -->
+        <el-dialog
+            v-model="switch_examine_1"
+            title="审核申请"
+            width="40%"
+            @closed="add_dialog_close"
+        >
+            <div>
+                <el-form
+                    :model="from_add.obj"
+                >
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="审核状态"
+                                label-width="80px"
+                                :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
+                            >
+                                <el-select v-model="examine_item.obj.process_status" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="item in opts_all.obj.examine_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label="回复"
+                                label-width="80px"
+                            >
+                                <el-input
+                                    v-model="examine_item.obj.reply"
+                                    :autosize="{ minRows: 4, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="switch_examine_1=false">取消</el-button>
+                    <el-button type="primary" @click="postFunc_2">确定</el-button>
+                </div>
             </template>
         </el-dialog>
     </div>
@@ -345,7 +542,8 @@ const refreshFunc_1 = () => {
 const from_tab = reactive({
     arr: []
 })
-
+const file_list = ref([])
+import { getFilesKeys } from '@/util/files.js'
 import {
     APIgetEnterpriseList,
     APIgetEnterpriseDetails,
@@ -396,7 +594,7 @@ const checkUsersNameFunc = val => {
 // dialog关闭回调
 const V_1 = ref(null)
 const add_dialog_close = () => {
-    V_1.value.clearFunc()
+    // V_1.value.clearFunc()
 }
 // // 添加
 // const addFunc = () => {
@@ -411,11 +609,12 @@ const addResidentialFunc = () => {
     err_add.obj = {}
     str_title.value = '添加'
     switch_add.value = true
-
+    file_list.value = []
 }
 const modifyFunc = val => {
     APIgetEnterpriseDetails(val.id).then(res => {
         from_add.obj = res.data
+        // file_list.value = res.data.logo
     })
     err_add.obj = {}
     str_title.value = '修改'
@@ -427,8 +626,10 @@ const details_item = reactive({
 })
 const detailsFunc = val => {
     APIgetEnterpriseDetails(val.id).then(res => {
+        // res.data.logo = import.meta.env.VITE_APP_FOLDER_SRC + res.data.lofo
         details_item.obj = res.data
         switch_details.value = true
+        console.log(res.data)
     })
 }
 const deleteFunc = val => {
@@ -438,7 +639,7 @@ const deleteFunc = val => {
     })
 }
 // 提交
-const postFunc = () => {
+const postFunc_1 = () => {
     if (str_title.value == '添加') {
         APIpostEnterprise(from_add.obj).then(res => {
             refreshFunc()
@@ -456,6 +657,45 @@ const postFunc = () => {
             ElMessage.error('修改失败')
         })
     }
+}
+const postFunc = () => {
+    // let files = ""
+    // let file_key = []
+    // if (file_list.value.length > 0) {
+    //     for (let i in file_list.value) {
+    //         if (!file_list.value[i].raw) {
+    //             file_key.push(file_list.value[i].name)
+    //         } else {
+    // files.push(file_list.value[i].raw)
+    //         }
+    //     }
+    // }
+    // console.log(file_list.value)
+    from_add.obj.logo = file_list.value[0].name
+    // if (files.length > 0) {
+    // getFilesKeys(file_list.value.row, 'folder').then(arr => {
+    //     from_add.obj.logo = file_list.value.name.concat(arr)
+    //     postFunc_1()
+    // })
+    console.log(from_add.obj.logo)
+    // return false
+    // }
+    postFunc_1()
+    // let data = {
+    //     biz_lic: 'gdrtrye5t.jpg',
+    //     type: 1
+    // }
+    // APIpostEnterpriseApply(data).then(res => {
+
+    // })
+    // let params = {
+    //     page: page.value,
+    //     per_page: per_page.value,
+    //     tyle: 1
+    // }
+    // APIgetEnterpriseApplyList(params).then(res => {
+    //     console.log(res)
+    // })
 }
 // 选择用户名
 const userData = reactive({
@@ -477,6 +717,55 @@ const getNameFunc = (arr, key) => {
         }
     }
 }
+// 企业申请
+const data_applyList = reactive({
+    arr: []
+})
+const switch_replay = ref(false)
+import {
+    APIgetEnterpriseApplyDetails,
+    APIgetEnterpriseApplyList,
+    APIpostEnterpriseExamine
+} from '@/api/custom/custom.js'
+const applyFunc = row => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        tyle: 1
+    }
+    APIgetEnterpriseApplyList(params).then(res => {
+        console.log(res)
+        data_applyList.arr = res.data
+        switch_replay.value = true
+    })
+}
+const switch_details_1 = ref(false)
+const apply_details = reactive({
+    obj: {}
+})
+const examine_item = reactive({
+    obj: {}
+})
+const switch_examine_1 = ref(false)
+const detailsFunc_1 = row => {
+    APIgetEnterpriseApplyDetails(row.id).then(res => {
+        console.log(res)
+        apply_details.obj = res.data
+        switch_details_1.value = true
+        apply_details.obj.content.biz_lic = import.meta.env.VITE_APP_FOLDER_SRC + apply_details.obj.content.biz_lic
+    })
+}
+const examineFunc = row => {
+    switch_examine_1.value = true
+    apply_details.obj = row
+
+}
+const postFunc_2 = () => {
+    APIpostEnterpriseExamine(apply_details.obj.id, examine_item.obj).then(res => {
+        ElMessage.success('审核成功')
+        switch_examine_1.value = false
+    })
+}
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
@@ -484,7 +773,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['enterprise_type']).then(res => {
+getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status']).then(res => {
     opts_all.obj = res
 })
 </script>

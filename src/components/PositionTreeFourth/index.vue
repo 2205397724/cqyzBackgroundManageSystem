@@ -45,11 +45,11 @@ import {
     // china区域
     APIgetChinaRegion,
     // 小区列表
-    APIgetResidentialListHouse,
+    APIgetResidentialListHouse
 } from '@/api/custom/custom.js'
 let nodeCopy = ''
 // type: region区域 zone小区 building楼栋 units单元
-const filterNode = (value, data,node) => {
+const filterNode = (value, data, node) => {
 
     // if(node.data.next_type===value){
     //     return false
@@ -82,17 +82,17 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'zone':
-                APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
-                    // treeDetail.arr = res.data
-                    console.log(res)
-                    let tree_arr = []
-                        for (let i in res) {
-                            tree_arr.push({ name: res[i].name, type: 'zone', leaf: true, id: res[i].id ,china_code:res[i].china_code})
-                        }
-                    resolve(tree_arr)
-                    emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
-                    tree_arr = []
-                })
+            APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
+                // treeDetail.arr = res.data
+                console.log(res)
+                let tree_arr = []
+                for (let i in res) {
+                    tree_arr.push({ name: res[i].name, type: 'zone', leaf: true, id: res[i].id, china_code: res[i].china_code })
+                }
+                resolve(tree_arr)
+                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                tree_arr = []
+            })
             break
         /* case 'building':
             APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
@@ -125,14 +125,14 @@ watch(tree_item, new_val => {
 const handleCheck = (data, checked) => {
     if (checked.checkedKeys.length > 0) {
         treeRef.value.setCheckedNodes([data])
-        emit('checkFunc', data)
+        emit('checkFuncDate', data)
         return false
     }
     emit('checkFunc', '')
 }
-const handleCheckChange=(data,selfSelected,childrenSelected)=>{
-    if(selfSelected){
-        emit('checkChangeFunc',data)
+const handleCheckChange = (data, selfSelected, childrenSelected) => {
+    if (selfSelected) {
+        emit('checkChangeFunc', data)
     }
 }
 </script>

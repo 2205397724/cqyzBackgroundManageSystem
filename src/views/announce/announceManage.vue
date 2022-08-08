@@ -680,7 +680,7 @@ const dialogExamineCloseFunc = formEl => {
                 }
                 return false
             }
-            getFilesKeys(files_arr, 'announce').then(files => {
+            getFilesKeys(files_arr, 'folder').then(files => {
                 console.log(files)
                 for (let i in files) {
                     from_examine.item.affix[i].file = files[i]

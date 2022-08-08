@@ -413,15 +413,15 @@ const opts = {
         key: 'gov',
         val: '行政管理端'
     }],
-    terminal_perms:[{
-        key:'gov',
-        val:'管理端'
-    },{
-        key:'pm',
-        val:"物业端"
-    },{
-        key:"mbr",
-        val:"业主端"
+    terminal_perms: [{
+        key: 'gov',
+        val: '管理端'
+    }, {
+        key: 'pm',
+        val: '物业端'
+    }, {
+        key: 'mbr',
+        val: '业主端'
     }],
     // 用户端类型
     terminal_num: [{
@@ -753,7 +753,27 @@ const opts = {
         { key: 5, val: '暂停' },
         { key: 6, val: '终止' },
         { key: 7, val: '已结束' }
-    ]
+    ],
+    enterpriseStatus: [{
+        key: 10,
+        val: '未处理'
+    }, {
+        key: 15,
+        val: '处理中'
+    }, {
+        key: 20,
+        val: '处理成功'
+    }, {
+        key: 30,
+        val: '处理失败'
+    }],
+    examine_status: [{
+        key: 20,
+        val: '通过'
+    }, {
+        key: 30,
+        val: '失败'
+    }]
 }
 
 export async function getOpts(arr) {

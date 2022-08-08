@@ -14,39 +14,31 @@
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">事件名称：</div>
-                            <el-input v-model="data_search.obj.name" class="head-btn search_tb" placeholder="事件名称" clearable />
+                            <el-input v-model="data_search.obj.name" class="search_tb" placeholder="事件名称" clearable />
                         </div>
                     </el-col>
-                    <!-- <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                区域类型：
-                            </div>
-                            <el-select v-model="data_search.obj.status" class="head-btn search_tb" placeholder="区域类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.group_user_region_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
-                    </el-col> -->
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">
                                 是否显示：
                             </div>
-                            <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
+                            <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
                                 <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :md="6" :lg="10">
+                    <el-col :sm="12" :md="12" :lg="12">
                         <div class="flx">
-                            <div class="w_30%">
+                            <div class="w_30">
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
-                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
                                 <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
                             </div>
                         </div>
                     </el-col>
@@ -88,12 +80,12 @@
                     <el-table-column />
                     <el-table-column fixed="right" label="操作" width="240">
                         <template #default="scope">
-                            <!-- <el-button
+                            <el-button
                                 size="small" type="success"
                                 @click="activityEventFunc(scope.row)"
                             >
                                 事件活动
-                            </el-button> -->
+                            </el-button>
                             <el-button
                                 type="primary" size="small"
                                 @click="modifyResidentialFunc(scope.row)"
@@ -283,12 +275,6 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="160">
                     <template #default="scope">
-                        <!-- <el-button
-                        size="small"
-                        @click="lookDetails(scope.row)"
-                    >
-                        详情
-                    </el-button> -->
                         <el-popconfirm
                             title="确定要删除当前项么?" cancel-button-type="info"
                             @confirm="deleteFuncDialog(scope.row)"
@@ -518,14 +504,10 @@ const addPostFunc = () => {
         ElMessage.error('添加失败')
     })
 }
-const deleteFuncDialog=val=>{
+const deleteFuncDialog = val => {
     console.log(val)
-    let data={
-        tgt_id: val.tgtid,
-        tgt_type: val.tgt_type
-    }
-    APIdeleteActivitiesEvent(val.vid,data).then(res=>{
-         refreshFunc()
+    APIdeleteActivitiesEvent(val.vid, { data: { tgt_id: val.tgt_id, tgt_type: val.tgt_type } }).then(res => {
+        refreshFunc()
         ElMessage.success('删除成功')
     })
 }
