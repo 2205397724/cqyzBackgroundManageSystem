@@ -126,9 +126,12 @@ const handleCheck = (data, checked) => {
     if (checked.checkedKeys.length > 0) {
         treeRef.value.setCheckedNodes([data])
         emit('checkFuncDate', data)
+        emit('checkFunc', data)
         return false
     }
     emit('checkFunc', '')
+    emit('checkFuncDate', '')
+
 }
 const handleCheckChange = (data, selfSelected, childrenSelected) => {
     if (selfSelected) {

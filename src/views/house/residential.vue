@@ -21,16 +21,41 @@
                         class="p-20 flex-colmun"
                     >
                         <div>
-                            <el-input v-model="data_search.obj.name" class="head-btn width-lg" placeholder="小区名称" clearable />
-                            <el-input v-model="data_search.obj.addr" class="head-btn width-lg" placeholder="地址" clearable />
-                            <el-button type="primary" class="head-btn" @click="searchFunc">搜索</el-button>
-                            <el-button v-show="switch_search" class="head-btn" @click="refreshFunc">重置</el-button>
-                            <span v-show="switch_search" class="font-grey size-base">*搜索到相关结果共{{ total }}条。</span>
+                            <el-button
+                                class="head-btn" type="primary" :icon="Plus"
+                                @click="addResidentialFunc"
+                            >
+                                添加小区
+                            </el-button>
                         </div>
-                        <div style="margin: 10px 0 20px;">
-                            <el-row :gutter="20" class="bottom-btn-box-2">
-                                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                                    <el-button type="primary" size="large" @click="addResidentialFunc">添加小区</el-button>
+                        <div class="search" style="background-color: white;">
+                            <el-row :gutter="10">
+                                <el-col :xs="24" :md="12" :lg="8">
+                                    <div class="searchBox">
+                                        <div class="search_th">小区名称：</div>
+                                        <el-input v-model="data_search.obj.name" class="search_tb" placeholder="小区名称" clearable />
+                                    </div>
+                                </el-col>
+                                <el-col :xs="24" :md="12" :lg="8">
+                                    <div class="searchBox">
+                                        <div class="search_th">地址：</div>
+                                        <el-input v-model="data_search.obj.addr" class="search_tb" placeholder="地址" clearable />
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row class="m-t-20">
+                                <el-col :xs="24" :md="24" :lg="14">
+                                    <div class="flx">
+                                        <div class="w_30">
+                                            <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                        </div>
+                                        <div v-show="switch_search == true" class="w_70 m-l-30">
+                                            <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                            <div class="searchDetail" style="width: 220px;">
+                                                *搜索到相关结果共{{ total }}条。
+                                            </div>
+                                        </div>
+                                    </div>
                                 </el-col>
                             </el-row>
                         </div>
@@ -615,6 +640,7 @@ import {
     watch
 } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 import House from '@/components/House/index.vue'

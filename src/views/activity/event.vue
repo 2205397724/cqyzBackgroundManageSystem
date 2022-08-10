@@ -29,7 +29,7 @@
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :sm="12" :md="12" :lg="12">
+                    <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
                             <div class="w_30">
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
@@ -80,12 +80,12 @@
                     <el-table-column />
                     <el-table-column fixed="right" label="操作" width="240">
                         <template #default="scope">
-                            <el-button
+                            <!-- <el-button
                                 size="small" type="success"
                                 @click="activityEventFunc(scope.row)"
                             >
                                 事件活动
-                            </el-button>
+                            </el-button> -->
                             <el-button
                                 type="primary" size="small"
                                 @click="modifyResidentialFunc(scope.row)"

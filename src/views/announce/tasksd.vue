@@ -15,7 +15,7 @@
                         <div class="searchBox">
                             <div class="search_th">发布人用户组：</div>
 
-                            <div class="searchUser search_tb">
+                            <div class="search_tb">
                                 <div class="searchUserGroup">
                                     <SearchUserGroup ref="V-1" @checkName="checkNameFunc" />
                                 </div>
@@ -25,7 +25,7 @@
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th" style="width: 135px;">任务接收对象等级：</div>
-                            <el-select v-model="data_search.obj.tolv" class="head-btn search_tb_1" placeholder="指定单位" clearable>
+                            <el-select v-model="data_search.obj.tolv" class="search_tb_1" placeholder="指定单位" clearable>
                                 <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </div>
@@ -43,7 +43,7 @@
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">是否启用：</div>
-                            <el-select v-model="data_search.obj.isactive" class="head-btn search_tb" placeholder="是否启用" clearable>
+                            <el-select v-model="data_search.obj.isactive" class="search_tb" placeholder="是否启用" clearable>
                                 <el-option v-for="(item) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </div>
@@ -63,14 +63,16 @@
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :md="12" :lg="10">
+                    <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
-                            <div class="w_30%">
+                            <div class="w_30">
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
-                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
                                 <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
                             </div>
                         </div>
                     </el-col>

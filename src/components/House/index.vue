@@ -18,70 +18,139 @@
                             style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
                         /> -->
                         <div style="padding: 20px 20px 0;box-sizing: border-box;">
-                            <el-row :gutter="10">
-                                <el-col :xs="24" class="el-cascader-box-my">
-                                    <el-select
-                                        v-model="data_search.obj.status_use"
-                                        class="head-btn width-sm" placeholder="*房屋使用状态"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
-                                    <el-select
-                                        v-model="data_search.obj.status_safe"
-                                        class="head-btn width-sm" placeholder="*房屋安全状态"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
-                                    <el-select
-                                        v-model="data_search.obj.status_plan"
-                                        class="head-btn width-sm" placeholder="*规划用途"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
-                                    <el-select
-                                        v-model="data_search.obj.status_fact"
-                                        class="head-btn width-sm" placeholder="*实际用途"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
-                                    <el-select
-                                        v-model="data_search.obj.is_bind_property"
-                                        class="head-btn width-sm"
-                                        placeholder="是否绑定"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
-                                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                                    <div v-if="switch_search">
-                                        <el-button class="head-btn" @click="refreshFunc">重置</el-button>
-                                        <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
-                                    </div>
-                                </el-col>
-                            </el-row>
+                            <div class="search">
+                                <el-row :gutter="10">
+                                    <el-col :xs="24" :md="12" :lg="8">
+                                        <div class="searchBox">
+                                            <div class="search_th">
+                                                房屋使用状态：
+                                            </div>
+                                            <el-select
+                                                v-model="data_search.obj.status_use"
+                                                class="search_tb" placeholder="*房屋使用状态"
+                                                clearable
+                                            >
+                                                <el-option
+                                                    v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
+                                                    :label="item.val" :value="item.key"
+                                                />
+                                            </el-select>
+                                        </div>
+                                    </el-col>
+                                    <el-col :xs="24" :md="12" :lg="8">
+                                        <div class="searchBox">
+                                            <div class="search_th">
+                                                房屋安全状态：
+                                            </div>
+                                            <el-select
+                                                v-model="data_search.obj.status_safe"
+                                                class="search_tb" placeholder="*房屋安全状态"
+                                                clearable
+                                            >
+                                                <el-option
+                                                    v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
+                                                    :label="item.val" :value="item.key"
+                                                />
+                                            </el-select>
+                                        </div>
+                                    </el-col>
+                                    <el-col :xs="24" :md="12" :lg="8">
+                                        <div class="searchBox">
+                                            <div class="search_th">
+                                                是否绑定：
+                                            </div>
+                                            <el-select
+                                                v-model="data_search.obj.is_bind_property"
+                                                class="search_tb"
+                                                placeholder="是否绑定"
+                                                clearable
+                                            >
+                                                <el-option
+                                                    v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
+                                                    :label="item.val" :value="item.key"
+                                                />
+                                            </el-select>
+                                        </div>
+                                    </el-col>
+                                    <!-- <el-col :xs="24" class="el-cascader-box-my">
+                                        <el-select
+                                            v-model="data_search.obj.status_use"
+                                            class="head-btn width-sm" placeholder="*房屋使用状态"
+                                            clearable
+                                        >
+                                            <el-option
+                                                v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
+                                                :label="item.val" :value="item.key"
+                                            />
+                                        </el-select>
+                                        <el-select
+                                            v-model="data_search.obj.status_safe"
+                                            class="head-btn width-sm" placeholder="*房屋安全状态"
+                                            clearable
+                                        >
+                                            <el-option
+                                                v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
+                                                :label="item.val" :value="item.key"
+                                            />
+                                        </el-select>
+                                        <el-select
+                                            v-model="data_search.obj.status_plan"
+                                            class="head-btn width-sm" placeholder="*规划用途"
+                                            clearable
+                                        >
+                                            <el-option
+                                                v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
+                                                :label="item.val" :value="item.key"
+                                            />
+                                        </el-select>
+                                        <el-select
+                                            v-model="data_search.obj.status_fact"
+                                            class="head-btn width-sm" placeholder="*实际用途"
+                                            clearable
+                                        >
+                                            <el-option
+                                                v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
+                                                :label="item.val" :value="item.key"
+                                            />
+                                        </el-select>
+                                        <el-select
+                                            v-model="data_search.obj.is_bind_property"
+                                            class="head-btn width-sm"
+                                            placeholder="是否绑定"
+                                            clearable
+                                        >
+                                            <el-option
+                                                v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
+                                                :label="item.val" :value="item.key"
+                                            />
+                                        </el-select>
+                                        <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
+                                        <div v-if="switch_search">
+                                            <el-button class="head-btn" @click="refreshFunc">重置</el-button>
+                                            <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
+                                        </div>
+                                    </el-col> -->
+                                </el-row>
+                                <el-row class="m-t-20">
+                                    <el-col :xs="24" :md="24" :lg="14">
+                                        <div class="flx">
+                                            <div class="w_30">
+                                                <el-button class="m-l-20" type="primary" :icon="Search" :disabled="active_obj.obj.type == 'units' || active_obj.obj.type =='buildings' ? false: true" @click="searchFunc">筛选</el-button>
+                                            </div>
+                                            <div v-show="switch_search" class="w_70 m-l-30">
+                                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                                <div class="searchDetail" style="width: 220px;">
+                                                    *搜索到相关结果共{{ total }}条。
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </div>
                             <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
                                 <div class="font-grey size-base">户数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_house }} </strong>户</div>
                             </div>
-                            <div v-if="active_obj.obj.type=='building'" class="count p-t-10">
+                            <div v-if="active_obj.obj.type=='buildings'" class="count p-t-10">
                                 <div class="font-grey size-base">住宅总面积：<strong class="font-darkgrey size-lg">{{ details_data.obj.area_live }}</strong>㎡，</div>
                                 <div class="font-grey size-base">住宅总套数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_live }}</strong>套</div>
                             </div>
@@ -90,14 +159,9 @@
                                     <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
                                     <el-button :disabled="choseIDs.arr.length<=0" type="warning" class="head-btn" @click="modifyAllFunc">批量修改</el-button>
                                     <el-button class="head-btn" type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
+                                    <el-button class="head-btn" type="primary" @click="houseBindFunc">房屋绑定申请</el-button>
                                 </el-col>
                             </el-row>
-                            <!-- <div class="count">
-                                    <div class="count-item count_item_i2">在租({{ leaseNum }})</div>
-                                    <div class="count-item count_item_i1">已配未租({{ renting }})</div>
-                                    <div class="count-item count_item_i3">未配({{ finishBuild }})</div>
-                                    <div class="count-item count_item_i4">闲置({{ otherHouse }})</div>
-                                </div> -->
                         </div>
                         <div
                             style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);"
@@ -135,6 +199,7 @@
                                     <el-scrollbar style="white-space: nowrap;">
                                         <div style="display: flex;">
                                             <div v-for="(item,i) in child.houses" :key="i" class="row-item-box">
+                                                <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
                                                 <div v-show="item.house_num?true:false" class="row-item">
                                                     <el-checkbox
                                                         v-if="checkFH.all[child.floor_truth]&&checkFH.all[child.floor_truth][item.house_num]"
@@ -142,7 +207,7 @@
                                                         @change="(val)=>{checkFH.all[child.floor_truth][item.house_num].val= val;allClickFunc(child.floor_truth,item.house_num,val)}"
                                                     />
                                                     <el-popover
-                                                        :width="200"
+                                                        :width="250"
                                                         trigger="hover"
 
                                                         placement="top"
@@ -158,7 +223,8 @@
                                                             <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div>
                                                             <div>
                                                                 <el-button type="primary" plain @click="modifyResidentialFunc(item)">修改</el-button>
-                                                                <el-button type="warning" plain @click="showPropertyFunc(item)">产权</el-button>
+                                                                <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button>
+                                                                <el-button type="success" plain @click="showNumbersFunc(item)">成员</el-button>
                                                             </div>
                                                         </div>
                                                     </el-popover>
@@ -422,14 +488,14 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col v-if="from_examine.item&&from_examine.item.addition" :md="24" :lg="24">
+                        <el-col v-if="from_examine.item.remark" :md="24" :lg="24">
                             <el-form-item
-                                label="简介" prop="addition.desc"
-                                :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''"
+                                label="简介" prop="remark"
+                                :error="from_error.msg&&from_error.msg['remark']?from_error.msg['remark'][0]:''"
                                 label-width="140px"
                             >
                                 <el-input
-                                    v-model="from_examine.item.addition.desc"
+                                    v-model="from_examine.item.remark"
                                     :autosize="{ minRows: 2, maxRows: 6 }"
                                     type="textarea"
                                     placeholder=""
@@ -743,10 +809,10 @@
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="产权人" name="second">
-                            <div v-for="(item,i) in property_form.obj.property_owners" :key="i" class="serve-box">
+                            <div v-for="(item,i) in property_form.obj.owners" :key="i" class="serve-box">
                                 <el-row>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
-                                        <el-form-item label-width="80px" label="姓名" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.name']?from_error_property.msg['property_owners.'+i+'.name'][0]:''">
+                                        <el-form-item label-width="80px" label="姓名" :error="from_error_property.msg&&from_error_property.msg['owners.'+i+'.name']?from_error_property.msg['owners.'+i+'.name'][0]:''">
                                             <el-input
                                                 v-if="!read_state"
                                                 v-model="item.name"
@@ -756,7 +822,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
-                                        <el-form-item label-width="80px" label="证件类型" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.type_id_card']?from_error_property.msg['property_owners.'+i+'.type_id_card'][0]:''">
+                                        <el-form-item label-width="80px" label="证件类型" :error="from_error_property.msg&&from_error_property.msg['owners.'+i+'.type_id_card']?from_error_property.msg['owners.'+i+'.type_id_card'][0]:''">
                                             <el-select
                                                 v-if="!read_state"
                                                 v-model="item.type_id_card" class="head-btn" placeholder=""
@@ -771,7 +837,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
-                                        <el-form-item label-width="80px" label="证件号" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.id_card']?from_error_property.msg['property_owners.'+i+'.id_card'][0]:''">
+                                        <el-form-item label-width="80px" label="证件号" :error="from_error_property.msg&&from_error_property.msg['owners.'+i+'.id_card']?from_error_property.msg['owners.'+i+'.id_card'][0]:''">
                                             <el-input
                                                 v-if="!read_state"
                                                 v-model="item.id_card"
@@ -781,7 +847,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
-                                        <el-form-item label-width="80px" label="联系方式" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.mobile']?from_error_property.msg['property_owners.'+i+'.mobile'][0]:''">
+                                        <el-form-item label-width="80px" label="联系方式" :error="from_error_property.msg&&from_error_property.msg['owners.'+i+'.mobile']?from_error_property.msg['owners.'+i+'.mobile'][0]:''">
                                             <el-input
                                                 v-if="!read_state"
                                                 v-model="item.mobile"
@@ -791,7 +857,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
-                                        <el-form-item label-width="80px" label="面积" :error="from_error_property.msg&&from_error_property.msg['property_owners.'+i+'.area']?from_error_property.msg['property_owners.'+i+'.area'][0]:''">
+                                        <el-form-item label-width="80px" label="面积" :error="from_error_property.msg&&from_error_property.msg['owners.'+i+'.area']?from_error_property.msg['owners.'+i+'.area'][0]:''">
                                             <el-input
                                                 v-if="!read_state"
                                                 v-model="item.area"
@@ -835,6 +901,305 @@
                 </div>
             </template>
         </el-dialog>
+        <el-dialog
+            v-model="switch_numbers"
+            title="房屋成员"
+            width="70%"
+        >
+            <div>
+                <el-button
+                    class="head-btn" type="primary" :icon="Plus"
+                    @click="addHouseNumberFunc"
+                >
+                    添加成员
+                </el-button>
+            </div>
+            <div>
+                <el-table
+                    v-loading="loading_tab"
+                    :data="houseNumbers_list.arr"
+                    :header-cell-style="{
+                        background: '#fbfbfb',
+                        color: '#999999',
+                        'font-size': '12px',
+                    }"
+                    style="width: 100%; min-height: 300px;"
+                    @select="handleSelectionChange"
+                >
+                    <el-table-column
+                        size="small"
+                        type="selection"
+                        align="center" width="55"
+                    />
+                    <el-table-column prop="name" label="用户姓名" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="用户id" width="300">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.uid }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="性别" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(
+                                [
+                                    { val: "男", key: "F" },
+                                    { val: "女", key: "M" },
+                                    { val: "未设置", key: "U" },
+                                ],
+                                scope.row.user.gender
+                            ) }}
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="手机号" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.user.mobile }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+            </div>
+            <div>
+                <el-popconfirm
+                    title="确定要删除当前项么?"
+                    cancel-button-type="info"
+                    @confirm="deleteFunc_2"
+                >
+                    <template #reference>
+                        <el-button type="danger"> 删除 </el-button>
+                    </template>
+                </el-popconfirm>
+            </div>
+        </el-dialog>
+        <!-- 添加成员 -->
+        <el-dialog
+            v-model="switch_houseNumber"
+            title="添加成员"
+            width="50%"
+        >
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="number.item"
+                >
+                    <el-row :gutter="10">
+                        <!-- <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="姓名" prop="name"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                                label-width="80px"
+                            >
+                                <el-input
+                                    v-model="number.item.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="姓别" prop="gender"
+                                :error="from_error.msg&&from_error.msg.gender?from_error.msg.gender[0]:''"
+                                label-width="80px"
+                            >
+                                <el-input
+                                    v-model="number.item.gender"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col> -->
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="手机号" prop="mobile"
+                                :error="from_error.msg&&from_error.msg.mobile?from_error.msg.mobile[0]:''"
+                                label-width="80px"
+                            >
+                                <el-input
+                                    v-model="number.item.mobile"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_houseNumber=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc_1()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 房屋绑定申请 -->
+        <el-dialog
+            v-model="switch_houseBind"
+            title="房屋绑定申请"
+            width="70%"
+        >
+            <div>
+                <el-table
+                    v-loading="loading_tab"
+                    :data="housebind_list.arr"
+                    :header-cell-style="{
+                        background: '#fbfbfb',
+                        color: '#999999',
+                        'font-size': '12px',
+                    }"
+                    style="width: 100%; min-height: 300px;"
+                    @select="handleSelectionChange"
+                >
+                    <el-table-column prop="name" label="申请人姓名" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="申请绑定的房屋ID" width="300">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.hid }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="类型" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_bind,scope.row.type) }}
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="申请状态" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }}
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                    <el-table-column label="操作" width="200px" fixed="right">
+                        <template #default="scope">
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="modifyHouseBindFunc(scope.row)"
+                            >
+                                审核
+                            </el-button>
+                            <el-button size="small" @click="getHouseBindDetails(scope.row)">
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?"
+                                cancel-button-type="info"
+                                @confirm="DeleteHouseBindFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small"> 删除 </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-dialog>
+        <!-- 修改 -->
+        <el-dialog
+            v-model="switch_PosthouseBind"
+            title="审核"
+            width="50%"
+        >
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="houseBind.item"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="审核状态" prop="hid"
+                                :error="from_error.msg&&from_error.msg.hid?from_error.msg.hid[0]:''"
+                                label-width="80px"
+                            >
+                                <el-select v-model="houseBind.item.status" class="head-btn search_tb" placeholder="审核状态" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.houseBindStatus_1" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label="回复" prop="reply"
+                                :error="from_error.msg&&from_error.msg.reply?from_error.msg.reply[0]:''"
+                                label-width="80px"
+                            >
+                                <el-input
+                                    v-model="houseBind.item.reply"
+                                    placeholder=""
+                                    type="textarea"
+                                    :autosize="{minRows: 2,maxRows: 8}"
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_PosthouseBind=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc_2()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 详情 -->
+        <el-dialog
+            v-model="switch_HouseBinddetails"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">申请人姓名</div>
+                    <div class="right">{{ data_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">申请绑定的房屋ID</div>
+                    <div class="right">{{ data_details.item.hid }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">申请人身份证号</div>
+                    <div class="right">{{ data_details.item.id_card }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_bind,data_details.item.type) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">申请状态</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.houseBindStatus,data_details.item.status) }}</div>
+                </div>
+                <div v-if="data_details.item.affixs&&data_details.item.affixs.length>0" class="item">
+                    <div class="left">附件</div>
+                    <div class="right">
+                        <!-- 两种模式任君选择 -->
+                        <el-image
+                            v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" class="wh_100p m-r-10" :src="item" fit="cover"
+                        />
+                    <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">申请时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_HouseBinddetails = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -864,7 +1229,7 @@ const checkFunc = val => {
     console.log(val)
     active_obj.obj = val
     if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
-        'building')) {
+        'buildings')) {
         getHouseListFunc()
     }
 }
@@ -895,6 +1260,7 @@ import {
     APIgetUnitsDetailsHouse,
     APIgetBuildDetailsHouse
 } from '@/api/custom/custom.js'
+import { Search, Plus } from '@element-plus/icons-vue'
 // 获取楼栋单元
 const details_data = reactive({
     obj: {}
@@ -904,15 +1270,9 @@ const getUnitBuildFunc = () => {
         APIgetUnitsDetailsHouse(active_obj.obj.id).then(res => {
             details_data.obj = res
         })
-    } else if (active_obj.obj.type == 'building') {
+    } else if (active_obj.obj.type == 'buildings') {
         APIgetBuildDetailsHouse(active_obj.obj.id).then(res => {
             details_data.obj = res
-
-
-
-
-
-
 
         })
     }
@@ -957,6 +1317,8 @@ const getHouseListFunc = () => {
     let params = {
         houseable_type: active_obj.obj.type,
         houseable_id: active_obj.obj.id
+        // houseable_type: 'units',
+        // houseable_id: '62be6497b55f2676b8065601'
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
@@ -981,23 +1343,23 @@ const getHouseListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     APIgetHouseListSort(params).then(res => {
-        if (!res.code) {
-            total.value = 0
-            // 处理空白格
-            let nums = res.data.house_nums
-            let list = res.data.houses
-            for (let i in list) {
-                if (list[i].houses.length < nums.length) {
-                    for (let j in nums) {
-                        if (!list[i].houses[j] || !list[i].houses[j].house_num || (list[i].houses[j]
-                            .house_num != nums[j])) {
-                            list[i].houses.splice(j, 0, {})
-                        }
+        console.log(res)
+        total.value = 0
+        // 处理空白格
+        let nums = res.house_nums
+        let list = res.floors
+        for (let i in list) {
+            if (list[i].houses.length < nums.length) {
+                for (let j in nums) {
+                    if (!list[i].houses[j] || !list[i].houses[j].house_num || (list[i].houses[j]
+                        .house_num != nums[j])) {
+                        list[i].houses.splice(j, 0, {})
                     }
                 }
             }
             house_num.arr = nums
             house_list.arr = list
+            console.log(house_num.arr)
             // 处理默认选择项目
             for (let i in house_num.arr) {
                 checkFH.row[house_num.arr[i]] = {
@@ -1023,6 +1385,7 @@ const getHouseListFunc = () => {
         }
     })
 }
+// houseable_type=units&houseable_id=62be6497b55f2676b8065601
 // 更新check状态
 // row点击
 const rowClickFunc = (col, val) => {
@@ -1194,8 +1557,8 @@ import {
 const getFilesFunc = () => {
     files_loading.value = true
     APIgetFilesList().then(res => {
-            files_tab.arr = res
-            files_loading.value = false
+        files_tab.arr = res
+        files_loading.value = false
     })
 }
 const fileChangeFunc = (file, fileList) => {
@@ -1213,11 +1576,9 @@ import {
 const alldetailsFunc = () => {
     error_alldetails.msg = {}
     APIputAllHouseHouse(piliangxiugai.obj).then(res => {
-        if (!res.code) {
-            switch_alldetails.value = false
-            ElMessage.success(res.msg)
-            refreshFunc()
-        }
+        switch_alldetails.value = false
+        ElMessage.success('修改成功')
+        refreshFunc()
     }).catch(err => {
         error_alldetails.msg = err.data
     })
@@ -1239,21 +1600,17 @@ const dialogExamineCloseFunc = () => {
     }
     if (str_title.value == '修改') {
         APIputHouseHouse(data.id, data).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                ElMessage.success(res.msg)
-                switch_examine.value = false
-            }
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_examine.value = false
         }).catch(err => {
             from_error.msg = err.data
         })
     } else {
         APIpostHouseHouse(data).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                ElMessage.success(res.msg)
-                switch_examine.value = false
-            }
+            refreshFunc()
+            ElMessage.success('添加失败')
+            switch_examine.value = false
         }).catch(err => {
             from_error.msg = err.data
         })
@@ -1278,10 +1635,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetHouseDetailsHouse(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+        console.log(res)
+        from_examine.item = res
+        switch_examine.value = true
     })
 }
 // 产权
@@ -1300,10 +1656,11 @@ const showPropertyFunc = val => {
     console.log(val)
     from_error_property.msg = {}
     property_obj.obj = JSON.parse(JSON.stringify(val))
-    APIgetPropertyDetails(property_obj.obj.curr_property_id).then(res => {
-        if (property_obj.obj.curr_property_id) {
-            property_form.obj = res.data
-            copy_property.obj = JSON.parse(JSON.stringify(res.data))
+    APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
+        console.log(res)
+        if (property_obj.obj.curr_property) {
+            property_form.obj = res
+            copy_property.obj = JSON.parse(JSON.stringify(res))
         } else {
             property_form.obj = { house_id: property_obj.obj.id }
             copy_property.obj = { house_id: property_obj.obj.id }
@@ -1312,9 +1669,86 @@ const showPropertyFunc = val => {
         switch_property.value = true
     })
 }
+// 房屋成员
+import {
+    APIgetHouseNumbersSort,
+    APIpostHouseNumbers,
+    APIdeleteHouseNumbers
+} from '@/api/custom/custom.js'
+const houseNumbers_list = reactive({
+    arr: []
+})
+const loading_tab = ref(true)
+const switch_numbers = ref(false)
+const switch_houseNumber = ref(false)
+const number = reactive({
+    item: {}
+})
+const house_id = ref('')
+const showNumbersFunc = item => {
+    console.log(item)
+    // let data = {
+    //     'hid': '62c2989e2f315d46612cdd51',
+    //     'mobile': '15523053981'
+    // }
+    // APIpostHouseNumbers(data).then(res => {
+    //     ElMessage.success('添加成功')
+    // })
+    house_id.value = item.id
+    getHouseNumbersFunc()
+}
+const getHouseNumbersFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        hid: house_id.value
+    }
+    loading_tab.value = true
+    APIgetHouseNumbersSort(params).then(res => {
+        console.log(res)
+        houseNumbers_list.arr = res
+        loading_tab.value = false
+        switch_numbers.value = true
+    })
+}
+// 添加成员
+const addHouseNumberFunc = () => {
+    switch_houseNumber.value = true
+    number.item = {}
+}
+const dialogExamineCloseFunc_1 = () => {
+    number.item.hid = house_id.value
+    APIpostHouseNumbers(number.item).then(res => {
+        ElMessage.success('添加成功')
+        getHouseNumbersFunc()
+        switch_houseNumber.value = false
+    })
+}
+const number_ids = reactive({
+    arr: []
+})
+const handleSelectionChange = val => {
+    let number_id = []
+    console.log(val)
+    val.forEach(function(value, index, array) {
+        // console.log(value)
+        number_id.push(value.id)
+        number_ids.arr = number_id
+    })
+    console.log(number_id)
+
+    console.log(number_ids.arr)
+}
+// 删除成员
+const deleteFunc_2 = () => {
+    APIdeleteHouseNumbers({ data: { ids: number_ids.arr } }).then(res => {
+        ElMessage.success('删除成功')
+        getHouseNumbersFunc()
+    })
+}
 // 删除 服务名称和联系方式
 const deleteServiceFunc = index => {
-    property_form.obj.property_owners.splice(index, 1)
+    property_form.obj.owners.splice(index, 1)
 }
 // 添加 服务名称和联系方式
 const addServiceFunc = index => {
@@ -1325,10 +1759,10 @@ const addServiceFunc = index => {
         mobile: '',
         area: ''
     }
-    if (!property_form.obj.property_owners) {
-        property_form.obj.property_owners = []
+    if (!property_form.obj.owners) {
+        property_form.obj.owners = []
     }
-    property_form.obj.property_owners.push(data)
+    property_form.obj.owners.push(data)
 }
 const from_error_property = reactive({
     msg: {}
@@ -1339,7 +1773,7 @@ const modifyPropertyFunc = val => {
     if (val) {
         from_error_property.msg = {}
         property_form.obj = {
-            property_owners: [],
+            owners: [],
             house_id: copy_property.obj.house_id,
             should_bind_house: 1
         }
@@ -1364,27 +1798,23 @@ const postPropertyFunc = () => {
     from_error_property.msg = {}
     if (!add_state.value) {
         APIputProperty(property_form.obj.id, property_form.obj).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                ElMessage.success(res.msg)
-                switch_property.value = false
-            }
-        }).catch(err => {
-            from_error_property.msg = err.data
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_property.value = false
+        }, err => {
+
+            console.log(err)
         })
     } else {
         APIpostProperty(property_form.obj).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                ElMessage.success(res.msg)
-                switch_property.value = false
-            }
+            refreshFunc()
+            ElMessage.success('添加成功')
+            switch_property.value = false
         }).catch(err => {
             from_error_property.msg = err.data
         })
     }
 }
-
 // 打开导入房屋from
 const openFileFunc = () => {
     upload_str.value = '请点击此处或拖拽需要上传的文件'
@@ -1394,13 +1824,82 @@ const openFileFunc = () => {
         loc_id: active_obj.obj.id
     }
 }
+// 房屋绑定申请
+import {
+    APIgetHouseBind,
+    APIgetHouseBindDetails,
+    APIputHouseBind,
+    APIdeleteHouseBind
+} from '@/api/custom/custom.js'
+const housebind_list = reactive({
+    arr: []
+})
+const switch_houseBind = ref(false)
+const switch_PosthouseBind = ref(false)
+const houseBind = reactive({
+    item: {}
+})
+const file_list = ref([])
+import { getFilesKeys } from '@/util/files.js'
+const data_details = reactive({
+    item: {}
+})
+const switch_HouseBinddetails = ref(false)
+const houseBindFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    loading_tab.value = true
+    APIgetHouseBind(params).then(res => {
+        console.log(res)
+        housebind_list.arr = res
+        loading_tab.value = false
+        switch_houseBind.value = true
+    })
+}
+// 审核
+const modifyHouseBindFunc = val => {
+    from_error.msg = {}
+    switch_PosthouseBind.value = true
+    houseBind.item.id = val.id
+}
+// 详情
+const getHouseBindDetails = val => {
+    APIgetHouseBindDetails(val.id).then(res => {
+        res.affixs = []
+        for (let i in res.affix) {
+            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])
+        }
+        data_details.item = res
+        switch_HouseBinddetails.value = true
+    })
+}
+// 同意拒绝提交
+const dialogExamineCloseFunc_2 = () => {
+    APIputHouseBind(houseBind.item.id, houseBind.item).then(res => {
+        ElMessage.success('已审核')
+        houseBindFunc()
+        switch_PosthouseBind.value = false
+        houseBind.item = {}
+    }).catch(err => {
+        // ElMessage.error('修改失败')
+    })
+}
+const DeleteHouseBindFunc = val => {
+    APIdeleteHouseBind(val.id).then(res => {
+        ElMessage.success('删除成功')
+        houseBindFunc()
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
+import SearchHouse from '../SearchHouse/index.vue'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['status_all', 'type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+getOpts(['status_all', 'houseBindStatus_1', 'houseBindStatus', 'type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact', 'house_bind']).then(res => {
     opts_all.obj = res
 })
 

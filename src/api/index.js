@@ -22,8 +22,7 @@ const api = axios.create({
     // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
     baseURL: import.meta.env.DEV &&
         import.meta.env.VITE_OPEN_PROXY === 'true' ?
-        '/proxy/' :
-        import.meta.env.VITE_APP_API_BASEURL,
+        '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
     timeout: 6000,
     responseType: 'json'
 })
@@ -89,6 +88,7 @@ api.interceptors.response.use(
             message = '接口请求超时'
         } else if (message.includes('Request failed with status code')) {
             message = '接口' + message.substr(message.length - 3) + '异常'
+                // message = '接' + message
         }
         ElMessage({
             message,

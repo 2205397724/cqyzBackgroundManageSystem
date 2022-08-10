@@ -131,11 +131,11 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="100">
                                     <template #default="scope">
-                                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                        <el-button v-show="scope.row.status == 2" class="btnNone m-l-5" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                        <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                        <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                                        <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                                     </template>
                                 </el-table-column>
 
@@ -170,13 +170,13 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round effect="dark">筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column />
@@ -686,23 +686,26 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
 })
 </script>
 <style lang="scss" scoped>
-    ::v-deep .el-button + .el-button {
-        margin-bottom: 5px;
-    }
-    .serve-box {
-        /* border: 1px solid #eee;
+::v-deep .el-button + .el-button {
+    margin-bottom: 5px;
+}
+.serve-box {
+    /* border: 1px solid #eee;
         box-sizing: border-box;
         padding: 10px;
         margin-bottom: 10px;
         border-radius: 6px; */
-        position: relative;
-        .delete-service {
-            position: absolute;
-            left: -33px;
-            top: -24px;
-            z-index: 99;
-            cursor: pointer;
-            background-color: #fff;
-        }
+    position: relative;
+    .delete-service {
+        position: absolute;
+        left: -33px;
+        top: -24px;
+        z-index: 99;
+        cursor: pointer;
+        background-color: #fff;
     }
+}
+.noDeal {
+    margin-left: 6px;
+}
 </style>

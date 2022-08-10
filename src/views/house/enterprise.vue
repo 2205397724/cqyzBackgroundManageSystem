@@ -31,14 +31,16 @@
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :md="12" :lg="10">
+                    <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
-                            <div class="w_30%">
+                            <div class="w_30">
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
-                            <div v-show="switch_search" class="w_70% m-l-30">
+                            <div v-show="switch_search" class="w_70 m-l-30">
                                 <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
                             </div>
                         </div>
                     </el-col>
@@ -269,63 +271,196 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="50%"
+            width="70%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">ID</div>
-                    <div class="right">{{ details_item.obj.id }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">用户名</div>
-                    <div class="right">{{ getNameFunc(userData.arr,details_item.obj.user_id) }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">企业名称</div>
-                    <div class="right">{{ details_item.obj.name }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">社会责任代码</div>
-                    <div class="right">{{ details_item.obj.social_code }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,details_item.obj.type) }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">图标</div>
-                    <div class="right">
-                        <!-- <el-image
+            <el-tabs model-value="1" @tab-click="handleClick">
+                <el-tab-pane label="企业成员" name="1">
+                    <el-scrollbar height="400px">
+                        <div>
+                            <el-button
+                                class="head-btn" type="primary" :icon="Plus"
+                                @click="addUserGroupFunc"
+                            >
+                                添加用户组
+                            </el-button>
+                        </div>
+                        <!-- <div class="search">
+                            <el-row :gutter="10">
+                                <el-col :xs="24" :md="12" :lg="8">
+                                    <div class="searchBox">
+                                        <div class="search_th">
+                                            用户组名称：
+                                        </div>
+                                        <el-input v-model="data_search.item.name" class="search_tb" placeholder="" clearable />
+                                    </div>
+                                </el-col>
+                                <el-col :xs="24" :md="12" :lg="8">
+                                    <div class="searchBox">
+                                        <div class="search_th">用户组类型：</div>
+                                        <el-select
+                                            v-model="data_search.item.type"
+                                            placeholder="请选择类型"
+                                            class="search_tb"
+                                        >
+                                            <el-option
+                                                v-for="item in opts_all.obj.toushu_return_type"
+                                                :key="item.key"
+                                                :value="item.key"
+                                                :label="item.val"
+                                            />
+                                        </el-select>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row class="m-t-20">
+                                <el-col :xs="12" :md="12" :lg="10">
+                                    <div class="flx">
+                                        <div class="w_30%">
+                                            <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc_1">筛选</el-button>
+                                        </div>
+                                        <div v-show="switch_search_1" class="w_70% m-l-30">
+                                            <el-button class="m-r-10" @click="refreshFunc_2">重置</el-button>
+                                            *搜索到相关结果共{{ total_1 }}条。
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div> -->
+                        <div>
+                            <el-table
+                                v-loading="loading_tab"
+                                :data="data_tab.arr"
+                                :header-cell-style="{
+                                    background: '#fbfbfb',
+                                    color: '#999999',
+                                    'font-size': '12px',
+                                }"
+                                default-expand-all
+                                row-key="id"
+                                :tree-props="{ children: 'children' }"
+                                style="width: 100%; min-height: 300px;"
+                            >
+                                <el-table-column prop="name" label="用户组名称" width="180">
+                                    <template #default="scope">
+                                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                                    </template>
+                                </el-table-column>
+                                <!-- <el-table-column prop="id" label="用户组ID" width="300">
+            <template #default="scope">
+              <span style="margin-left: 10px">{{ scope.row.id }} </span>
+            </template>
+          </el-table-column> -->
+                                <el-table-column prop="type" label="类型" width="180">
+                                    <template #default="scope">
+                                        <span style="margin-left: 10px;">{{
+                                            getOptVal(opts_all.obj.toushu_return_type, scope.row.type)
+                                        }}
+                                        </span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="type" label="所在区域" width="180">
+                                    <template #default="scope">
+                                        <span style="margin-left: 10px;">{{ scope.row.region_cc }}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="成员" width="180">
+                                    <template #default="scope">
+                                        <el-button
+                                            type="primary"
+                                            size="small"
+                                            style="margin-left: -10px;"
+                                            @click="optValFunc(scope.row)"
+                                        >
+                                            成员
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column />
+                                <el-table-column fixed="right" label="操作" width="320" style="z-index: 1;">
+                                    <template #default="scope">
+                                        <el-button
+                                            type="primary"
+                                            size="small"
+                                            @click="modifyResidentialFunc(scope.row)"
+                                        >
+                                            修改
+                                        </el-button>
+                                        <el-button size="small" @click="getGroupDetail(scope.row)">
+                                            详情
+                                        </el-button>
+                                        <el-popconfirm
+                                            title="确定要删除当前项么?"
+                                            cancel-button-type="info"
+                                            @confirm="deleteFunc_1(scope.row)"
+                                        >
+                                            <template #reference>
+                                                <el-button type="danger" size="small"> 删除 </el-button>
+                                            </template>
+                                        </el-popconfirm>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane label="企业信息" name="2">
+                    <div class="details-box">
+                        <div class="item">
+                            <div class="left">ID</div>
+                            <div class="right">{{ details_item.obj.id }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">用户名</div>
+                            <div class="right">{{ getNameFunc(userData.arr,details_item.obj.user_id) }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业名称</div>
+                            <div class="right">{{ details_item.obj.name }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">社会责任代码</div>
+                            <div class="right">{{ details_item.obj.social_code }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">类型</div>
+                            <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,details_item.obj.type) }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">图标</div>
+                            <div class="right">
+                                <!-- <el-image
                             v-for="(item,i) in details_item.obj.logo" :key="i" :preview-src-list="details_item.obj.logo" class="wh_100p m-r-10" :src="item" fit="cover"
                         /> -->
-                        <img :src="details_item.obj.logo" alt="" style="width: 40px;">
-                    </div>
-                </div>
-                <!-- <div class="item">
+                                <img :src="details_item.obj.logo" alt="" style="width: 40px;">
+                            </div>
+                        </div>
+                        <!-- <div class="item">
                     <div class="left">法人</div>
                     <div class="right">{{ details_item.obj.legal }} </div>
                 </div> -->
-                <div class="item">
-                    <div class="left">联系方式</div>
-                    <div class="right">{{ details_item.obj.contact }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">简介</div>
-                    <div class="right">{{ details_item.obj.desc }} </div>
-                </div>
-                <!-- <div class="item">
+                        <div class="item">
+                            <div class="left">联系方式</div>
+                            <div class="right">{{ details_item.obj.contact }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">简介</div>
+                            <div class="right">{{ details_item.obj.desc }} </div>
+                        </div>
+                        <!-- <div class="item">
                     <div class="left">extra</div>
                     <div class="right">{{ details_item.obj.extra }} </div>
                 </div> -->
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ details_item.obj.created_at }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">更新时间</div>
-                    <div class="right">{{ details_item.obj.updated_at }} </div>
-                </div>
-            </div>
+                        <div class="item">
+                            <div class="left">创建时间</div>
+                            <div class="right">{{ details_item.obj.created_at }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">更新时间</div>
+                            <div class="right">{{ details_item.obj.updated_at }} </div>
+                        </div>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
@@ -367,6 +502,7 @@
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
+                            :disabled="scope.row.status == 20 || scope.row.status == 30 ? false : true"
                             @click="examineFunc(scope.row)"
                         >
                             审核
@@ -404,7 +540,7 @@
                 </div>
                 <div class="item">
                     <div class="left">企业类型</div>
-                    <div class="right">{{ apply_details.obj.type }} </div>
+                    <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,apply_details.obj.type) }} </div>
                 </div>
                 <div class="item">
                     <div class="left">处理状态</div>
@@ -507,6 +643,350 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 企业成员添加修改 -->
+        <el-dialog v-model="switch_examine" :title="str_title" width="50%">
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="from_examine.item"
+                    label-position="left"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24">
+                            <el-form-item
+                                label="用户组名称"
+                                prop="name"
+                                label-width="110px"
+                            >
+                                <el-input v-model="from_examine.item.name" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :md="24">
+                            <el-form-item label="类型" prop="type" label-width="110px">
+                                <el-select
+                                    v-model="from_examine.item.type"
+                                    @change="type_change"
+                                >
+                                    <el-option
+                                        v-for="item in opts_all.obj.toushu_return_type"
+                                        :key="item.key"
+                                        :value="item.key"
+                                        :label="item.val"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :md="24">
+                            <el-form-item
+                                label="所在地区"
+                                prop="region_val"
+                                label-width="110px"
+                            >
+                                <!-- <el-input
+                                    v-model="from_examine.item.region_val"
+                                    placeholder=""
+                                /> -->
+                                <div
+                                    style="
+                                                                                                                                                                width: 100%;
+                                                                                                                                                                height: 32px;
+                                                                                                                                                                border: 1px solid #dcdfe6;
+                                                                                                                                                                border-radius: 4px;
+"
+                                    @click="click_add_group_zone_id"
+                                >
+                                    <span v-if="!selectedZone_id" style="margin-left: 11px; color: #ccc;">请选择区域</span>
+                                    <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div
+                    style="
+                                                                                                display: flex;
+                                                                                                justify-content: flex-end;
+                                                                                                align-items: center;
+                                                                                                width: 100%;
+"
+                >
+                    <el-button @click="switch_examine = false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">
+                        确定
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 用户组详情 -->
+        <el-dialog v-model="switch_group_details" title="详情" width="50%">
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">用户组名称</div>
+                    <div class="right">{{ data_group_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">类型</div>
+                    <div class="right">
+                        {{
+                            getOptVal(
+                                opts_all.obj.toushu_return_type,
+                                data_group_details.item.type
+                            )
+                        }}
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">关联</div>
+                    <div class="right">{{ data_group_details.item.ref }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">区域类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.group_user_region_type,data_group_details.item.region_type) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">区域类型对应值</div>
+                    <div class="right">{{ data_group_details.item.region_val }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">最小中国区域代码</div>
+                    <div class="right">{{ data_group_details.item.region_cc }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">用户组ID</div>
+                    <div class="right">{{ data_group_details.item.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_group_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_group_details.item.updated_at }}</div>
+                </div>
+            </div>
+        </el-dialog>
+        <!-- 添加用户组弹窗中选择区域弹窗 -->
+        <el-dialog v-model="switch_choose_zone" title="选择小区">
+            <el-scrollbar height="250px">
+                <position-tree-fourth
+                    :tree_item="tree_item"
+                    @checkChangeFunc="checkChangeFunc"
+                    @checkFunc="checkFunc"
+                />
+            </el-scrollbar>
+        </el-dialog>
+        <!-- 成员 -->
+        <!-- 列表 -->
+        <el-dialog
+            v-model="switch_opt_val"
+            :title="`“${item_opt.obj.name}”所有成员`"
+            width="70%"
+        >
+            <el-row :gutter="20" class="bottom-btn-box-2">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" type="primary" @click="optValAddFunc">
+                        添加成员
+                    </el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                v-loading="opt_loading"
+                :data="opt_tab.arr"
+                :header-cell-style="{
+                    background: '#fbfbfb',
+                    color: '#999999',
+                    'font-size': '12px',
+                }"
+                style="
+                                                                                width: 100%;
+                                                                                min-height: 300px;
+                                                                                margin-bottom: 10px;
+                                                                                border: 1px solid #ebeef5;
+                                                                                border-radius: 6px;
+"
+                max-height="400"
+            >
+                <el-table-column prop="name" label="姓名" width="80">
+                    <template #default="scope">
+                        <span>{{ scope.row.username }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="gender" label="性别" width="150">
+                    <template #default="scope">
+                        <span>{{
+                            getOptVal(
+                                [
+                                    { val: "男", key: "F" },
+                                    { val: "女", key: "M" },
+                                    { val: "未设置", key: "U" },
+                                ],
+                                scope.row.gender
+                            )
+                        }}
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="mobile" label="电话" width="130">
+                    <template #default="scope">
+                        <span>{{ scope.row.mobile }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="post" label="职位" width="100">
+                    <template #default="scope">
+                        <span>{{ getOptVal(opts_all.obj.group_user_flg,scope.row.flg) }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="post" label="职位描述">
+                    <template #default="scope">
+                        <span>{{ scope.row.post }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+                <el-table-column label="操作" width="200px" fixed="right">
+                    <template #default="scope">
+                        <el-button
+                            type="primary"
+                            size="small"
+                            @click="optValModifyFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button size="small" @click="getUserDetail(scope.row)">
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?"
+                            cancel-button-type="info"
+                            @confirm="optValDeleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small"> 删除 </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                v-model:current-page="opt_page"
+                layout="total,prev,pager,next,jumper,"
+                :total="opt_total"
+                :page-size="opt_per_page"
+                background
+                hide-on-single-page
+            />
+        </el-dialog>
+        <!-- 修改添加 -->
+        <el-dialog
+            v-model="switch_opt_val_add"
+            :title="str_opt_val_title"
+            width="50%"
+        >
+            <div>
+                <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
+                    <el-row :gutter="10">
+                        <el-col :sm="24" :md="24" :lg="12">
+                            <el-form-item label="用户ID" prop="id">
+                                <div class="searchUserGroup">
+                                    <SearchUser ref="V_1" @checkName="checkUsersNameFunc_1" />
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="职位" prop="flg">
+                                <el-select
+                                    v-model="from_opt_val.obj.flg"
+                                    @change="type_change"
+                                >
+                                    <el-option
+                                        v-for="item in opts_all.obj.group_user_flg"
+                                        :key="item.key"
+                                        :value="item.key"
+                                        :label="item.val"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="职位描述" prop="post">
+                                <el-input v-model="from_opt_val.obj.post" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div
+                    style="
+                                                                                                display: flex;
+                                                                                                justify-content: flex-end;
+                                                                                                align-items: center;
+                                                                                                width: 100%;
+"
+                >
+                    <el-button type="primary" @click="dialogOptValFunc">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 用户组成员详情 -->
+        <el-dialog v-model="switch_user_details" title="详情" width="50%">
+            <el-scrollbar height="400px">
+                <div class="details-box">
+                    <div v-if="data_user_detail.item.name" class="item">
+                        <div class="left">用户真实名</div>
+                        <div class="right">{{ data_user_detail.item.name }}</div>
+                    </div>
+                    <div v-if="data_user_detail.item.username" class="item">
+                        <div class="left">用户昵称</div>
+                        <div class="right">{{ data_user_detail.item.username }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">性别</div>
+                        <div class="right">
+                            {{
+                                getOptVal(
+                                    [
+                                        { key: "U", val: "未设置" },
+                                        { key: "F", val: "男" },
+                                        { key: "M", val: "女" },
+                                    ],
+                                    data_user_detail.item.gender
+                                )
+                            }}
+                        </div>
+                    </div>
+                    <div v-if="data_user_detail.item.id_card " class="item">
+                        <div class="left">身份证号</div>
+                        <div class="right">{{ data_user_detail.item.id_card }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">手机号</div>
+                        <div class="right">{{ data_user_detail.item.mobile }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">职位</div>
+                        <div class="right">{{ getOptVal(opts_all.obj.group_user_flg,data_user_detail.item.flg) }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">职位描述</div>
+                        <div class="right">{{ data_user_detail.item.post }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">用户ID</div>
+                        <div class="right">{{ data_user_detail.item.user_id }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">成员所在组</div>
+                        <div class="right">{{ data_user_detail.item.group_id }}</div>
+                    </div>
+                </div>
+            </el-scrollbar>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -590,12 +1070,9 @@ const checkUsersNameFunc = val => {
     console.log(val)
     search_str.obj.user_id = val.id
     from_add.obj.user_id = val.id
+    // from_opt_val.obj.user_id = val.id
 }
-// dialog关闭回调
-const V_1 = ref(null)
-const add_dialog_close = () => {
-    // V_1.value.clearFunc()
-}
+
 // // 添加
 // const addFunc = () => {
 //     from_add.obj = {}
@@ -624,12 +1101,50 @@ const switch_details = ref(false)
 const details_item = reactive({
     obj: {}
 })
+const data_tab = reactive({
+    arr: []
+})
+import {
+    APIgetGroupList,
+    APIputGroup,
+    APIpostGroup,
+    APIgetGroupDetails,
+    APIdeleteGroup
+} from '@/api/custom/custom.js'
+const data_search = reactive({
+    item: {}
+})
+const total_1 = ref(0)
+const switch_examine = ref(false)
+const from_examine = reactive({
+    item: {}
+})
+// 详情
 const detailsFunc = val => {
     APIgetEnterpriseDetails(val.id).then(res => {
         // res.data.logo = import.meta.env.VITE_APP_FOLDER_SRC + res.data.lofo
         details_item.obj = res.data
         switch_details.value = true
         console.log(res.data)
+    })
+    getUsergroupList()
+}
+const getUsergroupList = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        type: 7,
+        ref: details_item.obj.id
+    }
+    for (let key in data_search.item) {
+        if (data_search.item[key] && key !== 'switch') {
+            params[key] = data_search.item[key]
+        }
+    }
+    APIgetGroupList(params).then(res => {
+        console.log(res)
+        data_tab.arr = res.data
+        total_1.value = res.data.length
     })
 }
 const deleteFunc = val => {
@@ -638,7 +1153,237 @@ const deleteFunc = val => {
         ElMessage.success('删除成功')
     })
 }
+// 删除
+const deleteFunc_1 = val => {
+    console.log(val)
+    APIdeleteGroup(val.id).then(res => {
+        if (res.status === 200) {
+            getUsergroupList()
+            ElMessage.success('删除成功')
+        }
+    })
+}
+// 企业成员添加
+const addUserGroupFunc = val => {
+    from_examine.item = {}
+    str_title.value = '添加用户组'
+    from_examine.item.type = 7
+    from_examine.item.region_val = ''
+    switch_examine.value = true
+}
+// 企业成员修改
+const modifyResidentialFunc = val => {
+    str_title.value = '修改用户组'
+    from_examine.item = {
+        ...val
+    }
+    switch_examine.value = true
+}
+// 同意拒绝提交
+const dialogExamineCloseFunc = () => {
+    from_examine.item.ref = details_item.obj.id
+    if (str_title.value == '修改用户组') {
+        APIputGroup(from_examine.item.id, from_examine.item)
+            .then(res => {
+                if (res.status === 200) {
+                    getUsergroupList()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }
+            })
+            .catch(err => {
+                ElMessage.error('修改失败')
+            })
+    } else {
+        APIpostGroup(from_examine.item)
+            .then(res => {
+                if (res.status === 200) {
+                    getUsergroupList()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }
+            })
+            .catch(err => {
+                ElMessage.error('添加失败')
+            })
+    }
+}
+const switch_choose_zone = ref(false)
+const click_add_group_zone_id = () => {
+    switch_choose_zone.value = true
+}
+const checkFunc = val => {
+    selectedZone_id.value = val.name
+    if (val.type == 'region') {
+        from_examine.item.region_type = 1
+        from_examine.item.region_val = val.china_code || val.id
+        from_examine.item.region_cc = val.china_code || val.id
+    }
+    if ((val.type == 'zone')) {
+        from_examine.item.region_type = 2
+        from_examine.item.region_val = val.id
+        from_examine.item.region_cc = val.china_code
+    }
+    console.log(val)
+}
+const checkChangeFunc = val => {
+    switch_choose_zone.value = false
+}
+const selectedZone_id = ref('')
+const tree_item = ref({
+    id: '50',
+    name: '测试',
+    next_type: 'region',
+    type: 'region'
+})
+import { APIgetChinaRegion } from '@/api/custom/custom.js'
+// 添加弹出框选择小区
+APIgetChinaRegion().then(res => {
+    console.log(res)
+    tree_item.value.id = res.data[0].code
+    tree_item.value.name = res.data[0].name
+    tree_item.value.next_type = 'region'
+    tree_item.value.type = 'region'
+})
+// // 企业成员搜索
+// const switch_search_1 = ref(false)
+// const searchFunc_1 = () => {
+//     getUsergroupList()
+//     switch_search_1.value = true
+//     console.log(data_search.item)
+// }
+// const refreshFunc_2 = () => {
+//     data_search.item = {}
+//     getUsergroupList()
+//     switch_search_1.value = false
+// }
 // 提交
+// 企业成员详情
+const switch_group_details = ref(false)
+const data_group_details = reactive({
+    item: {}
+})
+// 用户组详情
+const getGroupDetail = val => {
+    APIgetGroupDetails(val.id).then(res => {
+        if (res.status == 200) {
+            data_group_details.item = res.data
+            switch_group_details.value = true
+        }
+    })
+}
+// 成员
+// 打开配置选项
+const switch_opt_val = ref(false)
+const item_opt = reactive({
+    obj: {}
+})
+import {
+    APIgetGroupUserList,
+    APIputGroupUser,
+    APIpostGroupUser,
+    APIdeleteGroupUser
+} from '@/api/custom/custom.js'
+const opt_tab = reactive({
+    arr: []
+})
+const str_opt_val_title = ref('添加')
+const from_opt_val = reactive({
+    obj: {}
+})
+const switch_opt_val_add = ref(false)
+const optValFunc = val => {
+    item_opt.obj = val
+    switch_opt_val.value = true
+    getOptValListFunc()
+}
+// 获取列表
+const getOptValListFunc = () => {
+    APIgetGroupUserList(item_opt.obj.id)
+        .then(res => {
+            if (res.status === 200) {
+                console.log(res)
+                opt_tab.arr = res.data
+            }
+        })
+}
+// dialog关闭回调
+const V_1 = ref(null)
+// 成员添加
+const optValAddFunc = () => {
+    str_opt_val_title.value = '添加'
+    from_opt_val.obj = {}
+    switch_opt_val_add.value = true
+    V_1.value.clearFunc()
+}
+// 修改
+const optValModifyFunc = val => {
+    switch_opt_val_add.value = true
+    str_opt_val_title.value = '修改'
+    from_opt_val.obj = {
+        ...val
+    }
+    V_1.value.clearFunc()
+}
+// 提交
+const dialogOptValFunc = () => {
+    if (str_opt_val_title.value == '修改') {
+        console.log(from_opt_val.obj)
+        APIputGroupUser(
+            from_opt_val.obj.group_id,
+            from_opt_val.obj.user_id,
+            from_opt_val.obj
+        )
+            .then(res => {
+                if (res.status === 200) {
+                    getOptValListFunc()
+                    ElMessage.success('修改成功')
+                    switch_opt_val_add.value = false
+                }
+            })
+    } else {
+        APIpostGroupUser(item_opt.obj.id, from_opt_val.obj)
+            .then(res => {
+                if (res.status === 200) {
+                    getOptValListFunc()
+                    ElMessage.success('添加成功')
+                    switch_opt_val_add.value = false
+                }
+            })
+    }
+}
+const checkUsersNameFunc_1 = val => {
+    from_opt_val.obj.user_id = val.id
+}
+// 用户组成员详细
+const data_user_detail = reactive({
+    item: {}
+})
+const switch_user_details = ref(false)
+const getUserDetail = val => {
+    // APIgetUserDetails(val.user_id).then(res => {
+    //     if (res.status === 200) {
+    //         console.log(res.data)
+    //         data_user_detail.item = res.data
+    //         switch_user_details.value = true
+    //     }
+    // })
+    console.log(val)
+    data_user_detail.item = val
+    switch_user_details.value = true
+}
+// 删除
+const optValDeleteFunc = val => {
+    console.log(val)
+    APIdeleteGroupUser(val.group_id, val.user_id).then(res => {
+        if (res.status === 200) {
+            getOptValListFunc()
+            ElMessage.success('删除成功')
+        } else {
+            ElMessage.error('删除失败请重试')
+        }
+    })
+}
 const postFunc_1 = () => {
     if (str_title.value == '添加') {
         APIpostEnterprise(from_add.obj).then(res => {
@@ -773,7 +1518,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status']).then(res => {
+getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status', 'toushu_return_type', 'group_user_region_type', 'group_user_flg']).then(res => {
     opts_all.obj = res
 })
 </script>
@@ -815,5 +1560,7 @@ getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status']).then(res => {
             }
         }
     }
-
+    ::v-deep .el-table__header-wrapper tr th.el-table-fixed-column--right {
+        z-index: 1;
+    }
 </style>

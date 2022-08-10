@@ -501,10 +501,6 @@ textarea {
 .btn {
     margin-bottom: 15px;
 }
-.search_tb {
-    // display: inline-block;
-    flex: 1;
-}
 .search_tb_1 {
     display: inline-block;
     width: 230px;
@@ -560,6 +556,10 @@ textarea {
         padding-right: 5px;
         font-size: 14px;
         line-height: 32px;
+    }
+    .search_tb {
+        // display: inline-block;
+        flex: 1;
     }
 }
 .tab {

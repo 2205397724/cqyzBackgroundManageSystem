@@ -1172,6 +1172,40 @@ export function APIpostHouseHouse(data) {
 export function APIputAllHouseHouse(data) {
     return api2.put('/houses-batch', data)
 }
+// 房屋成员
+// 列表
+export function APIgetHouseNumbersSort(params) {
+    return api2.get('/house-user', { params: params })
+}
+// 添加
+export function APIpostHouseNumbers(data) {
+    return api2.post('/house-user', data)
+}
+// 删除
+export function APIdeleteHouseNumbers(data) {
+    return api2.delete('/house-user', data)
+}
+// 房屋绑定申请
+// 列表
+export function APIgetHouseBind(params) {
+    return api2.get('/house-bind', { params: params })
+}
+// 详情
+export function APIgetHouseBindDetails(id) {
+    return api2.get(`/house-bind/${id}`)
+}
+// 修改
+export function APIputHouseBind(id, data) {
+    return api2.put(`/house-bind/${id}`, data)
+}
+// 添加
+export function APIpostHouseBind(data) {
+    return api2.post('/house-bind', data)
+}
+// 删除
+export function APIdeleteHouseBind(id, data) {
+    return api2.delete(`/house-bind/${id}`, data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 单元
 // 列表

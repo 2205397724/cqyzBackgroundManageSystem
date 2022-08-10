@@ -773,6 +773,30 @@ const opts = {
     }, {
         key: 30,
         val: '失败'
+    }],
+    house_bind: [{
+        key: 0,
+        val: '非业主'
+    }, {
+        key: 1,
+        val: '业主'
+    }],
+    houseBindStatus: [{
+        key: 10,
+        val: '审核未处理'
+    }, {
+        key: 20,
+        val: '审核成功'
+    }, {
+        key: 30,
+        val: '审核失败'
+    }],
+    houseBindStatus_1: [{
+        key: 20,
+        val: '审核成功'
+    }, {
+        key: 30,
+        val: '审核失败'
     }]
 }
 

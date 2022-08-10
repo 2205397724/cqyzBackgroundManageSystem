@@ -16,17 +16,17 @@
                             <div class="search_th">
                                 名称：
                             </div>
-                            <el-input v-model="data_search.name" class="head-btn search_tb" placeholder="名称" />
+                            <el-input v-model="data_search.name" class="search_tb" placeholder="名称" />
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :md="12" :lg="10">
+                    <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
-                            <div class="w_30%">
+                            <div class="w_30">
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
-                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
                                 <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
                                 *搜索到相关结果共{{ total }}条。
                             </div>

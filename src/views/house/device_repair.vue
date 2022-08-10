@@ -11,31 +11,33 @@
                             <div class="search_th">
                                 设备id：
                             </div>
-                            <el-input v-model="data_search.obj.did" class="head-btn search_tb" placeholder="设备id" clearable />
+                            <el-input v-model="data_search.obj.did" class="search_tb" placeholder="设备id" clearable />
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">类型：</div>
-                            <el-select v-model="data_search.obj.type" class="head-btn search_tb" placeholder="类型" clearable>
+                            <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
                                 <el-option v-for="(item) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :md="12" :lg="10">
+                    <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
-                            <div class="w_30%">
+                            <div class="w_30">
                                 <el-button
                                     class="m-l-20" type="primary" :icon="Search" @click="searchFunc"
                                 >
                                     筛选
                                 </el-button>
                             </div>
-                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
                                 <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
                             </div>
                         </div>
                     </el-col>

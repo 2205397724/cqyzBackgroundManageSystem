@@ -11,7 +11,7 @@
                             <div class="search_th">
                                 设备ID：
                             </div>
-                            <el-input v-model="data_search.obj.did" class="head-btn search_tb" placeholder="设备ID" clearable />
+                            <el-input v-model="data_search.obj.did" class="search_tb" placeholder="设备ID" clearable />
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">
@@ -19,27 +19,29 @@
                             <div class="search_th">
                                 档案名称：
                             </div>
-                            <el-input v-model="data_search.obj.title" class="head-btn search_tb" placeholder="档案名称" clearable />
+                            <el-input v-model="data_search.obj.title" class="search_tb" placeholder="档案名称" clearable />
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">是否显示：</div>
-                            <el-select v-model="data_search.obj.show" class="head-btn search_tb" placeholder="是否显示" clearable>
+                            <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
                                 <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="12" :md="12" :lg="10">
+                    <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
-                            <div class="w_30%">
+                            <div class="w_30">
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
-                            <div v-show="switch_search == true" class="w_70% m-l-30">
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
                                 <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
                             </div>
                         </div>
                     </el-col>
