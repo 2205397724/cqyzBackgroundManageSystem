@@ -6,12 +6,13 @@
         > -->
         <div
             class="tit-box"
-            :class="{'nostr':!props.str}"
+            :class="{'nostr':!houseName}"
             style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ props.str?props.str:'请点击选择房屋' }}</span>
+            <span v-if="!props.name" style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ houseName?houseName:'请点击选择房屋' }}</span>
+            <span v-if="props.name" class="head_tb" style="color: #626466;">{{ props.name }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
         <!-- </el-tooltip> -->
@@ -205,14 +206,15 @@ import {
     reactive,
     ref,
     defineProps,
+    defineExpose,
     defineEmits
 } from 'vue'
 import {
     APIgetHouseListHouse
 } from '@/api/custom/custom.js'
 const switch_list = ref(false)
-const props = defineProps(['str'])
-const emit = defineEmits(['update:str'])
+const props = defineProps(['name'])
+const emit = defineEmits(['update:name', 'checkFunc'])
 // const name = ref('请点击选择房屋')
 const loading_tab = ref(false)
 const data_tab = reactive({
@@ -237,6 +239,7 @@ const searchMore = () => {
 const openDigFunc = () => {
     switch_list.value = true
     getTabListFunc()
+    emit('update:name', '')
 }
 watch(page, () => {
     getTabListFunc()
@@ -271,20 +274,19 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetHouseListHouse(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
-
+const houseName = ref('')
 const rowClickFunc = row => {
     // name.value = row.name
-    emit('update:str', row.id)
+    emit('checkFunc', row.id)
     switch_list.value = false
+    houseName.value = row.name
 }
-const clearFunc = () => {
-    emit('update:str', '')
-}
+
 // 刷新
 const refreshFunc = () => {
     page.value = 1
@@ -300,6 +302,13 @@ const opts_all = reactive({
 })
 getOpts(['house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_plan_fact']).then(res => {
     opts_all.obj = res
+})
+const clearFunc = () => {
+    // emit('update:str', '')
+    houseName.value = ''
+}
+defineExpose({
+    clearFunc
 })
 </script>
 <style lang="scss" scoped>

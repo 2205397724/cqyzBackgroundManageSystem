@@ -17,7 +17,7 @@
 
                             <div class="search_tb">
                                 <div class="searchUserGroup">
-                                    <SearchUserGroup ref="V-1" @checkName="checkNameFunc" />
+                                    <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
                                 </div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
                             <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
                                 <div class="searchDetail">
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
@@ -196,7 +196,7 @@
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
                             <div class="searchUserGroup">
-                                <SearchUserGroup ref="V" :name="userId" @checkName="checkNameFunc" />
+                                <SearchUserGroup ref="V" :name="userGroupName" @checkName="checkNameFunc" />
                             </div>
                         </el-form-item>
                     </el-col>
@@ -530,6 +530,7 @@ const deleteFunc = val => {
 const V = ref(null)
 const add_dialog_close = () => {
     V.value.clearFunc()
+    userGroupName.value = ''
 }
 // 添加
 const addResidentialFunc = () => {
@@ -548,6 +549,7 @@ const addResidentialFunc = () => {
 }
 // 修改
 const userId = ref('')
+const userGroupName = ref('')
 const modifyResidentialFunc = val => {
     // V.value.rowClickFunc()
     from_error.msg = {}
@@ -556,6 +558,7 @@ const modifyResidentialFunc = val => {
         from_examine.item = res
         userId.value = from_examine.item.from
         switch_examine.value = true
+        userGroupName.value = getNameFunc(userData.arr, from_examine.item.from)
     })
 }
 // dialog关闭回调
@@ -566,7 +569,6 @@ const modifyResidentialFunc = val => {
 //     }
 // }
 // 选择用户组name
-const userName = ref('')
 const userData = reactive({
     arr: []
 })

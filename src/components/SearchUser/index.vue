@@ -7,7 +7,8 @@
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ userName?userName:'请点击选择用户' }}</span>
+            <span v-if="!props.name" style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ userName?userName:'请点击选择用户' }}</span>
+            <span v-if="props.name" class="head_tb" style="color: #626466;">{{ props.name }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
 
@@ -123,14 +124,15 @@ import {
     reactive,
     ref,
     defineProps,
+    defineExpose,
     defineEmits
 } from 'vue'
 import {
     APIgetUserList
 } from '@/api/custom/custom.js'
 const switch_list = ref(false)
-// const props = defineProps(['str'])
-const emit = defineEmits(['checkName'])
+const props = defineProps(['name'])
+const emit = defineEmits(['update:name', 'checkName'])
 // const name = ref('请点击选择房屋')
 const loading_tab = ref(false)
 const data_tab = reactive({
@@ -151,6 +153,7 @@ const searchFunc = () => {
 const openDigFunc = () => {
     switch_list.value = true
     getTabListFunc()
+    emit('update:name', '')
 }
 watch(page, () => {
     getTabListFunc()
@@ -192,7 +195,6 @@ const rowClickFunc = row => {
     switch_list.value = false
 }
 const clearFunc = () => {
-    emit('checkName', '')
     userName.value = ''
 }
 defineExpose({

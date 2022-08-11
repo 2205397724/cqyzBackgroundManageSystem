@@ -6,7 +6,8 @@
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span class="head_tb">{{ userName?userName:'请点击选择用户组' }}</span>
+            <span v-if="!props.name" class="head_tb">{{ userName?userName:'请点击选择用户组' }}</span>
+            <span v-if="props.name" class="head_tb" style="color: #626466;">{{ props.name }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
 
@@ -79,21 +80,24 @@ import {
     reactive,
     ref,
     defineProps,
+    defineExpose,
     defineEmits
 } from 'vue'
 import {
     APIgetGroupList
 } from '@/api/custom/custom.js'
 const switch_list = ref(false)
-const props = defineProps({ 'str': { type: String, default: '' }, checkbox: { type: Boolean, default: false } })
-const emit = defineEmits(['update:str', 'checkName'])
+// const props = defineProps({ 'str': { type: String, default: '' }, checkbox: { type: Boolean, default: false } })
+const props = defineProps(['name'])
+const emit = defineEmits(['update:name', 'checkName'])
+// const { name } = toRefs(props)
 const loading_tab = ref(false)
 const data_tab = reactive({
     arr: []
 })
 // 打开弹窗
 const openDigFunc = () => {
-
+    emit('update:name', '')
     switch_list.value = true
     getTabListFunc()
 }
@@ -118,7 +122,6 @@ const userName = ref('')
 const userId = ref('')
 const rowClickFunc = row => {
     if (!props.checkbox) {
-        emit('update:str', row.name)
         console.log(props.str)
         // console.log(props.str)
         emit('checkName', row)
@@ -143,7 +146,7 @@ const getUsers = () => {
     switch_list.value = false
 }
 const clearFunc = () => {
-    emit('update:str', '')
+    // emit('update:str', '')
     userName.value = ''
 }
 defineExpose({
@@ -169,7 +172,6 @@ defineExpose({
         color: #aaa;
     }
     .head {
-        display: inline-block;
         box-sizing: border-box;
         border-radius: 4px;
         width: 100%;

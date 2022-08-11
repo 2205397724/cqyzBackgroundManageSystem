@@ -157,7 +157,7 @@
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
                             <div class="searchUserGroup">
-                                <SearchUserGroup ref="V_1" :name="userId" @checkName="checkNameFunc" />
+                                <SearchUserGroup ref="V_1" v-model:name="usergroupName" @checkName="checkNameFunc" />
                             </div>
                         </el-form-item>
                     </el-col>
@@ -179,7 +179,7 @@
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
                             <div class="searchUserGroup">
-                                <SearchUserGroup ref="V" @checkName="checkNameFunc_1" />
+                                <SearchUserGroup ref="V" v-model:name="usergroupName_1" @checkName="checkNameFunc_1" />
                             </div>
                         </el-form-item>
                     </el-col>
@@ -482,6 +482,8 @@ const V_1 = ref(null)
 const add_dialog_close = () => {
     V.value.clearFunc()
     V_1.value.clearFunc()
+    usergroupName.value = ''
+    usergroupName_1.value = ''
 }
 // 分页
 let total = ref(100)
@@ -696,12 +698,16 @@ const addResidentialFunc = () => {
     switch_examine.value = true
 }
 // 修改
+const usergroupName = ref('')
+const usergroupName_1 = ref('')
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetTaskDetails(val.id).then(res => {
         from_examine.item = res
         switch_examine.value = true
+        usergroupName.value = getNameFunc(userData.arr, from_examine.item.from)
+        usergroupName_1.value = getNameFunc(userData.arr, from_examine.item.to)
     })
 
 }

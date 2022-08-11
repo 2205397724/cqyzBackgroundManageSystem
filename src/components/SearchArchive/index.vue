@@ -16,105 +16,102 @@
             title="公示"
             width="70%"
         >
-            <el-row :gutter="10">
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <CascaderAnnounce v-model="data_search.obj.cid" />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.totype" class="head-btn" placeholder="公示对象类型" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.article_lv" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
-                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                            <SearchUserGroup @checkName="checkNameFunc" />
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">公示分类：</div>
+                            <div class="search_tb">
+                                <CascaderAnnounce v-model="data_search.obj.cid" />
+                            </div>
                         </div>
-                    </div>
-                </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.depcc" class="head-btn" placeholder="depcc" clearable />
-                </el-col> -->
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.depcclv" class="head-btn" placeholder="depcclv" clearable />
-                </el-col> -->
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
-                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                            <SearchUser @checkName="checkUsersNameFunc" />
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">发布人用户组：</div>
+
+                            <div class="search_tb">
+                                <div class="searchUserGroup">
+                                    <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.utype" class="head-btn" placeholder="发布人用户端" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="data_search.obj.status" class="head-btn" placeholder="审核状态" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div style="height: 100%;box-sizing: border-box;padding-bottom: 10px;">
-                        <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                            <SearchFlow v-model:str="data_search.obj.step" />
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">状态：</div>
+
+                            <el-select v-model="data_search.obj.status" class="search_tb" placeholder="审核状态" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </div>
-                    </div>
-                </el-col> -->
-                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                </el-col>
-            </el-row>
-            <div v-show="switch_search" class="search-tips">
-                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                *搜索到相关结果共{{ total }}条。
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="24" :md="24" :lg="12">
+                        <div class="flx">
+                            <div class="w_30">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
             </div>
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击公示行选择该公示ID</div>
-            <el-table
-                v-loading="loading_tab"
-                :data="data_tab.arr"
-                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
-                @row-click="rowClickFunc"
-            >
-                <el-table-column label="公示主题" width="160">
-                    <template #default="scope">
-                        <span>{{ scope.row.title }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示id" width="220">
-                    <template #default="scope">
-                        <span>{{ scope.row.id }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示分类" width="220">
-                    <template #default="scope">
-                        <span>{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="公示对象类型" width="70">
-                    <template #default="scope">
-                        <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="用户组ID" width="220">
-                    <template #default="scope">
-                        <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="状态" width="150">
-                    <template #default="scope">
-                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 2" class="btnNone noDeal" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                    </template>
-                </el-table-column>
+            <div>
+                <el-scrollbar :height="data_tab.arr.length >= 8 ? '400px': ''">
+                    <el-table
+                        v-loading="loading_tab"
+                        :data="data_tab.arr"
+                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                        style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                        @row-click="rowClickFunc"
+                    >
+                        <el-table-column label="公示主题" width="160">
+                            <template #default="scope">
+                                <span>{{ scope.row.title }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公示id" width="220">
+                            <template #default="scope">
+                                <span>{{ scope.row.id }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公示分类">
+                            <template #default="scope">
+                                <span>{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="公示对象类型" width="70">
+                            <template #default="scope">
+                                <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="用户组ID">
+                            <template #default="scope">
+                                <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="状态" width="150">
+                            <template #default="scope">
+                                <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                <el-button v-show="scope.row.status == 2" class="btnNone noDeal" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                                <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                            </template>
+                        </el-table-column>
 
-                <el-table-column />
-            </el-table>
+                        <el-table-column />
+                    </el-table>
+                </el-scrollbar>
+            </div>
             <div style="padding-top: 20px;">
                 <el-pagination
                     v-model:current-page="page"
@@ -203,6 +200,11 @@ const refreshFunc = () => {
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
+}
+const V_1 = ref(null)
+const refreshFunc_1 = () => {
+    V_1.value.clearFunc()
+    refreshFunc()
 }
 // 选择用户组name
 const userName = ref('')

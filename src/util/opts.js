@@ -783,7 +783,7 @@ const opts = {
     }],
     houseBindStatus: [{
         key: 10,
-        val: '审核未处理'
+        val: '未处理'
     }, {
         key: 20,
         val: '审核成功'

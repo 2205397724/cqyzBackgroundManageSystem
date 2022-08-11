@@ -264,7 +264,7 @@
                         >
                             <div class="wh_100">
                                 <div class="searchUserGroup">
-                                    <SearchUserGroup ref="V" @checkName="checkNameFunc" />
+                                    <SearchUserGroup ref="V" v-model:name="userGroupName" @checkName="checkNameFunc" />
                                 </div>
                             </div>
                         </el-form-item>
@@ -387,7 +387,7 @@
                     <!-- </el-scrollbar> -->
                 </el-tab-pane>
                 <el-tab-pane label="审核记录" name="2">
-                    <el-scrollbar height="400px">
+                    <el-scrollbar height="500px">
                         <div>
                             <el-timeline v-for="(item,index) in article_tab.arr" :key="index">
                                 <el-timeline-item :timestamp="item.created_at" placement="top">
@@ -566,6 +566,7 @@ let switch_details = ref(false)
 const V = ref(null)
 const add_dialog_close = () => {
     V.value.clearFunc()
+    selectedZone_id.value = ''
 }
 // 列表
 let ruleFormRef = ref('')
@@ -777,6 +778,7 @@ const addResidentialFunc = () => {
 let new_from = reactive({
     item: {}
 })
+const userGroupName = ref('')
 // 修改
 const modifyResidentialFunc = val => {
     getChinaName()
@@ -784,7 +786,7 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改'
     switch_examine.value = true
     APIgetEventArticleDetails(val.id).then(res => {
-        console.log(res)
+        // console.log(res)
         // for (let key in res) {
         //     // if (key !== 'status') {
         //     from_examine.item[key] = val[key]
@@ -795,6 +797,7 @@ const modifyResidentialFunc = val => {
         console.log(res)
         from_examine.item = res
         switch_examine.value = true
+        userGroupName.value = getNameFunc(userData.arr, from_examine.item.groupid)
     })
 }
 
@@ -958,7 +961,7 @@ const checkNameFunc = val => {
     console.log(val)
     data_search.obj.groupid = val.id
     from_examine.item.groupid = val.id
-    userName.value = val.name
+    userGroupName.value = ''
 }
 import {
     APIgetGroupList

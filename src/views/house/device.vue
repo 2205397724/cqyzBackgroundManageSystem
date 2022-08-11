@@ -81,11 +81,11 @@
                             <span>{{ scope.row.sno }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="所在小区">
+                    <!-- <el-table-column prop="id" label="所在位置">
                         <template #default="scope">
-                            <span>{{ scope.row.sno }} </span>
+                            <span>{{ scope.row.zoneinfo.name }} {{ scope.row.buildinginfo.name }} {{ scope.row.unitinfo.name }} </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="cid" label="类型" width="90">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>

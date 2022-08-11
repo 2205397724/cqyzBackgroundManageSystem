@@ -17,7 +17,7 @@
 
                             <div class="search_tb">
                                 <div class="searchUserGroup">
-                                    <SearchHouse v-model:str="data_search.obj.house_id" />
+                                    <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
                             <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
                                 <div class="searchDetail">
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
@@ -98,9 +98,9 @@
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     class="tab"
                 >
-                    <el-table-column prop="house_id" label="房屋ID" width="250">
+                    <el-table-column prop="house_id" label="房屋" width="250">
                         <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.house_id }} </span>
+                            <span class="m-l-10">{{ getHouseNameFunc(allHouse_list.arr,scope.row.house_id) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="code_property" label="产权证号" width="250">
@@ -162,6 +162,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
                 <el-form
@@ -172,7 +173,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label-width="70px" label="房屋" prop="house_id" :error="from_error.msg&&from_error.msg.house_id?from_error.msg.house_id[0]:''">
                                 <div class="searchUserGroup">
-                                    <SearchHouse v-model:str="from_examine.item.house_id" />
+                                    <SearchHouse ref="V" v-model:name="houseName" @checkFunc="checkNameFunc_1" />
                                 </div>
                             </el-form-item>
                         </el-col>
@@ -213,55 +214,59 @@
                         </el-col> -->
                         <el-col :md="24" :lg="24">
                             <div class="m-b-10">
-                                <el-button class="m-r-10" @click="addServiceFunc">添加产权人</el-button>
+                                <el-button class="m-r-10" type="primary" @click="addServiceFunc">添加产权人</el-button>
                             </div>
-                            <div v-for="(item,i) in from_examine.item.owners" :key="i" class="serve-box">
-                                <el-row :gutter="10">
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label-width="70px" label="姓名" :error="from_error.msg&&from_error.msg['owners.'+i+'.name']?from_error.msg['owners.'+i+'.name'][0]:''">
-                                            <el-input
-                                                v-model="item.name"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label-width="70px" label="证件类型" :error="from_error.msg&&from_error.msg['owners.'+i+'.type_id_card']?from_error.msg['owners.'+i+'.type_id_card'][0]:''">
-                                            <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
-                                                <el-option v-for="item in opts_all.obj.type_id_card" :key="item.key" :label="item.val" :value="item.key" />
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label-width="70px" label="证件号" :error="from_error.msg&&from_error.msg['owners.'+i+'.id_card']?from_error.msg['owners.'+i+'.id_card'][0]:''">
-                                            <el-input
-                                                v-model="item.id_card"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label-width="70px" label="联系方式" :error="from_error.msg&&from_error.msg['owners.'+i+'.mobile']?from_error.msg['owners.'+i+'.mobile'][0]:''">
-                                            <el-input
-                                                v-model="item.mobile"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item label-width="70px" label="面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
-                                            <el-input
-                                                v-model="item.area"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <div class="delete-service" @click="deleteServiceFunc(i)">
-                                    <el-icon :size="20" color="#F56C6C">
-                                        <el-icon-circle-close />
-                                    </el-icon>
-                                </div>
+                            <div>
+                                <el-scrollbar :height="from_examine.item.owners.length >= 3 ? '400px' : ''">
+                                    <div v-for="(item,i) in from_examine.item.owners" :key="i" class="serve-box">
+                                        <el-row :gutter="10">
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label-width="70px" label="姓名" :error="from_error.msg&&from_error.msg['owners.'+i+'.name']?from_error.msg['owners.'+i+'.name'][0]:''">
+                                                    <el-input
+                                                        v-model="item.name"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label-width="70px" label="证件类型" :error="from_error.msg&&from_error.msg['owners.'+i+'.type_id_card']?from_error.msg['owners.'+i+'.type_id_card'][0]:''">
+                                                    <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
+                                                        <el-option v-for="item in opts_all.obj.type_id_card" :key="item.key" :label="item.val" :value="item.key" />
+                                                    </el-select>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label-width="70px" label="证件号" :error="from_error.msg&&from_error.msg['owners.'+i+'.id_card']?from_error.msg['owners.'+i+'.id_card'][0]:''">
+                                                    <el-input
+                                                        v-model="item.id_card"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label-width="70px" label="联系方式" :error="from_error.msg&&from_error.msg['owners.'+i+'.mobile']?from_error.msg['owners.'+i+'.mobile'][0]:''">
+                                                    <el-input
+                                                        v-model="item.mobile"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                                <el-form-item label-width="70px" label="面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
+                                                    <el-input
+                                                        v-model="item.area"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <div class="delete-service" style="z-index: 1;" @click="deleteServiceFunc(i)">
+                                            <el-icon :size="20" color="#F56C6C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
+                                        </div>
+                                    </div>
+                                </el-scrollbar>
                             </div>
                         </el-col>
                     </el-row>
@@ -282,8 +287,8 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">房屋ID</div>
-                    <div class="right">{{ data_details.item.house_id }}</div>
+                    <div class="left">房屋</div>
+                    <div class="right">{{ getHouseNameFunc(allHouse_list.arr, data_details.item.house_id) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">产权证号</div>
@@ -314,31 +319,33 @@
                     <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
                 <div v-if="data_details.item.owners">
-                    <div class="item">
-                        <div class="left">产权人</div>
-                        <div class="right">
-                            <div
-                                v-for="(item,i) in data_details.item.owners" :key="i"
-                                class="owners"
-                            >
-                                <div>
-                                    <span>姓名：</span>{{ item.name }}
-                                </div>
-                                <div>
-                                    <span>证件类型：</span>{{ item.type_id_card }}
-                                </div>
-                                <div>
-                                    <span>证件号：</span>{{ item.id_card }}
-                                </div>
-                                <div>
-                                    <span>联系方式：</span>{{ item.mobile }}
-                                </div>
-                                <div>
-                                    <span>面积：</span>{{ item.area }} ㎡
+                    <el-scrollbar :height="data_details.item.owners.length >= 3 ? '300px' : ''">
+                        <div class="item">
+                            <div class="left">产权人</div>
+                            <div class="right">
+                                <div
+                                    v-for="(item,i) in data_details.item.owners" :key="i"
+                                    class="owners"
+                                >
+                                    <div>
+                                        <span>姓名：</span>{{ item.name }}
+                                    </div>
+                                    <div>
+                                        <span>证件类型：</span>{{ item.type_id_card }}
+                                    </div>
+                                    <div>
+                                        <span>证件号：</span>{{ item.id_card }}
+                                    </div>
+                                    <div>
+                                        <span>联系方式：</span>{{ item.mobile }}
+                                    </div>
+                                    <div>
+                                        <span>面积：</span>{{ item.area }} ㎡
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </el-scrollbar>
                 </div>
             </div>
             <template #footer>
@@ -356,7 +363,8 @@ import {
     APIgetPropertyDetails,
     APIdeleteProperty,
     APIputProperty,
-    APIpostProperty
+    APIpostProperty,
+    APIgetHouseListHouse
 } from '@/api/custom/custom.js'
 // import { showForm } from '@/util/form'
 import {
@@ -420,6 +428,7 @@ const searchFunc = () => {
 const showForm = () => {
     searchVisible.value = !searchVisible.value
 }
+const V_1 = ref(null)
 // 刷新
 const refreshFunc = () => {
     page.value = 1
@@ -427,7 +436,10 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const refreshFunc_1 = () => {
+    V_1.value.clearFunc()
+    refreshFunc()
+}
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val
@@ -515,6 +527,30 @@ const getTabListFunc = () => {
         data_tab.arr = res
         total.value = data_tab.arr.length
     })
+    getHouseListFunc()
+}
+const allHouse_list = reactive({
+    arr: []
+})
+const getHouseListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetHouseListHouse(params).then(res => {
+        allHouse_list.arr = res
+    })
+}
+const getHouseNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
+}
+const checkNameFunc = row => {
+    data_search.obj.house_id = row
 }
 // 删除
 const deleteFunc = val => {
@@ -537,13 +573,23 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
+const checkNameFunc_1 = row => {
+    from_examine.item.house_id = row
+}
+const V = ref(null)
+const dialogClosed = () => {
+    V.value.clearFunc()
+    houseName.value = ''
+}
 // 修改
+const houseName = ref('')
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetPropertyDetails(val.id).then(res => {
         from_examine.item = res
         switch_examine.value = true
+        houseName.value = getHouseNameFunc(allHouse_list.arr, from_examine.item.house_id)
     })
 }
 // 删除 服务名称和联系方式

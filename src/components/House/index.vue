@@ -13,10 +13,10 @@
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
-                        <!-- <div
+                        <div
                             v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
                             style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
-                        /> -->
+                        />
                         <div style="padding: 20px 20px 0;box-sizing: border-box;">
                             <div class="search">
                                 <el-row :gutter="10">
@@ -135,7 +135,8 @@
                                     <el-col :xs="24" :md="24" :lg="14">
                                         <div class="flx">
                                             <div class="w_30">
-                                                <el-button class="m-l-20" type="primary" :icon="Search" :disabled="active_obj.obj.type == 'units' || active_obj.obj.type =='buildings' ? false: true" @click="searchFunc">筛选</el-button>
+                                                <!-- <el-button class="m-l-20" type="primary" :icon="Search" :disabled="active_obj.obj.type == 'units' || active_obj.obj.type =='buildings' ? false: true" @click="searchFunc">筛选</el-button> -->
+                                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                                             </div>
                                             <div v-show="switch_search" class="w_70 m-l-30">
                                                 <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
@@ -670,20 +671,18 @@
                 style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
                 max-height="400"
             >
-                <el-table-column prop="name" label="名称" width="180" />
-                <el-table-column prop="desc" label="备注" width="280" />
-                <el-table-column prop="status" label="状态" width="90">
+                <el-table-column prop="name" label="名称" />
+                <el-table-column prop="desc" label="备注" />
+                <el-table-column prop="status" label="状态" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
+                        <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="file_err" label="错误信息" width="280">
-                    <template #default="scope">
-                        <el-link :href="`${VITE_APP_FOLDER_SRC+scope.row.file_err}`" target="_blank" type="danger" style="margin-left: 10px;">{{ scope.row.file_err.substring(scope.row.file_err.lastIndexOf('/')+1) }} </el-link>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="created_at" label="创建时间" width="180" />
-                <el-table-column prop="updated_at" label="更新时间" width="180" />
+                <el-table-column prop="created_at" label="导入时间" width="170" />
+                <el-table-column prop="updated_at" label="修改时间" width="170" />
                 <el-table-column />
             </el-table>
         </el-dialog>
@@ -915,52 +914,54 @@
                 </el-button>
             </div>
             <div>
-                <el-table
-                    v-loading="loading_tab"
-                    :data="houseNumbers_list.arr"
-                    :header-cell-style="{
-                        background: '#fbfbfb',
-                        color: '#999999',
-                        'font-size': '12px',
-                    }"
-                    style="width: 100%; min-height: 300px;"
-                    @select="handleSelectionChange"
-                >
-                    <el-table-column
-                        size="small"
-                        type="selection"
-                        align="center" width="55"
-                    />
-                    <el-table-column prop="name" label="用户姓名" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="id" label="用户id" width="300">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.uid }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="性别" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(
-                                [
-                                    { val: "男", key: "F" },
-                                    { val: "女", key: "M" },
-                                    { val: "未设置", key: "U" },
-                                ],
-                                scope.row.user.gender
-                            ) }}
-                            </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="手机号" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.user.mobile }}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column />
-                </el-table>
+                <el-scollbar :height="houseNumbers_list.arr.length>= 8 ? '400': ''">
+                    <el-table
+                        v-loading="loading_tab"
+                        :data="houseNumbers_list.arr"
+                        :header-cell-style="{
+                            background: '#fbfbfb',
+                            color: '#999999',
+                            'font-size': '12px',
+                        }"
+                        style="width: 100%;min-height: 300px;"
+                        @select="handleSelectionChange"
+                    >
+                        <el-table-column
+                            size="small"
+                            type="selection"
+                            align="center" width="55"
+                        />
+                        <el-table-column prop="name" label="成员姓名">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="name" label="成员id" width="250">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ scope.row.user.id }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type" label="性别">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ getOptVal(
+                                    [
+                                        { val: "男", key: "F" },
+                                        { val: "女", key: "M" },
+                                        { val: "未设置", key: "U" },
+                                    ],
+                                    scope.row.user.gender
+                                ) }}
+                                </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type" label="手机号" width="180">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ scope.row.user.mobile }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column />
+                    </el-table>
+                </el-scollbar>
             </div>
             <div>
                 <el-popconfirm
@@ -1039,64 +1040,67 @@
             width="70%"
         >
             <div>
-                <el-table
-                    v-loading="loading_tab"
-                    :data="housebind_list.arr"
-                    :header-cell-style="{
-                        background: '#fbfbfb',
-                        color: '#999999',
-                        'font-size': '12px',
-                    }"
-                    style="width: 100%; min-height: 300px;"
-                    @select="handleSelectionChange"
-                >
-                    <el-table-column prop="name" label="申请人姓名" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="id" label="申请绑定的房屋ID" width="300">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.hid }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="类型" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_bind,scope.row.type) }}
-                            </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="申请状态" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }}
-                            </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column />
-                    <el-table-column label="操作" width="200px" fixed="right">
-                        <template #default="scope">
-                            <el-button
-                                type="primary"
-                                size="small"
-                                @click="modifyHouseBindFunc(scope.row)"
-                            >
-                                审核
-                            </el-button>
-                            <el-button size="small" @click="getHouseBindDetails(scope.row)">
-                                详情
-                            </el-button>
-                            <el-popconfirm
-                                title="确定要删除当前项么?"
-                                cancel-button-type="info"
-                                @confirm="DeleteHouseBindFunc(scope.row)"
-                            >
-                                <template #reference>
-                                    <el-button type="danger" size="small"> 删除 </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <el-scollbar :height="housebind_list.arr.length>= 8 ? '400': ''">
+                    <el-table
+                        v-loading="loading_tab"
+                        :data="housebind_list.arr"
+                        :header-cell-style="{
+                            background: '#fbfbfb',
+                            color: '#999999',
+                            'font-size': '12px',
+                        }"
+                        style="width: 100%; min-height: 400px;"
+                        @select="handleSelectionChange"
+                    >
+                        <el-table-column prop="name" label="申请人姓名">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="申请绑定的房屋" width="240">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ getHouseNameFunc(allHouse_list.arr,scope.row.hid) }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type" label="类型" width="80">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_bind,scope.row.type) }}
+                                </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="type" label="申请状态">
+                            <template #default="scope">
+                                <el-tag v-show="scope.row.status == 10" class="btnNone m-l-5" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 20" class="btnNone " type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
+                            </template>
+                        </el-table-column>
+                        <el-table-column />
+                        <el-table-column label="操作" width="200px" fixed="right">
+                            <template #default="scope">
+                                <el-button
+                                    type="primary"
+                                    size="small"
+                                    @click="modifyHouseBindFunc(scope.row)"
+                                >
+                                    审核
+                                </el-button>
+                                <el-button size="small" @click="getHouseBindDetails(scope.row)">
+                                    详情
+                                </el-button>
+                                <el-popconfirm
+                                    title="确定要删除当前项么?"
+                                    cancel-button-type="info"
+                                    @confirm="DeleteHouseBindFunc(scope.row)"
+                                >
+                                    <template #reference>
+                                        <el-button type="danger" size="small"> 删除 </el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-scollbar>
             </div>
         </el-dialog>
         <!-- 修改 -->
@@ -1171,7 +1175,11 @@
                 </div>
                 <div class="item">
                     <div class="left">申请状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.houseBindStatus,data_details.item.status) }}</div>
+                    <div class="right">
+                        <el-tag v-show="data_details.item.status == 10" class="btnNone" type="warning" effect="dark" size="large">未处理 </el-tag>
+                        <el-tag v-show="data_details.item.status == 20" class="btnNone " type="success" effect="dark" size="large">审核成功</el-tag>
+                        <el-tag v-show="data_details.item.status == 30" class="btnNone" type="danger" effect="dark" size="large">审核失败</el-tag>
+                    </div>
                 </div>
                 <div v-if="data_details.item.affixs&&data_details.item.affixs.length>0" class="item">
                     <div class="left">附件</div>
@@ -1315,10 +1323,10 @@ const getHouseListFunc = () => {
     choseIDs.arr = []
     getUnitBuildFunc()
     let params = {
-        houseable_type: active_obj.obj.type,
-        houseable_id: active_obj.obj.id
-        // houseable_type: 'units',
-        // houseable_id: '62be6497b55f2676b8065601'
+        // houseable_type: active_obj.obj.type,
+        // houseable_id: active_obj.obj.id
+        houseable_type: 'units',
+        houseable_id: '62be6497b55f2676b8065601'
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
@@ -1490,6 +1498,7 @@ import axios from 'axios'
 const filesUpFunc = () => {
     err_files.obj = {}
     let error = false
+    console.log(files_obj.obj)
     if (!files_obj.obj.file_src) {
         err_files.obj.file_src = ['请选择需要上传的文件']
         error = true
@@ -1557,6 +1566,7 @@ import {
 const getFilesFunc = () => {
     files_loading.value = true
     APIgetFilesList().then(res => {
+        console.log(res)
         files_tab.arr = res
         files_loading.value = false
     })
@@ -1673,7 +1683,8 @@ const showPropertyFunc = val => {
 import {
     APIgetHouseNumbersSort,
     APIpostHouseNumbers,
-    APIdeleteHouseNumbers
+    APIdeleteHouseNumbers,
+    APIgetHouseListHouse
 } from '@/api/custom/custom.js'
 const houseNumbers_list = reactive({
     arr: []
@@ -1684,16 +1695,12 @@ const switch_houseNumber = ref(false)
 const number = reactive({
     item: {}
 })
+const allHouse_list = reactive({
+    arr: []
+})
 const house_id = ref('')
 const showNumbersFunc = item => {
     console.log(item)
-    // let data = {
-    //     'hid': '62c2989e2f315d46612cdd51',
-    //     'mobile': '15523053981'
-    // }
-    // APIpostHouseNumbers(data).then(res => {
-    //     ElMessage.success('添加成功')
-    // })
     house_id.value = item.id
     getHouseNumbersFunc()
 }
@@ -1710,6 +1717,7 @@ const getHouseNumbersFunc = () => {
         loading_tab.value = false
         switch_numbers.value = true
     })
+
 }
 // 添加成员
 const addHouseNumberFunc = () => {
@@ -1857,6 +1865,21 @@ const houseBindFunc = () => {
         loading_tab.value = false
         switch_houseBind.value = true
     })
+    let params_1 = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetHouseListHouse(params_1).then(res => {
+        allHouse_list.arr = res
+    })
+}
+const getHouseNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
 }
 // 审核
 const modifyHouseBindFunc = val => {

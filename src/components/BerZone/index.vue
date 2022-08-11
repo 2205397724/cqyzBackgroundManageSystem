@@ -1,13 +1,13 @@
 <template>
     <div style="width: 100%;">
         <div
-            :style="{'color':checkedVal2l?'':'#aaaaaa'}"
+            :style="{'color':checkedVal2?'':'#aaaaaa'}"
             style="border: 1px solid rgb(220 223 230);width: 100%;border-radius: 4px;padding: 0 11px;box-sizing: border-box;cursor: pointer;overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
             @click="()=>{
                 popup1.switch = true;
             }"
         >
-            {{ checkedVal2 || '请选择单元' }}
+            {{ checkedVal2 || '请选择区域' }}
         </div>
         <!-- 详情 -->
         <el-dialog
@@ -67,10 +67,12 @@ const popup1 = reactive({
 const checkedVal = ref('')
 const checkedVal2 = ref('')
 const treeRef = ref(null)
-const handleCheck = (data) => {
-    treeRef.value.setCheckedNodes([data])
-    checkedVal.value = treeRef.value.getCheckedNodes()
-    checkedVal2.value = checkedVal.value[0].name
+const handleCheck = data => {
+    console.log(data)
+    // treeRef.value.setCheckedNodes([data])
+    // checkedVal.value = treeRef.value.getCheckedNodes()
+    // checkedVal2.value = checkedVal.value[0].name
+    checkedVal2.value = data.name
     console.log(checkedVal2.value)
     setTimeout(() => {
         popup1.switch = false

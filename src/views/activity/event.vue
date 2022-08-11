@@ -129,6 +129,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
                 <el-form
@@ -447,7 +448,9 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const dialogClosed = () => {
+    selectedZone_id.value = ''
+}
 // 详情
 const detailsFunc = val => {
     data_dialog.obj = val

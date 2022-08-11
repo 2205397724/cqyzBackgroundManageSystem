@@ -154,7 +154,7 @@
                             >
                                 <div class="wh_100">
                                     <div class="searchUserGroup">
-                                        <SearchUser ref="V_1" @checkName="checkUsersNameFunc" />
+                                        <SearchUser ref="V_1" v-model:name="userNames" @checkName="checkUsersNameFunc" />
                                     </div>
                                 </div>
                                 <!-- <el-input
@@ -198,6 +198,18 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="联系方式"
+                                label-width="120px"
+                                :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_add.obj.contact"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="企业图标"
@@ -231,18 +243,6 @@
                                 />
                             </el-form-item>
                         </el-col> -->
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="联系方式"
-                                label-width="120px"
-                                :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_add.obj.contact"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
                                 label="简介"
@@ -602,7 +602,6 @@
             v-model="switch_examine_1"
             title="审核申请"
             width="40%"
-            @closed="add_dialog_close"
         >
             <div>
                 <el-form
@@ -750,11 +749,7 @@
                     <div class="right">{{ getOptVal(opts_all.obj.group_user_region_type,data_group_details.item.region_type) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">区域类型对应值</div>
-                    <div class="right">{{ data_group_details.item.region_val }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">最小中国区域代码</div>
+                    <div class="left">所在区域</div>
                     <div class="right">{{ data_group_details.item.region_cc }}</div>
                 </div>
                 <div class="item">
@@ -886,11 +881,12 @@
             v-model="switch_opt_val_add"
             :title="str_opt_val_title"
             width="50%"
+            @closed="userNumbersClosed"
         >
             <div>
                 <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
                     <el-row :gutter="10">
-                        <el-col :sm="24" :md="24" :lg="12">
+                        <el-col v-if="str_opt_val_title == '添加'" :sm="24" :md="24" :lg="12">
                             <el-form-item label="用户ID" prop="id">
                                 <div class="searchUserGroup">
                                     <SearchUser ref="V_1" @checkName="checkUsersNameFunc_1" />
@@ -937,12 +933,8 @@
         <el-dialog v-model="switch_user_details" title="详情" width="50%">
             <el-scrollbar height="400px">
                 <div class="details-box">
-                    <div v-if="data_user_detail.item.name" class="item">
-                        <div class="left">用户真实名</div>
-                        <div class="right">{{ data_user_detail.item.name }}</div>
-                    </div>
                     <div v-if="data_user_detail.item.username" class="item">
-                        <div class="left">用户昵称</div>
+                        <div class="left">用户名</div>
                         <div class="right">{{ data_user_detail.item.username }}</div>
                     </div>
                     <div class="item">
@@ -977,12 +969,12 @@
                         <div class="right">{{ data_user_detail.item.post }}</div>
                     </div>
                     <div class="item">
-                        <div class="left">用户ID</div>
-                        <div class="right">{{ data_user_detail.item.user_id }}</div>
+                        <div class="left">成员所在组</div>
+                        <div class="right">{{ getUserGroupNameFunc(data_tab.arr,data_user_detail.item.group_id) }}</div>
                     </div>
                     <div class="item">
-                        <div class="left">成员所在组</div>
-                        <div class="right">{{ data_user_detail.item.group_id }}</div>
+                        <div class="left">用户ID</div>
+                        <div class="right">{{ data_user_detail.item.user_id }}</div>
                     </div>
                 </div>
             </el-scrollbar>
@@ -1092,6 +1084,8 @@ const modifyFunc = val => {
     APIgetEnterpriseDetails(val.id).then(res => {
         from_add.obj = res.data
         // file_list.value = res.data.logo
+        userNames.value = getNameFunc(userData.arr, from_add.obj.user_id)
+        // console.log(userName.value)
     })
     err_add.obj = {}
     str_title.value = '修改'
@@ -1146,6 +1140,14 @@ const getUsergroupList = () => {
         data_tab.arr = res.data
         total_1.value = res.data.length
     })
+}
+const getUserGroupNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
 }
 const deleteFunc = val => {
     APIdeleteEnterprise(val.id).then(res => {
@@ -1314,8 +1316,12 @@ const optValAddFunc = () => {
     str_opt_val_title.value = '添加'
     from_opt_val.obj = {}
     switch_opt_val_add.value = true
-    V_1.value.clearFunc()
 }
+const add_dialog_close = () => {
+    V_1.value.clearFunc()
+    userNames.value = ''
+}
+const userNames = ref('')
 // 修改
 const optValModifyFunc = val => {
     switch_opt_val_add.value = true
@@ -1323,7 +1329,6 @@ const optValModifyFunc = val => {
     from_opt_val.obj = {
         ...val
     }
-    V_1.value.clearFunc()
 }
 // 提交
 const dialogOptValFunc = () => {
