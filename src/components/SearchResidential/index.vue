@@ -6,12 +6,13 @@
         > -->
         <div
             class="tit-box"
-            :class="{'nostr':!props.str}"
+            :class="{'nostr':!zoneName}"
             style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ props.str?props.str:'请点击选择小区' }}</span>
+            <span v-if="!props.name" style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{ zoneName?zoneName:'请点击选择小区' }}</span>
+            <span v-if="props.name" style="line-height: 1rem;white-space: nowrap;overflow: hidden; color: #626466;">{{ props.name }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>
         <!-- </el-tooltip> -->
@@ -20,6 +21,7 @@
             v-model="switch_list"
             title="小区"
             width="70%"
+            style="z-index: 9999;"
         >
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;">*点击小区所在行选择该小区</div>
             <el-table
@@ -86,14 +88,15 @@ import {
     reactive,
     ref,
     defineProps,
+    defineExpose,
     defineEmits
 } from 'vue'
 import {
     APIgetResidentialListHouse
 } from '@/api/custom/custom.js'
 const switch_list = ref(false)
-const props = defineProps(['str'])
-const emit = defineEmits(['update:str'])
+const props = defineProps(['name'])
+const emit = defineEmits(['update:name', 'checkName'])
 // const name = ref('请点击选择小区')
 const loading_tab = ref(false)
 const data_tab = reactive({
@@ -106,6 +109,7 @@ const page = ref(1)
 const openDigFunc = () => {
     switch_list.value = true
     getTabListFunc()
+    emit('update:name', '')
 }
 watch(page, () => {
     getTabListFunc()
@@ -118,20 +122,25 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
-
+const zoneName = ref('')
 const rowClickFunc = row => {
     // name.value = row.name
-    emit('update:str', row.id)
+
+    emit('checkName', row)
+    zoneName.value = row.name
     switch_list.value = false
 }
 const clearFunc = () => {
-    emit('update:str', '')
+    zoneName.value = ''
 }
+defineExpose({
+    clearFunc
+})
 </script>
 <style lang="scss" scoped>
     .tit-box {

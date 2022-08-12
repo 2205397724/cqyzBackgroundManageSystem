@@ -9,9 +9,13 @@
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">
-                                设备ID：
+                                设备：
                             </div>
-                            <el-input v-model="data_search.obj.did" class="search_tb" placeholder="设备ID" clearable />
+                            <div class="search_tb">
+                                <div class="searchUserGroup">
+                                    <DeviceCategory ref="V" @checkName="checkUsersNameFunc" />
+                                </div>
+                            </div>
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">
@@ -38,7 +42,7 @@
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
                             <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
                                 <div class="searchDetail">
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
@@ -54,24 +58,24 @@
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     class="tab"
                 >
-                    <el-table-column prop="id" label="档案名称" width="120">
+                    <el-table-column prop="id" label="档案名称">
                         <template #default="scope">
                             <span>{{ scope.row.title }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="档案id">
+                    <el-table-column prop="id" label="设备">
                         <template #default="scope">
-                            <span>{{ scope.row.id }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="id" label="设备id">
-                        <template #default="scope">
-                            <span>{{ scope.row.did }} </span>
+                            <span>{{ getDeviceName(device_list.arr, scope.row.did) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="是否显示" width="100">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="创建时间" width="200">
+                        <template #default="scope">
+                            <span>{{ scope.row.created_at }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column />
@@ -120,6 +124,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
                 <el-form
@@ -129,14 +134,15 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="设备ID"
+                                label="设备"
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.did?from_error.msg.did[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.did"
-                                    class="head-btn"
-                                />
+                                <div class="wh_100">
+                                    <div class="searchUserGroup">
+                                        <DeviceCategory ref="V_1" v-model:name="deviceName" @checkName="checkUsersNameFunc_1" />
+                                    </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -173,47 +179,51 @@
                             <div class="m-b-10">
                                 <el-button type="primary" plain @click="addServiceFunc">添加档案内容</el-button>
                             </div>
-                            <div v-for="(item,i) in from_examine.item.content" :key="i" class="serve-box">
-                                <el-row :gutter="10">
-                                    <el-col :xs="24" :sm="24">
-                                        <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
-                                            <el-upload
-                                                action="***"
-                                                :auto-upload="false"
-                                                :file-list="fileListFn(item.key)"
-                                                :on-change="(file,files)=>{
-                                                    item.key = file
-                                                }"
-                                                :on-remove="(file,files)=>{
-                                                    item.key = file
-                                                }"
-                                            >
-                                                <el-button type="primary">选择附件</el-button>
-                                            </el-upload>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="12" :sm="12">
-                                        <el-form-item label-width="70px" label="文件类型" :error="from_error.msg&&from_error.msg['content.'+i+'.type']?from_error.msg['content.'+i+'.type'][0]:''">
-                                            <el-input
-                                                v-model="item.type"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="12" :sm="12">
-                                        <el-form-item label-width="70px" label="文件名" :error="from_error.msg&&from_error.msg['content.'+i+'.name']?from_error.msg['content.'+i+'.name'][0]:''">
-                                            <el-input
-                                                v-model="item.name"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                                <div class="delete-service" @click="deleteServiceFunc(i)">
-                                    <el-icon :size="20" color="#F56C6C">
-                                        <el-icon-circle-close />
-                                    </el-icon>
-                                </div>
+                            <div>
+                                <el-scrollbar :height="from_examine.item.content.length>= 3? '200px': ''">
+                                    <div v-for="(item,i) in from_examine.item.content" :key="i" class="serve-box">
+                                        <el-row :gutter="10">
+                                            <el-col :xs="24" :sm="24">
+                                                <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
+                                                    <el-upload
+                                                        action="***"
+                                                        :auto-upload="false"
+                                                        :file-list="fileListFn(item.key)"
+                                                        :on-change="(file,files)=>{
+                                                            item.key = file
+                                                        }"
+                                                        :on-remove="(file,files)=>{
+                                                            item.key = file
+                                                        }"
+                                                    >
+                                                        <el-button type="primary">选择附件</el-button>
+                                                    </el-upload>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label-width="70px" label="文件类型" :error="from_error.msg&&from_error.msg['content.'+i+'.type']?from_error.msg['content.'+i+'.type'][0]:''">
+                                                    <el-input
+                                                        v-model="item.type"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label-width="70px" label="文件名" :error="from_error.msg&&from_error.msg['content.'+i+'.name']?from_error.msg['content.'+i+'.name'][0]:''">
+                                                    <el-input
+                                                        v-model="item.name"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <div class="delete-service" @click="deleteServiceFunc(i)">
+                                            <el-icon :size="20" color="#F56C6C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
+                                        </div>
+                                    </div>
+                                </el-scrollbar>
                             </div>
                         </el-col>
                     </el-row>
@@ -242,8 +252,8 @@
                     <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">设备id</div>
-                    <div class="right">{{ data_details.item.did }}</div>
+                    <div class="left">设备</div>
+                    <div class="right">{{ getDeviceName(device_list.arr, data_details.item.did) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">是否显示</div>
@@ -336,7 +346,8 @@ const from_error = reactive({
 })
 
 import {
-    APIgetTypeList
+    APIgetTypeList,
+    APIgetDeviceList
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
@@ -350,6 +361,7 @@ const searchFunc = () => {
     switch_search.value = true
     getTabListFunc()
 }
+const V = ref(null)
 // 刷新
 const refreshFunc = () => {
     page.value = 1
@@ -357,9 +369,16 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const refreshFunc_1 = () => {
+    V.value.clearFunc()
+    refreshFunc()
+}
+const checkUsersNameFunc = row => {
+    data_search.obj.did = row.id
+}
 // 详情
 const detailsFunc = val => {
+    getDeviceList()
     data_dialog.obj = val
     APIgetDeviceArchiveDetails(val.id).then(res => {
         data_details.item = res
@@ -452,10 +471,12 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetDeviceArchiveList(params).then(res => {
+        console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
     })
+    getDeviceList()
 }
 // 删除
 const deleteFunc = val => {
@@ -463,6 +484,36 @@ const deleteFunc = val => {
         refreshFunc()
         ElMessage.success('删除成功')
     })
+}
+const checkUsersNameFunc_1 = row => {
+    from_examine.item.did = row.id
+}
+const V_1 = ref(null)
+const dialogClosed = () => {
+    V_1.value.clearFunc()
+    deviceName.value = ''
+}
+const device_list = reactive({
+    arr: []
+})
+const getDeviceList = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    loading_tab.value = true
+    APIgetDeviceList(params).then(res => {
+        loading_tab.value = false
+        device_list.arr = res
+    })
+}
+const getDeviceName = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
 }
 // 添加模板
 const addResidentialFunc = () => {
@@ -473,13 +524,16 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
+const deviceName = ref('')
 // 修改
 const modifyResidentialFunc = val => {
+    getDeviceList()
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
         from_examine.item = res
         switch_examine.value = true
+        deviceName.value = getDeviceName(device_list.arr, from_examine.item.did)
     })
 }
 // 删除 服务名称和联系方式
@@ -512,6 +566,7 @@ refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
+import DeviceCategory from '@/components/DeviceCategory/index.vue'
 const opts_all = reactive({
     obj: {}
 })

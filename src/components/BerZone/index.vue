@@ -1,6 +1,7 @@
 <template>
     <div style="width: 100%;">
         <div
+            v-if="!props.name"
             :style="{'color':checkedVal2?'':'#aaaaaa'}"
             style="border: 1px solid rgb(220 223 230);width: 100%;border-radius: 4px;padding: 0 11px;box-sizing: border-box;cursor: pointer;overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
             @click="()=>{
@@ -8,6 +9,15 @@
             }"
         >
             {{ checkedVal2 || '请选择区域' }}
+        </div>
+        <div
+            v-if="props.name"
+            style="border: 1px solid rgb(220 223 230);width: 100%;border-radius: 4px;padding: 0 11px;box-sizing: border-box;cursor: pointer;overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #aaa;"
+            @click="()=>{
+                popup1.switch = true;
+            }"
+        >
+            {{ props.name }}
         </div>
         <!-- 详情 -->
         <el-dialog
@@ -49,8 +59,8 @@ import {
     reactive,
     toRefs
 } from 'vue'
-const props = defineProps(['cid', 'zid', 'bid', 'uid', 'code', 'disabled'])
-const emits = defineEmits(['update:zid', 'update:bid', 'update:uid', 'update:cid'])
+const props = defineProps(['cid', 'zid', 'bid', 'uid', 'code', 'disabled', 'name'])
+const emits = defineEmits(['update:zid', 'update:bid', 'update:uid', 'update:cid', 'update:name'])
 const {
     uid,
     code,
@@ -68,9 +78,11 @@ const checkedVal = ref('')
 const checkedVal2 = ref('')
 const treeRef = ref(null)
 const handleCheck = data => {
+    emits('update:name', '')
     console.log(data)
     // treeRef.value.setCheckedNodes([data])
     // checkedVal.value = treeRef.value.getCheckedNodes()
+    // console.log(checkedVal.value)
     // checkedVal2.value = checkedVal.value[0].name
     checkedVal2.value = data.name
     console.log(checkedVal2.value)
@@ -96,6 +108,9 @@ const handleCheck = data => {
             emits('update:zid', data.data?.sync_zone_id)
             emits('update:bid', data.data?.building_id)
             emits('update:uid', data.data?.id)
+            console.log(props.zid.value)
+            console.log(props.bid.value)
+            console.log(props.uid.value)
             return false
         }
     }, 200)

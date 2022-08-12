@@ -9,9 +9,13 @@
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">
-                                设备id：
+                                设备：
                             </div>
-                            <el-input v-model="data_search.obj.did" class="search_tb" placeholder="设备id" clearable />
+                            <div class="search_tb">
+                                <div class="searchUserGroup">
+                                    <DeviceCategory ref="V" @checkName="checkUsersNameFunc" />
+                                </div>
+                            </div>
                         </div>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8">
@@ -34,7 +38,7 @@
                                 </el-button>
                             </div>
                             <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
                                 <div class="searchDetail">
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
@@ -55,22 +59,18 @@
                             <span>{{ scope.row.title }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="维保id">
+
+                    <el-table-column prop="id" label="设备">
                         <template #default="scope">
-                            <span>{{ scope.row.id }} </span>
+                            <span>{{ getDeviceName(device_list.arr, scope.row.did) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="设备id">
-                        <template #default="scope">
-                            <span>{{ scope.row.did }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="cid" label="类型" width="90">
+                    <el-table-column prop="cid" label="类型" width="150">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.repair_type,scope.row.type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="是否显示" width="90">
+                    <el-table-column prop="id" label="是否显示" width="120">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                         </template>
@@ -121,6 +121,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
                 <el-form
@@ -130,14 +131,15 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="设备id"
+                                label="设备"
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.did?from_error.msg.did[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.did"
-                                    class="head-btn"
-                                />
+                                <div class="wh_100">
+                                    <div class="searchUserGroup">
+                                        <DeviceCategory ref="V_1" v-model:name="deviceName" @checkName="checkUsersNameFunc_1" />
+                                    </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -247,8 +249,8 @@
                     <div class="right">{{ data_details.item.title }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">设备id</div>
-                    <div class="right">{{ data_details.item.did }}</div>
+                    <div class="left">设备</div>
+                    <div class="right">{{ getDeviceName(device_list.arr, data_details.item.did) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">详细记录</div>
@@ -346,7 +348,8 @@ const from_error = reactive({
 })
 
 import {
-    APIgetTypeList
+    APIgetTypeList,
+    APIgetDeviceList
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
@@ -369,9 +372,17 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const V = ref(null)
+const refreshFunc_1 = () => {
+    V.value.clearFunc()
+    refreshFunc()
+}
+const checkUsersNameFunc = row => {
+    data_search.obj.did = row.id
+}
 // 详情
 const detailsFunc = val => {
+    getDeviceList()
     data_dialog.obj = val
     APIgetDeviceRepairDetails(val.id).then(res => {
         res.affixs = []
@@ -473,6 +484,7 @@ const getTabListFunc = () => {
         data_tab.arr = res
         total.value = res.length
     })
+    getDeviceList()
 }
 // 删除
 const deleteFunc = val => {
@@ -480,6 +492,36 @@ const deleteFunc = val => {
         refreshFunc()
         ElMessage.success('删除成功')
     })
+}
+const checkUsersNameFunc_1 = row => {
+    from_examine.item.did = row.id
+}
+const V_1 = ref(null)
+const dialogClosed = () => {
+    V_1.value.clearFunc()
+    deviceName.value = ''
+}
+const device_list = reactive({
+    arr: []
+})
+const getDeviceList = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    loading_tab.value = true
+    APIgetDeviceList(params).then(res => {
+        loading_tab.value = false
+        device_list.arr = res
+    })
+}
+const getDeviceName = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
 }
 // 添加模板
 const addResidentialFunc = () => {
@@ -492,7 +534,9 @@ const addResidentialFunc = () => {
     switch_examine.value = true
 }
 // 修改
+const deviceName = ref('')
 const modifyResidentialFunc = val => {
+    getDeviceList()
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceRepairDetails(val.id).then(res => {
@@ -507,6 +551,7 @@ const modifyResidentialFunc = val => {
         }
         file_list.value = arr
         switch_examine.value = true
+        deviceName.value = getDeviceName(device_list.arr, from_examine.item.did)
     })
 }
 

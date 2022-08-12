@@ -16,41 +16,53 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            关键字:
-                            <el-input v-model="data_1.search.name" class=".head-btn search_tb p-l-5" placeholder="标题名称" clearable />
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                标题名称：
+                            </div>
+                            <el-input v-model="data_1.search.name" class="search_tb" placeholder="标题名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">区域代码：</div>
-                        <div class="search_tb">
-                            <Cascaders v-model="data_1.search.china_code" />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">区域代码：</div>
+                            <div class="search_tb">
+                                <Cascaders v-model="data_1.search.china_code" />
+                            </div>
                         </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
-                        <div class="search_th">状态：</div>
-                        <el-select v-model="data_1.search.status" clearable placeholder="状态" class="head-btn search_tb">
-                            <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">状态：</div>
+                            <el-select v-model="data_1.search.status" clearable placeholder="状态" class="search_tb">
+                                <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
-                        <el-button
-                            class="m-l-20" type="primary" :icon="Search" @click="()=>{
-                                data_1.switch_search = true;
-                                data_1.page = 1;
-                                getFuncCategoryList()
-                            }"
-                        >
-                            筛选
-                        </el-button>
-                    </el-col>
-                    <el-col v-show="data_1.switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
-                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ data_1.total }}条。
+                    <el-col :xs="24" :md="24" :lg="10">
+                        <div class="flx">
+                            <div class="w_30">
+                                <el-button
+                                    class="m-l-20" type="primary" :icon="Search" @click="()=>{
+                                        data_1.switch_search = true;
+                                        data_1.page = 1;
+                                        getFuncCategoryList()
+                                    }"
+                                >
+                                    筛选
+                                </el-button>
+                            </div>
+                            <div v-show="data_1.switch_search == true" class="w_70 m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ data_1.total }}条。
+                                </div>
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -59,6 +71,7 @@
                 row-key="id"
                 lazy
                 :load="getChildrens"
+                :default-sort="{ prop: 'sort', order: 'ascending' }"
                 :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
@@ -93,13 +106,13 @@
                 <el-table-column fixed="right" label="操作" width="300">
                     <template #default="scope">
                         <el-button
-                            type="success"
+                            type="success" size="small" style="width: 80px;"
                             @click="clickFuncPost(scope.row)"
                         >
                             添加子栏目
                         </el-button>
                         <el-button
-                            type="primary"
+                            type="primary" size="small"
                             @click="clickFuncModify(scope.row)"
                         >
                             修改
@@ -110,7 +123,7 @@
                         >
                             <template #reference>
                                 <el-button
-                                    type="danger"
+                                    type="danger" size="small"
                                 >
                                     删除
                                 </el-button>

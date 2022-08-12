@@ -91,14 +91,16 @@
                             <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="cid" label="状态" width="90">
-                        <template #default="scope">
-                            <span>{{ getOptVal(opts_all.obj.device_status,scope.row.status) }} </span>
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="id" label="是否显示" width="90">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="cid" label="状态" width="90">
+                        <template #default="scope">
+                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark">正常</el-tag>
+                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="danger" effect="dark"> 故障</el-tag>
+                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark">维修</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="档案" width="90">
@@ -181,7 +183,7 @@
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
                             >
-                                <BerZone v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit" :disabled="[0,1,2,3,4,5]" :code="''" />
+                                <BerZone v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit" v-model:name="chinaName" :disabled="[0,1,2,3,4,5]" :code="''" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -353,7 +355,11 @@
                             </div>
                             <div class="item">
                                 <div class="left">状态</div>
-                                <div class="right">{{ getOptVal(opts_all.obj.device_status,data_details.item.status) }}</div>
+                                <div class="right">
+                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="success" effect="dark">正常</el-tag>
+                                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="danger" effect="dark"> 故障</el-tag>
+                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark">维修</el-tag>
+                                </div>
                             </div>
                             <div class="item">
                                 <div class="left">是否显示</div>
@@ -675,6 +681,7 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             if (str_title.value == '修改') {
+                console.log(from_examine.item)
                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
                     ElMessage.success('修改成功')
@@ -703,8 +710,10 @@ const deleteFunc = val => {
         ElMessage.success('删除成功')
     })
 }
+const chinaName = ref('')
 // 添加模板
 const addResidentialFunc = () => {
+    chinaName.value = '请选择区域'
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
@@ -714,6 +723,7 @@ const addResidentialFunc = () => {
 }
 // 修改
 const modifyResidentialFunc = val => {
+    chinaName.value = '请点击选择区域'
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceDetails(val.id).then(res => {

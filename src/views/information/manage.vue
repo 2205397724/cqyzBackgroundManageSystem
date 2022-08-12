@@ -16,46 +16,59 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            关键字:
-                            <el-input v-model="data_1.search.title" class=".head-btn search_tb p-l-5" placeholder="标题名称" clearable />
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                                标题名称：
+                            </div>
+                            <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">区域代码：</div>
-                        <div class="search_tb">
-                            <Cascaders v-model="data_1.search.china_code" />
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">区域代码：</div>
+                            <div class="search_tb">
+                                <Cascaders v-model="data_1.search.china_code" />
+                            </div>
                         </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
-                        <div class="search_th">状态：</div>
-                        <el-select v-model="data_1.search.status" clearable placeholder="状态" class="head-btn search_tb">
-                            <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">状态：</div>
+                            <el-select v-model="data_1.search.status" clearable placeholder="状态" class="search_tb">
+                                <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
-                        <el-button
-                            class="m-l-20" type="primary" :icon="Search" @click="()=>{
-                                data_1.switch_search = true;
-                                data_1.page = 1;
-                                getFuncManageList()
-                            }"
-                        >
-                            筛选
-                        </el-button>
-                    </el-col>
-                    <el-col v-show="data_1.switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
-                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                        *搜索到相关结果共{{ data_1.total }}条。
+                    <el-col :xs="24" :md="24" :lg="10">
+                        <div class="flx">
+                            <div class="w_30">
+                                <el-button
+                                    class="m-l-20" type="primary" :icon="Search" @click="()=>{
+                                        data_1.switch_search = true;
+                                        data_1.page = 1;
+                                        getFuncManageList()
+                                    }"
+                                >
+                                    筛选
+                                </el-button>
+                            </div>
+                            <div v-show="data_1.switch_search == true" class="w_70 m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ data_1.total }}条。
+                                </div>
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
             <el-table
                 :data="data_1.list"
+                :load="loading_tab"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
@@ -64,19 +77,20 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="资讯id" width="240">
+                <el-table-column label="资讯类别">
                     <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="资讯类别id">
-                    <template #default="scope">
+                        <!-- <span>{{ getCategoryName(data_tab.arr,scope.row.cate_id) }} </span> -->
                         <span>{{ scope.row.cate_id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="所在区域">
                     <template #default="scope">
                         <span>{{ scope.row.china_name }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="所在小区" width="240">
+                    <template #default="scope">
+                        <span>{{ getZoneName(zone_list.arr,scope.row.zone_id) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态">
@@ -116,7 +130,7 @@
                         >
                             <template #reference>
                                 <el-button
-                                    type="danger"
+                                    type="danger" size="small"
                                 >
                                     删除
                                 </el-button>
@@ -141,6 +155,7 @@
             v-model="data_1.add_switch"
             :title="data_1.add_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <el-form
                 ref="ruleFormRef"
@@ -199,7 +214,7 @@
                             :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
                         >
                             <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;">
-                                <SearchResidential v-model:str="data_1.add_form.zone_id" />
+                                <SearchResidential ref="V" v-model:name="zoneName" @checkName="checkZoneName" />
                             </div>
                         </el-form-item>
                     </el-col>
@@ -263,7 +278,7 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <div class="m-l-10 m-b-10">资讯内容</div>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="z-index: 999;">
                         <!-- <el-form-item
                             label=""
                             label-width="120px"
@@ -303,12 +318,12 @@
                     <div class="right">{{ data_1.details_data.id }}</div>
                 </div>
                 <div v-if="data_1.details_data.zone_id" class="item">
-                    <div class="left">小区id</div>
-                    <div class="right">{{ data_1.details_data.zone_id }}</div>
+                    <div class="left">所在小区</div>
+                    <div class="right">{{ getZoneName(zone_list.arr, data_1.details_data.zone_id) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">资讯类别id</div>
-                    <div class="right">{{ data_1.details_data.cate_id }}</div>
+                    <div class="left">资讯类别</div>
+                    <div class="right">{{ data_1.details_data.cate.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">所在区域</div>
@@ -375,7 +390,16 @@ const data_1 = reactive({
     page: 1,
     total: 0,
     per_page: 15,
-    list: [],
+    list: [{
+        title: '',
+        cate: {
+            id: '',
+            name: ''
+        },
+        china_name: '',
+        zone_id: '',
+        status: 0
+    }],
     add_switch: false,
     add_title: '添加',
     add_form: {},
@@ -386,6 +410,7 @@ const data_1 = reactive({
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const getFuncManageList = () => {
+    data_1.list
     let params = {
         // page: data_1.page,
         // per_page: data_1.per_page
@@ -431,7 +456,7 @@ const clickFuncCategory = () => {
                     ElMessage.error('添加失败')
                 })
             } else {
-                data_1.add_form.setting = []
+                // data_1.add_form.setting = []
                 // data_1.add_form.thumb = ''
                 console.log(data_1.add_form)
                 APIputInforManage(data_1.add_form.id, data_1.add_form).then(res => {
@@ -470,7 +495,8 @@ const clickFuncCategory = () => {
 // 资讯列表
 // const getFuncCategoryList = () => {
 import {
-    APIgetInforCategoryList
+    APIgetInforCategoryList,
+    APIgetResidentialListHouse
 } from '@/api/custom/custom.js'
 const data_tab = reactive({
     arr: []
@@ -489,10 +515,97 @@ APIgetInforCategoryList(params).then(res => {
     // console.log(NewArr.arr)
 })
 const props = { multiple: false, emitPath: false, checkStrictly: true, value: 'id', label: 'name' }
+const V = ref(null)
+const zoneName = ref('')
+const dialogClosed = () => {
+    V.value.clearFunc()
+    zoneName.value = ''
+}
+const checkZoneName = row => {
+    data_1.add_form.zone_id = row.id
+}
+const loading_tab = ref(true)
+const zone_list = reactive({
+    arr: []
+})
+const getZoneListFunc = () => {
+    let params = {
+        page: data_1.page.value,
+        per_page: data_1.per_page.value
+    }
+    loading_tab.value = true
+    APIgetResidentialListHouse(params).then(res => {
+        loading_tab.value = false
+        zone_list.arr = res
+    })
+}
+const getZoneName = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
+}
+const name = ref('')
+const getCategoryName = (arr, id) => {
+    let name = ''
+    // arr.find(item => {
+    //     if (item.id == id) {
+    //         name = item['name']
+    //         return name
+    //     }
+    //     for (let key in item) {
+    //         if (item.children) {
+    //             item.children.forEach(item => {
+    //                 for (let key in item) {
+    //                     if (item[key] == id) {
+    //                         name = item['name']
+    //                         return name
+    //                     }
+    //                     for (let i in key) {
+    //                         if (key.children) {
+    //                             key.children.forEach(item => {
+    //                                 for (let key in item) {
+    //                                     if (item[key] == id) {
+    //                                         name = item['name']
+    //                                         return name
+    //                                     }
 
+    //                                 }
+    //                             })
+    //                         }
+
+    //                     }
+    //                 }
+    //             })
+    //         }
+
+    //     }
+    // })
+    // return name
+    for (let i in arr) {
+        if (arr[i].id == id) {
+            return arr[i].name
+        } else {
+            // while (arr[i].children) {
+            //     // if (arr[i].children) {
+            //     // arr[i].children.forEach(item => {
+            //     if (arr[i].children.id == id) {
+            //         name.value = arr[i].children.name
+            //         break
+            //     }
+            //     // })
+            //     // getCategoryName(arr[i].children, id)
+            //     // }
+            // }
+        }
+    }
+}
 // }
 // 修改
 const clickFuncModify = row => {
+    getZoneListFunc()
     data_1.add_title = '修改'
     console.log(row)
     APIgetInforManageDetails(row.id).then(res => {
@@ -507,6 +620,7 @@ const clickFuncModify = row => {
         }
         file_list.value = arr
         data_1.add_switch = true
+        zoneName.value = getZoneName(zone_list.arr, data_1.add_form.zone_id)
     })
 }
 // 详情
@@ -619,4 +733,5 @@ getOpts(['information_status']).then(res => {
 .switchStyle ::v-deep .el-switch__label {
     width: 60px !important;
 }
+
 </style>
