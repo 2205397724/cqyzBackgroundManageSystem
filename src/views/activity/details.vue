@@ -12,42 +12,44 @@
                 </el-button>
             </div>
             <div>
-                <el-scrollbar height="800px">
-                    <el-timeline>
-                        <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" type="primary">
-                            <el-popconfirm
-                                title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteActivityFunc(item)"
-                            >
-                                <template #reference>
-                                    <div class="serve-box">
-                                        <div class="delete-service">
-                                            <el-icon :size="20" color="#F56C6C">
-                                                <el-icon-circle-close />
-                                            </el-icon>
-                                        </div>
-                                    </div>
-                                </template>
-                            </el-popconfirm>
-                            <el-card @click="activitydetailsFunc(item)">
-                                <div>
-                                    <div v-if="item.docable.hasOwnProperty('title')" class="size-lg">{{ item.docable.title }}</div>
-                                    <div class="size-lg" else>{{ item.docable.name }}</div>
-                                    <div class="m-t-10 m-b-10">
-                                        <el-tag v-if="item.tgt_type == 'announce'" round size="large">公示</el-tag>
-                                        <el-tag v-if="item.docable.type == 1" round size="large">联名活动</el-tag>
-                                        <el-tag v-if="item.docable.type == 2" round size="large">表决活动</el-tag>
-                                        <el-tag v-if="item.docable.type == 3" round size="large">选举活动</el-tag>
-                                        <el-tag v-if="item.docable.type == 4" round size="large">问卷活动</el-tag>
-                                    </div>
-                                    <div v-if="item.docable.hasOwnProperty('uinfo')">
-                                        <span style="color: #b7b1b1;">操作人员: {{ item.docable.uinfo.name }}</span>
-                                    </div>
+                <el-timeline>
+                    <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" type="primary">
+                        <!-- <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteActivityFunc(item)"
+                        > -->
+                        <!-- <template #reference> -->
+                        <div class="serve-box">
+                            <div class="delete-service" @click="deleteActivityFunc_1(item)">
+                                <el-icon :size="20" color="#F56C6C">
+                                    <el-icon-circle-close />
+                                </el-icon>
+                            </div>
+                        </div>
+                        <div v-if="item.tgt_type == 'survey'" style="width: 97%;height: 133px;position: absolute;" @click="activitydetailsFunc(item)" />
+                        <AnnounceDetails v-if="item.tgt_type == 'announce'" :id="item.docable.id" :name="activeName_1" />
+
+                        <!-- </template> -->
+                        <!-- </el-popconfirm> -->
+                        <!-- <el-card @click="activitydetailsFunc(item)"> -->
+                        <el-card>
+                            <div>
+                                <div v-if="item.docable.hasOwnProperty('title')" class="size-lg">{{ item.docable.title }}</div>
+                                <div class="size-lg" else>{{ item.docable.name }}</div>
+                                <div class="m-t-10 m-b-10">
+                                    <el-tag v-if="item.tgt_type == 'announce'" round size="large">公示</el-tag>
+                                    <el-tag v-if="item.docable.type == 1" round size="large">联名活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 2" round size="large">表决活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 3" round size="large">选举活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 4" round size="large">问卷活动</el-tag>
                                 </div>
-                            </el-card>
-                        </el-timeline-item>
-                    </el-timeline>
-                </el-scrollbar>
+                                <div v-if="item.docable.hasOwnProperty('uinfo') && item.docable.uinfo">
+                                    <span style="color: #b7b1b1;">操作人员: {{ item.docable.uinfo.name ? item.docable.uinfo.name: item.docable.uinfo.nickname ? item.docable.uinfo.nickname : item.docable.uinfo.username }}</span>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-timeline-item>
+                </el-timeline>
             </div>
         </page-main>
         <el-dialog
@@ -84,7 +86,7 @@
                                 <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             </div>
                             <div v-show="switch_search == true" class="w_70% m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
                                 <div class="searchDetail">
                                     *搜索到相关结果共{{ total }}条。
                                 </div>
@@ -119,17 +121,17 @@
                                         <span>{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="公示对象类型" width="70">
+                                <el-table-column label="公示对象类型">
                                     <template #default="scope">
                                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="用户组ID">
+                                <el-table-column label="发布人">
                                     <template #default="scope">
                                         <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="状态" width="100">
+                                <el-table-column label="状态">
                                     <template #default="scope">
                                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                                         <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
@@ -144,7 +146,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="联名" name="1">
-                        <el-scrollbar height="800px">
+                        <el-scrollbar height="300px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -170,7 +172,7 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-tag v-if="scope.row.status == '1'" size="small" round effect="dark">筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
                                         <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
                                         <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
                                         <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
@@ -184,7 +186,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="表决" name="2">
-                        <el-scrollbar height="800px">
+                        <el-scrollbar height="300px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -210,13 +212,13 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column />
@@ -224,7 +226,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="选举" name="3">
-                        <el-scrollbar height="800px">
+                        <el-scrollbar height="300px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -250,13 +252,13 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column />
@@ -264,7 +266,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="问卷" name="4">
-                        <el-scrollbar height="800px">
+                        <el-scrollbar height="300px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -290,13 +292,13 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-button v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-button>
-                                        <el-button v-if="scope.row.status == '2'" size="small" type="primary" round>待审</el-button>
-                                        <el-button v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-button>
-                                        <el-button v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-button>
-                                        <el-button v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-button>
-                                        <el-button v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-button>
-                                        <el-button v-if="scope.row.status == '7'" size="small" type="danger" round>已结束</el-button>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column />
@@ -323,7 +325,7 @@
         >
             <div>
                 <!-- <img src="../../assets/images/xth.png"/> -->
-                是否确认添加此活动！
+                是否确认添加 <span class="ac_name"> "{{ currentActivity.item.title?currentActivity.item.title:currentActivity.item.name }}"</span> 活动！
             </div>
             <template #footer>
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
@@ -332,78 +334,23 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 公示详情 -->
         <el-dialog
-            v-model="switch_announce"
-            title="公示详情"
-            width="50%"
+            v-model="switch_deleteSure"
+            title="确认"
+            width="30%"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">公示主题</div>
-                    <div class="right">{{ data_details.item.title }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示分类</div>
-                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示对象</div>
-                    <div class="right">{{ data_details.item.toval }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">公示对象类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">发布人用户组</div>
-                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.groupid) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">
-                        <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                        <el-tag v-show="data_details.item.status == 2" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                        <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                        <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                        <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">开始时间</div>
-                    <div class="right">{{ data_details.item.start_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">结束时间</div>
-                    <div class="right">{{ data_details.item.end_at }}</div>
-                </div>
-                <!-- <div class="item">
-                                <div class="left">附件名称</div>
-                                <div class="right">{{ data_details.item.affix.title }}</div>
-                            </div> -->
-                <div class="item">
-                    <div class="left">附件</div>
-                    <div class="right">
-                        <img
-                            v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" :src="item" fit="cover"
-                        >
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">公示内容</div>
-                    <div class="right" v-html="data_details.item.content" />
-                </div>
+            <div>
+                <!-- <img src="../../assets/images/xth.png"/> -->
+                是否确认删除当前项？
             </div>
             <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="switch_announce = false">取消</el-button>
-                </span>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_deleteSure=false">取消</el-button>
+                    <el-button type="primary" @click="deleteActivityFunc">确定</el-button>
+                </div>
             </template>
         </el-dialog>
+        <!-- 详情 -->
         <el-dialog v-model="switch_survey" :title="data_details_1.item.name" width="80%" destroy-on-close="true">
             <Detail :id="data_details_1.item.id" />
             <template #footer>
@@ -444,6 +391,7 @@ const dataForm = reactive({
 const data_announce = reactive({
     arr: []
 })
+const activeName_1 = ref('活动')
 const data_tab = reactive({
     arr: []
 })
@@ -480,19 +428,24 @@ const searchFunc = () => {
     getTabListFunc()
     // } else {
     getSurveyListFunc(activeName.value)
+    getUserGroupList()
+    getAnnounceType()
     // }
 }
 // :disabled="activeName !== '5' ? true : false"
 // 刷新
 const refreshFunc = () => {
     page.value = 1
-    data_search.obj = {}
     getActivitiesEventList()
+}
+const refreshFunc_1 = () => {
+    page.value = 1
     getTabListFunc()
     getSurveyListFunc(activeName.value)
+    data_search.obj = {}
     switch_search.value = false
-    // clickFuncAddVote()
-    console.log()
+    getUserGroupList()
+    getAnnounceType()
 }
 import {
     APIgetSurvey,
@@ -569,6 +522,8 @@ const addActiviesFunc = () => {
     data_search.obj = {}
     getTabListFunc()
     getSurveyListFunc(activeName.value)
+    getUserGroupList()
+    getAnnounceType()
     switch_search.value = false
 }
 const rowClickFunc = row => {
@@ -592,10 +547,12 @@ import {
 } from '@/api/custom/custom.js'
 // 获取公式列表api请求
 const main_type = ref('announce')
-APIgetTypeList(main_type.value).then(res => {
-    console.log(res)
-    data_1.arr = res
-})
+const getAnnounceType = () => {
+    APIgetTypeList(main_type.value).then(res => {
+        console.log(res)
+        data_1.arr = res
+    })
+}
 // 选择用户组name
 const userData = reactive({
     arr: []
@@ -603,13 +560,15 @@ const userData = reactive({
 import {
     APIgetGroupList
 } from '@/api/custom/custom.js'
-APIgetGroupList().then(res => {
-    if (res.status == 200) {
-        console.log(res)
-        loading_tab.value = false
-        userData.arr = res.data
-    }
-})
+const getUserGroupList = () => {
+    APIgetGroupList().then(res => {
+        if (res.status == 200) {
+            console.log(res)
+            loading_tab.value = false
+            userData.arr = res.data
+        }
+    })
+}
 // 确认添加
 const clickFuncAddVote = () => {
     let data = {
@@ -639,12 +598,21 @@ const clickFuncAddVote = () => {
     switch_list.value = false
 }
 // 删除活动事件
-const deleteActivityFunc = val => {
-    console.log(val)
-    APIdeleteActivitiesEvent(val.vid, { data: { tgt_id: val.tgt_id, tgt_type: val.tgt_type } }).then(res => {
+const deleteActivityFunc = () => {
+    // console.log(val)
+    APIdeleteActivitiesEvent(activity.item.vid, { data: { tgt_id: activity.item.tgt_id, tgt_type: activity.item.tgt_type } }).then(res => {
         refreshFunc()
         ElMessage.success('删除成功')
+        switch_deleteSure.value = false
     })
+}
+const switch_deleteSure = ref(false)
+const activity = reactive({
+    item: {}
+})
+const deleteActivityFunc_1 = item => {
+    activity.item = item
+    switch_deleteSure.value = true
 }
 // 公示详情
 const switch_announce = ref(false)
@@ -656,18 +624,18 @@ const data_details_1 = reactive({
     item: {}
 })
 const activitydetailsFunc = item => {
-    if (item.tgt_type == 'announce') {
-        switch_announce.value = true
-        item.docable.affixs = []
-        for (let i in item.docable.affix) {
-            item.docable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + item.docable.affix[i].file)
-        }
-        data_details.item = item.docable
-        console.log(item.docable)
-    } else {
-        switch_survey.value = true
-        data_details_1.item = item.docable
-    }
+    // if (item.tgt_type == 'announce') {
+    //     switch_announce.value = true
+    //     item.docable.affixs = []
+    //     for (let i in item.docable.affix) {
+    //         item.docable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + item.docable.affix[i].file)
+    //     }
+    //     data_details.item = item.docable
+    //     console.log(item.docable)
+    // } else {
+    switch_survey.value = true
+    data_details_1.item = item.docable
+    // }
 }
 // 监听分页
 watch(page, () => {
@@ -698,8 +666,8 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
     position: relative;
     .delete-service {
         position: absolute;
-        left: -33px;
-        top: -24px;
+        right: -4px;
+        top: -6px;
         z-index: 99;
         cursor: pointer;
         background-color: #fff;
@@ -707,5 +675,11 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
 }
 .noDeal {
     margin-left: 6px;
+}
+.ac_name {
+    display: inline-block;
+    font-size: 18px;
+    color: #00c701;
+    padding: 0 10px;
 }
 </style>

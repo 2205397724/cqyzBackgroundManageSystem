@@ -323,7 +323,7 @@
                 </div>
                 <div class="item">
                     <div class="left">资讯类别</div>
-                    <div class="right">{{ data_1.details_data.cate.name }}</div>
+                    <div class="right">{{ data_1.details_data.cate_id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">所在区域</div>
@@ -427,6 +427,7 @@ const getFuncManageList = () => {
         data_1.total = res.length
         data_1.list = res
     })
+    getZoneListFunc()
 }
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {

@@ -14,7 +14,6 @@
                 :data="data_tab.arr"
                 :default-sort="{ prop: 'sort', order: 'ascending' }"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                default-expand-all
                 row-key="id"
                 :tree-props="{ children: 'children' }"
                 style="width: 100%;min-height: 300px;"
