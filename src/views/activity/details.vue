@@ -615,11 +615,7 @@ const deleteActivityFunc_1 = item => {
     switch_deleteSure.value = true
 }
 // 公示详情
-const switch_announce = ref(false)
 const switch_survey = ref(false)
-const data_details = reactive({
-    item: {}
-})
 const data_details_1 = reactive({
     item: {}
 })

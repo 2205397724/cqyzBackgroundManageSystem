@@ -23,7 +23,7 @@
                         </div>
                         <div class="item">
                             <div class="left">公示分类</div>
-                            <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                            <div class="right">{{ cateName }}</div>
                         </div>
                         <div class="item">
                             <div class="left">公示对象</div>
@@ -34,8 +34,8 @@
                             <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
                         </div>
                         <div class="item">
-                            <div class="left">发布人用户组</div>
-                            <div class="right">{{ getNameFunc(userData.arr,data_details.item.groupid) }}</div>
+                            <div class="left">发布人</div>
+                            <div class="right">{{ groupName }}</div>
                         </div>
                         <div class="item">
                             <div class="left">状态</div>
@@ -165,13 +165,16 @@ const per_page = ref(15)
 const article_tab = reactive({
     arr: []
 })
-
+const groupName = ref('')
+const cateName = ref('')
 const detailsFunc = () => {
     console.log(props.id)
     activeName.value = '1'
     switch_details.value = true
     APIgetEventArticleDetails(props.id).then(res => {
         data_details.item = res
+        groupName.value = res.authorgroup.name
+        cateName.value = res.cate.name
         res.affixs = []
         for (let i in res.affix) {
             res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
@@ -179,6 +182,8 @@ const detailsFunc = () => {
         // AudioContext.value = data_details.item.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
         console.log(props.id)
         getListArchiveFunc()
+        getAnnounceListFunc()
+        getUserGroupListFunc()
     })
 }
 import {
@@ -197,18 +202,6 @@ const getListArchiveFunc = () => {
     })
 }
 // 获取类别名称
-let data_1 = reactive({
-    arr: []
-})
-import {
-    APIgetTypeList
-} from '@/api/custom/custom.js'
-// 获取公式列表api请求
-const main_type = ref('announce')
-APIgetTypeList(main_type.value).then(res => {
-    console.log(res)
-    data_1.arr = res
-})
 const getNameFunc = (arr, key) => {
     for (let i in arr) {
         if (arr[i].id == key) {
@@ -222,12 +215,14 @@ const userData = reactive({
 import {
     APIgetGroupList
 } from '@/api/custom/custom.js'
-APIgetGroupList().then(res => {
-    if (res.status == 200) {
-        console.log(res)
-        userData.arr = res.data
-    }
-})
+const getUserGroupListFunc = () => {
+    APIgetGroupList().then(res => {
+        if (res.status == 200) {
+            console.log(res)
+            userData.arr = res.data
+        }
+    })
+}
 // defineExpose({
 //     getAnnounceDetailsFunc
 // })
@@ -243,5 +238,4 @@ getOpts(['article_lv', 'announce_status']).then(res => {
     opts_all.obj = res
 })
 </script>
-
 
