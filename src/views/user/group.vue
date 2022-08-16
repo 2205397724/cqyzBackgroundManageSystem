@@ -437,11 +437,11 @@
         <!-- 角色部分 -->
         <el-dialog v-model="switch_roles" title="角色信息" center width="65%">
             <el-button type="primary" class="m-b-10" @click="addGroupRoles">
-                添加角色
+                添加用户组角色
             </el-button>
-            <el-input v-model="from_addRoles.item.role_ids[0]" class="p-b-10">
+            <!-- <el-input v-model="from_addRoles.item.role_ids[0]" class="p-b-10">
                 <template #prepend>角色ID集</template>
-            </el-input>
+            </el-input> -->
             <el-table v-loading="loading_tab" :data="data_tab_roles.arr">
                 <el-table-column label="角色名称" prop="name">
                     <template #default="scope">
@@ -477,6 +477,41 @@
                     </template>
                 </el-table-column>
             </el-table>
+        </el-dialog>
+        <!-- 添加用户组角色弹窗 -->
+               <el-dialog
+            v-model="switch_post_group_role"
+            title="添加用户组角色"
+            width="50%"
+        >
+            <div>
+                <el-form ref="ruleFormRef" :model="post_group_role.item" label-width="80px">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="名称" prop="name">
+                                <el-input v-model="post_group_role.item.name" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="特有标识" prop="spec">
+                                <el-input v-model="post_group_role.item.spec" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div
+                    style="
+                                                                                                display: flex;
+                                                                                                justify-content: flex-end;
+                                                                                                align-items: center;
+                                                                                                width: 100%;
+"
+                >
+                    <el-button type="primary" @click="post_group_role_submit">确定</el-button>
+                </div>
+            </template>
         </el-dialog>
         <!-- 成员角色部分 -->
         <el-dialog v-model="switch_group_roles" title="成员角色">
@@ -1325,29 +1360,50 @@ const deleteGroup_roles = val => {
     })
 }
 // 添加用户组角色
-const addGroupRoles = () => {
-    console.log(from_addRoles.item.role_ids[0])
-    if (from_addRoles.item.role_ids[0] == '') {
-        ElMessage.error('请输入角色ID')
-        return
+import {APIpostRoles} from '@/api/custom/custom'
+const switch_post_group_role=ref(false)
+const post_group_role=reactive({
+    item:{
+        name:"",
+        spec:"",
     }
-    APIpostGroupRoles(
-        from_addRoles.item.group,
-        from_addRoles.item
-    ).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('添加角色成功')
+})
+const post_group_role_submit=async ()=>{
+    let res=await APIpostRoles(post_group_role.item)
+    APIpostGroupRoles(from_addRoles.item.group,{role_ids:[res.data.id]}).then(res=>{
+        if(res.status==200){
+            ElMessage.success('添加成功')
+            switch_post_group_role.value=false
+            switch_roles.value=false
+            post_group_role.item.name=""
+            post_group_role.item.spec=""
         }
     })
 }
-// 添加
+const addGroupRoles = () => {
+    switch_post_group_role.value=true
+    // console.log(from_addRoles.item.role_ids[0])
+    // if (from_addRoles.item.role_ids[0] == '') {
+    //     ElMessage.error('请输入角色ID')
+    //     return
+    // }
+    // APIpostGroupRoles(
+    //     from_addRoles.item.group,
+    //     from_addRoles.item
+    // ).then(res => {
+    //     if (res.status === 200) {
+    //         ElMessage.success('添加角色成功')
+    //     }
+    // })
+}
+// 添加用户组
 const addResidentialFunc = val => {
     from_examine.item = {}
     from_error.msg = {}
     str_title.value = '添加用户组'
     switch_examine.value = true
 }
-// 修改
+// 修改用户组
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改用户组'
