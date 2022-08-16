@@ -449,7 +449,7 @@ export function APIpostArchiveAudit(data) {
 }
 // 审核操作
 export function APIputArchiveAudit(id, data) {
-    return api2.post(`/a-audit/${id}`, data)
+    return api2.put(`/a-audit/${id}`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示归档

@@ -168,6 +168,7 @@
                     layout="prev,next,jumper"
                     :page-size="per_page"
                     :total="50"
+                    :disabled="flag"
                     background
                     prev-text="上一页"
                     next-text="下一页"
@@ -870,14 +871,16 @@ const total = ref(50)
 watch(page, () => {
     getTabListFunc()
 })
-/* const next_click_page=()=>{
-    page.value+=1
-}
-const prev_click_page=()=>{
-    if(page.value>1){
-        page.value-=1
+const next_click_page = () => {
+    if (per_page.value < 15) {
+        flag.value = true
     }
-} */
+}
+// const prev_click_page=()=>{
+//     if(page.value>1){
+//         page.value-=1
+//     }
+// }
 //
 let from_addGroupUser_perms = reactive({
     item: {
@@ -1274,6 +1277,7 @@ const dialogExamineCloseFunc = () => {
             })
     }
 }
+const flag = ref(false)
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -1285,6 +1289,9 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res.data
+        if (per_page.value < 15) {
+            flag.value = true
+        }
     })
 }
 // 删除
@@ -1517,15 +1524,26 @@ getOpts([
         }
     }
 }
-::v-deep .el-pagination.is-background .btn-prev {
-    padding: 17px 20px;
-    background-color: #409eff;
-}
+
 </style>
 <style lang="scss" scoped>
 .search-tips {
     color: #aaa;
     font-size: 14px;
     margin-bottom: 20px;
+}
+::v-deep .el-pagination.is-background .btn-prev {
+    padding: 16px 13px;
+    background-color: #409eff;
+}
+::v-deep .el-pagination.is-background .btn-next {
+    padding: 16px 13px;
+    background-color: #409eff;
+}
+::v-deep .el-pagination__jump {
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 14px !important;
+    vertical-align: bottom !important;
 }
 </style>
