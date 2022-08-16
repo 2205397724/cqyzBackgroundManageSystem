@@ -406,7 +406,7 @@
                     <el-row :gutter="10">
                         <el-col :sm="24" :md="24" :lg="12">
                             <el-form-item label="用户ID" prop="id">
-                                <SearchUser v-model:str="from_opt_val.obj.user_id" />
+                                <SearchUser v-model:str="from_opt_val.obj.user_id" @checkName="group_user_check_userid"/>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -922,6 +922,11 @@ const post_all_group_perms = () => {
         }
     })
 }
+//添加用户组成员弹框选择成员
+const group_user_check_userid=(val)=>{
+    console.log(val)
+    from_opt_val.obj.user_id=val.id
+}
 // 添加用户组全部权限取消弹窗
 const group_perms_close = () => {
     data_tab_group_perms_selected_gov.arr.length = 0
@@ -1251,6 +1256,7 @@ const refreshFunc = () => {
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
     if (str_title.value == '修改用户组') {
+
         APIputGroup(from_examine.item.id, from_examine.item)
             .then(res => {
                 if (res.status === 200) {
@@ -1334,7 +1340,7 @@ const addGroupRoles = () => {
     }
     APIpostGroupRoles(
         from_addRoles.item.group,
-        from_addRoles.item.role_ids[0]
+        from_addRoles.item
     ).then(res => {
         if (res.status === 200) {
             ElMessage.success('添加角色成功')
