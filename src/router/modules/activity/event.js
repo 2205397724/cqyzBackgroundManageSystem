@@ -33,7 +33,7 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/event_detail'
+                activeMenu: '/activity_event'
             }
         }]
     }]

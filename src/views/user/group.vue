@@ -169,6 +169,8 @@
                     :page-size="per_page"
                     :total="50"
                     background
+                    prev-text="上一页"
+                    next-text="下一页"
                     @next-click="next_click_page"
                     @prev-click="prev_click_page"
                 />
@@ -863,7 +865,7 @@ let from_addRoles = reactive({
 })
 // 用户组分页板块
 const page = ref(1)
-const per_page = ref(12)
+const per_page = ref(15)
 const total = ref(50)
 watch(page, () => {
     getTabListFunc()
@@ -1520,6 +1522,10 @@ getOpts([
             background-color: #fff;
         }
     }
+}
+::v-deep .el-pagination.is-background .btn-prev {
+    padding: 17px 20px;
+    background-color: #409eff;
 }
 </style>
 <style lang="scss" scoped>

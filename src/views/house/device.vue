@@ -330,8 +330,10 @@
                                 <div class="right">{{ data_details.item.name }}</div>
                             </div>
                             <div class="item">
-                                <div class="left">小区>楼栋>单元</div>
-                                <div class="right">{{ zoneName.name }} {{ buildingName.name }} {{ unitName.name }}</div>
+                                <div class="left" style="width: 128px;">小区>楼栋>单元</div>
+                                <div class="right" style="width: 10%;">{{ zoneName.name }}</div>
+                                <div v-if="data_details.item.building" style="display: inline-block;margin-right: 15px;">{{ buildingName.name }}</div>
+                                <div v-if="data_details.item.unit" style="display: inline-block;">{{ unitName.name }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>

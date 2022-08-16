@@ -80,6 +80,7 @@
                 <el-table-column label="资讯类别">
                     <template #default="scope">
                         <!-- <span>{{ getCategoryName(data_tab.arr,scope.row.cate_id) }} </span> -->
+                        <!-- <span>{{ scope.row.cate.name }} </span> -->
                         <span>{{ scope.row.cate_id }} </span>
                     </template>
                 </el-table-column>
@@ -323,7 +324,7 @@
                 </div>
                 <div class="item">
                     <div class="left">资讯类别</div>
-                    <div class="right">{{ data_1.details_data.cate.name }}</div>
+                    <div class="right">{{ data_1.details_data.cate_id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">所在区域</div>
@@ -410,7 +411,6 @@ const data_1 = reactive({
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const getFuncManageList = () => {
-    data_1.list
     let params = {
         // page: data_1.page,
         // per_page: data_1.per_page
@@ -427,6 +427,7 @@ const getFuncManageList = () => {
         data_1.total = res.length
         data_1.list = res
     })
+    getZoneListFunc()
 }
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
@@ -508,6 +509,7 @@ let params = {
     // page: page.value,
     // per_page: per_page.value
 }
+
 APIgetInforCategoryList(params).then(res => {
     console.log(res)
     data_tab.arr = res
