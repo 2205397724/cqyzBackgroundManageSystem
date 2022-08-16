@@ -77,7 +77,7 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="资讯类别">
+                <el-table-column label="资讯类别" prop="cate.name">
                     <template #default="scope">
                         <!-- <span>{{ getCategoryName(data_tab.arr,scope.row.cate_id) }} </span> -->
                         <!-- <span>{{ scope.row.cate.name }} </span> -->
@@ -426,8 +426,10 @@ const getFuncManageList = () => {
         console.log(res)
         data_1.total = res.length
         data_1.list = res
+        console.log(res[0].cate.name)
     })
     getZoneListFunc()
+    getCategoryList()
 }
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
@@ -509,13 +511,14 @@ let params = {
     // page: page.value,
     // per_page: per_page.value
 }
-
+const getCategoryList=()=>{
 APIgetInforCategoryList(params).then(res => {
     console.log(res)
     data_tab.arr = res
     // NewArr.arr = data_tab.arr.map(item => { return Object.assign({}, { 'id': item.id, 'name': item.name }) })
     // console.log(NewArr.arr)
 })
+}
 const props = { multiple: false, emitPath: false, checkStrictly: true, value: 'id', label: 'name' }
 const V = ref(null)
 const zoneName = ref('')

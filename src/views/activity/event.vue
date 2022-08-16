@@ -51,16 +51,12 @@
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     class="tab"
                 >
-                    <el-table-column prop="house_id" label="事件名称" width="180">
+                    <el-table-column prop="house_id" label="事件名称">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="code_property" label="事件id" width="250">
-                        <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.id }} </span>
-                        </template>
-                    </el-table-column>
+
                     <el-table-column prop="code_room" label="所在区域" width="160">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.region_cc }} </span>
@@ -71,12 +67,16 @@
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.region_type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="time_deal" label="是否显示" width="140px">
+                    <el-table-column prop="time_deal" label="是否显示">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                         </template>
                     </el-table-column>
-
+                    <el-table-column prop="created_at" label="创建日期" width="250">
+                        <template #default="scope">
+                            <span class="m-l-10">{{ scope.row.created_at }} </span>
+                        </template>
+                    </el-table-column>
                     <el-table-column />
                     <el-table-column fixed="right" label="操作" width="240">
                         <template #default="scope">

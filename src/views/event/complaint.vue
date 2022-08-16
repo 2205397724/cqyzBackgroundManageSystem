@@ -16,28 +16,36 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
-                            标题名称:
-                            <el-input v-model="data_1.search.title" class="head-btn search_tb p-l-5" placeholder="标题名称" clearable />
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
+                            标题名称：
+                            </div>
+                            <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="8" :sm="10" :md="12" :lg="8" :xl="8">
-                        <div class="search_th">分类：</div>
-                        <el-select v-model="data_1.search.kind" class="head-btn search_tb" clearable placeholder="分类">
+                   <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">分类：</div>
+                        <el-select v-model="data_1.search.kind" class="search_tb" clearable placeholder="分类">
                             <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
                         </el-select>
+                        </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
-                        <div class="search_th">状态：</div>
-                        <el-select v-model="data_1.search.status" class="head-btn search_tb" clearable placeholder="状态">
+                     <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">状态：</div>
+                        <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
                             <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
                         </el-select>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                    <el-col :xs="24" :md="24" :lg="10">
+                        <div class="flx">
+                            <div class="w_30">
                         <el-button
                             class="m-l-20" type="primary" :icon="Search" @click="()=>{
                                 data_1.switch_search = true;
@@ -47,10 +55,14 @@
                         >
                             筛选
                         </el-button>
-                    </el-col>
-                    <el-col v-show="data_1.switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                    </div>
+                            <div v-show="data_1.switch_search == true" class="w_70 m-l-30">
                         <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        <div class="searchDetail">
                         *搜索到相关结果共{{ data_1.total }}条。
+                        </div>
+                         </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -77,36 +89,42 @@
                 </el-badge>
             </div>
             <el-table
+                v-loading="loading_tab"
                 :data="data_1.list"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="投诉名称" width="120">
+                <el-table-column label="投诉名称" >
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="投诉id">
+                <el-table-column label="所在区域">
                     <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
+                        <span>{{ scope.row.cc_name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="小区id">
+                <el-table-column label="业务编号" width="180">
                     <template #default="scope">
-                        <span>{{ scope.row.zid }} </span>
+                        <span>{{ scope.row.sno }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="150">
+                <!-- <el-table-column label="小区名称">
                     <template #default="scope">
-                        <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <span>{{ scope.row.zone.name}} </span>
+                    </template>
+                </el-table-column> -->
+                <el-table-column label="状态">
+                    <template #default="scope">
+                        <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark" >{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark" >{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="success" effect="dark" >{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <!-- <div style=":background-color"></div> -->
                     </template>
                 </el-table-column>
@@ -673,6 +691,9 @@ import {
     APIputComplaint,
     APIpostComplaint
 } from '@/api/custom/custom.js'
+const data_2=reactive({
+    arr: []
+})
 const data_1 = reactive({
     search: {},
     switch_search: false,
@@ -687,6 +708,7 @@ const data_1 = reactive({
     details_data: {},
     details_switch: false
 })
+const loading_tab=ref(true)
 const getFuncVoteList = () => {
     let data = {
         page: data_1.page,
@@ -698,10 +720,12 @@ const getFuncVoteList = () => {
             data[key] = item
         }
     }
+    loading_tab.value=true
     APIgetComplaintList(data).then(res => {
         console.log(res)
         data_1.total = res.length
         data_1.list = res
+        loading_tab.value=false
     })
 }
 const file_list = ref([])

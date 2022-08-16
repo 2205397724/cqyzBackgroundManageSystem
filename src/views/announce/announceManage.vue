@@ -91,7 +91,7 @@
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="320">
+                <el-table-column fixed="right" label="操作" width="280">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -117,13 +117,13 @@
                                 </el-button>
                             </template>
                         </el-popconfirm>
-                        <el-button
+                        <!-- <el-button
                             size="small"
                             type="primary"
                             @click="passAudit(scope.row)"
                         >
                             审核
-                        </el-button>
+                        </el-button> -->
                         <BerComment :id="scope.row.id" />
                     </template>
                 </el-table-column>
@@ -157,6 +157,7 @@
                 <el-step title="完成" />
             </el-steps>
             <div style="width: 100%; margin-top: 40px; margin-bottom: 20px;">
+              <!-- <el-scrollbar max-height="550px"> -->
                 <el-form
                     v-if="active == 0"
                     ref="ruleFormRef"
@@ -321,6 +322,7 @@
                         </el-col>
                     </el-row>
                 </el-form>
+                <!-- </el-scrollbar> -->
                 <el-form
                     v-if="active == 1"
                     ref="ruleFormRef"

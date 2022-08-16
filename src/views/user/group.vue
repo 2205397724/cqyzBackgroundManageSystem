@@ -168,7 +168,6 @@
                     layout="prev,next,jumper"
                     :page-size="per_page"
                     :total="50"
-                    :disabled="flag"
                     background
                     prev-text="上一页"
                     next-text="下一页"
@@ -872,9 +871,20 @@ watch(page, () => {
     getTabListFunc()
 })
 const next_click_page = () => {
-    if (per_page.value < 15) {
-        flag.value = true
+    let btnNext=document.querySelector('.btn-next')
+    console.log(flag.value)
+    if(!flag.value){
+        btnNext.classList.add('not_allowed')
     }
+    console.log(btnNext.className)
+}
+const prev_click_page=()=>{
+    let btnNext=document.querySelector('.btn-next')
+    console.log(flag.value)
+    if (flag.value) {
+        btnNext.classList.remove('not_allowed')
+    }
+    console.log(btnNext.className)
 }
 // const prev_click_page=()=>{
 //     if(page.value>1){
@@ -1295,7 +1305,7 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res.data
-        if (per_page.value < 15) {
+        if (res.data.length < per_page.value) {
             flag.value = true
         }
     })
@@ -1551,5 +1561,11 @@ getOpts([
     font-weight: 500;
     font-size: 14px !important;
     vertical-align: bottom !important;
+}
+::v-deep .not_allowed {
+    pointer-events: none;
+}
+::v-deep .not_allowed:disabled {
+    cursor: not-allowed;
 }
 </style>
