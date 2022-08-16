@@ -19,13 +19,13 @@
                             @confirm="deleteActivityFunc(item)"
                         > -->
                         <!-- <template #reference> -->
-                        <div class="serve-box">
+                        <!-- <div class="serve-box"> -->
                             <div class="delete-service" @click="deleteActivityFunc_1(item)">
                                 <el-icon :size="20" color="#F56C6C">
                                     <el-icon-circle-close />
                                 </el-icon>
                             </div>
-                        </div>
+                        <!-- </div> -->
                         <div v-if="item.tgt_type == 'survey'" style="width: 97%;height: 133px;position: absolute;" @click="activitydetailsFunc(item)" />
                         <AnnounceDetails v-if="item.tgt_type == 'announce'" :id="item.docable.id" :name="activeName_1" />
 
@@ -653,21 +653,13 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
 ::v-deep .el-button + .el-button {
     margin-bottom: 5px;
 }
-.serve-box {
-    /* border: 1px solid #eee;
-        box-sizing: border-box;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 6px; */
-    position: relative;
-    .delete-service {
-        position: absolute;
-        right: -4px;
-        top: -6px;
-        z-index: 99;
-        cursor: pointer;
-        background-color: #fff;
-    }
+.delete-service {
+    position: absolute;
+    right: -5px;
+    top: 18px;
+    z-index: 99;
+    cursor: pointer;
+    background-color: #fff;
 }
 .noDeal {
     margin-left: 6px;

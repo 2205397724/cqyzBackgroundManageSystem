@@ -16,21 +16,27 @@
             </div>
             <div class="search">
                 <el-row :gutter="10">
-                    <el-col :xs="12" :sm="12" :md="24" :lg="8" :xl="8">
-                        <div class="size-base p-l-20">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">
                             报修名称：
-                            <el-input v-model="data_1.search.title" class="head-btn search_tb p-l-5" placeholder="报修名称" clearable />
+                            </div>
+                            <el-input v-model="data_1.search.title" class="search_tb" placeholder="报修名称" clearable />
                         </div>
                     </el-col>
-                    <el-col :xs="12" :sm="12" :md="10" :lg="8" :xl="8">
+                     <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
                         <div class="search_th">报修状态：</div>
-                        <el-select v-model="data_1.search.status" class="head-btn search_tb" clearable placeholder="状态">
+                        <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
                             <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
                         </el-select>
+                        </div>
                     </el-col>
                 </el-row>
                 <el-row class="m-t-20">
-                    <el-col :xs="4" :sm="6" :md="6" :lg="3" :xl="8">
+                    <el-col :xs="24" :md="24" :lg="10">
+                        <div class="flx">
+                            <div class="w_30">
                         <el-button
                             class="m-l-20" type="primary" :icon="Search"
                             @click="()=>{
@@ -41,10 +47,14 @@
                         >
                             筛选
                         </el-button>
-                    </el-col>
-                    <el-col v-show="data_1.switch_search" :xs="4" :sm="6" :md="6" :lg="21" :xl="8">
+                    </div>
+                            <div v-show=" data_1.switch_search == true" class="w_70 m-l-30">
                         <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                        <div class="searchDetail">
                         *搜索到相关结果共{{ data_1.total }}条。
+                        </div>
+                            </div>
+                        </div>
                     </el-col>
                 </el-row>
             </div>
@@ -58,17 +68,17 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="报修id">
+                <el-table-column label="所在区域">
                     <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
+                        <span>{{ scope.row.cc_name}} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="小区id">
+                <el-table-column label="业务编号" width="180">
                     <template #default="scope">
-                        <span>{{ scope.row.zid }} </span>
+                        <span>{{ scope.row.sno }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="90">
+                <el-table-column label="状态">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
@@ -81,12 +91,12 @@
                         <el-tag v-show="scope.row.status == 8" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否匿名" width="90">
+                <el-table-column label="是否匿名">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_ano,scope.row.ano) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否公开" width="90">
+                <el-table-column label="是否公开">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
@@ -124,6 +134,7 @@
             v-model="data_1.add_switch"
             :title="data_1.add_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <el-form
                 :model="data_1.add_form"
@@ -171,7 +182,7 @@
                         >
                             <div style="margin-bottom: 10px;width: 100%;">
                                 <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                    <SearchResidential v-model:str="data_1.add_form.zid" />
+                                    <SearchResidential ref="V" v-model:name="zoneName" @checkName="checkNameFunc" />
                                 </div>
                             </div>
                         </el-form-item>
@@ -292,8 +303,8 @@
                     <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,data_1.details_data.ano) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">小区id</div>
-                    <div class="right">{{ data_1.details_data.zid }}</div>
+                    <div class="left">所在小区</div>
+                    <div class="right">{{ data_1.details_data.zid}}</div>
                 </div>
                 <div v-if="data_1.details_data.catpro" class="item">
                     <div class="left">问题分类</div>
@@ -331,7 +342,8 @@ import {
     APIgetComplaintList,
     APIgetComplaintDetails,
     APIputComplaint,
-    APIpostComplaint
+    APIpostComplaint,
+    APIgetResidentialListHouse
 } from '@/api/custom/custom.js'
 const data_1 = reactive({
     search: {},
@@ -421,8 +433,29 @@ const clickFuncAddVote = () => {
         })
     }
 }
-
+const V=ref(null)
+const dialogClosed=()=>{
+    V.value.clearFunc()
+    zoneName.value=''
+}
+const checkNameFunc=row=>{
+    data_1.add_form.zid=row.id
+}
+const getZoneListFunc=()=>{
+    let params={
+        page: data_1.page,
+        per_page: data_1.per_page
+    }
+    APIgetResidentialListHouse(params).then(res=>{
+        zone_list.arr=res
+    })
+}
+const zoneName=ref('')
+const zone_list=reactive({
+    arr:[]
+})
 const clickFuncModify = val => {
+    getZoneListFunc()
     data_1.add_error = {}
     data_1.add_title = '修改'
     data_1.add_switch
@@ -439,8 +472,17 @@ const clickFuncModify = val => {
         }
         file_list.value = arr
         data_1.add_switch = true
+        zoneName.value=getNameFunc(zone_list.arr,data_1.add_form.zid)
     })
 }
+const getNameFunc = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+}
+const zoneNAme_1=ref('')
 const clickFuncDeteails = val => {
     APIgetComplaintDetails(val.id).then(res => {
         res.affixs = []
@@ -453,6 +495,7 @@ const clickFuncDeteails = val => {
                 res.totlogs[i].logable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.totlogs[i].logable.affix[j])
             }
         }
+        console.log(res)
         data_1.details_data = res
         data_1.details_switch = true
     })

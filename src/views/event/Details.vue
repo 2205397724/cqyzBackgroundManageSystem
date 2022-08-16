@@ -11,7 +11,7 @@
                 <el-button v-if="dataForm.item.status == 0" type="primary" class="btn3" @click="examine_switch= true">
                     审核
                 </el-button>
-                <el-button v-if="dataForm.item.status == 1" type="primary" class="btn3" @click="replyFunk">
+                <el-button v-if="dataForm.item.status == 1 || !replayLogable.item" type="primary" class="btn3" @click="replyFunk">
                     回复
                 </el-button>
                 <el-button v-if="dataForm.item.status !== 0" type="warning" class="btn3" @click="TransferFunk">
@@ -446,7 +446,7 @@
         <!-- 投诉回复 -->
         <el-dialog
             v-model="examine_switch"
-            title="回复"
+            title="审核"
             width="50%"
         >
             <div class="details-box">
@@ -541,7 +541,7 @@ const replayTotlogs = reactive({
     item: {}
 })
 const replayLogable = reactive({
-    item: ''
+    item: {}
 })
 // 投诉详情
 APIgetComplaintDetails(route.query.id, { log: 'all' }).then(res => {
@@ -563,7 +563,7 @@ APIgetComplaintDetails(route.query.id, { log: 'all' }).then(res => {
     }
     Name.value = dataForm.item.uinfo.name
     replayTotlogs.item = dataForm.item.totlogs
-    replayLogable.item = replayTotlogs.item.logable
+    replayLogable.item = replayTotlogs.item[0].logable
     console.log(replayTotlogs.item)
 })
 const data = {
@@ -688,7 +688,7 @@ const popupFuncAdd3 = () => {
     getFilesKeys(files, 'folder').then(arr => {
         data.affix = file_key.concat(arr)
         APIpostDealAdd(route.query.id, data).then(res => {
-            ElMessage.success(res.msg)
+            ElMessage.success('回复成功')
             popup_3.switch = false
             APIgetComplaintDetails(route.query.id).then()
         })
@@ -894,9 +894,9 @@ import {
 } from '@/api/custom/custom.js'
 getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status', 'comment_scoreper']).then(res => {
     opts_all.obj = res
-    APIgetTypeList(opts_all.obj.kind[1].key).then(res => {
-        console.log(res)
-        opts_all.obj.problem_type = res
+    APIgetTypeList(opts_all.obj.kind[1].key).then(res1 => {
+        console.log(res1)
+        opts_all.obj.problem_type = res1
         // let newArray = []
         console.log(dataForm.item.catob)
         opts_all.obj.problem_type.forEach(item => {
@@ -905,8 +905,8 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
             }
         })
     })
-    APIgetTypeList(opts_all.obj.kind[2].key).then(res => {
-        opts_all.obj.toushu_user_type = res
+    APIgetTypeList(opts_all.obj.kind[2].key).then(res2 => {
+        opts_all.obj.toushu_user_type = res2
         opts_all.obj.toushu_user_type.forEach(item => {
             if (item.id == dataForm.item.catob) {
                 newcatob.item = item

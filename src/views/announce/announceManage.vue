@@ -91,7 +91,7 @@
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="320">
+                <el-table-column fixed="right" label="操作" width="280">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -117,14 +117,13 @@
                                 </el-button>
                             </template>
                         </el-popconfirm>
-                        <el-button
+                        <!-- <el-button
                             size="small"
                             type="primary"
-                            :disabled="scope.row.status == 1 ? false : true"
                             @click="passAudit(scope.row)"
                         >
                             审核
-                        </el-button>
+                        </el-button> -->
                         <BerComment :id="scope.row.id" />
                     </template>
                 </el-table-column>
@@ -158,6 +157,7 @@
                 <el-step title="完成" />
             </el-steps>
             <div style="width: 100%; margin-top: 40px; margin-bottom: 20px;">
+              <!-- <el-scrollbar max-height="550px"> -->
                 <el-form
                     v-if="active == 0"
                     ref="ruleFormRef"
@@ -322,6 +322,7 @@
                         </el-col>
                     </el-row>
                 </el-form>
+                <!-- </el-scrollbar> -->
                 <el-form
                     v-if="active == 1"
                     ref="ruleFormRef"
@@ -388,18 +389,71 @@
             </template> -->
         </el-dialog>
         <!-- 审核 -->
-        <!-- <el-dialog
+        <el-dialog
             v-model="switch_pass"
             title="审核"
             width="50%"
         >
+            <el-form
+                ref="ruleFormRef"
+                :model="from_pass.obj"
+            >
+                <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" class="m-b-20">
+                    <el-step v-for="(item,i) in buzhoutiao.arr" :key="i" :title="item.name" />
+                </el-steps>
+                <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" class="pass">
+                    当前公示已审核完成
+                </div>
+                <el-row v-else :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label="审核申请"
+                            label-width="100px"
+                            :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
+                        >
+                            <!-- <el-select v-model="from_pass.obj.status" class="head-btn" placeholder="" clearable>
+                                <el-option label="审核通过" value="1" />
+                                <el-option label="不通过" value="0" />
+                            </el-select> -->
+                            <el-switch
+                                v-model="from_pass.obj.status"
+
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                active-text="通过"
+                                inactive-text="失败"
+                                :active-value="20"
+                                :inactive-value="30"
+                                class="switchStyle"
+                                :disabled="total1>= 1 ? true: false"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="100px"
+                            label="审核回执内容"
+                            :error="err_msg.obj&&err_msg.obj.reply?err_msg.obj.reply[0]:''"
+                        >
+                            <el-input
+                                v-model="from_pass.obj.reply"
+                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                type="textarea"
+                                placeholder="审核回执内容"
+                                :disabled="total1>=1 ? true: false"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
             <template #footer>
                 <div class="footer">
                     <el-button @click="switch_pass=false">取消</el-button>
-                    <el-button v-if="gongshixiangqing.obj.status != opts_all.obj.status_all[1]" type="primary" @click="passToAuditFunc">确定</el-button>
+                    <el-button v-if="gongshixiangqing.obj.status != opts_all.obj.status_all[1]" type="primary" @click="passToAuditFunc_1">确定</el-button>
                 </div>
             </template>
-        </el-dialog> -->
+        </el-dialog>
         <!-- 选择公示对象 -->
         <el-dialog v-model="switch_choose_zone" title="选择公示对象">
             <el-scrollbar height="250px">
@@ -447,7 +501,7 @@ let switch_details = ref(false)
 // dialog关闭回调
 const V = ref(null)
 const add_dialog_close = () => {
-    // V.value.clearFunc()
+    V.value.clearFunc()
     selectedZone_id.value = ''
 }
 // 列表
@@ -483,6 +537,7 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
+const userGroupName = ref('')
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -510,18 +565,18 @@ watch(page, () => {
 })
 // const V_2 = ref(null)
 // 详情
-const detailsFunc = row => {
-    switch_details.value = true
-    APIgetEventArticleDetails(row.id).then(res => {
-        data_details.item = res
-        console.log(data_details.item)
-        res.affixs = []
-        for (let i in res.affix) {
-            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
-        }
-    })
-    // V_2.value.getAnnounceDetailsFunc()
-}
+// const detailsFunc = row => {
+//     switch_details.value = true
+//     APIgetEventArticleDetails(row.id).then(res => {
+//         data_details.item = res
+//         console.log(data_details.item)
+//         res.affixs = []
+//         for (let i in res.affix) {
+//             res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
+//         }
+//     })
+//     // V_2.value.getAnnounceDetailsFunc()
+// }
 // 同意拒绝提交
 import { getFilesKeys } from '@/util/files.js'
 const dialogExamineCloseFunc = () => {
@@ -660,12 +715,12 @@ const addResidentialFunc = () => {
     switch_examine.value = true
     // passAudit()
 }
-const userGroupName = ref('')
 // 修改
 const modifyResidentialFunc = val => {
     from_pass.obj.reply = ''
     active.value = 0
     getChinaName()
+    getUsergroupList()
     from_error.msg = {}
     str_title.value = '修改'
     switch_examine.value = true
@@ -683,6 +738,7 @@ const modifyResidentialFunc = val => {
         switch_examine.value = true
         announce_id.value = from_examine.item.id,
         group_id.value = from_examine.item.groupid
+        userGroupName.value = getNameFunc_1(userData.arr, from_examine.item.groupid)
     })
 
 }
@@ -753,7 +809,9 @@ const next = () => {
 // 审核
 import {
     APIpostArchiveAudit,
-    APIgetListArchiveAudit
+    APIgetListArchiveAudit,
+    APIputArchiveAudit,
+    APIgetDetailsArchiveAudit
 } from '@/api/custom/custom.js'
 
 const switch_pass = ref(false)
@@ -769,29 +827,54 @@ const gongshixiangqing = reactive({
 const buzhoutiao = reactive({
     arr: []
 })
+const examineListFunc = val => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        tgt_type: 'announce',
+        tgt_id: val.id,
+        group_id: val.groupid
+    }
+    APIgetListArchiveAudit(params).then(res => {
+        console.log(res)
+        Examine_id.value = res[0].id
+        switch_pass.value = true
+    })
+}
 const active_bzt = ref(99)
-// const passAudit = val => {
-//     from_pass.obj = {}
-//     err_msg.obj = {}
-//     // 获取详情
-//     APIgetEventArticleDetails(val.id).then(res => {
-//         console.log(res)
-//         gongshixiangqing.obj = res
-//         // 获取步骤条
-//         // APIgetStepList(res.data.flowstep.fid).then(res2 => {
-//         //     buzhoutiao.arr = res2
-//         //     for (let i in res2) {
-//         //         if (res.flowstep.id == res2[i].id) {
-//         //             nextTick(() => {
-//         //                 active_bzt.value = i * 1
-//         //             })
-//         //             break
-//         //         }
-//         //     }
-//         // })
-//     })
-//     switch_pass.value = true
-// }
+const Examine_id = ref('')
+const passAudit = val => {
+    from_pass.obj = {}
+    err_msg.obj = {}
+    examineListFunc(val)
+    // 获取详情
+    // APIgetDetailsArchiveAudit(val.id).then(res => {
+    // if (res.status == 10) {
+    // console.log(res)
+    // gongshixiangqing.obj = res
+    // }
+    // 获取步骤条
+    // APIgetStepList(res.data.flowstep.fid).then(res2 => {
+    //     buzhoutiao.arr = res2
+    //     for (let i in res2) {
+    //         if (res.flowstep.id == res2[i].id) {
+    //             nextTick(() => {
+    //                 active_bzt.value = i * 1
+    //             })
+    //             break
+    //         }
+    //     }
+    // })
+    // console.log(gongshixiangqing.obj)
+    // })
+}
+const passToAuditFunc_1 = () => {
+    console.log(from_pass.obj)
+    APIputArchiveAudit(Examine_id.value, from_pass.obj).then(res => {
+        ElMessage.success('审核成功')
+        getTabListFunc()
+    })
+}
 const passToAuditFunc = () => {
     // let data = {
     //     'tgt_type': 'announce',
@@ -862,15 +945,17 @@ const checkNameFunc = val => {
     from_examine.item.groupid = val.id
     userGroupName.value = ''
 }
-// import {
-//     APIgetGroupList
-// } from '@/api/custom/custom.js'
-// APIgetGroupList().then(res => {
-//     if (res.status == 200) {
-//         console.log(res)
-//         userData.arr = res.data
-//     }
-// })
+import {
+    APIgetGroupList
+} from '@/api/custom/custom.js'
+const getUsergroupList = () => {
+    APIgetGroupList().then(res => {
+        if (res.status == 200) {
+            console.log(res)
+            userData.arr = res.data
+        }
+    })
+}
 const getNameFunc = (arr, key) => {
     for (let i in arr) {
         if (arr[i].title == key) {
@@ -880,8 +965,8 @@ const getNameFunc = (arr, key) => {
 }
 const getNameFunc_1 = (arr, key) => {
     for (let i in arr) {
-        if (arr[i].title == key) {
-            return arr[i].groupid
+        if (arr[i].id == key) {
+            return arr[i].name
         }
     }
 }

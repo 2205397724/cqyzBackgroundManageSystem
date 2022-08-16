@@ -182,7 +182,6 @@ const detailsFunc = () => {
         // AudioContext.value = data_details.item.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
         console.log(props.id)
         getListArchiveFunc()
-        getAnnounceListFunc()
         getUserGroupListFunc()
     })
 }

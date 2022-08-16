@@ -905,14 +905,27 @@ const total = ref(50)
 watch(page, () => {
     getTabListFunc()
 })
-/* const next_click_page=()=>{
-    page.value+=1
+const next_click_page = () => {
+    let btnNext=document.querySelector('.btn-next')
+    console.log(flag.value)
+    if(!flag.value){
+        btnNext.classList.add('not_allowed')
+    }
+    console.log(btnNext.className)
 }
 const prev_click_page=()=>{
-    if(page.value>1){
-        page.value-=1
+    let btnNext=document.querySelector('.btn-next')
+    console.log(flag.value)
+    if (flag.value) {
+        btnNext.classList.remove('not_allowed')
     }
-} */
+    console.log(btnNext.className)
+}
+// const prev_click_page=()=>{
+//     if(page.value>1){
+//         page.value-=1
+//     }
+// }
 //
 let from_addGroupUser_perms = reactive({
     item: {
@@ -1315,6 +1328,7 @@ const dialogExamineCloseFunc = () => {
             })
     }
 }
+const flag = ref(false)
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -1326,6 +1340,9 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res.data
+        if (res.data.length < per_page.value) {
+            flag.value = true
+        }
     })
 }
 // 删除
@@ -1579,15 +1596,32 @@ getOpts([
         }
     }
 }
-::v-deep .el-pagination.is-background .btn-prev {
-    padding: 17px 20px;
-    background-color: #409eff;
-}
+
 </style>
 <style lang="scss" scoped>
 .search-tips {
     color: #aaa;
     font-size: 14px;
     margin-bottom: 20px;
+}
+::v-deep .el-pagination.is-background .btn-prev {
+    padding: 16px 13px;
+    background-color: #409eff;
+}
+::v-deep .el-pagination.is-background .btn-next {
+    padding: 16px 13px;
+    background-color: #409eff;
+}
+::v-deep .el-pagination__jump {
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 14px !important;
+    vertical-align: bottom !important;
+}
+::v-deep .not_allowed {
+    pointer-events: none;
+}
+::v-deep .not_allowed:disabled {
+    cursor: not-allowed;
 }
 </style>
