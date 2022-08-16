@@ -163,6 +163,7 @@ const defaultChecked=reactive({arr:[]})
 //提交选择
 const submit = () => {
   let all = treeRef.value.getCheckedNodes();
+  console.log(all)
   all.forEach((item) => {
     switch (item.type) {
       case "region":
@@ -271,7 +272,6 @@ const loadNode = (node, resolve) => {
               });
             } else {
                 if(res.data[i].can_exist){
-                console.log('ffffffff')
                 defaultChecked.arr.push(res.data[i].code)
                 selected_all.arr.push(res.data[i].code)
                 treeRef.value.setCheckedKeys(selected_all.arr);
@@ -304,7 +304,7 @@ const loadNode = (node, resolve) => {
         for (let i in res) {
           if(res[i].can_exist){
             defaultChecked.arr.push(res[i].china_code)
-            selected_all.arr.push(res[i].china_code)
+            selected_all.arr.push(res[i].id)
             treeRef.value.setCheckedKeys(selected_all.arr);
           }
           tree_arr.push({
@@ -332,7 +332,7 @@ const loadNode = (node, resolve) => {
         let tree_arr = [];
         for (let i in res) {
             if(res[i].can_exist){
-            defaultChecked.arr.push(res[i].china_code)
+            defaultChecked.arr.push(res[i].id)
             selected_all.arr.push(res[i].id)
             treeRef.value.setCheckedKeys(selected_all.arr);
           }
@@ -341,7 +341,7 @@ const loadNode = (node, resolve) => {
             type: "building",
             next_type: "units",
             id: res[i].id,
-            china_code:res[i].china_code,
+            code:res[i].id,
             can_exist:res[i].can_exist
           });
         }
