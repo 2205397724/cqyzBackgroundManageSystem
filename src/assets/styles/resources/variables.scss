@@ -1,1 +1,28 @@
 // 全局变量
+@mixin pageStyle {
+    /deep/ .el-pagination.is-background .btn-prev {
+        padding: 16px 13px;
+        background-color: #409eff;
+        color: white;
+    }
+    /deep/ .el-pagination.is-background .btn-next {
+        padding: 16px 13px;
+        background-color: #409eff;
+        color: white;
+    }
+    /deep/ .el-pagination__jump {
+        margin-left: 10px;
+        font-weight: 500;
+        font-size: 14px !important;
+        vertical-align: bottom !important;
+    }
+    .el-pagination {
+        margin-top: 15px;
+    }
+    /deep/ .el-pagination.is-background .btn-next:disabled {
+        color: #c0c4cc;
+    }
+    /deep/ .el-pagination.is-background .btn-prev:disabled {
+        color: #c0c4cc;
+    }
+}

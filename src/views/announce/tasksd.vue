@@ -1,6 +1,6 @@
 <template>
     <div class="articletpletasksd">
-        <page-main>
+        <page-main style="overflow: hidden;">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus"
@@ -108,7 +108,7 @@
                 </el-table-column>
                 <el-table-column label="公示分类" width="150">
                     <template #default="scope">
-                        <span class="m-l-10">{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
+                        <span class="m-l-10">{{ scope.row?.cate?.name }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="计划发布周期">
@@ -169,11 +169,13 @@
             </el-table>
             <el-pagination
                 v-model:current-page="page"
-                class="p-t-20"
-                layout="total,prev,pager,next,jumper,"
-                :total="total"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
                 :page-size="per_page"
                 background
+                prev-text="上一页"
+                next-text="下一页"
                 hide-on-single-page
             />
         </page-main>
@@ -301,7 +303,7 @@
                 </div>
                 <div class="item">
                     <div class="left">公示分类</div>
-                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                    <div class="right">{{ data_details.item?.cate?.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">下次执行时间</div>
@@ -510,10 +512,22 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        total.value = res.length
+        // total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
-
+const flag = ref(false)
 // switch 状态改变事件
 const SwitchFunc = row => {
     console.log(row)
@@ -598,15 +612,15 @@ const getNameFunc = (arr, key) => {
 let data_1 = reactive({
     arr: []
 })
-import {
-    APIgetTypeList
-} from '@/api/custom/custom.js'
-// 获取公式列表api请求
-const main_type = ref('announce')
-APIgetTypeList(main_type.value).then(res => {
-    console.log(res)
-    data_1.arr = res
-})
+// import {
+//     APIgetTypeList
+// } from '@/api/custom/custom.js'
+// // 获取公式列表api请求
+// const main_type = ref('announce')
+// APIgetTypeList(main_type.value).then(res => {
+//     console.log(res)
+//     data_1.arr = res
+// })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -621,3 +635,7 @@ getOpts(['article_lv_1', 'tasksd_use', 'article_rate']).then(res => {
 })
 
 </script>
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+</style>

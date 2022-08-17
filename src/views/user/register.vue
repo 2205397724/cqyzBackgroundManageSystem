@@ -2,135 +2,153 @@
     <div class="userregister">
         <page-main>
             <div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc" :icon="Plus">添加用户</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-input v-model="data_search.mobile" class="head-btn" placeholder="手机号" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-input v-model="data_search.username" class="head-btn" placeholder="用户名" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-input v-model="data_search.id_card" class="head-btn" placeholder="身份证号" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-input v-model="data_search.name" class="head-btn" placeholder="真实姓名" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-select v-model="data_search.gender" class="head-btn" placeholder="性别" clearable>
+                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加用户</el-button>
+            </div>
+            <div :class="{search3: isSearch3,search2: isSearch2}">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">用户名：</div>
+                            <el-input v-model="data_search.username" class="search_tb" placeholder="用户名" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">手机号：</div>
+                            <el-input v-model="data_search.mobile" class="search_tb" placeholder="手机号" clearable />
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">身份证号：</div>
+                            <el-input v-model="data_search.id_card" class="search_tb" placeholder="身份证号" clearable />
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">性别：</div>
+                            <el-select v-model="data_search.gender" class="search_tb" placeholder="性别" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="3" :xl="3">
-                            <el-select v-model="data_search.status_cert" class="head-btn" placeholder="认证状态" clearable>
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">认证状态：</div>
+                            <el-select v-model="data_search.status_cert" class="search_tb" placeholder="认证状态" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.house_id" class="head-btn" placeholder="终端类型" clearable>
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">终端类型：</div>
+                            <el-select v-model="data_search.house_id" class="search_tb" placeholder="终端类型" clearable>
                                 <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.oauth_type" class="head-btn" placeholder="第三方登录类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.login_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col v-show="searchVisible==true" :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <Cascaders v-model="data_search.region" />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc" :icon="Search">搜索</el-button>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchMore">更多搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="username" label="用户名" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.username }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="mobile" label="手机号" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="id_card" label="身份证号" width="220">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="gender" label="性别" width="90">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="status_cert" label="认证状态" width="120">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
-                            </template>
-                        </el-table-column>
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="24" :md="24" :lg="10">
+                        <div class="flx">
+                            <div class="w_30">
+                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            </div>
+                            <div v-show="switch_search == true" class="w_70 m-l-30">
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ total }}条。
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div class="searchPlay" @click="btnClickFunc">
+                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                        <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
+                    </div>
+                </el-row>
+            </div>
+            <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;"
+                >
+                    <el-table-column prop="username" label="用户名" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.username }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="mobile" label="手机号" width="180">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id_card" label="身份证号" width="220">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="gender" label="性别" width="90">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_cert" label="认证状态" width="120">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }} </span>
+                        </template>
+                    </el-table-column>
 
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table>
-                     <el-pagination
-                        style="float: right;"
-                        v-model:current-page="page"
-                        layout="prev,next,jumper"
-                        :page-size="per_page"
-                        :total="150"
-                        background
-                        @next-click="next_click_page"
-                        @prev-click="prev_click_page"
-                    />
-                </div>
+                    <el-table-column />
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+                <el-pagination
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper"
+                    :page-size="per_page"
+                    :total="150"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                    @next-click="next_click_page"
+                    @prev-click="prev_click_page"
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -293,7 +311,7 @@
 </template>
 <script setup>
 import Cascaders from '@/components/Cascaders/index.vue'
-import { Delete, Edit, Search, Share, Upload ,Plus} from '@element-plus/icons-vue'
+import { Delete, Edit, Search, Share, Upload, Plus } from '@element-plus/icons-vue'
 import {
     APIgetUserList,
     APIgetUserDetails,
@@ -309,8 +327,18 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
+// 方法
+let btnClick = ref(false)
+const isSearch3 = ref(false)
+const isSearch2 = ref(true)
+const btnClickFunc = () => {
+    btnClick.value = !btnClick.value
+    isSearch3.value = !isSearch3.value
+    isSearch2.value = !isSearch2.value
+}
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({ })
@@ -332,7 +360,7 @@ const data_details = reactive({
 })
 // 分页
 let total = ref(100)
-let per_page = ref(10)
+let per_page = ref(15)
 let page = ref(1)
 /* const next_click_page=()=>{
     page.value=page.value+1
@@ -437,7 +465,7 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputUser(from_examine.item.id, from_examine.item).then(res => {
-                    if (res.status===200) {
+                    if (res.status === 200) {
                         refreshFunc()
                         ElMessage.success('修改成功')
                         switch_examine.value = false
@@ -447,10 +475,10 @@ const dialogExamineCloseFunc = formEl => {
                 })
             } else {
                 console.log(from_examine.item)
-                APIpostUser(from_examine.item.authType,from_examine.item).then(res => {
-                    if (res.status===200) {
+                APIpostUser(from_examine.item.authType, from_examine.item).then(res => {
+                    if (res.status === 200) {
                         refreshFunc()
-                        ElMessage.success("添加成功")
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
@@ -462,6 +490,7 @@ const dialogExamineCloseFunc = formEl => {
         }
     })
 }
+const flag = ref(false)
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -499,10 +528,22 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetUserList(params).then(res => {
-            console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = res.data.length
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res.data
+        total.value = res.data.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.data.length < per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 // 删除
@@ -519,13 +560,13 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        gender:"",
+        gender: '',
         mobile: '',
         username: '',
         id_card: '',
         auth_type: '',
         status_cert: '',
-        password:""
+        password: ''
     }
     switch_examine.value = true
 }
@@ -534,8 +575,8 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetUserDetails(val.id).then(res => {
-            from_examine.item = res.data
-            switch_examine.value = true
+        from_examine.item = res.data
+        switch_examine.value = true
     })
 }
 // 删除 服务名称和联系方式
@@ -593,10 +634,11 @@ getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(r
     }
 </style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 </style>

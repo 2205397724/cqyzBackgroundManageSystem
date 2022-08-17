@@ -1,67 +1,82 @@
 <template>
     <div class="usergroup">
         <page-main>
-            <el-row :gutter="10">
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.item.name" placeholder="用户组名称" />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-cascader
-                        v-model="data_search.item.region_cc"
-                        class="head-btn"
-                        placeholder="区域"
-                        :props="cascader_props"
-                        collapse-tags
-                        collapse-tags-tooltip
-                        :show-all-levels="false"
-                    />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select
-                        v-model="data_search.item.type"
-                        placeholder="请选择类型"
-                    >
-                        <el-option
-                            v-for="item in opts_all.obj.toushu_return_type"
-                            :key="item.key"
-                            :value="item.key"
-                            :label="item.val"
-                        />
-                    </el-select>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-button type="primary" class="m-t-10" @click="data_searchFun">
-                        搜索
-                    </el-button>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <div v-show="data_search.item.switch" class="m-t-10">
-                        <div style="width: 260px;">
-                            <el-button
-                                style="margin-right: 10px;"
-                                type="primary"
-                                @click="refreshSearch()"
-                            >
-                                重置
-                            </el-button>
-                            *搜索到相关结果共{{ data_search.item.total }}条。
+            <div>
+                <el-button
+                    class="head-btn"
+                    type="primary"
+                    :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加用户组
+                </el-button>
+            </div>
+            <div class="search">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">用户组名称：</div>
+                            <el-input v-model="data_search.item.name" class="search_tb" placeholder="用户组名称" />
                         </div>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-row :gutter="20" class="bottom-btn-box-2">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button
-                        class="head-btn m-t-10"
-                        type="primary"
-                        @click="addResidentialFunc"
-                    >
-                        添加用户组
-                    </el-button>
-                </el-col>
-            </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">所在区域：</div>
+
+                            <div class="search_tb">
+                                <el-cascader
+                                    v-model="data_search.item.region_cc"
+                                    class="head-btn"
+                                    placeholder="区域"
+                                    :props="cascader_props"
+                                    collapse-tags
+                                    collapse-tags-tooltip
+                                    :show-all-levels="false"
+                                />
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8">
+                        <div class="searchBox">
+                            <div class="search_th">类型：</div>
+                            <el-select
+                                v-model="data_search.item.type"
+                                placeholder="请选择类型"
+                                class="search_tb"
+                            >
+                                <el-option
+                                    v-for="item in opts_all.obj.toushu_return_type"
+                                    :key="item.key"
+                                    :value="item.key"
+                                    :label="item.val"
+                                />
+                            </el-select>
+                        </div>
+                    </el-col>
+                </el-row>
+                <el-row class="m-t-20">
+                    <el-col :xs="24" :md="24" :lg="10">
+                        <div class="flx">
+                            <div class="w_30">
+                                <el-button type="primary" class="m-l-20" :icon="Search" @click="data_searchFun">
+                                    筛选
+                                </el-button>
+                            </div>
+                            <div v-show="data_search.item.switch == true" class="w_70 m-l-30">
+                                <el-button
+                                    class="m-r-10"
+                                    @click="refreshSearch()"
+                                >
+                                    重置
+                                </el-button>
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ data_search.item.total }}条。
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
             <div
                 style="
                                                                                 width: 100%;
@@ -171,6 +186,7 @@
                     background
                     prev-text="上一页"
                     next-text="下一页"
+                    hide-on-single-page
                     @next-click="next_click_page"
                     @prev-click="prev_click_page"
                 />
@@ -405,7 +421,7 @@
                     <el-row :gutter="10">
                         <el-col :sm="24" :md="24" :lg="12">
                             <el-form-item label="用户ID" prop="id">
-                                <SearchUser v-model:str="from_opt_val.obj.user_id" @checkName="group_user_check_userid"/>
+                                <SearchUser v-model:str="from_opt_val.obj.user_id" @checkName="group_user_check_userid" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -609,7 +625,7 @@
                             @change="(val) => group_perms_selectFun_gov(val, item.id)"
                         />
                     </div>
-                    <!-- </el-checkbox-group> -->
+                <!-- </el-checkbox-group> -->
                 </el-tab-pane>
                 <el-tab-pane label="物业端权限">
                     <div v-for="item in all_perms_list.arr" :key="item.id">
@@ -770,6 +786,7 @@ import {
 } from '@/api/custom/custom.js'
 import { ref, watch, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 分类种类
@@ -825,6 +842,7 @@ let from_examine = reactive({
 })
 // 检索查询板块
 const refreshSearch = () => {
+    data_search.item = {}
     data_search.item.switch = false
     APIgetGroupList().then(res => {
         data_tab.arr = res.data
@@ -870,28 +888,6 @@ const total = ref(50)
 watch(page, () => {
     getTabListFunc()
 })
-const next_click_page = () => {
-    let btnNext=document.querySelector('.btn-next')
-    console.log(flag.value)
-    if(!flag.value){
-        btnNext.classList.add('not_allowed')
-    }
-    console.log(btnNext.className)
-}
-const prev_click_page=()=>{
-    let btnNext=document.querySelector('.btn-next')
-    console.log(flag.value)
-    if (flag.value) {
-        btnNext.classList.remove('not_allowed')
-    }
-    console.log(btnNext.className)
-}
-// const prev_click_page=()=>{
-//     if(page.value>1){
-//         page.value-=1
-//     }
-// }
-//
 let from_addGroupUser_perms = reactive({
     item: {
         perm_ids: ['']
@@ -932,10 +928,10 @@ const post_all_group_perms = () => {
         }
     })
 }
-//添加用户组成员弹框选择成员
-const group_user_check_userid=(val)=>{
+// 添加用户组成员弹框选择成员
+const group_user_check_userid = val => {
     console.log(val)
-    from_opt_val.obj.user_id=val.id
+    from_opt_val.obj.user_id = val.id
 }
 // 添加用户组全部权限取消弹窗
 const group_perms_close = () => {
@@ -1305,8 +1301,17 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res.data
+        let btnNext = document.querySelector('.btn-next')
         if (res.data.length < per_page.value) {
             flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
         }
     })
 }
@@ -1540,32 +1545,8 @@ getOpts([
         }
     }
 }
-
 </style>
 <style lang="scss" scoped>
-.search-tips {
-    color: #aaa;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-::v-deep .el-pagination.is-background .btn-prev {
-    padding: 16px 13px;
-    background-color: #409eff;
-}
-::v-deep .el-pagination.is-background .btn-next {
-    padding: 16px 13px;
-    background-color: #409eff;
-}
-::v-deep .el-pagination__jump {
-    margin-left: 10px;
-    font-weight: 500;
-    font-size: 14px !important;
-    vertical-align: bottom !important;
-}
-::v-deep .not_allowed {
-    pointer-events: none;
-}
-::v-deep .not_allowed:disabled {
-    cursor: not-allowed;
-}
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 </style>

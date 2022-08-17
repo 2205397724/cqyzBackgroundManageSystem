@@ -1,6 +1,6 @@
 <template>
     <div class="articletparticletpl">
-        <page-main>
+        <page-main style="overflow: hidden;">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus"
@@ -95,16 +95,17 @@
                 </el-table-column>
                 <el-table-column />
             </el-table>
-            <div class="p-t-20">
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
-            </div>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -441,9 +442,22 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        total.value = res.length
+        // total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
+const flag = ref(false)
 // 删除
 const deleteFunc = val => {
     APIdeleteArticletpl(val.id).then(res => {
@@ -499,7 +513,9 @@ watch(page, () => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .serve-box {
     border: 1px solid #eee;
     box-sizing: border-box;
