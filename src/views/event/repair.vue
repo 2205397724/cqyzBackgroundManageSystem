@@ -1,10 +1,10 @@
 <template>
     <div class="vote">
-        <page-main>
+        <page-main style="overflow: hidden;">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus" @click="()=>{
-                        data_1.add_form={status:opts_all.obj.toushu_status[0].key};
+                        data_1.add_form={};
                         data_1.add_error={};
                         data_1.add_switch=true;
                         file_list=[];
@@ -19,17 +19,17 @@
                     <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
                             <div class="search_th">
-                            报修名称：
+                                报修名称：
                             </div>
                             <el-input v-model="data_1.search.title" class="search_tb" placeholder="报修名称" clearable />
                         </div>
                     </el-col>
-                     <el-col :xs="24" :md="12" :lg="8">
+                    <el-col :xs="24" :md="12" :lg="8">
                         <div class="searchBox">
-                        <div class="search_th">报修状态：</div>
-                        <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
-                            <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                        </el-select>
+                            <div class="search_th">报修状态：</div>
+                            <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </div>
                     </el-col>
                 </el-row>
@@ -37,22 +37,22 @@
                     <el-col :xs="24" :md="24" :lg="10">
                         <div class="flx">
                             <div class="w_30">
-                        <el-button
-                            class="m-l-20" type="primary" :icon="Search"
-                            @click="()=>{
-                                data_1.switch_search = true;
-                                data_1.page = 1;
-                                getFuncVoteList()
-                            }"
-                        >
-                            筛选
-                        </el-button>
-                    </div>
+                                <el-button
+                                    class="m-l-20" type="primary" :icon="Search"
+                                    @click="()=>{
+                                        data_1.switch_search = true;
+                                        data_1.page = 1;
+                                        getFuncVoteList()
+                                    }"
+                                >
+                                    筛选
+                                </el-button>
+                            </div>
                             <div v-show=" data_1.switch_search == true" class="w_70 m-l-30">
-                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                        <div class="searchDetail">
-                        *搜索到相关结果共{{ data_1.total }}条。
-                        </div>
+                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                <div class="searchDetail">
+                                    *搜索到相关结果共{{ data_1.total }}条。
+                                </div>
                             </div>
                         </div>
                     </el-col>
@@ -63,19 +63,24 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="投诉名称" width="120">
+                <el-table-column label="报修名称">
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="所在区域">
                     <template #default="scope">
-                        <span>{{ scope.row.cc_name}} </span>
+                        <span>{{ scope.row.cc_name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="业务编号" width="180">
                     <template #default="scope">
                         <span>{{ scope.row.sno }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="所在小区">
+                    <template #default="scope">
+                        <span>{{ scope.row?.zone?.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态">
@@ -121,11 +126,13 @@
             </el-table>
             <el-pagination
                 v-model:current-page="data_1.page"
-                style="padding-top: 20px;"
-                layout="total,prev,pager,next,jumper,"
-                :total="data_1.total"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
                 :page-size="data_1.per_page"
                 background
+                prev-text="上一页"
+                next-text="下一页"
                 hide-on-single-page
             />
         </page-main>
@@ -142,7 +149,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label-width="70px"
+                            label-width="100px"
                             label="报修名称"
                             :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
                         >
@@ -154,7 +161,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label-width="70px"
+                            label-width="100px"
                             label="是否公开"
                             :error="data_1.add_error&&data_1.add_error.pub?data_1.add_error.pub[0]:''"
                         >
@@ -165,7 +172,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label-width="70px"
+                            label-width="100px"
                             label="是否匿名"
                             :error="data_1.add_error&&data_1.add_error.ano?data_1.add_error.ano[0]:''"
                         >
@@ -176,21 +183,19 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label-width="70px"
-                            label="小区id"
-                            :error="data_1.add_error&&data_1.add_error.zid?data_1.add_error.zid[0]:''"
+                            label-width="100px"
+                            label="状态"
+                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
                         >
-                            <div style="margin-bottom: 10px;width: 100%;">
-                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                    <SearchResidential ref="V" v-model:name="zoneName" @checkName="checkNameFunc" />
-                                </div>
-                            </div>
+                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <template v-if="data_1.add_title=='修改'">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label-width="70px"
+                                label-width="100px"
                                 label="问题分类"
                                 :error="data_1.add_error&&data_1.add_error.catpro?data_1.add_error.catpro[0]:''"
                             >
@@ -212,10 +217,13 @@
                                     clearable
                                 />
                             </el-form-item>
+                            <el-icon :size="15" color="#F56C6C" class="icon">
+                                <StarFilled />
+                            </el-icon>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label-width="70px"
+                                label-width="100px"
                                 label="投诉对象"
                                 :error="data_1.add_error&&data_1.add_error.catob?data_1.add_error.catob[0]:''"
                             >
@@ -238,22 +246,36 @@
                                     clearable
                                 />
                             </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label-width="70px"
-                                label="状态"
-                                :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                            >
-                                <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
+                            <el-icon :size="15" color="#F56C6C" class="icon_1">
+                                <StarFilled />
+                            </el-icon>
                         </el-col>
                     </template>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
-                            label-width="70px"
+                            label-width="100px"
+                            label="附件"
+                            :error="data_1.add_error&&data_1.add_error.affix?data_1.add_error.affix[0]:''"
+                        >
+                            <el-upload
+                                ref="uploadRef"
+                                action="***"
+                                :auto-upload="false"
+                                :file-list="file_list"
+                                :on-change="(file,files)=>{
+                                    file_list = files
+                                }"
+                                :on-remove="(file,files)=>{
+                                    file_list = files
+                                }"
+                            >
+                                <el-button type="primary">选择附件</el-button>
+                            </el-upload>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="100px"
                             label="内容"
                             :error="data_1.add_error&&data_1.add_error.content?data_1.add_error.content[0]:''"
                         >
@@ -302,9 +324,9 @@
                     <div class="left">是否匿名</div>
                     <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,data_1.details_data.ano) }}</div>
                 </div>
-                <div class="item">
+                <div v-if="data_1.details_data?.zone?.name" class="item">
                     <div class="left">所在小区</div>
-                    <div class="right">{{ data_1.details_data.zid}}</div>
+                    <div class="right">{{ data_1.details_data?.zone?.name }}</div>
                 </div>
                 <div v-if="data_1.details_data.catpro" class="item">
                     <div class="left">问题分类</div>
@@ -314,9 +336,29 @@
                     <div class="left">投诉对象</div>
                     <div class="right">{{ data_1.details_data.catob }}</div>
                 </div>
+                <div v-if="data_1.details_data.affixs&&data_1.details_data.affixs.length>0" class="item">
+                    <div class="left">附件</div>
+                    <div class="right">
+                        <!-- 两种模式任君选择 -->
+                        <img v-for="(item,i) in data_1.details_data.affixs" :key="i" :preview-src-list="data_1.details_data.affixs" class="image" :src="item" fit="cover">
+                        <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
+                        </div> -->
+                    </div>
+                </div>
                 <div class="item">
                     <div class="left">状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }}</div>
+                    <div class="right">
+                        <el-tag v-show="data_1.details_data.status == 0" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 1" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 2" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 3" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 4" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 5" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 6" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                        <el-tag v-show="data_1.details_data.status == 8" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
+                    </div>
                 </div>
             </div>
             <template #footer>
@@ -336,14 +378,13 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Search, Plus, StarFilled } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetComplaintList,
     APIgetComplaintDetails,
     APIputComplaint,
-    APIpostComplaint,
-    APIgetResidentialListHouse
+    APIpostComplaint
 } from '@/api/custom/custom.js'
 const data_1 = reactive({
     search: {},
@@ -356,7 +397,9 @@ const data_1 = reactive({
     add_title: '添加',
     add_form: {},
     add_error: {},
-    details_data: {},
+    details_data: {
+        zone: { name: '' }
+    },
     details_switch: false
 })
 const getFuncVoteList = () => {
@@ -374,8 +417,21 @@ const getFuncVoteList = () => {
         console.log(res)
         data_1.total = res.length
         data_1.list = res
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= data_1.per_page) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
+const flag = ref(false)
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const clickFuncAddVote = () => {
@@ -433,29 +489,7 @@ const clickFuncAddVote = () => {
         })
     }
 }
-const V=ref(null)
-const dialogClosed=()=>{
-    V.value.clearFunc()
-    zoneName.value=''
-}
-const checkNameFunc=row=>{
-    data_1.add_form.zid=row.id
-}
-const getZoneListFunc=()=>{
-    let params={
-        page: data_1.page,
-        per_page: data_1.per_page
-    }
-    APIgetResidentialListHouse(params).then(res=>{
-        zone_list.arr=res
-    })
-}
-const zoneName=ref('')
-const zone_list=reactive({
-    arr:[]
-})
 const clickFuncModify = val => {
-    getZoneListFunc()
     data_1.add_error = {}
     data_1.add_title = '修改'
     data_1.add_switch
@@ -472,17 +506,8 @@ const clickFuncModify = val => {
         }
         file_list.value = arr
         data_1.add_switch = true
-        zoneName.value=getNameFunc(zone_list.arr,data_1.add_form.zid)
     })
 }
-const getNameFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-}
-const zoneNAme_1=ref('')
 const clickFuncDeteails = val => {
     APIgetComplaintDetails(val.id).then(res => {
         res.affixs = []
@@ -729,7 +754,19 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
 
 </script>
 <style lang="scss" scoped>
-    ::v-deep .el-cascader {
-        width: 100%;
-    }
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+::v-deep .el-cascader {
+    width: 100%;
+}
+.icon {
+    position: absolute;
+    top: 65px;
+    left: 10px;
+}
+.icon_1 {
+    position: absolute;
+    top: 65px;
+    right: 340px;
+}
 </style>
