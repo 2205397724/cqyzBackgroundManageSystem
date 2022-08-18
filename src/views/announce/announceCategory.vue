@@ -57,7 +57,7 @@
                 <el-table-column fixed="right" label="操作" width="240">
                     <template #default="scope">
                         <el-button
-                            type="primary" size="small"
+                            type="success" size="small"
                             @click="addResidentialFunc(scope.row)"
                         >
                             添加子分类

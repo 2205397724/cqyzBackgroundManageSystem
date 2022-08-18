@@ -135,7 +135,7 @@
             </el-table>
             <el-pagination
                 v-model:current-page="data_1.page"
-                style="padding-top: 20px;"
+                class="p-t-20"
                 layout="total,prev,pager,next,jumper,"
                 :total="data_1.total"
                 :page-size="data_1.per_page"
@@ -189,7 +189,7 @@
                             label="所在小区"
                             :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
                         >
-                            <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;">
+                            <div class="searchUserGroup">
                                 <SearchResidential v-model:str="data_1.add_form.zone_id" />
                             </div>
                         </el-form-item>
@@ -237,7 +237,7 @@
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="data_1.add_switch=false">取消</el-button>
                     <el-button type="primary" @click="clickFuncCategory(ruleFormRef)">确定</el-button>
                 </div>

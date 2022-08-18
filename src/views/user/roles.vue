@@ -1,12 +1,12 @@
 <template>
-   <div class="userRoles">
-      <page-main>
-        <el-row>
-            <el-col>
-                <el-button type="primary" @click="addRolesFun" class="m-b-20">添加用户组角色</el-button>
-            </el-col>
-        </el-row>
-        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+    <div class="userRoles">
+        <page-main>
+            <el-row>
+                <el-col>
+                    <el-button type="primary" :icon="Plus" class="m-b-20" @click="addRolesFun">添加用户组角色</el-button>
+                </el-col>
+            </el-row>
+            <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
                 <el-table
                     v-loading="loading_tab"
                     :data="data_tab.arr"
@@ -18,22 +18,22 @@
                 >
                     <el-table-column prop="name" label="角色名称" width="180">
                         <template #default="scope">
-                            <span >{{ scope.row.name }} </span>
+                            <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="角色ID" width="230px">
                         <template #default="scope">
-                            <span >{{ scope.row.id }} </span>
+                            <span>{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="group_id" label="所属用户组">
                         <template #default="scope">
-                            <span >{{ find_groupid_name(scope.row.group_id)  }} </span>
+                            <span>{{ find_groupid_name(scope.row.group_id) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="spec" label="特有标识" width="180">
                         <template #default="scope">
-                            <span >{{ scope.row.spec }} </span>
+                            <span>{{ scope.row.spec }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="270px">
@@ -63,67 +63,72 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                 <el-pagination
-                        style="float: right;"
-                        v-model:current-page="page"
-                        layout="prev,next,jumper"
-                        :page-size="per_page"
-                        :total="50"
-                        background
-                        @next-click="next_click_page"
-                        @prev-click="prev_click_page"
-                    />
+                <el-pagination
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper"
+                    :page-size="per_page"
+                    :total="50"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                    @next-click="next_click_page"
+                    @prev-click="prev_click_page"
+                />
             </div>
-        <!-- 添加修改 -->
-         <el-dialog :title="add_or_post_text" v-model="switch_add_post" show-close width="40%" @close="close_post_put">
-            <el-form :model="from_data.item" label-width="90px"
-            :rules="addPutRules"
-            label-position="left" ref="ruleFormRefAddPut">
-                <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                    <el-form-item label="角色名称" prop="name">
-                        <el-input v-model="from_data.item.name"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="5">
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                    <el-form-item label="特有标识" prop="spec">
-                        <el-input v-model="from_data.item.spec"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                        <el-form-item label-width="90px" label="用户组">
-                            <GroupListTabs
-                             @change="
-                                (val) => {
-                                    from_data.item.group_id = val.id;
-                                }
-                            "
-                            :placeholder="'请选择用户组'"
-                            />
-                        </el-form-item>
-            </el-col>
-          </el-row>
-            </el-form>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="switch_add_post=false">取消</el-button>
-                    <el-button type="primary" @click="add_post_submit">确定</el-button>
-                </div>
-            </template>
-         </el-dialog>
-         <!-- 角色获取权限 -->
-         <el-dialog v-model="switch_roles_perms" title="角色拥有权限" width="60%">
-            <el-button type="primary" @click="post_roles_perms">给角色赋权限</el-button>
-            <el-input class="m-tb-20" v-model="from_post_roles_perms.item.perm_ids[0]">
-                <template #prepend>
-                    权限ID
+            <!-- 添加修改 -->
+            <el-dialog v-model="switch_add_post" :title="add_or_post_text" show-close width="40%" @close="close_post_put">
+                <el-form
+                    ref="ruleFormRefAddPut" :model="from_data.item"
+                    label-width="90px"
+                    :rules="addPutRules" label-position="left"
+                >
+                    <el-row :gutter="5">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                            <el-form-item label="角色名称" prop="name">
+                                <el-input v-model="from_data.item.name" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="5">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                            <el-form-item label="特有标识" prop="spec">
+                                <el-input v-model="from_data.item.spec" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                            <el-form-item label-width="90px" label="用户组">
+                                <GroupListTabs
+                                    :placeholder="'请选择用户组'"
+                                    @change="
+                                        (val) => {
+                                            from_data.item.group_id = val.id;
+                                        }
+                                    "
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <template #footer>
+                    <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                        <el-button @click="switch_add_post=false">取消</el-button>
+                        <el-button type="primary" @click="add_post_submit">确定</el-button>
+                    </div>
                 </template>
-            </el-input>
-            <el-table
+            </el-dialog>
+            <!-- 角色获取权限 -->
+            <el-dialog v-model="switch_roles_perms" title="角色拥有权限" width="60%">
+                <el-button type="primary" @click="post_roles_perms">给角色赋权限</el-button>
+                <el-input v-model="from_post_roles_perms.item.perm_ids[0]" class="m-tb-20">
+                    <template #prepend>
+                        权限ID
+                    </template>
+                </el-input>
+                <el-table
                     v-loading="loading_tab"
                     :data="data_tab_roles_perms.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -167,9 +172,9 @@
                         </template>
                     </el-table-column>
                 </el-table>
-         </el-dialog>
-      </page-main>
-   </div>
+            </el-dialog>
+        </page-main>
+    </div>
 </template>
 
 <script setup>
@@ -181,50 +186,51 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 import {
-APIgetRolesList,
-APIgetRolesDetail,
-APIpostRoles,
-APIputRoles,
-APIDeleteRoles,
-payRoles_perms,
-deleteRoles_perms,
-APIgetRoles_perms,
-APIpostRoles_perms,
-APIdeleteRoles_perms,
-APIgetGroupList
+    APIgetRolesList,
+    APIgetRolesDetail,
+    APIpostRoles,
+    APIputRoles,
+    APIDeleteRoles,
+    payRoles_perms,
+    deleteRoles_perms,
+    APIgetRoles_perms,
+    APIpostRoles_perms,
+    APIdeleteRoles_perms,
+    APIgetGroupList
 } from '@/api/custom/custom.js'
-const page=ref(1)
-const per_page=ref(10)
-const switch_add_post=ref(false)
-const loading_tab=ref(false)
-const add_or_post_text=ref("添加")
-const ruleFormRef=ref("")
-const from_data=reactive({
-    item:{}
+const page = ref(1)
+const per_page = ref(10)
+const switch_add_post = ref(false)
+const loading_tab = ref(false)
+const add_or_post_text = ref('添加')
+const ruleFormRef = ref('')
+const from_data = reactive({
+    item: {}
 })
-const from_post_roles_perms=reactive({
-    item:{
-        perm_ids:[""]
+const from_post_roles_perms = reactive({
+    item: {
+        perm_ids: ['']
     }
 })
-const switch_roles_perms=ref(false)
-const data_tab=reactive({
-    arr:[]
+const switch_roles_perms = ref(false)
+const data_tab = reactive({
+    arr: []
 })
-const data_tab_roles_perms=reactive({
-    arr:[]
+const data_tab_roles_perms = reactive({
+    arr: []
 })
-const refreshFunc=()=>{
-    page.value=1
-    per_page.value=10
-    switch_add_post.value=false
+const refreshFunc = () => {
+    page.value = 1
+    per_page.value = 10
+    switch_add_post.value = false
     getTabListFunc()
 }
-const current_roles_perms=reactive({
-    id:""
+const current_roles_perms = reactive({
+    id: ''
 })
-//表单校验
+// 表单校验
 // const addPutRules=reactive({
 //     name:[
 //         {require:true,message:"请输入角色名称",triggerL:'blur'},
@@ -236,126 +242,142 @@ const current_roles_perms=reactive({
 //         {require:true,message:"请输入角色名称",triggerL:'blur'},
 //     ]
 // })
-//分页板块
-watch(page,()=>{
+// 分页板块
+watch(page, () => {
     getTabListFunc
 })
-//给角色赋予权限
-const post_roles_perms=()=>{
-    if(from_post_roles_perms.item.perm_ids[0]==""){
-        ElMessage.error("请输入信息")
+// 给角色赋予权限
+const post_roles_perms = () => {
+    if (from_post_roles_perms.item.perm_ids[0] == '') {
+        ElMessage.error('请输入信息')
         return
     }
-    APIpostRoles_perms(current_roles_perms.id,{perm_ids:[from_post_roles_perms.item.perm_ids[0]]}).then(res=>{
-        if(res.status==200){
-            ElMessage.success("赋予权限成功")
-            from_post_roles_perms.item.perm_ids[0]=""
+    APIpostRoles_perms(current_roles_perms.id, { perm_ids: [from_post_roles_perms.item.perm_ids[0]] }).then(res => {
+        if (res.status == 200) {
+            ElMessage.success('赋予权限成功')
+            from_post_roles_perms.item.perm_ids[0] = ''
         }
     })
 }
-//根据用户组ID找到对应name
-const groupList=reactive({arr:[]})
-const getGroupList=()=>{
-    APIgetGroupList().then(res=>{
-        groupList.arr=res.data
+// 根据用户组ID找到对应name
+const groupList = reactive({ arr: [] })
+const getGroupList = () => {
+    APIgetGroupList().then(res => {
+        groupList.arr = res.data
     })
 }
 getGroupList()
-const find_groupid_name=(val)=>{
-    let name=""
-        groupList.arr.forEach((item)=>{
-                if(item['id']==val){
-                    name=item.name
-                }
-        })
+const find_groupid_name = val => {
+    let name = ''
+    groupList.arr.forEach(item => {
+        if (item['id'] == val) {
+            name = item.name
+        }
+    })
     return name
 }
 
-//关闭dialog事件
-const close_post_put=()=>{
-    from_data.item={}
+// 关闭dialog事件
+const close_post_put = () => {
+    from_data.item = {}
 }
-//获取角色权限
-const getRoles_permsFun=(val)=>{
-    switch_roles_perms.value=true
-    current_roles_perms.id=val.id
-    APIgetRoles_perms(val.id).then(res=>{
+// 获取角色权限
+const getRoles_permsFun = val => {
+    switch_roles_perms.value = true
+    current_roles_perms.id = val.id
+    APIgetRoles_perms(val.id).then(res => {
         console.log(res)
-        data_tab_roles_perms.arr=res.data
+        data_tab_roles_perms.arr = res.data
     })
 }
-//删除角色
-const deleteRoles=(val)=>{
-    APIDeleteRoles(val.id).then(res=>{
-        if(res.status===200){
-            ElMessage.success("删除角色成功")
+// 删除角色
+const deleteRoles = val => {
+    APIDeleteRoles(val.id).then(res => {
+        if (res.status === 200) {
+            ElMessage.success('删除角色成功')
             refreshFunc()
-        }else{
-            ElMessage.error("删除失败")
+        } else {
+            ElMessage.error('删除失败')
         }
     })
 }
-//修改角色
-const postRolesFun=(val)=>{
-    switch_add_post.value=true
-    add_or_post_text.value="修改"
-    APIgetRolesDetail(val.id).then(res=>{
-        if(res.status===200){
+// 修改角色
+const postRolesFun = val => {
+    switch_add_post.value = true
+    add_or_post_text.value = '修改'
+    APIgetRolesDetail(val.id).then(res => {
+        if (res.status === 200) {
             console.log(res)
-            from_data.item=res.data
+            from_data.item = res.data
         }
     })
 }
-//添加角色
-const addRolesFun=()=>{
-    switch_add_post.value=true
-    add_or_post_text.value="添加"
+// 添加角色
+const addRolesFun = () => {
+    switch_add_post.value = true
+    add_or_post_text.value = '添加'
 }
-//添加修改submit
-const add_post_submit=()=>{
-        if (from_data.item.name&&from_data.item.spec&&from_data.item.group_id) {
-            if (add_or_post_text.value == '修改') {
-                loading_tab.value=true
-                APIputRoles(from_data.item.id, from_data.item).then(res => {
-                    if (res.status===200) {
-                        loading_tab.value=false
-                        refreshFunc()
-                        ElMessage.success('修改成功')
-                        switch_add_post.value = false
-                    }
-                }).catch(err => {
-                    loading_tab.value=false
-                })
-            } else {
-                console.log(from_data.item)
-                loading_tab.value=true
-                APIpostRoles(from_data.item).then(res => {
-                    if (res.status===200) {
-                        loading_tab.value=false
-                        refreshFunc()
-                        ElMessage.success("添加成功")
-                        switch_add_post.value = false
-                    }
-                }).catch(err => {
-                   loading_tab.value=false
-                })
-            }
-        }else{
-            ElMessage.error("请输入完整信息")
+// 添加修改submit
+const add_post_submit = () => {
+    if (from_data.item.name && from_data.item.spec && from_data.item.group_id) {
+        if (add_or_post_text.value == '修改') {
+            loading_tab.value = true
+            APIputRoles(from_data.item.id, from_data.item).then(res => {
+                if (res.status === 200) {
+                    loading_tab.value = false
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_add_post.value = false
+                }
+            }).catch(err => {
+                loading_tab.value = false
+            })
+        } else {
+            console.log(from_data.item)
+            loading_tab.value = true
+            APIpostRoles(from_data.item).then(res => {
+                if (res.status === 200) {
+                    loading_tab.value = false
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_add_post.value = false
+                }
+            }).catch(err => {
+                loading_tab.value = false
+            })
         }
-}
-//获取角色列表
-const getTabListFunc=()=>{
-    let params={
-        page:page.value,
-        per_page:per_page.value
+    } else {
+        ElMessage.error('请输入完整信息')
     }
-    APIgetRolesList(params).then(res=>{
-        data_tab.arr=res.data
+}
+const flag = ref(false)
+// 获取角色列表
+const getTabListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetRolesList(params).then(res => {
+        data_tab.arr = res.data
         console.log(res)
+        let btnNext = document.querySelector('.btn-next')
+        if (res.data.length < per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 refreshFunc()
 </script>
-
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+</style>
 

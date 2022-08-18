@@ -1,6 +1,6 @@
 <template>
     <div class="articletplarticle">
-        <page-main>
+        <page-main style="overflow: hidden;">
             <div>
                 <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">发布公示</el-button>
             </div>
@@ -79,7 +79,7 @@
                 </el-table-column>
                 <el-table-column label="用户组">
                     <template #default="scope">
-                        <span>{{ scope.row.authorgroup.name }} </span>
+                        <span>{{ scope.row?.authorgroup?.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态">
@@ -131,11 +131,13 @@
             </el-table>
             <el-pagination
                 v-model:current-page="page"
-                class="p-t-20"
-                layout="total,prev,pager,next,jumper,"
-                :total="total"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
                 :page-size="per_page"
                 background
+                prev-text="上一页"
+                next-text="下一页"
                 hide-on-single-page
             />
         </page-main>
@@ -157,7 +159,7 @@
                 <el-step title="完成" />
             </el-steps>
             <div style="width: 100%; margin-top: 40px; margin-bottom: 20px;">
-              <!-- <el-scrollbar max-height="550px"> -->
+                <!-- <el-scrollbar max-height="550px"> -->
                 <el-form
                     v-if="active == 0"
                     ref="ruleFormRef"
@@ -499,11 +501,7 @@ const announceName = ref('公式')
 // 详情
 let switch_details = ref(false)
 // dialog关闭回调
-const V = ref(null)
-const add_dialog_close = () => {
-    V.value.clearFunc()
-    selectedZone_id.value = ''
-}
+
 // 列表
 let ruleFormRef = ref('')
 let loading_tab = ref(false)
@@ -579,7 +577,17 @@ watch(page, () => {
 // }
 // 同意拒绝提交
 import { getFilesKeys } from '@/util/files.js'
+const V = ref(null)
+const add_dialog_close = () => {
+    if (active.value == 0) {
+        V.value.clearFunc()
+        selectedZone_id.value = ''
+        userGroupName.value = ''
+    }
+}
 const dialogExamineCloseFunc = () => {
+    V.value.clearFunc()
+    selectedZone_id.value = ''
     // console.log(formEl)
     // from_error.msg = {}
     // if (!formEl) return
@@ -671,10 +679,22 @@ const getTabListFunc = () => {
         data_tab.arr = res
         announce_id.value = getNameFunc(res, from_examine.item.title)
         group_id.value = from_examine.item.groupid
-        total.value = res.length
-        // console.log(announce_id.value)
+        // total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
+const flag = ref(false)
 // 删除
 const deleteFunc = val => {
     APIdeleteEventArticle(val.id).then(res => {
@@ -794,6 +814,8 @@ const next = () => {
                     total1.value = 0
                 }
             })
+        } else {
+            total1.value = 0
         }
         active.value = 1
     } else if (active.value == 1) {
@@ -998,7 +1020,9 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', '
     opts_all.obj = res
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .serve-box {
     border: 1px solid #eee;
     box-sizing: border-box;
