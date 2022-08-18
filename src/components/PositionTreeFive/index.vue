@@ -226,7 +226,7 @@ const submit = () => {
       APIaddSurveyRange({
         sid: props.surveyid,
         can_type: selected_do_type.value,
-        type: 1,
+        type: 2,
         tgt: selected_house.arr,
       })
     );
@@ -235,6 +235,7 @@ const submit = () => {
     .then((res) => {
       //并发接口
       ElMessage.success("设置成功");
+      emit("update:showabled", false);
     })
     .catch((e) => {
       ElMessage.error("设置失败请重试");
@@ -369,6 +370,7 @@ const loadNode = (node, resolve) => {
             id: res[i].id,
             type: "units",
             next_type: "house",
+            code:res[i].id,
             can_exist:res[i].can_exist,
             leaf:true
           });
@@ -456,9 +458,20 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
     APIgetHouseListSort({
       houseable_type: "units",
       houseable_id: data.id,
+      sid:props.surveyid,
+      can_type:2
     }).then((res) => {
       console.log(res);
       floors.arr = res.floors;
+      let selected=[]
+      floors.arr.forEach(item=>{
+        item.houses.forEach(items=>{
+            if(items.can_exist){
+                selected.push(items.id)
+            }
+        })
+      })
+      selected_house.arr=selected
     });
   }
 };
