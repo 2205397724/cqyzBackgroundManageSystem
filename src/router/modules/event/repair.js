@@ -22,6 +22,19 @@ export default {
             breadcrumb: false,
             activeMenu: '/event_repair',
             auth: ['event.repair.repair', '*']
-        }
+        },
+        children: [{
+            path: 'details',
+            name: 'complaintDetails_2',
+            sidebar: false,
+            breadcrumb: false,
+            component: () =>
+                import ('@/views/event/Details.vue'),
+            meta: {
+                title: '详情',
+                sidebar: false,
+                activeMenu: '/event_repair'
+            }
+        }]
     }]
 }

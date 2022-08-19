@@ -117,14 +117,14 @@
                 <el-table-column label="状态">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 3" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 99" class="btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <!-- <div style=":background-color"></div> -->
                     </template>
                 </el-table-column>
@@ -138,7 +138,7 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="300">
+                <el-table-column fixed="right" label="操作" width="250">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -149,12 +149,12 @@
                         <el-link :underline="false" type="primary">
                             <router-link class="el-button details" :to="{name: 'complaintDetails',query:{ id : scope.row.id }}">详情</router-link>
                         </el-link>
-                        <el-button
+                        <!-- <el-button
                             size="small"
                             @click="clickFuncAllot(scope.row)"
                         >
                             转办
-                        </el-button>
+                        </el-button> -->
                         <el-button
                             size="small"
                             @click="clickFuncAllot4(scope.row.id)"

@@ -163,22 +163,29 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="200">
+                <el-table-column fixed="right" label="操作" width="250">
                     <template #default="scope">
                         <el-button
-                            type="primary" size="small"
+                            type="primary"
                             @click="clickFuncModify(scope.row)"
                         >
                             修改
                         </el-button>
-                        <el-button
+                        <!-- <el-button
                             size="small"
                             @click="clickFuncDeteails(scope.row)"
                         >
                             详情
-                        </el-button>
+                        </el-button> -->
+                        <el-link :underline="false" type="primary">
+                            <router-link class="el-button details" :to="{name: 'complaintDetails_1',query:{ id : scope.row.id }}">详情</router-link>
+                        </el-link>
+                        <!-- <el-button
+                            @click="clickFuncAllot(scope.row)"
+                        >
+                            转办
+                        </el-button> -->
                         <el-button
-                            size="small"
                             @click="clickFuncAllot4(scope.row.id)"
                         >
                             违建
@@ -360,76 +367,6 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 详情 -->
-        <el-dialog
-            v-model="data_1.details_switch"
-            title="详情"
-            width="50%"
-        >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">违建名称</div>
-                    <div class="right">{{ data_1.details_data.title }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">违建id</div>
-                    <div class="right">{{ data_1.details_data.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">编号</div>
-                    <div class="right">{{ data_1.details_data.sno }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">是否公开</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,data_1.details_data.pub) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">是否匿名</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,data_1.details_data.ano) }}</div>
-                </div>
-                <div v-if="data_1.details_data?.zone?.name" class="item">
-                    <div class="left">所在小区</div>
-                    <div class="right">{{ data_1.details_data?.zone?.name }}</div>
-                </div>
-                <div v-if="data_1.details_data.catpro" class="item">
-                    <div class="left">问题分类</div>
-                    <div class="right">{{ data_1.details_data.catpro }}</div>
-                </div>
-                <div v-if="data_1.details_data.catob" class="item">
-                    <div class="left">投诉对象</div>
-                    <div class="right">{{ data_1.details_data.catob }}</div>
-                </div>
-                <div v-if="data_1.details_data.affixs&&data_1.details_data.affixs.length>0" class="item">
-                    <div class="left">附件</div>
-                    <div class="right">
-                        <!-- 两种模式任君选择 -->
-                        <img v-for="(item,i) in data_1.details_data.affixs" :key="i" :preview-src-list="data_1.details_data.affixs" class="image" :src="item" fit="cover">
-                        <!-- <div v-for="(item,i) in data_1.details_data.affixs">
-                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
-                        </div> -->
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">
-                        <el-tag v-show="data_1.details_data.status == 0" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 1" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 2" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 3" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 4" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 5" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 6" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                        <el-tag v-show="data_1.details_data.status == 8" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,data_1.details_data.status) }} </el-tag>
-                    </div>
-                </div>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="data_1.details_switch = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
         <!-- 添加违建 -->
         <el-dialog
             v-model="popup_4.switch"
@@ -481,6 +418,35 @@
                 <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="popup_4.switch=false">取消</el-button>
                     <el-button type="primary" @click="popupFuncAdd4">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 转办 -->
+        <el-dialog
+            v-model="popup_1.switch"
+            title="转办"
+            width="400px"
+        >
+            <el-form
+                :model="popup_1.form"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24">
+                        <el-form-item
+                            label="投诉转办对象" prop="name"
+                            :error="popup_1.msg&&popup_1.msg.type?popup_1.msg.type[0]:''"
+                        >
+                            <el-select v-model="popup_1.form.type" class="head-btn" clearable>
+                                <el-option v-for="(item,i) in opts_all.obj.toushu_return_type" :key="item.key" :label="item.val" :value="item.key" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="popup_1.switch=false">取消</el-button>
+                    <el-button type="primary" @click="popupFuncAdd">确定</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -797,6 +763,34 @@ const popupFuncAdd3 = val => {
         return false
     }
     dealFuncAddPut(data)
+}
+// 转办
+const popup_1 = reactive({
+    switch: false,
+    form: {},
+    msg: {}
+})
+const clickFuncAllot = val => {
+    popup_1.msg = {}
+    popup_1.form = {
+        id: val.id
+    }
+    popup_1.switch = true
+}
+import {
+    APIpostAllot
+} from '@/api/custom/custom.js'
+const popupFuncAdd = val => {
+    popup_1.msg = {}
+    APIpostAllot(popup_1.form.id, { type: popup_1.form.type }).then(res => {
+        console.log(res)
+
+        ElMessage.success('转办成功')
+        popup_1.switch = false
+        refreshFunc()
+    }).catch(err => {
+        ElMessage.error('转办失败')
+    })
 }
 // 添加转办处理
 const clickFuncOpenPopup4 = (val, id) => {
@@ -1133,5 +1127,13 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
     position: absolute;
     top: 65px;
     right: 340px;
+}
+.details {
+    text-decoration: inherit;
+    font-size: small;
+    margin: 0 10px;
+}
+:deep .el-button {
+    font-size: 12px;
 }
 </style>

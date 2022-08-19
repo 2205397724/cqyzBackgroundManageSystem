@@ -149,7 +149,23 @@ export function APIpostIllegal(complaint, data) {
 export function APIpostDealAdd(complaint, data) {
     return api2.post(`complaint/${complaint}/deal`, data)
 }
-
+// 追问
+// 列表
+export function APIgetComplaintPlusList(params) {
+    return api2.get('/complaint-plus', { params: params })
+}
+// 审核
+export function APIputComplaintPlus(id, data) {
+    return api2.put(`/complaint-plus/${id}`, data)
+}
+// 删除
+export function APIdeleteComplaintPlus(id) {
+    return api2.delete(`/complaint-plus/${id}`)
+}
+// 添加
+export function APIpostComplaintPlus(complaint, data) {
+    return api2.post(`/complaint/${complaint}/plus`, data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 修改内容
 export function APIputDeal(deal, data) {
