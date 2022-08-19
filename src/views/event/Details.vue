@@ -6,18 +6,30 @@
                 受理编号：{{ dataForm.item.sno }}
                 <el-button round type="success" class="m-10 btn1" size="small">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }}</el-button>
             </p>
-            <div class="btn2">
+            <div v-if=" dataForm.item.status != 99" class="btn2">
                 <!-- <el-button-group> -->
-                <el-button v-if="dataForm.item.status == 0" type="primary" class="btn3" @click="examine_switch= true">
+                <el-button v-if="dataForm.item.status == 0" type="primary" class="btn3" @click="examineFunk">
                     审核
                 </el-button>
-                <el-button v-if="dataForm.item.status == 1 || !replayLogable.item" type="primary" class="btn3" @click="replyFunk">
-                    回复
+                <el-button v-if="dataForm.item.status == 1" type="primary" class="btn3" @click="sureFunk">
+                    确认
                 </el-button>
-                <el-button v-if="dataForm.item.status !== 0" type="warning" class="btn3" @click="TransferFunk">
+                <el-button v-if="dataForm.item.status == 2" type="primary" class="btn3" @click="examineFunk">
+                    受理
+                </el-button>
+                <el-button v-if="dataForm.item.status == 3" type="warning" class="btn3" @click="TransferFunk">
                     转办
                 </el-button>
-                <el-button v-if="dataForm.item.status !== 0 && dataForm.item.status !== 8" type="success" class="btn3" @click="setting_switch= true">
+                <el-button v-if="dataForm.item.status == 5 || dataForm.item.status == 6 || dataForm.item.status == 7||dataForm.item.status == 8" type="primary" class="btn3" @click="replyFunk">
+                    回复
+                </el-button>
+                <el-button v-if="dataForm.item.status == 6" type="warning" class="btn3" @click="examineFunk">
+                    办完
+                </el-button>
+                <el-button v-if="dataForm.item.status == 6||dataForm.item.status == 7" type="warning" class="btn3" @click="questioningFunc">
+                    追问
+                </el-button>
+                <el-button v-if="dataForm.item.status !=1 &&dataForm.item.status!=0&&dataForm.item.status!=99 " type="success" class="btn3" @click="setting_switch= true">
                     结案
                 </el-button>
             </div>
@@ -47,8 +59,8 @@
                                             <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
                                         </div>
                                         <div class="item">
-                                            <div class="left">小区id</div>
-                                            <div class="right">{{ dataForm.item.zid }}</div>
+                                            <div class="left">所在小区</div>
+                                            <div class="right">{{ dataForm.item?.zone?.name }}</div>
                                         </div>
                                     </div>
                                     <div>
@@ -76,30 +88,30 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="处理记录" name="2">
-                        <el-scrollbar height="800px">
-                            <div>
-                                <el-timeline>
-                                    <el-timeline-item v-for="(item,index) in dataForm.item.totlogs" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
-                                        <el-card>
+                        <!-- <el-scrollbar height="800px"> -->
+                        <div>
+                            <el-timeline>
+                                <el-timeline-item v-for="(item,index) in dataForm.item.totlogs" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
+                                    <el-card>
+                                        <div>
                                             <div>
-                                                <div>
-                                                    <div class="sno m-b-10">
-                                                        <span>操作人员: {{ Name }}</span>
-                                                        <span class="m-l-60">事件：{{ item.content }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="m-b-10">
-                                                    {{ item.logable.content }}
-                                                </div>
-                                                <div>
-                                                    <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
+                                                <div class="sno m-b-10">
+                                                    <span>操作人员: {{ item.uinfo.name?item.uinfo.name: item.uinfo.nickname? item.uinfo.nickname:item.uinfo.username? item.uinfo.username: '不透露' }}</span>
+                                                    <span class="m-l-60">事件：{{ item.content }}</span>
                                                 </div>
                                             </div>
-                                        </el-card>
-                                    </el-timeline-item>
-                                </el-timeline>
-                            </div>
-                        </el-scrollbar>
+                                            <div class="m-b-10">
+                                                {{ item.logable.content }}
+                                            </div>
+                                            <div>
+                                                <img v-for="(j,i) in item.logable.affixs" :key="i" :preview-src-list="item.logable.affixs" class="image" :src="j" fit="cover">
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </el-timeline-item>
+                            </el-timeline>
+                        </div>
+                        <!-- </el-scrollbar> -->
                         <!-- <div v-show="data_archive.arr.length <= 0" class="size-lx">此设备无档案信息</div> -->
                     </el-tab-pane>
                     <el-tab-pane label="业主评论" name="3">
@@ -409,6 +421,95 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 追问 -->
+        <el-dialog
+            v-model="questioning_switch"
+            title="追问"
+            width="60%"
+        >
+            <el-table
+                ref="multipleTableRef"
+                :data="questioning_list.arr"
+                style="width: 100%; min-height: 300px;"
+            >
+                <el-table-column label="追问id" width="220" show-overflow-tooltip="true">
+                    <template #default="scope">
+                        <span>{{ scope.row.cid }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="状态">
+                    <template #default="scope">
+                        <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" effect="dark" size="large">未审核</el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">审核成功</el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">审核失败</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="创建时间" width="220">
+                    <template #default="scope">
+                        <span>{{ scope.row.created_at }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" with="150">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="examineFunk_2(scope.row)"
+                        >
+                            审核
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="toggleDelete(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+        <!-- 追问审核 -->
+        <el-dialog
+            v-model="questioning_examineSwitch"
+            title="审核"
+            width="400px"
+        >
+            <el-form
+                :model="questioning_from.item "
+            >
+                <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="80px"
+                            label="审核状态"
+                            :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
+                        >
+                            <el-switch
+                                v-model="questioning_from.item.status"
+
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                active-text="通过"
+                                inactive-text="失败"
+                                :active-value="20"
+                                :inactive-value="30"
+                                class="switchStyle"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="questioning_examineSwitch = false">取消</el-button>
+                    <el-button @click="examineSure_2">确定</el-button>
+                </span>
+            </template>
+        </el-dialog>
         <!-- 详情 -->
         <el-dialog
             v-model="comment.switch_details"
@@ -443,26 +544,30 @@
                 </span>
             </template>
         </el-dialog>
-        <!-- 投诉回复 -->
+        <!-- 投诉审核、受理 、办完-->
         <el-dialog
             v-model="examine_switch"
-            title="审核"
-            width="50%"
+            :title="dataForm.item.status == 0 ? '审核': dataForm.item.status == 6? '办完':'受理'"
+            width="400px"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">是否确认审核</div>
-                    <div class="right">
-                        <el-radio v-model="statusValue" label="1">是</el-radio>
-                        <el-radio v-model="statusValue" label="0">否</el-radio>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">留言</div>
-                    <!-- <div class="right">{{ dataForm.item.content }}</div> -->
-                    <el-input v-model="dataForm.item.content" :autosize="{ minRows: 2, maxRows: 6 }" type="textarea" class="right" />
-                </div>
-            </div>
+            <el-form
+                :model="data_1.add_form"
+            >
+                <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="100px"
+                            :label="dataForm.item.status==0? '是否确认审核' : dataForm.item.status == 6? '是否确认办完':'是否确认受理'"
+                            :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
+                        >
+                            <div class="m-l-20">
+                                <el-radio v-model="statusValue" label="1">是</el-radio>
+                                <el-radio v-model="statusValue" label="0">否</el-radio>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="examine_switch = false">取消</el-button>
@@ -470,26 +575,108 @@
                 </span>
             </template>
         </el-dialog>
+        <!-- 确认 -->
+        <el-dialog
+            v-model="examine_switch_1"
+            title="确认投诉信息"
+            width="50%"
+        >
+            <el-form
+                :model="data_1.add_form"
+            >
+                <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item
+                            label-width="100px"
+                            label="是否确认"
+                            :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
+                        >
+                            <div class="m-l-20">
+                                <el-radio v-model="statusValue" label="1">是</el-radio>
+                                <el-radio v-model="statusValue" label="0">否</el-radio>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="100px"
+                            label="问题分类"
+                            :error="data_1.add_error&&data_1.add_error.catpro?data_1.add_error.catpro[0]:''"
+                        >
+                            <el-cascader
+                                v-model="dataForm.item.catpro"
+                                placeholder=""
+                                :options="opts_all.obj.problem_type"
+                                :props="{
+                                    multiple: false,
+                                    emitPath: false,
+                                    lazy: false,
+                                    value: 'id',
+                                    label: 'name',
+                                    checkStrictly: true
+                                }"
+                                collapse-tags
+                                collapse-tags-tooltip
+                                :show-all-levels="false"
+                                clearable
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="100px"
+                            label="投诉对象"
+                            :error="data_1.add_error&&data_1.add_error.catob?data_1.add_error.catob[0]:''"
+                        >
+                            <el-cascader
+                                v-model="dataForm.item.catob"
+                                style="width: 100%;"
+                                placeholder=""
+                                :options="opts_all.obj.toushu_user_type"
+                                :props="{
+                                    multiple: false,
+                                    emitPath: false,
+                                    lazy: false,
+                                    value: 'id',
+                                    label: 'name',
+                                    checkStrictly: true
+                                }"
+                                collapse-tags
+                                collapse-tags-tooltip
+                                :show-all-levels="false"
+                                clearable
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="examine_switch_1 = false">取消</el-button>
+                    <el-button @click="examineSure_1">确定</el-button>
+                </span>
+            </template>
+        </el-dialog>
         <!-- 投诉结案 -->
         <el-dialog
             v-model="setting_switch"
             title="结案"
-            width="50%"
+            width="400px"
         >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">是否确认结案</div>
-                    <div class="right">
-                        <el-radio v-model="statusValue_1" label="8">是</el-radio>
-                        <el-radio v-model="statusValue_1" label="0">否</el-radio>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">留言</div>
-                    <!-- <div class="right">{{ dataForm.item.content }}</div> -->
-                    <el-input v-model="dataForm.item.content" :autosize="{ minRows: 2, maxRows: 6 }" type="textarea" class="right" />
-                </div>
-            </div>
+            <el-row>
+                <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item
+                        label-width="100px"
+                        label="是否确认结案"
+                        :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
+                    >
+                        <div class="m-l-20">
+                            <el-radio v-model="statusValue_1" label="99">是</el-radio>
+                            <el-radio v-model="statusValue_1" label="0">否</el-radio>
+                        </div>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="setting_switch = false">取消</el-button>
@@ -520,13 +707,13 @@ import {
     // APIpostComment,
     APIgetCommentDetails,
     APIputComplaint
-    // APIpostComplaint
 } from '@/api/custom/custom.js'
 const dataForm = reactive({
     item: {
         uinfo: {
             name: ''
-        }
+        },
+        zone: { name: '' }
     }
 })
 const popup_3 = reactive({
@@ -544,28 +731,26 @@ const replayLogable = reactive({
     item: {}
 })
 // 投诉详情
-APIgetComplaintDetails(route.query.id, { log: 'all' }).then(res => {
-    console.log(res)
-
-    dataForm.item = res
-    // console.log(res.totlogs)
-    console.log(dataForm.item)
-    console.log(dataForm.item.totlogs)
-    res.affixs = []
-    for (let i in res.affix) {
-        res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])
-    }
-    for (let i in res.totlogs) {
-        res.totlogs[i].logable.affixs = []
-        for (let j in res.totlogs[i].logable.affix) {
-            res.totlogs[i].logable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.totlogs[i].logable.affix[j])
+const getComplaintDetailsFunc = () => {
+    APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' }).then(res => {
+        console.log(res)
+        dataForm.item = res
+        res.affixs = []
+        for (let i in res.affix) {
+            res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])
         }
-    }
-    Name.value = dataForm.item.uinfo.name
-    replayTotlogs.item = dataForm.item.totlogs
-    replayLogable.item = replayTotlogs.item[0].logable
-    console.log(replayTotlogs.item)
-})
+        for (let i in res.totlogs) {
+            res.totlogs[i].logable.affixs = []
+            for (let j in res.totlogs[i].logable.affix) {
+                res.totlogs[i].logable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.totlogs[i].logable.affix[j])
+            }
+        }
+        Name.value = dataForm.item.uinfo.name
+        replayTotlogs.item = dataForm.item.totlogs
+        replayLogable.item = replayTotlogs.item[0].logable
+        console.log(replayTotlogs.item)
+    })
+}
 const data = {
     content: '对方能够代加工',
     score: 9,
@@ -581,39 +766,132 @@ const examine_switch = ref(false)
 //     examine_switch.value = true
 // }
 // 投诉审核确认
-const statusValue = ref('')
+const statusValue = ref('1')
+const examineFunk = () => {
+    examine_switch.value = true
+    delete dataForm.item.catpro
+    delete dataForm.item.catob
+    console.log(dataForm.item.status)
+}
 const examineSure = () => {
-    dataForm.item.status = parseInt(statusValue.value)
-    if (dataForm.item.status == 1) {
+    console.log(dataForm.item.status)
+    if (dataForm.item.status == 0) {
+        dataForm.item.status = 1
         APIputComplaint(route.query.id, dataForm.item).then(res => {
             ElMessage.success('已审核成功！')
+            refreshFunc()
         })
-    } else {}
+    } else if (dataForm.item.status == 2) {
+        dataForm.item.status = 3
+        APIputComplaint(route.query.id, dataForm.item).then(res => {
+            ElMessage.success('已受理成功！')
+            refreshFunc()
+        })
+    } else {
+        dataForm.item.status = 7
+        APIputComplaint(route.query.id, dataForm.item).then(res => {
+            ElMessage.success('已办完！')
+            refreshFunc()
+        })
+    }
     examine_switch.value = false
+}
+const handleClick = row => {
+    console.log(row)
+    console.log(activeName.value)
+}
+// 确认
+const sureFunk = () => {
+    examine_switch_1.value = true
+}
+const examine_switch_1 = ref(false)
+const examineSure_1 = () => {
+    if (statusValue.value == 1) {
+        dataForm.item.status = 2
+        APIputComplaint(route.query.id, dataForm.item).then(res => {
+            ElMessage.success('已确认！')
+            refreshFunc()
+        })
+        examine_switch_1.value = false
+    }
+}
+import {
+    APIgetComplaintPlusList,
+    APIputComplaintPlus,
+    APIdeleteComplaintPlus
+} from '@/api/custom/custom.js'
+// 追问
+const questioning_list = reactive({
+    arr: []
+})
+const questioning_from = reactive({
+    item: {}
+})
+const questioning_switch = ref(false)
+const questioningFunc = () => {
+    let params = {
+        page: data_1.page,
+        per_page: data_1.per_page,
+        cid: route.query.id
+    }
+    APIgetComplaintPlusList(params).then(res => {
+        console.log(res)
+        questioning_list.arr = res
+        questioning_switch.value = true
+    })
+}
+// 追问审核
+const questioning_examineSwitch = ref(false)
+const examineFunk_2 = row => {
+    questioning_from.item.id = row.id
+    questioning_examineSwitch.value = true
+    // APIputComplaintPlus()
+}
+const examineSure_2 = () => {
+    APIputComplaintPlus(questioning_from.item.id, questioning_from.item).then(res => {
+        if (questioning_from.item.status == 20) {
+            ElMessage.success('已审核成功')
+        } else {
+            ElMessage.warning('已审核失败')
+        }
+        questioning_examineSwitch.value = false
+        questioningFunc()
+        refreshFunc()
+    })
+}
+// 删除追问
+const toggleDelete = row => {
+    APIdeleteComplaintPlus(row.id).then(res => {
+        ElMessage.success('删除成功')
+        questioningFunc()
+        refreshFunc()
+    })
 }
 // 投诉回复
 const replyFunk = () => {
-    console.log(replayLogable.item)
-    dataForm.item.status = 1
+    // console.log(replayLogable.item)
+    // dataForm.item.status = 1
     popup_3.msg = {}
     popup_3.tid = ''
-    popup_3.form = {
-        caid: replayLogable.item.id,
-        content: replayLogable.item.content,
-        affix: replayLogable.item.affix,
-        type: replayLogable.item.type,
-        flg: replayLogable.item.flg
-    }
+    // popup_3.form = {
+    //     caid: replayLogable.item.id,
+    //     content: replayLogable.item.content,
+    //     affix: replayLogable.item.affix,
+    //     type: replayLogable.item.type,
+    //     flg: replayLogable.item.flg
+    // }
+    popup_3.form = {}
     popup_3.switch = true
-    let arr = []
-    for (let i in replayLogable.item.affix) {
-        if (replayLogable.item.affix[i]) {
-            arr.push({
-                name: replayLogable.item.affix[i]
-            })
-        }
-    }
-    file_list3.value = arr
+    file_list3.value = []
+    // let arr = []
+    // for (let i in replayLogable.item.affix) {
+    //     if (replayLogable.item.affix[i]) {
+    //         arr.push({
+    //             name: replayLogable.item.affix[i]
+    //         })
+    //     }
+    // }
+    // file_list3.value = arr
 }
 // 投诉转办
 const popup_1 = reactive({
@@ -635,7 +913,6 @@ const popupFuncAdd = val => {
     popup_1.msg = {}
     APIpostAllot(popup_1.form.id, { type: popup_1.form.type }).then(res => {
         console.log(res)
-
         ElMessage.success('转办成功')
         popup_1.switch = false
         refreshFunc()
@@ -652,14 +929,13 @@ const setting_switch = ref(false)
 //     })
 // }
 // 投诉结案确认
-const statusValue_1 = ref('')
+const statusValue_1 = ref('99')
 const settingSure = () => {
     dataForm.item.status = parseInt(statusValue_1.value)
-    if (dataForm.item.status == 8) {
-        APIputComplaint(route.query.id, dataForm.item).then(() => {
-            ElMessage.success('已结案！')
-        })
-    } else {}
+    APIputComplaint(route.query.id, dataForm.item).then(() => {
+        ElMessage.success('已结案！')
+        refreshFunc()
+    })
     setting_switch.value = false
 }
 const file_list3 = ref([])
@@ -687,12 +963,21 @@ const popupFuncAdd3 = () => {
     popup_3.msg = {}
     getFilesKeys(files, 'folder').then(arr => {
         data.affix = file_key.concat(arr)
+
         APIpostDealAdd(route.query.id, data).then(res => {
-            ElMessage.success('回复成功')
+            if (dataForm.item.status !== 6 && dataForm.item.status !== 7 && dataForm.item.status != 8) {
+                dataForm.item.status = 6
+                APIputComplaint(route.query.id, dataForm.item).then(res => {
+                    ElMessage.success('回复成功')
+                })
+                refreshFunc()
+            }
+            console.log(dataForm.item.status)
             popup_3.switch = false
-            APIgetComplaintDetails(route.query.id).then()
+            // APIgetComplaintDetails(route.query.id).then()
         })
     })
+
     return false
     // dealFuncAddPut(data)
 }
@@ -754,6 +1039,7 @@ const popup2FnAdd = () => {
         ElMessage.success('回复成功')
         popup2.switch = false
         getFuncCommentList()
+        refreshFunc()
     }).catch(err => {
         ElMessage.error('回复失败')
     })
@@ -810,6 +1096,7 @@ const clickFuncAddVote = () => {
     APIputComment(data_1.add_form.id, data_1.add_form).then(res => {
         console.log(res)
         getFuncCommentList()
+        refreshFunc()
         data_1.add_switch = false
         if (data_1.add_form == 30) {
             ElMessage.error('审核失败')
@@ -870,6 +1157,8 @@ const getFuncCommentList = () => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     getFuncCommentList()
+    // APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' })
+    getComplaintDetailsFunc()
 }
 watch(() => {
     refreshFunc()
@@ -917,56 +1206,68 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
 import { Delete, Edit } from '@element-plus/icons-vue'
 </script>
 <style scoped>
-    .sno {
-        color: #b7b1b1;
-    }
-    .btn1 {
-        cursor: default;
-    }
-    .btn2 {
-        margin: 0 50px 30px 0;
-    }
-    .content {
-        margin-left: -33px;
-    }
-    .btn3 {
-        margin-right: 20px;
-    }
-    .box {
-        display: flex;
-        justify-content: space-between;
-    }
-    .el-table th:first-child .cell {
-        display: none;
-    }
-    .el-button + .el-button {
-        margin-left: 0;
-    }
-    .el-button {
-        margin-right: 20px;
-    }
-    .closed {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        width: 100%;
-    }
-    .radioGroup {
-        margin-left: 20px;
-        display: inline-block;
-    }
-    .isComment {
-        display: flex;
-        align-items: center;
-        margin: 10px 0 15px;
-    }
-    .image {
-        width: 100px;
-        height: 100px;
-        margin-right: 10px;
-    }
-
-    /* .el-button--primary {
-        margin-right: 20px;
-    } */
+.sno {
+    color: #b7b1b1;
+}
+.btn1 {
+    cursor: default;
+}
+.btn2 {
+    margin: 0 50px 30px 0;
+}
+.content {
+    margin-left: -33px;
+}
+.btn3 {
+    margin-right: 20px;
+}
+.box {
+    display: flex;
+    justify-content: space-between;
+}
+.el-table th:first-child .cell {
+    display: none;
+}
+.el-button + .el-button {
+    margin-left: 0;
+}
+.el-button {
+    margin-right: 20px;
+}
+.closed {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+.radioGroup {
+    margin-left: 20px;
+    display: inline-block;
+}
+.isComment {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 15px;
+}
+.switchStyle ::v-deep .el-switch__label {
+    position: absolute !important;
+    display: none !important;
+    color: #fff !important;
+    width: 80px;
+}
+.switchStyle ::v-deep .el-switch__label--left {
+    z-index: 9 !important;
+    left: 17px !important;
+}
+.switchStyle ::v-deep .el-switch__label--right {
+    z-index: 9 !important;
+    left: -5px !important;
+}
+.switchStyle ::v-deep .el-switch__label.is-active {
+    display: block !important;
+}
+.switchStyle.el-switch ::v-deep .el-switch__core,
+.switchStyle ::v-deep .el-switch__label {
+    width: 60px !important;
+}
 </style>

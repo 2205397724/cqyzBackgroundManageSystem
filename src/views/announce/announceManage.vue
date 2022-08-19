@@ -85,7 +85,7 @@
                 <el-table-column label="状态">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="large" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="large" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
@@ -394,7 +394,7 @@
         <el-dialog
             v-model="switch_pass"
             title="审核"
-            width="50%"
+            width="600px"
         >
             <el-form
                 ref="ruleFormRef"
@@ -409,7 +409,7 @@
                 <el-row v-else :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
-                            label="审核申请"
+                            label="审核状态"
                             label-width="100px"
                             :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
                         >
@@ -440,7 +440,7 @@
                         >
                             <el-input
                                 v-model="from_pass.obj.reply"
-                                :autosize="{ minRows: 2, maxRows: 10 }"
+                                :autosize="{ minRows: 3, maxRows: 10 }"
                                 type="textarea"
                                 placeholder="审核回执内容"
                                 :disabled="total1>=1 ? true: false"
@@ -452,7 +452,7 @@
             <template #footer>
                 <div class="footer">
                     <el-button @click="switch_pass=false">取消</el-button>
-                    <el-button v-if="gongshixiangqing.obj.status != opts_all.obj.status_all[1]" type="primary" @click="passToAuditFunc_1">确定</el-button>
+                    <el-button type="primary" @click="passToAuditFunc_1">确定</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -894,6 +894,7 @@ const passToAuditFunc_1 = () => {
     console.log(from_pass.obj)
     APIputArchiveAudit(Examine_id.value, from_pass.obj).then(res => {
         ElMessage.success('审核成功')
+        switch_pass.value = false
         getTabListFunc()
     })
 }
