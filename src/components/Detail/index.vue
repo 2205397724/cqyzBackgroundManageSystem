@@ -398,10 +398,10 @@
       <template #footer>
         <div
           style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                align-items: center;
+                                                width: 100%;
 "
         >
           <el-button @click="switch_comment = false">取消</el-button>
@@ -460,10 +460,10 @@
       <template #footer>
         <div
           style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                align-items: center;
+                                                width: 100%;
 "
         >
           <el-button @click="switch_comment_detail = false">取消</el-button>
@@ -643,10 +643,11 @@ const rangeFunc = () => {
   let params = {
     page: 1,
     per_page: 15,
-    sid: props.id,
+    sid: props.id
   };
   APIgetSurveyRange(params)
-    .then((res) => {
+    .then(res => {
+        console.log(res)
       let newarr = [];
       res.data.forEach((item) => {
         let check = newarr.every((items) => {
@@ -1095,8 +1096,9 @@ const dialogModifyComment = (content, status) => {
     .region_box {
         .region_box_item {
             text-align: center;
-            background-color: #ecf5ff;
-            color: #409eff;
+            background-color: #409eff;
+            // color: #ecf5ff;
+            color: white;
             width: 85%;
             height: 40px;
             font-size: 15px;
@@ -1108,13 +1110,15 @@ const dialogModifyComment = (content, status) => {
             .region_box_item_del {
                 width: 20px;
                 height: 20px;
-                line-height: 19px;
+                line-height: 16px;
                 position: absolute;
                 right: -6px;
                 top: -7px;
                 border-radius: 50%;
-                border: 1px solid #409eff;
+                border: 2px solid red;
                 cursor: pointer;
+                font-weight: bold;
+                color: red;
             }
         }
     }

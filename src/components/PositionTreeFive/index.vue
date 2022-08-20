@@ -22,6 +22,7 @@
             accordion
             @check="handleCheck"
             @check-change="handleCheckChange"
+            @node-click="nodeClick"
           />
         </el-scrollbar>
       </div>
@@ -56,9 +57,7 @@
         <!-- <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;" effect="dark">
           <el-option :label="item.value" :value="item.type" v-for="item in do_type.item" :key="item.type"></el-option>
         </el-select> -->
-        <el-button type="primary" @click="submit"
-          >确认</el-button
-        >
+        <el-button type="primary" @click="submit">确认</el-button>
       </template>
     </el-dialog>
   </div>
@@ -100,7 +99,9 @@ const selected_region = reactive({
   arr: [],
 });
 const unitsDetail = reactive({
-  item: {},
+  item: {
+    name:""
+  },
 });
 const floors = reactive({
   arr: [],
@@ -111,7 +112,7 @@ const tree_props = {
   isLeaf: "leaf",
 };
 //选择可操作类型
-const selected_do_type=ref(2)
+const selected_do_type = ref(2);
 const do_type = reactive({
   item: [
     {
@@ -149,7 +150,7 @@ const filterNode = (value, data, node) => {
 const house_detail = reactive({
   item: {},
 });
-//选择的目标
+//选择的房屋
 const selectedHouseFun = (houseid) => {
   if (selected_house.arr.includes(houseid)) {
     let index = selected_house.arr.indexOf(houseid);
@@ -159,11 +160,11 @@ const selectedHouseFun = (houseid) => {
   }
 };
 //默认选择地区数组
-const defaultChecked=reactive({arr:[]})
+const defaultChecked = reactive({ arr: [] });
 //提交选择
 const submit = () => {
   let all = treeRef.value.getCheckedNodes();
-  console.log(all)
+  console.log(all);
   all.forEach((item) => {
     switch (item.type) {
       case "region":
@@ -241,6 +242,37 @@ const submit = () => {
       ElMessage.error("设置失败请重试");
     });
 };
+//点击节点触发
+const nodeClick = (node, treenode, event) => {
+  console.log(node);
+  if(node.type!=="units"){
+    showFamily.value=false
+    return
+  }
+  if (node.type == "units") {
+    let name=node.name
+    unitsDetail.item.name=name
+    showFamily.value = true;
+    APIgetHouseListSort({
+      houseable_type: "units",
+      houseable_id: node.id,
+      sid: props.surveyid,
+      can_type: 2,
+    }).then((res) => {
+      console.log(res);
+      floors.arr = res.floors;
+      let selected = [];
+      floors.arr.forEach((item) => {
+        item.houses.forEach((items) => {
+          if (items.can_exist) {
+            selected.push(items.id);
+          }
+        });
+      });
+      selected_house.arr = selected;
+    });
+  }
+};
 const loadNode = (node, resolve) => {
   if (node.level == 0) {
     nodeCopy = node;
@@ -250,17 +282,21 @@ const loadNode = (node, resolve) => {
   }
   switch (node.data.next_type) {
     case "region":
-      APIgetChinaRegion({ p_code: node.data.id ,sid:props.surveyid,can_type:2}).then((res) => {
+      APIgetChinaRegion({
+        p_code: node.data.id,
+        sid: props.surveyid,
+        can_type: 2,
+      }).then((res) => {
         treeDetail.arr = res.data;
         console.log(res);
         let tree_arr = [];
         if (res.status == 200) {
           for (let i in res.data) {
             if (res.data[i].level < 5) {
-              if(res.data[i].can_exist){
-                console.log(res.data[i])
-                defaultChecked.arr.push(res.data[i].code)
-                selected_all.arr.push(res.data[i].code)
+              if (res.data[i].can_exist) {
+                console.log(res.data[i]);
+                defaultChecked.arr.push(res.data[i].code);
+                selected_all.arr.push(res.data[i].code);
                 treeRef.value.setCheckedKeys(selected_all.arr);
               }
               tree_arr.push({
@@ -269,12 +305,12 @@ const loadNode = (node, resolve) => {
                 next_type: "region",
                 id: res.data[i].code,
                 code: res.data[i].code,
-                can_exist:res.data[i].can_exist
+                can_exist: res.data[i].can_exist,
               });
             } else {
-                if(res.data[i].can_exist){
-                defaultChecked.arr.push(res.data[i].code)
-                selected_all.arr.push(res.data[i].code)
+              if (res.data[i].can_exist) {
+                defaultChecked.arr.push(res.data[i].code);
+                selected_all.arr.push(res.data[i].code);
                 treeRef.value.setCheckedKeys(selected_all.arr);
               }
               tree_arr.push({
@@ -282,30 +318,28 @@ const loadNode = (node, resolve) => {
                 type: "region",
                 next_type: "zone",
                 id: res.data[i].code,
-                code:res.data[i].code
+                code: res.data[i].code,
               });
             }
           }
         }
-                console.log(defaultChecked.arr)
+        console.log(defaultChecked.arr);
         resolve(tree_arr);
         emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
       });
       break;
     case "zone":
       APIgetResidentialListHouse({
-        page: 1,
-        per_page: 7,
         china_code: node.data.id,
-        sid:props.surveyid,
-        can_type:2
+        sid: props.surveyid,
+        can_type: 2,
       }).then((res) => {
         console.log(res);
         let tree_arr = [];
         for (let i in res) {
-          if(res[i].can_exist){
-            defaultChecked.arr.push(res[i].china_code)
-            selected_all.arr.push(res[i].id)
+          if (res[i].can_exist) {
+            defaultChecked.arr.push(res[i].china_code);
+            selected_all.arr.push(res[i].id);
             treeRef.value.setCheckedKeys(selected_all.arr);
           }
           tree_arr.push({
@@ -314,7 +348,7 @@ const loadNode = (node, resolve) => {
             next_type: "building",
             id: res[i].id,
             code: res[i].id,
-            can_exist:res[i].can_exist
+            can_exist: res[i].can_exist,
           });
         }
         resolve(tree_arr);
@@ -324,17 +358,15 @@ const loadNode = (node, resolve) => {
       break;
     case "building":
       APIgetBuildListHouse({
-        page: 1,
-        per_page: 7,
         zone_id: node.data.id,
-        sid:props.surveyid,
-        can_type:2
+        sid: props.surveyid,
+        can_type: 2,
       }).then((res) => {
         let tree_arr = [];
         for (let i in res) {
-            if(res[i].can_exist){
-            defaultChecked.arr.push(res[i].id)
-            selected_all.arr.push(res[i].id)
+          if (res[i].can_exist) {
+            defaultChecked.arr.push(res[i].id);
+            selected_all.arr.push(res[i].id);
             treeRef.value.setCheckedKeys(selected_all.arr);
           }
           tree_arr.push({
@@ -342,8 +374,8 @@ const loadNode = (node, resolve) => {
             type: "building",
             next_type: "units",
             id: res[i].id,
-            code:res[i].id,
-            can_exist:res[i].can_exist
+            code: res[i].id,
+            can_exist: res[i].can_exist,
           });
         }
         emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
@@ -352,17 +384,15 @@ const loadNode = (node, resolve) => {
       break;
     case "units":
       APIgetUnitsListHouse({
-        page: 1,
-        per_page: 7,
         building_id: node.data.id,
-        sid:props.surveyid,
-        can_type:2
+        sid: props.surveyid,
+        can_type: 2,
       }).then((res) => {
         let tree_arr = [];
         for (let i in res) {
-            if(res[i].can_exist){
-            defaultChecked.arr.push(res[i].id)
-            selected_all.arr.push(res[i].id)
+          if (res[i].can_exist) {
+            defaultChecked.arr.push(res[i].id);
+            selected_all.arr.push(res[i].id);
             treeRef.value.setCheckedKeys(selected_all.arr);
           }
           tree_arr.push({
@@ -370,43 +400,15 @@ const loadNode = (node, resolve) => {
             id: res[i].id,
             type: "units",
             next_type: "house",
-            code:res[i].id,
-            can_exist:res[i].can_exist,
-            leaf:true
+            code: res[i].id,
+            can_exist: res[i].can_exist,
+            leaf: true,
           });
         }
         resolve(tree_arr);
         emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
       });
       break;
-    //   case "house":
-    //   APIgetHouseListSort({
-    //     page: 1,
-    //     per_page: 7,
-    //     houseable_type: "units",
-    //     houseable_id: node.data.id,
-    //     sid:props.surveyid,
-    //     can_type:2,
-    //   }).then((res) => {
-    //     let tree_arr = [];
-    //     for (let i in res) {
-    //         if(res[i].can_exist){
-    //         defaultChecked.arr.push(res[i].id)
-    //       }
-    //       tree_arr.push({
-    //         name: res[i].name,
-    //         id: res[i].id,
-    //         type: "house",
-    //         next_type: "house",
-
-    //         can_exist:res[i].can_exist,
-    //         leaf: true
-    //       });
-    //     }
-    //     resolve(tree_arr);
-    //     emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
-    //   });
-    //   break;
   }
 };
 const treeRef = ref(null);
@@ -423,22 +425,100 @@ watch(
 const handleCheck = (data, checked) => {
   //点击复选框触发
   selected_all.arr.push(data.code); //选中的数组往里面push值
-  console.log(selected_all.arr)
-  treeRef.value.setCheckedKeys(selected_all.arr);
+  //控制选择父节点，子节点取消
+  if (data.type == "region") {
+    treeRef.value.setCheckedKeys(selected_all.arr);
+    APIgetChinaRegion({
+        p_code:data.code,
+        sid:props.surveyid,
+        can_type:2
+    }).then(res=>{
+        console.log(res)
+        let can_exist_true=[]
+        let delarr=[]
+         res.data.forEach(item=>{
+            can_exist_true.push(item.code)
+        })
+        can_exist_true.forEach(item=>{
+            if(selected_all.arr.indexOf(item)!=-1){
+                let index=selected_all.arr.indexOf(item)
+                let del=selected_all.arr.splice(index,1)
+                delarr.push(del)
+                console.log(del)
+                // treeRef.value.setCheckedKeys(selected_all.arr)
+            }
+        })
+        selected_all.arr=selected_all.arr.filter(item=>{
+            return !delarr.includes(item)
+        })
+        treeRef.value.setCheckedKeys(selected_all.arr)
+    })
+  }
+  if (data.type == "zone") {
+    APIgetBuildListHouse({
+        zone_id: data.id,
+        sid: props.surveyid,
+        can_type: 2,
+    }).then(res=>{
+        console.log(res)
+        let can_exist_true=[]
+        let delarr=[]
+         res.forEach(item=>{
+            can_exist_true.push(item.id)
+        })
+        can_exist_true.forEach(item=>{
+            if(selected_all.arr.indexOf(item)!=-1){
+                let index=selected_all.arr.indexOf(item)
+                let del=selected_all.arr.splice(index,1)
+                delarr.push(del)
+                console.log(del)
+                // treeRef.value.setCheckedKeys(selected_all.arr)
+            }
+        })
+        selected_all.arr=selected_all.arr.filter(item=>{
+            return !delarr.includes(item)
+        })
+        treeRef.value.setCheckedKeys(selected_all.arr)
+    })
+  }
+  if (data.type == "building") {
+    APIgetUnitsListHouse({
+        building_id: data.id,
+        sid: props.surveyid,
+        can_type: 2,
+    }).then(res=>{
+        console.log(res)
+        let can_exist_true=[]
+        let delarr=[]
+         res.forEach(item=>{
+            can_exist_true.push(item.id)
+        })
+        can_exist_true.forEach(item=>{
+            if(selected_all.arr.indexOf(item)!=-1){
+                let index=selected_all.arr.indexOf(item)
+                let del=selected_all.arr.splice(index,1)
+                delarr.push(del)
+                console.log(del)
+            }
+        })
+        selected_all.arr=selected_all.arr.filter(item=>{
+            return !delarr.includes(item)
+        })
+        treeRef.value.setCheckedKeys(selected_all.arr)
+    })
+  }
   emit("checkFunc", data);
 };
 const handleCheckChange = (data, selfSelected, childrenSelected) => {
   //点击节点触发
   selected_all.arr.forEach((item, index) => {
     //实现多选时复选框二次点击取消选中
-    if (item== data.code) {
+    if (item == data.code) {
       selected_all.arr.splice(index, 1);
       treeRef.value.setCheckedKeys(selected_all.arr);
     }
   });
-  if (data.type == "region") {
-    console.log(data);
-  }
+
   if (data.type == "zone") {
     APIgetResidentialDetailsHouse(data.id).then((res) => {
       console.log(res);
@@ -451,29 +531,29 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
       emit("checkChangeFunc", res);
     });
   }
-  if (data.type == "units") {
-    showFamily.value = true;
-    emit("checkChangeFunc", data);
-    unitsDetail.item = data;
-    APIgetHouseListSort({
-      houseable_type: "units",
-      houseable_id: data.id,
-      sid:props.surveyid,
-      can_type:2
-    }).then((res) => {
-      console.log(res);
-      floors.arr = res.floors;
-      let selected=[]
-      floors.arr.forEach(item=>{
-        item.houses.forEach(items=>{
-            if(items.can_exist){
-                selected.push(items.id)
-            }
-        })
-      })
-      selected_house.arr=selected
-    });
-  }
+//   if (data.type == "units") {
+//     showFamily.value = true;
+//     emit("checkChangeFunc", data);
+//     unitsDetail.item.name= data.name
+//     APIgetHouseListSort({
+//       houseable_type: "units",
+//       houseable_id: data.id,
+//       sid: props.surveyid,
+//       can_type: 2,
+//     }).then((res) => {
+//       console.log(res);
+//       floors.arr = res.floors;
+//       let selected = [];
+//       floors.arr.forEach((item) => {
+//         item.houses.forEach((items) => {
+//           if (items.can_exist) {
+//             selected.push(items.id);
+//           }
+//         });
+//       });
+//       selected_house.arr = selected;
+//     });
+//   }
 };
 </script>
 <style lang="scss">
