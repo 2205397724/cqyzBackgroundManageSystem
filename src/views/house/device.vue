@@ -1,6 +1,6 @@
 <template>
     <div class="articletparticletpl">
-        <page-main>
+        <page-main style="overflow: hidden;">
             <div>
                 <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加设备</el-button>
             </div>
@@ -142,16 +142,17 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <div class="p-t-20">
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
-            </div>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -318,7 +319,7 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="50%"
+            width="70%"
             @closed="closeDialog"
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -331,7 +332,7 @@
                             </div>
                             <div class="item">
                                 <div class="left" style="width: 128px;">小区>楼栋>单元</div>
-                                <div class="right" style="width: 10%;">{{ zoneName.name }}</div>
+                                <div class="right" style="width: 80px;">{{ zoneName.name }}</div>
                                 <div v-if="data_details.item.building" style="display: inline-block;margin-right: 15px;">{{ buildingName.name }}</div>
                                 <div v-if="data_details.item.unit" style="display: inline-block;">{{ unitName.name }}</div>
                             </div>
@@ -379,23 +380,50 @@
                     </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="档案信息" name="2">
-                    <el-scrollbar height="400px">
+                    <el-button type="primary" class="m-l-10 m-b-10" :icon="Plus" @click="addArchiveFunc">添加档案</el-button>
+                    <el-scrollbar height="600px">
                         <div>
                             <el-timeline v-for="(item,index) in data_archive.arr" :key="index">
                                 <el-timeline-item :timestamp="item.created_at" placement="top">
+                                    <div class="put_del">
+                                        <el-button type="primary" size="small m-r-10" @click="modifyArchiveFunc(item)">修改</el-button>
+                                        <el-popconfirm
+                                            title="确定要删除当前项么?" cancel-button-type="info"
+                                            @confirm="deleteArchiveFunc(item)"
+                                        >
+                                            <template #reference>
+                                                <el-button type="danger" size="small">
+                                                    删除
+                                                </el-button>
+                                            </template>
+                                        </el-popconfirm>
+                                    </div>
                                     <el-card>
                                         <div class="details-box">
                                             <div class="item">
                                                 <div class="left">档案名称</div>
                                                 <div class="right">{{ item.title }}</div>
                                             </div>
-                                            <div class="item">
-                                                <div class="left">档案id</div>
-                                                <div class="right">{{ item.id }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">设备id</div>
-                                                <div class="right">{{ item.did }}</div>
+                                            <!-- <div
+                                                v-if="item.content&&item.content.length>=1" class="item"
+                                            >
+                                                <div class="left">
+                                                    附件
+                                                </div>
+
+                                                <div class="right">
+                                                    <el-image
+                                                        v-for="(j,i) in item.content" :key="i" :preview-src-list="item.affixs" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+j.key" fit="cover"
+                                                    />
+                                                </div>
+                                            </div> -->
+                                            <div v-if="item.content&&item.content.length>=1" class="item">
+                                                <div class="left">附件</div>
+                                                <div class="right">
+                                                    <div v-for="(item,i) in item.content" :key="i">
+                                                        <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="item">
                                                 <div class="left">是否显示</div>
@@ -415,23 +443,46 @@
                     </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="维保记录" name="3">
-                    <el-scrollbar height="400px">
+                    <el-button type="primary" class="m-l-10 m-b-10" :icon="Plus" @click="addRepairFunc">添加维修</el-button>
+                    <el-scrollbar height="600px">
                         <div>
                             <el-timeline v-for="(item,index) in data_repair.arr" :key="index">
                                 <el-timeline-item :timestamp="item.created_at" placement="top">
+                                    <div class="put_del">
+                                        <el-button type="primary" size="small m-r-10" @click="modifyRepairFunc(item)">修改</el-button>
+                                        <el-popconfirm
+                                            title="确定要删除当前项么?" cancel-button-type="info"
+                                            @confirm="deleteRepairFunc(item)"
+                                        >
+                                            <template #reference>
+                                                <el-button type="danger" size="small">
+                                                    删除
+                                                </el-button>
+                                            </template>
+                                        </el-popconfirm>
+                                    </div>
                                     <el-card>
                                         <div class="details-box">
                                             <div class="item">
                                                 <div class="left">维保名称</div>
                                                 <div class="right">{{ item.title }}</div>
                                             </div>
-                                            <div class="item">
-                                                <div class="left">维保id</div>
-                                                <div class="right">{{ item.id }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">设备id</div>
-                                                <div class="right">{{ item.did }}</div>
+                                            <div
+                                                v-if="item.affix&&item.affix.length>=1" class="item"
+                                            >
+                                                <div class="left">
+                                                    附件
+                                                </div>
+
+                                                <div class="right">
+                                                    <!-- 两种模式任君选择 -->
+                                                    <el-image
+                                                        v-for="(j,i) in item.affix" :key="i" :preview-src-list="item.affixs" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+j" fit="cover"
+                                                    />
+                                                <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
+                        </div> -->
+                                                </div>
                                             </div>
                                             <div class="item">
                                                 <div class="left">详细记录</div>
@@ -440,14 +491,6 @@
                                             <div class="item">
                                                 <div class="left">类型</div>
                                                 <div class="right">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">是否显示</div>
-                                                <div class="right">{{ getOptVal(opts_all.obj.device_show,item.show) }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">更新时间</div>
-                                                <div class="right">{{ item.updated_at }}</div>
                                             </div>
                                         </div>
                                     </el-card>
@@ -462,6 +505,218 @@
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
                 </span>
+            </template>
+        </el-dialog>
+        <!-- 档案修改添加 -->
+        <el-dialog
+            v-model="addArchive.switch"
+            :title="str_title_2"
+            width="50%"
+            @closed="dialogClosed"
+        >
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="from_examine.item"
+                >
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="档案名称"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
+                            >
+                                <el-input
+                                    v-model="addArchive.item.title"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="是否显示"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.show?from_error.msg.show[0]:''"
+                            >
+                                <el-switch
+                                    v-model="addArchive.item.show"
+                                    class="head-btn"
+                                    inline-prompt
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    active-text="是"
+                                    inactive-text="否"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24"><div class="details-tit-sm m-b-10">档案内容</div></el-col>
+                        <el-col :md="24" :lg="24">
+                            <div class="m-b-10">
+                                <el-button type="primary" plain @click="addServiceFunc_1">添加档案内容</el-button>
+                            </div>
+                            <div>
+                                <el-scrollbar :height="addArchive.item.content.length>= 3? '200px': ''">
+                                    <div v-for="(item,i) in addArchive.item.content" :key="i" class="serve-box">
+                                        <el-row :gutter="10">
+                                            <el-col :xs="24" :sm="24">
+                                                <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
+                                                    <el-upload
+                                                        action="***"
+                                                        :auto-upload="false"
+                                                        :file-list="fileListFn(item.key)"
+                                                        :on-change="(file,files)=>{
+                                                            item.key = file
+                                                        }"
+                                                        :on-remove="(file,files)=>{
+                                                            item.key = file
+                                                        }"
+                                                    >
+                                                        <el-button type="primary">选择附件</el-button>
+                                                    </el-upload>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label-width="70px" label="文件类型" :error="from_error.msg&&from_error.msg['content.'+i+'.type']?from_error.msg['content.'+i+'.type'][0]:''">
+                                                    <el-input
+                                                        v-model="item.type"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :xs="12" :sm="12">
+                                                <el-form-item label-width="70px" label="文件名" :error="from_error.msg&&from_error.msg['content.'+i+'.name']?from_error.msg['content.'+i+'.name'][0]:''">
+                                                    <el-input
+                                                        v-model="item.name"
+                                                        placeholder=""
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <div class="delete-service" @click="deleteServiceFunc(i)">
+                                            <el-icon :size="20" color="#F56C6C">
+                                                <el-icon-circle-close />
+                                            </el-icon>
+                                        </div>
+                                    </div>
+                                </el-scrollbar>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="addArchive.switch=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc_2(ruleFormRef)">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 维保修改添加 -->
+        <el-dialog
+            v-model="addRepair.switch"
+            :title="str_title_1"
+            width="50%"
+            @closed="dialogClosed"
+        >
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="addRepair.item"
+                >
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="维保名称"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
+                            >
+                                <el-input
+                                    v-model="addRepair.item.title"
+                                    class="head-btn"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="使用金额"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.money?from_error.msg.money[0]:''"
+                            >
+                                <el-input
+                                    v-model="addRepair.item.money"
+                                    class="head-btn"
+                                >
+                                    <template #append>分</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="类型"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
+                            >
+                                <el-select v-model="addRepair.item.type" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="是否显示"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.show?from_error.msg.show[0]:''"
+                            >
+                                <el-switch
+                                    v-model="addRepair.item.show"
+                                    class="head-btn"
+                                    inline-prompt
+                                    :active-value="1"
+                                    :inactive-value="0"
+                                    active-text="是"
+                                    inactive-text="否"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            <el-form-item
+                                label-width="70px"
+                                label="附件"
+                                :error="from_error.msg&&from_error.msg.affix?from_error.msg.affix[0]:''"
+                            >
+                                <el-upload
+                                    action="***"
+                                    :auto-upload="false"
+                                    :file-list="file_list"
+                                    :on-change="(file,files)=>{
+                                        file_list = files
+                                    }"
+                                    :on-remove="(file,files)=>{
+                                        file_list = files
+                                    }"
+                                >
+                                    <el-button type="primary">选择附件</el-button>
+                                </el-upload>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item label="详细记录" label-width="70px" :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''">
+                                <el-input
+                                    v-model="addRepair.item.content"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="addRepair.switch=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc_1(ruleFormRef)">确定</el-button>
+                </div>
             </template>
         </el-dialog>
     </div>
@@ -597,9 +852,22 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        total.value = res.length
+        // total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
+const flag = ref(false)
 // 搜索
 const searchFunc = () => {
     page.value = 1
@@ -613,7 +881,7 @@ const refreshFunc = () => {
     data_search.obj = {}
     getTabListFunc()
 }
-
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 // 详情
 const getDetailsFunc = val => {
     data_dialog.obj = val
@@ -633,6 +901,12 @@ const getDetailsFunc = val => {
     }
     APIgetDeviceArchiveList(params).then(res => {
         console.log(res)
+        // for (let i in res) {
+        //     res[i].affixs = []
+        //     for (let j in res[i].content) {
+        //         res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].content[j].key)
+        //     }
+        // }
         data_archive.arr = res
         switch_details.value = true
     })
@@ -642,8 +916,14 @@ const getDetailsFunc = val => {
         did: val.id
     }
     APIgetDeviceRepairList(params1).then(res => {
-        console.log(res)
+        for (let i in res) {
+            res[i].affixs = []
+            for (let j in res[i].affix) {
+                res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].affix[j])
+            }
+        }
         data_repair.arr = res
+        console.log(data_repair.arr)
         switch_details.value = true
     })
 
@@ -729,6 +1009,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetDeviceDetails(val.id).then(res => {
+        if (res.unit == '') {
+            delete res.unit
+        }
         from_examine.item = res
         switch_examine.value = true
     })
@@ -744,6 +1027,205 @@ const addServiceFunc = index => {
         'val': ''
     }
     from_examine.item.extra.push(data)
+}
+// 维保
+// 添加
+import {
+    APIpostDeviceRepair,
+    APIputDeviceRepair,
+    APIgetDeviceRepairDetails,
+    APIdeleteDeviceRepair
+} from '@/api/custom/custom.js'
+const file_list = ref([])
+const addRepair = reactive({
+    item: {},
+    switch: false
+})
+const str_title_1 = ref('添加')
+const addRepairFunc = () => {
+    from_error.msg = {}
+    str_title_1.value = '添加'
+    addRepair.item = {
+        extra: []
+    }
+    addRepair.item.did = data_details.item.id
+    file_list.value = []
+    addRepair.switch = true
+}
+const modifyRepairFunc = val => {
+    from_error.msg = {}
+    str_title_1.value = '修改'
+    APIgetDeviceRepairDetails(val.id).then(res => {
+        addRepair.item = res
+        addRepair.item.did = data_details.item.id
+        let arr = []
+        for (let i in res.affix) {
+            if (res.affix[i]) {
+                arr.push({
+                    name: res.affix[i]
+                })
+            }
+        }
+        file_list.value = arr
+        addRepair.switch = true
+    })
+}
+import { getFilesKeys } from '@/util/files.js'
+const fileListFn = val => {
+    if (!val) {
+        return []
+    }
+    if (typeof val == 'string') {
+        return [{
+            name: val
+        }]
+    }
+    return [val]
+}
+// 同意拒绝提交
+const fromFnUpload = () => {
+    if (str_title_1.value == '修改') {
+        console.log(addRepair.item.did)
+        APIputDeviceRepair(addRepair.item.id, addRepair.item).then(res => {
+            getDetailsFunc(data_details.item)
+            ElMessage.success('修改成功')
+            addRepair.switch = false
+        }).catch(err => {
+            ElMessage.error('修改失败')
+        })
+    } else {
+        APIpostDeviceRepair(addRepair.item).then(res => {
+            getDetailsFunc(data_details.item)
+            ElMessage.success('添加成功')
+            addRepair.switch = false
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+    }
+}
+const dialogExamineCloseFunc_1 = () => {
+    from_error.msg = {}
+    let files = []
+    let file_key = []
+    if (file_list.value.length > 0) {
+        for (let i in file_list.value) {
+            if (!file_list.value[i].raw) {
+                file_key.push(file_list.value[i].name)
+            } else {
+                files.push(file_list.value[i].raw)
+            }
+        }
+    }
+    addRepair.item.affix = file_key
+    if (files.length > 0) {
+        getFilesKeys(files, 'folder').then(arr => {
+            addRepair.item.affix = file_key.concat(arr)
+            fromFnUpload()
+        })
+        return false
+    }
+    fromFnUpload()
+}
+// 维保删除
+const deleteRepairFunc = val => {
+    APIdeleteDeviceRepair(val.id).then(res => {
+        getDetailsFunc(data_details.item)
+        ElMessage.success('删除成功')
+    })
+}
+
+// 档案
+// 添加
+import {
+    APIgetDeviceArchiveDetails,
+    APIputDeviceArchive,
+    APIpostDeviceArchive,
+    APIdeleteDeviceArchive
+} from '@/api/custom/custom.js'
+const str_title_2 = ref('添加')
+const addArchive = reactive({
+    switch: false,
+    form: {}
+})
+const addArchiveFunc = () => {
+    from_error.msg = {}
+    str_title_2.value = '添加'
+    addArchive.item = {
+        content: []
+    }
+    addArchive.item.did = data_details.item.id
+    addArchive.switch = true
+}
+// 修改
+const modifyArchiveFunc = val => {
+    from_error.msg = {}
+    str_title_2.value = '修改'
+    APIgetDeviceArchiveDetails(val.id).then(res => {
+        addArchive.item = res
+        addArchive.item.did = data_details.item.id
+        addArchive.switch = true
+    })
+}
+const addServiceFunc_1 = () => {
+    let data = {
+        'name': '',
+        'type': '',
+        'key': ''
+    }
+    addArchive.item.content.push(data)
+}
+// 同意拒绝提交
+const formFnUpload_1 = () => {
+    if (str_title_2.value == '修改') {
+        APIputDeviceArchive(addArchive.item.id, addArchive.item).then(res => {
+            getDetailsFunc(data_details.item)
+            ElMessage.success('修改成功')
+            addArchive.switch = false
+
+        }).catch(err => {
+            ElMessage.error('修改失败')
+        })
+    } else {
+        APIpostDeviceArchive(addArchive.item).then(res => {
+            getDetailsFunc(data_details.item)
+            ElMessage.success('添加成功')
+            addArchive.switch = false
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+    }
+}
+const dialogExamineCloseFunc_2 = () => {
+    from_error.msg = {}
+    let obj = {}
+    for (let i in addArchive.item.content) {
+        if (typeof addArchive.item.content[i].key != 'string') {
+            obj[i] = addArchive.item.content[i].key
+        }
+    }
+    let files = []
+    for (let i in obj) {
+        files.push(obj[i].raw)
+    }
+    if (files.length > 0) {
+        getFilesKeys(files, 'folder').then(arr => {
+            let o = 0
+            for (let i in obj) {
+                addArchive.item.content[i].key = arr[o]
+                o++
+            }
+            formFnUpload_1()
+        })
+        return false
+    }
+    formFnUpload_1()
+}
+// 删除
+const deleteArchiveFunc = val => {
+    APIdeleteDeviceArchive(val.id).then(res => {
+        getDetailsFunc(data_details.item)
+        ElMessage.success('删除成功')
+    })
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -773,14 +1255,21 @@ const addServiceFunc = index => {
     }
 </style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-    .archive {
-        color: #00daff;
-        font-weight: bold;
-        cursor: pointer;
-    }
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.archive {
+    color: #00daff;
+    font-weight: bold;
+    cursor: pointer;
+}
+.put_del {
+    position: absolute;
+    top: 29px;
+    right: 4px;
+}
 </style>

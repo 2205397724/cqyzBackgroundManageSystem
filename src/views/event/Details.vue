@@ -4,7 +4,16 @@
             <div class="size-lx">{{ dataForm.item.title }}</div>
             <p class="size-sm sno">
                 受理编号：{{ dataForm.item.sno }}
-                <el-button round type="success" class="m-10 btn1" size="small">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }}</el-button>
+                <!-- <el-button round type="success" class="m-10 btn1" size="small">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }}</el-button> -->
+                <el-tag v-show="dataForm.item.status == 0" class="m-t-10 btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 1" class="m-t-10 btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 2" class="m-t-10 btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 3" class="m-t-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 5" class="m-t-10 btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 6" class="m-t-10 btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 7" class="m-t-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 8" class="m-t-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 99" class="m-t-10 btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
             </p>
             <div v-if=" dataForm.item.status != 99" class="btn2">
                 <!-- <el-button-group> -->
@@ -23,10 +32,10 @@
                 <el-button v-if="dataForm.item.status == 5 || dataForm.item.status == 6 || dataForm.item.status == 7||dataForm.item.status == 8" type="primary" class="btn3" @click="replyFunk">
                     回复
                 </el-button>
-                <el-button v-if="dataForm.item.status == 6" type="warning" class="btn3" @click="examineFunk">
+                <el-button v-if="dataForm.item.status == 5" type="warning" class="btn3" @click="examineFunk">
                     办完
                 </el-button>
-                <el-button v-if="dataForm.item.status == 6||dataForm.item.status == 7" type="warning" class="btn3" @click="questioningFunc">
+                <el-button v-if="dataForm.item.status == 5||dataForm.item.status == 7" type="warning" class="btn3" @click="questioningFunc">
                     追问
                 </el-button>
                 <el-button v-if="dataForm.item.status !=1 &&dataForm.item.status!=0&&dataForm.item.status!=99 " type="success" class="btn3" @click="setting_switch= true">
@@ -749,6 +758,7 @@ const getComplaintDetailsFunc = () => {
         replayTotlogs.item = dataForm.item.totlogs
         replayLogable.item = replayTotlogs.item[0].logable
         console.log(replayTotlogs.item)
+        getOptsFunc()
     })
 }
 const data = {
@@ -967,9 +977,9 @@ const popupFuncAdd3 = () => {
         APIpostDealAdd(route.query.id, data).then(res => {
             if (dataForm.item.status !== 6 && dataForm.item.status !== 7 && dataForm.item.status != 8) {
                 dataForm.item.status = 6
-                APIputComplaint(route.query.id, dataForm.item).then(res => {
-                    ElMessage.success('回复成功')
-                })
+                // APIputComplaint(route.query.id, dataForm.item).then(res => {
+                //     ElMessage.success('回复成功')
+                // })
                 refreshFunc()
             }
             console.log(dataForm.item.status)
@@ -1181,28 +1191,30 @@ const newcatob = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status', 'comment_scoreper']).then(res => {
-    opts_all.obj = res
-    APIgetTypeList(opts_all.obj.kind[1].key).then(res1 => {
-        console.log(res1)
-        opts_all.obj.problem_type = res1
-        // let newArray = []
-        console.log(dataForm.item.catob)
-        opts_all.obj.problem_type.forEach(item => {
-            if (item.id == dataForm.item.catpro) {
-                newcatpro.item = item
-            }
+const getOptsFunc = () => {
+    getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status', 'comment_scoreper']).then(res => {
+        opts_all.obj = res
+        APIgetTypeList(opts_all.obj.kind[1].key).then(res1 => {
+            console.log(res1)
+            opts_all.obj.problem_type = res1
+            // let newArray = []
+            console.log(dataForm.item.catob)
+            opts_all.obj.problem_type.forEach(item => {
+                if (item.id == dataForm.item.catpro) {
+                    newcatpro.item = item
+                }
+            })
+        })
+        APIgetTypeList(opts_all.obj.kind[2].key).then(res2 => {
+            opts_all.obj.toushu_user_type = res2
+            opts_all.obj.toushu_user_type.forEach(item => {
+                if (item.id == dataForm.item.catob) {
+                    newcatob.item = item
+                }
+            })
         })
     })
-    APIgetTypeList(opts_all.obj.kind[2].key).then(res2 => {
-        opts_all.obj.toushu_user_type = res2
-        opts_all.obj.toushu_user_type.forEach(item => {
-            if (item.id == dataForm.item.catob) {
-                newcatob.item = item
-            }
-        })
-    })
-})
+}
 import { Delete, Edit } from '@element-plus/icons-vue'
 </script>
 <style scoped>
@@ -1216,7 +1228,7 @@ import { Delete, Edit } from '@element-plus/icons-vue'
     margin: 0 50px 30px 0;
 }
 .content {
-    margin-left: -33px;
+    margin-left: -59px;
 }
 .btn3 {
     margin-right: 20px;
