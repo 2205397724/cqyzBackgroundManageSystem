@@ -223,7 +223,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
+                        <!-- <el-form-item
                             label-width="100px"
                             label="状态"
                             :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
@@ -231,7 +231,7 @@
                             <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
                                 <el-option v-for="(item) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
-                        </el-form-item>
+                        </el-form-item> -->
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
