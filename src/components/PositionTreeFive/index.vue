@@ -100,7 +100,7 @@ const selected_region = reactive({
 });
 const unitsDetail = reactive({
   item: {
-    name:""
+    name: "",
   },
 });
 const floors = reactive({
@@ -139,6 +139,7 @@ import {
   APIgetResidentialDetailsHouse,
   APIgetBuildDetailsHouse,
   APIaddSurveyRange,
+  APIdeleteSurveyRange,
 } from "@/api/custom/custom.js";
 let nodeCopy = "";
 // type: region区域 zone小区 building楼栋 units单元
@@ -155,9 +156,12 @@ const selectedHouseFun = (houseid) => {
   if (selected_house.arr.includes(houseid)) {
     let index = selected_house.arr.indexOf(houseid);
     selected_house.arr.splice(index, 1);
+    APIdeleteSurveyRange({sid:props.surveyid,can_type:2,type:1,tgt:[houseid]})
   } else {
+    APIaddSurveyRange({sid:props.surveyid,can_type:2,type:1,tgt:[houseid]})
     selected_house.arr.push(houseid);
   }
+  console.log(selected_house.arr);
 };
 //默认选择地区数组
 const defaultChecked = reactive({ arr: [] });
@@ -222,16 +226,6 @@ const submit = () => {
       })
     );
   }
-  if (selected_house.arr.length > 0) {
-    promiseAll.push(
-      APIaddSurveyRange({
-        sid: props.surveyid,
-        can_type: selected_do_type.value,
-        type: 2,
-        tgt: selected_house.arr,
-      })
-    );
-  }
   Promise.all(promiseAll)
     .then((res) => {
       //并发接口
@@ -245,13 +239,13 @@ const submit = () => {
 //点击节点触发
 const nodeClick = (node, treenode, event) => {
   console.log(node);
-  if(node.type!=="units"){
-    showFamily.value=false
-    return
+  if (node.type !== "units") {
+    showFamily.value = false;
+    return;
   }
   if (node.type == "units") {
-    let name=node.name
-    unitsDetail.item.name=name
+    let name = node.name;
+    unitsDetail.item.name = name;
     showFamily.value = true;
     APIgetHouseListSort({
       houseable_type: "units",
@@ -306,6 +300,7 @@ const loadNode = (node, resolve) => {
                 id: res.data[i].code,
                 code: res.data[i].code,
                 can_exist: res.data[i].can_exist,
+                isDisabled:true
               });
             } else {
               if (res.data[i].can_exist) {
@@ -319,6 +314,7 @@ const loadNode = (node, resolve) => {
                 next_type: "zone",
                 id: res.data[i].code,
                 code: res.data[i].code,
+                isDisabled:true
               });
             }
           }
@@ -349,6 +345,7 @@ const loadNode = (node, resolve) => {
             id: res[i].id,
             code: res[i].id,
             can_exist: res[i].can_exist,
+            isDisabled:true
           });
         }
         resolve(tree_arr);
@@ -376,6 +373,7 @@ const loadNode = (node, resolve) => {
             id: res[i].id,
             code: res[i].id,
             can_exist: res[i].can_exist,
+            isDisabled:true
           });
         }
         emit("checkFunc", { 0: tree_item.value, 1: treeDetail.arr });
@@ -402,6 +400,7 @@ const loadNode = (node, resolve) => {
             next_type: "house",
             code: res[i].id,
             can_exist: res[i].can_exist,
+            isDisabled:false,
             leaf: true,
           });
         }
@@ -424,136 +423,145 @@ watch(
 );
 const handleCheck = (data, checked) => {
   //点击复选框触发
-  selected_all.arr.push(data.code); //选中的数组往里面push值
+  let currentNode=treeRef.value.getNode(data.code)
+  console.log(currentNode)
+  if(currentNode.checked){
+    cancelChildNode(currentNode)
+  }
+  function cancelChildNode(parentNode){
+    for(let i=0;i<parentNode.childNodes.length;i++){
+        console.log(i)
+        parentNode.childNodes[i].checked=false
+        // parentNode.childNodes[i].data.isDisabled=true
+        cancelChildNode(parentNode.childNodes[i])
+    }
+  }
   //控制选择父节点，子节点取消
-  if (data.type == "region") {
-    treeRef.value.setCheckedKeys(selected_all.arr);
-    APIgetChinaRegion({
-        p_code:data.code,
-        sid:props.surveyid,
-        can_type:2
-    }).then(res=>{
-        console.log(res)
-        let can_exist_true=[]
-        let delarr=[]
-         res.data.forEach(item=>{
-            can_exist_true.push(item.code)
-        })
-        can_exist_true.forEach(item=>{
-            if(selected_all.arr.indexOf(item)!=-1){
-                let index=selected_all.arr.indexOf(item)
-                let del=selected_all.arr.splice(index,1)
-                delarr.push(del)
-                console.log(del)
-                // treeRef.value.setCheckedKeys(selected_all.arr)
-            }
-        })
-        selected_all.arr=selected_all.arr.filter(item=>{
-            return !delarr.includes(item)
-        })
-        treeRef.value.setCheckedKeys(selected_all.arr)
-    })
-  }
-  if (data.type == "zone") {
-    APIgetBuildListHouse({
-        zone_id: data.id,
-        sid: props.surveyid,
-        can_type: 2,
-    }).then(res=>{
-        console.log(res)
-        let can_exist_true=[]
-        let delarr=[]
-         res.forEach(item=>{
-            can_exist_true.push(item.id)
-        })
-        can_exist_true.forEach(item=>{
-            if(selected_all.arr.indexOf(item)!=-1){
-                let index=selected_all.arr.indexOf(item)
-                let del=selected_all.arr.splice(index,1)
-                delarr.push(del)
-                console.log(del)
-                // treeRef.value.setCheckedKeys(selected_all.arr)
-            }
-        })
-        selected_all.arr=selected_all.arr.filter(item=>{
-            return !delarr.includes(item)
-        })
-        treeRef.value.setCheckedKeys(selected_all.arr)
-    })
-  }
-  if (data.type == "building") {
-    APIgetUnitsListHouse({
-        building_id: data.id,
-        sid: props.surveyid,
-        can_type: 2,
-    }).then(res=>{
-        console.log(res)
-        let can_exist_true=[]
-        let delarr=[]
-         res.forEach(item=>{
-            can_exist_true.push(item.id)
-        })
-        can_exist_true.forEach(item=>{
-            if(selected_all.arr.indexOf(item)!=-1){
-                let index=selected_all.arr.indexOf(item)
-                let del=selected_all.arr.splice(index,1)
-                delarr.push(del)
-                console.log(del)
-            }
-        })
-        selected_all.arr=selected_all.arr.filter(item=>{
-            return !delarr.includes(item)
-        })
-        treeRef.value.setCheckedKeys(selected_all.arr)
-    })
-  }
+//   if (data.type == "region") {
+//     treeRef.value.setCheckedKeys(selected_all.arr);
+//     APIgetChinaRegion({
+//       p_code: data.code,
+//       sid: props.surveyid,
+//       can_type: 2,
+//     }).then((res) => {
+//       console.log(res);
+//       let can_exist_true = [];
+//       let delarr = [];
+//       res.data.forEach((item) => {
+//         can_exist_true.push(item.code);
+//       });
+//       can_exist_true.forEach((item) => {
+//         if (selected_all.arr.indexOf(item) != -1) {
+//           let index = selected_all.arr.indexOf(item);
+//           let del = selected_all.arr.splice(index, 1);
+//           delarr.push(del);
+//           console.log(del);
+//           // treeRef.value.setCheckedKeys(selected_all.arr)
+//         }
+//       });
+//       selected_all.arr = selected_all.arr.filter((item) => {
+//         return !delarr.includes(item);
+//       });
+//       treeRef.value.setCheckedKeys(selected_all.arr);
+//     });
+//   }
+//   if (data.type == "zone") {
+//     APIgetBuildListHouse({
+//       zone_id: data.id,
+//       sid: props.surveyid,
+//       can_type: 2,
+//     }).then((res) => {
+//       console.log(res);
+//       let can_exist_true = [];
+//       let delarr = [];
+//       res.forEach((item) => {
+//         can_exist_true.push(item.id);
+//       });
+//       can_exist_true.forEach((item) => {
+//         if (selected_all.arr.indexOf(item) != -1) {
+//           let index = selected_all.arr.indexOf(item);
+//           let del = selected_all.arr.splice(index, 1);
+//           delarr.push(del);
+//           console.log(del);
+//           // treeRef.value.setCheckedKeys(selected_all.arr)
+//         }
+//       });
+//       selected_all.arr = selected_all.arr.filter((item) => {
+//         return !delarr.includes(item);
+//       });
+//       treeRef.value.setCheckedKeys(selected_all.arr);
+//     });
+//   }
+//   if (data.type == "building") {
+//     APIgetUnitsListHouse({
+//       building_id: data.id,
+//       sid: props.surveyid,
+//       can_type: 2,
+//     }).then((res) => {
+//       console.log(res);
+//       let can_exist_true = [];
+//       let delarr = [];
+//       res.forEach((item) => {
+//         can_exist_true.push(item.id);
+//       });
+//       can_exist_true.forEach((item) => {
+//         if (selected_all.arr.indexOf(item) != -1) {
+//           let index = selected_all.arr.indexOf(item);
+//           let del = selected_all.arr.splice(index, 1);
+//           delarr.push(del);
+//           console.log(del);
+//         }
+//       });
+//       selected_all.arr = selected_all.arr.filter((item) => {
+//         return !delarr.includes(item);
+//       });
+//       treeRef.value.setCheckedKeys(selected_all.arr);
+//     });
+//   }
   emit("checkFunc", data);
 };
 const handleCheckChange = (data, selfSelected, childrenSelected) => {
   //点击节点触发
-  selected_all.arr.forEach((item, index) => {
-    //实现多选时复选框二次点击取消选中
-    if (item == data.code) {
-      selected_all.arr.splice(index, 1);
-      treeRef.value.setCheckedKeys(selected_all.arr);
-    }
-  });
-
+//   selected_all.arr.forEach((item, index) => {
+//     //实现多选时复选框二次点击取消选中
+//     if (item == data.code) {
+//       selected_all.arr.splice(index, 1);
+//       treeRef.value.setCheckedKeys(selected_all.arr);
+//     }
+//   });
   if (data.type == "zone") {
     APIgetResidentialDetailsHouse(data.id).then((res) => {
-      console.log(res);
       emit("checkChangeFunc", res);
     });
   }
   if (data.type == "building") {
     APIgetBuildDetailsHouse(data.id).then((res) => {
-      console.log(res);
       emit("checkChangeFunc", res);
     });
   }
-//   if (data.type == "units") {
-//     showFamily.value = true;
-//     emit("checkChangeFunc", data);
-//     unitsDetail.item.name= data.name
-//     APIgetHouseListSort({
-//       houseable_type: "units",
-//       houseable_id: data.id,
-//       sid: props.surveyid,
-//       can_type: 2,
-//     }).then((res) => {
-//       console.log(res);
-//       floors.arr = res.floors;
-//       let selected = [];
-//       floors.arr.forEach((item) => {
-//         item.houses.forEach((items) => {
-//           if (items.can_exist) {
-//             selected.push(items.id);
-//           }
-//         });
-//       });
-//       selected_house.arr = selected;
-//     });
-//   }
+  //   if (data.type == "units") {
+  //     showFamily.value = true;
+  //     emit("checkChangeFunc", data);
+  //     unitsDetail.item.name= data.name
+  //     APIgetHouseListSort({
+  //       houseable_type: "units",
+  //       houseable_id: data.id,
+  //       sid: props.surveyid,
+  //       can_type: 2,
+  //     }).then((res) => {
+  //       console.log(res);
+  //       floors.arr = res.floors;
+  //       let selected = [];
+  //       floors.arr.forEach((item) => {
+  //         item.houses.forEach((items) => {
+  //           if (items.can_exist) {
+  //             selected.push(items.id);
+  //           }
+  //         });
+  //       });
+  //       selected_house.arr = selected;
+  //     });
+  //   }
 };
 </script>
 <style lang="scss">
