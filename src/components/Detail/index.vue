@@ -169,8 +169,10 @@
               <el-scrollbar height="300px">
                 <div class="region_box">
                   <div v-for="item in data_range.arr" :key="item.id">
-                    <div v-if="item.type == 5" class="region_box_item">
-                      {{ item.tgt_name }}
+                    <div v-if="item.type == 5"
+                    @click="closeShowHouse"
+                    class="region_box_item">
+                      {{ item.tgt_obj }}
                       <el-popconfirm
                         title="确定要删除当前项么?"
                         cancel-button-type="info"
@@ -197,9 +199,9 @@
                     <div
                       v-if="item.type == 4"
                       class="region_box_item"
-                      @click="clickZone(item)"
+                      @click="closeShowHouse"
                     >
-                      {{ item.tgt_name }}
+                      {{item.tgt_obj.pos_name+item.tgt_obj.name}}
                       <el-popconfirm
                         title="确定要删除当前项么?"
                         cancel-button-type="info"
@@ -209,6 +211,11 @@
                           <div class="region_box_item_del">✖</div>
                         </template>
                       </el-popconfirm>
+                    </div>
+                  </div>
+                  <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
+                    <div class="region_box_item region_box_item_house">
+                      {{ house.building.zone.name}}
                     </div>
                   </div>
                 </div>
@@ -222,9 +229,11 @@
               </div>
               <el-scrollbar height="300px">
                 <div class="region_box">
-                  <div v-for="item in data_range_buildings.arr" :key="item.id">
-                    <div class="region_box_item" @click="clickBuildings(item)">
-                      {{ item.name }}
+                  <div v-for="item in data_range.arr" :key="item.id">
+                    <div class="region_box_item"
+                    @click="closeShowHouse"
+                    v-if="item.type == 3">
+                      {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
                       <el-popconfirm
                         title="确定要删除当前项么?"
                         cancel-button-type="info"
@@ -234,6 +243,11 @@
                           <div class="region_box_item_del">✖</div>
                         </template>
                       </el-popconfirm>
+                    </div>
+                  </div>
+                  <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
+                    <div class="region_box_item region_box_item_house">
+                      {{ house.building.name}}
                     </div>
                   </div>
                 </div>
@@ -247,7 +261,7 @@
               </div>
               <el-scrollbar height="300px">
                 <div class="region_box">
-                  <div v-for="item in data_range_units.arr" :key="item.id">
+                  <!-- <div v-for="item in data_range_units.arr" :key="item.id">
                     <div class="region_box_item" @click="clickUnits(item)">
                       {{ item.name }}
                       <el-popconfirm
@@ -259,6 +273,32 @@
                           <div class="region_box_item_del">✖</div>
                         </template>
                       </el-popconfirm>
+                    </div>
+                  </div> -->
+                  <div v-for="item in data_range.arr" :key="item.id">
+                    <div
+                      class="region_box_item"
+                      v-if="item.type == 2"
+                      @click="closeShowHouse"
+                    >
+                      {{ item.tgt_obj.pos_name+item.tgt_obj.name}}
+                      <el-popconfirm
+                        title="确定要删除当前项么?"
+                        cancel-button-type="info"
+                        @confirm="deleteRange(item)"
+                      >
+                        <template #reference>
+                          <div class="region_box_item_del">✖</div>
+                        </template>
+                      </el-popconfirm>
+                    </div>
+                  </div>
+                  <div
+                    v-for="house in surverRangeWhenHouse.arr"
+                    :key="house.id"
+                  >
+                    <div @click="clickUnits(house)" class="region_box_item region_box_item_house">
+                      {{ house.name }}
                     </div>
                   </div>
                 </div>
@@ -398,10 +438,10 @@
       <template #footer>
         <div
           style="
-                                                display: flex;
-                                                justify-content: flex-end;
-                                                align-items: center;
-                                                width: 100%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        width: 100%;
 "
         >
           <el-button @click="switch_comment = false">取消</el-button>
@@ -460,10 +500,10 @@
       <template #footer>
         <div
           style="
-                                                display: flex;
-                                                justify-content: flex-end;
-                                                align-items: center;
-                                                width: 100%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        width: 100%;
 "
         >
           <el-button @click="switch_comment_detail = false">取消</el-button>
@@ -488,6 +528,7 @@ import {
   APIgetSurveyDetails,
   // 问卷范围
   APIgetSurveyRange,
+  APIgetSurverRangeWhenHouse,
   APIdeleteSurveyRange,
   APIgetSurveyTopic,
   APIgetSurveyTopicDetail,
@@ -639,15 +680,18 @@ const topicsFunc = () => {
   console.log("topic_details", topic_details);
 };
 // 获取问卷范围
+const surverRangeWhenHouse = reactive({ arr: [] });
 const rangeFunc = () => {
   let params = {
     page: 1,
-    per_page: 15,
-    sid: props.id
+    per_page: 100,
+    sid: props.id,
+    can_type: 2,
+    type_many:[2,3,4,5]
   };
   APIgetSurveyRange(params)
-    .then(res => {
-        console.log(res)
+    .then((res) => {
+      console.log(res);
       let newarr = [];
       res.data.forEach((item) => {
         let check = newarr.every((items) => {
@@ -655,66 +699,86 @@ const rangeFunc = () => {
         });
         check ? newarr.push(item) : "";
       });
-      console.log(newarr);
       data_range.arr = newarr;
     })
     .catch((err) => {
       from_error.msg = err.data;
     });
+  APIgetSurverRangeWhenHouse({sid:props.id,can_type:2}).then((res) => {
+    surverRangeWhenHouse.arr = res.data.units;
+    console.log(surverRangeWhenHouse.arr);
+  });
 };
 // 问卷范围点击小区事件
 const data_range_buildings = reactive({
-  arr: []
+  arr: [],
 });
 const clickZone = (val) => {
-    showHouses.value = false
-    data_range_buildings.arr=[]
-  APIgetBuildListHouse({ zone_id: val.tgt,sid:props.id,can_type:2 }).then((res) => {
-    res.forEach(item=>{
-        if(item.can_exist){
-            data_range_buildings.arr.push(item)
+  showHouses.value = false;
+  data_range_buildings.arr = [];
+  APIgetBuildListHouse({ zone_id: val.tgt, sid: props.id, can_type: 2 }).then(
+    (res) => {
+      res.forEach((item) => {
+        if (item.can_exist) {
+          data_range_buildings.arr.push(item);
         }
-    })
-  });
+      });
+    }
+  );
 };
 //问卷范围点击楼栋事件
 const data_range_units = reactive({
-  arr: []
+  arr: [],
 });
-import { APIgetUnitsListHouse} from "@/api/custom/custom";
+import { APIgetUnitsListHouse } from "@/api/custom/custom";
 const clickBuildings = (val) => {
-    data_range_units.arr=[]
-    showHouses.value = false
-  APIgetUnitsListHouse({ building_id: val.id,sid:props.id,can_type:2 }).then((res) => {
-    res.forEach(item=>{
-        if(item.can_exist){
-            data_range_units.arr.push(item)
-        }
-    })
+  data_range_units.arr = [];
+  showHouses.value = false;
+  APIgetUnitsListHouse({
+    building_id: val.id,
+    sid: props.id,
+    can_type: 2,
+  }).then((res) => {
+    res.forEach((item) => {
+      if (item.can_exist) {
+        data_range_units.arr.push(item);
+      }
+    });
   });
 };
+//点击单元取消显示房屋范围
+const closeShowHouse=()=>{
+    showHouses.value=false
+}
 //问卷范围点击单元事件
 const data_range_selected_houses = reactive({
-  arr: []
+  arr: [],
 });
 const showHouses = ref(false);
 const floors = reactive({
-    arr:[]
+  arr: [],
 });
 const clickUnits = (val) => {
-  APIgetHouseListSort({ houseable_id: val.id, houseable_type: "units",sid:props.id,can_type:2 }).then(res => {
-      showHouses.value = true;
-      floors.arr=res.floors
-      floors.arr.forEach(item=>{
-        data_range_selected_houses.arr.push(...item.houses)
-      })
-      data_range_selected_houses.arr=data_range_selected_houses.arr.filter(item=>{
-        return item.can_exist==1
-      })
-      console.log(data_range_selected_houses.arr)
-      console.log(floors.arr)
-    }
-  );
+    console.log(val)
+  APIgetHouseListSort({
+    houseable_id: val.id,
+    houseable_type: "units",
+    sid: props.id,
+    can_type: 2,
+  }).then((res) => {
+    showHouses.value = true;
+    floors.arr = res.floors;
+    floors.arr.forEach((item) => {
+      data_range_selected_houses.arr.push(...item.houses);
+    });
+    data_range_selected_houses.arr = data_range_selected_houses.arr.filter(
+      (item) => {
+        return item.can_exist == 1;
+      }
+    );
+    console.log(data_range_selected_houses.arr);
+    console.log(floors.arr);
+  });
 };
 // 获取问卷结果详情
 let answer_detail = reactive({
@@ -1120,6 +1184,9 @@ const dialogModifyComment = (content, status) => {
                 font-weight: bold;
                 color: red;
             }
+        }
+        .region_box_item_house {
+            background-color: #999;
         }
     }
 }

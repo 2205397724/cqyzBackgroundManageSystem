@@ -1447,6 +1447,10 @@ export function APImodifySurveyStatus(id, data) {
 export function APIgetSurveyRange(params) {
     return api.get('/s/can', { params: params })
 }
+//获取参与范围是房屋时上级
+export function APIgetSurverRangeWhenHouse(params){
+    return api.get(`/s-can-h-p`,{params:params})
+}
 // // 问卷设置范围详情
 // export function APIsetSurveyDetails(props) {
 //     return api.get('/s/can/'+ props)
