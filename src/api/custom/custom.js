@@ -734,8 +734,8 @@ export function APIpostFiles(data) {
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组成员 /api/ccgroup/{gid}/user
-export function APIgetGroupUserList(gid) {
-    return api.get(`/groups/${gid}/users`)
+export function APIgetGroupUserList(gid, params) {
+    return api.get(`/groups/${gid}/users`, { params: params })
 }
 // 删除
 export function APIdeleteGroupUser(gid, uid) {

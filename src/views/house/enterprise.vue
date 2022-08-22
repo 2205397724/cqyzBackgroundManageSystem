@@ -210,7 +210,7 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="24">
                             <el-form-item
                                 label="企业图标"
                                 label-width="120px"

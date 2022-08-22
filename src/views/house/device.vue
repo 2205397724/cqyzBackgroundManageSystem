@@ -381,7 +381,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="档案信息" name="2">
                     <el-button type="primary" class="m-l-10 m-b-10" :icon="Plus" @click="addArchiveFunc">添加档案</el-button>
-                    <el-scrollbar height="600px">
+                    <el-scrollbar :height="data_archive.arr.length>= 3 ? '600px': ''">
                         <div>
                             <el-timeline v-for="(item,index) in data_archive.arr" :key="index">
                                 <el-timeline-item :timestamp="item.created_at" placement="top">
@@ -444,7 +444,8 @@
                 </el-tab-pane>
                 <el-tab-pane label="维保记录" name="3">
                     <el-button type="primary" class="m-l-10 m-b-10" :icon="Plus" @click="addRepairFunc">添加维修</el-button>
-                    <el-scrollbar height="600px">
+
+                    <el-scrollbar :height=" data_repair.arr.length >= 3? '600px': ''">
                         <div>
                             <el-timeline v-for="(item,index) in data_repair.arr" :key="index">
                                 <el-timeline-item :timestamp="item.created_at" placement="top">
@@ -479,7 +480,7 @@
                                                     <el-image
                                                         v-for="(j,i) in item.affix" :key="i" :preview-src-list="item.affixs" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+j" fit="cover"
                                                     />
-                                                <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                                                    <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                         </div> -->
                                                 </div>

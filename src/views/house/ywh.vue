@@ -38,7 +38,6 @@
                         <el-tabs model-value="first" @tab-click="handleClick">
                             <el-tab-pane label="业委会成员" name="first">
                                 <el-button
-                                    v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'"
                                     type="primary"
                                     @click="addflowFunc(data_details.item)"
                                 >
@@ -47,29 +46,29 @@
                                 <el-table
                                     v-loading="tabloading"
                                     :data="flow_data.arr"
-                                    class="size-sm"
+                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                 >
-                                    <el-table-column label="真实姓名">
+                                    <el-table-column label="用户名">
                                         <template #default="scope">
-                                            <span>{{ scope.row.user.name }} </span>
+                                            <span>{{ scope.row.username }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="手机号" width="120">
+                                    <el-table-column label="手机号">
                                         <template #default="scope">
-                                            <span>{{ scope.row.user.mobile }} </span>
+                                            <span>{{ scope.row.mobile }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="注册名">
+                                    <el-table-column label="职位">
                                         <template #default="scope">
-                                            <span>{{ scope.row.user.username }} </span>
+                                            <span>{{ getOptVal(opts_all.obj.group_user_flg,scope.row.flg ) }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="职务" width="100">
+                                    <el-table-column label="职位描述">
                                         <template #default="scope">
-                                            <span>无 </span>
+                                            {{ scope.row.post }}
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="操作">
+                                    <el-table-column label="操作" width="150">
                                         <template #default="scope">
                                             <el-button
                                                 type="primary" size="small"
@@ -103,6 +102,7 @@
                                     :data="data_tab.arr"
                                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                     height="calc(100vh - 240px)"
+                                    class="size-sm"
                                     @row-click="rowClickFunc"
                                 >
                                     <el-table-column prop="name" label="业委会名称">
@@ -110,34 +110,39 @@
                                             <span>{{ scope.row.name }} </span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="name" label="届次" width="80">
+                                    <el-table-column prop="name" label="状态" width="80">
                                         <template #default="scope">
-                                            <span>第{{ scope.row.period }}届</span>
+                                            <el-popconfirm
+                                                :title="scope.row.active == 1 ? '确定要禁用当前业委会么?' : '确定要启用当前业委会么?'" cancel-button-type="info"
+                                                @confirm="activeYwhFunc(scope.row)"
+                                            >
+                                                <template #reference>
+                                                    <div @click.stop="()=>{}">
+                                                        <el-button v-if="scope.row.active==1" type="success" size="small">启用</el-button>
+                                                        <el-button v-if="scope.row.active==0" type="info" size="small">禁用</el-button>
+                                                    </div>
+                                                </template>
+                                            </el-popconfirm>
                                         </template>
                                     </el-table-column>
 
-                                    <el-table-column label="操作">
+                                    <el-table-column label="操作" width="150">
                                         <template #default="scope">
                                             <div @click.stop="()=>{}">
-                                                <el-button
-                                                    v-if="scope.row.isbindzone"
+                                                <!-- <el-button
+                                                    v-if="scope.row.active"
                                                     type="success" size="small"
                                                 >
                                                     生效
                                                 </el-button>
-                                                <el-popconfirm
-                                                    title="确定要激活当前业委会么?" cancel-button-type="info"
-                                                    @confirm="activeYwhFunc(scope.row,1)"
-                                                >
-                                                    <template #reference>
+
                                                         <el-button
                                                             v-if="!scope.row.isbindzone"
                                                             type="info" size="small"
                                                         >
                                                             失效
                                                         </el-button>
-                                                    </template>
-                                                </el-popconfirm>
+                                                     -->
                                                 <el-button
                                                     type="primary" size="small"
                                                     @click="modifyResidentialFunc(scope.row)"
@@ -158,22 +163,13 @@
                                         </template>
                                     </el-table-column>
                                 </el-table>
-                                <el-pagination
-                                    v-model:current-page="page"
-                                    layout="total,prev,pager,next,jumper,"
-                                    :total="total"
-                                    :page-size="per_page"
-                                    background
-                                    hide-on-single-page
-                                    style="padding-top: 20px;"
-                                />
                             </el-tab-pane>
                         </el-tabs>
                     </div>
                 </el-col>
             </el-row>
         </div>
-        <!-- 修改添加 -->
+        <!-- 业委会修改添加 -->
         <el-dialog
             v-model="switch_examine"
             :title="str_title"
@@ -182,125 +178,97 @@
             <el-form
                 ref="ruleFormRef"
                 :model="from_examine.item"
+                label-position="right"
             >
                 <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :md="12" :lg="12">
                         <el-form-item
-                            label="业委会名称" prop="name" label-width="90px"
-                            :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            label="业委会名称"
+                            prop="name"
+                            label-width="110px"
+                            :error="
+                                from_error.msg && from_error.msg.name
+                                    ? from_error.msg.name[0]
+                                    : ''
+                            "
                         >
-                            <el-input
-                                v-model="from_examine.item.name"
-                                placeholder=""
-                            />
+                            <el-input v-model="from_examine.item.name" placeholder="" />
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                </el-row>
+                <el-row v-if="str_title=='添加'" :gutter="10">
+                    <el-col :md="12" :lg="12">
                         <el-form-item
-                            label="届次" prop="period" label-width="90px"
-                            :error="from_error.msg&&from_error.msg.period?from_error.msg.period[0]:''"
+                            label="状态"
+                            prop="region_val"
+                            label-width="110px"
+                            :error="
+                                from_error.msg && from_error.msg.name
+                                    ? from_error.msg.name[0]
+                                    : ''
+                            "
                         >
-                            <el-input
-                                v-model="from_examine.item.period"
-                                placeholder="填整数类型"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="开始时间"
-                            label-width="90px"
-                            :error="from_error.msg&&from_error.msg.start_at?from_error.msg.start_at[0]:''"
-                        >
-                            <el-date-picker
-                                v-model="from_examine.item.startat"
-                                type="datetime"
-                                value-format="YYYY-MM-DD"
-                                placeholder=""
-                                style="width: 100%;"
-                                :default-value="new Date()"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label="结束时间"
-                            label-width="90px"
-                            :error="from_error.msg&&from_error.msg.end_at?from_error.msg.end_at[0]:''"
-                        >
-                            <el-date-picker
-                                v-model="from_examine.item.endat"
-                                type="datetime"
-                                value-format="YYYY-MM-DD"
-                                placeholder=""
-                                style="width: 100%;"
-                                :default-value="new Date()"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label="描述" prop="desc" label-width="90px"
-                            :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
-                        >
-                            <el-input
-                                v-model="from_examine.item.desc"
-                                :autosize="{ minRows: 2, maxRows: 10 }"
-                                type="textarea"
-                                placeholder=""
-                            />
+                            <!-- <el-input
+                                    v-model="from_examine.item.region_val"
+                                    placeholder=""
+                                /> -->
+                            <el-radio-group v-model="radio" class="ml-4">
+                                <el-radio label="1" size="large">启用</el-radio>
+                                <el-radio label="2" size="large">禁用</el-radio>
+                            </el-radio-group>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
             </template>
         </el-dialog>
-        <!-- 步骤 修改添加 -->
+        <!-- 修改添加 -->
         <el-dialog
             v-model="switch_examine2"
             :title="str_title2"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
-                <el-form
-                    :model="from_examine2.obj"
-                >
+                <el-form ref="ruleFormRef" :model="from_examine2.item" label-width="80px">
                     <el-row :gutter="10">
-                        <el-col v-if="!hide_id" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="选择用户" prop="uid" label-width="100px"
-                                :error="from_error2.msg&&from_error2.msg.uid?from_error2.msg.uid[0]:''"
-                            >
-                                <div style="height: 100%;width: 100%;">
-                                    <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;font-size: 14px;">
-                                        <SearchUser v-model:str="from_examine2.item.uid" />
-                                    </div>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="用户名" prop="id">
+                                <div class="searchUserGroup">
+                                    <SearchUser ref="V_1" v-model:name="userName" @checkName="checkUsersNameFunc" />
                                 </div>
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            <el-form-item
-                                label="工作描述" prop="desc" label-width="100px"
-                                :error="from_error2.msg&&from_error2.msg.desc?from_error2.msg.desc[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine2.item.desc"
-                                    :autosize="{ minRows: 2, maxRows: 10 }"
-                                    type="textarea"
-                                    placeholder="工作职责描述"
-                                />
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="职位" prop="flg">
+                                <el-select
+                                    v-model="from_examine2.item.flg"
+                                    @change="type_change"
+                                >
+                                    <el-option
+                                        v-for="item in opts_all.obj.group_user_flg"
+                                        :key="item.key"
+                                        :value="item.key"
+                                        :label="item.val"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item label="职位描述" prop="post">
+                                <el-input v-model="from_examine2.item.post" placeholder="" />
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
             </div>
             <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                <div class="footer">
                     <el-button @click="switch_examine2=false">取消</el-button>
                     <el-button type="primary" @click="flowUpdataFunc">确定</el-button>
                 </div>
@@ -313,11 +281,11 @@ import SearchUser from '@/components/SearchUser/index.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 import {
-    APIgetListYwh,
-    APIgetDetailsYwh,
-    APIdeleteYwh,
-    APIputYwh,
-    APIpostYwh
+    APIgetGroupList,
+    APIgetGroupUserList,
+    APIgetGroupDetails,
+    APIpostGroup,
+    APIdeleteGroup
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -367,13 +335,15 @@ const refreshFunc = () => {
     getTabListFunc()
 }
 
-// 详情
+// 业委会成员
 const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetDetailsYwh(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-        }
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetGroupUserList(val.id, params).then(res => {
+        console.log(res)
+        flow_data.arr = res.data
     })
 }
 // 监听分页
@@ -386,22 +356,30 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
-            from_examine.item.zid = route.query.zid
+            if (radio.value == '1') {
+                from_examine.item.active = 1
+            } else {
+                from_examine.item.active = 0
+            }
+            from_examine.item.region_val = route.query.zid
+            from_examine.item.region_type = 2
+            from_examine.item.type = 7
+            from_examine.item.region_cc = route.query.china_code
             if (str_title.value == '修改') {
-                APIputYwh(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
+                APIputGroup(from_examine.item.id, from_examine.item).then(res => {
+                    if (res.status == 200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
-                APIpostYwh(from_examine.item).then(res => {
-                    if (!res.code) {
+                APIpostGroup(from_examine.item).then(res => {
+                    if (res.status == 200) {
                         refreshFunc()
-                        ElMessage.success(res.msg)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
@@ -418,7 +396,9 @@ const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value,
-        zid: route.query.zid
+        region_type: 2,
+        region_val: route.query.zid,
+        type: 7
     }
     for (let key in data_search) {
         if (data_search[key] || data_search[key] === 0) {
@@ -429,48 +409,41 @@ const getTabListFunc = () => {
         }
     }
     loading_tab.value = true
-    APIgetListYwh(params).then(res => {
+    APIgetGroupList(params).then(res => {
         console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.data.aggregation.total_cnt
-            if (data_tab.arr.length > 0) {
-                rowClickFunc(data_tab.arr[0])
-            }
+        loading_tab.value = false
+        data_tab.arr = res.data
+        total.value = res.data.length
+        if (data_tab.arr.length > 0) {
+            rowClickFunc(data_tab.arr[0])
+        }
     })
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteYwh(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+    APIdeleteGroup(val.id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
+const radio = ref('1')
 // 添加
 const addResidentialFunc = () => {
+    console.log(route.query)
+    radio.value = '1'
     from_error.msg = {}
     str_title.value = '添加'
-    from_examine.item = {
-        property_owners: [],
-        house_id: '',
-        time_deal: '',
-        code_property: '',
-        code_room: '',
-        should_bind_house: ''
-    }
+    from_examine.item = {}
     switch_examine.value = true
 }
 // 修改
 const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetDetailsYwh(val.id).then(res => {
-        if (!res.code) {
-            from_examine.item = res.data
-            switch_examine.value = true
-        }
+    APIgetGroupDetails(val.id).then(res => {
+        from_examine.item = res.data
+        delete from_examine.item.ref
+        switch_examine.value = true
     })
 }
 
@@ -480,10 +453,9 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
-    APIgetListYwhUser,
-    APIdeleteYwhUser,
-    APIputYwhUser,
-    APIpostYwhUser
+    APIputGroupUser,
+    APIpostGroupUser,
+    APIdeleteGroupUser
 } from '@/api/custom/custom.js'
 var flow_id = ''
 const flow_data = reactive({
@@ -501,24 +473,34 @@ const modifyFlowFunc = val => {
     from_examine2.item = { ...val }
     from_error2.msg = {}
     switch_examine2.value = true
+    userName.value = val.username
 }
 
 const deleteFunc2 = val => {
-    APIdeleteYwhUser(flow_id, val.uid).then(res => {
-        refreshFunc2()
-        ElMessage.success(res.msg)
+    APIdeleteGroupUser(flow_id, val.user_id).then(res => {
+        detailsFunc(flow.item)
+        ElMessage.success('删除成功')
     })
 }
-const openStepFunc = val => {
-    flow_id = val.id
-    refreshFunc2()
+// const openStepFunc = val => {
+//     flow_id = val.id
+//     refreshFunc2()
+// }
+// const refreshFunc2 = () => {
+//     tabloading.value = true
+//     APIgetListYwhUser(flow_id).then(res => {
+//         flow_data.arr = res.data
+//         tabloading.value = false
+//     })
+// }
+const checkUsersNameFunc = val => {
+    from_examine2.item.user_id = val.id
 }
-const refreshFunc2 = () => {
-    tabloading.value = true
-    APIgetListYwhUser(flow_id).then(res => {
-        flow_data.arr = res.data
-        tabloading.value = false
-    })
+const V_1 = ref(null)
+const userName = ref('')
+const dialogClosed = () => {
+    V_1.value.clearFunc()
+    userName.value = ''
 }
 const addflowFunc = () => {
     hide_id.value = false
@@ -530,49 +512,62 @@ const addflowFunc = () => {
 const flowUpdataFunc = () => {
     from_error2.msg = {}
     if (str_title2.value == '修改') {
-        APIputYwhUser(flow_id, from_examine2.item.uid, from_examine2.item).then(res => {
-            if (!res.code) {
-                refreshFunc2()
-                ElMessage.success(res.msg)
-                switch_examine2.value = false
-            }
+        APIputGroupUser(flow_id, from_examine2.item.user_id, from_examine2.item).then(res => {
+            detailsFunc(flow.item)
+            ElMessage.success('修改成功')
+            switch_examine2.value = false
         }).catch(err => {
-            from_error2.msg = err.data
+            ElMessage.error('修改失败')
         })
     } else {
-        APIpostYwhUser(flow_id, from_examine2.item).then(res => {
-            if (!res.code) {
-                refreshFunc2()
-                ElMessage.success(res.msg)
-                switch_examine2.value = false
-            }
+        APIpostGroupUser(flow_id, from_examine2.item).then(res => {
+            detailsFunc(flow.item)
+            ElMessage.success('添加成功')
+            switch_examine2.value = false
         }).catch(err => {
-            from_error2.msg = err.data
+            ElMessage.error('添加失败')
         })
     }
 }
-
+const flow = reactive({
+    item: {}
+})
 const rowClickFunc = (row, column, event) => {
     detailsFunc(row)
-    openStepFunc(row)
+    flow_id = row.id
+    flow.item = row
+    // openStepFunc(row)
 }
-import { APIputYwhActive } from '@/api/custom/custom.js'
-const activeYwhFunc = (val, v) => {
-    APIputYwhActive(val.id, { isbind: v }).then(res => {
+const active = ref('')
+import { APIputGroup } from '@/api/custom/custom.js'
+const activeYwhFunc = val => {
+    if (val.active == 1) {
+        val.active = 0
+    } else {
+        val.active = 1
+    }
+    delete val.ref
+    APIputGroup(val.id, val).then(res => {
         refreshFunc()
     })
 }
-// 取消激活
-const cancelYwhFunc = (val, v) => {
-    activeYwhFunc(val, v)
-}
+// // 取消激活
+// const cancelYwhFunc = (val, v) => {
+//     activeYwhFunc(val, v)
+// }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['type_type']).then(res => {
+getOpts(['type_type', 'gender', 'group_user_flg']).then(res => {
     opts_all.obj = res
 })
 </script>
+<style lang="scss" scoped>
+    :deep .el-form-item--default .el-form-item__label {
+        line-height: 39px;
+        margin-right: 17px;
+    }
+</style>

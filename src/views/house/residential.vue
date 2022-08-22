@@ -20,16 +20,16 @@
                         style="box-sizing: border-box;"
                         class="p-20 flex-colmun"
                     >
-                        <div>
-                            <el-button
-                                class="head-btn" type="primary" :icon="Plus"
-                                @click="addResidentialFunc"
-                            >
-                                添加小区
-                            </el-button>
-                        </div>
-                        <div class="search" style="background-color: white;">
+                        <div class="search" style="background-color: white;height: 178px;">
                             <el-row :gutter="10">
+                                <el-col :xs="24" :md="24" :lg="24">
+                                    <el-button
+                                        class="head-btn m-t-5" type="primary" :icon="Plus"
+                                        @click="addResidentialFunc"
+                                    >
+                                        添加小区
+                                    </el-button>
+                                </el-col>
                                 <el-col :xs="24" :md="12" :lg="8">
                                     <div class="searchBox">
                                         <div class="search_th">小区名称：</div>
@@ -44,12 +44,12 @@
                                 </el-col>
                             </el-row>
                             <el-row class="m-t-20">
-                                <el-col :xs="24" :md="24" :lg="14">
+                                <el-col :xs="24" :md="24" :lg="24">
                                     <div class="flx">
-                                        <div class="w_30">
-                                            <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                        </div>
-                                        <div v-show="switch_search == true" class="w_70 m-l-30">
+                                        <!-- <div class="w_30"> -->
+                                        <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                        <!-- </div> -->
+                                        <div v-show="switch_search == true" class="m-l-20 size-base">
                                             <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
                                             <div class="searchDetail" style="width: 220px;">
                                                 *搜索到相关结果共{{ total }}条。
@@ -94,14 +94,14 @@
                                 <el-table-column prop="cnt_live" label="住房总套数" width="140">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
-                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_building_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
+                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_zone_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="cnt_live" label="业委会" width="140">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
-                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id }}">业委会</router-link>
+                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id,china_code: scope.row.china_code }}">业委会</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>

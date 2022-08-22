@@ -19,134 +19,78 @@
                         />
                         <div style="padding: 20px 20px 0;box-sizing: border-box;">
                             <div class="search">
-                                <el-row :gutter="10">
-                                    <el-col :xs="24" :md="12" :lg="8">
-                                        <div class="searchBox">
-                                            <div class="search_th">
-                                                房屋使用状态：
+                                <div>
+                                    <el-row :gutter="10">
+                                        <el-col :xs="24" :md="12" :lg="8">
+                                            <div class="searchBox">
+                                                <div class="search_th">
+                                                    房屋使用状态：
+                                                </div>
+                                                <el-select
+                                                    v-model="data_search.obj.status_use"
+                                                    class="search_tb" placeholder="*房屋使用状态"
+                                                    clearable
+                                                >
+                                                    <el-option
+                                                        v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
+                                                        :label="item.val" :value="item.key"
+                                                    />
+                                                </el-select>
                                             </div>
-                                            <el-select
-                                                v-model="data_search.obj.status_use"
-                                                class="search_tb" placeholder="*房屋使用状态"
-                                                clearable
-                                            >
-                                                <el-option
-                                                    v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
-                                                    :label="item.val" :value="item.key"
-                                                />
-                                            </el-select>
-                                        </div>
-                                    </el-col>
-                                    <el-col :xs="24" :md="12" :lg="8">
-                                        <div class="searchBox">
-                                            <div class="search_th">
-                                                房屋安全状态：
+                                        </el-col>
+                                        <el-col :xs="24" :md="12" :lg="8">
+                                            <div class="searchBox">
+                                                <div class="search_th">
+                                                    房屋安全状态：
+                                                </div>
+                                                <el-select
+                                                    v-model="data_search.obj.status_safe"
+                                                    class="search_tb" placeholder="*房屋安全状态"
+                                                    clearable
+                                                >
+                                                    <el-option
+                                                        v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
+                                                        :label="item.val" :value="item.key"
+                                                    />
+                                                </el-select>
                                             </div>
-                                            <el-select
-                                                v-model="data_search.obj.status_safe"
-                                                class="search_tb" placeholder="*房屋安全状态"
-                                                clearable
-                                            >
-                                                <el-option
-                                                    v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
-                                                    :label="item.val" :value="item.key"
-                                                />
-                                            </el-select>
-                                        </div>
-                                    </el-col>
-                                    <el-col :xs="24" :md="12" :lg="8">
-                                        <div class="searchBox">
-                                            <div class="search_th">
-                                                是否绑定：
+                                        </el-col>
+                                        <el-col :xs="24" :md="12" :lg="8">
+                                            <div class="searchBox">
+                                                <div class="search_th">
+                                                    是否绑定：
+                                                </div>
+                                                <el-select
+                                                    v-model="data_search.obj.is_bind_property"
+                                                    class="search_tb"
+                                                    placeholder="是否绑定"
+                                                    clearable
+                                                >
+                                                    <el-option
+                                                        v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
+                                                        :label="item.val" :value="item.key"
+                                                    />
+                                                </el-select>
                                             </div>
-                                            <el-select
-                                                v-model="data_search.obj.is_bind_property"
-                                                class="search_tb"
-                                                placeholder="是否绑定"
-                                                clearable
-                                            >
-                                                <el-option
-                                                    v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
-                                                    :label="item.val" :value="item.key"
-                                                />
-                                            </el-select>
-                                        </div>
-                                    </el-col>
-                                    <!-- <el-col :xs="24" class="el-cascader-box-my">
-                                        <el-select
-                                            v-model="data_search.obj.status_use"
-                                            class="head-btn width-sm" placeholder="*房屋使用状态"
-                                            clearable
-                                        >
-                                            <el-option
-                                                v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
-                                                :label="item.val" :value="item.key"
-                                            />
-                                        </el-select>
-                                        <el-select
-                                            v-model="data_search.obj.status_safe"
-                                            class="head-btn width-sm" placeholder="*房屋安全状态"
-                                            clearable
-                                        >
-                                            <el-option
-                                                v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
-                                                :label="item.val" :value="item.key"
-                                            />
-                                        </el-select>
-                                        <el-select
-                                            v-model="data_search.obj.status_plan"
-                                            class="head-btn width-sm" placeholder="*规划用途"
-                                            clearable
-                                        >
-                                            <el-option
-                                                v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
-                                                :label="item.val" :value="item.key"
-                                            />
-                                        </el-select>
-                                        <el-select
-                                            v-model="data_search.obj.status_fact"
-                                            class="head-btn width-sm" placeholder="*实际用途"
-                                            clearable
-                                        >
-                                            <el-option
-                                                v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key"
-                                                :label="item.val" :value="item.key"
-                                            />
-                                        </el-select>
-                                        <el-select
-                                            v-model="data_search.obj.is_bind_property"
-                                            class="head-btn width-sm"
-                                            placeholder="是否绑定"
-                                            clearable
-                                        >
-                                            <el-option
-                                                v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
-                                                :label="item.val" :value="item.key"
-                                            />
-                                        </el-select>
-                                        <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                                        <div v-if="switch_search">
-                                            <el-button class="head-btn" @click="refreshFunc">重置</el-button>
-                                            <span v-show="switch_search" class="size-sm font-grey">*搜索到相关结果共{{ total }}条。</span>
-                                        </div>
-                                    </el-col> -->
-                                </el-row>
-                                <el-row class="m-t-20">
-                                    <el-col :xs="24" :md="24" :lg="14">
-                                        <div class="flx">
-                                            <div class="w_30">
+                                        </el-col>
+                                    </el-row>
+                                    <el-row class="m-t-20">
+                                        <el-col :xs="24" :md="24" :lg="14">
+                                            <div class="flx">
+                                                <!-- <div class="w_30"> -->
                                                 <!-- <el-button class="m-l-20" type="primary" :icon="Search" :disabled="active_obj.obj.type == 'units' || active_obj.obj.type =='buildings' ? false: true" @click="searchFunc">筛选</el-button> -->
-                                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                            </div>
-                                            <div v-show="switch_search" class="w_70 m-l-30">
-                                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                                <div class="searchDetail" style="width: 220px;">
-                                                    *搜索到相关结果共{{ total }}条。
+                                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                                <!-- </div> -->
+                                                <div v-show="switch_search" class="m-l-20 size-base">
+                                                    <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                                    <div class="searchDetail" style="width: 220px;">
+                                                        *搜索到相关结果共{{ total }}条。
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </el-col>
-                                </el-row>
+                                        </el-col>
+                                    </el-row>
+                                </div>
                             </div>
                             <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
                                 <div class="font-grey size-base">户数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_house }} </strong>户</div>

@@ -89,6 +89,8 @@
                         <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="280">
@@ -428,7 +430,6 @@
                                 :active-value="20"
                                 :inactive-value="30"
                                 class="switchStyle"
-                                :disabled="total1>= 1 ? true: false"
                             />
                         </el-form-item>
                     </el-col>
@@ -443,7 +444,6 @@
                                 :autosize="{ minRows: 3, maxRows: 10 }"
                                 type="textarea"
                                 placeholder="审核回执内容"
-                                :disabled="total1>=1 ? true: false"
                             />
                         </el-form-item>
                     </el-col>
@@ -605,8 +605,10 @@ const dialogExamineCloseFunc = () => {
             //     taskid: ''
             // }
             from_examine.item.custom = []
-            from_examine.item.relid = 'ggtr4535'
-            from_examine.item.taskid = 'gdhfth454g'
+            // from_examine.item.relid = 'ggtr4535'
+            // from_examine.item.taskid = 'gdhfth454g'
+            delete from_examine.item.relid
+            delete from_examine.item.taskid
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                 refreshFunc()
                 // ElMessage.success('修改成功')
