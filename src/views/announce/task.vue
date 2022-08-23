@@ -10,51 +10,51 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">发布人用户组：</div>
-                            <div class="search_tb">
-                                <div class="searchUserGroup">
-                                    <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
+                <div class="m-t-10">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">发布人用户组：</div>
+                                <div class="search_tb">
+                                    <div class="searchUserGroup">
+                                        <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                任务派发单位：
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    任务派发单位：
+                                </div>
+                                <el-select v-model="data_search.obj.tolv" class="search_tb" placeholder="指定单位" clearable>
+                                    <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </div>
-                            <el-select v-model="data_search.obj.tolv" class="search_tb" placeholder="指定单位" clearable>
-                                <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">公示分类：</div>
-                            <div class="search_tb">
-                                <CascaderAnnounce v-model="data_search.obj.cid" />
-                            </div>
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">公示分类：</div>
+                                <div class="search_tb">
+                                    <CascaderAnnounce v-model="data_search.obj.cid" />
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                </el-row>
+                        </el-col>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="10">
+                            <div class="flx">
+                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                <div v-show="switch_search == true" class="m-l-20 size-base">
+                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                    <div class="searchDetail">
+                                        *搜索到相关结果共{{ total }}条。
+                                    </div>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -585,19 +585,16 @@ const getTabListFunc = () => {
         // total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= per_page.value) {
-            flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
         } else {
-            flag.value = false
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
     })
 }
-const flag = ref(false)
 // 删除
 const deleteFunc = val => {
     APIdeleteTask(val.id).then(res => {

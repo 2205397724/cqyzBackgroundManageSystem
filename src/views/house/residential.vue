@@ -59,7 +59,7 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;background-color: white;">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -130,14 +130,15 @@
                                 </el-table-column>
                                 <el-table-column />
                             </el-table>
-                        </div>
-                        <div style="padding-top: 20px;">
                             <el-pagination
                                 v-model:current-page="page"
-                                layout="total,prev,pager,next,jumper,"
-                                :total="total"
+                                style="float: right;"
+                                layout="prev,next,jumper,"
+                                :total="50"
                                 :page-size="per_page"
                                 background
+                                prev-text="上一页"
+                                next-text="下一页"
                                 hide-on-single-page
                             />
                         </div>
@@ -897,6 +898,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = data_tab.arr.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
         // }
     })
 }
@@ -1030,6 +1041,8 @@ refreshFunc()
 }
 </style>
 <style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .search-tips {
     color: #aaa;
     font-size: 14px;

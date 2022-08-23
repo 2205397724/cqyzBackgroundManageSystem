@@ -98,6 +98,7 @@ import houseHousingManagement from './modules/house/housing_management.js'
 import houseEnterprise from './modules/house/enterprise.js'
 import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
+import houseBind from './modules/house/house_bind.js'
 import eventDevice from './modules/house/device.js'
 import eventDeviceArchive from './modules/house/device_archive.js'
 import eventDeviceRepair from './modules/house/device_repair.js'
@@ -165,6 +166,7 @@ const asyncRoutes = [{
         children: [
             houseResidential,
             houseHousingManagement,
+            houseBind,
             houseProperty,
             houseEnterprise,
             eventDevice,

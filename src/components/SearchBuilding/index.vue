@@ -150,9 +150,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetBuildListHouse(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 

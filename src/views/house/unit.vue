@@ -10,7 +10,7 @@
                 </el-button>
             </div>
             <div class="search">
-                <div style="margin-top: 14px;">
+                <div class="m-t-10">
                     <el-row :gutter="10">
                         <el-col :xs="24" :md="12" :lg="8">
                             <div class="searchBox">
@@ -93,14 +93,15 @@
                         </template>
                     </el-table-column>
                 </el-table>
-            </div>
-            <div style="padding-top: 20px;">
                 <el-pagination
                     v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
+                    style="float: right;"
+                    layout="prev,next,jumper,"
+                    :total="50"
                     :page-size="per_page"
                     background
+                    prev-text="上一页"
+                    next-text="下一页"
                     hide-on-single-page
                 />
             </div>
@@ -490,6 +491,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 // 删除
@@ -531,39 +542,40 @@ const modifyResidentialFunc = val => {
 // 执行
 refreshFunc()
 </script>
-<style lang="scss">
-    .routineunit {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .el-form-item {
-                margin: 0;
-            }
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
-</style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.routineunit {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
+            margin-bottom: 10px;
+        }
     }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .el-form-item {
+            margin: 0;
+        }
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 </style>
+

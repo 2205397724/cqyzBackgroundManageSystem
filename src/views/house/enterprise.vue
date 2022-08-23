@@ -51,11 +51,10 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="logo" label="企业图标" width="140">
+                <el-table-column prop="logo_1" label="企业图标" width="140">
                     <template #default="scope">
                         <span class="m-l-10">
-                            <img :src="scope.row.logo" alt="" style="width: 25px;">
-                        </span>
+                            <el-image :src="scope.row.logo_1" alt="" style="width: 25px;" /></span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="企业名称" />
@@ -406,16 +405,22 @@
                 <el-tab-pane label="企业信息" name="2">
                     <div class="details-box">
                         <div class="item">
-                            <div class="left">ID</div>
+                            <div class="left">图标</div>
+                            <div class="right">
+                                <el-image :src="VITE_APP_FOLDER_SRC+details_item.obj.logo" alt="" style="width: 40px;" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业名称</div>
+                            <div class="right">{{ details_item.obj.name }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业ID</div>
                             <div class="right">{{ details_item.obj.id }} </div>
                         </div>
                         <div class="item">
                             <div class="left">用户名</div>
                             <div class="right">{{ getNameFunc(userData.arr,details_item.obj.user_id) }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">企业名称</div>
-                            <div class="right">{{ details_item.obj.name }} </div>
                         </div>
                         <div class="item">
                             <div class="left">社会责任代码</div>
@@ -425,19 +430,6 @@
                             <div class="left">类型</div>
                             <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,details_item.obj.type) }} </div>
                         </div>
-                        <div class="item">
-                            <div class="left">图标</div>
-                            <div class="right">
-                                <!-- <el-image
-                            v-for="(item,i) in details_item.obj.logo" :key="i" :preview-src-list="details_item.obj.logo" class="wh_100p m-r-10" :src="item" fit="cover"
-                        /> -->
-                                <img :src="details_item.obj.logo" alt="" style="width: 40px;">
-                            </div>
-                        </div>
-                        <!-- <div class="item">
-                    <div class="left">法人</div>
-                    <div class="right">{{ details_item.obj.legal }} </div>
-                </div> -->
                         <div class="item">
                             <div class="left">联系方式</div>
                             <div class="right">{{ details_item.obj.contact }} </div>
@@ -1023,7 +1015,7 @@ import {
     APIputEnterprise,
     APIpostEnterprise
 } from '@/api/custom/custom.js'
-
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 // 获取列表
 const loading_tab = ref(false)
 const getTabListFunc = () => {
@@ -1046,6 +1038,10 @@ const getTabListFunc = () => {
             loading_tab.value = false
             from_tab.arr = res.data
             total.value = res.data.length
+            for (let i in res.data) {
+                res.data[i].logo_1 = ''
+                res.data[i].logo_1 = VITE_APP_FOLDER_SRC.value + res.data[i].logo
+            }
         }
     })
 }
@@ -1080,11 +1076,24 @@ const addResidentialFunc = () => {
     switch_add.value = true
     file_list.value = []
 }
+const logo = reactive({
+    arr: []
+})
 const modifyFunc = val => {
     APIgetEnterpriseDetails(val.id).then(res => {
         from_add.obj = res.data
         // file_list.value = res.data.logo
         userNames.value = getNameFunc(userData.arr, from_add.obj.user_id)
+        // logo.arr = res.data.logo.split('')
+        // let arr = []
+        // for (let i in logo.arr) {
+        //     if (logo.arr[i]) {
+        //         arr.push({
+        //             name: logo.arr[i]
+        //         })
+        //     }
+        // }
+        // file_list.value = arr
         // console.log(userName.value)
     })
     err_add.obj = {}
@@ -1409,26 +1418,34 @@ const postFunc_1 = () => {
     }
 }
 const postFunc = () => {
-    // let files = ""
-    // let file_key = []
-    // if (file_list.value.length > 0) {
-    //     for (let i in file_list.value) {
-    //         if (!file_list.value[i].raw) {
-    //             file_key.push(file_list.value[i].name)
-    //         } else {
-    // files.push(file_list.value[i].raw)
-    //         }
-    //     }
-    // }
+    let files = []
+    let file_key = []
+    if (file_list.value.length > 0) {
+        for (let i in file_list.value) {
+            if (!file_list.value[i].raw) {
+                file_key.push(file_list.value[i].name)
+            } else {
+                files.push(file_list.value[i].raw)
+            }
+        }
+    }
+    delete from_add.obj.legal
     // console.log(file_list.value)
-    from_add.obj.logo = file_list.value[0].name
-    // if (files.length > 0) {
-    // getFilesKeys(file_list.value.row, 'folder').then(arr => {
-    //     from_add.obj.logo = file_list.value.name.concat(arr)
-    //     postFunc_1()
-    // })
-    console.log(from_add.obj.logo)
-    // return false
+    from_add.obj.logo = file_key
+    from_add.obj.logo = from_add.obj.logo.join(' ')
+    if (files.length > 0) {
+        getFilesKeys(files, 'folder').then(arr => {
+            console.log(arr)
+            from_add.obj.logo = file_key.concat(arr)
+            // console.log(from_add.obj.logo)
+            console.log(from_add.obj.logo.join(' '))
+            from_add.obj.logo = from_add.obj.logo.join(' ')
+            postFunc_1()
+        })
+        console.log(from_add.obj.logo)
+
+        return false
+    }
     // }
     postFunc_1()
     // let data = {

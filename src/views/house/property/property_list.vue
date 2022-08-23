@@ -10,17 +10,18 @@
                 </el-button>
             </div>
             <div :class="{search3: isSearch3,search2: isSearch2}">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">房屋id：</div>
+                <div class="m-t-10">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">房屋id：</div>
 
-                            <div class="search_tb">
-                                <div class="searchUserGroup">
-                                    <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
+                                <div class="search_tb">
+                                    <div class="searchUserGroup">
+                                        <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <!-- <div class="search_th" style="width: 20%;">房屋id：</div> -->
 
                         <!-- <div class="searchUser search_tb" style="width: 80%;">
@@ -28,68 +29,67 @@
                                 <SearchHouse v-model:str="data_search.obj.house_id" />
                             </div>
                         </div> -->
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">产权证号：</div>
-                            <el-input v-model="data_search.obj.code_property" class="head-btn search_tb" placeholder="产权证号" clearable />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                地房籍号：
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">产权证号：</div>
+                                <el-input v-model="data_search.obj.code_property" class="head-btn search_tb" placeholder="产权证号" clearable />
                             </div>
-                            <el-input v-model="data_search.obj.code_room" class="head-btn search_tb" placeholder="地房籍号" clearable />
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                产权人姓名：
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    地房籍号：
+                                </div>
+                                <el-input v-model="data_search.obj.code_room" class="head-btn search_tb" placeholder="地房籍号" clearable />
                             </div>
-                            <el-input v-model="data_search.obj.owner_name" class="head-btn search_tb" placeholder="产权人姓名" clearable />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">交易时间：</div>
-                            <el-date-picker
-                                v-model="data_search.obj.time_deal"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="交易时间"
-                                end-placeholder="交易时间"
-                                class="search_tb"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    产权人姓名：
+                                </div>
+                                <el-input v-model="data_search.obj.owner_name" class="head-btn search_tb" placeholder="产权人姓名" clearable />
                             </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">交易时间：</div>
+                                <el-date-picker
+                                    v-model="data_search.obj.time_deal"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="交易时间"
+                                    end-placeholder="交易时间"
+                                    class="search_tb"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="24">
+                            <div class="flx">
+                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                <div v-show="switch_search == true" class="m-l-20 size-base">
+                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                    <div class="searchDetail">
+                                        *搜索到相关结果共{{ total }}条。
+                                    </div>
                                 </div>
                             </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <div class="searchPlay" @click="btnClickFunc">
+                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
                         </div>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <div class="searchPlay" @click="btnClickFunc">
-                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                        <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
-                        <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
-                    </div>
-                </el-row>
+                    </el-row>
+                </div>
             </div>
             <div>
                 <el-table

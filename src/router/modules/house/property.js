@@ -1,4 +1,5 @@
-const Layout = () => import('@/layout/index.vue')
+const Layout = () =>
+    import ('@/layout/index.vue')
 
 export default {
     path: '/house_property',
@@ -6,24 +7,23 @@ export default {
     redirect: '/house_property/property_list',
     name: 'housePropertyBox',
     meta: {
-        title: '产权',
+        title: '产权管理',
         icon: 'el-icon-postcard',
         auth: ['house.property_list', '*']
     },
-    children: [
-        {
-            path: 'property_list',
-            name: 'houseProperty',
-            component: () => import('@/views/house/property/property_list.vue'),
-            meta: {
-                title: '产权',
-                sidebar: false,
-                breadcrumb: false,
-                activeMenu: '/house_property',
-                auth: ['house.property_list.property_list', '*']
-            }
+    children: [{
+        path: 'property_list',
+        name: 'houseProperty',
+        component: () =>
+            import ('@/views/house/property/property_list.vue'),
+        meta: {
+            title: '产权管理',
+            sidebar: false,
+            breadcrumb: false,
+            activeMenu: '/house_property',
+            auth: ['house.property_list.property_list', '*']
         }
-    ]
+    }]
 }
 
 // const Layout = () => import('@/layout/index.vue')
