@@ -5,64 +5,64 @@
                 <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加设备</el-button>
             </div>
             <div :class="{search3: isSearch3,search2: isSearch2}">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                设备名称：
+                <div class="m-t-10">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    设备名称：
+                                </div>
+                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称" clearable />
                             </div>
-                            <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称" clearable />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">设备类型：</div>
-                            <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">状态：</div>
-                            <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">是否启用：</div>
-                            <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">设备类型：</div>
+                                <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">状态：</div>
+                                <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">是否启用：</div>
+                                <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="24">
+                            <div class="flx">
+                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                <div v-show="switch_search == true" class="m-l-20 size-base">
+                                    <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                    <div class="searchDetail">
+                                        *搜索到相关结果共{{ total }}条。
+                                    </div>
                                 </div>
                             </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <div class="searchPlay" @click="btnClickFunc">
+                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
                         </div>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <div class="searchPlay" @click="btnClickFunc">
-                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                        <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
-                        <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
-                    </div>
-                </el-row>
+                    </el-row>
+                </div>
             </div>
             <div>
                 <el-table
@@ -333,8 +333,8 @@
                             <div class="item">
                                 <div class="left" style="width: 128px;">小区>楼栋>单元</div>
                                 <div class="right" style="width: 80px;">{{ zoneName.name }}</div>
-                                <div v-if="data_details.item.building" style="display: inline-block;margin-right: 15px;">{{ buildingName.name }}</div>
-                                <div v-if="data_details.item.unit" style="display: inline-block;">{{ unitName.name }}</div>
+                                <div v-if="data_details.item.building!== ''&& data_details.item.buildinginfo !== null " style="display: inline-block;margin-right: 15px;">{{ buildingName.name }}</div>
+                                <div v-if="data_details.item.unit !== '' && data_details.item.unitinfo !== null" style="display: inline-block;">{{ unitName.name }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">所在地址</div>
@@ -853,7 +853,7 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        // total.value = res.length
+        total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= per_page.value) {
             flag.value = true

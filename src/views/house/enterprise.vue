@@ -10,41 +10,41 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                关键字：
+                <div class="m-t-10">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    关键字：
+                                </div>
+                                <el-input v-model="search_str.obj.keyword" class="search_tb" placeholder="" clearable />
                             </div>
-                            <el-input v-model="search_str.obj.keyword" class="search_tb" placeholder="" clearable />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">用户名：</div>
-                            <div class="search_tb">
-                                <div class="searchUserGroup">
-                                    <SearchUser ref="V" @checkName="checkUsersNameFunc" />
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">用户名：</div>
+                                <div class="search_tb">
+                                    <div class="searchUserGroup">
+                                        <SearchUser ref="V" @checkName="checkUsersNameFunc" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
+                        </el-col>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="24">
+                            <div class="flx">
+                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                <div v-show="switch_search" class="m-l-20 size-base">
+                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                    <div class="searchDetail">
+                                        *搜索到相关结果共{{ total }}条。
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                </el-row>
+                        </el-col>
+                    </el-row>
+                </div>
             </div>
             <el-table
                 :data="from_tab.arr"
@@ -226,7 +226,7 @@
                                         file_list = files
                                     }"
                                 >
-                                    <el-button type="primary">选择图标</el-button>
+                                    <el-button type="primary" :disabled="logo.arr.length == 1&&file_list.length == 1? true:false">选择图标</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
@@ -1075,26 +1075,27 @@ const addResidentialFunc = () => {
     str_title.value = '添加'
     switch_add.value = true
     file_list.value = []
+    logo.arr = []
 }
 const logo = reactive({
     arr: []
 })
 const modifyFunc = val => {
+    logo.arr = []
     APIgetEnterpriseDetails(val.id).then(res => {
         from_add.obj = res.data
         // file_list.value = res.data.logo
         userNames.value = getNameFunc(userData.arr, from_add.obj.user_id)
-        // logo.arr = res.data.logo.split('')
-        // let arr = []
-        // for (let i in logo.arr) {
-        //     if (logo.arr[i]) {
-        //         arr.push({
-        //             name: logo.arr[i]
-        //         })
-        //     }
-        // }
-        // file_list.value = arr
-        // console.log(userName.value)
+        logo.arr.push(res.data.logo)
+        let arr = []
+        for (let i in logo.arr) {
+            if (logo.arr[i]) {
+                arr.push({
+                    name: logo.arr[i]
+                })
+            }
+        }
+        file_list.value = arr
     })
     err_add.obj = {}
     str_title.value = '修改'

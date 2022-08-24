@@ -8,7 +8,7 @@ export default {
     name: 'houseBindBox',
     meta: {
         title: '房屋绑定申请',
-        icon: 'el-icon-postcard',
+        icon: 'el-icon-message-box',
         auth: ['house.bind', '*']
     },
     children: [{

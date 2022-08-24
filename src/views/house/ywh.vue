@@ -452,7 +452,6 @@ const getTabListFunc = () => {
             rowClickFunc(data_tab.arr[0])
         }
         let btnNext1 = document.querySelector('.btnClass')
-        // .document.querySelector('.btn-next')
         let btnNext2 = btnNext1.children[1]
         console.log(btnNext1.children[1])
         if (res.data.length <= per_page.value) {
