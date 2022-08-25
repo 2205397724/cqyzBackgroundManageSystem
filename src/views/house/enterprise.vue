@@ -1,6 +1,6 @@
 <template>
     <div class="keep-on-record">
-        <page-main>
+        <page-main class="hidden">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus"
@@ -33,12 +33,15 @@
                     </el-row>
                     <el-row class="m-t-20">
                         <el-col :xs="24" :md="24" :lg="24">
-                            <div class="flx">
-                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                <div v-show="switch_search" class="m-l-20 size-base">
-                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                    <div class="searchDetail">
-                                        *搜索到相关结果共{{ total }}条。
+                            <div class="searchBox">
+                                <div class="search_th" />
+                                <div class="search_tb">
+                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                    <div v-show="switch_search" class="m-l-20 size-base inline-block">
+                                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                        <div class="searchDetail">
+                                            *搜索到相关结果共{{ total }}条。
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -51,21 +54,21 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="logo_1" label="企业图标" width="140">
+                <el-table-column prop="logo_1" label="企业logo" width="140">
                     <template #default="scope">
                         <span class="m-l-10">
                             <el-image :src="scope.row.logo_1" alt="" style="width: 25px;" /></span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="企业名称" />
-                <el-table-column prop="user_id" label="用户名">
-                    <template #default="scope">
-                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.user_id) }} </span>
-                    </template>
-                </el-table-column>
                 <el-table-column prop="social_code" label="社会信用代码" width="140">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row.social_code }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="contact" label="企业电话" width="140">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ scope.row.contact }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="type" label="企业类型">
@@ -74,30 +77,8 @@
                         </span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="legal" label="法人" width="140">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.legal }} </span>
-                    </template>
-                </el-table-column> -->
-                <el-table-column prop="contact" label="联系方式" width="140">
-                    <template #default="scope">
-                        <span class="m-l-10">{{ scope.row.contact }} </span>
-                    </template>
-                </el-table-column>
-                <!-- <el-table-column prop="desc" label="简介" width="140">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.desc }} </span>
-                    </template>
-                </el-table-column> -->
-                <!-- <el-table-column /> -->
                 <el-table-column fixed="right" label="操作" width="300">
                     <template #default="scope">
-                        <el-button
-                            type="primary" size="small"
-                            @click="applyFunc(scope.row)"
-                        >
-                            企业申请
-                        </el-button>
                         <el-button
                             type="primary" size="small"
                             @click="modifyFunc(scope.row)"
@@ -125,12 +106,14 @@
             </el-table>
             <el-pagination
                 v-model:current-page="page"
-                layout="total,prev,pager,next,jumper,"
-                :total="total"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
                 :page-size="per_page"
                 background
+                prev-text="上一页"
+                next-text="下一页"
                 hide-on-single-page
-                class="p-t-20"
             />
         </page-main>
         <!-- 修改添加 -->
@@ -211,7 +194,7 @@
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="企业图标"
+                                label="企业logo"
                                 label-width="120px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
@@ -226,7 +209,7 @@
                                         file_list = files
                                     }"
                                 >
-                                    <el-button type="primary" :disabled="logo.arr.length == 1&&file_list.length == 1? true:false">选择图标</el-button>
+                                    <el-button type="primary" :disabled="logo.arr.length == 1&&file_list.length == 1? true:false">选择logo</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
@@ -405,7 +388,7 @@
                 <el-tab-pane label="企业信息" name="2">
                     <div class="details-box">
                         <div class="item">
-                            <div class="left">图标</div>
+                            <div class="left">企业logo</div>
                             <div class="right">
                                 <el-image :src="VITE_APP_FOLDER_SRC+details_item.obj.logo" alt="" style="width: 40px;" />
                             </div>
@@ -419,19 +402,15 @@
                             <div class="right">{{ details_item.obj.id }} </div>
                         </div>
                         <div class="item">
-                            <div class="left">用户名</div>
-                            <div class="right">{{ getNameFunc(userData.arr,details_item.obj.user_id) }} </div>
-                        </div>
-                        <div class="item">
                             <div class="left">社会责任代码</div>
                             <div class="right">{{ details_item.obj.social_code }} </div>
                         </div>
                         <div class="item">
-                            <div class="left">类型</div>
+                            <div class="left">企业类型</div>
                             <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,details_item.obj.type) }} </div>
                         </div>
                         <div class="item">
-                            <div class="left">联系方式</div>
+                            <div class="left">企业电话</div>
                             <div class="right">{{ details_item.obj.contact }} </div>
                         </div>
                         <div class="item">
@@ -470,12 +449,6 @@
                 class="tab_1"
             >
                 <el-table-column prop="name" label="企业名称" />
-                <el-table-column prop="user_id" label="用户名">
-                    <template #default="scope">
-                        <span v-if="getNameFunc(userData.arr,scope.row.user_id)" class="m-l-10">{{ getNameFunc(userData.arr,scope.row.user_id) }} </span>
-                        <span class="m-l-10" else>{{ scope.row.user_id }} </span>
-                    </template>
-                </el-table-column>
                 <el-table-column prop="type" label="企业类型">
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
@@ -484,21 +457,27 @@
                 </el-table-column>
                 <el-table-column prop="type" label="处理状态">
                     <template #default="scope">
-                        <el-tag v-if="scope.row.process_status == 10" type="warning" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
-                        <el-tag v-if="scope.row.process_status == 15" type="primary" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
-                        <el-tag v-if="scope.row.process_status == 20" type="success" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
-                        <el-tag v-if="scope.row.process_status == 30" type="danger" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 10" type="warning" round size="small" effect="dark" @click="detailsFunc_1(scope.row)">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 15" type="primary" round size="small">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 20" type="success" round size="small">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                        <el-tag v-if="scope.row.process_status == 30" type="danger" round size="small">{{ getOptVal(opts_all.obj.enterpriseStatus,scope.row.process_status) }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="type" label="申请时间">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ scope.row.created_at }}
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="150">
                     <template #default="scope">
-                        <el-button
-                            type="primary" size="small"
-                            :disabled="scope.row.status == 20 || scope.row.status == 30 ? false : true"
+                        <!-- <el-button
+                            v-if="scope.row.status == 10" type="primary"
+                            size="small"
                             @click="examineFunc(scope.row)"
                         >
                             审核
-                        </el-button>
+                        </el-button> -->
                         <el-button
                             size="small"
                             @click="detailsFunc_1(scope.row)"
@@ -521,55 +500,15 @@
             width="50%"
         >
             <div class="details-box">
-                <div class="item">
-                    <div class="left">企业名称</div>
-                    <div class="right">{{ apply_details.obj.name }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">用户名</div>
-                    <div v-if="getNameFunc(userData.arr,apply_details.obj.user_id)" class="right">{{ getNameFunc(userData.arr,apply_details.obj.user_id) }} </div>
-                    <div class="right" else>{{ apply_details.obj.user_id }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">企业类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,apply_details.obj.type) }} </div>
-                </div>
-                <div class="item">
-                    <div class="left">处理状态</div>
-                    <div class="right">
-                        <el-tag v-if="apply_details.obj.process_status == 10" type="warning" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
-                        <el-tag v-if="apply_details.obj.process_status == 15" type="primary" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
-                        <el-tag v-if="apply_details.obj.process_status == 20" type="success" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
-                        <el-tag v-if="apply_details.obj.process_status == 30" type="danger" round effect="dark">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
-                    </div>
-                </div>
-                <!-- <div class="item">
-                    <div class="left">图标</div>
-                    <div class="right">
-                        <img :src="apply_details.obj.logo" alt="" style="width: 40px;">
-                    </div>
-                </div> -->
-                <!-- <div class="item">
-                    <div class="left">法人</div>
-                    <div class="right">{{ details_item.obj.legal }} </div>
-                </div> -->
-                <div class="item">
-                    <div class="left">申请时间</div>
-                    <div class="right">{{ apply_details.obj.created_at }} </div>
-                </div>
-                <div v-if="apply_details.obj.reply" class="item">
-                    <div class="left">回复内容</div>
-                    <div class="right">{{ apply_details.obj.reply }} </div>
-                </div>
-                <div style="border: 1px solid #ccc;">
-                    相关信息
+                <div class="item-hd">企业相关信息：</div>
+                <div style="background-color: #fafafa;">
                     <div class="item">
-                        <div class="left">申请人</div>
-                        <div class="right">{{ apply_details.obj.content.legal }} </div>
+                        <div class="left">企业名称</div>
+                        <div class="right">{{ apply_details.obj.name }} </div>
                     </div>
                     <div class="item">
-                        <div class="left">申请地址</div>
-                        <div class="right">{{ apply_details.obj.content.com_addr }} </div>
+                        <div class="left">企业类型</div>
+                        <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,apply_details.obj.type) }} </div>
                     </div>
                     <div class="item">
                         <div class="left">营业执照</div>
@@ -580,6 +519,64 @@
                     <div class="item">
                         <div class="left">社会信用代码</div>
                         <div class="right">{{ apply_details.obj.content.social_code }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">法人</div>
+                        <div class="right">{{ apply_details.obj.content.legal }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">地址</div>
+                        <div class="right">{{ apply_details.obj.content.com_addr }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">处理状态</div>
+                        <div class="right">
+                            <el-tag v-if="apply_details.obj.process_status == 10" type="warning" round size="small" effect="dark" @click="examineFunc">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                            <el-tag v-if="apply_details.obj.process_status == 15" type="primary" round size="small">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                            <el-tag v-if="apply_details.obj.process_status == 20" type="success" round size="small">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                            <el-tag v-if="apply_details.obj.process_status == 30" type="danger" round size="small">{{ getOptVal(opts_all.obj.enterpriseStatus,apply_details.obj.process_status) }}</el-tag>
+                        </div>
+                    </div>
+                    <div v-if="apply_details.obj.status == 10" class="item">
+                        <!-- <div class="item"> -->
+                        <div class="left_1" />
+                        <div class="right">
+                            <el-button type="primary" @click="examineFunc">审核</el-button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="user.item" class="item-hd">申请人相关信息：</div>
+                <div v-if="user.item" style="background-color: #fafafa;">
+                    <div class="item">
+                        <div class="left">申请人</div>
+                        <div class="right">{{ user.item.username }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">申请人身份证号</div>
+                        <div class="right">{{ user.item.id_card }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">申请人手机号</div>
+                        <div class="right">{{ user.item.mobile }} </div>
+                    </div>
+                </div>
+                <div v-if="apply_details.obj.process_by" class="item-hd">处理人相关信息：</div>
+                <div v-if="apply_details.obj.process_by" style="background-color: #fafafa;">
+                    <div class="item">
+                        <div class="left">处理人姓名</div>
+                        <div class="right">{{ apply_details.obj.process_by.name ? apply_details.obj.process_by.name:apply_details.obj.process_by.nickname ? apply_details.obj.process_by.nickname : apply_details.obj.process_by.username }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">处理人手机号</div>
+                        <div class="right">{{ apply_details.obj.process_by.mobile }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">处理意见</div>
+                        <div class="right">{{ apply_details.obj.reply }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">处理日期</div>
+                        <div class="right">{{ apply_details.obj.updated_at }} </div>
                     </div>
                 </div>
             </div>
@@ -1042,6 +1039,16 @@ const getTabListFunc = () => {
                 res.data[i].logo_1 = ''
                 res.data[i].logo_1 = VITE_APP_FOLDER_SRC.value + res.data[i].logo
             }
+            let btnNext = document.querySelector('.btn-next')
+            if (res.data.length <= per_page.value) {
+                btnNext.classList.add('not_allowed')
+                btnNext.setAttribute('disabled', true)
+                btnNext.setAttribute('aria-disabled', true)
+            } else {
+                btnNext.classList.remove('not_allowed')
+                btnNext.removeAttribute('disabled')
+                btnNext.setAttribute('aria-disabled', false)
+            }
         }
     })
 }
@@ -1472,67 +1479,12 @@ const userData = reactive({
 import {
     APIgetUserList
 } from '@/api/custom/custom.js'
-APIgetUserList().then(res => {
-    if (res.status == 200) {
-        console.log(res)
-        userData.arr = res.data
-    }
-})
 const getNameFunc = (arr, key) => {
     for (let i in arr) {
         if (arr[i].id == key) {
-            return arr[i].username
+            return arr[i]
         }
     }
-}
-// 企业申请
-const data_applyList = reactive({
-    arr: []
-})
-const switch_replay = ref(false)
-import {
-    APIgetEnterpriseApplyDetails,
-    APIgetEnterpriseApplyList,
-    APIpostEnterpriseExamine
-} from '@/api/custom/custom.js'
-const applyFunc = row => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        tyle: 1
-    }
-    APIgetEnterpriseApplyList(params).then(res => {
-        console.log(res)
-        data_applyList.arr = res.data
-        switch_replay.value = true
-    })
-}
-const switch_details_1 = ref(false)
-const apply_details = reactive({
-    obj: {}
-})
-const examine_item = reactive({
-    obj: {}
-})
-const switch_examine_1 = ref(false)
-const detailsFunc_1 = row => {
-    APIgetEnterpriseApplyDetails(row.id).then(res => {
-        console.log(res)
-        apply_details.obj = res.data
-        switch_details_1.value = true
-        apply_details.obj.content.biz_lic = import.meta.env.VITE_APP_FOLDER_SRC + apply_details.obj.content.biz_lic
-    })
-}
-const examineFunc = row => {
-    switch_examine_1.value = true
-    apply_details.obj = row
-
-}
-const postFunc_2 = () => {
-    APIpostEnterpriseExamine(apply_details.obj.id, examine_item.obj).then(res => {
-        ElMessage.success('审核成功')
-        switch_examine_1.value = false
-    })
 }
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -1546,44 +1498,59 @@ getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status', 'toushu_return
 })
 </script>
 <style lang="scss" scoped>
-    .keep-on-record {
-        .tit-box-box {
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.keep-on-record {
+    .tit-box-box {
+        display: flex;
+        padding: 0;
+        .tit-box {
+            height: 60px;
+            box-sizing: border-box;
+            margin-right: 30px;
+            padding: 0 20px;
+            font-size: 13px;
+            color: #8c8c8c;
             display: flex;
-            padding: 0;
-            .tit-box {
-                height: 60px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            position: relative;
+            .tips {
+                position: absolute;
+                right: 0;
+                top: 8px;
                 box-sizing: border-box;
-                margin-right: 30px;
-                padding: 0 20px;
-                font-size: 13px;
-                color: #8c8c8c;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                border-bottom: 2px solid transparent;
-                position: relative;
-                .tips {
-                    position: absolute;
-                    right: 0;
-                    top: 8px;
-                    box-sizing: border-box;
-                    padding: 0 8px;
-                    border-radius: 14px;
-                    font-size: 12px;
-                    color: #fff;
-                    background-color: #e55055;
-                }
-            }
-            .tit-box.on {
-                border-bottom: 2px solid rgb(2 167 240 / 100%);
-            }
-            .tit-box:last-child {
-                margin-right: 0;
+                padding: 0 8px;
+                border-radius: 14px;
+                font-size: 12px;
+                color: #fff;
+                background-color: #e55055;
             }
         }
+        .tit-box.on {
+            border-bottom: 2px solid rgb(2 167 240 / 100%);
+        }
+        .tit-box:last-child {
+            margin-right: 0;
+        }
     }
-    ::v-deep .el-table__header-wrapper tr th.el-table-fixed-column--right {
-        z-index: 1;
-    }
+}
+::v-deep .el-table__header-wrapper tr th.el-table-fixed-column--right {
+    z-index: 1;
+}
+.item-hd {
+    font-size: 14px;
+    margin: 10px 0 5px;
+    font-weight: 700;
+}
+.left_1 {
+    color: #999;
+    box-sizing: border-box;
+    width: 160px;
+    white-space: nowrap;
+    margin-right: 20px;
+    text-align: right;
+}
 </style>

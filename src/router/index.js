@@ -96,6 +96,7 @@ import statisticsRepair from './modules/statistics/repair.js'
 // 房源
 import houseHousingManagement from './modules/house/housing_management.js'
 import houseEnterprise from './modules/house/enterprise.js'
+import houseEnterpriseApply from './modules/house/enterprise_apply.js'
 import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
 import houseBind from './modules/house/house_bind.js'
@@ -169,6 +170,7 @@ const asyncRoutes = [{
             houseBind,
             houseProperty,
             houseEnterprise,
+            houseEnterpriseApply,
             eventDevice,
             eventDeviceArchive,
             eventDeviceRepair

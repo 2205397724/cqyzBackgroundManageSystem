@@ -9,8 +9,8 @@
                                 <span class="strong size-lg">业委会名称： {{ flow.item.name }}</span>
                             </p>
                             <p>
-                                <el-tag v-if="flow.item.active == 1" type="success" effect="dark" round>已启用</el-tag>
-                                <el-tag v-if="flow.item.active == 0" type="info" effect="dark" round>已禁用</el-tag>
+                                <el-tag v-if="flow.item.active == 1" type="success" size="small" round>已启用</el-tag>
+                                <el-tag v-if="flow.item.active == 0" type="info" size="small" round>已禁用</el-tag>
                             </p>
                         </div>
                         <div style="text-align: center;">

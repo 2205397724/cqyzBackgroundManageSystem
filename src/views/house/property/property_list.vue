@@ -71,12 +71,15 @@
                     </el-row>
                     <el-row class="m-t-20">
                         <el-col :xs="24" :md="24" :lg="24">
-                            <div class="flx">
-                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                <div v-show="switch_search == true" class="m-l-20 size-base">
-                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                    <div class="searchDetail">
-                                        *搜索到相关结果共{{ total }}条。
+                            <div class="searchBox">
+                                <div class="search_th" />
+                                <div class="search_tb">
+                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                        <div class="searchDetail">
+                                            *搜索到相关结果共{{ total }}条。
+                                        </div>
                                     </div>
                                 </div>
                             </div>

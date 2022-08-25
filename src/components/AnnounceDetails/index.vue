@@ -40,11 +40,11 @@
                         <div class="item">
                             <div class="left">状态</div>
                             <div class="right">
-                                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 2" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 2" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
                             </div>
                         </div>
                         <div class="item">
@@ -62,9 +62,9 @@
                         <div class="item">
                             <div class="left">附件</div>
                             <div class="right">
-                                <img
+                                <el-image
                                     v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" :src="item" fit="cover"
-                                >
+                                />
                             </div>
                         </div>
                         <div class="item">
@@ -172,6 +172,7 @@ const detailsFunc = () => {
     activeName.value = '1'
     switch_details.value = true
     APIgetEventArticleDetails(props.id).then(res => {
+        console.log(res)
         data_details.item = res
         groupName.value = res.authorgroup.name
         cateName.value = res.cate.name

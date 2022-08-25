@@ -2,18 +2,18 @@
     <div class="routine-house">
         <page-main style="overflow: hidden;">
             <el-button-group class="btn">
-                <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag">
-                    <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
-                </el-badge>
-                <el-badge :value="index == 10 ? total : ''" class="item" :hidden="flag1">
-                    <el-button :type="index == 10 ? 'primary' : ''" @click="StatusFunk(10)">未处理</el-button>
-                </el-badge>
-                <el-badge :value="index == 20 ? total : ''" class="item" :hidden="flag2">
-                    <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">审核成功</el-button>
-                </el-badge>
-                <el-badge :value="index == 30 ? total : ''" class="item" :hidden="flag3">
-                    <el-button :type="index == 30 ? 'primary' : ''" @click="StatusFunk(30)">审核失败</el-button>
-                </el-badge>
+                <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
+                <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 10 ? total : ''" class="item" :hidden="flag1"> -->
+                <el-button :type="index == 10 ? 'primary' : ''" @click="StatusFunk(10)">未处理</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 20 ? total : ''" class="item" :hidden="flag2"> -->
+                <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">审核成功</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 30 ? total : ''" class="item" :hidden="flag3"> -->
+                <el-button :type="index == 30 ? 'primary' : ''" @click="StatusFunk(30)">审核失败</el-button>
+                <!-- </el-badge> -->
             </el-button-group>
             <el-table
                 v-loading="loading_tab"
@@ -49,9 +49,9 @@
                 </el-table-column>
                 <el-table-column prop="type" label="申请状态">
                     <template #default="scope">
-                        <el-tag v-show="scope.row.status == 10" class="btnNone m-l-5" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 20" class="btnNone " type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 10" class="btnNone m-l-5" type="warning" effect="dark" size="small" @click="getHouseBindDetails(scope.row)">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone " type="success" size="small">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" size="small">{{ getOptVal(opts_all.obj.houseBindStatus,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -95,7 +95,7 @@
         <el-dialog
             v-model="switch_PosthouseBind"
             title="审核"
-            width="50%"
+            width="40%"
         >
             <div>
                 <el-form
@@ -124,14 +124,14 @@
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="回复" prop="reply"
+                                label="审核意见" prop="reply"
                                 label-width="80px"
                             >
                                 <el-input
                                     v-model="houseBind.item.reply"
                                     placeholder=""
                                     type="textarea"
-                                    :autosize="{minRows: 2,maxRows: 8}"
+                                    :autosize="{minRows: 3,maxRows: 8}"
                                 />
                             </el-form-item>
                         </el-col>
@@ -149,11 +149,11 @@
         <el-dialog
             v-model="switch_HouseBinddetails"
             title="详情"
-            :width="data_details_1.item ? '70%':'50%'"
+            width="70%"
         >
             <div class="detail_hd">
-                <div class="left">申请基本信息</div>
-                <div v-if="data_details_1.item" class="right">申请绑定房屋产权信息</div>
+                <div class="left">申请人信息</div>
+                <div class="right">房屋产权信息</div>
             </div>
             <div class="Box">
                 <div class="detailBigBox">
@@ -165,35 +165,27 @@
                         <div class="item">
                             <div class="left">申请类型</div>
                             <div class="right">
-                                <el-tag effect="dark" :type="data_details.item.type==1? 'success' : 'warning'">{{ getOptVal(opts_all.obj.house_bind,data_details.item.type) }}</el-tag>
+                                <el-tag :type="data_details.item.type==1? 'success' : 'warning'">{{ getOptVal(opts_all.obj.house_bind,data_details.item.type) }}</el-tag>
                             </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">申请绑定的房屋</div>
-                            <div class="right">{{ data_details.item.house.name }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">房屋地址</div>
-                            <div class="right">{{ data_details.item.house.addr }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">房屋名义层</div>
-                            <div class="right">{{ data_details.item.house.floor_alias }}</div>
                         </div>
                         <div class="item">
                             <div class="left">申请人身份证号</div>
                             <div class="right">{{ data_details.item.id_card }}</div>
                         </div>
                         <div class="item">
+                            <div class="left">申请时间</div>
+                            <div class="right">{{ data_details.item.created_at }}</div>
+                        </div>
+                        <div class="item">
                             <div class="left">申请状态</div>
                             <div class="right">
-                                <el-tag v-show="data_details.item.status == 10" class="btnNone" type="warning" effect="dark">未处理 </el-tag>
-                                <el-tag v-show="data_details.item.status == 20" class="btnNone " type="success" effect="dark">审核成功</el-tag>
-                                <el-tag v-show="data_details.item.status == 30" class="btnNone" type="danger" effect="dark">审核失败</el-tag>
+                                <el-tag v-show="data_details.item.status == 10" class="btnNone" type="warning" effect="dark" @click="modifyHouseBindFunc">未处理 </el-tag>
+                                <el-tag v-show="data_details.item.status == 20" class="btnNone " type="success">审核成功</el-tag>
+                                <el-tag v-show="data_details.item.status == 30" class="btnNone" type="danger">审核失败</el-tag>
                             </div>
                         </div>
                         <div v-if="data_details.item.affixs&&data_details.item.affixs.length>0" class="item">
-                            <div class="left">附件</div>
+                            <div class="left">佐证材料</div>
                             <div class="right">
                                 <!-- 两种模式任君选择 -->
                                 <el-image
@@ -204,31 +196,57 @@
                         </div> -->
                             </div>
                         </div>
-                        <div class="item">
-                            <div class="left">申请时间</div>
-                            <div class="right">{{ data_details.item.created_at }}</div>
+                        <div v-if="data_details.item.reply != ''" class="item">
+                            <div class="left">审核意见</div>
+                            <div class="right">{{ data_details.item.reply }}</div>
+                        </div>
+                        <div v-if="data_details.item.audit_user" class="item">
+                            <div class="left">审核人</div>
+                            <div class="right">
+                                <span>姓名：{{ data_details.item.audit_user.name ? data_details.item.audit_user.name: data_details.item.audit_user.nickname ? data_details.item.audit_user.nickname : data_details.item.audit_user.username ? data_details.item.audit_user.username:'' }}</span>
+                                <span class="inline-block m-l-30 m-r-30">电话：{{ data_details.item.audit_user.mobile }}
+                                </span>
+                                <span style="font-size: 13px;">时间：{{ data_details.item.updated_at }}</span>
+                            </div>
+                        </div>
+                        <div v-if="data_details.item.status == 10" class="item">
+                            <div class="left_1" />
+                            <div class="right">
+                                <el-button type="primary" class="m-t-10" @click="modifyHouseBindFunc">审核</el-button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div v-if="data_details_1.item" class="detailBigBox_1">
+                <div class="detailBigBox_1">
                     <div class="details-box">
                         <div class="item">
+                            <div class="left">房屋名称</div>
+                            <div class="right">{{ data_details.item.house.name }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="left">房屋地址</div>
+                            <div class="right">{{ data_details.item.house.addr }}</div>
+                        </div>
+                        <div class="item">
                             <div class="left">产权证号</div>
-                            <div class="right">{{ data_details_1.item.code_property }}</div>
+                            <div v-if="data_details_1.item" class="right">{{ data_details_1.item.code_property }}</div>
+                            <div v-if="!data_details_1.item" class="right" />
                         </div>
                         <div class="item">
                             <div class="left">地房籍号</div>
-                            <div class="right">{{ data_details_1.item.code_room }}</div>
+                            <div v-if="data_details_1.item" class="right">{{ data_details_1.item.code_room }}</div>
+                            <div v-if="!data_details_1.item" class="right" />
                         </div>
                         <div class="item">
                             <div class="left">交易时间</div>
-                            <div class="right">{{ data_details_1.item.time_deal }}</div>
+                            <div v-if="data_details_1.item" class="right">{{ data_details_1.item.time_deal }}</div>
+                            <div v-if="!data_details_1.item" class="right" />
                         </div>
-                        <div v-if="data_details_1.item.owners">
-                            <el-scrollbar :height="data_details_1.item.owners.length >= 3 ? '300px' : ''">
-                                <div class="item">
-                                    <div class="left">产权人</div>
-                                    <div class="right">
+                        <div>
+                            <div class="item">
+                                <div class="left">产权人</div>
+                                <div v-if="data_details_1.item && data_details_1.item.owners" class="right">
+                                    <el-scrollbar :height="data_details_1.item.owners.length >= 3 ? '300px' : ''">
                                         <div
                                             v-for="(item,i) in data_details_1.item.owners" :key="i"
                                             class="owners"
@@ -249,14 +267,14 @@
                                                 <span>证件号：</span>{{ item.id_card }}
                                             </div>
                                         </div>
-                                    </div>
+                                    </el-scrollbar>
                                 </div>
-                            </el-scrollbar>
+                                <div v-if="!data_details_1.item" class="right" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <el-button v-if="data_details.item.status == 10" type="primary" class="m-t-10" @click="modifyHouseBindFunc">审核</el-button>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_HouseBinddetails = false">取消</el-button>
@@ -295,7 +313,9 @@ const allHouse_list = reactive({
     arr: []
 })
 const data_details_1 = reactive({
-    item: {}
+    item: {
+        owners: []
+    }
 })
 const getHouseBindListFunc = val => {
     let params = {
@@ -332,7 +352,7 @@ const getHouseBindListFunc = val => {
     })
 }
 // 待处理点击事件
-const index = ref(1)
+const index = ref(0)
 const noDeal = val => {
     index.value = val
     getHouseBindListFunc(val)
@@ -368,6 +388,12 @@ const data_details = reactive({
             name: '',
             addr: '',
             floor_alias: ''
+        },
+        audit_user: {
+            name: '',
+            nickname: '',
+            username: '',
+            mobile: ''
         }
     }
 })
@@ -396,12 +422,12 @@ const getHouseBindDetails = val => {
         console.log(res)
         data_details_1.item = res[0]
         let detailBigBox = document.querySelector('.detailBigBox')
-        if (!data_details_1.item) {
-            detailBigBox.style.width = '100%'
-            console.log(detailBigBox)
-        } else {
-            detailBigBox.style.width = '50%'
-        }
+        // if (!data_details_1.item) {
+        //     detailBigBox.style.width = '100%'
+        //     console.log(detailBigBox)
+        // } else {
+        //     detailBigBox.style.width = '50%'
+        // }
         console.log(res[0])
     })
 }
@@ -411,6 +437,7 @@ const dialogExamineCloseFunc_2 = () => {
         ElMessage.success('已审核')
         refreshFunc()
         switch_PosthouseBind.value = false
+        switch_HouseBinddetails.value = false
         houseBind.item = {}
     }).catch(err => {
         // ElMessage.error('修改失败')
@@ -480,14 +507,14 @@ getOpts(['houseBindStatus', 'house_bind']).then(res => {
     margin-bottom: 15px;
 }
 .btn button {
-    padding: 0 40px;
+    padding: 20px 40px;
 }
 .Box {
     display: flex;
     .detailBigBox {
         width: 50%;
         padding: 10px;
-        background-color: #cde6eb;
+        background-color: #ecf5ff;
         margin-right: 20px;
     }
     .detailBigBox_1 {
@@ -523,5 +550,13 @@ getOpts(['houseBindStatus', 'house_bind']).then(res => {
             color: #000;
         }
     }
+}
+.left_1 {
+    color: #999;
+    box-sizing: border-box;
+    width: 160px;
+    white-space: nowrap;
+    margin-right: 20px;
+    text-align: right;
 }
 </style>

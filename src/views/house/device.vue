@@ -98,9 +98,9 @@
                     </el-table-column>
                     <el-table-column prop="cid" label="状态" width="90">
                         <template #default="scope">
-                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark">正常</el-tag>
-                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="danger" effect="dark"> 故障</el-tag>
-                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark">维修</el-tag>
+                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" size="small">正常</el-tag>
+                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="danger" size="small"> 故障</el-tag>
+                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">维修</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="档案" width="90">
@@ -359,9 +359,9 @@
                             <div class="item">
                                 <div class="left">状态</div>
                                 <div class="right">
-                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="success" effect="dark">正常</el-tag>
-                                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="danger" effect="dark"> 故障</el-tag>
-                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark">维修</el-tag>
+                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="success" size="small">正常</el-tag>
+                                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="danger" size="small"> 故障</el-tag>
+                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">维修</el-tag>
                                 </div>
                             </div>
                             <div class="item">
