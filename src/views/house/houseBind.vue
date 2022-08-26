@@ -23,7 +23,7 @@
                     color: '#999999',
                     'font-size': '12px',
                 }"
-                style="width: 100%; min-height: 400px;"
+                class="tab_1"
                 @select="handleSelectionChange"
             >
                 <el-table-column prop="name" label="申请人姓名">

@@ -1,6 +1,20 @@
 <template>
     <div class="keep-on-record">
         <page-main class="hidden">
+            <el-button-group class="btn">
+                <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
+                <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 10 ? total : ''" class="item" :hidden="flag1"> -->
+                <el-button :type="index == 10 ? 'primary' : ''" @click="StatusFunk(10)">未处理</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 20 ? total : ''" class="item" :hidden="flag2"> -->
+                <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">审核成功</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 30 ? total : ''" class="item" :hidden="flag3"> -->
+                <el-button :type="index == 30 ? 'primary' : ''" @click="StatusFunk(30)">审核失败</el-button>
+                <!-- </el-badge> -->
+            </el-button-group>
             <el-table
                 :data="data_applyList.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -61,7 +75,7 @@
         <el-dialog
             v-model="switch_details_1"
             title="申请详情"
-            width="50%"
+            width="60%"
         >
             <div class="details-box">
                 <div class="item-hd">企业相关信息：</div>
@@ -77,7 +91,7 @@
                     <div class="item">
                         <div class="left">营业执照</div>
                         <div class="right">
-                            <img :src="apply_details.obj.content.biz_lic" alt="" style="width: 120px;">
+                            <el-image :src="apply_details.obj.content.biz_lic" class="wh_100p m-r-10" :preview-src-list="list.arr" fit="cover" />
                         </div>
                     </div>
                     <div class="item">
@@ -109,19 +123,20 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="user.item" class="item-hd">申请人相关信息：</div>
-                <div v-if="user.item" style="background-color: #fafafa;">
+                <div v-if="apply_details.obj.uinfo" class="item-hd">申请人相关信息：</div>
+                <div v-if="apply_details.obj.uinfo" style="background-color: #fafafa;">
                     <div class="item">
-                        <div class="left">申请人</div>
-                        <div class="right">{{ user.item.username }} </div>
+                        <div class="left">申请人姓名</div>
+                        <div class="right">{{ apply_details.obj.uinfo.name || apply_details.obj.uinfo.nickname || apply_details.obj.uinfo.username || '未实名' }} </div>
                     </div>
-                    <div class="item">
-                        <div class="left">申请人身份证号</div>
-                        <div class="right">{{ user.item.id_card }} </div>
-                    </div>
+
                     <div class="item">
                         <div class="left">申请人手机号</div>
-                        <div class="right">{{ user.item.mobile }} </div>
+                        <div class="right">{{ apply_details.obj.uinfo.mobile }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">申请时间</div>
+                        <div class="right">{{ apply_details.obj.created_at }} </div>
                     </div>
                 </div>
                 <div v-if="apply_details.obj.process_by" class="item-hd">处理人相关信息：</div>
@@ -231,6 +246,24 @@ const getNameFunc = (arr, key) => {
         }
     }
 }
+// 待处理点击事件
+const index = ref(0)
+const noDeal = val => {
+    index.value = val
+    getEnterpriseApplyList(val)
+}
+const flag = ref(true)
+const flag1 = ref(true)
+const flag2 = ref(true)
+const flag3 = ref(true)
+const StatusFunk = val => {
+    noDeal(val)
+    flag.value = false
+    flag1.value = false
+    flag2.value = false
+    flag3.value = false
+    console.log(flag.value)
+}
 // 企业申请
 const data_applyList = reactive({
     arr: []
@@ -241,11 +274,15 @@ import {
     APIgetEnterpriseApplyList,
     APIpostEnterpriseExamine
 } from '@/api/custom/custom.js'
-const getEnterpriseApplyList = () => {
+const getEnterpriseApplyList = val => {
     let params = {
         page: page.value,
         per_page: per_page.value,
-        tyle: 1
+        tyle: 1,
+        process_status: val
+    }
+    if (val == 0) {
+        delete params.process_status
     }
     APIgetEnterpriseApplyList(params).then(res => {
         console.log(res)
@@ -270,8 +307,8 @@ const apply_details = reactive({
 const examine_item = reactive({
     obj: {}
 })
-const user = reactive({
-    item: {}
+const list = reactive({
+    arr: []
 })
 const switch_examine_1 = ref(false)
 const detailsFunc_1 = row => {
@@ -280,14 +317,7 @@ const detailsFunc_1 = row => {
         apply_details.obj = res.data
         switch_details_1.value = true
         apply_details.obj.content.biz_lic = import.meta.env.VITE_APP_FOLDER_SRC + apply_details.obj.content.biz_lic
-        APIgetUserList().then(res => {
-            if (res.status == 200) {
-                userData.arr = res.data
-                console.log(userData.arr)
-                user.item = getNameFunc(userData.arr, apply_details.obj.user_id)
-                console.log(user.item)
-            }
-        })
+        list.arr.push(apply_details.obj.content.biz_lic)
     })
 }
 const examineFunc = () => {
@@ -328,5 +358,11 @@ getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status', 'toushu_return
     white-space: nowrap;
     margin-right: 20px;
     text-align: right;
+}
+.btn {
+    margin-bottom: 15px;
+}
+.btn button {
+    padding: 20px 40px;
 }
 </style>

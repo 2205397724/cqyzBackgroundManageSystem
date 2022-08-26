@@ -1,6 +1,6 @@
 <template>
     <div class="articletparticletpl">
-        <page-main style="overflow: hidden;">
+        <page-main class="hidden">
             <div>
                 <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加设备</el-button>
             </div>
@@ -44,12 +44,15 @@
                     </el-row>
                     <el-row class="m-t-20">
                         <el-col :xs="24" :md="24" :lg="24">
-                            <div class="flx">
-                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                <div v-show="switch_search == true" class="m-l-20 size-base">
-                                    <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                    <div class="searchDetail">
-                                        *搜索到相关结果共{{ total }}条。
+                            <div class="searchBox">
+                                <div class="search_th" />
+                                <div class="search_tb">
+                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                        <div class="searchDetail">
+                                            *搜索到相关结果共{{ total }}条。
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +72,7 @@
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    class="tab"
+                    class="tab_1"
                 >
                     <el-table-column prop="id" label="设备名称" width="180">
                         <template #default="scope">
@@ -105,12 +108,12 @@
                     </el-table-column>
                     <el-table-column prop="id" label="档案" width="90">
                         <template #default="scope">
-                            <div class="archive" @click="deviceArchive(scope.row)">档案</div>
+                            <el-tag class="btnNone" type="primary" size="small" effect="dark" @click="deviceArchive(scope.row)">档案</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="维保记录" width="120">
                         <template #default="scope">
-                            <div class="archive" @click="deviceRepair(scope.row)">维保记录</div>
+                            <el-tag class="btnNone" type="primary" size="small" effect="dark" @click="deviceRepair(scope.row)">维保记录</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
@@ -189,7 +192,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="所在地址"
+                                label="详细地址"
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''"
                             >
@@ -319,25 +322,28 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="70%"
+            width="60%"
             @closed="closeDialog"
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="基础信息" name="1">
-                    <el-scrollbar height="400px">
+                    <el-scrollbar height="452px">
                         <div class="details-box">
+                            <div class="details-tit-sm">设备信息</div>
                             <div class="item">
                                 <div class="left">设备名称</div>
                                 <div class="right">{{ data_details.item.name }}</div>
                             </div>
                             <div class="item">
-                                <div class="left" style="width: 128px;">小区>楼栋>单元</div>
-                                <div class="right" style="width: 80px;">{{ zoneName.name }}</div>
-                                <div v-if="data_details.item.building!== ''&& data_details.item.buildinginfo !== null " style="display: inline-block;margin-right: 15px;">{{ buildingName.name }}</div>
-                                <div v-if="data_details.item.unit !== '' && data_details.item.unitinfo !== null" style="display: inline-block;">{{ unitName.name }}</div>
+                                <div class="left">所属位置</div>
+                                <div class="right">
+                                    <span>{{ zoneName.name }}</span>
+                                    <span v-if="data_details.item.building!== ''&& data_details.item.buildinginfo !== null " style="margin-right: 15px; margin-left: 15px;">{{ buildingName.name }}</span>
+                                    <span v-if="data_details.item.unit !== '' && data_details.item.unitinfo !== null">{{ unitName.name }}</span>
+                                </div>
                             </div>
                             <div class="item">
-                                <div class="left">所在地址</div>
+                                <div class="left">详细地址</div>
                                 <div class="right">{{ data_details.item.addr }}</div>
                             </div>
                             <div class="item">
@@ -368,6 +374,15 @@
                                 <div class="left">是否显示</div>
                                 <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
                             </div>
+                            <div class="details-tit-sm">其他信息</div>
+
+                            <div
+                                v-for="(item,i) in data_details.item.extra" :key="i"
+                                class="item"
+                            >
+                                <div class="left">{{ item.lab }}</div>
+                                <div class="right">{{ item.val }}</div>
+                            </div>
                             <div class="item">
                                 <div class="left">创建时间</div>
                                 <div class="right">{{ data_details.item.created_at }}</div>
@@ -380,13 +395,13 @@
                     </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="档案信息" name="2">
-                    <el-button type="primary" class="m-l-10 m-b-10" :icon="Plus" @click="addArchiveFunc">添加档案</el-button>
-                    <el-scrollbar :height="data_archive.arr.length>= 3 ? '600px': ''">
+                    <el-button type="primary" class="m-b-20" :icon="Plus" @click="addArchiveFunc">添加档案</el-button>
+                    <el-scrollbar height="400px">
                         <div>
-                            <el-timeline v-for="(item,index) in data_archive.arr" :key="index">
-                                <el-timeline-item :timestamp="item.created_at" placement="top">
+                            <el-timeline style="padding: 1px;">
+                                <el-timeline-item v-for="(item,index) in data_archive.arr" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
                                     <div class="put_del">
-                                        <el-button type="primary" size="small m-r-10" @click="modifyArchiveFunc(item)">修改</el-button>
+                                        <el-button type="primary" size="small" @click="modifyArchiveFunc(item)">修改</el-button>
                                         <el-popconfirm
                                             title="确定要删除当前项么?" cancel-button-type="info"
                                             @confirm="deleteArchiveFunc(item)"
@@ -402,55 +417,40 @@
                                         <div class="details-box">
                                             <div class="item">
                                                 <div class="left">档案名称</div>
-                                                <div class="right">{{ item.title }}</div>
-                                            </div>
-                                            <!-- <div
-                                                v-if="item.content&&item.content.length>=1" class="item"
-                                            >
-                                                <div class="left">
-                                                    附件
-                                                </div>
-
                                                 <div class="right">
-                                                    <el-image
-                                                        v-for="(j,i) in item.content" :key="i" :preview-src-list="item.affixs" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+j.key" fit="cover"
-                                                    />
+                                                    <span>{{ item.title }}</span>
+                                                    <el-tag v-if="item.show == 1" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.device_show,item.show) }}</el-tag>
+                                                    <el-tag v-if="item.show == 0" type="info" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.device_show,item.show) }}</el-tag>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <div v-if="item.content&&item.content.length>=1" class="item">
                                                 <div class="left">附件</div>
                                                 <div class="right">
                                                     <div v-for="(item,i) in item.content" :key="i">
-                                                        <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link>
+                                                        <!-- <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link> -->
+                                                        <el-tag v-if="item.type == 'file'" type="success" size="small">{{ item.name }}</el-tag>
+                                                        <el-image v-if="item.type == 'image'" :preview-src-list="item.key" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+item.key" fit="cover" />
+                                                        <vue3VideoPlay v-if="item.type == 'radio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+item.key" />
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">是否显示</div>
-                                                <div class="right">{{ getOptVal(opts_all.obj.device_show,item.show) }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">更新时间</div>
-
-                                                <div class="right">{{ item.updated_at }}</div>
                                             </div>
                                         </div>
                                     </el-card>
                                 </el-timeline-item>
                             </el-timeline>
                         </div>
-                        <div v-show="data_archive.arr.length <= 0" class="size-lx">此设备无档案信息</div>
+                        <div v-show="data_archive.arr.length <= 0" class="size-lg">此设备无档案信息</div>
                     </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="维保记录" name="3">
-                    <el-button type="primary" class="m-l-10 m-b-10" :icon="Plus" @click="addRepairFunc">添加维修</el-button>
+                    <el-button type="primary" class="m-b-20" :icon="Plus" @click="addRepairFunc">添加维修</el-button>
 
-                    <el-scrollbar :height=" data_repair.arr.length >= 3? '600px': ''">
+                    <el-scrollbar height="400px">
                         <div>
-                            <el-timeline v-for="(item,index) in data_repair.arr" :key="index">
-                                <el-timeline-item :timestamp="item.created_at" placement="top">
+                            <el-timeline style="padding: 1px;">
+                                <el-timeline-item v-for="(item,index) in data_repair.arr" :key="index" :type="index == 0 ? 'primary' : ''" :timestamp="item.created_at" placement="top">
                                     <div class="put_del">
-                                        <el-button type="primary" size="small m-r-10" @click="modifyRepairFunc(item)">修改</el-button>
+                                        <el-button type="primary" size="small" @click="modifyRepairFunc(item)">修改</el-button>
                                         <el-popconfirm
                                             title="确定要删除当前项么?" cancel-button-type="info"
                                             @confirm="deleteRepairFunc(item)"
@@ -466,7 +466,15 @@
                                         <div class="details-box">
                                             <div class="item">
                                                 <div class="left">维保名称</div>
-                                                <div class="right">{{ item.title }}</div>
+                                                <div class="right">
+                                                    <span>{{ item.title }}</span>
+                                                    <el-tag v-if="item.type == 1" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</el-tag>
+                                                    <el-tag v-if="item.type == 0" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</el-tag>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">详细记录</div>
+                                                <div class="right">{{ item.content }}</div>
                                             </div>
                                             <div
                                                 v-if="item.affix&&item.affix.length>=1" class="item"
@@ -480,25 +488,14 @@
                                                     <el-image
                                                         v-for="(j,i) in item.affix" :key="i" :preview-src-list="item.affixs" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+j" fit="cover"
                                                     />
-                                                    <!-- <div v-for="(item,i) in data_1.details_data.affixs">
-                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
-                        </div> -->
                                                 </div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">详细记录</div>
-                                                <div class="right">{{ item.content }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">类型</div>
-                                                <div class="right">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</div>
                                             </div>
                                         </div>
                                     </el-card>
                                 </el-timeline-item>
                             </el-timeline>
                         </div>
-                        <div v-show="data_repair.arr.length <= 0" class="size-lx">此设备无维保记录</div>
+                        <div v-show="data_repair.arr.length <= 0" class="size-lg">此设备无维保记录</div>
                     </el-scrollbar>
                 </el-tab-pane>
             </el-tabs>
@@ -550,7 +547,6 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24"><div class="details-tit-sm m-b-10">档案内容</div></el-col>
                         <el-col :md="24" :lg="24">
                             <div class="m-b-10">
                                 <el-button type="primary" plain @click="addServiceFunc_1">添加档案内容</el-button>
@@ -576,15 +572,16 @@
                                                     </el-upload>
                                                 </el-form-item>
                                             </el-col>
-                                            <el-col :xs="12" :sm="12">
+                                            <el-col :xs="24" :sm="24">
                                                 <el-form-item label-width="70px" label="文件类型" :error="from_error.msg&&from_error.msg['content.'+i+'.type']?from_error.msg['content.'+i+'.type'][0]:''">
-                                                    <el-input
-                                                        v-model="item.type"
-                                                        placeholder=""
-                                                    />
+                                                    <el-radio-group v-model="item.type" class="ml-4">
+                                                        <el-radio label="image">图片</el-radio>
+                                                        <el-radio label="file">文件</el-radio>
+                                                        <el-radio label="audio">音频</el-radio>
+                                                    </el-radio-group>
                                                 </el-form-item>
                                             </el-col>
-                                            <el-col :xs="12" :sm="12">
+                                            <el-col :xs="24" :sm="24">
                                                 <el-form-item label-width="70px" label="文件名" :error="from_error.msg&&from_error.msg['content.'+i+'.name']?from_error.msg['content.'+i+'.name'][0]:''">
                                                     <el-input
                                                         v-model="item.name"
@@ -639,6 +636,28 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
+                                label="类型"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
+                            >
+                                <el-select v-model="addRepair.item.type" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="资金来源"
+                                label-width="70px"
+                                :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
+                            >
+                                <el-select v-model="addRepair.item.money_src" class="head-btn" placeholder="" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.device_repair_money_src" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
                                 label="使用金额"
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.money?from_error.msg.money[0]:''"
@@ -649,17 +668,6 @@
                                 >
                                     <template #append>分</template>
                                 </el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="类型"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
-                            >
-                                <el-select v-model="addRepair.item.type" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -738,10 +746,20 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+
 import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
+// 音频
+const optionsAll = reactive({
+    width: '500px', // 播放器高度
+    height: '260px', // 播放器高度
+    color: '#409eff', // 主题色
+    control: false, // 是否显示控制器
+    title: '', // 视频名称
+    poster: ''
+})
 let switch_search = ref(false)
 let data_search = reactive({ obj: {} })
 // 详情
@@ -784,15 +802,13 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
-const switch_repair = ref(false)
-const switch_archive = ref(false)
 const activeName = ref('1')
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['illegal_user', 'illegal_type', 'device_status', 'device_type', 'device_show', 'kind', 'repair_type', 'device_show']).then(res => {
+getOpts(['illegal_user', ' device_repair_money_src', 'illegal_type', 'device_status', 'device_type', 'device_show', 'kind', 'repair_type', 'device_show']).then(res => {
     console.log(res)
     opts_all.obj = res
 })
@@ -1270,7 +1286,19 @@ const deleteArchiveFunc = val => {
 }
 .put_del {
     position: absolute;
-    top: 29px;
-    right: 4px;
+    top: 40px;
+    right: 15px;
+}
+.owners {
+    display: flex;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    div {
+        width: 50%;
+        margin-bottom: 5px;
+        span {
+            color: #000;
+        }
+    }
 }
 </style>

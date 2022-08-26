@@ -1,6 +1,6 @@
 <template>
     <div class="propertypropertylist">
-        <page-main>
+        <page-main class="hidden">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus"
@@ -99,7 +99,7 @@
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    class="tab"
+                    class="tab_1"
                 >
                     <el-table-column prop="house_id" label="房屋" width="250">
                         <template #default="scope">
@@ -149,16 +149,17 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <div class="p-t-20">
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
-            </div>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -529,6 +530,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = data_tab.arr.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
     getHouseListFunc()
 }
@@ -626,49 +637,51 @@ getOpts(['house_has_house', 'type_id_card']).then(res => {
 
 </script>
 <style lang="scss">
-    .propertypropertylist {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
+.propertypropertylist {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
             margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
         }
     }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
 </style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-    .owners {
-        display: flex;
-        margin-bottom: 10px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
-        flex-wrap: wrap;
-        div {
-            width: 50%;
-            margin-bottom: 5px;
-            span {
-                color: #000;
-            }
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.owners {
+    display: flex;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+    div {
+        width: 50%;
+        margin-bottom: 5px;
+        span {
+            color: #000;
         }
     }
+}
 </style>

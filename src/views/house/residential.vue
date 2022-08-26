@@ -45,14 +45,16 @@
                             </el-row>
                             <el-row class="m-t-20">
                                 <el-col :xs="24" :md="24" :lg="24">
-                                    <div class="flx">
-                                        <!-- <div class="w_30"> -->
-                                        <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                        <!-- </div> -->
-                                        <div v-show="switch_search == true" class="m-l-20 size-base">
-                                            <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                            <div class="searchDetail" style="width: 220px;">
-                                                *搜索到相关结果共{{ total }}条。
+                                    <div class="searchBox">
+                                        <div class="search_th" />
+                                        <div class="search_tb">
+                                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                            <!-- </div> -->
+                                            <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                                <div class="searchDetail" style="width: 220px;">
+                                                    *搜索到相关结果共{{ total }}条。
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -64,7 +66,7 @@
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;"
+                                class="tab_1"
                             >
                                 <el-table-column prop="name" label="名称" width="180" />
                                 <el-table-column prop="addr" label="地址" width="220" />

@@ -84,13 +84,13 @@
                 </el-table-column>
                 <el-table-column label="状态">
                     <template #default="scope">
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="large" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="large" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="280">
@@ -594,9 +594,11 @@ const dialogExamineCloseFunc = () => {
     // formEl.validate(valid => {
     //     if (valid) {
     let files_arr = []
+
     for (let i in from_examine.item.affix) {
         files_arr.push(from_examine.item.affix[i].file)
     }
+    console.log(files_arr)
     if (files_arr.length <= 0) {
         if (str_title.value == '修改') {
             // from_examine.item = {
@@ -684,12 +686,10 @@ const getTabListFunc = () => {
         // total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= per_page.value) {
-            flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
         } else {
-            flag.value = false
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)

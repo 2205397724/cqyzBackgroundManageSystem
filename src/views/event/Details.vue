@@ -45,56 +45,54 @@
             <div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="基础信息" name="1">
-                        <el-scrollbar height="800px">
-                            <div class="details-box">
-                                <div class="item">
-                                    <div class="left content">内容</div>
-                                    <div class="right">{{ dataForm.item.content }}</div>
-                                </div>
-                                <div v-if="dataForm.item.affix&&dataForm.item.affix.length>0" class="item">
-                                    <div class="left content">附件</div>
-                                    <div class="right">
-                                        <!-- 两种模式任君选择 -->
-                                        <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
+                        <div class="details-box">
+                            <div class="item">
+                                <div class="left content">内容</div>
+                                <div class="right">{{ dataForm.item.content }}</div>
+                            </div>
+                            <div v-if="dataForm.item.affix&&dataForm.item.affix.length>0" class="item">
+                                <div class="left content">附件</div>
+                                <div class="right">
+                                    <!-- 两种模式任君选择 -->
+                                    <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
                                     <!-- <div v-for="(item,i) in data_1.details_data.affixs">
                             <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
                         </div> -->
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div>
+                                    <div class="item">
+                                        <div class="left">是否公开</div>
+                                        <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="left">所在小区</div>
+                                        <div class="right">{{ dataForm.item?.zone?.name }}</div>
                                     </div>
                                 </div>
-                                <div class="box">
-                                    <div>
-                                        <div class="item">
-                                            <div class="left">是否公开</div>
-                                            <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="left">所在小区</div>
-                                            <div class="right">{{ dataForm.item?.zone?.name }}</div>
-                                        </div>
+                                <div>
+                                    <div class="item">
+                                        <div class="left">是否匿名</div>
+                                        <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,dataForm.item.ano) }}</div>
                                     </div>
-                                    <div>
-                                        <div class="item">
-                                            <div class="left">是否匿名</div>
-                                            <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,dataForm.item.ano) }}</div>
-                                        </div>
-                                        <div v-if="dataForm.item.catpro" class="item">
-                                            <div class="left">问题分类</div>
-                                            <div class="right">{{ newcatpro.item.name }}</div>
-                                        </div>
+                                    <div v-if="dataForm.item.catpro" class="item">
+                                        <div class="left">问题分类</div>
+                                        <div class="right">{{ newcatpro.item.name }}</div>
                                     </div>
-                                    <div>
-                                        <div class="item">
-                                            <div class="left">分类</div>
-                                            <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,dataForm.item.kind) }}</div>
-                                        </div>
-                                        <div v-if="dataForm.item.catob" class="item">
-                                            <div class="left">投诉对象</div>
-                                            <div class="right">{{ newcatob.item.name }}</div>
-                                        </div>
+                                </div>
+                                <div>
+                                    <div class="item">
+                                        <div class="left">分类</div>
+                                        <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,dataForm.item.kind) }}</div>
+                                    </div>
+                                    <div v-if="dataForm.item.catob" class="item">
+                                        <div class="left">投诉对象</div>
+                                        <div class="right">{{ newcatob.item.name }}</div>
                                     </div>
                                 </div>
                             </div>
-                        </el-scrollbar>
+                        </div>
                     </el-tab-pane>
                     <el-tab-pane label="处理记录" name="2">
                         <!-- <el-scrollbar height="800px"> -->

@@ -46,6 +46,7 @@
                                     v-loading="tabloading"
                                     :data="flow_data.arr"
                                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                    class="tab_1"
                                 >
                                     <el-table-column label="用户名">
                                         <template #default="scope">
@@ -112,7 +113,7 @@
                                     :data="data_tab.arr"
                                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                     height="calc(100vh - 240px)"
-                                    class="size-sm"
+                                    class="size-sm tab_1"
                                     @row-click="rowClickFunc"
                                 >
                                     <el-table-column prop="name" label="业委会名称">
