@@ -1,13 +1,13 @@
 <template>
     <div class="articletparticletpl">
         <page-main class="hidden">
-            <div>
-                <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">添加设备</el-button>
+            <div class="m-b-20" >
+                <el-button type="primary" :icon="Plus" @click="addResidentialFunc" size="large">添加设备</el-button>
             </div>
-            <div :class="{search3: isSearch3,search2: isSearch2}">
-                <div class="m-t-10">
+            <!-- <div :class="{search3: isSearch3,search2: isSearch2}"> -->
+            <div class="search">
                     <el-row :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                             <div class="searchBox">
                                 <div class="search_th">
                                     设备名称：
@@ -15,7 +15,7 @@
                                 <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称" clearable />
                             </div>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                             <div class="searchBox">
                                 <div class="search_th">设备类型：</div>
                                 <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
@@ -23,7 +23,7 @@
                                 </el-select>
                             </div>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                             <div class="searchBox">
                                 <div class="search_th">状态：</div>
                                 <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态" clearable>
@@ -32,8 +32,8 @@
                             </div>
                         </el-col>
                     </el-row>
-                    <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
+                    <el-row v-if="btnClick==true" :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                             <div class="searchBox">
                                 <div class="search_th">是否启用：</div>
                                 <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
@@ -42,30 +42,29 @@
                             </div>
                         </el-col>
                     </el-row>
-                    <el-row class="m-t-20">
+                    <el-row>
                         <el-col :xs="24" :md="24" :lg="24">
                             <div class="searchBox">
                                 <div class="search_th" />
                                 <div class="search_tb">
                                     <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
-                                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                        <div class="searchDetail">
+                                    <!-- <div v-show="switch_search == true" class="m-l-20 size-base inline-block"> -->
+                                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                                        <span class="size-base" v-show="switch_search == true">
                                             *搜索到相关结果共{{ total }}条。
-                                        </div>
-                                    </div>
+                                        </span>
+                                    <!-- </div> -->
                                 </div>
                             </div>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <!-- <el-row> -->
                         <div class="searchPlay" @click="btnClickFunc">
                             <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
-                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
                         </div>
-                    </el-row>
-                </div>
+                    <!-- </el-row> -->
             </div>
             <div>
                 <el-table
@@ -426,11 +425,11 @@
                                             <div v-if="item.content&&item.content.length>=1" class="item">
                                                 <div class="left">附件</div>
                                                 <div class="right">
-                                                    <div v-for="(item,i) in item.content" :key="i">
+                                                    <div v-for="(val,i) in item.content" :key="i" class="inline-block">
                                                         <!-- <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link> -->
-                                                        <el-tag v-if="item.type == 'file'" type="success" size="small">{{ item.name }}</el-tag>
-                                                        <el-image v-if="item.type == 'image'" :preview-src-list="item.key" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+item.key" fit="cover" />
-                                                        <vue3VideoPlay v-if="item.type == 'radio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+item.key" />
+                                                        <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
+                                                        <el-image v-if="val.type == 'image'" :preview-src-list="item.keys" class="image" :src="VITE_APP_FOLDER_SRC+val.key" fit="cover" />
+                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -552,7 +551,6 @@
                                 <el-button type="primary" plain @click="addServiceFunc_1">添加档案内容</el-button>
                             </div>
                             <div>
-                                <el-scrollbar :height="addArchive.item.content.length>= 3? '200px': ''">
                                     <div v-for="(item,i) in addArchive.item.content" :key="i" class="serve-box">
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24">
@@ -568,6 +566,16 @@
                                                             item.key = file
                                                         }"
                                                     >
+                                                    <!-- <el-upload
+                                    action="***"
+                                    :auto-upload="false"
+                                    :file-list="file_list_1"
+                                    :on-change="(file,files)=>{
+                                        file_list_1 = files
+                                    }"
+                                    :on-remove="(file,files)=>{
+                                        file_list_1 = files
+                                    }" -->
                                                         <el-button type="primary">选择附件</el-button>
                                                     </el-upload>
                                                 </el-form-item>
@@ -596,7 +604,6 @@
                                             </el-icon>
                                         </div>
                                     </div>
-                                </el-scrollbar>
                             </div>
                         </el-col>
                     </el-row>
@@ -747,7 +754,7 @@ import {
     ElMessage
 } from 'element-plus'
 
-import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { Loading,Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -826,8 +833,8 @@ const isSearch3 = ref(false)
 const isSearch2 = ref(true)
 const btnClickFunc = () => {
     btnClick.value = !btnClick.value
-    isSearch3.value = !isSearch3.value
-    isSearch2.value = !isSearch2.value
+    // isSearch3.value = !isSearch3.value
+    // isSearch2.value = !isSearch2.value
 }
 // 获取列表api请求
 const getTabListFunc = () => {
@@ -924,6 +931,13 @@ const getDetailsFunc = val => {
         //         res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].content[j].key)
         //     }
         // }
+        let keys=[]
+        for (let i in res){
+            res[i].keys=[]
+            for(let j in res[i].content){
+            res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
+        }
+        }
         data_archive.arr = res
         switch_details.value = true
     })
@@ -1035,7 +1049,7 @@ const modifyResidentialFunc = val => {
 }
 // 删除 服务名称和联系方式
 const deleteServiceFunc = index => {
-    from_examine.item.extra.splice(index, 1)
+     addArchive.item.content.splice(index, 1)
 }
 // 添加 服务名称和联系方式
 const addServiceFunc = index => {
@@ -1092,7 +1106,8 @@ const fileListFn = val => {
     if (!val) {
         return []
     }
-    if (typeof val == 'string') {
+    if (val) {
+    // if (typeof val == 'string') {
         return [{
             name: val
         }]
@@ -1164,12 +1179,14 @@ const addArchive = reactive({
     switch: false,
     form: {}
 })
+const file_list_1 = ref([])
 const addArchiveFunc = () => {
     from_error.msg = {}
     str_title_2.value = '添加'
     addArchive.item = {
         content: []
     }
+    // file_list.value = []
     addArchive.item.did = data_details.item.id
     addArchive.switch = true
 }
@@ -1179,6 +1196,16 @@ const modifyArchiveFunc = val => {
     str_title_2.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
         addArchive.item = res
+        // let arr = []
+        // for (let i in res.content) {
+        //     if (res.content[i]) {
+        //         for (let j in res.content[i].key)
+        //         arr.push({
+        //             name: res.content[i].key[j]
+        //         })
+        //     }
+        // }
+        // file_list.value = arr
         addArchive.item.did = data_details.item.id
         addArchive.switch = true
     })
@@ -1300,5 +1327,19 @@ const deleteArchiveFunc = val => {
             color: #000;
         }
     }
+}
+.d-player-wrap {
+    width: 200px !important;
+    height: 100px !important;
+    margin-right: 10px;
+}
+.searchPlay .el-button {
+    // --el-button-hover-border-color: #fafafa;
+    // --el-button-active-text-color: #fafafa;
+    // --el-button-active-border-color: #fafafa;
+    --el-button-active-bg-color: #fafafa;
+}
+.searchPlay .el-button:hover {
+    background-color: #fafafa;
 }
 </style>

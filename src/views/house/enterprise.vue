@@ -208,8 +208,9 @@
                                     :on-remove="(file,files)=>{
                                         file_list = files
                                     }"
+                                    :disabled="file_list.length >= 1? true:false"
                                 >
-                                    <el-button type="primary" :disabled="logo.arr.length == 1&&file_list.length == 1? true:false">选择logo</el-button>
+                                    <el-button type="primary" :disabled="file_list.length >= 1? true:false">选择logo</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
