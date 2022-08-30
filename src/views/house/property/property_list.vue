@@ -1,62 +1,66 @@
 <template>
     <div class="propertypropertylist">
         <page-main class="hidden">
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加产权
                 </el-button>
             </div>
-            <div :class="{search3: isSearch3,search2: isSearch2}">
-                <div class="m-t-10">
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">房屋id：</div>
-
-                                <div class="search_tb">
+            <div class="search">
+                    <el-row>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    房屋id：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18" class="search_tb">
                                     <div class="searchUserGroup">
                                         <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
                                     </div>
-                                </div>
-                            </div>
-                        <!-- <div class="search_th" style="width: 20%;">房屋id：</div> -->
-
-                        <!-- <div class="searchUser search_tb" style="width: 80%;">
-                            <div class="searchUserGroup">
-                                <SearchHouse v-model:str="data_search.obj.house_id" />
-                            </div>
-                        </div> -->
+                                </el-col>
+                            </el-row>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">产权证号：</div>
-                                <el-input v-model="data_search.obj.code_property" class="head-btn search_tb" placeholder="产权证号" clearable />
-                            </div>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    产权证号：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.code_property" class="search_tb" placeholder="产权证号" clearable />
+                            </el-col>
+                            </el-row>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                     地房籍号：
-                                </div>
-                                <el-input v-model="data_search.obj.code_room" class="head-btn search_tb" placeholder="地房籍号" clearable />
-                            </div>
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.code_room" class="search_tb" placeholder="地房籍号" clearable />
+                            </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
-                    <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">
+                    <el-row v-if="btnClick==true">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                     产权人姓名：
-                                </div>
-                                <el-input v-model="data_search.obj.owner_name" class="head-btn search_tb" placeholder="产权人姓名" clearable />
-                            </div>
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.owner_name" class="search_tb" placeholder="产权人姓名" clearable />
+                            </el-col>
+                            </el-row>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">交易时间：</div>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    交易时间：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
                                 <el-date-picker
                                     v-model="data_search.obj.time_deal"
                                     type="daterange"
@@ -66,33 +70,27 @@
                                     class="search_tb"
                                     value-format="YYYY-MM-DD"
                                 />
-                            </div>
+                            </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
-                    <el-row class="m-t-20">
-                        <el-col :xs="24" :md="24" :lg="24">
-                            <div class="searchBox">
-                                <div class="search_th" />
-                                <div class="search_tb">
-                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
-                                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                        <div class="searchDetail">
-                                            *搜索到相关结果共{{ total }}条。
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
                         </el-col>
                     </el-row>
                     <el-row>
                         <div class="searchPlay" @click="btnClickFunc">
                             <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
-                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
                         </div>
                     </el-row>
-                </div>
             </div>
             <div>
                 <el-table
@@ -377,7 +375,7 @@ import {
     watch
 } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { Search, Plus, CaretTop, CaretBottom,Loading } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const searchVisible = ref(false)
 // 数据

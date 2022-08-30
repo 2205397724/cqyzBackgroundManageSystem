@@ -20,46 +20,47 @@
                         style="box-sizing: border-box;"
                         class="p-20 flex-colmun"
                     >
-                        <div class="search" style="background-color: white;height: 178px;">
-                            <el-row :gutter="10">
-                                <el-col :xs="24" :md="24" :lg="24">
-                                    <el-button
-                                        class="head-btn m-t-5" type="primary" :icon="Plus"
+                    <div class="m-b-20" >
+                        <el-button
+                                        type="primary" :icon="Plus" size="large"
                                         @click="addResidentialFunc"
                                     >
                                         添加小区
                                     </el-button>
+            </div>
+                        <div class="search" style="background-color: white;">
+                            <el-row>
+                                <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                                    <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    小区名称：
                                 </el-col>
-                                <el-col :xs="24" :md="12" :lg="8">
-                                    <div class="searchBox">
-                                        <div class="search_th">小区名称：</div>
+                                <el-col :sm="20" :xs="18" :md="18">
                                         <el-input v-model="data_search.obj.name" class="search_tb" placeholder="小区名称" clearable />
-                                    </div>
+                                    </el-col>
+                            </el-row>
                                 </el-col>
-                                <el-col :xs="24" :md="12" :lg="8">
-                                    <div class="searchBox">
-                                        <div class="search_th">地址：</div>
+                                <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                                    <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    地址：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
                                         <el-input v-model="data_search.obj.addr" class="search_tb" placeholder="地址" clearable />
-                                    </div>
+                                    </el-col>
+                            </el-row>
                                 </el-col>
                             </el-row>
-                            <el-row class="m-t-20">
-                                <el-col :xs="24" :md="24" :lg="24">
-                                    <div class="searchBox">
-                                        <div class="search_th" />
-                                        <div class="search_tb">
-                                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                            <!-- </div> -->
-                                            <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
-                                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                                <div class="searchDetail" style="width: 220px;">
-                                                    *搜索到相关结果共{{ total }}条。
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </el-col>
-                            </el-row>
+                            <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
+                        </el-col>
+                    </el-row>
                         </div>
                         <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;background-color: white;">
                             <el-table
