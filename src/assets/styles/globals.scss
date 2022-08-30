@@ -521,7 +521,7 @@ textarea {
 }
 .searchPlay {
     display: inline-block;
-    position: relative;
+    position: absolute;
     bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
@@ -550,13 +550,9 @@ textarea {
     width: 100px;
     height: 100px;
 }
-.searchBox {
-    display: flex;
-    height: 32px;
+.search {
     .search_th {
-        width: 110px;
         text-align: right;
-        padding-right: 5px;
         font-size: 14px;
         line-height: 32px;
     }
