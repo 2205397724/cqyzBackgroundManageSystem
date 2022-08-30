@@ -5,51 +5,51 @@
                 <el-button class="head-btn" type="primary" :icon="Plus" @click="addResidentialFunc">发布公示</el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">公示分类：</div>
-                            <div class="search_tb">
-                                <CascaderAnnounce v-model="data_search.obj.cid" />
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">发布人用户组：</div>
-
-                            <div class="search_tb">
-                                <div class="searchUserGroup">
-                                    <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
+                <div class="m-t-10">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">公示分类：</div>
+                                <div class="search_tb">
+                                    <CascaderAnnounce v-model="data_search.obj.cid" />
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">状态：</div>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">发布人用户组：</div>
 
-                            <el-select v-model="data_search.obj.status" class="search_tb" placeholder="审核状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
+                                <div class="search_tb">
+                                    <div class="searchUserGroup">
+                                        <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                </el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">状态：</div>
+
+                                <el-select v-model="data_search.obj.status" class="search_tb" placeholder="审核状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="24">
+                            <div class="flx">
+                                <el-button class="m-l-110" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                <div v-show="switch_search == true" class="m-l-20 size-base">
+                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                    <div class="searchDetail">
+                                        *搜索到相关结果共{{ total }}条。
+                                    </div>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -84,13 +84,13 @@
                 </el-table-column>
                 <el-table-column label="状态">
                     <template #default="scope">
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="large" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="large" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="280">
@@ -594,9 +594,11 @@ const dialogExamineCloseFunc = () => {
     // formEl.validate(valid => {
     //     if (valid) {
     let files_arr = []
+
     for (let i in from_examine.item.affix) {
         files_arr.push(from_examine.item.affix[i].file)
     }
+    console.log(files_arr)
     if (files_arr.length <= 0) {
         if (str_title.value == '修改') {
             // from_examine.item = {
@@ -684,12 +686,10 @@ const getTabListFunc = () => {
         // total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= per_page.value) {
-            flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
         } else {
-            flag.value = false
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)

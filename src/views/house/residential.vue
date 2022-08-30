@@ -45,26 +45,28 @@
                             </el-row>
                             <el-row class="m-t-20">
                                 <el-col :xs="24" :md="24" :lg="24">
-                                    <div class="flx">
-                                        <!-- <div class="w_30"> -->
-                                        <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                        <!-- </div> -->
-                                        <div v-show="switch_search == true" class="m-l-20 size-base">
-                                            <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                            <div class="searchDetail" style="width: 220px;">
-                                                *搜索到相关结果共{{ total }}条。
+                                    <div class="searchBox">
+                                        <div class="search_th" />
+                                        <div class="search_tb">
+                                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                            <!-- </div> -->
+                                            <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                                <div class="searchDetail" style="width: 220px;">
+                                                    *搜索到相关结果共{{ total }}条。
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </el-col>
                             </el-row>
                         </div>
-                        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;background-color: white;">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;"
+                                class="tab_1"
                             >
                                 <el-table-column prop="name" label="名称" width="180" />
                                 <el-table-column prop="addr" label="地址" width="220" />
@@ -130,14 +132,15 @@
                                 </el-table-column>
                                 <el-table-column />
                             </el-table>
-                        </div>
-                        <div style="padding-top: 20px;">
                             <el-pagination
                                 v-model:current-page="page"
-                                layout="total,prev,pager,next,jumper,"
-                                :total="total"
+                                style="float: right;"
+                                layout="prev,next,jumper,"
+                                :total="50"
                                 :page-size="per_page"
                                 background
+                                prev-text="上一页"
+                                next-text="下一页"
                                 hide-on-single-page
                             />
                         </div>
@@ -897,6 +900,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = data_tab.arr.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
         // }
     })
 }
@@ -1030,6 +1043,8 @@ refreshFunc()
 }
 </style>
 <style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .search-tips {
     color: #aaa;
     font-size: 14px;

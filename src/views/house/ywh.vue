@@ -4,15 +4,14 @@
             <el-row :gutter="20">
                 <el-col :xs="24" :sm="16" :md="16" :lg="16" :xl="16">
                     <div class="p-20 bg-color-white" style="box-sizing: border-box;min-height: calc(100vh - 90px);">
-                        <div v-if="data_details.item&&JSON.stringify(data_details.item)!='{}'">
-                            <p>
-                                <span class="strong size-lg">{{ data_details.item.name }}</span>
-                                <el-tag v-if="data_details.item.isbindzone" type="success" effect="dark" round>有效</el-tag><el-tag v-if="!data_details.item.isbindzone" type="danger" effect="dark" round>失效</el-tag>
+                        <div v-if="flow.item">
+                            <p class="font-grey size-base">
+                                <span class="strong size-lg">业委会名称： {{ flow.item.name }}</span>
                             </p>
-                            <p class="font-grey size-base">届次：第{{ data_details.item.period }}届</p>
-                            <p class="font-grey size-base">创建时间：{{ data_details.item.created_at }}</p>
-                            <p class="font-grey size-base">更新时间：{{ data_details.item.updated_at }}</p>
-                            <p class="font-grey size-base">描述：{{ data_details.item.desc }}</p>
+                            <p>
+                                <el-tag v-if="flow.item.active == 1" type="success" size="small" round>已启用</el-tag>
+                                <el-tag v-if="flow.item.active == 0" type="info" size="small" round>已禁用</el-tag>
+                            </p>
                         </div>
                         <div style="text-align: center;">
                             <el-button
@@ -47,6 +46,7 @@
                                     v-loading="tabloading"
                                     :data="flow_data.arr"
                                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                    class="tab_1"
                                 >
                                     <el-table-column label="用户名">
                                         <template #default="scope">
@@ -89,6 +89,17 @@
                                         </template>
                                     </el-table-column>
                                 </el-table>
+                                <el-pagination
+                                    v-model:current-page="page_1"
+                                    style="float: right;"
+                                    layout="prev,next,jumper,"
+                                    :total="50"
+                                    :page-size="per_page_1"
+                                    background
+                                    prev-text="上一页"
+                                    next-text="下一页"
+                                    hide-on-single-page
+                                />
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -102,7 +113,7 @@
                                     :data="data_tab.arr"
                                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                     height="calc(100vh - 240px)"
-                                    class="size-sm"
+                                    class="size-sm tab_1"
                                     @row-click="rowClickFunc"
                                 >
                                     <el-table-column prop="name" label="业委会名称">
@@ -118,8 +129,8 @@
                                             >
                                                 <template #reference>
                                                     <div @click.stop="()=>{}">
-                                                        <el-button v-if="scope.row.active==1" type="success" size="small">启用</el-button>
-                                                        <el-button v-if="scope.row.active==0" type="info" size="small">禁用</el-button>
+                                                        <el-button v-if="scope.row.active==1" type="success" size="small">已启用</el-button>
+                                                        <el-button v-if="scope.row.active==0" type="info" size="small">已禁用</el-button>
                                                     </div>
                                                 </template>
                                             </el-popconfirm>
@@ -163,6 +174,18 @@
                                         </template>
                                     </el-table-column>
                                 </el-table>
+                                <el-pagination
+                                    v-model:current-page="page"
+                                    class="btnClass"
+                                    style="float: right;"
+                                    layout="prev,next,jumper,"
+                                    :total="50"
+                                    :page-size="per_page"
+                                    background
+                                    prev-text="上一页"
+                                    next-text="下一页"
+                                    hide-on-single-page
+                                />
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -338,12 +361,23 @@ const refreshFunc = () => {
 // 业委会成员
 const detailsFunc = val => {
     let params = {
-        page: page.value,
-        per_page: per_page.value
+        page: page_1.value,
+        per_page: per_page_1.value
     }
     APIgetGroupUserList(val.id, params).then(res => {
         console.log(res)
         flow_data.arr = res.data
+        let btnNext = document.querySelector('.btn-next')
+        console.log(btnNext)
+        if (res.data.length <= per_page_1.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 // 监听分页
@@ -391,6 +425,8 @@ const dialogExamineCloseFunc = formEl => {
         }
     })
 }
+const page_1 = ref(1)
+const per_page_1 = ref(15)
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -413,12 +449,26 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res.data
-        total.value = res.data.length
         if (data_tab.arr.length > 0) {
             rowClickFunc(data_tab.arr[0])
         }
+        let btnNext1 = document.querySelector('.btnClass')
+        let btnNext2 = btnNext1.children[1]
+        console.log(btnNext1.children[1])
+        if (res.data.length <= per_page.value) {
+            flag.value = true
+            btnNext2.classList.add('not_allowed')
+            btnNext2.setAttribute('disabled', true)
+            btnNext2.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext2.classList.remove('not_allowed')
+            btnNext2.removeAttribute('disabled')
+            btnNext2.setAttribute('aria-disabled', false)
+        }
     })
 }
+const flag = ref(false)
 // 删除
 const deleteFunc = val => {
     APIdeleteGroup(val.id).then(res => {
@@ -566,8 +616,10 @@ getOpts(['type_type', 'gender', 'group_user_flg']).then(res => {
 })
 </script>
 <style lang="scss" scoped>
-    :deep .el-form-item--default .el-form-item__label {
-        line-height: 39px;
-        margin-right: 17px;
-    }
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+:deep .el-form-item--default .el-form-item__label {
+    line-height: 39px;
+    margin-right: 17px;
+}
 </style>

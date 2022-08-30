@@ -1,6 +1,6 @@
 <template>
     <div class="routinebuilding">
-        <page-main>
+        <page-main class="hidden">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus"
@@ -10,7 +10,7 @@
                 </el-button>
             </div>
             <div class="search">
-                <div style="margin-top: 14px;">
+                <div class="m-t-10">
                     <el-row :gutter="10">
                         <el-col :xs="24" :md="12" :lg="8">
                             <div class="searchBox">
@@ -35,14 +35,16 @@
                     </el-row>
                     <el-row class="m-t-20">
                         <el-col :xs="24" :md="24" :lg="24">
-                            <div class="flx">
-                                <!-- <div class="w_30"> -->
-                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                <!-- </div> -->
-                                <div v-show="switch_search == true" class="m-l-20 size-base">
-                                    <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                    <div class="searchDetail">
-                                        *搜索到相关结果共{{ total }}条。
+                            <div class="searchBox">
+                                <div class="search_th" />
+                                <div class="search_tb">
+                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                    <!-- </div> -->
+                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                        <div class="searchDetail">
+                                            *搜索到相关结果共{{ total }}条。
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -66,89 +68,88 @@
                             />
                         </div>
                     </el-col> -->
-            <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                <el-table
-                    v-loading="loading_tab"
-                    :data="data_tab.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    style="width: 100%;min-height: 300px;"
-                >
-                    <el-table-column prop="name" label="名称" width="180" />
-                    <el-table-column prop="addr" label="地址" width="220" />
-                    <el-table-column prop="area_live" label="住宅总面积" width="140">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.area_live }} m²</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="area_build" label="总建筑面积" width="140">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
-                        </template>
-                    </el-table-column>
-                    <!-- <el-table-column prop="area_live_not" label="非住宅面积" width="140">
+            <el-table
+                v-loading="loading_tab"
+                :data="data_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                class="tab_1"
+            >
+                <el-table-column prop="name" label="名称" width="180" />
+                <el-table-column prop="addr" label="地址" width="220" />
+                <el-table-column prop="area_live" label="住宅总面积" width="140">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.area_live }} m²</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="area_build" label="总建筑面积" width="140">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column prop="area_live_not" label="非住宅面积" width="140">
                             <template #default="scope">
                                 <span style="margin-left: 10px;">{{ scope.row.area_live_not }} m²</span>
                             </template>
                         </el-table-column> -->
-                    <el-table-column prop="cnt_floor" label="楼层数" width="140">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.cnt_floor }} 层</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="cnt_unit" label="单元数" width="140">
-                        <template #default="scope">
-                            <el-link :underline="false" type="primary">
-                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuildingUnit',query:{ building_id: scope.row.id }}">{{ scope.row.cnt_unit }} 个</router-link>
-                            </el-link>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="cnt_live" label="住宅总套数" width="140">
-                        <template #default="scope">
-                            <el-link class="el-button" :underline="false" style="padding: 0 10px;" type="primary" @click="showHouseFunc(scope.row)">
-                                {{ scope.row.cnt_live }} 套
-                            </el-link>
-                        </template>
-                    </el-table-column>
+                <el-table-column prop="cnt_floor" label="楼层数" width="140">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.cnt_floor }} 层</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="cnt_unit" label="单元数" width="140">
+                    <template #default="scope">
+                        <el-link :underline="false" type="primary">
+                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuildingUnit',query:{ building_id: scope.row.id }}">{{ scope.row.cnt_unit }} 个</router-link>
+                        </el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="cnt_live" label="住宅总套数" width="140">
+                    <template #default="scope">
+                        <el-link class="el-button" :underline="false" style="padding: 0 10px;" type="primary" @click="showHouseFunc(scope.row)">
+                            {{ scope.row.cnt_live }} 套
+                        </el-link>
+                    </template>
+                </el-table-column>
 
-                    <el-table-column fixed="right" label="操作" width="200">
-                        <template #default="scope">
-                            <el-button
-                                type="primary" size="small"
-                                @click="modifyResidentialFunc(scope.row)"
-                            >
-                                修改
-                            </el-button>
-                            <el-button
-                                size="small"
-                                @click="detailsFunc(scope.row)"
-                            >
-                                详情
-                            </el-button>
-                            <el-popconfirm
-                                title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteFunc(scope.row)"
-                            >
-                                <template #reference>
-                                    <el-button type="danger" size="small">
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                    <el-table-column />
-                </el-table>
-            </div>
-            <div style="padding-top: 20px;">
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
-            </div>
+                <el-table-column fixed="right" label="操作" width="200">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" size="small"
+                            @click="modifyResidentialFunc(scope.row)"
+                        >
+                            修改
+                        </el-button>
+                        <el-button
+                            size="small"
+                            @click="detailsFunc(scope.row)"
+                        >
+                            详情
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" size="small">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+                <el-table-column />
+            </el-table>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -795,6 +796,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 // 删除
@@ -861,39 +872,39 @@ getOpts(['build_type_water', 'build_type_construct']).then(res => {
     opts_all.obj = res
 })
 </script>
-<style lang="scss">
-    .routinebuilding {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .el-form-item {
-                margin: 0;
-            }
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
-</style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.routinebuilding {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
+            margin-bottom: 10px;
+        }
     }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .el-form-item {
+            margin: 0;
+        }
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 </style>

@@ -72,17 +72,17 @@
                         未处理
                     </el-button>
                 </el-badge>
-                <el-badge :value="index == 1 ? data_1.total : ''" class="item" :hidden="flag">
+                <el-badge :value="index == 1 ? data_1.total : ''" class="item" :hidden="flag1">
                     <el-button :type="index == 1 ? 'primary' : ''" @click="StatusFunk(1)">
                         办理中
                     </el-button>
                 </el-badge>
-                <el-badge :value="index == 3 ? data_1.total : ''" class="item" :hidden="flag">
+                <el-badge :value="index == 3 ? data_1.total : ''" class="item" :hidden="flag2">
                     <el-button :type="index == 3 ? 'primary' : ''" @click="StatusFunk(3)">
                         已回复
                     </el-button>
                 </el-badge>
-                <el-badge :value="index == 4 ? data_1.total : ''" class="item" :hidden="flag">
+                <el-badge :value="index == 4 ? data_1.total : ''" class="item" :hidden="flag3">
                     <el-button :type="index == 4 ? 'primary' : ''" @click="StatusFunk(4)">
                         已结案
                     </el-button>
@@ -612,19 +612,16 @@ const getFuncVoteList = () => {
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= data_1.per_page) {
-            flag_1.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
         } else {
-            flag_1.value = false
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
     })
 }
-const flag_1 = ref('')
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const clickFuncAddVote = () => {
@@ -943,10 +940,16 @@ const noDeal = val => {
     })
 }
 const flag = ref(true)
+const flag1 = ref(true)
+const flag2 = ref(true)
+const flag3 = ref(true)
 const StatusFunk = val => {
     noDeal(val)
     console.log(index.value)
-    flag.value = !flag.value
+    flag.value = false
+    flag1.value = false
+    flag2.value = false
+    flag3.value = false
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {

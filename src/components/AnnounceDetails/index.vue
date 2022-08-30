@@ -40,11 +40,13 @@
                         <div class="item">
                             <div class="left">状态</div>
                             <div class="right">
-                                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 2" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
                             </div>
                         </div>
                         <div class="item">
@@ -61,10 +63,10 @@
                             </div> -->
                         <div class="item">
                             <div class="left">附件</div>
-                            <div class="right">
-                                <img
-                                    v-for="(item,i) in data_details.item.affixs" :key="i" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" :src="item" fit="cover"
-                                >
+                            <div v-for="(item,i) in data_details.item.affixs" :key="i" class="right">
+                                <el-image
+                                    :src="item" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" fit="cover"
+                                />
                             </div>
                         </div>
                         <div class="item">
@@ -148,6 +150,7 @@
 import {
     APIgetEventArticleDetails
 } from '@/api/custom/custom.js'
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import {
     reactive,
     ref,
@@ -172,15 +175,16 @@ const detailsFunc = () => {
     activeName.value = '1'
     switch_details.value = true
     APIgetEventArticleDetails(props.id).then(res => {
-        data_details.item = res
-        groupName.value = res.authorgroup.name
+        console.log(res)
+        groupName.value = res.authorgroup?.name
         cateName.value = res.cate.name
         res.affixs = []
         for (let i in res.affix) {
             res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
         }
+        data_details.item = res
         // AudioContext.value = data_details.item.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
-        console.log(props.id)
+        console.log(data_details.item)
         getListArchiveFunc()
         getUserGroupListFunc()
     })

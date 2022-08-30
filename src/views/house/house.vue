@@ -1,80 +1,81 @@
 <template>
     <div class="routine-house">
-        <page-main>
+        <page-main class="hidden">
             <div>
-                <div class="search">
-                    <div style="margin-top: 14px;">
+                <div :class="{search3: isSearch3,search2: isSearch2}">
+                    <div class="m-t-10">
                         <el-row :gutter="10">
                             <el-col :xs="24" :md="12" :lg="8">
                                 <div class="searchBox">
-                                    <div class="search_th">
-                                        房屋使用状态：
-                                    </div>
-                                    <el-select
-                                        v-model="data_search.status_use"
-                                        class="search_tb" placeholder="*房屋使用状态"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
+                                    <div class="search_th">房屋名称：</div>
+                                    <el-input v-model="data_search.name" class="search_tb" placeholder="房屋名称" clearable />
                                 </div>
                             </el-col>
                             <el-col :xs="24" :md="12" :lg="8">
                                 <div class="searchBox">
                                     <div class="search_th">
-                                        房屋安全状态：
+                                        地址：
                                     </div>
-                                    <el-select
-                                        v-model="data_search.status_safe"
-                                        class="search_tb" placeholder="*房屋安全状态"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
+                                    <el-input v-model="data_search.addr" class="search_tb" placeholder="地址" clearable />
                                 </div>
                             </el-col>
                             <el-col :xs="24" :md="12" :lg="8">
                                 <div class="searchBox">
-                                    <div class="search_th">
-                                        是否绑定：
-                                    </div>
-                                    <el-select
-                                        v-model="data_search.is_bind_property"
-                                        class="search_tb"
-                                        placeholder="是否绑定"
-                                        clearable
-                                    >
-                                        <el-option
-                                            v-for="(item) in opts_all.obj.house_has_property" :key="item.key"
-                                            :label="item.val" :value="item.key"
-                                        />
-                                    </el-select>
+                                    <div class="search_th">物理楼层：</div>
+                                    <el-input v-model="data_search.floor_truth" class="search_tb" placeholder="*物理楼层" clearable />
                                 </div>
                             </el-col>
                         </el-row>
-                        <el-row class="m-t-20">
-                            <el-col :xs="24" :md="24" :lg="14">
-                                <div class="flx">
-                                    <!-- <div class="w_30"> -->
-                                    <!-- <el-button class="m-l-20" type="primary" :icon="Search" :disabled="active_obj.obj.type == 'units' || active_obj.obj.type =='buildings' ? false: true" @click="searchFunc">筛选</el-button> -->
-                                    <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                    <!-- </div> -->
-                                    <div v-show="switch_search" class="m-l-20 size-base">
-                                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                        <div class="searchDetail" style="width: 220px;">
-                                            *搜索到相关结果共{{ total }}条。
-                                        </div>
+                        <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
+                            <el-col :xs="24" :md="12" :lg="8">
+                                <div class="searchBox">
+                                    <div class="search_th">
+                                        名义层：
                                     </div>
+                                    <el-input v-model="data_search.floor_alias" class="search_tb" placeholder="*名义层" clearable />
+                                </div>
+                            </el-col>
+                            <el-col :xs="24" :md="12" :lg="8">
+                                <div class="searchBox">
+                                    <div class="search_th">户型：</div>
+                                    <el-select v-model="data_search.type_model" class="search_tb" placeholder="*户型" clearable>
+                                        <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
+                                </div>
+                            </el-col>
+                            <el-col :xs="24" :md="12" :lg="8">
+                                <div class="searchBox">
+                                    <div class="search_th">是否绑定产权：</div>
+                                    <el-select v-model="data_search.is_bind_property" class="search_tb" placeholder="是否绑定产权" clearable>
+                                        <el-option v-for="(item,i) in opts_all.obj.house_has_property" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
                                 </div>
                             </el-col>
                         </el-row>
                     </div>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="24">
+                            <div class="searchBox">
+                                <div class="search_th" />
+                                <div class="search_tb">
+                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                        <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
+                                        <div class="searchDetail">
+                                            *搜索到相关结果共{{ total }}条。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <div class="searchPlay" @click="btnClickFunc">
+                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
+                        </div>
+                    </el-row>
                 </div>
                 <div>
                     <el-row :gutter="10" class="bottom-btn-box-2">
@@ -103,116 +104,115 @@
                         </el-col>
                     </el-row>
                 </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <div v-if="data_tab.arr.length>0">
-                        <el-table
-                            ref="multipleTableRef"
-                            v-loading="loading_tab"
-                            :data="data_tab.arr"
-                            :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                            style="width: 100%;min-height: 300px;"
-                            @selection-change="handleSelectionChange"
-                        >
-                            <el-table-column type="selection" width="55" />
-                            <el-table-column prop="name" label="房屋名称" width="180" />
-                            <el-table-column prop="addr" label="地址" width="220" />
-                            <el-table-column prop="floor_truth" label="物理层" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ scope.row.floor_truth }} 层</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="floor_alias" label="名义层" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ scope.row.floor_alias }} 层</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="house_num" label="房号" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ scope.row.house_num }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="area_build" label="建筑面积" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="type_model" label="户型" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="type_property" label="产权性质" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="type_building" label="楼栋性质" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="status_use" label="房屋使用状态" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="status_safe" label="房屋安全状态" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="status_plan" label="规划用途" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_plan) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="status_fact" label="实际用途" width="140">
-                                <template #default="scope">
-                                    <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_fact) }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column fixed="right" label="操作" width="200">
-                                <template #default="scope">
-                                    <el-button
-                                        :disabled="arr_selection.arr.length>0"
-                                        type="primary" size="small"
-                                        @click="modifyResidentialFunc(scope.row)"
-                                    >
-                                        修改
+                <!-- <div v-if="data_tab.arr.length>0"> -->
+                <el-table
+                    ref="multipleTableRef"
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    class="tab_1"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column type="selection" width="55" />
+                    <el-table-column prop="name" label="房屋名称" width="180" />
+                    <el-table-column prop="addr" label="地址" width="220" />
+                    <el-table-column prop="floor_truth" label="物理层" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.floor_truth }} 层</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="floor_alias" label="名义层" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.floor_alias }} 层</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="house_num" label="房号" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.house_num }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="area_build" label="建筑面积" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type_model" label="户型" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type_property" label="产权性质" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type_building" label="楼栋性质" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_use" label="房屋使用状态" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_safe" label="房屋安全状态" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_plan" label="规划用途" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_plan) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_fact" label="实际用途" width="140">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_fact) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                :disabled="arr_selection.arr.length>0"
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
                                     </el-button>
-                                    <el-button
-                                        size="small"
-                                        @click="detailsFunc(scope.row)"
-                                    >
-                                        详情
-                                    </el-button>
-                                    <el-popconfirm
-                                        title="确定要删除当前项么?" cancel-button-type="info"
-                                        @confirm="deleteFunc(scope.row)"
-                                    >
-                                        <template #reference>
-                                            <el-button type="danger" size="small">
-                                                删除
-                                            </el-button>
-                                        </template>
-                                    </el-popconfirm>
                                 </template>
-                            </el-table-column>
-                            <el-table-column />
-                        </el-table>
-                    </div>
-                    <div v-else class="flex-row flex-center p-tb-30 font-grey">~无房屋信息~</div>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+                <el-pagination
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper,"
+                    :total="50"
+                    :page-size="per_page"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
+                <!-- </div> -->
+                <!-- <div v-else class="flex-row flex-center p-tb-30 font-grey">~无房屋信息~</div> -->
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -220,6 +220,7 @@
             v-model="switch_examine"
             :title="str_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
                 <el-form
@@ -793,6 +794,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Search, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -880,6 +882,23 @@ const error_alldetails = reactive({
 const showForm = () => {
     searchVisible.value = !searchVisible.value
 }
+// 方法
+let btnClick = ref(false)
+const isSearch3 = ref(false)
+const isSearch2 = ref(true)
+const btnClickFunc = () => {
+    btnClick.value = !btnClick.value
+    isSearch3.value = !isSearch3.value
+    isSearch2.value = !isSearch2.value
+}
+// const V = ref(null)
+// const dialogClosed = () => {
+//     V.value.clearFunc()
+// }
+// const checkNameFunc = row => {
+//     from_examine.item.houseable_id = row.id
+// }
+const buildingName = ref('')
 // 确认批量修改
 const alldetailsFunc = () => {
     error_alldetails.msg = {}
@@ -1024,6 +1043,16 @@ const getTabListFunc = () => {
         data_tab.arr = res
         total.value = res.length
         loading_tab.value = false
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 // 删除
@@ -1169,40 +1198,39 @@ getOpts(['status_all', 'house_has_property', 'house_type_model', 'house_type_pro
 })
 
 </script>
-<style lang="scss">
-    .routine-house {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .el-form-item {
-                margin: 0;
-            }
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
-    }
-</style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.routine-house {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
+            margin-bottom: 10px;
+        }
     }
-
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .el-form-item {
+            margin: 0;
+        }
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 </style>

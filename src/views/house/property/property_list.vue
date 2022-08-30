@@ -1,6 +1,6 @@
 <template>
     <div class="propertypropertylist">
-        <page-main>
+        <page-main class="hidden">
             <div>
                 <el-button
                     class="head-btn" type="primary" :icon="Plus"
@@ -10,17 +10,18 @@
                 </el-button>
             </div>
             <div :class="{search3: isSearch3,search2: isSearch2}">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">房屋id：</div>
+                <div class="m-t-10">
+                    <el-row :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">房屋id：</div>
 
-                            <div class="search_tb">
-                                <div class="searchUserGroup">
-                                    <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
+                                <div class="search_tb">
+                                    <div class="searchUserGroup">
+                                        <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <!-- <div class="search_th" style="width: 20%;">房屋id：</div> -->
 
                         <!-- <div class="searchUser search_tb" style="width: 80%;">
@@ -28,75 +29,77 @@
                                 <SearchHouse v-model:str="data_search.obj.house_id" />
                             </div>
                         </div> -->
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">产权证号：</div>
-                            <el-input v-model="data_search.obj.code_property" class="head-btn search_tb" placeholder="产权证号" clearable />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                地房籍号：
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">产权证号：</div>
+                                <el-input v-model="data_search.obj.code_property" class="head-btn search_tb" placeholder="产权证号" clearable />
                             </div>
-                            <el-input v-model="data_search.obj.code_room" class="head-btn search_tb" placeholder="地房籍号" clearable />
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
-                                产权人姓名：
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    地房籍号：
+                                </div>
+                                <el-input v-model="data_search.obj.code_room" class="head-btn search_tb" placeholder="地房籍号" clearable />
                             </div>
-                            <el-input v-model="data_search.obj.owner_name" class="head-btn search_tb" placeholder="产权人姓名" clearable />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">交易时间：</div>
-                            <el-date-picker
-                                v-model="data_search.obj.time_deal"
-                                type="daterange"
-                                range-separator="-"
-                                start-placeholder="交易时间"
-                                end-placeholder="交易时间"
-                                class="search_tb"
-                                value-format="YYYY-MM-DD"
-                            />
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">
+                                    产权人姓名：
+                                </div>
+                                <el-input v-model="data_search.obj.owner_name" class="head-btn search_tb" placeholder="产权人姓名" clearable />
                             </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8">
+                            <div class="searchBox">
+                                <div class="search_th">交易时间：</div>
+                                <el-date-picker
+                                    v-model="data_search.obj.time_deal"
+                                    type="daterange"
+                                    range-separator="-"
+                                    start-placeholder="交易时间"
+                                    end-placeholder="交易时间"
+                                    class="search_tb"
+                                    value-format="YYYY-MM-DD"
+                                />
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row class="m-t-20">
+                        <el-col :xs="24" :md="24" :lg="24">
+                            <div class="searchBox">
+                                <div class="search_th" />
+                                <div class="search_tb">
+                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                    <div v-show="switch_search == true" class="m-l-20 size-base inline-block">
+                                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
+                                        <div class="searchDetail">
+                                            *搜索到相关结果共{{ total }}条。
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <div class="searchPlay" @click="btnClickFunc">
+                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
                         </div>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <div class="searchPlay" @click="btnClickFunc">
-                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                        <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal">展开</el-button>
-                        <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal">收起</el-button>
-                    </div>
-                </el-row>
+                    </el-row>
+                </div>
             </div>
             <div>
                 <el-table
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    class="tab"
+                    class="tab_1"
                 >
                     <el-table-column prop="house_id" label="房屋" width="250">
                         <template #default="scope">
@@ -146,16 +149,17 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <div class="p-t-20">
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
-            </div>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -526,6 +530,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = data_tab.arr.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
     getHouseListFunc()
 }
@@ -623,49 +637,51 @@ getOpts(['house_has_house', 'type_id_card']).then(res => {
 
 </script>
 <style lang="scss">
-    .propertypropertylist {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
+.propertypropertylist {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
             margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
         }
     }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
 </style>
 <style lang="scss" scoped>
-    .search-tips {
-        color: #aaa;
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-    .owners {
-        display: flex;
-        margin-bottom: 10px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
-        flex-wrap: wrap;
-        div {
-            width: 50%;
-            margin-bottom: 5px;
-            span {
-                color: #000;
-            }
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.owners {
+    display: flex;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+    div {
+        width: 50%;
+        margin-bottom: 5px;
+        span {
+            color: #000;
         }
     }
+}
 </style>

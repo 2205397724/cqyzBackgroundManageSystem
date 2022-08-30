@@ -400,9 +400,6 @@ textarea {
 }
 
 //按钮公共样式
-.head-btn {
-    margin-bottom: 10px;
-}
 .head-btn + .head-btn {
     margin-left: 10px;
     margin-bottom: 10px;
@@ -468,31 +465,31 @@ textarea {
 }
 .search {
     background-color: #fafafa;
-    height: 150px;
+    // height: 140px;
     width: 100%;
     padding: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .search2 {
     background-color: #fafafa;
-    height: 158px;
+    // height: 169px;
     width: 100%;
     padding: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .search1 {
     background-color: #fafafa;
-    height: 215px;
+    // height: 215px;
     width: 100%;
     padding: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .search3 {
     background-color: #fafafa;
-    height: 209px;
+    // height: 220px;
     width: 100%;
     padding: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .searchKey {
     text-align: center;
@@ -502,7 +499,7 @@ textarea {
     margin: 10px 0 0 15px;
 }
 .btn {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .search_tb_1 {
     display: inline-block;
@@ -523,8 +520,11 @@ textarea {
     background-color: #fff;
 }
 .searchPlay {
-    margin: auto;
-    margin-top: 20px;
+    display: inline-block;
+    position: relative;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
     .searchDeal {
         border: none;
         background-color: #fafafa;
@@ -593,4 +593,10 @@ textarea {
     width: 100px;
     height: 100px;
     margin-right: 10px;
+}
+.m-l-110 {
+    margin-left: 110px;
+}
+.hidden {
+    overflow: hidden;
 }
