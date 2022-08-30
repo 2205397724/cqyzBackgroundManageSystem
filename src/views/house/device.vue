@@ -6,65 +6,73 @@
             </div>
             <!-- <div :class="{search3: isSearch3,search2: isSearch2}"> -->
             <div class="search">
-                    <el-row :gutter="10">
+                    <el-row>
                         <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <div class="searchBox">
-                                <div class="search_th">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                     设备名称：
-                                </div>
-                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称" clearable />
-                            </div>
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                    <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称" clearable />
+                                </el-col>
+                            </el-row>
                         </el-col>
                         <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <div class="searchBox">
-                                <div class="search_th">设备类型：</div>
-                                <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </div>
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    设备类型：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                    <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
+                                        <el-option v-for="(item) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
+                                </el-col>
+                            </el-row>
                         </el-col>
                         <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <div class="searchBox">
-                                <div class="search_th">状态：</div>
-                                <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </div>
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    状态：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                    <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态" clearable>
+                                        <el-option v-for="(item) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
+                                </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
-                    <el-row v-if="btnClick==true" :gutter="10">
+                    <el-row v-if="btnClick==true">
                         <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <div class="searchBox">
-                                <div class="search_th">是否启用：</div>
-                                <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </div>
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    是否启用：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
+                                    <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
+                                        <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
+                                </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :xs="24" :md="24" :lg="24">
-                            <div class="searchBox">
-                                <div class="search_th" />
-                                <div class="search_tb">
-                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                    <!-- <div v-show="switch_search == true" class="m-l-20 size-base inline-block"> -->
-                                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                                        <span class="size-base" v-show="switch_search == true">
-                                            *搜索到相关结果共{{ total }}条。
-                                        </span>
-                                    <!-- </div> -->
-                                </div>
-                            </div>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
                         </el-col>
                     </el-row>
-                    <!-- <el-row> -->
+                    <el-row>
                         <div class="searchPlay" @click="btnClickFunc">
                             <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
                             <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
                             <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
                         </div>
-                    <!-- </el-row> -->
+                    </el-row>
             </div>
             <div>
                 <el-table
