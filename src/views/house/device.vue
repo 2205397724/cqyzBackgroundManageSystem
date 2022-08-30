@@ -555,7 +555,7 @@
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24">
                                                 <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
-                                                    <el-upload
+                                                    <!-- <el-upload
                                                         action="***"
                                                         :auto-upload="false"
                                                         :file-list="fileListFn(item.key)"
@@ -565,17 +565,15 @@
                                                         :on-remove="(file,files)=>{
                                                             item.key = file
                                                         }"
-                                                    >
-                                                    <!-- <el-upload
+                                                    > -->
+                                                    <el-upload
                                     action="***"
                                     :auto-upload="false"
                                     :file-list="file_list_1"
-                                    :on-change="(file,files)=>{
-                                        file_list_1 = files
-                                    }"
+                                    :on-change="uploadChange"
                                     :on-remove="(file,files)=>{
                                         file_list_1 = files
-                                    }" -->
+                                    }">
                                                         <el-button type="primary">选择附件</el-button>
                                                     </el-upload>
                                                 </el-form-item>
@@ -1102,18 +1100,20 @@ const modifyRepairFunc = val => {
     })
 }
 import { getFilesKeys } from '@/util/files.js'
-const fileListFn = val => {
-    if (!val) {
-        return []
-    }
-    if (val) {
-    // if (typeof val == 'string') {
-        return [{
-            name: val
-        }]
-    }
-    return [val]
-}
+// const fileListFn = val => {
+//     if (!val) {
+//         return []
+//     }
+//     if (val) {
+//     console.log(typeof(val))
+//     if (typeof val == 'string') {
+//         return [{
+//             name: val
+//         }]
+//     }
+//     }
+//     return [val]
+// }
 // 同意拒绝提交
 const fromFnUpload = () => {
     if (str_title_1.value == '修改') {
@@ -1184,9 +1184,9 @@ const addArchiveFunc = () => {
     from_error.msg = {}
     str_title_2.value = '添加'
     addArchive.item = {
-        content: []
+        content: [  ]
     }
-    // file_list.value = []
+    file_list_1.value = []
     addArchive.item.did = data_details.item.id
     addArchive.switch = true
 }
@@ -1196,16 +1196,20 @@ const modifyArchiveFunc = val => {
     str_title_2.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
         addArchive.item = res
-        // let arr = []
-        // for (let i in res.content) {
-        //     if (res.content[i]) {
-        //         for (let j in res.content[i].key)
-        //         arr.push({
-        //             name: res.content[i].key[j]
-        //         })
-        //     }
-        // }
-        // file_list.value = arr
+        let arr = []
+        for (let i in res.content) {
+            if (res.content[i]) {
+                // for (let j in res.content[i].key)
+                // arr.push({
+                //     name: res.content[i].key[j]
+                // })
+                arr.push({
+                    name: res.content[i].key
+                    })
+            }
+        }
+        file_list_1.value = arr
+        console.log( file_list_1.value)
         addArchive.item.did = data_details.item.id
         addArchive.switch = true
     })
@@ -1239,30 +1243,59 @@ const formFnUpload_1 = () => {
         })
     }
 }
+const uploadChange=(file, file_list)=>{
+    console.log(file_list)
+    console.log(file)
+}
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
-    let obj = {}
-    for (let i in addArchive.item.content) {
-        if (typeof addArchive.item.content[i].key != 'string') {
-            obj[i] = addArchive.item.content[i].key
+    let files = []
+    let file_key = []
+    if (file_list_1.value.length > 0) {
+        for (let i in file_list_1.value) {
+            if (!file_list_1.value[i].raw) {
+                file_key.push(file_list_1.value[i].name)
+            } else {
+                files.push(file_list_1.value[i].raw)
+            }
         }
     }
-    let files = []
-    for (let i in obj) {
-        files.push(obj[i].raw)
+    console.log(file_list_1.value)
+    console.log(file_key)
+    for(let i in addArchive.item.content){
+        addArchive.item.content[i].key.push=file_key
     }
-    if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
-            let o = 0
-            for (let i in obj) {
-                addArchive.item.content[i].key = arr[o]
-                o++
-            }
-            formFnUpload_1()
-        })
-        return false
-    }
-    formFnUpload_1()
+    addArchive.item.content.key = file_key
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'folder').then(arr => {
+    //         addArchive.item.content.key = file_key.concat(arr)
+    //         // fromFnUpload()
+    //     })
+    //     return false
+    // }
+    // fromFnUpload()
+    // let obj = {}
+    // for (let i in addArchive.item.content) {
+    //     if (typeof addArchive.item.content[i].key != 'string') {
+    //         obj[i] = addArchive.item.content[i].key
+    //     }
+    // }
+    // let files = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'folder').then(arr => {
+    //         let o = 0
+    //         for (let i in obj) {
+    //             addArchive.item.content[i].key = arr[o]
+    //             o++
+    //         }
+    //         formFnUpload_1()
+    //     })
+    //     return false
+    // }
+    // formFnUpload_1()
 }
 // 删除
 const deleteArchiveFunc = val => {
