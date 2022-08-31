@@ -284,7 +284,6 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24"><div class="details-tit-sm m-b-10">自定义字段</div></el-col>
                         <el-col :md="24" :lg="24">
                             <div class="m-b-10">
                                 <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
@@ -333,10 +332,10 @@
             @closed="closeDialog"
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="基础信息" name="1">
+                <el-tab-pane label="设备信息" name="1">
                     <el-scrollbar height="452px">
                         <div class="details-box">
-                            <div class="details-tit-sm">设备信息</div>
+                            <div class="details-tit-sm">基础信息</div>
                             <div class="item">
                                 <div class="left">设备名称</div>
                                 <div class="right">{{ data_details.item.name }}</div>
@@ -381,15 +380,14 @@
                                 <div class="left">是否显示</div>
                                 <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
                             </div>
-                            <div class="details-tit-sm">其他信息</div>
-
                             <div
-                                v-for="(item,i) in data_details.item.extra" :key="i"
+                                v-if="data_details.item.extra" v-for="(item,i) in data_details.item.extra" :key="i"
                                 class="item"
                             >
                                 <div class="left">{{ item.lab }}</div>
                                 <div class="right">{{ item.val }}</div>
                             </div>
+                            <div class="details-tit-sm">其他信息</div>
                             <div class="item">
                                 <div class="left">创建时间</div>
                                 <div class="right">{{ data_details.item.created_at }}</div>
@@ -564,11 +562,12 @@
                                             <el-col :xs="24" :sm="24">
                                                 <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
                                                     <el-upload
+                                                        multiple
                                                         action="***"
                                                         :auto-upload="false"
                                                         :file-list="fileListFn(item.key)"
                                                         :on-change="(file,files)=>{
-                                                            item.key = file
+                                                            item.key=file
                                                         }"
                                                         :on-remove="(file,files)=>{
                                                             item.key = file
@@ -604,7 +603,7 @@
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
-                                        <div class="delete-service" @click="deleteServiceFunc(i)">
+                                        <div class="delete-service" @click="deleteServiceFunc_1(i)">
                                             <el-icon :size="20" color="#F56C6C">
                                                 <el-icon-circle-close />
                                             </el-icon>
@@ -912,6 +911,7 @@ const refreshFunc = () => {
     getTabListFunc()
 }
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
+// const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_UPLOAD )
 // 详情
 const getDetailsFunc = val => {
     data_dialog.obj = val
@@ -1053,11 +1053,14 @@ const modifyResidentialFunc = val => {
         switch_examine.value = true
     })
 }
-// 删除 服务名称和联系方式
-const deleteServiceFunc = index => {
+// 删除
+const deleteServiceFunc_1 = index => {
      addArchive.item.content.splice(index, 1)
 }
-// 添加 服务名称和联系方式
+const deleteServiceFunc = index => {
+    from_examine.item.extra.splice(index, 1)
+}
+// 添加
 const addServiceFunc = index => {
     let data = {
         'lab': '',
@@ -1185,14 +1188,21 @@ import {
 const str_title_2 = ref('添加')
 const addArchive = reactive({
     switch: false,
-    form: {}
+    form: {},
+    item:{
+        content:[{
+            type:"",
+            name:"",
+            key:[]
+        }]
+    }
 })
 const file_list_1 = ref([])
 const addArchiveFunc = () => {
     from_error.msg = {}
     str_title_2.value = '添加'
     addArchive.item = {
-        content: [  ]
+        content: []
     }
     // file_list_1.value = []
     addArchive.item.did = data_details.item.id
@@ -1226,7 +1236,7 @@ const addServiceFunc_1 = () => {
     let data = {
         'name': '',
         'type': '',
-        'key': ''
+        'key': []
     }
     addArchive.item.content.push(data)
 }
@@ -1257,36 +1267,12 @@ const uploadChange=(file, file_list)=>{
 }
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
-    // let files = []
-    // let file_key = []
-    // if (file_list_1.value.length > 0) {
-    //     for (let i in file_list_1.value) {
-    //         if (!file_list_1.value[i].raw) {
-    //             file_key.push(file_list_1.value[i].name)
-    //         } else {
-    //             files.push(file_list_1.value[i].raw)
-    //         }
-    //     }
-    // }
-    // console.log(file_list_1.value)
-    // console.log(file_key)
-    // for(let i in addArchive.item.content){
-    //     addArchive.item.content[i].key.push=file_key
-    // }
-    // addArchive.item.content.key = file_key
-    // if (files.length > 0) {
-    //     getFilesKeys(files, 'folder').then(arr => {
-    //         addArchive.item.content.key = file_key.concat(arr)
-    //         // fromFnUpload()
-    //     })
-    //     return false
-    // }
-    // fromFnUpload()
     let obj = {}
     for (let i in addArchive.item.content) {
-        if (typeof addArchive.item.content[i].key != 'string') {
-            obj[i] = addArchive.item.content[i].key
-        }
+        // if (typeof addArchive.item.content[i].key != 'string') {
+        //     obj[i] = addArchive.item.content[i].key
+        // }c
+        obj[i] = addArchive.item.content[i].key
     }
     let files = []
     for (let i in obj) {
@@ -1295,8 +1281,11 @@ const dialogExamineCloseFunc_2 = () => {
     if (files.length > 0) {
         getFilesKeys(files, 'folder').then(arr => {
             let o = 0
+            console.log(arr);
+            console.log(obj);
             for (let i in obj) {
                 addArchive.item.content[i].key = arr[o]
+                // addArchive.item.content[i].key.push(arr[o])
                 o++
             }
             formFnUpload_1()
@@ -1320,22 +1309,6 @@ const deleteArchiveFunc = val => {
         .el-cascader {
             width: 100% !important;
             margin-bottom: 10px;
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            padding: 0 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
         }
     }
 </style>

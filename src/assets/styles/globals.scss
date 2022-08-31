@@ -594,3 +594,19 @@ textarea {
 .hidden {
     overflow: hidden;
 }
+.serve-box {
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    position: relative;
+    .delete-service {
+        position: absolute;
+        cursor: pointer;
+        z-index: 999999;
+        right: -8px;
+        top: -9px;
+        background-color: #fff;
+    }
+}

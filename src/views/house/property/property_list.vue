@@ -254,7 +254,7 @@
                                                 </el-form-item>
                                             </el-col>
                                             <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label-width="70px" label="面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
+                                                <el-form-item label-width="70px" label="房屋面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
                                                     <el-input
                                                         v-model="item.area"
                                                         placeholder=""
@@ -262,7 +262,7 @@
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
-                                        <div class="delete-service" style="z-index: 1;" @click="deleteServiceFunc(i)">
+                                        <div class="delete-service"  @click="deleteServiceFunc(i)">
                                             <el-icon :size="20" color="#F56C6C">
                                                 <el-icon-circle-close />
                                             </el-icon>
@@ -342,7 +342,7 @@
                                         <span>联系方式：</span>{{ item.mobile }}
                                     </div>
                                     <div>
-                                        <span>面积：</span>{{ item.area }} ㎡
+                                        <span>房屋面积：</span>{{ item.area }} ㎡
                                     </div>
                                 </div>
                             </div>
@@ -640,22 +640,6 @@ getOpts(['house_has_house', 'type_id_card']).then(res => {
         .el-cascader {
             width: 100% !important;
             margin-bottom: 10px;
-        }
-    }
-    .serve-box {
-        border: 1px solid #eee;
-        box-sizing: border-box;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 6px;
-        position: relative;
-        .delete-service {
-            position: absolute;
-            right: 0;
-            top: 0;
-            z-index: 999999;
-            cursor: pointer;
-            background-color: #fff;
         }
     }
 }
