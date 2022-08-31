@@ -217,9 +217,8 @@
                                     :on-remove="(file,files)=>{
                                         file_list = files
                                     }"
-                                    :disabled="file_list.length >= 1? true:false"
                                 >
-                                    <el-button type="primary" :disabled="file_list.length >= 1? true:false">选择logo</el-button>
+                                    <el-button type="primary">选择logo</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
@@ -1505,7 +1504,7 @@ const postFunc = () => {
     from_add.obj.logo = file_key
     from_add.obj.logo = from_add.obj.logo.join(' ')
     if (files.length > 0) {
-        getFilesKeys(files, 'companyLogo').then(arr => {
+        getFilesKeys(files, 'comlogo').then(arr => {
             console.log(arr)
             from_add.obj.logo = file_key.concat(arr)
             // console.log(from_add.obj.logo)

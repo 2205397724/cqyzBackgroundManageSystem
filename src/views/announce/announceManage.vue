@@ -68,7 +68,7 @@
                         <span>{{ scope.row.cate.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示对象" width="160">
+                <el-table-column label="公示对象" width="220">
                     <template #default="scope">
                         <span>{{ scope.row.toval }} </span>
                     </template>
@@ -78,9 +78,9 @@
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="用户组">
+                <el-table-column label="发布人用户组">
                     <template #default="scope">
-                        <span>{{ scope.row?.authorgroup?.name }} </span>
+                        <span>{{ scope.row.authorgroup?.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态">
@@ -630,16 +630,13 @@ const dialogExamineCloseFunc = () => {
         }
         return false
     }
-    getFilesKeys(files_arr, 'folder').then(files => {
+    getFilesKeys(files_arr, 'announce').then(files => {
         console.log(files)
         for (let i in files) {
             from_examine.item.affix[i].file = files[i]
         }
         if (str_title.value == '修改') {
             from_examine.item.custom = []
-            from_examine.item.relid = 'ggtr4535'
-            from_examine.item.groupcc = 'hgfjht56'
-            from_examine.item.taskid = 'gdhfth454g'
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                 refreshFunc()
                 // ElMessage.success('修改成功')
@@ -686,7 +683,7 @@ const getTabListFunc = () => {
         group_id.value = from_examine.item.groupid
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -1027,22 +1024,6 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', '
 <style lang="scss" scoped>
 @import "@/assets/styles/resources/variables.scss";
 @include pageStyle;
-.serve-box {
-    border: 1px solid #eee;
-    box-sizing: border-box;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    position: relative;
-    .delete-service {
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 999999;
-        cursor: pointer;
-        background-color: #fff;
-    }
-}
 .el-form-item__content {
     overflow: hidden;
 }

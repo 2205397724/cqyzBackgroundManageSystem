@@ -1,56 +1,70 @@
 <template>
     <div class="articletpletasksd">
         <page-main style="overflow: hidden;">
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                     type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     制定计划
                 </el-button>
             </div>
-            <div :class="{search3: isSearch3,search2: isSearch2}">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">发布人用户组：</div>
-
-                            <div class="search_tb">
+            <div class="search">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    发布人用户组：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                                 <div class="searchUserGroup">
                                     <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
                                 </div>
-                            </div>
-                        </div>
+                            </el-col>
+                            </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th" style="width: 135px;">任务接收对象等级：</div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    任务接收对象等级：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                             <el-select v-model="data_search.obj.tolv" class="search_tb_1" placeholder="指定单位" clearable>
                                 <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
-                        </div>
+                        </el-col>
+                            </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">公示分类：</div>
-                            <div class="search_tb">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    公示分类：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                                 <CascaderAnnounce v-model="data_search.obj.cid" />
-                            </div>
-                        </div>
+                            </el-col>
+                            </el-row>
                     </el-col>
                 </el-row>
-                <el-row v-if="btnClick==true" class="m-t-20" :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">是否启用：</div>
+                <el-row v-if="btnClick==true">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    是否启用：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                             <el-select v-model="data_search.obj.isactive" class="search_tb" placeholder="是否启用" clearable>
                                 <el-option v-for="(item) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
-                        </div>
+                        </el-col>
+                            </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th" style="width: 135px;">下次执行时间：</div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    下次执行时间：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                             <el-date-picker
                                 v-model="data_search.obj.runat"
                                 type="date"
@@ -59,29 +73,25 @@
                                 class="search_tb"
                                 :default-value="new Date()"
                             />
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
-                                </div>
-                            </div>
-                        </div>
+                        </el-col>
+                            </el-row>
                     </el-col>
                 </el-row>
                 <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
+                        </el-col>
+                    </el-row>
+                <el-row>
                     <div class="searchPlay" @click="btnClickFunc">
                         <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                        <el-button v-if="btnClick==false" :icon="CaretTop" class="searchDeal">展开</el-button>
-                        <el-button v-if="btnClick==true" :icon="CaretBottom" class="searchDeal">收起</el-button>
+                        <el-button v-if="btnClick==false" :icon="CaretTop" class="searchDeal" size="small">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretBottom" class="searchDeal" size="small">收起</el-button>
                     </div>
                 </el-row>
             </div>
@@ -350,7 +360,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { Loading,Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 import { useUserOutsideStore } from '@/store/modules/user'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
@@ -512,7 +522,7 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        // total.value = res.length
+        total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= per_page.value) {
             flag.value = true

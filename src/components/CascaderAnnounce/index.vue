@@ -4,6 +4,8 @@
         placeholder="公示分类"
         :show-all-levels="false"
         :props="cascader_props"
+        ref="divRef"
+        @change="changeFunc"
         clearable
     >
         <template #default="{ node, data }">
@@ -24,6 +26,11 @@ const props = defineProps({
         default: ''
     }
 })
+const divRef=ref(null)
+const changeFunc=()=>{
+    console.log(divRef.value);
+    divRef.value.dropDownVisible=false
+}
 const emits = defineEmits(['update:modelValue'])
 const code = ref('')
 const options = reactive({
