@@ -87,16 +87,15 @@ api.interceptors.response.use(
             message = '后端网络故障'
         } else if (message.includes('timeout')) {
             message = '接口请求超时'
-        } else if (message.includes('Request failed with status code')) {
-            message = '接口' + message.substr(message.length - 3) + '异常'
-                // message = '接' + message
+        } else if (error.response) {
+            message = error.response.data.message
         }
         ElMessage({
             message,
             type: 'error'
         })
+        loading.close()
         return Promise.reject(error)
     }
 )
-
 export default api
