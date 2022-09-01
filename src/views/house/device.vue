@@ -565,9 +565,15 @@
                                                         multiple
                                                         action="***"
                                                         :auto-upload="false"
-                                                        :file-list="fileListFn(item.key)"
+                                                        :file-list="item.key"
                                                         :on-change="(file,files)=>{
-                                                            item.key=file
+
+                                                            if (typeof item.key == 'string' ) {
+                                                                item.key = file
+                                                                console.log(file)
+                                                            } else {
+                                                                item.key.push(file)
+                                                            }
                                                         }"
                                                         :on-remove="(file,files)=>{
                                                             item.key = file
@@ -1150,6 +1156,7 @@ const dialogExamineCloseFunc_1 = () => {
     from_error.msg = {}
     let files = []
     let file_key = []
+    console.log(file_list.value)
     if (file_list.value.length > 0) {
         for (let i in file_list.value) {
             if (!file_list.value[i].raw) {
@@ -1159,6 +1166,7 @@ const dialogExamineCloseFunc_1 = () => {
             }
         }
     }
+    console.log(files)
     addRepair.item.affix = file_key
     if (files.length > 0) {
         getFilesKeys(files, 'folder').then(arr => {
@@ -1267,32 +1275,66 @@ const uploadChange=(file, file_list)=>{
 }
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
-    let obj = {}
-    for (let i in addArchive.item.content) {
-        // if (typeof addArchive.item.content[i].key != 'string') {
-        //     obj[i] = addArchive.item.content[i].key
-        // }c
-        obj[i] = addArchive.item.content[i].key
-    }
+    // let obj = {}
+    // for (let i in addArchive.item.content) {
+    //     // if (typeof addArchive.item.content[i].key != 'string') {
+    //     //     obj[i] = addArchive.item.content[i].key
+    //     // }c
+    //     obj[i] = addArchive.item.content[i].key
+    // }
     let files = []
-    for (let i in obj) {
-        files.push(obj[i].raw)
-    }
-    if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
-            let o = 0
-            console.log(arr);
-            console.log(obj);
-            for (let i in obj) {
-                addArchive.item.content[i].key = arr[o]
-                // addArchive.item.content[i].key.push(arr[o])
-                o++
+    let file_key = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'folder').then(arr => {
+    //         let o = 0
+    //         console.log(arr);
+    //         console.log(obj);
+    //         for (let i in obj) {
+    //             addArchive.item.content[i].key = arr[o]
+    //             // addArchive.item.content[i].key.push(arr[o])
+    //             o++
+    //         }
+    //         formFnUpload_1()
+    //     })
+    //     return false
+    // }
+    // formFnUpload_1()
+    console.log(addArchive.item.content)
+    let arr = []
+	let everyKeyLength = [] //多文件上传处理
+	addArchive.item.content.forEach((item, index) => {
+	// console.log(item.key)
+	everyKeyLength.push(item.key.length)
+	for (let key in item.key) {
+	arr[key] = item.key[key]
+	}
+
+	})
+    console.log(arr)
+     if (arr.length > 0) {
+        for (let i in arr) {
+            if (!arr[i].raw) {
+                file_key.push(arr[i].name)
+            } else {
+                files.push(arr[i].raw)
             }
-            formFnUpload_1()
-        })
-        return false
+        }
     }
-    formFnUpload_1()
+    console.log(files)
+    getFilesKeys(files,'archive').then(res => {
+	// console.log(res)
+	let whereKey = 0
+	for (let x = 0; x < everyKeyLength.length; x++) { //多文件上传处理
+	for (let y = 0; y < everyKeyLength[x]; y++) {
+	addArchive.item.content[x].key[y] = res[whereKey]
+	whereKey++
+    }
+	}
+	})
+    console.log(addArchive.item)
 }
 // 删除
 const deleteArchiveFunc = val => {
