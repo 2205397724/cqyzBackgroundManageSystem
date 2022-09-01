@@ -1,7 +1,7 @@
 <template>
     <div class="keep-on-record">
         <page-main class="hidden">
-            <el-button-group class="btn">
+            <el-button-group class="btngrop m-b-20">
                 <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
                 <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
                 <!-- </el-badge> -->
@@ -359,10 +359,7 @@ getOpts(['enterprise_type', 'enterpriseStatus', 'examine_status', 'toushu_return
     margin-right: 20px;
     text-align: right;
 }
-.btn {
-    margin-bottom: 15px;
-}
-.btn button {
+.btngrop button {
     padding: 20px 40px;
 }
 </style>

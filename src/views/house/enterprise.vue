@@ -47,6 +47,7 @@
 
             </div>
             <el-table
+                v-loading="loading_tab"
                 :data="from_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
@@ -122,6 +123,7 @@
         >
             <div>
                 <el-form
+                ref="ruleFormRef"
                     :model="from_add.obj"
                 >
                     <el-row :gutter="10">
@@ -170,7 +172,7 @@
                             <el-form-item
                                 label="公司类型"
                                 label-width="100px"
-                                :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
+                                :error="err_add.obj&&err_add.obj.user_id?err_add.obj.user_id[0]:''"
                             >
                                 <el-select v-model="from_add.obj.type" class="head-btn search_tb" placeholder="审核状态" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.enterprise_type" :key="item.key" :label="item.val" :value="item.key" />
@@ -193,7 +195,7 @@
                             <el-form-item
                                 label="企业法人"
                                 label-width="100px"
-                                :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
+                                :error="err_add.obj&&err_add.obj.legal?err_add.obj.legal[0]:''"
                             >
                                 <el-input
                                     v-model="from_add.obj.legal"
@@ -348,10 +350,10 @@
                     <el-scrollbar height="400px">
                         <div>
                             <el-button
-                                class="head-btn" type="primary" :icon="Plus"
+                                class="m-b-20" type="primary" :icon="Plus"
                                 @click="addUserGroupFunc"
                             >
-                                添加企业组织
+                                添加项目部
                             </el-button>
                         </div>
                         <!-- <div class="search">
@@ -359,14 +361,14 @@
                                 <el-col :xs="24" :md="12" :lg="8">
                                     <div class="searchBox">
                                         <div class="search_th">
-                                            组织名称：
+                                            项目部名称：
                                         </div>
                                         <el-input v-model="data_search.item.name" class="search_tb" placeholder="" clearable />
                                     </div>
                                 </el-col>
                                 <el-col :xs="24" :md="12" :lg="8">
                                     <div class="searchBox">
-                                        <div class="search_th">组织类型：</div>
+                                        <div class="search_th">项目部类型：</div>
                                         <el-select
                                             v-model="data_search.item.type"
                                             placeholder="请选择类型"
@@ -410,12 +412,12 @@
                                 :tree-props="{ children: 'children' }"
                                 style="width: 100%; min-height: 300px;"
                             >
-                                <el-table-column prop="name" label="组织名称" width="180">
+                                <el-table-column prop="name" label="项目部名称" width="180">
                                     <template #default="scope">
                                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                                     </template>
                                 </el-table-column>
-                                <!-- <el-table-column prop="id" label="组织ID" width="300">
+                                <!-- <el-table-column prop="id" label="项目部ID" width="300">
             <template #default="scope">
               <span style="margin-left: 10px">{{ scope.row.id }} </span>
             </template>
@@ -684,7 +686,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24">
                             <el-form-item
-                                label="组织名称"
+                                label="项目部名称"
                                 prop="name"
                                 label-width="110px"
                             >
@@ -753,11 +755,11 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 组织详情 -->
+        <!-- 项目部详情 -->
         <el-dialog v-model="switch_group_details" title="详情" width="50%">
             <div class="details-box">
                 <div class="item">
-                    <div class="left">组织名称</div>
+                    <div class="left">项目部名称</div>
                     <div class="right">{{ data_group_details.item.name }}</div>
                 </div>
                 <div class="item">
@@ -772,8 +774,8 @@
                     </div>
                 </div>
                 <div class="item">
-                    <div class="left">关联</div>
-                    <div class="right">{{ data_group_details.item.ref }}</div>
+                    <div class="left">关联企业</div>
+                    <div class="right">{{ details_item.obj.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">区域类型</div>
@@ -784,7 +786,7 @@
                     <div class="right">{{ data_group_details.item.region_cc }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">组织ID</div>
+                    <div class="left">项目部ID</div>
                     <div class="right">{{ data_group_details.item.id }}</div>
                 </div>
                 <div class="item">
@@ -797,7 +799,7 @@
                 </div>
             </div>
         </el-dialog>
-        <!-- 添加组织弹窗中选择区域弹窗 -->
+        <!-- 添加项目部弹窗中选择区域弹窗 -->
         <el-dialog v-model="switch_choose_zone" title="选择小区">
             <el-scrollbar height="250px">
                 <position-tree-fourth
@@ -816,7 +818,7 @@
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="optValAddFunc">
+                    <el-button class="m-b-20" :icon="Plus" type="primary" @click="optValAddFunc">
                         添加成员
                     </el-button>
                 </el-col>
@@ -863,12 +865,12 @@
                         <span>{{ scope.row.mobile }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="post" label="职位" width="100">
+                <el-table-column prop="post" label="权限" width="100">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.group_user_flg,scope.row.flg) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="post" label="职位描述">
+                <el-table-column prop="post" label="职位名称">
                     <template #default="scope">
                         <span>{{ scope.row.post }} </span>
                     </template>
@@ -918,7 +920,7 @@
                 <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
                     <el-row :gutter="10">
                         <el-col v-if="str_opt_val_title == '添加'" :sm="24" :md="24" :lg="12">
-                            <el-form-item label="用户ID" prop="id">
+                            <el-form-item label="用户名" prop="id">
                                 <div class="searchUserGroup">
                                     <SearchUser ref="V_1" @checkName="checkUsersNameFunc_1" />
                                 </div>
@@ -960,7 +962,7 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 组织成员详情 -->
+        <!-- 项目部成员详情 -->
         <el-dialog v-model="switch_user_details" title="详情" width="50%">
             <el-scrollbar height="400px">
                 <div class="details-box">
@@ -1124,6 +1126,7 @@ const addResidentialFunc = () => {
     from_add.obj = {
         extra:[]
     }
+    console.log(typeof(from_add.obj.extra))
     err_add.obj = {}
     str_title.value = '添加'
     switch_add.value = true
@@ -1135,11 +1138,12 @@ const deleteServiceFunc = index => {
     from_add.obj.extra.splice(index, 1)
 }
 // 添加
-const addServiceFunc = index => {
+const addServiceFunc = () => {
     let data = {
         'lab': '',
         'val': ''
     }
+    console.log(typeof(from_add.obj.extra))
     from_add.obj.extra.push(data)
 }
 const logo = reactive({
@@ -1216,7 +1220,9 @@ const getUsergroupList = () => {
             params[key] = data_search.item[key]
         }
     }
+    loading_tab.value = true
     APIgetGroupList(params).then(res => {
+        loading_tab.value = false
         console.log(res)
         data_tab.arr = res.data
         total_1.value = res.data.length
@@ -1249,14 +1255,14 @@ const deleteFunc_1 = val => {
 // 企业成员添加
 const addUserGroupFunc = val => {
     from_examine.item = {}
-    str_title.value = '添加组织'
+    str_title.value = '添加项目部'
     from_examine.item.type = 7
     from_examine.item.region_val = ''
     switch_examine.value = true
 }
 // 企业成员修改
 const modifyResidentialFunc = val => {
-    str_title.value = '修改组织'
+    str_title.value = '修改项目部'
     from_examine.item = {
         ...val
     }
@@ -1265,7 +1271,7 @@ const modifyResidentialFunc = val => {
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
     from_examine.item.ref = details_item.obj.id
-    if (str_title.value == '修改组织') {
+    if (str_title.value == '修改项目部') {
         APIputGroup(from_examine.item.id, from_examine.item)
             .then(res => {
                 if (res.status === 200) {
@@ -1346,7 +1352,7 @@ const switch_group_details = ref(false)
 const data_group_details = reactive({
     item: {}
 })
-// 组织详情
+// 项目部详情
 const getGroupDetail = val => {
     APIgetGroupDetails(val.id).then(res => {
         if (res.status == 200) {
@@ -1441,7 +1447,7 @@ const dialogOptValFunc = () => {
 const checkUsersNameFunc_1 = val => {
     from_opt_val.obj.user_id = val.id
 }
-// 组织成员详细
+// 项目部成员详细
 const data_user_detail = reactive({
     item: {}
 })
@@ -1471,15 +1477,14 @@ const optValDeleteFunc = val => {
     })
 }
 const postFunc_1 = () => {
-    if (str_title.value == '添加') {
-        APIpostEnterprise(from_add.obj).then(res => {
-            refreshFunc()
-            ElMessage.success('添加成功')
-            switch_add.value = false
-        }).catch(err => {
-            ElMessage.error('添加失败')
-        })
-    } else if (str_title.value == '修改') {
+    err_add.obj = {}
+    // console.log('失败')
+    // console.log(formEl)
+    // if (!formEl) return
+    // console.log('失败')
+    // formEl.validate(valid => {
+    //     if (valid) {
+    if (str_title.value == '修改') {
         APIputEnterprise(from_add.obj.id, from_add.obj).then(() => {
             refreshFunc()
             ElMessage.success('修改成功')
@@ -1487,9 +1492,21 @@ const postFunc_1 = () => {
         }).catch(() => {
             ElMessage.error('修改失败')
         })
+    }else (
+            APIpostEnterprise(from_add.obj).then(res => {
+            refreshFunc()
+            ElMessage.success('添加成功')
+            switch_add.value = false
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+        )
     }
-}
-const postFunc = () => {
+// }
+//     })
+
+const postFunc = (formEl) => {
+    console.log(formEl)
     let files = []
     let file_key = []
     if (file_list.value.length > 0) {

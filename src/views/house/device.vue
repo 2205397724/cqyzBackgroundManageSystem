@@ -76,7 +76,7 @@
             </div>
             <div>
                 <el-table
-                    v-loading="loading_tab"
+
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     class="tab_1"
@@ -478,6 +478,13 @@
                                                 </div>
                                             </div>
                                             <div class="item">
+                                                <div class="left">资金来源</div>
+                                                <div class="right">
+                                                    <span class="m-r-10">{{ getOptVal(opts_all.obj.device_repair_money_src,item.money_src) }}</span>
+                                                    <span class="m-r-10">{{ item.money }} 元</span>
+                                                </div>
+                                            </div>
+                                            <div class="item">
                                                 <div class="left">详细记录</div>
                                                 <div class="right">{{ item.content }}</div>
                                             </div>
@@ -678,7 +685,7 @@
                                     v-model="addRepair.item.money"
                                     class="head-btn"
                                 >
-                                    <template #append>分</template>
+                                    <template #append>元</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -778,7 +785,7 @@ let data_search = reactive({ obj: {} })
 let switch_details = ref(false)
 // 列表
 let ruleFormRef = ref('')
-let loading_tab = ref(false)
+// let loading_tab = ref(false)
 let data_tab = reactive({
     arr: []
 })
@@ -876,10 +883,10 @@ const getTabListFunc = () => {
         }
         params.updated_at = updated_str.substring(1)
     }
-    loading_tab.value = true
+    // loading_tab.value = true
     APIgetDeviceList(params).then(res => {
         console.log(res)
-        loading_tab.value = false
+        // loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
@@ -959,8 +966,13 @@ const getDetailsFunc = val => {
                 res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].affix[j])
             }
         }
+        for(let i in res){
+            if(res[i].money){
+                res[i].money=parseInt(res[i].money)/100
+            }
+        }
         data_repair.arr = res
-        console.log(data_repair.arr)
+        console.log(res)
         switch_details.value = true
     })
 
@@ -995,6 +1007,7 @@ watch(page, () => {
 }, { immediate: true, deep: true })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
+    // console.log(formEl);
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
@@ -1002,10 +1015,12 @@ const dialogExamineCloseFunc = formEl => {
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+                    console.log(res)
                     refreshFunc()
                     ElMessage.success('修改成功')
                     switch_examine.value = false
                 }).catch(err => {
+                    console.log(err);
                     ElMessage.error('修改失败')
                 })
             } else {
@@ -1038,6 +1053,7 @@ const addResidentialFunc = () => {
     from_examine.item = {
         extra: []
     }
+    console.log(typeof(from_examine.item.extra))
     switch_examine.value = true
 }
 // 修改
@@ -1066,6 +1082,7 @@ const addServiceFunc = index => {
         'lab': '',
         'val': ''
     }
+    console.log(typeof(from_examine.item.extra))
     from_examine.item.extra.push(data)
 }
 // 维保
@@ -1097,6 +1114,7 @@ const modifyRepairFunc = val => {
     str_title_1.value = '修改'
     APIgetDeviceRepairDetails(val.id).then(res => {
         addRepair.item = res
+        addRepair.item.money=parseInt(addRepair.item.money) / 100
         addRepair.item.did = data_details.item.id
         let arr = []
         for (let i in res.affix) {
@@ -1127,6 +1145,7 @@ const fileListFn = val => {
 }
 // 同意拒绝提交
 const fromFnUpload = () => {
+    addRepair.item.money=parseInt(addRepair.item.money)*100
     if (str_title_1.value == '修改') {
         console.log(addRepair.item.did)
         APIputDeviceRepair(addRepair.item.id, addRepair.item).then(res => {
