@@ -76,7 +76,7 @@
             </div>
             <div>
                 <el-table
-                    v-loading="loading_tab"
+
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     class="tab_1"
@@ -433,9 +433,9 @@
                                                 <div class="right">
                                                     <div v-for="(val,i) in item.content" :key="i" class="inline-block">
                                                         <!-- <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link> -->
-                                                        <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
+                                                        <!-- <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
                                                         <el-image v-if="val.type == 'image'" :preview-src-list="item.keys" class="image" :src="VITE_APP_FOLDER_SRC+val.key" fit="cover" />
-                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" />
+                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" /> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -475,6 +475,13 @@
                                                     <span>{{ item.title }}</span>
                                                     <el-tag v-if="item.type == 1" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</el-tag>
                                                     <el-tag v-if="item.type == 0" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</el-tag>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">资金来源</div>
+                                                <div class="right">
+                                                    <span class="m-r-10">{{ getOptVal(opts_all.obj.device_repair_money_src,item.money_src) }}</span>
+                                                    <span class="m-r-10">{{ item.money }} 元</span>
                                                 </div>
                                             </div>
                                             <div class="item">
@@ -561,24 +568,29 @@
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24">
                                                 <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
-                                                    <el-upload
+                                                    <!-- <el-upload
                                                         multiple
                                                         action="***"
                                                         :auto-upload="false"
-                                                        :file-list="item.key"
+                                                        :file-list="fileListFn(item.key)"
                                                         :on-change="(file,files)=>{
-
-                                                            if (typeof item.key == 'string' ) {
-                                                                item.key = file
-                                                                console.log(file)
-                                                            } else {
-                                                                item.key.push(file)
-                                                            }
+                                                            item.key=file
                                                         }"
                                                         :on-remove="(file,files)=>{
                                                             item.key = file
                                                         }"
-                                                    >
+                                                    > -->
+                                                    <el-upload
+multiple
+action="***"
+:auto-upload="false"
+:file-list="fileListFn(item.key)"
+:on-change="(file,files)=>{
+   item.key=files
+}"
+:on-remove="(file,files)=>{
+    item.key = files
+}">
                                                     <!-- <el-upload
                                     action="***"
                                     :auto-upload="false"
@@ -684,7 +696,7 @@
                                     v-model="addRepair.item.money"
                                     class="head-btn"
                                 >
-                                    <template #append>分</template>
+                                    <template #append>元</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -784,7 +796,7 @@ let data_search = reactive({ obj: {} })
 let switch_details = ref(false)
 // 列表
 let ruleFormRef = ref('')
-let loading_tab = ref(false)
+// let loading_tab = ref(false)
 let data_tab = reactive({
     arr: []
 })
@@ -882,10 +894,10 @@ const getTabListFunc = () => {
         }
         params.updated_at = updated_str.substring(1)
     }
-    loading_tab.value = true
+    // loading_tab.value = true
     APIgetDeviceList(params).then(res => {
         console.log(res)
-        loading_tab.value = false
+        // loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
@@ -943,13 +955,13 @@ const getDetailsFunc = val => {
         //         res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].content[j].key)
         //     }
         // }
-        let keys=[]
-        for (let i in res){
-            res[i].keys=[]
-            for(let j in res[i].content){
-            res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
-        }
-        }
+        // let keys=[]
+        // for (let i in res){
+        //     res[i].keys=[]
+        //     for(let j in res[i].content){
+        //     res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
+        // }
+        // }
         data_archive.arr = res
         switch_details.value = true
     })
@@ -965,8 +977,13 @@ const getDetailsFunc = val => {
                 res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].affix[j])
             }
         }
+        for(let i in res){
+            if(res[i].money){
+                res[i].money=parseInt(res[i].money)/100
+            }
+        }
         data_repair.arr = res
-        console.log(data_repair.arr)
+        console.log(res)
         switch_details.value = true
     })
 
@@ -1001,6 +1018,7 @@ watch(page, () => {
 }, { immediate: true, deep: true })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
+    // console.log(formEl);
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
@@ -1008,10 +1026,12 @@ const dialogExamineCloseFunc = formEl => {
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+                    console.log(res)
                     refreshFunc()
                     ElMessage.success('修改成功')
                     switch_examine.value = false
                 }).catch(err => {
+                    console.log(err);
                     ElMessage.error('修改失败')
                 })
             } else {
@@ -1044,6 +1064,7 @@ const addResidentialFunc = () => {
     from_examine.item = {
         extra: []
     }
+    console.log(typeof(from_examine.item.extra))
     switch_examine.value = true
 }
 // 修改
@@ -1072,6 +1093,7 @@ const addServiceFunc = index => {
         'lab': '',
         'val': ''
     }
+    console.log(typeof(from_examine.item.extra))
     from_examine.item.extra.push(data)
 }
 // 维保
@@ -1103,6 +1125,7 @@ const modifyRepairFunc = val => {
     str_title_1.value = '修改'
     APIgetDeviceRepairDetails(val.id).then(res => {
         addRepair.item = res
+        addRepair.item.money=parseInt(addRepair.item.money) / 100
         addRepair.item.did = data_details.item.id
         let arr = []
         for (let i in res.affix) {
@@ -1112,27 +1135,35 @@ const modifyRepairFunc = val => {
                 })
             }
         }
+        console.log(arr)
         file_list.value = arr
         addRepair.switch = true
     })
 }
 import { getFilesKeys } from '@/util/files.js'
 const fileListFn = val => {
-    if (!val) {
-        return []
-    }
-    if (val) {
-    console.log(typeof(val))
-    if (typeof val == 'string') {
-        return [{
-            name: val
-        }]
-    }
-    }
-    return [val]
+    // if (!val) {
+    //     return []
+    // }
+    // if (val) {
+    // console.log(typeof(val))
+    // if (typeof val == 'string') {
+        // return [{
+        //     name: val
+        // }]
+        let arr=[]
+        for (let i in val){
+        arr.push({ name: val[i]})
+        }
+        val=arr
+        console.log(val)
+    // }
+    // }
+    // return [val]
 }
 // 同意拒绝提交
 const fromFnUpload = () => {
+    addRepair.item.money=parseInt(addRepair.item.money)*100
     if (str_title_1.value == '修改') {
         console.log(addRepair.item.did)
         APIputDeviceRepair(addRepair.item.id, addRepair.item).then(res => {
@@ -1166,7 +1197,6 @@ const dialogExamineCloseFunc_1 = () => {
             }
         }
     }
-    console.log(files)
     addRepair.item.affix = file_key
     if (files.length > 0) {
         getFilesKeys(files, 'folder').then(arr => {
@@ -1235,7 +1265,6 @@ const modifyArchiveFunc = val => {
         //     }
         // }
         // file_list_1.value = arr
-        console.log( file_list_1.value)
         addArchive.item.did = data_details.item.id
         addArchive.switch = true
     })
@@ -1275,33 +1304,8 @@ const uploadChange=(file, file_list)=>{
 }
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
-    // let obj = {}
-    // for (let i in addArchive.item.content) {
-    //     // if (typeof addArchive.item.content[i].key != 'string') {
-    //     //     obj[i] = addArchive.item.content[i].key
-    //     // }c
-    //     obj[i] = addArchive.item.content[i].key
-    // }
     let files = []
     let file_key = []
-    // for (let i in obj) {
-    //     files.push(obj[i].raw)
-    // }
-    // if (files.length > 0) {
-    //     getFilesKeys(files, 'folder').then(arr => {
-    //         let o = 0
-    //         console.log(arr);
-    //         console.log(obj);
-    //         for (let i in obj) {
-    //             addArchive.item.content[i].key = arr[o]
-    //             // addArchive.item.content[i].key.push(arr[o])
-    //             o++
-    //         }
-    //         formFnUpload_1()
-    //     })
-    //     return false
-    // }
-    // formFnUpload_1()
     console.log(addArchive.item.content)
     let arr = []
 	let everyKeyLength = [] //多文件上传处理
@@ -1323,9 +1327,18 @@ const dialogExamineCloseFunc_2 = () => {
             }
         }
     }
-    console.log(files)
+    // console.log(files)
     getFilesKeys(files,'archive').then(res => {
-	// console.log(res)
+	console.log(res)
+    // let Arr=[]
+    // for(let i in res){
+    //     Arr.push(VITE_APP_FOLDER_SRC.value+res[i])
+    // }
+    // res=Arr
+    // console.log(Arr)
+    // res.forEach(item =>{
+    //     item=VITE_APP_FOLDER_SRC+item
+    // })
 	let whereKey = 0
 	for (let x = 0; x < everyKeyLength.length; x++) { //多文件上传处理
 	for (let y = 0; y < everyKeyLength[x]; y++) {
@@ -1333,8 +1346,35 @@ const dialogExamineCloseFunc_2 = () => {
 	whereKey++
     }
 	}
+    formFnUpload_1()
 	})
-    console.log(addArchive.item)
+    // console.log(addArchive.item)
+    // let obj = {}
+    // for (let i in addArchive.item.content) {
+    //     // if (typeof addArchive.item.content[i].key != 'string') {
+    //     //     obj[i] = addArchive.item.content[i].key
+    //     // }c
+    //     obj[i] = addArchive.item.content[i].key
+    // }
+    // let files = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'folder').then(arr => {
+    //         let o = 0
+    //         console.log(arr);
+    //         console.log(obj);
+    //         for (let i in obj) {
+    //             addArchive.item.content[i].key = arr[o]
+    //             // addArchive.item.content[i].key.push(arr[o])
+    //             o++
+    //         }
+    //         formFnUpload_1()
+    //     })
+    //     return false
+    // }
+    // formFnUpload_1()
 }
 // 删除
 const deleteArchiveFunc = val => {

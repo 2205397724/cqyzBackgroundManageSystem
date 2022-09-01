@@ -70,13 +70,14 @@ api.interceptors.response.use(
              * 请求出错时 error 会返回错误信息
              */
         if (response.status === 200) {
-            if (!response.code) {
+            // if (!response.code) {
                 return Promise.resolve(response)
-            } else {
-                ElMessage.error(response.msg)
-                return Promise.reject(response)
-            }
+            // } else {
+                ElMessage.error(response.message)
+                // return Promise.reject(response)
+            // }
         } else {
+            console.log(response.message)
             toLogin()
         }
     },

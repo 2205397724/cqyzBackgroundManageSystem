@@ -7,14 +7,13 @@
     "code": "ELIFECYCLE",
     "pkgid": "fantastic-admin@0.1.0",
     "stage": "dev",
-    "script": "vite",
+    "script": "vite --host 0.0.0.0",
     "pkgname": "fantastic-admin",
     "err": {
       "name": "pnpm",
-      "message": "fantastic-admin@0.1.0 dev: `vite`\nExit status 1",
+      "message": "fantastic-admin@0.1.0 dev: `vite --host 0.0.0.0`\nExit status 1",
       "code": "ELIFECYCLE",
-      "stack": "pnpm: fantastic-admin@0.1.0 dev: `vite`\nExit status 1\n    at EventEmitter.<anonymous> (D:\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:103873:20)\n    at EventEmitter.emit (node:events:390:28)\n    at ChildProcess.<anonymous> (D:\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:91802:18)\n    at ChildProcess.emit (node:events:390:28)\n    at maybeClose (node:internal/child_process:1062:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:301:5)"
+      "stack": "pnpm: fantastic-admin@0.1.0 dev: `vite --host 0.0.0.0`\nExit status 1\n    at EventEmitter.<anonymous> (D:\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:103873:20)\n    at EventEmitter.emit (node:events:390:28)\n    at ChildProcess.<anonymous> (D:\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:91802:18)\n    at ChildProcess.emit (node:events:390:28)\n    at maybeClose (node:internal/child_process:1062:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:301:5)"
     }
-  },
-  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
+  }
 }

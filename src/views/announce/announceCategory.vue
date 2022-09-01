@@ -1,9 +1,9 @@
 <template>
     <div class="articletpletasksd">
         <page-main>
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="m-b-30" type="primary" :icon="Plus"
+                     type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加分类
