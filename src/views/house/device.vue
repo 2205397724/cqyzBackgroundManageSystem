@@ -433,9 +433,9 @@
                                                 <div class="right">
                                                     <div v-for="(val,i) in item.content" :key="i" class="inline-block">
                                                         <!-- <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link> -->
-                                                        <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
+                                                        <!-- <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
                                                         <el-image v-if="val.type == 'image'" :preview-src-list="item.keys" class="image" :src="VITE_APP_FOLDER_SRC+val.key" fit="cover" />
-                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" />
+                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" /> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -568,7 +568,7 @@
                                         <el-row :gutter="10">
                                             <el-col :xs="24" :sm="24">
                                                 <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
-                                                    <el-upload
+                                                    <!-- <el-upload
                                                         multiple
                                                         action="***"
                                                         :auto-upload="false"
@@ -579,7 +579,18 @@
                                                         :on-remove="(file,files)=>{
                                                             item.key = file
                                                         }"
-                                                    >
+                                                    > -->
+                                                    <el-upload
+multiple
+action="***"
+:auto-upload="false"
+:file-list="fileListFn(item.key)"
+:on-change="(file,files)=>{
+   item.key=files
+}"
+:on-remove="(file,files)=>{
+    item.key = files
+}">
                                                     <!-- <el-upload
                                     action="***"
                                     :auto-upload="false"
@@ -944,13 +955,13 @@ const getDetailsFunc = val => {
         //         res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].content[j].key)
         //     }
         // }
-        let keys=[]
-        for (let i in res){
-            res[i].keys=[]
-            for(let j in res[i].content){
-            res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
-        }
-        }
+        // let keys=[]
+        // for (let i in res){
+        //     res[i].keys=[]
+        //     for(let j in res[i].content){
+        //     res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
+        // }
+        // }
         data_archive.arr = res
         switch_details.value = true
     })
@@ -1124,24 +1135,31 @@ const modifyRepairFunc = val => {
                 })
             }
         }
+        console.log(arr)
         file_list.value = arr
         addRepair.switch = true
     })
 }
 import { getFilesKeys } from '@/util/files.js'
 const fileListFn = val => {
-    if (!val) {
-        return []
-    }
-    if (val) {
-    console.log(typeof(val))
-    if (typeof val == 'string') {
-        return [{
-            name: val
-        }]
-    }
-    }
-    return [val]
+    // if (!val) {
+    //     return []
+    // }
+    // if (val) {
+    // console.log(typeof(val))
+    // if (typeof val == 'string') {
+        // return [{
+        //     name: val
+        // }]
+        let arr=[]
+        for (let i in val){
+        arr.push({ name: val[i]})
+        }
+        val=arr
+        console.log(val)
+    // }
+    // }
+    // return [val]
 }
 // 同意拒绝提交
 const fromFnUpload = () => {
@@ -1169,6 +1187,7 @@ const dialogExamineCloseFunc_1 = () => {
     from_error.msg = {}
     let files = []
     let file_key = []
+    console.log(file_list.value)
     if (file_list.value.length > 0) {
         for (let i in file_list.value) {
             if (!file_list.value[i].raw) {
@@ -1246,7 +1265,6 @@ const modifyArchiveFunc = val => {
         //     }
         // }
         // file_list_1.value = arr
-        console.log( file_list_1.value)
         addArchive.item.did = data_details.item.id
         addArchive.switch = true
     })
@@ -1286,32 +1304,77 @@ const uploadChange=(file, file_list)=>{
 }
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
-    let obj = {}
-    for (let i in addArchive.item.content) {
-        // if (typeof addArchive.item.content[i].key != 'string') {
-        //     obj[i] = addArchive.item.content[i].key
-        // }c
-        obj[i] = addArchive.item.content[i].key
-    }
     let files = []
-    for (let i in obj) {
-        files.push(obj[i].raw)
-    }
-    if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
-            let o = 0
-            console.log(arr);
-            console.log(obj);
-            for (let i in obj) {
-                addArchive.item.content[i].key = arr[o]
-                // addArchive.item.content[i].key.push(arr[o])
-                o++
+    let file_key = []
+    console.log(addArchive.item.content)
+    let arr = []
+	let everyKeyLength = [] //多文件上传处理
+	addArchive.item.content.forEach((item, index) => {
+	// console.log(item.key)
+	everyKeyLength.push(item.key.length)
+	for (let key in item.key) {
+	arr[key] = item.key[key]
+	}
+
+	})
+    console.log(arr)
+     if (arr.length > 0) {
+        for (let i in arr) {
+            if (!arr[i].raw) {
+                file_key.push(arr[i].name)
+            } else {
+                files.push(arr[i].raw)
             }
-            formFnUpload_1()
-        })
-        return false
+        }
     }
+    // console.log(files)
+    getFilesKeys(files,'archive').then(res => {
+	console.log(res)
+    // let Arr=[]
+    // for(let i in res){
+    //     Arr.push(VITE_APP_FOLDER_SRC.value+res[i])
+    // }
+    // res=Arr
+    // console.log(Arr)
+    // res.forEach(item =>{
+    //     item=VITE_APP_FOLDER_SRC+item
+    // })
+	let whereKey = 0
+	for (let x = 0; x < everyKeyLength.length; x++) { //多文件上传处理
+	for (let y = 0; y < everyKeyLength[x]; y++) {
+	addArchive.item.content[x].key[y] = res[whereKey]
+	whereKey++
+    }
+	}
     formFnUpload_1()
+	})
+    // console.log(addArchive.item)
+    // let obj = {}
+    // for (let i in addArchive.item.content) {
+    //     // if (typeof addArchive.item.content[i].key != 'string') {
+    //     //     obj[i] = addArchive.item.content[i].key
+    //     // }c
+    //     obj[i] = addArchive.item.content[i].key
+    // }
+    // let files = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'folder').then(arr => {
+    //         let o = 0
+    //         console.log(arr);
+    //         console.log(obj);
+    //         for (let i in obj) {
+    //             addArchive.item.content[i].key = arr[o]
+    //             // addArchive.item.content[i].key.push(arr[o])
+    //             o++
+    //         }
+    //         formFnUpload_1()
+    //     })
+    //     return false
+    // }
+    // formFnUpload_1()
 }
 // 删除
 const deleteArchiveFunc = val => {
