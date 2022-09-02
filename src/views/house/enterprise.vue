@@ -1,72 +1,65 @@
 <template>
     <div class="keep-on-record">
         <page-main class="hidden">
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                     type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加企业
                 </el-button>
             </div>
             <div class="search">
-                <div class="m-t-10">
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">
+                <el-row >
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                     关键字：
-                                </div>
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="search_str.obj.keyword" class="search_tb" placeholder="" clearable />
-                            </div>
+                            </el-col>
+                            </el-row>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">用户名：</div>
-                                <div class="search_tb">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                    申请人：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="18" class="search_tb">
                                     <div class="searchUserGroup">
                                         <SearchUser ref="V" @checkName="checkUsersNameFunc" />
                                     </div>
-                                </div>
-                            </div>
+                                </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
-                    <el-row class="m-t-20">
-                        <el-col :xs="24" :md="24" :lg="24">
-                            <div class="searchBox">
-                                <div class="search_th" />
-                                <div class="search_tb">
-                                    <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                    <div v-show="switch_search" class="m-l-20 size-base inline-block">
-                                        <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                        <div class="searchDetail">
-                                            *搜索到相关结果共{{ total }}条。
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
                         </el-col>
                     </el-row>
-                </div>
+
             </div>
             <el-table
+                v-loading="loading_tab"
                 :data="from_tab.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="logo_1" label="企业logo" width="140">
+                <el-table-column prop="logo_1" label="企业logo">
                     <template #default="scope">
                         <span class="m-l-10">
-                            <el-image :src="scope.row.logo_1" alt="" style="width: 25px;" /></span>
+                            <el-image :src="scope.row.logo_1" alt="" style="width: 36px;" /></span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="企业名称" />
-                <el-table-column prop="social_code" label="社会信用代码" width="140">
-                    <template #default="scope">
-                        <span class="m-l-10">{{ scope.row.social_code }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="contact" label="企业电话" width="140">
+                <el-table-column prop="contact" label="企业电话">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row.contact }} </span>
                     </template>
@@ -75,6 +68,11 @@
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
                         </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="social_code" label="社会信用代码">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ scope.row.social_code }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="300">
@@ -125,13 +123,14 @@
         >
             <div>
                 <el-form
+                ref="ruleFormRef"
                     :model="from_add.obj"
                 >
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="用户名"
-                                label-width="120px"
+                                label="申请人"
+                                label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <div class="wh_100">
@@ -148,7 +147,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="公司名称"
-                                label-width="120px"
+                                label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <el-input
@@ -160,7 +159,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="社会信用代码"
-                                label-width="120px"
+                                label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <el-input
@@ -172,8 +171,8 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="公司类型"
-                                label-width="120px"
-                                :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
+                                label-width="100px"
+                                :error="err_add.obj&&err_add.obj.user_id?err_add.obj.user_id[0]:''"
                             >
                                 <el-select v-model="from_add.obj.type" class="head-btn search_tb" placeholder="审核状态" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.enterprise_type" :key="item.key" :label="item.val" :value="item.key" />
@@ -183,7 +182,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="联系方式"
-                                label-width="120px"
+                                label-width="100px"
                                 :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
                             >
                                 <el-input
@@ -192,10 +191,22 @@
                                 />
                             </el-form-item>
                         </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
+                                label="企业法人"
+                                label-width="100px"
+                                :error="err_add.obj&&err_add.obj.legal?err_add.obj.legal[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_add.obj.legal"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
                                 label="企业logo"
-                                label-width="120px"
+                                label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <el-upload
@@ -208,28 +219,15 @@
                                     :on-remove="(file,files)=>{
                                         file_list = files
                                     }"
-                                    :disabled="file_list.length >= 1? true:false"
                                 >
-                                    <el-button type="primary" :disabled="file_list.length >= 1? true:false">选择logo</el-button>
+                                    <el-button type="primary">选择logo</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="法人"
-                                label-width="120px"
-                                :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_add.obj.legal"
-                                    placeholder=""
-                                />
-                            </el-form-item>
-                        </el-col> -->
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="简介"
-                                label-width="120px"
+                                label="企业简介"
+                                label-width="100px"
                                 :error="err_add.obj&&err_add.obj.desc?err_add.obj.desc[0]:''"
                             >
                                 <el-input
@@ -239,6 +237,36 @@
                                     placeholder=""
                                 />
                             </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <div class="m-b-10 m-l-40">
+                                <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
+                            </div>
+                            <div v-for="(item,i) in from_add.obj.extra" :key="i" class="serve-box">
+                                <el-row :gutter="10" class="p-t-20">
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item label="字段名" label-width="100px">
+                                            <el-input
+                                                v-model="item.lab"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item label="字段内容" label-width="100px">
+                                            <el-input
+                                                v-model="item.val"
+                                                placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div class="delete-service" @click="deleteServiceFunc(i)">
+                                    <el-icon :size="20" color="#F56C6C">
+                                        <el-icon-circle-close />
+                                    </el-icon>
+                                </div>
+                            </div>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -257,14 +285,75 @@
             width="70%"
         >
             <el-tabs model-value="1" @tab-click="handleClick">
-                <el-tab-pane label="企业成员" name="1">
+                <el-tab-pane label="企业信息" name="1">
+                    <div class="details-box">
+                        <div class="details-tit-sm">基础信息</div>
+                        <div class="item">
+                            <div class="left">企业logo</div>
+                            <div class="right">
+                                <el-image :src="VITE_APP_FOLDER_SRC+details_item.obj.logo" :preview-src-list="logo_1.arr"  alt="" style="width: 40px;" />
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业名称</div>
+                            <div class="right">{{ details_item.obj.name }} </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="left">企业类型</div>
+                            <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,details_item.obj.type) }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业电话</div>
+                            <div class="right">{{ details_item.obj.contact }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业法人</div>
+                            <div class="right">{{ details_item.obj.legal }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">社会信用代码</div>
+                            <div class="right">{{ details_item.obj.social_code }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业简介</div>
+                            <div class="right">{{ details_item.obj.desc }} </div>
+                        </div>
+                        <div
+                                v-if="details_item.obj.extra" v-for="(item,i) in details_item.obj.extra" :key="i"
+                                class="item"
+                            >
+                                <div class="left">{{ item.lab }}</div>
+                                <div class="right">{{ item.val }}</div>
+                            </div>
+                        <div class="details-tit-sm">其他信息</div>
+                        <div class="item" v-if="details_item.obj.uinfo?.name ">
+                            <div class="left">申请人</div>
+                            <div class="right">{{ details_item.obj.uinfo?.name }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业ID</div>
+                            <div class="right">{{ details_item.obj.id }} </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="left">创建时间</div>
+                            <div class="right">{{ details_item.obj.created_at }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">更新时间</div>
+                            <div class="right">{{ details_item.obj.updated_at }} </div>
+                        </div>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="企业成员" name="2">
                     <el-scrollbar height="400px">
                         <div>
                             <el-button
-                                class="head-btn" type="primary" :icon="Plus"
+                                class="m-b-20" type="primary" :icon="Plus"
                                 @click="addUserGroupFunc"
                             >
-                                添加用户组
+                                添加项目部
                             </el-button>
                         </div>
                         <!-- <div class="search">
@@ -272,14 +361,14 @@
                                 <el-col :xs="24" :md="12" :lg="8">
                                     <div class="searchBox">
                                         <div class="search_th">
-                                            用户组名称：
+                                            项目部名称：
                                         </div>
                                         <el-input v-model="data_search.item.name" class="search_tb" placeholder="" clearable />
                                     </div>
                                 </el-col>
                                 <el-col :xs="24" :md="12" :lg="8">
                                     <div class="searchBox">
-                                        <div class="search_th">用户组类型：</div>
+                                        <div class="search_th">项目部类型：</div>
                                         <el-select
                                             v-model="data_search.item.type"
                                             placeholder="请选择类型"
@@ -323,12 +412,12 @@
                                 :tree-props="{ children: 'children' }"
                                 style="width: 100%; min-height: 300px;"
                             >
-                                <el-table-column prop="name" label="用户组名称" width="180">
+                                <el-table-column prop="name" label="项目部名称" width="180">
                                     <template #default="scope">
                                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                                     </template>
                                 </el-table-column>
-                                <!-- <el-table-column prop="id" label="用户组ID" width="300">
+                                <!-- <el-table-column prop="id" label="项目部ID" width="300">
             <template #default="scope">
               <span style="margin-left: 10px">{{ scope.row.id }} </span>
             </template>
@@ -385,52 +474,6 @@
                             </el-table>
                         </div>
                     </el-scrollbar>
-                </el-tab-pane>
-                <el-tab-pane label="企业信息" name="2">
-                    <div class="details-box">
-                        <div class="item">
-                            <div class="left">企业logo</div>
-                            <div class="right">
-                                <el-image :src="VITE_APP_FOLDER_SRC+details_item.obj.logo" alt="" style="width: 40px;" />
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">企业名称</div>
-                            <div class="right">{{ details_item.obj.name }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">企业ID</div>
-                            <div class="right">{{ details_item.obj.id }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">社会责任代码</div>
-                            <div class="right">{{ details_item.obj.social_code }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">企业类型</div>
-                            <div class="right">{{ getOptVal(opts_all.obj.enterprise_type,details_item.obj.type) }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">企业电话</div>
-                            <div class="right">{{ details_item.obj.contact }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">简介</div>
-                            <div class="right">{{ details_item.obj.desc }} </div>
-                        </div>
-                        <!-- <div class="item">
-                    <div class="left">extra</div>
-                    <div class="right">{{ details_item.obj.extra }} </div>
-                </div> -->
-                        <div class="item">
-                            <div class="left">创建时间</div>
-                            <div class="right">{{ details_item.obj.created_at }} </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">更新时间</div>
-                            <div class="right">{{ details_item.obj.updated_at }} </div>
-                        </div>
-                    </div>
                 </el-tab-pane>
             </el-tabs>
             <template #footer>
@@ -643,7 +686,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24">
                             <el-form-item
-                                label="用户组名称"
+                                label="项目部名称"
                                 prop="name"
                                 label-width="110px"
                             >
@@ -712,11 +755,11 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 用户组详情 -->
+        <!-- 项目部详情 -->
         <el-dialog v-model="switch_group_details" title="详情" width="50%">
             <div class="details-box">
                 <div class="item">
-                    <div class="left">用户组名称</div>
+                    <div class="left">项目部名称</div>
                     <div class="right">{{ data_group_details.item.name }}</div>
                 </div>
                 <div class="item">
@@ -731,8 +774,8 @@
                     </div>
                 </div>
                 <div class="item">
-                    <div class="left">关联</div>
-                    <div class="right">{{ data_group_details.item.ref }}</div>
+                    <div class="left">关联企业</div>
+                    <div class="right">{{ details_item.obj.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">区域类型</div>
@@ -743,7 +786,7 @@
                     <div class="right">{{ data_group_details.item.region_cc }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">用户组ID</div>
+                    <div class="left">项目部ID</div>
                     <div class="right">{{ data_group_details.item.id }}</div>
                 </div>
                 <div class="item">
@@ -756,7 +799,7 @@
                 </div>
             </div>
         </el-dialog>
-        <!-- 添加用户组弹窗中选择区域弹窗 -->
+        <!-- 添加项目部弹窗中选择区域弹窗 -->
         <el-dialog v-model="switch_choose_zone" title="选择小区">
             <el-scrollbar height="250px">
                 <position-tree-fourth
@@ -775,7 +818,7 @@
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="optValAddFunc">
+                    <el-button class="m-b-20" :icon="Plus" type="primary" @click="optValAddFunc">
                         添加成员
                     </el-button>
                 </el-col>
@@ -822,12 +865,12 @@
                         <span>{{ scope.row.mobile }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="post" label="职位" width="100">
+                <el-table-column prop="post" label="权限" width="100">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.group_user_flg,scope.row.flg) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="post" label="职位描述">
+                <el-table-column prop="post" label="职位名称">
                     <template #default="scope">
                         <span>{{ scope.row.post }} </span>
                     </template>
@@ -877,7 +920,7 @@
                 <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
                     <el-row :gutter="10">
                         <el-col v-if="str_opt_val_title == '添加'" :sm="24" :md="24" :lg="12">
-                            <el-form-item label="用户ID" prop="id">
+                            <el-form-item label="用户名" prop="id">
                                 <div class="searchUserGroup">
                                     <SearchUser ref="V_1" @checkName="checkUsersNameFunc_1" />
                                 </div>
@@ -919,12 +962,12 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 用户组成员详情 -->
+        <!-- 项目部成员详情 -->
         <el-dialog v-model="switch_user_details" title="详情" width="50%">
             <el-scrollbar height="400px">
                 <div class="details-box">
                     <div v-if="data_user_detail.item.username" class="item">
-                        <div class="left">用户名</div>
+                        <div class="left">申请人</div>
                         <div class="right">{{ data_user_detail.item.username }}</div>
                     </div>
                     <div class="item">
@@ -975,7 +1018,7 @@
 import Cascaders from '@/components/Cascaders/index.vue'
 import { reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
+import { Loading,Plus,Search } from '@element-plus/icons-vue'
 const search_str = reactive({
     obj: {}
 })
@@ -1057,7 +1100,9 @@ const getTabListFunc = () => {
 const switch_add = ref(false)
 const str_title = ref('添加')
 const from_add = reactive({
-    obj: {}
+    obj: {
+        extra:[]
+    }
 })
 const err_add = reactive({
     obj: {}
@@ -1078,12 +1123,28 @@ const checkUsersNameFunc = val => {
 // }
 // 添加
 const addResidentialFunc = () => {
-    from_add.obj = {}
+    from_add.obj = {
+        extra:[]
+    }
+    console.log(typeof(from_add.obj.extra))
     err_add.obj = {}
     str_title.value = '添加'
     switch_add.value = true
     file_list.value = []
     logo.arr = []
+}
+// 删除
+const deleteServiceFunc = index => {
+    from_add.obj.extra.splice(index, 1)
+}
+// 添加
+const addServiceFunc = () => {
+    let data = {
+        'lab': '',
+        'val': ''
+    }
+    console.log(typeof(from_add.obj.extra))
+    from_add.obj.extra.push(data)
 }
 const logo = reactive({
     arr: []
@@ -1132,14 +1193,20 @@ const from_examine = reactive({
     item: {}
 })
 // 详情
+const logo_1=reactive({
+    arr:[]
+})
 const detailsFunc = val => {
+    logo_1.arr=[]
     APIgetEnterpriseDetails(val.id).then(res => {
         // res.data.logo = import.meta.env.VITE_APP_FOLDER_SRC + res.data.lofo
         details_item.obj = res.data
+        logo_1.arr.push(VITE_APP_FOLDER_SRC.value+res.data.logo)
         switch_details.value = true
         console.log(res.data)
+        getUsergroupList()
     })
-    getUsergroupList()
+
 }
 const getUsergroupList = () => {
     let params = {
@@ -1153,7 +1220,9 @@ const getUsergroupList = () => {
             params[key] = data_search.item[key]
         }
     }
+    loading_tab.value = true
     APIgetGroupList(params).then(res => {
+        loading_tab.value = false
         console.log(res)
         data_tab.arr = res.data
         total_1.value = res.data.length
@@ -1186,14 +1255,14 @@ const deleteFunc_1 = val => {
 // 企业成员添加
 const addUserGroupFunc = val => {
     from_examine.item = {}
-    str_title.value = '添加用户组'
+    str_title.value = '添加项目部'
     from_examine.item.type = 7
     from_examine.item.region_val = ''
     switch_examine.value = true
 }
 // 企业成员修改
 const modifyResidentialFunc = val => {
-    str_title.value = '修改用户组'
+    str_title.value = '修改项目部'
     from_examine.item = {
         ...val
     }
@@ -1202,7 +1271,7 @@ const modifyResidentialFunc = val => {
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
     from_examine.item.ref = details_item.obj.id
-    if (str_title.value == '修改用户组') {
+    if (str_title.value == '修改项目部') {
         APIputGroup(from_examine.item.id, from_examine.item)
             .then(res => {
                 if (res.status === 200) {
@@ -1283,7 +1352,7 @@ const switch_group_details = ref(false)
 const data_group_details = reactive({
     item: {}
 })
-// 用户组详情
+// 项目部详情
 const getGroupDetail = val => {
     APIgetGroupDetails(val.id).then(res => {
         if (res.status == 200) {
@@ -1378,7 +1447,7 @@ const dialogOptValFunc = () => {
 const checkUsersNameFunc_1 = val => {
     from_opt_val.obj.user_id = val.id
 }
-// 用户组成员详细
+// 项目部成员详细
 const data_user_detail = reactive({
     item: {}
 })
@@ -1408,15 +1477,14 @@ const optValDeleteFunc = val => {
     })
 }
 const postFunc_1 = () => {
-    if (str_title.value == '添加') {
-        APIpostEnterprise(from_add.obj).then(res => {
-            refreshFunc()
-            ElMessage.success('添加成功')
-            switch_add.value = false
-        }).catch(err => {
-            ElMessage.error('添加失败')
-        })
-    } else if (str_title.value == '修改') {
+    err_add.obj = {}
+    // console.log('失败')
+    // console.log(formEl)
+    // if (!formEl) return
+    // console.log('失败')
+    // formEl.validate(valid => {
+    //     if (valid) {
+    if (str_title.value == '修改') {
         APIputEnterprise(from_add.obj.id, from_add.obj).then(() => {
             refreshFunc()
             ElMessage.success('修改成功')
@@ -1424,9 +1492,21 @@ const postFunc_1 = () => {
         }).catch(() => {
             ElMessage.error('修改失败')
         })
+    }else (
+            APIpostEnterprise(from_add.obj).then(res => {
+            refreshFunc()
+            ElMessage.success('添加成功')
+            switch_add.value = false
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+        )
     }
-}
-const postFunc = () => {
+// }
+//     })
+
+const postFunc = (formEl) => {
+    console.log(formEl)
     let files = []
     let file_key = []
     if (file_list.value.length > 0) {
@@ -1438,12 +1518,10 @@ const postFunc = () => {
             }
         }
     }
-    delete from_add.obj.legal
-    // console.log(file_list.value)
     from_add.obj.logo = file_key
     from_add.obj.logo = from_add.obj.logo.join(' ')
     if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
+        getFilesKeys(files, 'comlogo').then(arr => {
             console.log(arr)
             from_add.obj.logo = file_key.concat(arr)
             // console.log(from_add.obj.logo)

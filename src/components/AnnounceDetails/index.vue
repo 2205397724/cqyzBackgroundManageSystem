@@ -49,6 +49,25 @@
                                 <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
                             </div>
                         </div>
+                        <!-- <div class="item">
+                                <div class="left">附件名称</div>
+                                <div class="right">{{ data_details.item.affix.title }}</div>
+                            </div> -->
+                        <div class="item">
+                            <div class="left">附件</div>
+                            <div class="right">
+                            <div v-for="(item,i) in data_details.item.affix" :key="i" class="inline-block m-r-10">
+                                <!-- <el-image
+                                    :src="item" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" fit="cover"
+                                />   -->
+                                <el-tag type='primary' v-html="item.title" />
+                            </div>
+                        </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">公示内容</div>
+                            <div class="right" v-html="data_details.item.content" />
+                        </div>
                         <div class="item">
                             <div class="left">开始时间</div>
                             <div class="right">{{ data_details.item.start_at }}</div>
@@ -56,22 +75,6 @@
                         <div class="item">
                             <div class="left">结束时间</div>
                             <div class="right">{{ data_details.item.end_at }}</div>
-                        </div>
-                        <!-- <div class="item">
-                                <div class="left">附件名称</div>
-                                <div class="right">{{ data_details.item.affix.title }}</div>
-                            </div> -->
-                        <div class="item">
-                            <div class="left">附件</div>
-                            <div v-for="(item,i) in data_details.item.affixs" :key="i" class="right">
-                                <el-image
-                                    :src="item" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" fit="cover"
-                                />
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="left">公示内容</div>
-                            <div class="right" v-html="data_details.item.content" />
                         </div>
                     </div>
                 <!-- </el-scrollbar> -->
@@ -102,9 +105,9 @@
                                             <div class="item">
                                                 <div class="left">状态</div>
                                                 <div class="right">
-                                                    <el-button v-if="item.status== 10" type="primary">未处理</el-button>
-                                                    <el-button v-if="item.status == 20" type="success">审核通过</el-button>
-                                                    <el-button v-if="item.status == 30" type="danger">审核失败</el-button>
+                                                    <el-tag v-if="item.status== 10" type="warning" size="small">未处理</el-tag>
+                                                    <el-tag v-if="item.status == 20" type="success" size="small">审核通过</el-tag>
+                                                    <el-tag v-if="item.status == 30" type="danger" size="small">审核失败</el-tag>
                                                 </div>
                                             </div>
                                             <div v-if="item.remark" class="item">

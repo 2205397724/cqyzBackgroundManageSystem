@@ -463,34 +463,6 @@ textarea {
     margin-right: 10px;
     display: inline-block;
 }
-.search {
-    background-color: #fafafa;
-    // height: 140px;
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-.search2 {
-    background-color: #fafafa;
-    // height: 169px;
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-.search1 {
-    background-color: #fafafa;
-    // height: 215px;
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-.search3 {
-    background-color: #fafafa;
-    // height: 220px;
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 20px;
-}
 .searchKey {
     text-align: center;
     margin-top: 5px;
@@ -551,6 +523,11 @@ textarea {
     height: 100px;
 }
 .search {
+    background-color: #fafafa;
+    // height: 140px;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
     .search_th {
         text-align: right;
         font-size: 14px;
@@ -595,4 +572,20 @@ textarea {
 }
 .hidden {
     overflow: hidden;
+}
+.serve-box {
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    position: relative;
+    .delete-service {
+        position: absolute;
+        cursor: pointer;
+        z-index: 999999;
+        right: -8px;
+        top: -9px;
+        background-color: #fff;
+    }
 }

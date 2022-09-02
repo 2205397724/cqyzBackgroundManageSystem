@@ -16,19 +16,17 @@
             v-model="switch_list"
             title="用户"
             width="70%"
+            class="hidden"
         >
             <el-row :gutter="10">
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.mobile" class="head-btn" placeholder="手机号" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                     <el-input v-model="data_search.obj.username" class="head-btn" placeholder="用户名" clearable />
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.id_card" class="head-btn" placeholder="身份证号" clearable />
+                <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                    <el-input v-model="data_search.obj.mobile" class="head-btn" placeholder="手机号" clearable />
                 </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="data_search.obj.name" class="head-btn" placeholder="真实姓名" clearable />
+                <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                    <el-input v-model="data_search.obj.id_card" class="head-btn" placeholder="身份证号" clearable />
                 </el-col>
                 <!-- <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <el-select v-model="data_search.obj.gender" class="head-btn" placeholder="性别" clearable>
@@ -53,15 +51,18 @@
                 <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
                     <Cascaders v-model="data_search.obj.region" />
                 </el-col> -->
-                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                    <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                </el-col>
-            </el-row>
-            <div v-show="switch_search" class="search-tips">
-                <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
+                </el-row>
+                <el-row>
+            <el-col :xs="24" :md="12" :lg="24">
+                <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                <el-button style="margin-right: 10px;" :icon="Loading" @click="refreshFunc" v-show="switch_search == true">重置</el-button>
+                <span class="size-base" v-show="switch_search == true">
                 *搜索到相关结果共{{ total }}条。
-            </div>
+            </span>
+            </el-col>
+        </el-row>
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击用户所在行选择该用户</div>
+
             <el-scrollbar height="450px">
                 <el-table
                     v-loading="loading_tab"
@@ -105,13 +106,16 @@
             </el-scrollbar>
             <div style="padding-top: 20px;">
                 <el-pagination
-                    v-model:current-page="page"
-                    layout="prev,next,jumper,"
-                    :total="200"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
             </div>
         </el-dialog>
     </div>
@@ -119,6 +123,7 @@
 
 <script setup>
 import Cascaders from '@/components/Cascaders/index.vue'
+import { Loading,Search } from '@element-plus/icons-vue'
 const icon_hover = ref(false)
 import {
     reactive,
@@ -184,6 +189,18 @@ const getTabListFunc = () => {
             loading_tab.value = false
             data_tab.arr = res.data
             total.value = res.data.length
+            let btnNext = document.querySelector('.btn-next')
+        if (res.length <= per_page.value) {
+            flag.value = true
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            flag.value = false
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
         }
     })
 }
@@ -218,20 +235,22 @@ getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(r
 })
 </script>
 <style lang="scss" scoped>
-    .tit-box {
-        position: relative;
-        .tit-icon {
-            position: absolute;
-            right: 10px;
-            top: calc(50% - 10px);
-            background-color: #fff;
-            z-index: 1;
-        }
-        .tit-icon-on {
-            display: none;
-        }
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.tit-box {
+    position: relative;
+    .tit-icon {
+        position: absolute;
+        right: 10px;
+        top: calc(50% - 10px);
+        background-color: #fff;
+        z-index: 1;
     }
-    .nostr {
-        color: #aaa;
+    .tit-icon-on {
+        display: none;
     }
+}
+.nostr {
+    color: #aaa;
+}
 </style>

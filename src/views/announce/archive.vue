@@ -1,38 +1,37 @@
 <template>
     <div class="articletplarchive">
-        <page-main style="overflow: hidden;">
-            <div>
+        <page-main class="hidden">
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加归档
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 名称：
-                            </div>
+                            </el-col>
+                                <el-col :sm="20" :xs="18" :md="18">
                             <el-input v-model="data_search.name" class="search_tb" placeholder="名称" />
-                        </div>
+                        </el-col>
+                            </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                *搜索到相关结果共{{ total }}条。
-                            </div>
-                        </div>
-                    </el-col>
-                </el-row>
+                <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
+                        </el-col>
+                    </el-row>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -142,11 +141,11 @@
         <el-dialog
             v-model="switch_article"
             title="已归档公示"
-            width="50%"
+            width="60%"
         >
             <el-row :gutter="20" class="bottom-btn-box-2">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="addArchiveFunc">添加公示</el-button>
+                    <el-button class="m-b-20" type="primary" :icon="Plus" size="large" @click="addArchiveFunc">添加公示</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -154,23 +153,30 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column label="公示主题" width="180">
+                <el-table-column label="公示主题">
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="ID" width="250">
+                <el-table-column label="公示对象" width="220">
                     <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
+                        <span>{{ scope.row.toval }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="公示对象类型">
+                    <template #default="scope">
+                        <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态" width="180">
                     <template #default="scope">
-                        <el-button v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 2" class="btnNone noDeal" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 3" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 4" class="btnNone" type="success">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
-                        <el-button v-show="scope.row.status == 5" class="btnNone" type="info">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-button>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
 
@@ -211,10 +217,12 @@
             v-model="switch_add"
             title="添加归档公示"
             width="50%"
+            @closed="dialogClosed"
         >
             <el-form
                 ref="ruleFormRef"
                 :model="from_add.obj"
+
             >
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -225,7 +233,7 @@
                             <div class="wh_100">
                                 <div class="searchUserGroup">
                                     <!-- <SearchArchive v-model:str="from_add.obj.article_id" /> -->
-                                    <SearchArchive @checkUserNameFunc="checkUserNameFunc" />
+                                    <SearchArchive ref="V" @checkUserNameFunc="checkUserNameFunc" />
                                 </div>
                             </div>
                         </el-form-item>
@@ -291,7 +299,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Search, Plus,Loading } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -406,9 +414,9 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        // total.value = res.length
+        total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= per_page.value) {
+        if (res.length < per_page.value) {
             flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
@@ -493,9 +501,14 @@ const err_msg = reactive({
 const from_add = reactive({
     obj: {}
 })
+const V=ref(null)
 const addArchiveFunc = () => {
+
     switch_add.value = true
     from_add.obj = {}
+}
+const dialogClosed=()=>{
+    V.value.clearFunc()
 }
 const addPostFunc = () => {
     APIpostArticleArchive(article_item.obj.id, from_add.obj).then(() => {
@@ -527,7 +540,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['announce_status']).then(res => {
+getOpts(['announce_status','article_lv']).then(res => {
     opts_all.obj = res
 })
 </script>

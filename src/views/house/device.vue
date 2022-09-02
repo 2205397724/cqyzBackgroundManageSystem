@@ -1,94 +1,98 @@
 <template>
     <div class="articletparticletpl">
         <page-main class="hidden">
-            <div class="m-b-20" >
+            <div class="m-b-20">
                 <el-button type="primary" :icon="Plus" @click="addResidentialFunc" size="large">添加设备</el-button>
             </div>
             <!-- <div :class="{search3: isSearch3,search2: isSearch2}"> -->
             <div class="search">
-                    <el-row>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    设备名称：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                                    <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称" clearable />
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    设备类型：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                                    <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
-                                        <el-option v-for="(item) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
-                                    </el-select>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    状态：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                                    <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态" clearable>
-                                        <el-option v-for="(item) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
-                                    </el-select>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row v-if="btnClick==true">
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    是否启用：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                                    <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
-                                        <el-option v-for="(item,i) in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                                    </el-select>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <div class="searchPlay" @click="btnClickFunc">
-                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
-                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
-                        </div>
-                    </el-row>
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                设备名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="设备名称"
+                                    clearable />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                设备类型：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_search.obj.type" class="search_tb" placeholder="类型" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.device_type" :key="item.key"
+                                        :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态"
+                                    clearable>
+                                    <el-option v-for="(item) in opts_all.obj.device_status" :key="item.key"
+                                        :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick == true">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                是否启用：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示"
+                                    clearable>
+                                    <el-option v-for="(item, i) in opts_all.obj.device_show" :key="i" :label="item.val"
+                                        :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading"
+                            @click="refreshFunc">重置</el-button>
+                        <span class="size-base" v-show="switch_search == true">
+                            *共搜索到{{  total  }}条。
+                        </span>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div class="searchPlay" @click="btnClickFunc">
+                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                        <el-button v-if="btnClick == false" :icon="CaretBottom" class="searchDeal" size="small">展开
+                        </el-button>
+                        <el-button v-if="btnClick == true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
+                    </div>
+                </el-row>
             </div>
             <div>
-                <el-table
-                    v-loading="loading_tab"
-                    :data="data_tab.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    class="tab_1"
-                >
+                <el-table :data="data_tab.arr"
+                    :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
                     <el-table-column prop="id" label="设备名称" width="180">
                         <template #default="scope">
-                            <span>{{ scope.row.name }} </span>
+                            <span>{{  scope.row.name  }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="设备编号">
                         <template #default="scope">
-                            <span>{{ scope.row.sno }} </span>
+                            <span>{{  scope.row.sno  }} </span>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="id" label="所在位置">
@@ -98,49 +102,46 @@
                     </el-table-column> -->
                     <el-table-column prop="cid" label="类型" width="90">
                         <template #default="scope">
-                            <span>{{ getOptVal(opts_all.obj.device_type,scope.row.type) }} </span>
+                            <span>{{  getOptVal(opts_all.obj.device_type, scope.row.type)  }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="是否显示" width="90">
                         <template #default="scope">
-                            <span>{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
+                            <span>{{  getOptVal(opts_all.obj.device_show, scope.row.show)  }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="cid" label="状态" width="90">
                         <template #default="scope">
-                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" size="small">正常</el-tag>
-                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="danger" size="small"> 故障</el-tag>
-                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">维修</el-tag>
+                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" size="small">正常
+                            </el-tag>
+                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="danger" size="small"> 故障
+                            </el-tag>
+                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">维修
+                            </el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="档案" width="90">
                         <template #default="scope">
-                            <el-tag class="btnNone" type="primary" size="small" effect="dark" @click="deviceArchive(scope.row)">档案</el-tag>
+                            <el-tag class="btnNone" type="primary" size="small" effect="dark"
+                                @click="deviceArchive(scope.row)">档案</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="维保记录" width="120">
                         <template #default="scope">
-                            <el-tag class="btnNone" type="primary" size="small" effect="dark" @click="deviceRepair(scope.row)">维保记录</el-tag>
+                            <el-tag class="btnNone" type="primary" size="small" effect="dark"
+                                @click="deviceRepair(scope.row)">维保记录</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
                         <template #default="scope">
-                            <el-button
-                                type="primary" size="small"
-                                @click="modifyResidentialFunc(scope.row)"
-                            >
+                            <el-button type="primary" size="small" @click="modifyResidentialFunc(scope.row)">
                                 修改
                             </el-button>
-                            <el-button
-                                size="small"
-                                @click="detailsFunc(scope.row)"
-                            >
+                            <el-button size="small" @click="detailsFunc(scope.row)">
                                 详情
                             </el-button>
-                            <el-popconfirm
-                                title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteFunc(scope.row)"
-                            >
+                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)">
                                 <template #reference>
                                     <el-button type="danger" size="small">
                                         删除
@@ -152,159 +153,93 @@
                     <el-table-column />
                 </el-table>
             </div>
-            <el-pagination
-                v-model:current-page="page"
-                style="float: right;"
-                layout="prev,next,jumper,"
-                :total="50"
-                :page-size="per_page"
-                background
-                prev-text="上一页"
-                next-text="下一页"
-                hide-on-single-page
-            />
+            <el-pagination v-model:current-page="page" style="float: right;" layout="prev,next,jumper," :total="50"
+                :page-size="per_page" background prev-text="上一页" next-text="下一页" hide-on-single-page />
         </page-main>
         <!-- 修改添加 -->
-        <el-dialog
-            v-model="switch_examine"
-            :title="str_title"
-            width="50%"
-        >
+        <el-dialog v-model="switch_examine" :title="str_title" width="50%">
             <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
+                <el-form ref="ruleFormRef" :model="from_examine.item">
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="设备名称"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.name"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="设备名称" label-width="90px"
+                                :error="from_error.msg && from_error.msg.name ? from_error.msg.name[0] : ''">
+                                <el-input v-model="from_examine.item.name" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="所属位置"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.zone?from_error.msg.zone[0]:''"
-                            >
-                                <BerZone v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building" v-model:uid="from_examine.item.unit" v-model:name="chinaName" :disabled="[0,1,2,3,4,5]" :code="''" />
+                            <el-form-item label="所属位置" label-width="90px"
+                                :error="from_error.msg && from_error.msg.zone ? from_error.msg.zone[0] : ''">
+                                <BerZone v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building"
+                                    v-model:uid="from_examine.item.unit" v-model:name="chinaName"
+                                    :disabled="[0, 1, 2, 3, 4, 5]" :code="''" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="详细地址"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.addr"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="详细地址" label-width="90px"
+                                :error="from_error.msg && from_error.msg.addr ? from_error.msg.addr[0] : ''">
+                                <el-input v-model="from_examine.item.addr" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="编号"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.sno?from_error.msg.sno[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.sno"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="编号" label-width="90px"
+                                :error="from_error.msg && from_error.msg.sno ? from_error.msg.sno[0] : ''">
+                                <el-input v-model="from_examine.item.sno" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="品牌"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.brand?from_error.msg.brand[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.brand"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="品牌" label-width="90px"
+                                :error="from_error.msg && from_error.msg.brand ? from_error.msg.brand[0] : ''">
+                                <el-input v-model="from_examine.item.brand" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="提醒信息"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.warn?from_error.msg.warn[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_examine.item.warn"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="提醒信息" label-width="90px"
+                                :error="from_error.msg && from_error.msg.warn ? from_error.msg.warn[0] : ''">
+                                <el-input v-model="from_examine.item.warn" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="设备类型"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
-                            >
+                            <el-form-item label="设备类型" label-width="90px"
+                                :error="from_error.msg && from_error.msg.type ? from_error.msg.type[0] : ''">
                                 <el-select v-model="from_examine.item.type" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.device_type" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item, i) in opts_all.obj.device_type" :key="i" :label="i"
+                                        :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="设备状态"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
-                            >
+                            <el-form-item label="设备状态" label-width="90px"
+                                :error="from_error.msg && from_error.msg.status ? from_error.msg.status[0] : ''">
                                 <el-select v-model="from_examine.item.status" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.device_status" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item, i) in opts_all.obj.device_status" :key="item.key"
+                                        :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="是否显示"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.show?from_error.msg.show[0]:''"
-                            >
-                                <el-switch
-                                    v-model="from_examine.item.show"
-                                    class="head-btn"
-                                    inline-prompt
-                                    :active-value="1"
-                                    :inactive-value="0"
-                                    active-text="是"
-                                    inactive-text="否"
-                                />
+                            <el-form-item label="是否显示" label-width="90px"
+                                :error="from_error.msg && from_error.msg.show ? from_error.msg.show[0] : ''">
+                                <el-switch v-model="from_examine.item.show" class="head-btn" inline-prompt
+                                    :active-value="1" :inactive-value="0" active-text="是" inactive-text="否" />
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24"><div class="details-tit-sm m-b-10">自定义字段</div></el-col>
                         <el-col :md="24" :lg="24">
                             <div class="m-b-10">
                                 <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
                             </div>
-                            <div v-for="(item,i) in from_examine.item.extra" :key="i" class="serve-box">
+                            <div v-for="(item, i) in from_examine.item.extra" :key="i" class="serve-box">
                                 <el-row :gutter="10" class="p-t-20">
                                     <el-col :xs="12" :sm="12">
-                                        <el-form-item label="字段名" :error="from_error.msg&&from_error.msg['extra.'+i+'.lab']?from_error.msg['extra.'+i+'.lab'][0]:''">
-                                            <el-input
-                                                v-model="item.lab"
-                                                placeholder=""
-                                            />
+                                        <el-form-item label="字段名"
+                                            :error="from_error.msg && from_error.msg['extra.' + i + '.lab'] ? from_error.msg['extra.' + i + '.lab'][0] : ''">
+                                            <el-input v-model="item.lab" placeholder="" />
                                         </el-form-item>
                                     </el-col>
                                     <el-col :xs="12" :sm="12">
-                                        <el-form-item label="字段内容" :error="from_error.msg&&from_error.msg['extra.'+i+'.val']?from_error.msg['extra.'+i+'.val'][0]:''">
-                                            <el-input
-                                                v-model="item.val"
-                                                placeholder=""
-                                            />
+                                        <el-form-item label="字段内容"
+                                            :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''">
+                                            <el-input v-model="item.val" placeholder="" />
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -320,83 +255,83 @@
             </div>
             <template #footer>
                 <div class="footer">
-                    <el-button @click="switch_examine=false">取消</el-button>
+                    <el-button @click="switch_examine = false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
                 </div>
             </template>
         </el-dialog>
         <!-- 详情 -->
-        <el-dialog
-            v-model="switch_details"
-            title="详情"
-            width="60%"
-            @closed="closeDialog"
-        >
+        <el-dialog v-model="switch_details" title="详情" width="60%" @closed="closeDialog">
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="基础信息" name="1">
+                <el-tab-pane label="设备信息" name="1">
                     <el-scrollbar height="452px">
                         <div class="details-box">
-                            <div class="details-tit-sm">设备信息</div>
+                            <div class="details-tit-sm">基础信息</div>
                             <div class="item">
                                 <div class="left">设备名称</div>
-                                <div class="right">{{ data_details.item.name }}</div>
+                                <div class="right">{{  data_details.item.name  }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">所属位置</div>
                                 <div class="right">
-                                    <span>{{ zoneName.name }}</span>
-                                    <span v-if="data_details.item.building!== ''&& data_details.item.buildinginfo !== null " style="margin-right: 15px; margin-left: 15px;">{{ buildingName.name }}</span>
-                                    <span v-if="data_details.item.unit !== '' && data_details.item.unitinfo !== null">{{ unitName.name }}</span>
+                                    <span>{{  zoneName.name  }}</span>
+                                    <span
+                                        v-if="data_details.item.building !== '' && data_details.item.buildinginfo !== null"
+                                        style="margin-right: 15px; margin-left: 15px;">{{  buildingName.name  }}</span>
+                                    <span v-if="data_details.item.unit !== '' && data_details.item.unitinfo !== null">{{
+                                         unitName.name  }}</span>
                                 </div>
                             </div>
                             <div class="item">
                                 <div class="left">详细地址</div>
-                                <div class="right">{{ data_details.item.addr }}</div>
+                                <div class="right">{{  data_details.item.addr  }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">编号</div>
-                                <div class="right">{{ data_details.item.sno }}</div>
+                                <div class="right">{{  data_details.item.sno  }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">品牌</div>
-                                <div class="right">{{ data_details.item.brand }}</div>
+                                <div class="right">{{  data_details.item.brand  }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">提醒信息</div>
-                                <div class="right">{{ data_details.item.warn }}</div>
+                                <div class="right">{{  data_details.item.warn  }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">类型</div>
-                                <div class="right">{{ getOptVal(opts_all.obj.device_type,data_details.item.type) }}</div>
+                                <div class="right">{{  getOptVal(opts_all.obj.device_type, data_details.item.type)  }}
+                                </div>
                             </div>
                             <div class="item">
                                 <div class="left">状态</div>
                                 <div class="right">
-                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="success" size="small">正常</el-tag>
-                                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="danger" size="small"> 故障</el-tag>
-                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">维修</el-tag>
+                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="success"
+                                        size="small">正常</el-tag>
+                                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="danger"
+                                        size="small"> 故障</el-tag>
+                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning"
+                                        size="small">维修</el-tag>
                                 </div>
                             </div>
                             <div class="item">
                                 <div class="left">是否显示</div>
-                                <div class="right">{{ getOptVal(opts_all.obj.device_show,data_details.item.show) }}</div>
+                                <div class="right">{{  getOptVal(opts_all.obj.device_show, data_details.item.show)  }}
+                                </div>
+                            </div>
+                            <div v-if="data_details.item.extra" v-for="(item, i) in data_details.item.extra" :key="i"
+                                class="item">
+                                <div class="left">{{  item.lab  }}</div>
+                                <div class="right">{{  item.val  }}</div>
                             </div>
                             <div class="details-tit-sm">其他信息</div>
-
-                            <div
-                                v-for="(item,i) in data_details.item.extra" :key="i"
-                                class="item"
-                            >
-                                <div class="left">{{ item.lab }}</div>
-                                <div class="right">{{ item.val }}</div>
-                            </div>
                             <div class="item">
                                 <div class="left">创建时间</div>
-                                <div class="right">{{ data_details.item.created_at }}</div>
+                                <div class="right">{{  data_details.item.created_at  }}</div>
                             </div>
                             <div class="item">
                                 <div class="left">更新时间</div>
-                                <div class="right">{{ data_details.item.updated_at }}</div>
+                                <div class="right">{{  data_details.item.updated_at  }}</div>
                             </div>
                         </div>
                     </el-scrollbar>
@@ -406,13 +341,13 @@
                     <el-scrollbar height="400px">
                         <div>
                             <el-timeline style="padding: 1px;">
-                                <el-timeline-item v-for="(item,index) in data_archive.arr" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
+                                <el-timeline-item v-for="(item, index) in data_archive.arr" :key="index"
+                                    :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
                                     <div class="put_del">
-                                        <el-button type="primary" size="small" @click="modifyArchiveFunc(item)">修改</el-button>
-                                        <el-popconfirm
-                                            title="确定要删除当前项么?" cancel-button-type="info"
-                                            @confirm="deleteArchiveFunc(item)"
-                                        >
+                                        <el-button type="primary" size="small" @click="modifyArchiveFunc(item)">修改
+                                        </el-button>
+                                        <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                            @confirm="deleteArchiveFunc(item)">
                                             <template #reference>
                                                 <el-button type="danger" size="small">
                                                     删除
@@ -425,19 +360,23 @@
                                             <div class="item">
                                                 <div class="left">档案名称</div>
                                                 <div class="right">
-                                                    <span>{{ item.title }}</span>
-                                                    <el-tag v-if="item.show == 1" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.device_show,item.show) }}</el-tag>
-                                                    <el-tag v-if="item.show == 0" type="info" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.device_show,item.show) }}</el-tag>
+                                                    <span>{{  item.title  }}</span>
+                                                    <el-tag v-if="item.show == 1" type="primary" size="small"
+                                                        class="m-l-10">{{  getOptVal(opts_all.obj.device_show, item.show)
+                                                        }}</el-tag>
+                                                    <el-tag v-if="item.show == 0" type="info" size="small"
+                                                        class="m-l-10">{{  getOptVal(opts_all.obj.device_show, item.show)
+                                                        }}</el-tag>
                                                 </div>
                                             </div>
-                                            <div v-if="item.content&&item.content.length>=1" class="item">
+                                            <div v-if="item.content && item.content.length >= 1" class="item">
                                                 <div class="left">附件</div>
                                                 <div class="right">
-                                                    <div v-for="(val,i) in item.content" :key="i" class="inline-block">
+                                                    <div v-for="(val, i) in item.content" :key="i" class="inline-block">
                                                         <!-- <el-link type="success" :href="VITE_APP_FOLDER_SRC+item.key" target="_blank">{{ item.name }}</el-link> -->
-                                                        <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
+                                                        <!-- <el-tag v-if="val.type == 'file'" type="success" size="small">{{ val.name }}</el-tag>
                                                         <el-image v-if="val.type == 'image'" :preview-src-list="item.keys" class="image" :src="VITE_APP_FOLDER_SRC+val.key" fit="cover" />
-                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" />
+                                                        <vue3VideoPlay v-if="val.type == 'audio'" v-bind="optionsAll" :src="VITE_APP_FOLDER_SRC+val.key" class="image" /> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -455,13 +394,13 @@
                     <el-scrollbar height="400px">
                         <div>
                             <el-timeline style="padding: 1px;">
-                                <el-timeline-item v-for="(item,index) in data_repair.arr" :key="index" :type="index == 0 ? 'primary' : ''" :timestamp="item.created_at" placement="top">
+                                <el-timeline-item v-for="(item, index) in data_repair.arr" :key="index"
+                                    :type="index == 0 ? 'primary' : ''" :timestamp="item.created_at" placement="top">
                                     <div class="put_del">
-                                        <el-button type="primary" size="small" @click="modifyRepairFunc(item)">修改</el-button>
-                                        <el-popconfirm
-                                            title="确定要删除当前项么?" cancel-button-type="info"
-                                            @confirm="deleteRepairFunc(item)"
-                                        >
+                                        <el-button type="primary" size="small" @click="modifyRepairFunc(item)">修改
+                                        </el-button>
+                                        <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
+                                            @confirm="deleteRepairFunc(item)">
                                             <template #reference>
                                                 <el-button type="danger" size="small">
                                                     删除
@@ -474,27 +413,38 @@
                                             <div class="item">
                                                 <div class="left">维保名称</div>
                                                 <div class="right">
-                                                    <span>{{ item.title }}</span>
-                                                    <el-tag v-if="item.type == 1" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</el-tag>
-                                                    <el-tag v-if="item.type == 0" type="primary" size="small" class="m-l-10">{{ getOptVal(opts_all.obj.repair_type,item.type) }}</el-tag>
+                                                    <span>{{  item.title  }}</span>
+                                                    <el-tag v-if="item.type == 1" type="primary" size="small"
+                                                        class="m-l-10">{{  getOptVal(opts_all.obj.repair_type, item.type)
+                                                        }}</el-tag>
+                                                    <el-tag v-if="item.type == 0" type="primary" size="small"
+                                                        class="m-l-10">{{  getOptVal(opts_all.obj.repair_type, item.type)
+                                                        }}</el-tag>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">资金来源</div>
+                                                <div class="right">
+                                                    <span class="m-r-10">{{
+                                                         getOptVal(opts_all.obj.device_repair_money_src, item.money_src)
+                                                        }}</span>
+                                                    <span class="m-r-10">{{  item.money  }} 元</span>
                                                 </div>
                                             </div>
                                             <div class="item">
                                                 <div class="left">详细记录</div>
-                                                <div class="right">{{ item.content }}</div>
+                                                <div class="right">{{  item.content  }}</div>
                                             </div>
-                                            <div
-                                                v-if="item.affix&&item.affix.length>=1" class="item"
-                                            >
+                                            <div v-if="item.affix && item.affix.length >= 1" class="item">
                                                 <div class="left">
                                                     附件
                                                 </div>
 
                                                 <div class="right">
                                                     <!-- 两种模式任君选择 -->
-                                                    <el-image
-                                                        v-for="(j,i) in item.affix" :key="i" :preview-src-list="item.affixs" class="wh_100p m-r-10" :src="VITE_APP_FOLDER_SRC+j" fit="cover"
-                                                    />
+                                                    <el-image v-for="(j, i) in item.affix" :key="i"
+                                                        :preview-src-list="item.affixs" class="wh_100p m-r-10"
+                                                        :src="VITE_APP_FOLDER_SRC + j" fit="cover" />
                                                 </div>
                                             </div>
                                         </div>
@@ -513,45 +463,21 @@
             </template>
         </el-dialog>
         <!-- 档案修改添加 -->
-        <el-dialog
-            v-model="addArchive.switch"
-            :title="str_title_2"
-            width="50%"
-            @closed="dialogClosed"
-        >
+        <el-dialog v-model="addArchive.switch" :title="str_title_2" width="50%" @closed="dialogClosed">
             <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
+                <el-form ref="ruleFormRef" :model="from_examine.item">
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="档案名称"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
-                            >
-                                <el-input
-                                    v-model="addArchive.item.title"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="档案名称" label-width="70px"
+                                :error="from_error.msg && from_error.msg.title ? from_error.msg.title[0] : ''">
+                                <el-input v-model="addArchive.item.title" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="是否显示"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.show?from_error.msg.show[0]:''"
-                            >
-                                <el-switch
-                                    v-model="addArchive.item.show"
-                                    class="head-btn"
-                                    inline-prompt
-                                    :active-value="1"
-                                    :inactive-value="0"
-                                    active-text="是"
-                                    inactive-text="否"
-                                />
+                            <el-form-item label="是否显示" label-width="70px"
+                                :error="from_error.msg && from_error.msg.show ? from_error.msg.show[0] : ''">
+                                <el-switch v-model="addArchive.item.show" class="head-btn" inline-prompt
+                                    :active-value="1" :inactive-value="0" active-text="是" inactive-text="否" />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
@@ -559,59 +485,64 @@
                                 <el-button type="primary" plain @click="addServiceFunc_1">添加档案内容</el-button>
                             </div>
                             <div>
-                                    <div v-for="(item,i) in addArchive.item.content" :key="i" class="serve-box">
-                                        <el-row :gutter="10">
-                                            <el-col :xs="24" :sm="24">
-                                                <el-form-item label-width="70px" label="附件" :error="from_error.msg&&from_error.msg['content.'+i+'.key']?from_error.msg['content.'+i+'.key'][0]:''">
-                                                    <el-upload
+                                <div v-for="(item, i) in addArchive.item.content" :key="i" class="serve-box">
+                                    <el-row :gutter="10">
+                                        <el-col :xs="24" :sm="24">
+                                            <el-form-item label-width="70px" label="附件"
+                                                :error="from_error.msg && from_error.msg['content.' + i + '.key'] ? from_error.msg['content.' + i + '.key'][0] : ''">
+                                                <!-- <el-upload
+                                                        multiple
                                                         action="***"
                                                         :auto-upload="false"
                                                         :file-list="fileListFn(item.key)"
                                                         :on-change="(file,files)=>{
-                                                            item.key = file
+                                                            item.key=file
                                                         }"
                                                         :on-remove="(file,files)=>{
                                                             item.key = file
                                                         }"
-                                                    >
+                                                    > -->
+                                                <el-upload multiple action="***" :auto-upload="false"
+                                                    :file-list="item.key" :on-change="(file, files) => {
+                                                        item.key = files
+                                                    }" :on-remove="(file, files) => {
+    item.key = files
+}">
                                                     <!-- <el-upload
                                     action="***"
                                     :auto-upload="false"
                                     :file-list="file_list_1"
-                                    :on-change="(file,files)=>{
-                                        file_list_1 = files
-                                    }"
+                                    :on-change="uploadChange"
                                     :on-remove="(file,files)=>{
                                         file_list_1 = files
-                                    }" -->
-                                                        <el-button type="primary">选择附件</el-button>
-                                                    </el-upload>
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24">
-                                                <el-form-item label-width="70px" label="文件类型" :error="from_error.msg&&from_error.msg['content.'+i+'.type']?from_error.msg['content.'+i+'.type'][0]:''">
-                                                    <el-radio-group v-model="item.type" class="ml-4">
-                                                        <el-radio label="image">图片</el-radio>
-                                                        <el-radio label="file">文件</el-radio>
-                                                        <el-radio label="audio">音频</el-radio>
-                                                    </el-radio-group>
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24">
-                                                <el-form-item label-width="70px" label="文件名" :error="from_error.msg&&from_error.msg['content.'+i+'.name']?from_error.msg['content.'+i+'.name'][0]:''">
-                                                    <el-input
-                                                        v-model="item.name"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                        </el-row>
-                                        <div class="delete-service" @click="deleteServiceFunc(i)">
-                                            <el-icon :size="20" color="#F56C6C">
-                                                <el-icon-circle-close />
-                                            </el-icon>
-                                        </div>
+                                    }"> -->
+                                                    <el-button type="primary">选择附件</el-button>
+                                                </el-upload>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24">
+                                            <el-form-item label-width="70px" label="文件类型"
+                                                :error="from_error.msg && from_error.msg['content.' + i + '.type'] ? from_error.msg['content.' + i + '.type'][0] : ''">
+                                                <el-radio-group v-model="item.type" class="ml-4">
+                                                    <el-radio label="image">图片</el-radio>
+                                                    <el-radio label="file">文件</el-radio>
+                                                    <el-radio label="audio">音频</el-radio>
+                                                </el-radio-group>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24">
+                                            <el-form-item label-width="70px" label="文件名"
+                                                :error="from_error.msg && from_error.msg['content.' + i + '.name'] ? from_error.msg['content.' + i + '.name'][0] : ''">
+                                                <el-input v-model="item.name" placeholder="" />
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <div class="delete-service" @click="deleteServiceFunc_1(i)">
+                                        <el-icon :size="20" color="#F56C6C">
+                                            <el-icon-circle-close />
+                                        </el-icon>
                                     </div>
+                                </div>
                             </div>
                         </el-col>
                     </el-row>
@@ -619,118 +550,72 @@
             </div>
             <template #footer>
                 <div class="footer">
-                    <el-button @click="addArchive.switch=false">取消</el-button>
+                    <el-button @click="addArchive.switch = false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc_2(ruleFormRef)">确定</el-button>
                 </div>
             </template>
         </el-dialog>
         <!-- 维保修改添加 -->
-        <el-dialog
-            v-model="addRepair.switch"
-            :title="str_title_1"
-            width="50%"
-            @closed="dialogClosed"
-        >
+        <el-dialog v-model="addRepair.switch" :title="str_title_1" width="50%" @closed="dialogClosed">
             <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="addRepair.item"
-                >
+                <el-form ref="ruleFormRef" :model="addRepair.item">
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="维保名称"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
-                            >
-                                <el-input
-                                    v-model="addRepair.item.title"
-                                    class="head-btn"
-                                />
+                            <el-form-item label="维保名称" label-width="70px"
+                                :error="from_error.msg && from_error.msg.title ? from_error.msg.title[0] : ''">
+                                <el-input v-model="addRepair.item.title" class="head-btn" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="类型"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
-                            >
+                            <el-form-item label="类型" label-width="70px"
+                                :error="from_error.msg && from_error.msg.type ? from_error.msg.type[0] : ''">
                                 <el-select v-model="addRepair.item.type" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.repair_type" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="item in opts_all.obj.repair_type" :key="item.key"
+                                        :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="资金来源"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.title?from_error.msg.title[0]:''"
-                            >
+                            <el-form-item label="资金来源" label-width="70px"
+                                :error="from_error.msg && from_error.msg.title ? from_error.msg.title[0] : ''">
                                 <el-select v-model="addRepair.item.money_src" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.device_repair_money_src" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item, i) in opts_all.obj.device_repair_money_src" :key="i"
+                                        :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="使用金额"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.money?from_error.msg.money[0]:''"
-                            >
-                                <el-input
-                                    v-model="addRepair.item.money"
-                                    class="head-btn"
-                                >
-                                    <template #append>分</template>
+                            <el-form-item label="使用金额" label-width="70px"
+                                :error="from_error.msg && from_error.msg.money ? from_error.msg.money[0] : ''">
+                                <el-input v-model="addRepair.item.money" class="head-btn">
+                                    <template #append>元</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="是否显示"
-                                label-width="70px"
-                                :error="from_error.msg&&from_error.msg.show?from_error.msg.show[0]:''"
-                            >
-                                <el-switch
-                                    v-model="addRepair.item.show"
-                                    class="head-btn"
-                                    inline-prompt
-                                    :active-value="1"
-                                    :inactive-value="0"
-                                    active-text="是"
-                                    inactive-text="否"
-                                />
+                            <el-form-item label="是否显示" label-width="70px"
+                                :error="from_error.msg && from_error.msg.show ? from_error.msg.show[0] : ''">
+                                <el-switch v-model="addRepair.item.show" class="head-btn" inline-prompt
+                                    :active-value="1" :inactive-value="0" active-text="是" inactive-text="否" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            <el-form-item
-                                label-width="70px"
-                                label="附件"
-                                :error="from_error.msg&&from_error.msg.affix?from_error.msg.affix[0]:''"
-                            >
-                                <el-upload
-                                    action="***"
-                                    :auto-upload="false"
-                                    :file-list="file_list"
-                                    :on-change="(file,files)=>{
-                                        file_list = files
-                                    }"
-                                    :on-remove="(file,files)=>{
-                                        file_list = files
-                                    }"
-                                >
+                            <el-form-item label-width="70px" label="附件"
+                                :error="from_error.msg && from_error.msg.affix ? from_error.msg.affix[0] : ''">
+                                <el-upload action="***" :auto-upload="false" :file-list="file_list" :on-change="(file, files) => {
+                                    file_list = files
+                                }" :on-remove="(file, files) => {
+    file_list = files
+}">
                                     <el-button type="primary">选择附件</el-button>
                                 </el-upload>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <el-form-item label="详细记录" label-width="70px" :error="from_error.msg&&from_error.msg.content?from_error.msg.content[0]:''">
-                                <el-input
-                                    v-model="addRepair.item.content"
-                                    :autosize="{ minRows: 2, maxRows: 6 }"
-                                    type="textarea"
-                                    placeholder=""
-                                />
+                            <el-form-item label="详细记录" label-width="70px"
+                                :error="from_error.msg && from_error.msg.content ? from_error.msg.content[0] : ''">
+                                <el-input v-model="addRepair.item.content" :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea" placeholder="" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -738,7 +623,7 @@
             </div>
             <template #footer>
                 <div class="footer">
-                    <el-button @click="addRepair.switch=false">取消</el-button>
+                    <el-button @click="addRepair.switch = false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc_1(ruleFormRef)">确定</el-button>
                 </div>
             </template>
@@ -762,7 +647,7 @@ import {
     ElMessage
 } from 'element-plus'
 
-import { Loading,Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { Loading, Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -781,7 +666,7 @@ let data_search = reactive({ obj: {} })
 let switch_details = ref(false)
 // 列表
 let ruleFormRef = ref('')
-let loading_tab = ref(false)
+// let loading_tab = ref(false)
 let data_tab = reactive({
     arr: []
 })
@@ -879,10 +764,10 @@ const getTabListFunc = () => {
         }
         params.updated_at = updated_str.substring(1)
     }
-    loading_tab.value = true
+    // loading_tab.value = true
     APIgetDeviceList(params).then(res => {
         console.log(res)
-        loading_tab.value = false
+        // loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
@@ -914,6 +799,7 @@ const refreshFunc = () => {
     getTabListFunc()
 }
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
+// const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_UPLOAD )
 // 详情
 const getDetailsFunc = val => {
     data_dialog.obj = val
@@ -939,13 +825,13 @@ const getDetailsFunc = val => {
         //         res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].content[j].key)
         //     }
         // }
-        let keys=[]
-        for (let i in res){
-            res[i].keys=[]
-            for(let j in res[i].content){
-            res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
-        }
-        }
+        // let keys=[]
+        // for (let i in res){
+        //     res[i].keys=[]
+        //     for(let j in res[i].content){
+        //     res[i].keys.push(VITE_APP_FOLDER_SRC.value+res[i].content[j].key)
+        // }
+        // }
         data_archive.arr = res
         switch_details.value = true
     })
@@ -961,8 +847,13 @@ const getDetailsFunc = val => {
                 res[i].affixs.push(VITE_APP_FOLDER_SRC.value + res[i].affix[j])
             }
         }
+        for (let i in res) {
+            if (res[i].money) {
+                res[i].money = parseInt(res[i].money) / 100
+            }
+        }
         data_repair.arr = res
-        console.log(data_repair.arr)
+        console.log(res)
         switch_details.value = true
     })
 
@@ -997,6 +888,7 @@ watch(page, () => {
 }, { immediate: true, deep: true })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
+    // console.log(formEl);
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
@@ -1004,10 +896,12 @@ const dialogExamineCloseFunc = formEl => {
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
+                    console.log(res)
                     refreshFunc()
                     ElMessage.success('修改成功')
                     switch_examine.value = false
                 }).catch(err => {
+                    console.log(err);
                     ElMessage.error('修改失败')
                 })
             } else {
@@ -1040,6 +934,7 @@ const addResidentialFunc = () => {
     from_examine.item = {
         extra: []
     }
+    console.log(typeof (from_examine.item.extra))
     switch_examine.value = true
 }
 // 修改
@@ -1055,16 +950,20 @@ const modifyResidentialFunc = val => {
         switch_examine.value = true
     })
 }
-// 删除 服务名称和联系方式
-const deleteServiceFunc = index => {
-     addArchive.item.content.splice(index, 1)
+// 删除
+const deleteServiceFunc_1 = index => {
+    addArchive.item.content.splice(index, 1)
 }
-// 添加 服务名称和联系方式
+const deleteServiceFunc = index => {
+    from_examine.item.extra.splice(index, 1)
+}
+// 添加
 const addServiceFunc = index => {
     let data = {
         'lab': '',
         'val': ''
     }
+    console.log(typeof (from_examine.item.extra))
     from_examine.item.extra.push(data)
 }
 // 维保
@@ -1096,6 +995,7 @@ const modifyRepairFunc = val => {
     str_title_1.value = '修改'
     APIgetDeviceRepairDetails(val.id).then(res => {
         addRepair.item = res
+        addRepair.item.money = parseInt(addRepair.item.money) / 100
         addRepair.item.did = data_details.item.id
         let arr = []
         for (let i in res.affix) {
@@ -1105,25 +1005,35 @@ const modifyRepairFunc = val => {
                 })
             }
         }
+        console.log(arr)
         file_list.value = arr
         addRepair.switch = true
     })
 }
 import { getFilesKeys } from '@/util/files.js'
 const fileListFn = val => {
-    if (!val) {
-        return []
-    }
-    if (val) {
+    // if (!val) {
+    //     return []
+    // }
+    // if (val) {
+    // console.log(typeof(val))
     // if (typeof val == 'string') {
-        return [{
-            name: val
-        }]
+    // return [{
+    //     name: val
+    // }]
+    let arr = []
+    for (let i in val) {
+        arr.push({ name: val[i] })
     }
-    return [val]
+    val = arr
+    console.log(val)
+    // }
+    // }
+    // return [val]
 }
 // 同意拒绝提交
 const fromFnUpload = () => {
+    addRepair.item.money = parseInt(addRepair.item.money) * 100
     if (str_title_1.value == '修改') {
         console.log(addRepair.item.did)
         APIputDeviceRepair(addRepair.item.id, addRepair.item).then(res => {
@@ -1147,6 +1057,7 @@ const dialogExamineCloseFunc_1 = () => {
     from_error.msg = {}
     let files = []
     let file_key = []
+    console.log(file_list.value)
     if (file_list.value.length > 0) {
         for (let i in file_list.value) {
             if (!file_list.value[i].raw) {
@@ -1156,6 +1067,7 @@ const dialogExamineCloseFunc_1 = () => {
             }
         }
     }
+    console.log(files)
     addRepair.item.affix = file_key
     if (files.length > 0) {
         getFilesKeys(files, 'folder').then(arr => {
@@ -1185,7 +1097,14 @@ import {
 const str_title_2 = ref('添加')
 const addArchive = reactive({
     switch: false,
-    form: {}
+    form: {},
+    item: {
+        content: [{
+            type: "",
+            name: "",
+            key: []
+        }]
+    }
 })
 const file_list_1 = ref([])
 const addArchiveFunc = () => {
@@ -1194,7 +1113,7 @@ const addArchiveFunc = () => {
     addArchive.item = {
         content: []
     }
-    // file_list.value = []
+    // file_list_1.value = []
     addArchive.item.did = data_details.item.id
     addArchive.switch = true
 }
@@ -1203,17 +1122,21 @@ const modifyArchiveFunc = val => {
     from_error.msg = {}
     str_title_2.value = '修改'
     APIgetDeviceArchiveDetails(val.id).then(res => {
-        addArchive.item = res
+
         // let arr = []
-        // for (let i in res.content) {
-        //     if (res.content[i]) {
-        //         for (let j in res.content[i].key)
-        //         arr.push({
-        //             name: res.content[i].key[j]
-        //         })
-        //     }
-        // }
-        // file_list.value = arr
+        for (let i in res.content) {
+            res.content[i].arr = []
+            if (res.content[i]) {
+                for (let j in res.content[i].key) {
+                    res.content[i].arr.push({
+                        name: res.content[i].key[j]
+                    })
+                }
+                res.content[i].key = res.content[i].arr
+            }
+        }
+        addArchive.item = res
+        console.log(addArchive.item)
         addArchive.item.did = data_details.item.id
         addArchive.switch = true
     })
@@ -1222,12 +1145,13 @@ const addServiceFunc_1 = () => {
     let data = {
         'name': '',
         'type': '',
-        'key': ''
+        'key': []
     }
     addArchive.item.content.push(data)
 }
 // 同意拒绝提交
 const formFnUpload_1 = () => {
+    console.log(addArchive.item)
     if (str_title_2.value == '修改') {
         APIputDeviceArchive(addArchive.item.id, addArchive.item).then(res => {
             getDetailsFunc(data_details.item)
@@ -1247,30 +1171,94 @@ const formFnUpload_1 = () => {
         })
     }
 }
+const uploadChange = (file, file_list) => {
+    console.log(file_list)
+    console.log(file)
+}
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
-    let obj = {}
-    for (let i in addArchive.item.content) {
-        if (typeof addArchive.item.content[i].key != 'string') {
-            obj[i] = addArchive.item.content[i].key
+    let files = []
+    let file_key = []
+    console.log(addArchive.item.content)
+    let arr = []
+    let everyKeyLength = [] //多文件上传处理
+    addArchive.item.content.forEach((item, index) => {
+        // console.log(item.key)
+        everyKeyLength.push(item.key.length)
+        for (let key in item.key) {
+            // arr[key] = item.key[key]
+            arr.push(item.key[key])
+        }
+    })
+    console.log(arr)
+    if (arr.length > 0) {
+        for (let i in arr) {
+            if (!arr[i].raw) {
+                file_key.push(arr[i].name)
+            } else {
+                files.push(arr[i].raw)
+            }
         }
     }
-    let files = []
-    for (let i in obj) {
-        files.push(obj[i].raw)
-    }
-    if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
-            let o = 0
-            for (let i in obj) {
-                addArchive.item.content[i].key = arr[o]
-                o++
+    console.log(files)
+    getFilesKeys(files, 'archive').then(res => {
+        console.log(res)
+        // let Arr=[]
+        // for(let i in res){
+        //     Arr.push(VITE_APP_FOLDER_SRC.value+res[i])
+        // }
+        // res=Arr
+        // console.log(Arr)
+        // res.forEach(item =>{
+        //     item=VITE_APP_FOLDER_SRC+item
+        // })
+        console.log(everyKeyLength)
+        let whereKey = 0
+        if (str_title_2.value == '添加') {
+            for (let x = 0; x < everyKeyLength.length; x++) { //多文件上传处理
+            for (let y = 0; y < everyKeyLength[x]; y++) {
+                addArchive.item.content[x].key[y] = res[whereKey]
+                whereKey++
             }
-            formFnUpload_1()
-        })
-        return false
+        }
+        } else {
+            for (let x = 0; x < everyKeyLength.length; x++) { //多文件上传处理
+            for (let y = 0; y < everyKeyLength[x]; y++) {
+                addArchive.item.content[x].key.push(res[whereKey])
+                whereKey++
+            }
+        }
+        console.log(addArchive.item)
     }
-    formFnUpload_1()
+        formFnUpload_1()
+    })
+    // console.log(addArchive.item)
+    // let obj = {}
+    // for (let i in addArchive.item.content) {
+    //     // if (typeof addArchive.item.content[i].key != 'string') {
+    //     //     obj[i] = addArchive.item.content[i].key
+    //     // }c
+    //     obj[i] = addArchive.item.content[i].key
+    // }
+    // let files = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'folder').then(arr => {
+    //         let o = 0
+    //         console.log(arr);
+    //         console.log(obj);
+    //         for (let i in obj) {
+    //             addArchive.item.content[i].key = arr[o]
+    //             // addArchive.item.content[i].key.push(arr[o])
+    //             o++
+    //         }
+    //         formFnUpload_1()
+    //     })
+    //     return false
+    // }
+    // formFnUpload_1()
 }
 // 删除
 const deleteArchiveFunc = val => {
@@ -1283,28 +1271,12 @@ const deleteArchiveFunc = val => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 </script>
 <style lang="scss">
-    .articletparticletpl {
-        .el-cascader {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            padding: 0 10px;
-            border-radius: 6px;
-            position: relative;
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
-        }
+.articletparticletpl {
+    .el-cascader {
+        width: 100% !important;
+        margin-bottom: 10px;
     }
+}
 </style>
 <style lang="scss" scoped>
 @import "@/assets/styles/resources/variables.scss";

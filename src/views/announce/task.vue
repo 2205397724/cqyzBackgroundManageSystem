@@ -1,60 +1,61 @@
 <template>
     <div class="articletpltask">
         <page-main style="overflow: hidden;">
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加任务
                 </el-button>
             </div>
             <div class="search">
-                <div class="m-t-10">
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">发布人用户组：</div>
-                                <div class="search_tb">
+                    <el-row>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    发布人用户组：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                                     <div class="searchUserGroup">
                                         <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
                                     </div>
-                                </div>
-                            </div>
+                                </el-col>
+                            </el-row>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
                                     任务派发单位：
-                                </div>
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                                 <el-select v-model="data_search.obj.tolv" class="search_tb" placeholder="指定单位" clearable>
                                     <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
-                            </div>
+                            </el-col>
+                            </el-row>
                         </el-col>
-                        <el-col :xs="24" :md="12" :lg="8">
-                            <div class="searchBox">
-                                <div class="search_th">公示分类：</div>
-                                <div class="search_tb">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    公示分类：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
                                     <CascaderAnnounce v-model="data_search.obj.cid" />
-                                </div>
-                            </div>
+                                </el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
-                    <el-row class="m-t-20">
-                        <el-col :xs="24" :md="24" :lg="10">
-                            <div class="flx">
-                                <el-button style="margin-left: 110px;" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                <div v-show="switch_search == true" class="m-l-20 size-base">
-                                    <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                    <div class="searchDetail">
-                                        *搜索到相关结果共{{ total }}条。
-                                    </div>
-                                </div>
-                            </div>
+                    <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                            <span class="size-base" v-show="switch_search == true">
+                                *共搜索到{{ total }}条。
+                            </span>
                         </el-col>
                     </el-row>
-                </div>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -454,7 +455,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Loading,Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -582,9 +583,9 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        // total.value = res.length
+        total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
