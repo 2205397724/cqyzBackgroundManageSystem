@@ -1,12 +1,10 @@
 <template>
     <div>
-        <div class="bg-banner">
-            <p>重庆市哪屋优商务信息咨询有限公司</p>
-        </div>
+        <div class="bg-banner"></div>
         <div id="login-box">
-            <div class="logo">
+            <!-- <div class="logo">
                 <img src="../assets/images/logo2.png" alt="">
-            </div>
+            </div> -->
             <el-form v-show="formType == 'login'" ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
                 <div class="title-container">
                     <h3 class="title">{{ title }}管理后台</h3>
@@ -29,14 +27,14 @@
                             </template>
                         </el-input>
                     </el-form-item>
-                </div>
-                <div>
-                    <el-radio-group v-model="user_utype">
-                      <el-radio label="pt">总平台</el-radio>
-                      <el-radio label="ptr">区域平台</el-radio>
-                      <el-radio label="pm">企业端</el-radio>
-                      <el-radio label="gov">行政端</el-radio>
-                    </el-radio-group>
+                    <el-form-item prop="user_utype">
+                        <el-radio-group v-model="loginForm.user_utype">
+                            <el-radio label="pt">总平台</el-radio>
+                            <el-radio label="ptr">区域平台</el-radio>
+                            <el-radio label="pm">企业端</el-radio>
+                            <el-radio label="gov">行政端</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                 </div>
                 <div class="flex-bar">
                     <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
@@ -111,6 +109,7 @@ const loginForm = ref({
     account: localStorage.login_account || '',
     password: '',
     remember: !!localStorage.login_account,
+    user_utype : '',
     domain: localStorage.domain || ''
 })
 const loginRules = ref({
@@ -121,8 +120,8 @@ const loginRules = ref({
         { required: true, trigger: 'blur', message: '请输入密码' },
         { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
     ],
-    domain: [
-        { required: true, trigger: 'blur', message: '请输入主域名' }
+    user_utype: [
+        { required: true, trigger: 'change', message: '请选择类型' }
     ]
 })
 
@@ -162,17 +161,12 @@ function showPassword() {
 function handleLogin() {
     proxy.$refs.loginFormRef.validate(valid => {
         if (valid) {
-            if(user_utype.value==""){
-                ElMessage.error("请选择类型")
-                return
-            }
             loading.value = true
             let data = {
-                'auth_type': user_utype.value,
+                'auth_type': loginForm.value.user_utype,
                 'username': loginForm.value.account,
                 'password': loginForm.value.password
             }
-            console.log(data)
             userStore.login(data).then(() => {
                 localStorage.removeItem("utype")
                 userStore.utype=data.auth_type
@@ -268,9 +262,8 @@ function handleFind() {
     top: 50%;
     left: 70%;
     transform: translateX(-50%) translateY(-50%);
-    background: rgb(255 255 255 / 37.3%);
-    border-radius: 10px;
-    box-shadow: 0 0 5px #999;
+    background: rgb(255 255 255 / 100%);
+    border-radius: 4px;
     .logo {
         position: absolute;
         top: -11%;
@@ -289,7 +282,7 @@ function handleFind() {
             position: relative;
             .title {
                 font-size: 22px;
-                color: #444;
+                color: #333;
                 margin: 0 auto 30px;
                 text-align: center;
                 font-weight: 800;

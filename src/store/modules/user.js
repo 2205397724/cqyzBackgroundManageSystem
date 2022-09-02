@@ -10,108 +10,106 @@ import * as md5 from 'md5'
 export const useUserStore = defineStore(
     // 唯一ID
     'user', {
-    state: () => ({
-        account: localStorage.account || '',
-        token: localStorage.token || '',
-        failure_time: localStorage.failure_time || '',
-        permissions: [],
-        utype: "",
-        china_code: "",
-        isChooseCity: false,
-        groupChinaCode:""
-    }),
-    getters: {
-        isLogin: state => {
-            let retn = false
-            if (state.token) {
-                if (new Date().getTime() < state.failure_time * 1000) {
-                    retn = true
+        state: () => ({
+            account: localStorage.account || '',
+            token: localStorage.token || '',
+            failure_time: localStorage.failure_time || '',
+            permissions: [],
+            utype: "",
+            china_code: "",
+            isChooseCity: false,
+            groupChinaCode:""
+        }),
+        getters: {
+            isLogin: state => {
+                let retn = false
+                if (state.token) {
+                    if (new Date().getTime() < state.failure_time * 1000) {
+                        retn = true
+                    }
                 }
+                return retn
             }
-            return retn
-        }
-    },
-    actions: {
-        login(data) {
-            return new Promise((resolve, reject) => {
-                APIlogin(data).then(res => {
-                    console.log(res)
-                    let utype = data.utype
-                    let name = data.username
-                    let time = res.data.expires_in + Date.now() / 1000
-                    let token = res.data.access_token
-                    localStorage.setItem('account', name)
-                    localStorage.setItem('token', token)
-                    localStorage.setItem('failure_time', time)
-                    this.account = name
-                    this.token = token
-                    this.failure_time = time
-                    this.utype = utype
-                    ElMessage.success("登录成功")
-                    resolve()
-                }).catch(error => {
-                    reject(error)
-                })
-            })
         },
-        logout() {
-            return new Promise(resolve => {
-                const menuStore = useMenuStore()
-                localStorage.removeItem('account')
-                localStorage.removeItem('token')
-                localStorage.removeItem('failure_time')
-                this.account = ''
-                this.token = ''
-                this.failure_time = ''
-                menuStore.invalidRoutes()
-                menuStore.removeRoutes()
-                resolve()
-            })
-        },
-        // 获取我的权限
-        getPermissions() {
-            return new Promise(resolve => {
-                if (sessionStorage.getItem("utype") == md5('pt')) {
-                    this.permissions = ['*']
-                    resolve(this.permissions)
-                } else {
-                    let perms=[]
-                    APIgetPermsList().then(res => {
-                        res.data.forEach(item=>{
-                            for(let key in item){
-                                if(key=='name'){
-                                    perms.push(item[key])
-                                }
-                            }
-                        })
-                        this.permissions=perms
-                        console.log(perms)
-                        console.log("获取权限")
-                        resolve(perms)
+        actions: {
+            login(data) {
+                return new Promise((resolve, reject) => {
+                    APIlogin(data).then(res => {
+                        console.log(res)
+                        let utype = data.utype
+                        let name = data.username
+                        let time = res.data.expires_in + Date.now() / 1000
+                        let token = res.data.access_token
+                        localStorage.setItem('account', name)
+                        localStorage.setItem('token', token)
+                        localStorage.setItem('failure_time', time)
+                        this.account = name
+                        this.token = token
+                        this.failure_time = time
+                        this.utype = utype
+                        ElMessage.success("登录成功")
+                        resolve()
+                    }).catch(error => {
+                        reject(error)
                     })
-                }
-            }
-
-            )
-        },
-        // setPermissions(data){
-        //    return new Promise(resolve=>{
-        //     for(let i=0;i<data.length;i++){
-        //         this.permissions.push(data[0])
-        //     }
-        //     resolve()
-        //    })
-        // },
-        editPassword(data) {
-            return new Promise(resolve => {
-                APIeditPassword({ password: data.password }).then(res => {
-                    ElMessage.success(res.msg)
-                    resolve(res)
                 })
-            })
+            },
+            logout() {
+                return new Promise(resolve => {
+                    const menuStore = useMenuStore()
+                    localStorage.removeItem('account')
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('failure_time')
+                    this.account = ''
+                    this.token = ''
+                    this.failure_time = ''
+                    menuStore.invalidRoutes()
+                    menuStore.removeRoutes()
+                    resolve()
+                })
+            },
+            // 获取我的权限
+            getPermissions() {
+                return new Promise(resolve => {
+                    if (sessionStorage.getItem("utype") == md5('pt')) {
+                        this.permissions = ['*']
+                        resolve(this.permissions)
+                    } else {
+                        let perms=[]
+                        APIgetPermsList().then(res => {
+                            res.data.forEach(item=>{
+                                for(let key in item){
+                                    if(key=='name'){
+                                        perms.push(item[key])
+                                    }
+                                }
+                            })
+                            this.permissions=perms
+                            console.log(perms)
+                            console.log("获取权限")
+                            resolve(perms)
+                        })
+                    }
+                })
+            },
+            // setPermissions(data){
+            //    return new Promise(resolve=>{
+            //     for(let i=0;i<data.length;i++){
+            //         this.permissions.push(data[0])
+            //     }
+            //     resolve()
+            //    })
+            // },
+            editPassword(data) {
+                return new Promise(resolve => {
+                    APIeditPassword({ password: data.password }).then(res => {
+                        ElMessage.success(res.msg)
+                        resolve(res)
+                    })
+                })
+            }
         }
     }
-}
 )
 
 export function useUserOutsideStore() {
