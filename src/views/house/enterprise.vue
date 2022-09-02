@@ -332,7 +332,11 @@
                             <div class="right">{{ details_item.obj.uinfo?.name }} </div>
                         </div>
                         <div class="item">
-                            <div class="left">企业ID</div>
+                            <div class="left">申请人手机号</div>
+                            <div class="right">{{ details_item.obj.uinfo?.mobile }} </div>
+                        </div>
+                        <div class="item">
+                            <div class="left">企业id</div>
                             <div class="right">{{ details_item.obj.id }} </div>
                         </div>
 
@@ -448,7 +452,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column />
-                                <el-table-column fixed="right" label="操作" width="320" style="z-index: 1;">
+                                <el-table-column fixed="right" label="操作" width="200" style="z-index: 1;">
                                     <template #default="scope">
                                         <el-button
                                             type="primary"
@@ -920,14 +924,14 @@
                 <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
                     <el-row :gutter="10">
                         <el-col v-if="str_opt_val_title == '添加'" :sm="24" :md="24" :lg="12">
-                            <el-form-item label="用户名" prop="id">
+                            <el-form-item label="手机号" prop="id">
                                 <div class="searchUserGroup">
                                     <SearchUser ref="V_1" @checkName="checkUsersNameFunc_1" />
                                 </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="职位" prop="flg">
+                            <el-form-item label="权限" prop="flg">
                                 <el-select
                                     v-model="from_opt_val.obj.flg"
                                     @change="type_change"
@@ -942,7 +946,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label="职位描述" prop="post">
+                            <el-form-item label="职位名称" prop="post">
                                 <el-input v-model="from_opt_val.obj.post" placeholder="" />
                             </el-form-item>
                         </el-col>
@@ -967,7 +971,7 @@
             <el-scrollbar height="400px">
                 <div class="details-box">
                     <div v-if="data_user_detail.item.username" class="item">
-                        <div class="left">申请人</div>
+                        <div class="left">成员</div>
                         <div class="right">{{ data_user_detail.item.username }}</div>
                     </div>
                     <div class="item">
@@ -994,11 +998,11 @@
                         <div class="right">{{ data_user_detail.item.mobile }}</div>
                     </div>
                     <div class="item">
-                        <div class="left">职位</div>
+                        <div class="left">权限</div>
                         <div class="right">{{ getOptVal(opts_all.obj.group_user_flg,data_user_detail.item.flg) }}</div>
                     </div>
                     <div class="item">
-                        <div class="left">职位描述</div>
+                        <div class="left">职位名称</div>
                         <div class="right">{{ data_user_detail.item.post }}</div>
                     </div>
                     <div class="item">

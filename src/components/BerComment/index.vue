@@ -22,14 +22,14 @@
                     @change="switchFnUse"
                 />
                 <div style="margin-left: 20px;display: inline-block;">
-                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(true)">
+                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(false)">
                         <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="item.key" size="large">{{ item.val }}</el-radio>
                     </el-radio-group>
                 </div>
             </div>
             <div>
                 <el-button
-                    class="head-btn" type="primary"
+                    class="m-b-20" type="primary" :icon="Plus"
                     @click="()=>{
                         popup2.form = {};
                         popup2.error = {};
@@ -233,6 +233,7 @@ const props = defineProps(['id'])
 const {
     id
 } = toRefs(props)
+import { Plus } from '@element-plus/icons-vue'
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 const popup1 = reactive({
     switch: false,

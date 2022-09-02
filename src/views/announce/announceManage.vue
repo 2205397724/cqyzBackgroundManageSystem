@@ -1,56 +1,63 @@
 <template>
     <div class="articletplarticle">
         <page-main style="overflow: hidden;">
-            <div class="m-b-20" >
+            <div class="m-b-20">
                 <el-button type="primary" size="large" :icon="Plus" @click="addResidentialFunc">发布公示</el-button>
             </div>
             <div class="search">
-                    <el-row>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    公示分类：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14" class="search_tb">
-                                    <CascaderAnnounce v-model="data_search.obj.cid" />
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    发布人用户组：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14" class="search_tb">
-                                    <div class="searchUserGroup">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                公示分类：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <CascaderAnnounce v-model="data_search.obj.cid" />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                公示区域：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <!-- <div class="searchUserGroup">
                                         <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
-                                    </div>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    状态：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
+                                    </div> -->
+                                <div
+                                    class="selecZone"
+                                    @click="switch_choose_zone = true"
+                                >
+                                    <span v-if="!selectedZone_id" class="selecChina_1">区域</span>
+                                    <span class="selecChina_1" style="color: #606266;">{{ selectedZone_id }}</span>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-select v-model="data_search.obj.status" class="search_tb" placeholder="审核状态" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -68,17 +75,17 @@
                         <span>{{ scope.row.cate.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示对象" width="220">
+                <!-- <el-table-column label="公示区域" width="220">
                     <template #default="scope">
                         <span>{{ scope.row.toval }} </span>
                     </template>
-                </el-table-column>
-                <el-table-column label="公示对象类型">
+                </el-table-column> -->
+                <el-table-column label="公示区域类型">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="发布人用户组">
+                <el-table-column label="发布单位">
                     <template #default="scope">
                         <span>{{ scope.row.authorgroup?.name }} </span>
                     </template>
@@ -195,7 +202,7 @@
                         </el-col>
                         <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="公示对象类型"
+                            label="公示区域类型"
                             label-width="120px"
                             :error="from_error.msg&&from_error.msg.lv?from_error.msg.lv[0]:''"
                         >
@@ -215,7 +222,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="公示对象"
+                                label="公示区域"
                                 label-width="120px"
                                 :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
                             >
@@ -277,7 +284,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="发布人用户组"
+                                label="发布单位"
                                 label-width="120px"
                                 :error="from_error.msg&&from_error.msg.dep_id?from_error.msg.dep_id[0]:''"
                             >
@@ -457,8 +464,8 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 选择公示对象 -->
-        <el-dialog v-model="switch_choose_zone" title="选择公示对象">
+        <!-- 选择公示区域 -->
+        <el-dialog v-model="switch_choose_zone" title="选择公示区域">
             <el-scrollbar height="250px">
                 <position-tree-fourth :tree_item="tree_item" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
             </el-scrollbar>
@@ -490,7 +497,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import {Loading, Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -552,12 +559,13 @@ const refreshFunc = () => {
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
+    getChinaName()
 }
-const V_1 = ref(null)
-const refreshFunc_1 = () => {
-    V_1.value.clearFunc()
-    refreshFunc()
-}
+// const V_1 = ref(null)
+// const refreshFunc_1 = () => {
+//     V_1.value.clearFunc()
+//     refreshFunc()
+// }
 // 监听分页
 watch(page, () => {
     getTabListFunc()
@@ -674,6 +682,7 @@ const getTabListFunc = () => {
             params[key] = data_search.obj[key]
         }
     }
+    console.log(data_search.obj)
     loading_tab.value = true
     APIgetEventArticleList(params).then(res => {
         console.log(res)
@@ -707,7 +716,6 @@ const addResidentialFunc = () => {
     from_pass.obj.reply = ''
     from_pass.obj.status = 0
     active.value = 0
-    getChinaName()
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
@@ -739,7 +747,6 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_pass.obj.reply = ''
     active.value = 0
-    getChinaName()
     getUsergroupList()
     from_error.msg = {}
     str_title.value = '修改'
@@ -924,7 +931,7 @@ const chooseFile = i => {
     const file = document.getElementById('fileRef' + i)
     file.click()
 }
-// 选择公示对象
+// 选择公示区域
 const tree_item = ref({})
 const switch_choose_zone = ref(false)
 const selectedZone_id = ref('')
@@ -942,9 +949,11 @@ const checkFunc = val => {
     console.log(val)
     if (val.type == 'zone') {
         from_examine.item.toval = val.china_code
+        data_search.obj.tovalcan = val.china_code
         from_examine.item.totype = 6
     } else {
         from_examine.item.toval = val.id
+        data_search.obj.tovalcan = val.id
         if (val.id.length <= 6) {
             from_examine.item.totype = 3
         } else if (val.id.length <= 9) {
@@ -964,7 +973,6 @@ const userData = reactive({
 })
 const checkNameFunc = val => {
     console.log(val)
-    data_search.obj.groupid = val.id
     from_examine.item.groupid = val.id
     userGroupName.value = ''
 }
@@ -1066,9 +1074,16 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', '
     height: 32px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
+    background-color: #fff;
     .selecChina {
         margin-left: 11px;
         color: #aaa;
+    }
+    .selecChina_1 {
+        margin-left: 11px;
+        font-size: 14px;
+        line-height: 29px;
+        color: #c0c4d5;
     }
 }
 .pass {
