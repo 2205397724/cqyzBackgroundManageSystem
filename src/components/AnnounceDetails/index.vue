@@ -89,19 +89,15 @@
                                     <el-card>
                                         <div class="details-box">
                                             <div class="item">
-                                                <div class="left">ID</div>
-                                                <div class="right">{{ item.id }}</div>
+                                                <div class="left">公示</div>
+                                                <div class="right">{{ item.auditable?.title }}</div>
                                             </div>
                                             <div class="item">
-                                                <div class="left">公示ID</div>
-                                                <div class="right">{{ item.tgt_id }}</div>
+                                                <div class="left">处理人</div>
+                                                <div class="right">{{ item.auditor?.name? item.auditor?.name:item.auditor?.nickname?item.auditor?.nickname:item.auditor?.username }}</div>
                                             </div>
-                                            <div class="item">
-                                                <div class="left">发布对象</div>
-                                                <div class="right">{{ getNameFunc(userData.arr,item.group_id) }}</div>
-                                            </div>
-                                            <div v-if="article_tab.arr.reply" class="item">
-                                                <div class="left">答复</div>
+                                            <div v-if="item.reply" class="item">
+                                                <div class="left">回复内容</div>
                                                 <div class="right">{{ item.reply }}</div>
                                             </div>
                                             <div class="item">
@@ -111,14 +107,6 @@
                                                     <el-tag v-if="item.status == 20" type="success" size="small">审核通过</el-tag>
                                                     <el-tag v-if="item.status == 30" type="danger" size="small">审核失败</el-tag>
                                                 </div>
-                                            </div>
-                                            <div v-if="item.remark" class="item">
-                                                <div class="left">备注</div>
-                                                <div class="right">{{ item.remark }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">修改时间</div>
-                                                <div class="right">{{ item.updated_at }}</div>
                                             </div>
                                         </div>
                                     </el-card>
@@ -207,32 +195,6 @@ const getListArchiveFunc = () => {
         article_tab.arr = res
     })
 }
-// 获取类别名称
-const getNameFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-}
-const userData = reactive({
-    arr: []
-})
-import {
-    APIgetGroupList
-} from '@/api/custom/custom.js'
-const getUserGroupListFunc = () => {
-    APIgetGroupList().then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            userData.arr = res.data
-        }
-    })
-}
-// defineExpose({
-//     getAnnounceDetailsFunc
-// })
-
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({

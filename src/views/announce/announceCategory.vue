@@ -3,7 +3,7 @@
         <page-main>
             <div class="m-b-20">
                 <el-button
-                     type="primary" :icon="Plus" size="large"
+                    type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加分类
@@ -18,7 +18,7 @@
                 :tree-props="{ children: 'children' }"
                 style="width: 100%;min-height: 300px;"
             >
-                <el-table-column prop="name" label="名称" width="180">
+                <el-table-column prop="name" label="分类名称" width="180">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                     </template>
@@ -53,7 +53,6 @@
                             <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
                         </template>
                     </el-table-column> -->
-                <el-table-column />
                 <el-table-column fixed="right" label="操作" width="240">
                     <template #default="scope">
                         <el-button
@@ -94,9 +93,9 @@
                     :model="from_examine.item"
                 >
                     <el-row :gutter="10">
-                        <el-col :md="24" :lg="12">
+                        <el-col v-if="!show_pid" :md="24" :lg="12">
                             <el-form-item
-                                label="名称" prop="name"
+                                label="分类名称" prop="name" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -107,7 +106,18 @@
                         </el-col>
                         <el-col v-if="show_pid" :md="24" :lg="12">
                             <el-form-item
-                                label="上级ID" prop="pid"
+                                label="子分类名称" prop="name" label-width="100px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col v-if="show_pid" :md="24" :lg="12">
+                            <el-form-item
+                                label="上级ID" prop="pid" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.pid?from_error.msg.pid[0]:''"
                             >
                                 <el-input
@@ -119,7 +129,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="排序" prop="sort"
+                                label="排序" prop="sort" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.sort?from_error.msg.sort[0]:''"
                             >
                                 <el-input

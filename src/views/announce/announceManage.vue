@@ -137,7 +137,6 @@
                         <BerComment :id="scope.row.id" />
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page"

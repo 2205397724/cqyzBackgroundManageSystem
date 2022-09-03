@@ -10,52 +10,52 @@
                 </el-button>
             </div>
             <div class="search">
-                    <el-row>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    发布人用户组：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
-                                    <div class="searchUserGroup">
-                                        <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
-                                    </div>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    任务派发单位：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
-                                <el-select v-model="data_search.obj.tolv" class="search_tb" placeholder="指定单位" clearable>
-                                    <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                任务派发单位：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <div class="searchUserGroup">
+                                    <SearchUserGroup ref="V_2" @checkName="checkNameFunc_2" />
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                公示分类：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <CascaderAnnounce v-model="data_search.obj.cid" />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                是否完成：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-select v-model="data_search.obj.iscpt" class="search_tb" placeholder="是否完成" clearable>
+                                    <el-option v-for="item in opts_all.obj.task_ok" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    公示分类：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
-                                    <CascaderAnnounce v-model="data_search.obj.cid" />
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -63,36 +63,37 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column label="任务ID" width="240">
+                <!-- <el-table-column label="任务ID" width="240">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row.id }}</span>
                     </template>
-                </el-table-column>
-                <el-table-column label="任务派发对象" width="150">
+                </el-table-column> -->
+                <el-table-column label="任务派发单位">
                     <template #default="scope">
-                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span>
+                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span> -->
+                        <span class="m-l-10">{{ scope.row.from }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示分类" width="150">
+                <el-table-column label="公示分类">
                     <template #default="scope">
-                        <span class="m-l-10">{{ getNameFunc(data_1.arr,scope.row.cid) }}</span>
+                        <span class="m-l-10">{{ scope.row.cate?.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="接收对象等级" width="150">
+                <el-table-column label="接收单位等级">
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="任务接收对象" width="150">
+                <el-table-column label="任务接收单位">
                     <template #default="scope">
-                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.to) }}</span>
+                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.to) }}</span> -->
+                        <span class="m-l-10">{{ scope.row.to }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否完成" width="150">
+                <el-table-column label="是否完成">
                     <template #default="scope">
-                        <el-tag v-if=" scope.row.iscpt" type="success" effect="dark" round>已完成</el-tag>
-                        <el-tag v-if=" scope.row.iscpt" class="m-l-10" type="default" round>查看{{ scope.row.aid }}</el-tag>
-                        <el-tag v-if="!scope.row.iscpt" type="danger" effect="dark" round>未完成</el-tag>
+                        <el-tag v-if=" scope.row.iscpt" type="success" size="small" round>已完成</el-tag>
+                        <el-tag v-if="!scope.row.iscpt" type="danger" size="small" round>未完成</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="300">
@@ -127,7 +128,6 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page"
@@ -155,8 +155,8 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="任务派发对象"
-                            label-width="130px"
+                            label="任务派发单位"
+                            label-width="100px"
                             :error="from_error.msg&&from_error.msg.from?from_error.msg.from[0]:''"
                         >
                             <div class="searchUserGroup">
@@ -166,8 +166,8 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="接收对象等级"
-                            label-width="130px"
+                            label="接收单位等级"
+                            label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
                             <el-select v-model="from_examine.item.tolv" class="head-btn" placeholder="" clearable>
@@ -177,8 +177,8 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="任务接收对象"
-                            label-width="130px"
+                            label="任务接收单位"
+                            label-width="100px"
                             :error="from_error.msg&&from_error.msg.to?from_error.msg.to[0]:''"
                         >
                             <div class="searchUserGroup">
@@ -188,8 +188,8 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="分类"
-                            label-width="130px"
+                            label="公示分类"
+                            label-width="100px"
                             :error="from_error.msg&&from_error.msg.cid?from_error.msg.cid[0]:''"
                         >
                             <CascaderAnnounce v-model="from_examine.item.cid" />
@@ -212,24 +212,23 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">任务ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">任务派发对象</div>
-                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div>
+                    <div class="left">任务派发单位</div>
+                    <!-- <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div> -->
+                    <div class="right">{{ data_details.item.from }}</div>
                 </div>
                 <div class="item">
                     <div class="left">公示分类</div>
-                    <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                    <!-- <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div> -->
+                    <div class="right">{{ data_details.item.cid }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">接收对象等级</div>
+                    <div class="left">接收单位等级</div>
                     <div class="right">{{ getOptVal(opts_all.obj.article_lv_1,data_details.item.tolv) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">任务接收对象</div>
-                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.to) }}</div>
+                    <div class="left">任务接收单位</div>
+                    <div class="right">{{ data_details.item.to }}</div>
+                    <!-- <div class="right">{{ getNameFunc(userData.arr,data_details.item.to) }}</div> -->
                 </div>
                 <!-- <div class="item">
                     <div class="left">任务单位</div>
@@ -250,6 +249,10 @@
                         <el-tag v-if=" data_details.item.iscpt" class="m-l-10 btnNone" type="default" round>查看{{ data_details.item.aid }}</el-tag>
                         <el-tag v-if="!data_details.item.iscpt" type="danger" effect="dark" round class="btnNone">未完成</el-tag>
                     </div>
+                </div>
+                <div class="item">
+                    <div class="left">任务ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -455,7 +458,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Loading,Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -758,19 +761,6 @@ const getNameFunc = (arr, key) => {
         }
     }
 }
-// 获取类别名称
-let data_1 = reactive({
-    arr: []
-})
-import {
-    APIgetTypeList
-} from '@/api/custom/custom.js'
-// 获取公式列表api请求
-const main_type = ref('announce')
-APIgetTypeList(main_type.value).then(res => {
-    console.log(res)
-    data_1.arr = res
-})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
