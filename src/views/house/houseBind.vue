@@ -1,7 +1,7 @@
 <template>
     <div class="routine-house">
         <page-main style="overflow: hidden;">
-            <el-button-group class="btn">
+            <el-button-group class="btn m-b-20">
                 <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
                 <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
                 <!-- </el-badge> -->
@@ -502,9 +502,6 @@ getOpts(['houseBindStatus', 'house_bind']).then(res => {
 }
 :deep .el-badge__content {
     line-height: 23px;
-}
-.btn {
-    margin-bottom: 15px;
 }
 .btn button {
     padding: 20px 40px;

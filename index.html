@@ -21,12 +21,12 @@
                 justify-content: center;
                 flex-direction: column;
                 user-select: none;
-                color: #736477;
-                background-color: snow;
+                color:#1890ff;
+                background-color:#f6f8f9;
             }
             .fantastic-admin-home .loading {
                 height: 40px;
-                width: 40px;
+                width: 240px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -36,15 +36,15 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                height: 20px;
-                width: 20px;
+                height:40px;
+                width:40px;
             }
             .fantastic-admin-home .square::before {
                 content: '';
-                width: 10px;
-                height: 10px;
-                border-radius: 15%;
-                border: 3px solid #8c858f;
+                width:20px;
+                height:20px;
+                border-radius:50%;
+                border: 3px solid #1890ff;
             }
             .fantastic-admin-home .loading.animate .square::before {
                 animation: square-to-dot-animation 1.2s linear;
@@ -71,7 +71,7 @@
                     border-width: 5px;
                 }
                 70% {
-                    border-radius: 15%;
+                    border-radius:50%;
                     width: 10px;
                     height: 10px;
                     margin: initial;
@@ -81,6 +81,7 @@
             .fantastic-admin-home .text {
                 font-size: 24px;
                 margin-top: 20px;
+                color: #1890ff;
             }
         </style>
         <%- copyrightScript %>
@@ -94,7 +95,7 @@
                     <div class="square"></div>
                     <div class="square"></div>
                 </div>
-                <div class="text"><%= title %>载入中…</div>
+                <div class="text"><%= title %></div>
             </div>
             <script>
                 const Loading = document.querySelector('.loading')

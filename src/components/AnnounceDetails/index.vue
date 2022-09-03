@@ -13,29 +13,27 @@
                 <el-tab-pane label="公示信息" name="1">
                     <!-- <el-scrollbar height="400px"> -->
                     <div class="details-box">
+                        <div class="details-tit-sm">基础信息</div>
                         <div class="item">
                             <div class="left">公示主题</div>
                             <div class="right">{{ data_details.item.title }}</div>
                         </div>
-                        <div class="item">
-                            <div class="left">公示ID</div>
-                            <div class="right">{{ data_details.item.id }}</div>
-                        </div>
+
                         <div class="item">
                             <div class="left">公示分类</div>
                             <div class="right">{{ cateName }}</div>
                         </div>
                         <div class="item">
-                            <div class="left">公示对象</div>
+                            <div class="left">公示区域</div>
                             <div class="right">{{ data_details.item.toval }}</div>
                         </div>
                         <div class="item">
-                            <div class="left">公示对象类型</div>
+                            <div class="left">公示区域类型</div>
                             <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
                         </div>
                         <div class="item">
-                            <div class="left">发布人</div>
-                            <div class="right">{{ groupName }}</div>
+                            <div class="left">发布单位</div>
+                            <div class="right">{{ data_details.item.authorgroup?.name }}</div>
                         </div>
                         <div class="item">
                             <div class="left">状态</div>
@@ -56,17 +54,21 @@
                         <div class="item">
                             <div class="left">附件</div>
                             <div class="right">
-                            <div v-for="(item,i) in data_details.item.affix" :key="i" class="inline-block m-r-10">
-                                <!-- <el-image
-                                    :src="item" :preview-src-list="data_details.item.affixs" class="m-r-10 wh_100" fit="cover"
-                                />   -->
-                                <el-tag type='primary' v-html="item.title" />
+                                <div v-for="(item,i) in data_details.item.affix" :key="i" class="inline-block m-r-10">
+                                    <el-tag type="success">
+                                        <el-link type="success" class="link" :href="data_details.item.affixs" target="_blank">{{ item.title }}</el-link>
+                                    </el-tag>
+                                </div>
                             </div>
-                        </div>
                         </div>
                         <div class="item">
                             <div class="left">公示内容</div>
                             <div class="right" v-html="data_details.item.content" />
+                        </div>
+                        <div class="details-tit-sm">其他信息</div>
+                        <div class="item">
+                            <div class="left">公示ID</div>
+                            <div class="right">{{ data_details.item.id }}</div>
                         </div>
                         <div class="item">
                             <div class="left">开始时间</div>
@@ -123,7 +125,7 @@
                                 </el-timeline-item>
                             </el-timeline>
                         </div>
-                        <div v-show="article_tab.arr.length <= 0" class="size-lx">此公式无审核信息</div>
+                        <div v-show="article_tab.arr.length <= 0" class="size-lg">此公式无审核信息</div>
                     </el-scrollbar>
                 <!-- </el-tab-pane>
                 <el-tab-pane label="附件" name="3">
@@ -171,7 +173,6 @@ const per_page = ref(15)
 const article_tab = reactive({
     arr: []
 })
-const groupName = ref('')
 const cateName = ref('')
 const detailsFunc = () => {
     console.log(props.id)
@@ -179,7 +180,6 @@ const detailsFunc = () => {
     switch_details.value = true
     APIgetEventArticleDetails(props.id).then(res => {
         console.log(res)
-        groupName.value = res.authorgroup?.name
         cateName.value = res.cate.name
         res.affixs = []
         for (let i in res.affix) {
