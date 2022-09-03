@@ -1,9 +1,9 @@
 <template>
     <div class="vote">
         <page-main style="overflow: hidden;">
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    type="primary" :icon="Plus" size="large"
                     @click="()=>{
                         data_1.add_form={};
                         data_1.add_error={};
@@ -16,53 +16,60 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
                                 标题名称：
-                            </div>
-                            <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
-                        </div>
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">分类：</div>
-                            <el-select v-model="data_1.search.kind" class="search_tb" clearable placeholder="分类">
-                                <el-option v-for="(item,i) in opts_all.obj.tousu_type_kind" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
+
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">状态：</div>
-                            <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                是否匿名：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-select v-model="data_1.search.ano" class="search_tb" clearable placeholder="是否匿名">
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button
-                                    class="m-l-20" type="primary" :icon="Search" @click="()=>{
-                                        data_1.switch_search = true;
-                                        data_1.page = 1;
-                                        getFuncVoteList()
-                                    }"
-                                >
-                                    筛选
-                                </el-button>
-                            </div>
-                            <div v-show="data_1.switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ data_1.total }}条。
-                                </div>
-                            </div>
-                        </div>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button
+                            type="primary" :icon="Search" @click="()=>{
+                                data_1.switch_search = true;
+                                data_1.page = 1;
+                                getFuncVoteList()
+                            }"
+                        >
+                            筛选
+                        </el-button>
+
+                        <el-button v-show="data_1.switch_search== true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="data_1.switch_search== true" class="size-base">
+                            *搜索到相关结果共{{ data_1.total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
@@ -104,7 +111,7 @@
                         <span>{{ scope.row.cc_name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="业务编号" width="180">
+                <el-table-column label="业务编号" width="150">
                     <template #default="scope">
                         <span>{{ scope.row.sno }} </span>
                     </template>
@@ -114,7 +121,7 @@
                         <span>{{ scope.row?.zone?.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态">
+                <el-table-column label="状态" width="100">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
@@ -128,12 +135,12 @@
                         <!-- <div style=":background-color"></div> -->
                     </template>
                 </el-table-column>
-                <el-table-column label="是否匿名" width="90">
+                <el-table-column label="是否匿名" width="80">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_ano,scope.row.ano) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否公开" width="90">
+                <el-table-column label="是否公开" width="80">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
@@ -163,7 +170,6 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="data_1.page"
@@ -175,6 +181,7 @@
                 prev-text="上一页"
                 next-text="下一页"
                 hide-on-single-page
+                @current-change="changePageFunc"
             />
         </page-main>
         <!-- 修改添加 -->
@@ -580,7 +587,7 @@ const data_1 = reactive({
     search: {},
     switch_search: false,
     page: 1,
-    total: 0,
+    total: 50,
     per_page: 15,
     list: [],
     add_switch: false,
@@ -594,9 +601,16 @@ const data_1 = reactive({
 })
 const loading_tab = ref(true)
 const getFuncVoteList = () => {
+    let key = 1
+    console.log(sessionStorage.getItem('currentPage2'))
+    key = sessionStorage.getItem('currentPage2')
+    if (key && key != 1) {
+        data_1.page = key
+    }
     let data = {
         page: data_1.page,
-        per_page: data_1.per_page
+        per_page: data_1.per_page,
+        kind: 2
     }
     for (let key in data_1.search) {
         let item = data_1.search[key]
@@ -611,7 +625,7 @@ const getFuncVoteList = () => {
         data_1.list = res
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= data_1.per_page) {
+        if (res.length < data_1.per_page) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -621,6 +635,7 @@ const getFuncVoteList = () => {
             btnNext.setAttribute('aria-disabled', false)
         }
     })
+    sessionStorage.removeItem('currentPage2')
 }
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
@@ -922,7 +937,7 @@ const popupFuncAdd4 = val => {
     })
 }
 // 待处理点击事件
-const index = ref(1)
+const index = ref(0)
 const noDeal = val => {
     index.value = val
     data_1.page = 1
@@ -953,17 +968,30 @@ const StatusFunk = val => {
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
-    data_1.search = {
-        kind: 2
-    }
+    data_1.search = {}
     data_1.switch_search = false
-    data_1.page = 1
+    // data_1.page = 1
     index.value = 9
+    sessionStorage.removeItem('currentPage2')
     getFuncVoteList()
+
 }
+// const changePageFunc = val => {
+//     console.log(val)
+//     sessionStorage.removeItem('currentPage1')
+//     sessionStorage.setItem('currentPage1', val)
+//     console.log(sessionStorage.getItem('currentPage1'))
+// }
 watch(() => data_1.page, new_val => {
-    refreshFunc()
+    getFuncVoteList()
 }, { immediate: true, deep: true })
+watchEffect(() => {
+    console.log(data_1.page)
+
+    sessionStorage.setItem('currentPage2', data_1.page)
+    console.log(sessionStorage.getItem('currentPage2'))
+
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import {

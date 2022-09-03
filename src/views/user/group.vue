@@ -62,7 +62,7 @@
                                     筛选
                                 </el-button>
                             </div>
-                            <div v-show="data_search.item.switch == true" class="w_70 m-l-30">
+                            <div v-show="data_search.switch == true" class="w_70 m-l-30">
                                 <el-button
                                     class="m-r-10"
                                     @click="refreshSearch()"
@@ -70,7 +70,7 @@
                                     重置
                                 </el-button>
                                 <div class="searchDetail">
-                                    *搜索到相关结果共{{ data_search.item.total }}条。
+                                    *搜索到相关结果共{{ data_search.total }}条。
                                 </div>
                             </div>
                         </div>
@@ -189,6 +189,7 @@
                     hide-on-single-page
                     @next-click="next_click_page"
                     @prev-click="prev_click_page"
+                    @current-change="changePageFunc"
                 />
             </div>
         </page-main>
@@ -495,7 +496,7 @@
             </el-table>
         </el-dialog>
         <!-- 添加用户组角色弹窗 -->
-               <el-dialog
+        <el-dialog
             v-model="switch_post_group_role"
             title="添加用户组角色"
             width="50%"
@@ -878,20 +879,15 @@ let from_examine = reactive({
 // 检索查询板块
 const refreshSearch = () => {
     data_search.item = {}
-    data_search.item.switch = false
+    data_search.switch = false
     APIgetGroupList().then(res => {
         data_tab.arr = res.data
     })
 }
 const data_search = reactive({
-    item: {
-        type: '',
-        region_type: '',
-        region_cc: '',
-        region_val: '',
-        switch: false,
-        total: 0
-    }
+    item: {},
+    switch: false,
+    total: 50
 })
 
 const data_searchFun = () => {
@@ -901,12 +897,12 @@ const data_searchFun = () => {
             params[key] = data_search.item[key]
         }
     }
-    data_search.item.switch = true
+    data_search.switch = true
     console.log(params)
     APIgetGroupList(params).then(res => {
         console.log(res)
         data_tab.arr = res.data
-        data_search.item.total =  res.data.length
+        data_search.total =  res.data.length
     })
 }
 let from_addRoles = reactive({
@@ -923,6 +919,12 @@ const total = ref(50)
 watch(page, () => {
     getTabListFunc()
 })
+const next_click_page = val => {
+    console.log(val)
+}
+const changePageFunc = val => {
+    console.log(val)
+}
 let from_addGroupUser_perms = reactive({
     item: {
         perm_ids: ['']
@@ -1111,12 +1113,12 @@ const deleteGroup_perms = val => {
     APIdeleteGroupPerms(current_group_perms.item.id, {
         data: { perm_ids: [val.id] }
     }).then(res => {
-        if ((res.status = 200)) {
-            ElMessage.success('删除成功')
-            switch_group_perms.value = false
-        } else {
-            ElMessage.error('删除失败')
-        }
+        // if (res.status = 200) {
+        ElMessage.success('删除成功')
+        switch_group_perms.value = false
+        // } else {
+        // ElMessage.error('删除失败')
+        // }
     })
 }
 // 添加组权限
@@ -1296,6 +1298,7 @@ const refreshFunc = () => {
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
+    delete from_examine.item.ref
     if (str_title.value == '修改用户组') {
 
         APIputGroup(from_examine.item.id, from_examine.item)
@@ -1331,6 +1334,12 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
+    if (data_search.item) {
+        for (let i in data_search.item) {
+            params[i] = data_search.item[i]
+        }
+    }
+    console.log(params)
     loading_tab.value = true
     APIgetGroupList(params).then(res => {
         console.log(res)
@@ -1382,28 +1391,28 @@ const deleteGroup_roles = val => {
     })
 }
 // 添加用户组角色
-import {APIpostRoles} from '@/api/custom/custom'
-const switch_post_group_role=ref(false)
-const post_group_role=reactive({
-    item:{
-        name:"",
-        spec:"",
+import { APIpostRoles } from '@/api/custom/custom'
+const switch_post_group_role = ref(false)
+const post_group_role = reactive({
+    item: {
+        name: '',
+        spec: ''
     }
 })
-const post_group_role_submit=async ()=>{
-    let res=await APIpostRoles(post_group_role.item)
-    APIpostGroupRoles(from_addRoles.item.group,{role_ids:[res.data.id]}).then(res=>{
-        if(res.status==200){
+const post_group_role_submit = async() => {
+    let res = await APIpostRoles(post_group_role.item)
+    APIpostGroupRoles(from_addRoles.item.group, { role_ids: [res.data.id] }).then(res => {
+        if (res.status == 200) {
             ElMessage.success('添加成功')
-            switch_post_group_role.value=false
-            switch_roles.value=false
-            post_group_role.item.name=""
-            post_group_role.item.spec=""
+            switch_post_group_role.value = false
+            switch_roles.value = false
+            post_group_role.item.name = ''
+            post_group_role.item.spec = ''
         }
     })
 }
 const addGroupRoles = () => {
-    switch_post_group_role.value=true
+    switch_post_group_role.value = true
     // console.log(from_addRoles.item.role_ids[0])
     // if (from_addRoles.item.role_ids[0] == '') {
     //     ElMessage.error('请输入角色ID')

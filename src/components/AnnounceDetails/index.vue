@@ -6,7 +6,7 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="50%"
+            width="60%"
             :append-to-body="true"
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -22,6 +22,10 @@
                         <div class="item">
                             <div class="left">公示分类</div>
                             <div class="right">{{ cateName }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="left">公示文号</div>
+                            <div class="right">{{ data_details.item.proof }}</div>
                         </div>
                         <div class="item">
                             <div class="left">公示区域</div>
@@ -60,6 +64,13 @@
                                     </el-tag>
                                 </div>
                             </div>
+                        </div>
+                        <div
+                            v-for="(item, i) in data_details.item.custom" v-if="data_details.item.custom" :key="i"
+                            class="item"
+                        >
+                            <div class="left">{{ item.label }}</div>
+                            <div class="right">{{ item.val }}</div>
                         </div>
                         <div class="item">
                             <div class="left">公示内容</div>
@@ -177,7 +188,6 @@ const detailsFunc = () => {
         // AudioContext.value = data_details.item.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
         console.log(data_details.item)
         getListArchiveFunc()
-        getUserGroupListFunc()
     })
 }
 import {
