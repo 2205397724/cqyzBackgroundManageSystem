@@ -4,7 +4,7 @@ $g-main-bg: #f0f2f5;
 
 /* ----- 顶部 ----- */
 // 背景色
-$g-header-bg: #222b45;
+$g-header-bg: #282c34;
 // 文字颜色
 $g-header-color: #fff;
 // 导航文字颜色
@@ -12,25 +12,25 @@ $g-header-menu-color: #ccc;
 // 导航鼠标悬浮文字颜色
 $g-header-menu-hover-color: #fff;
 // 导航鼠标悬浮背景色
-$g-header-menu-hover-bg: #334067;
+$g-header-menu-hover-bg: #409eff;
 // 导航选中文字颜色
 $g-header-menu-active-color: #fff;
 // 导航选中背景色
-$g-header-menu-active-bg: #334067;
+$g-header-menu-active-bg: #409eff;
 
 /* ----- 主导航 ----- */
 // 背景色
-$g-main-sidebar-bg: #222b45;
+$g-main-sidebar-bg: #282c34;
 // 菜单文字颜色
 $g-main-sidebar-menu-color: #ccc;
 // 菜单鼠标悬浮文字颜色
 $g-main-sidebar-menu-hover-color: #fff;
 // 菜单鼠标悬浮背景色
-$g-main-sidebar-menu-hover-bg: #334067;
+$g-main-sidebar-menu-hover-bg: #409eff;
 // 菜单选中文字颜色
 $g-main-sidebar-menu-active-color: #fff;
 // 菜单选中背景色
-$g-main-sidebar-menu-active-bg: #334067;
+$g-main-sidebar-menu-active-bg: #409eff;
 
 /* ----- 次导航 ----- */
 // 背景色
@@ -46,7 +46,7 @@ $g-sub-sidebar-menu-hover-bg: darken(#fafafa, 10);
 // 菜单选中文字颜色
 $g-sub-sidebar-menu-active-color: #e7f4ff;
 // 菜单选中背景色
-$g-sub-sidebar-menu-active-bg: #5482ee;
+$g-sub-sidebar-menu-active-bg: #409eff;
 
 /* ----- 进度条 ----- */
-$g-nprogress-color: #29d;
+$g-nprogress-color: #409eff;
