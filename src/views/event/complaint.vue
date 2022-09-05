@@ -567,7 +567,8 @@
 import {
     reactive,
     ref,
-    watch
+    watch,
+    onUnmounted
 } from 'vue'
 import {
     ElMessage
@@ -602,6 +603,7 @@ const data_1 = reactive({
 const loading_tab = ref(true)
 const getFuncVoteList = () => {
     let key = 1
+
     console.log(sessionStorage.getItem('currentPage2'))
     key = sessionStorage.getItem('currentPage2')
     if (key && key != 1) {
@@ -991,6 +993,9 @@ watchEffect(() => {
     sessionStorage.setItem('currentPage2', data_1.page)
     console.log(sessionStorage.getItem('currentPage2'))
 
+})
+onUnmounted(()=>{
+    sessionStorage.removeItem('currentPage2')
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项

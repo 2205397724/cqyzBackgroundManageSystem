@@ -76,7 +76,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <div class="hidden" height="450px">
+            <div class="hidden pointer" height="450px">
                 <!-- <el-scrollbar height="450px"> -->
                 <el-table
                     v-loading="loading_tab" :data="data_tab.arr"

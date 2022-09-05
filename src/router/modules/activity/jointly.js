@@ -7,19 +7,19 @@ export default {
     // name: 'activity',
     meta: {
         title: '联名',
-        icon: 'el-icon-document',
+        icon: 'el-icon-document'
     },
     children: [
         {
             path: 'jointly',
-            component: () => import('@/views/activity/manage.vue'),
+            component: () => import('@/views/activity/jointly.vue'),
             meta: {
                 title: '联名管理',
                 // 在侧边导航栏显示
                 sidebar: false,
                 // 在面包屑展示
                 breadcrumb: false,
-                activeMenu: '/activity_jointly',
+                activeMenu: '/activity_jointly'
             }
         }
     ]

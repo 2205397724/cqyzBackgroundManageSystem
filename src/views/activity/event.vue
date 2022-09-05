@@ -1,46 +1,52 @@
 <template>
     <div class="propertypropertylist">
         <page-main>
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     添加事件
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">事件名称：</div>
-                            <el-input v-model="data_search.obj.name" class="search_tb" placeholder="事件名称" clearable />
-                        </div>
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                事件名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="事件名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 是否显示：
-                            </div>
-                            <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
-                                <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_search.obj.show" class="search_tb" placeholder="是否显示" clearable>
+                                    <el-option v-for="item, in opts_all.obj.device_show" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
-                                </div>
-                            </div>
-                        </div>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button
+                            v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading"
+                            @click="refreshFunc"
+                        >
+                            重置
+                        </el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
@@ -57,27 +63,26 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="code_room" label="所在区域" width="160">
+                    <el-table-column prop="code_room" label="所在区域">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.region_cc }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="code_room" label="区域类型" width="160">
+                    <el-table-column prop="code_room" label="区域类型">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.region_type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="time_deal" label="是否显示">
+                    <el-table-column prop="time_deal" label="是否显示" width="100">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="created_at" label="创建日期" width="250">
+                    <el-table-column prop="created_at" label="创建日期" width="180">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.created_at }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column />
                     <el-table-column fixed="right" label="操作" width="240">
                         <template #default="scope">
                             <!-- <el-button
@@ -110,7 +115,6 @@
                             </el-popconfirm>
                         </template>
                     </el-table-column>
-                    <el-table-column />
                 </el-table>
             </div>
             <div class="p-t-20">
@@ -145,13 +149,13 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label-width="70px" label="区域类型" prop="region_type" :error="from_error.msg&&from_error.msg.region_type?from_error.msg.region_type[0]:''">
                                 <el-select v-model="from_examine.item.region_type" class="head-btn search_tb" placeholder="区域类型" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.group_user_region_type" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="所在区域"

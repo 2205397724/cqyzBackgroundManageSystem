@@ -1,136 +1,138 @@
 <template>
-  <div class="container">
-    <div style="position: relative; top: -10px;">
-      <span>开始时间：{{ data_details.item.startat }}</span>
-      <span class="m-20">
-        <el-button v-if="data_details.item.status == 1" round
-          >筹备阶段</el-button
-        >
-        <el-button v-if="data_details.item.status == 2" type="primary" round
-          >待审</el-button
-        >
-        <el-button v-if="data_details.item.status == 3" type="info" round
-          >未开始</el-button
-        >
-        <el-button v-if="data_details.item.status == 4" type="success" round
-          >进行中</el-button
-        >
-        <el-button v-if="data_details.item.status == 5" type="warning" round
-          >暂停</el-button
-        >
-        <el-button v-if="data_details.item.status == 6" type="warning" round
-          >终止</el-button
-        >
-        <el-button v-if="data_details.item.status == 7" type="danger" round
-          >已结束</el-button
-        >
-      </span>
-      <span>结束时间：{{ data_details.item.endat }}</span>
-    </div>
-    <div>
-      <el-button size="small" @click="exchangeStatus('1')">筹备阶段</el-button>
-      <el-button size="small" type="primary" @click="exchangeStatus('2')"
-        >待审</el-button
-      >
-      <el-button size="small" type="info" @click="exchangeStatus('3')"
-        >未开始</el-button
-      >
-      <el-button size="small" type="success" @click="exchangeStatus('4')"
-        >进行中</el-button
-      >
-      <el-button size="small" type="warning" @click="exchangeStatus('5')"
-        >暂停</el-button
-      >
-      <el-button size="small" type="warning" @click="exchangeStatus('6')"
-        >终止</el-button
-      >
-      <el-button size="small" type="danger" @click="exchangeStatus('7')"
-        >已结束</el-button
-      >
-    </div>
-    <el-tabs v-model="activeName" @tab-click="changePane">
-      <el-tab-pane label="问卷主题" name="1">
-        <el-scrollbar height="400px">
-          <div class="details-box">
-            <el-row>
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">内容</div>
-                  <span>{{ data_details.item.content }}</span>
+    <div class="container">
+        <div style="position: relative; top: -10px;">
+            <span>开始时间：{{ data_details.item.startat }}</span>
+            <span class="m-20">
+                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+                <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+                <el-tag v-show="data_details.item.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+                <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,data_details.item.status) }} </el-tag>
+            </span>
+            <span>结束时间：{{ data_details.item.endat }}</span>
+        </div>
+        <!-- <div class="m-t-10 m-b-20">
+            <el-button size="small" @click="exchangeStatus('1')">筹备中</el-button>
+            <el-button size="small" type="primary" @click="exchangeStatus('2')">
+                待审
+            </el-button>
+            <el-button size="small" type="info" @click="exchangeStatus('3')">
+                未开始
+            </el-button>
+            <el-button size="small" type="success" @click="exchangeStatus('4')">
+                进行中
+            </el-button>
+            <el-button size="small" type="warning" @click="exchangeStatus('5')">
+                暂停
+            </el-button>
+            <el-button size="small" type="warning" @click="exchangeStatus('6')">
+                终止
+            </el-button>
+            <el-button size="small" type="danger" @click="exchangeStatus('7')">
+                已结束
+            </el-button>
+        </div> -->
+        <el-tabs v-model="activeName" @tab-click="changePane">
+            <el-tab-pane :label="activeName_1+'主题'" name="1">
+                <div style="height: 400px;">
+                    <div class="details-box">
+                        <!-- <el-row>
+                            <el-col :span="8">
+
+                            </el-col>
+                        </el-row> -->
+                        <div class="details-tit-sm">基础信息</div>
+                        <el-row :gutter="20">
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">内容</div>
+                                    <span>{{ data_details.item.content }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">所在区域</div>
+                                    <span>{{ data_details.item.author_cc_name }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">是否开放</div>
+                                    <el-tag v-show="data_details.item.pub == 0" class="btnNone" type="primary" size="small">关闭</el-tag>
+                                    <el-tag v-show="data_details.item.pub== 1" class="btnNone noDeal" type="warning" size="small">开放</el-tag>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">总票数</div>
+                                    <span>{{ data_details.item.ticketall }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">总面积数</div>
+                                    <span>{{ data_details.item.areaall }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">活动id</div>
+                                    <span>{{ data_details.item.id }}</span>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <div class="details-tit-sm">发布人信息</div>
+                        <el-row :gutter="20">
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">发布人</div>
+                                    <span>{{ data_details.item.uinfo?.name ? data_details.item.uinfo?.name:data_details.item.uinfo?.nickname? data_details.item.uinfo?.nickname :data_details.item.uinfo?.username }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">手机号</div>
+                                    <span>{{ data_details.item.uinfo?.mobile }}</span>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">用户类型</div>
+                                    <span>{{ data_details.item.utype }}</span>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                <!-- <div>
+                        <h3>问卷记录</h3>
+                        <div class="steps-column m-l-40 selected">
+                            <div class="steps-column-item">
+                                <div>
+                                    <text>时间:2022-07-14 12:00:00</text>
+                                </div>
+                                <div>
+                                    操作人员：街道 主任 王先生
+                                    <span class="m-l-40">事件：审核</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <div class="item"><div class="left">附件</div></div>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">是否开放</div>
-                  <span>{{ data_details.item.pub }}</span>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">是否匿名</div>
-                  <span>{{ data_details.item.pub }}</span>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">活动类型</div>
-                  <span>{{ data_details.item.type }}</span>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">总票数</div>
-                  <span>{{ data_details.item.ticketall }}</span>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">总面积数</div>
-                  <span>{{ data_details.item.areaall }}</span>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="item">
-                  <div class="left">活动id</div>
-                  <span>{{ data_details.item.id }}</span>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="record">
-            <h3>问卷记录</h3>
-            <div class="steps-column m-l-40 selected">
-              <div class="steps-column-item">
-                <div>
-                  <text>时间:2022-07-14 12:00:00</text>
-                </div>
-                <div>
-                  操作人员：街道 主任 王先生
-                  <span class="m-l-40">事件：审核</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="设置参与范围" name="2">
-        <el-button
-          type="primary"
-          class="m-tb-10"
-          style="position: relative;"
-          @click="detail_set_area"
-          >设置</el-button
-        >
-        <!-- <el-table :data="data_range.arr"
+            </el-tab-pane>
+            <el-tab-pane label="设置参与范围" name="2">
+                <el-button
+                    type="primary"
+                    class="m-tb-10"
+                    style="position: relative;"
+                    @click="detail_set_area"
+                >
+                    设置
+                </el-button>
+                <!-- <el-table :data="data_range.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     width="100%"
                 >
@@ -160,108 +162,112 @@
                     </el-table-column>
                 </el-table> -->
 
-        <el-row>
-          <el-col :sm="3" :md="3" :lg="3">
-            <div class="set_range_box">
-              <div>
-                <div class="m-b-10">已选择区域</div>
-              </div>
-              <el-scrollbar height="300px">
-                <div class="region_box">
-                  <div v-for="item in data_range.arr" :key="item.id">
-                    <div v-if="item.type == 5"
-                    @click="closeShowHouse"
-                    class="region_box_item">
-                      {{ item.tgt_obj }}
-                      <el-popconfirm
-                        title="确定要删除当前项么?"
-                        cancel-button-type="info"
-                        @confirm="deleteRange(item)"
-                      >
-                        <template #reference>
-                          <div class="region_box_item_del">✖</div>
-                        </template>
-                      </el-popconfirm>
-                    </div>
-                  </div>
-                </div>
-              </el-scrollbar>
-            </div>
-          </el-col>
-          <el-col :sm="3" :md="3" :lg="3">
-            <div class="set_range_box">
-              <div class="m-b-10">
-                <div>已选择小区</div>
-              </div>
-              <el-scrollbar height="300px">
-                <div class="region_box">
-                  <div v-for="item in data_range.arr" :key="item.id">
-                    <div
-                      v-if="item.type == 4"
-                      class="region_box_item"
-                      @click="closeShowHouse"
-                    >
-                      {{item.tgt_obj.pos_name+item.tgt_obj.name}}
-                      <el-popconfirm
-                        title="确定要删除当前项么?"
-                        cancel-button-type="info"
-                        @confirm="deleteRange(item)"
-                      >
-                        <template #reference>
-                          <div class="region_box_item_del">✖</div>
-                        </template>
-                      </el-popconfirm>
-                    </div>
-                  </div>
-                  <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
-                    <div class="region_box_item region_box_item_house">
-                      {{ house.building.zone.name}}
-                    </div>
-                  </div>
-                </div>
-              </el-scrollbar>
-            </div>
-          </el-col>
-          <el-col :sm="3" :md="3" :lg="3">
-            <div class="set_range_box">
-              <div>
-                <div>可参与楼栋</div>
-              </div>
-              <el-scrollbar height="300px">
-                <div class="region_box">
-                  <div v-for="item in data_range.arr" :key="item.id">
-                    <div class="region_box_item"
-                    @click="closeShowHouse"
-                    v-if="item.type == 3">
-                      {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
-                      <el-popconfirm
-                        title="确定要删除当前项么?"
-                        cancel-button-type="info"
-                        @confirm="deleteRange(item)"
-                      >
-                        <template #reference>
-                          <div class="region_box_item_del">✖</div>
-                        </template>
-                      </el-popconfirm>
-                    </div>
-                  </div>
-                  <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
-                    <div class="region_box_item region_box_item_house">
-                      {{ house.building.name}}
-                    </div>
-                  </div>
-                </div>
-              </el-scrollbar>
-            </div>
-          </el-col>
-          <el-col :sm="3" :md="3" :lg="3">
-            <div class="set_range_box">
-              <div>
-                <div>可参与单元</div>
-              </div>
-              <el-scrollbar height="300px">
-                <div class="region_box">
-                  <!-- <div v-for="item in data_range_units.arr" :key="item.id">
+                <el-row>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div>
+                                <div class="m-b-10">已选择区域</div>
+                            </div>
+                            <el-scrollbar height="300px">
+                                <div class="region_box">
+                                    <div v-for="item in data_range.arr" :key="item.id">
+                                        <div
+                                            v-if="item.type == 5"
+                                            class="region_box_item"
+                                            @click="closeShowHouse"
+                                        >
+                                            {{ item.tgt_obj }}
+                                            <el-popconfirm
+                                                title="确定要删除当前项么?"
+                                                cancel-button-type="info"
+                                                @confirm="deleteRange(item)"
+                                            >
+                                                <template #reference>
+                                                    <div class="region_box_item_del">✖</div>
+                                                </template>
+                                            </el-popconfirm>
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </el-col>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div class="m-b-10">
+                                <div>已选择小区</div>
+                            </div>
+                            <el-scrollbar height="300px">
+                                <div class="region_box">
+                                    <div v-for="item in data_range.arr" :key="item.id">
+                                        <div
+                                            v-if="item.type == 4"
+                                            class="region_box_item"
+                                            @click="closeShowHouse"
+                                        >
+                                            {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
+                                            <el-popconfirm
+                                                title="确定要删除当前项么?"
+                                                cancel-button-type="info"
+                                                @confirm="deleteRange(item)"
+                                            >
+                                                <template #reference>
+                                                    <div class="region_box_item_del">✖</div>
+                                                </template>
+                                            </el-popconfirm>
+                                        </div>
+                                    </div>
+                                    <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
+                                        <div class="region_box_item region_box_item_house">
+                                            {{ house.building.zone.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </el-col>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div>
+                                <div>可参与楼栋</div>
+                            </div>
+                            <el-scrollbar height="300px">
+                                <div class="region_box">
+                                    <div v-for="item in data_range.arr" :key="item.id">
+                                        <div
+                                            v-if="item.type == 3"
+                                            class="region_box_item"
+                                            @click="closeShowHouse"
+                                        >
+                                            {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
+                                            <el-popconfirm
+                                                title="确定要删除当前项么?"
+                                                cancel-button-type="info"
+                                                @confirm="deleteRange(item)"
+                                            >
+                                                <template #reference>
+                                                    <div class="region_box_item_del">✖</div>
+                                                </template>
+                                            </el-popconfirm>
+                                        </div>
+                                    </div>
+                                    <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
+                                        <div class="region_box_item region_box_item_house">
+                                            {{ house.building.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </el-col>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div>
+                                <div>可参与单元</div>
+                            </div>
+                            <el-scrollbar height="300px">
+                                <div class="region_box">
+                                    <!-- <div v-for="item in data_range_units.arr" :key="item.id">
                     <div class="region_box_item" @click="clickUnits(item)">
                       {{ item.name }}
                       <el-popconfirm
@@ -275,740 +281,743 @@
                       </el-popconfirm>
                     </div>
                   </div> -->
-                  <div v-for="item in data_range.arr" :key="item.id">
-                    <div
-                      class="region_box_item"
-                      v-if="item.type == 2"
-                      @click="closeShowHouse"
+                                    <div v-for="item in data_range.arr" :key="item.id">
+                                        <div
+                                            v-if="item.type == 2"
+                                            class="region_box_item"
+                                            @click="closeShowHouse"
+                                        >
+                                            {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
+                                            <el-popconfirm
+                                                title="确定要删除当前项么?"
+                                                cancel-button-type="info"
+                                                @confirm="deleteRange(item)"
+                                            >
+                                                <template #reference>
+                                                    <div class="region_box_item_del">✖</div>
+                                                </template>
+                                            </el-popconfirm>
+                                        </div>
+                                    </div>
+                                    <div
+                                        v-for="house in surverRangeWhenHouse.arr"
+                                        :key="house.id"
+                                    >
+                                        <div class="region_box_item region_box_item_house" @click="clickUnits(house)">
+                                            {{ house.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </el-col>
+                    <el-col :sm="11" :md="11" :lg="11">
+                        <div v-if="showHouses" class="table">
+                            <div class="header" />
+                            <el-scrollbar style="height: 504px;">
+                                <div>
+                                    <div
+                                        v-for="(floor, index) in floors.arr"
+                                        :key="index"
+                                        class="house_box"
+                                    >
+                                        <div class="floor">{{ floor.floor_truth }}</div>
+                                        <div class="house_item">
+                                            <div
+                                                v-for="house in floor.houses"
+                                                :key="house.id"
+                                                :class="{
+                                                    item: true,
+                                                    bg: house.can_exist,
+                                                }"
+                                            >
+                                                {{ house.house_num }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+            <el-tab-pane :label="activeName_1+'题目'" name="3">
+                <SurveyQuestions :id="props.id" />
+            </el-tab-pane>
+            <el-tab-pane :label=" activeName_1 + '调查结果'" name="4">
+                <SurveyAnswer :id="props.id" />
+            </el-tab-pane>
+            <el-tab-pane label="业主评论" name="5">
+                <comment-switch :id="props.id" />
+                <el-scrollbar height="400px">
+                    <el-table :data="comment_list" style="width: 100%;">
+                        <el-table-column type="selection" width="50" />
+                        <el-table-column prop="content" label="评论内容" />
+                        <el-table-column prop="zan" label="点赞" width="100" />
+                        <el-table-column label="状态" width="100" align="center">
+                            <template #default="scope">
+                                <el-button
+                                    v-if="scope.row.status == 10"
+                                    size="small"
+                                    round
+                                    type="warning"
+                                >
+                                    未审核
+                                </el-button>
+                                <el-button
+                                    v-else-if="scope.row.status == 20"
+                                    size="small"
+                                    round
+                                    type="success"
+                                >
+                                    已审核
+                                </el-button>
+                                <el-button
+                                    v-else-if="scope.row.status == 30"
+                                    size="small"
+                                    round
+                                    type="danger"
+                                >
+                                    审核失败
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="score" label="评分" width="100" />
+                        <el-table-column prop="atuname" label="作者" width="100" />
+                        <el-table-column prop="updated_at" label="时间段" width="200" />
+                        <el-table-column fixed="right" width="200" label="操作">
+                            <template #default="scope">
+                                <el-button
+                                    border
+                                    size="small"
+                                    @click="getCommentDetail(scope.row.id)"
+                                >
+                                    详情
+                                </el-button>
+                                <el-button
+                                    border
+                                    type="primary"
+                                    size="small"
+                                    @click="modifyComment(scope.row.id)"
+                                >
+                                    修改
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-scrollbar>
+            </el-tab-pane>
+        </el-tabs>
+        <!-- 修改问卷评论 -->
+        <el-dialog v-model="switch_comment" title="修改评论">
+            <div class="details-box p-lr-10">
+                <el-form :model="comment_details.item">
+                    <el-row :gutter="10">
+                        <el-col>
+                            <el-form-item label="评论内容" label-width="120px">
+                                <el-input v-model="comment_details.item.content" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col>
+                            <el-form-item label="评论状态" label-width="120px">
+                                <el-radio-group
+                                    v-model="comment_details.item.status"
+                                    class="ml-4"
+                                >
+                                    <el-radio label="10" size="large">未审核</el-radio>
+                                    <el-radio label="20" size="large">已审核</el-radio>
+                                    <el-radio label="30" size="large">审核失败</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div
+                    style="
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        width: 100%;
+"
+                >
+                    <el-button @click="switch_comment = false">取消</el-button>
+                    <el-button
+                        type="primary"
+                        @click="
+                            dialogModifyComment(
+                                comment_details.item.content,
+                                comment_details.item.status
+                            )
+                        "
                     >
-                      {{ item.tgt_obj.pos_name+item.tgt_obj.name}}
-                      <el-popconfirm
-                        title="确定要删除当前项么?"
-                        cancel-button-type="info"
-                        @confirm="deleteRange(item)"
-                      >
-                        <template #reference>
-                          <div class="region_box_item_del">✖</div>
-                        </template>
-                      </el-popconfirm>
-                    </div>
-                  </div>
-                  <div
-                    v-for="house in surverRangeWhenHouse.arr"
-                    :key="house.id"
-                  >
-                    <div @click="clickUnits(house)" class="region_box_item region_box_item_house">
-                      {{ house.name }}
-                    </div>
-                  </div>
+                        确定
+                    </el-button>
                 </div>
-              </el-scrollbar>
-            </div>
-          </el-col>
-          <el-col :sm="11" :md="11" :lg="11">
-            <div class="table" v-if="showHouses">
-              <div class="header"></div>
-              <el-scrollbar style="height: 504px;">
-                <div>
-                  <div
-                    class="house_box"
-                    v-for="(floor, index) in floors.arr"
-                    :key="index"
-                  >
-                    <div class="floor">{{ floor.floor_truth }}</div>
-                    <div class="house_item">
-                      <div
-                        :class="{
-                          item: true,
-                          bg: house.can_exist,
-                        }"
-                        v-for="house in floor.houses"
-                        :key="house.id"
-                      >
-                        {{ house.house_num }}
-                      </div>
-                    </div>
-                  </div>
+            </template>
+        </el-dialog>
+        <!-- 问卷评论详情 -->
+        <el-dialog v-model="switch_comment_detail" title="评论详情">
+            <div class="details-box p-lr-10">
+                <div class="item">
+                    <div class="left">评论内容</div>
+                    <div class="right">{{ comment_details.item.content }}</div>
                 </div>
-              </el-scrollbar>
+                <div class="item">
+                    <div class="left">评论状态</div>
+                    <div class="right">
+                        <span v-if="comment_details.item.status == 10">未审核</span>
+                        <span v-else-if="comment_details.item.status == 20">未审核</span>
+                        <span v-else>审核失败</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">评论时间</div>
+                    <div class="right">{{ comment_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">修改时间</div>
+                    <div class="right">{{ comment_details.item.updated_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">点赞</div>
+                    <div class="right">{{ comment_details.item.zan }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">分数</div>
+                    <div class="right">{{ comment_details.item.score }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">网络位置</div>
+                    <div class="right">
+                        {{ comment_details.item.loc }}:{{ comment_details.item.ip }}
+                    </div>
+                </div>
             </div>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-      <el-tab-pane label="添加参与范围" name="6">
-        <!-- <el-button type="primary" class="m-10" @click="submit">确认设置</el-button> -->
-        <el-scrollbar height="400px">
-          <!-- 树形结构 -->
-          <div class="tree-item">
-            <div style="height: calc(100% - 60px);">
-              <position-tree-third :id="props.id" :tree_item="tree_item" />
-            </div>
-          </div>
-        </el-scrollbar>
-      </el-tab-pane>
-      <el-tab-pane label="问卷题目" name="3">
-        <SurveyQuestions :id="props.id" />
-      </el-tab-pane>
-      <el-tab-pane label="问卷调查结果" name="4">
-        <SurveyAnswer :id="props.id" />
-      </el-tab-pane>
-      <el-tab-pane label="业主评论" name="5">
-        <comment-switch :id="props.id" />
-        <el-scrollbar height="400px">
-          <el-table :data="comment_list" style="width: 100%;">
-            <el-table-column type="selection" width="50" />
-            <el-table-column prop="content" label="评论内容" />
-            <el-table-column prop="zan" label="点赞" width="100" />
-            <el-table-column label="状态" width="100" align="center">
-              <template #default="scope">
-                <el-button
-                  v-if="scope.row.status == 10"
-                  size="small"
-                  round
-                  type="warning"
-                  >未审核</el-button
-                >
-                <el-button
-                  v-else-if="scope.row.status == 20"
-                  size="small"
-                  round
-                  type="success"
-                  >已审核</el-button
-                >
-                <el-button
-                  v-else-if="scope.row.status == 30"
-                  size="small"
-                  round
-                  type="danger"
-                  >审核失败</el-button
-                >
-              </template>
-            </el-table-column>
-            <el-table-column prop="score" label="评分" width="100" />
-            <el-table-column prop="atuname" label="作者" width="100" />
-            <el-table-column prop="updated_at" label="时间段" width="200" />
-            <el-table-column fixed="right" width="200" label="操作">
-              <template #default="scope">
-                <el-button
-                  border
-                  size="small"
-                  @click="getCommentDetail(scope.row.id)"
-                  >详情</el-button
-                >
-                <el-button
-                  border
-                  type="primary"
-                  size="small"
-                  @click="modifyComment(scope.row.id)"
-                  >修改</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-scrollbar>
-      </el-tab-pane>
-    </el-tabs>
-    <!-- 修改问卷评论 -->
-    <el-dialog v-model="switch_comment" title="修改问卷评论">
-      <div class="details-box p-lr-10">
-        <el-form :model="comment_details.item">
-          <el-row :gutter="10">
-            <el-col>
-              <el-form-item label="评论内容" label-width="120px">
-                <el-input v-model="comment_details.item.content" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col>
-              <el-form-item label="评论状态" label-width="120px">
-                <el-radio-group
-                  v-model="comment_details.item.status"
-                  class="ml-4"
-                >
-                  <el-radio label="10" size="large">未审核</el-radio>
-                  <el-radio label="20" size="large">已审核</el-radio>
-                  <el-radio label="30" size="large">审核失败</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-      <template #footer>
-        <div
-          style="
+            <template #footer>
+                <div
+                    style="
                         display: flex;
                         justify-content: flex-end;
                         align-items: center;
                         width: 100%;
 "
-        >
-          <el-button @click="switch_comment = false">取消</el-button>
-          <el-button
-            type="primary"
-            @click="
-              dialogModifyComment(
-                comment_details.item.content,
-                comment_details.item.status
-              )
-            "
-          >
-            确定
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <!-- 问卷评论详情 -->
-    <el-dialog v-model="switch_comment_detail" title="问卷评论详情">
-      <div class="details-box p-lr-10">
-        <div class="item">
-          <div class="left">评论内容</div>
-          <div class="right">{{ comment_details.item.content }}</div>
-        </div>
-        <div class="item">
-          <div class="left">评论状态</div>
-          <div class="right">
-            <span v-if="comment_details.item.status == 10">未审核</span>
-            <span v-else-if="comment_details.item.status == 20">未审核</span>
-            <span v-else>审核失败</span>
-          </div>
-        </div>
-        <div class="item">
-          <div class="left">评论时间</div>
-          <div class="right">{{ comment_details.item.created_at }}</div>
-        </div>
-        <div class="item">
-          <div class="left">修改时间</div>
-          <div class="right">{{ comment_details.item.updated_at }}</div>
-        </div>
-        <div class="item">
-          <div class="left">点赞</div>
-          <div class="right">{{ comment_details.item.zan }}</div>
-        </div>
-        <div class="item">
-          <div class="left">分数</div>
-          <div class="right">{{ comment_details.item.score }}</div>
-        </div>
-        <div class="item">
-          <div class="left">网络位置</div>
-          <div class="right">
-            {{ comment_details.item.loc }}:{{ comment_details.item.ip }}
-          </div>
-        </div>
-      </div>
-      <template #footer>
-        <div
-          style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
-"
-        >
-          <el-button @click="switch_comment_detail = false">取消</el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <PositionTreeFive
-      v-model:showabled="switch_set_area"
-      :tree_item="tree_item"
-      :surveyid="props.id"
-      @checkFunc="checkFunc"
-      @checkChangeFunc="checkChangeFunc"
-    />
-  </div>
+                >
+                    <el-button @click="switch_comment_detail = false">取消</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <PositionTreeFive
+            v-model:showabled="switch_set_area"
+            :tree_item="tree_item"
+            :surveyid="props.id"
+            @checkFunc="checkFunc"
+            @checkChangeFunc="checkChangeFunc"
+        />
+    </div>
 </template>
 
 <script setup>
 import {
-  APImodifySurveyStatus,
-  APIgetChinaRegion,
-  APIaddSurveyRange,
-  APIgetSurveyDetails,
-  // 问卷范围
-  APIgetSurveyRange,
-  APIgetSurverRangeWhenHouse,
-  APIdeleteSurveyRange,
-  APIgetSurveyTopic,
-  APIgetSurveyTopicDetail,
-  APIdeleteSurveyTopic,
-  APIaddSurveyTopic,
-  APImodifySurveyTopic,
-  APIgetHouseListSort,
-  // 问卷结果
-  APIgetSurveyAnswerList,
-  APIgetSurveyAnswerDetail,
-  APIaddSurveyAnswer,
-  APIgetNotParticipate,
-  // 评论
-  APIgetCommentList,
-  APIgetCommentDetails,
-  APIputComment,
-  APIgetBuildListHouse,
-} from "@/api/custom/custom.js";
+    APImodifySurveyStatus,
+    APIgetChinaRegion,
+    APIaddSurveyRange,
+    APIgetSurveyDetails,
+    // 问卷范围
+    APIgetSurveyRange,
+    APIgetSurverRangeWhenHouse,
+    APIdeleteSurveyRange,
+    APIgetSurveyTopic,
+    APIgetSurveyTopicDetail,
+    APIdeleteSurveyTopic,
+    APIaddSurveyTopic,
+    APImodifySurveyTopic,
+    APIgetHouseListSort,
+    // 问卷结果
+    APIgetSurveyAnswerList,
+    APIgetSurveyAnswerDetail,
+    APIaddSurveyAnswer,
+    APIgetNotParticipate,
+    // 评论
+    APIgetCommentList,
+    APIgetCommentDetails,
+    APIputComment,
+    APIgetBuildListHouse
+} from '@/api/custom/custom.js'
 // 导入图标
-import { Edit, Search } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { Edit, Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 const from_error = reactive({
-  msg: {},
-});
+    msg: {}
+})
 // 修改问卷状态
-const exchangeStatus = (status) => {
-  APImodifySurveyStatus(props.id, { status: status })
-    .then((res) => {
-      console.log(res);
-      detailsFunc(props.id);
-    })
-    .catch((err) => {
-      // console.log('err',err.response.data)
-      ElMessage.error("修改失败" + err.response.data.message);
-      // from_error.msg = err.data
-    });
-};
+const exchangeStatus = status => {
+    APImodifySurveyStatus(props.id, { status: status })
+        .then(res => {
+            console.log(res)
+            detailsFunc(props.id)
+        })
+        .catch(err => {
+            // console.log('err',err.response.data)
+            ElMessage.error('修改失败' + err.response.data.message)
+            // from_error.msg = err.data
+        })
+}
 // 详情设置范围
 const tree_item = ref({
-  id: "50",
-  name: "测试",
-  next_type: "region",
-  type: "region",
-});
-const checkFunc = (val) => {};
-const checkChangeFunc = (val) => {
-  console.log(val);
-};
-const switch_set_area = ref(false);
+    id: '50',
+    name: '测试',
+    next_type: 'region',
+    type: 'region'
+})
+const checkFunc = val => {}
+const checkChangeFunc = val => {
+    console.log(val)
+}
+const switch_set_area = ref(false)
 const detail_set_area = () => {
-  switch_set_area.value = true;
-  console.log(switch_set_area.value);
-};
+    switch_set_area.value = true
+    console.log(switch_set_area.value)
+}
 // 详情
-let switch_details = ref(false);
+let switch_details = ref(false)
 // 接收父组件传递过来的id
-const props = defineProps(["id"]);
-const activeName = ref("1");
+const props = defineProps(['id'])
+const activeName = ref('1')
 // 详情
 const data_details = reactive({
-  item: "",
-});
+    item: ''
+})
 // 问卷题目
 const topic_details = reactive({
-  item: "",
-});
-const value1 = ref([]);
+    item: ''
+})
+const value1 = ref([])
 // 判断答卷选项是否选中
-const ischecked = ref("1");
-const checkList = ref(["1"]);
+const ischecked = ref('1')
+const checkList = ref(['1'])
 // 参与详情
-const radio = ref("全部");
+const radio = ref('全部')
 // 参与范围
 let data_range = reactive({
-  arr: [],
-});
+    arr: []
+})
 const data_range_zone = reactive({
-  arr: [],
-});
+    arr: []
+})
 // 添加问卷题目
-const str_title = ref("添加");
-let switch_examine = ref(false);
-let switch_addAnswer = ref(false);
-let switch_answer_detail = ref(false);
-let switch_comment = ref(false);
-let switch_comment_detail = ref(false);
+const str_title = ref('添加')
+let switch_examine = ref(false)
+let switch_addAnswer = ref(false)
+let switch_answer_detail = ref(false)
+let switch_comment = ref(false)
+let switch_comment_detail = ref(false)
 let topic_examine = reactive({
-  item: {},
-});
-let opts = reactive([]);
+    item: {}
+})
+let opts = reactive([])
 // 增加选项
 const addopts = () => {
-  opts.push({
-    content: "",
-    score: "",
-    sort: "",
-  });
-};
+    opts.push({
+        content: '',
+        score: '',
+        sort: ''
+    })
+}
 onMounted(() => {
-  console.log(props.id);
-  detailsFunc(props.id);
-});
+    detailsFunc(props.id)
+})
 // 切换tab-pane触发请求事件
 const changePane = (tab, event) => {
-  // 代理
-  // console.log(tab)
-  // 指针事件pointerEvent（未使用）
-  // console.log(event)
-  // console.log(tab.props.name)
-  if (tab.props.name == 2) {
-    rangeFunc();
-  } else if (tab.props.name == 3) {
-    // 问卷题目
-    topicsFunc();
-  } else if (tab.props.name == 4) {
-    // 未参与房屋
-    notParticipate();
-    // 问卷调查结果
-    answerListFunc();
-    topicsFunc();
-  } else {
-    // 业主评论
-    ownerComment();
-  }
-};
-// 获取问卷详情
-const detailsFunc = (id) => {
-  data_details.item = "";
-  APIgetSurveyDetails(id).then((res) => {
-    if (res.status === 200) {
-      data_details.item = res.data;
-      switch_details.value = true;
+    // 代理
+    // console.log(tab)
+    // 指针事件pointerEvent（未使用）
+    // console.log(event)
+    // console.log(tab.props.name)
+    if (tab.props.name == 2) {
+        rangeFunc()
+    } else if (tab.props.name == 3) {
+        // 问卷题目
+        topicsFunc()
+    } else if (tab.props.name == 4) {
+        // 未参与房屋
+        notParticipate()
+        // 问卷调查结果
+        answerListFunc()
+        topicsFunc()
+    } else {
+        // 业主评论
+        ownerComment()
     }
-  });
-  console.log(data_details.item);
-};
+}
+const activeName_1 = ref('')
+// 获取问卷详情
+const detailsFunc = id => {
+    data_details.item = ''
+    APIgetSurveyDetails(id).then(res => {
+        if (res.status === 200) {
+            data_details.item = res.data
+            if (res.data.type == 1) {
+                activeName_1.value = '问卷'
+            } else if (res.data.type == 2) {
+                activeName_1.value = '选举'
+            } else if (res.data.type == 3) {
+                activeName_1.value = '表决'
+            } else {
+                activeName_1.value = '联名'
+            }
+            switch_details.value = true
+        }
+    })
+    console.log(data_details.item)
+}
 // 获取问卷题目
 const topicsFunc = () => {
-  let params = {
-    sid: props.id,
-  };
-  // 问卷题目列表
-  APIgetSurveyTopic(params).then((res) => {
-    console.log(res.data);
-    if (res.status === 200) {
-      topic_details.item = res.data;
+    let params = {
+        sid: props.id
     }
-  });
-  console.log("topic_details", topic_details);
-};
-// 获取问卷范围
-const surverRangeWhenHouse = reactive({ arr: [] });
-const rangeFunc = () => {
-  let params = {
-    page: 1,
-    per_page: 100,
-    sid: props.id,
-    can_type: 2,
-    type_many:[2,3,4,5]
-  };
-  APIgetSurveyRange(params)
-    .then((res) => {
-      console.log(res);
-      let newarr = [];
-      res.data.forEach((item) => {
-        let check = newarr.every((items) => {
-          return item.tgt !== items.tgt;
-        });
-        check ? newarr.push(item) : "";
-      });
-      data_range.arr = newarr;
+    // 问卷题目列表
+    APIgetSurveyTopic(params).then(res => {
+        console.log(res.data)
+        if (res.status === 200) {
+            topic_details.item = res.data
+        }
     })
-    .catch((err) => {
-      from_error.msg = err.data;
-    });
-  APIgetSurverRangeWhenHouse({sid:props.id,can_type:2}).then((res) => {
-    surverRangeWhenHouse.arr = res.data.units;
-    console.log(surverRangeWhenHouse.arr);
-  });
-};
+    console.log('topic_details', topic_details)
+}
+// 获取问卷范围
+const surverRangeWhenHouse = reactive({ arr: [] })
+const rangeFunc = () => {
+    let params = {
+        page: 1,
+        per_page: 100,
+        sid: props.id,
+        can_type: 2,
+        type_many: [2, 3, 4, 5]
+    }
+    APIgetSurveyRange(params)
+        .then(res => {
+            console.log(res)
+            let newarr = []
+            res.data.forEach(item => {
+                let check = newarr.every(items => {
+                    return item.tgt !== items.tgt
+                })
+                check ? newarr.push(item) : ''
+            })
+            data_range.arr = newarr
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+    APIgetSurverRangeWhenHouse({ sid: props.id, can_type: 2 }).then(res => {
+        surverRangeWhenHouse.arr = res.data.units
+        console.log(surverRangeWhenHouse.arr)
+    })
+}
 // 问卷范围点击小区事件
 const data_range_buildings = reactive({
-  arr: [],
-});
-const clickZone = (val) => {
-  showHouses.value = false;
-  data_range_buildings.arr = [];
-  APIgetBuildListHouse({ zone_id: val.tgt, sid: props.id, can_type: 2 }).then(
-    (res) => {
-      res.forEach((item) => {
-        if (item.can_exist) {
-          data_range_buildings.arr.push(item);
+    arr: []
+})
+const clickZone = val => {
+    showHouses.value = false
+    data_range_buildings.arr = []
+    APIgetBuildListHouse({ zone_id: val.tgt, sid: props.id, can_type: 2 }).then(
+        res => {
+            res.forEach(item => {
+                if (item.can_exist) {
+                    data_range_buildings.arr.push(item)
+                }
+            })
         }
-      });
-    }
-  );
-};
-//问卷范围点击楼栋事件
-const data_range_units = reactive({
-  arr: [],
-});
-import { APIgetUnitsListHouse } from "@/api/custom/custom";
-const clickBuildings = (val) => {
-  data_range_units.arr = [];
-  showHouses.value = false;
-  APIgetUnitsListHouse({
-    building_id: val.id,
-    sid: props.id,
-    can_type: 2,
-  }).then((res) => {
-    res.forEach((item) => {
-      if (item.can_exist) {
-        data_range_units.arr.push(item);
-      }
-    });
-  });
-};
-//点击单元取消显示房屋范围
-const closeShowHouse=()=>{
-    showHouses.value=false
+    )
 }
-//问卷范围点击单元事件
+// 问卷范围点击楼栋事件
+const data_range_units = reactive({
+    arr: []
+})
+import { APIgetUnitsListHouse } from '@/api/custom/custom'
+const clickBuildings = val => {
+    data_range_units.arr = []
+    showHouses.value = false
+    APIgetUnitsListHouse({
+        building_id: val.id,
+        sid: props.id,
+        can_type: 2
+    }).then(res => {
+        res.forEach(item => {
+            if (item.can_exist) {
+                data_range_units.arr.push(item)
+            }
+        })
+    })
+}
+// 点击单元取消显示房屋范围
+const closeShowHouse = () => {
+    showHouses.value = false
+}
+// 问卷范围点击单元事件
 const data_range_selected_houses = reactive({
-  arr: [],
-});
-const showHouses = ref(false);
+    arr: []
+})
+const showHouses = ref(false)
 const floors = reactive({
-  arr: [],
-});
-const clickUnits = (val) => {
+    arr: []
+})
+const clickUnits = val => {
     console.log(val)
-  APIgetHouseListSort({
-    houseable_id: val.id,
-    houseable_type: "units",
-    sid: props.id,
-    can_type: 2,
-  }).then((res) => {
-    showHouses.value = true;
-    floors.arr = res.floors;
-    floors.arr.forEach((item) => {
-      data_range_selected_houses.arr.push(...item.houses);
-    });
-    data_range_selected_houses.arr = data_range_selected_houses.arr.filter(
-      (item) => {
-        return item.can_exist == 1;
-      }
-    );
-    console.log(data_range_selected_houses.arr);
-    console.log(floors.arr);
-  });
-};
+    APIgetHouseListSort({
+        houseable_id: val.id,
+        houseable_type: 'units',
+        sid: props.id,
+        can_type: 2
+    }).then(res => {
+        showHouses.value = true
+        floors.arr = res.floors
+        floors.arr.forEach(item => {
+            data_range_selected_houses.arr.push(...item.houses)
+        })
+        data_range_selected_houses.arr = data_range_selected_houses.arr.filter(
+            item => {
+                return item.can_exist == 1
+            }
+        )
+        console.log(data_range_selected_houses.arr)
+        console.log(floors.arr)
+    })
+}
 // 获取问卷结果详情
 let answer_detail = reactive({
-  item: "",
-});
-const getAnswerDetail = (id) => {
-  switch_answer_detail.value = true;
-  // 根据问卷题目数量插入对象到answers中
-  // 先判断数组长度是否相同
-  if (addticket.answers.length != topic_details.item.length) {
-    addticket.answers = [];
-    for (let i = 0; i < topic_details.item.length; i++) {
-      // 判断是选择题还是主观题
-      if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
-        addticket.answers.push({ tid: "", opt: [] });
-      } else {
-        addticket.answers.push({ tid: "", content: "" });
-      }
+    item: ''
+})
+const getAnswerDetail = id => {
+    switch_answer_detail.value = true
+    // 根据问卷题目数量插入对象到answers中
+    // 先判断数组长度是否相同
+    if (addticket.answers.length != topic_details.item.length) {
+        addticket.answers = []
+        for (let i = 0; i < topic_details.item.length; i++) {
+            // 判断是选择题还是主观题
+            if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
+                addticket.answers.push({ tid: '', opt: [] })
+            } else {
+                addticket.answers.push({ tid: '', content: '' })
+            }
+        }
     }
-  }
-  // console.log(id)
-  APIgetSurveyAnswerDetail(id).then((res) => {
-    // console.log(res.data)
-    answer_detail.item = res.data;
-    console.log("answer_detail.item", answer_detail.item);
-  });
-};
+    // console.log(id)
+    APIgetSurveyAnswerDetail(id).then(res => {
+        // console.log(res.data)
+        answer_detail.item = res.data
+        console.log('answer_detail.item', answer_detail.item)
+    })
+}
 // 参与情况
 let participate = reactive({
-  on_line: 0,
-  off_line: 0,
-  notParticipateLength: 0,
-});
+    on_line: 0,
+    off_line: 0,
+    notParticipateLength: 0
+})
 // 获取问卷结果列表
-let answer_list = reactive([]);
-let answer_list_on = reactive([]);
-let answer_list_off = reactive([]);
+let answer_list = reactive([])
+let answer_list_on = reactive([])
+let answer_list_off = reactive([])
 const answerListFunc = () => {
-  let params = {
-    page: 1,
-    per_page: 15,
-  };
-  APIgetSurveyAnswerList(props.id, params).then((res) => {
-    // console.log(res.data)
-    // answer_list = res.data[0]
-    // 清空答卷列表（线上、线下、总列表）
-    answer_list.length = 0;
-    answer_list_on.length = 0;
-    answer_list_off.length = 0;
-    // 线上线下参与数量
-    participate.on_line = 0;
-    participate.off_line = 0;
-    res.data.forEach((element) => {
-      if (element.source === 1) {
-        participate.on_line++;
-        answer_list_on.push(element);
-      } else {
-        participate.off_line++;
-        answer_list_off.push(element);
-      }
-    });
-    answer_list.push(...answer_list_on, ...answer_list_off);
+    let params = {
+        page: 1,
+        per_page: 15
+    }
+    APIgetSurveyAnswerList(props.id, params).then(res => {
+        // console.log(res.data)
+        // answer_list = res.data[0]
+        // 清空答卷列表（线上、线下、总列表）
+        answer_list.length = 0
+        answer_list_on.length = 0
+        answer_list_off.length = 0
+        // 线上线下参与数量
+        participate.on_line = 0
+        participate.off_line = 0
+        res.data.forEach(element => {
+            if (element.source === 1) {
+                participate.on_line++
+                answer_list_on.push(element)
+            } else {
+                participate.off_line++
+                answer_list_off.push(element)
+            }
+        })
+        answer_list.push(...answer_list_on, ...answer_list_off)
     // console.log(answer_list)
-  });
-};
+    })
+}
 // 判断选项是否存在于答卷详情,取每个选项的id判断是否存在于答卷中，存在则显示该道选项内容
 const showTopic = (optid, answeropts) => {
-  let isShow = false;
-  answeropts.forEach((element) => {
-    console.log(optid, element.oid);
-    if (optid === element.oid) {
-      isShow = true;
-    }
-  });
-  return isShow;
-};
+    let isShow = false
+    answeropts.forEach(element => {
+        console.log(optid, element.oid)
+        if (optid === element.oid) {
+            isShow = true
+        }
+    })
+    return isShow
+}
 // 切换标签，显示不同参与情况的列表
-const handleClick = (tab) => {
-  if (tab === "线上参与") {
-    answer_list.length = 0;
-    answer_list.push(...answer_list_on);
-  } else if (tab === "线下参与") {
-    answer_list.length = 0;
-    answer_list.push(...answer_list_off);
-  } else if (tab === "全部") {
-    answer_list.length = 0;
-    answer_list.push(...answer_list_on, ...answer_list_off);
-  }
-};
+const handleClick = tab => {
+    if (tab === '线上参与') {
+        answer_list.length = 0
+        answer_list.push(...answer_list_on)
+    } else if (tab === '线下参与') {
+        answer_list.length = 0
+        answer_list.push(...answer_list_off)
+    } else if (tab === '全部') {
+        answer_list.length = 0
+        answer_list.push(...answer_list_on, ...answer_list_off)
+    }
+}
 // 打开对话框添加书面票
 const addAnswer = () => {
-  switch_addAnswer.value = true;
-  // 根据问卷题目数量插入对象到answers中
-  // console.log('length',topic_details.item.length)
-  // 先判断数组长度是否相同
-  if (addticket.answers.length != topic_details.item.length) {
-    addticket.answers = [];
-    for (let i = 0; i < topic_details.item.length; i++) {
-      // 判断是选择题还是主观题
-      if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
-        addticket.answers.push({ tid: "", opt: [] });
-      } else {
-        addticket.answers.push({ tid: "", content: "" });
-      }
+    switch_addAnswer.value = true
+    // 根据问卷题目数量插入对象到answers中
+    // console.log('length',topic_details.item.length)
+    // 先判断数组长度是否相同
+    if (addticket.answers.length != topic_details.item.length) {
+        addticket.answers = []
+        for (let i = 0; i < topic_details.item.length; i++) {
+            // 判断是选择题还是主观题
+            if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
+                addticket.answers.push({ tid: '', opt: [] })
+            } else {
+                addticket.answers.push({ tid: '', content: '' })
+            }
+        }
     }
-  }
-};
+}
 // 获取未参与答卷的房屋作为未参与用户的数量
-let notParticipateLength = 0;
-let notParticipateList = reactive([]);
+let notParticipateLength = 0
+let notParticipateList = reactive([])
 const notParticipate = () => {
-  notParticipateList.length = 0;
-  APIgetNotParticipate(props.id).then((res) => {
-    // console.log('aaa',res.data)
-    participate.notParticipateLength = res.data.length;
-    res.data.forEach((element) => {
-      notParticipateList.push(element);
-    });
+    notParticipateList.length = 0
+    APIgetNotParticipate(props.id).then(res => {
+        // console.log('aaa',res.data)
+        participate.notParticipateLength = res.data.length
+        res.data.forEach(element => {
+            notParticipateList.push(element)
+        })
     // console.log("notParticipateList",notParticipateList)
-  });
-};
+    })
+}
 // 添加问卷题目
 const addServeyTopic = () => {
-  // console.log(props.id)
-  str_title.value = "添加";
-  switch_examine.value = true;
-  // 清除问卷的信息
-  topic_examine.item = { sid: props.id, extra: null, sort: 5 };
-  opts.length = 0;
-};
+    // console.log(props.id)
+    str_title.value = '添加'
+    switch_examine.value = true
+    // 清除问卷的信息
+    topic_examine.item = { sid: props.id, extra: null, sort: 5 }
+    opts.length = 0
+}
 // 修改问卷题目
-const modifyServeyTopic = (val) => {
-  console.log(val.id);
-  str_title.value = "修改";
-  // 获取问卷题目详情
-  APIgetSurveyTopicDetail(val.id).then((res) => {
-    if (res.status == 200) {
-      topic_examine.item = res.data;
-      // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
-      topic_examine.item.type += "";
-      topic_examine.item.score_calc += "";
-      // 清除选项缓存数据
-      opts.length = 0;
-      // 将选项数据遍历插入数组对象
-      res.data.opts.forEach((element) => {
-        opts.push(element);
-      });
-      console.log(opts);
-      switch_examine.value = true;
-    }
-  });
-};
+const modifyServeyTopic = val => {
+    console.log(val.id)
+    str_title.value = '修改'
+    // 获取问卷题目详情
+    APIgetSurveyTopicDetail(val.id).then(res => {
+        if (res.status == 200) {
+            topic_examine.item = res.data
+            // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
+            topic_examine.item.type += ''
+            topic_examine.item.score_calc += ''
+            // 清除选项缓存数据
+            opts.length = 0
+            // 将选项数据遍历插入数组对象
+            res.data.opts.forEach(element => {
+                opts.push(element)
+            })
+            console.log(opts)
+            switch_examine.value = true
+        }
+    })
+}
 // 删除问卷题目
-const deleteFunc = (val) => {
-  APIdeleteSurveyTopic(val.id).then((res) => {
-    refreshFunc();
-    // ElMessage.success(res.statusText)
-    ElMessage.success("删除成功");
-  });
-};
+const deleteFunc = val => {
+    APIdeleteSurveyTopic(val.id).then(res => {
+        refreshFunc()
+        // ElMessage.success(res.statusText)
+        ElMessage.success('删除成功')
+    })
+}
 // 删除问卷范围
-const deleteRange = (val) => {
-  let range = { sid: val.sid, can_type: val.can_type, type: val.type, tgt: [] };
-  range.tgt.push(val.tgt);
-  APIdeleteSurveyRange(range).then((res) => {
-    rangeFunc();
-    ElMessage.success("删除成功");
-  });
-};
+const deleteRange = val => {
+    let range = { sid: val.sid, can_type: val.can_type, type: val.type, tgt: [] }
+    range.tgt.push(val.tgt)
+    APIdeleteSurveyRange(range).then(res => {
+        rangeFunc()
+        ElMessage.success('删除成功')
+    })
+}
 // 刷新
 const refreshFunc = () => {
-  topicsFunc();
-};
+    topicsFunc()
+}
 // 确定提交添加修改问卷题目
-const dialogExamineCloseFunc = (id) => {
-  topic_examine.item.opts = opts;
-  // console.log(topic_examine.item)
-  if (str_title.value == "添加") {
-    // console.log('qqqqqq',topic_examine.item)
-    APIaddSurveyTopic(topic_examine.item).then((res) => {
-      if (!res.code) {
-        refreshFunc();
-        // ElMessage.success(res.msg)
-        ElMessage.success("添加成功");
-        switch_examine.value = false;
-      }
-    });
-  } else {
-    id = topic_examine.item.id;
-    // console.log(id)
-    APImodifySurveyTopic(id, topic_examine.item).then((res) => {
-      if (res.status == 200) {
-        refreshFunc();
-        // ElMessage.success(res.msg)
-        ElMessage.success("修改成功");
-        switch_examine.value = false;
-      }
-    });
-  }
-};
+const dialogExamineCloseFunc = id => {
+    topic_examine.item.opts = opts
+    // console.log(topic_examine.item)
+    if (str_title.value == '添加') {
+        // console.log('qqqqqq',topic_examine.item)
+        APIaddSurveyTopic(topic_examine.item).then(res => {
+            if (!res.code) {
+                refreshFunc()
+                // ElMessage.success(res.msg)
+                ElMessage.success('添加成功')
+                switch_examine.value = false
+            }
+        })
+    } else {
+        id = topic_examine.item.id
+        // console.log(id)
+        APImodifySurveyTopic(id, topic_examine.item).then(res => {
+            if (res.status == 200) {
+                refreshFunc()
+                // ElMessage.success(res.msg)
+                ElMessage.success('修改成功')
+                switch_examine.value = false
+            }
+        })
+    }
+}
 
 // 确认提交添加书面票
 let addticket = reactive({
-  idcard: "",
-  answers: [
+    idcard: '',
+    answers: [
     // {
     //     // 'tid':'',
     //     // 'content':'',
     //     'opt':''
     // },
-  ],
-});
+    ]
+})
 // 点击选框事件
 const emitTickets = (tid, index) => {
-  // console.log('tid',tid,'opt',opt,'index',index)
-  addticket.answers[index].tid = tid;
-  // addticket.answers.opt = opt
-};
+    // console.log('tid',tid,'opt',opt,'index',index)
+    addticket.answers[index].tid = tid
+    // addticket.answers.opt = opt
+}
 const dialogAddSurveyAnswer = () => {
-  console.log("addticket", addticket);
-  APIaddSurveyAnswer(props.id, addticket)
-    .then((res) => {
-      // console.log(res)
-      switch_addAnswer.value = false;
-      ElMessage.success("问卷提交成功");
-    })
-    .catch((err) => {
-      from_error.msg = err.data;
-    });
-};
+    console.log('addticket', addticket)
+    APIaddSurveyAnswer(props.id, addticket)
+        .then(res => {
+            // console.log(res)
+            switch_addAnswer.value = false
+            ElMessage.success('问卷提交成功')
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+}
 
 // // 调用接口设置范围
 // const submit = () => {
@@ -1024,84 +1033,91 @@ const dialogAddSurveyAnswer = () => {
 //     })
 // }
 // 调用tree树形组件初始的请求
-APIgetChinaRegion().then((res) => {
-  tree_item.value.id = res.data[0].code;
-  tree_item.value.name = res.data[0].name;
-  tree_item.value.type = "region";
-  tree_item.value.next_type = "region";
-});
+APIgetChinaRegion().then(res => {
+    tree_item.value.id = res.data[0].code
+    tree_item.value.name = res.data[0].name
+    tree_item.value.type = 'region'
+    tree_item.value.next_type = 'region'
+})
 
 // 业主评论
-let comment_list = reactive([]);
+let comment_list = reactive([])
 const ownerComment = () => {
-  let params = {
-    tgtid: props.id,
-  };
-  APIgetCommentList(params)
-    .then((res) => {
-      // console.log(res)
-      comment_list.length = 0;
-      res.forEach((element) => {
-        comment_list.push(element);
-      });
-      console.log(comment_list);
-    })
-    .catch((err) => {
-      from_error.msg = err.data;
-    });
-};
+    let params = {
+        tgtid: props.id
+    }
+    APIgetCommentList(params)
+        .then(res => {
+            // console.log(res)
+            comment_list.length = 0
+            res.forEach(element => {
+                comment_list.push(element)
+            })
+            console.log(comment_list)
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+}
 // 修改评论
 const modify = reactive({
-  Id: "",
-});
+    Id: ''
+})
 const comment_details = reactive({
-  item: "",
-});
-const modifyComment = (id) => {
-  modify.Id = id;
-  switch_comment.value = true;
-  APIgetCommentDetails(id)
-    .then((res) => {
-      console.log(res);
-      comment_details.item = res;
-      comment_details.item.status += "";
-    })
-    .catch((err) => {
-      from_error.msg = err.data;
-    });
-};
+    item: ''
+})
+const modifyComment = id => {
+    modify.Id = id
+    switch_comment.value = true
+    APIgetCommentDetails(id)
+        .then(res => {
+            console.log(res)
+            comment_details.item = res
+            comment_details.item.status += ''
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+}
 // 评论详情
-const getCommentDetail = (id) => {
-  switch_comment_detail.value = true;
-  comment_details.length = 0;
-  APIgetCommentDetails(id)
-    .then((res) => {
-      console.log(res);
-      comment_details.item = res;
-    })
-    .catch((err) => {
-      from_error.msg = err.data;
-    });
-};
+const getCommentDetail = id => {
+    switch_comment_detail.value = true
+    comment_details.length = 0
+    APIgetCommentDetails(id)
+        .then(res => {
+            console.log(res)
+            comment_details.item = res
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+}
 // 提交评论修改
 const dialogModifyComment = (content, status) => {
-  console.log(modify.Id);
-  APIputComment(modify.Id, { content: content, status: status })
-    .then((res) => {
-      console.log(res);
-      ElMessage.success("修改成功");
-    })
-    .catch((err) => {
-      ElMessage.error("提交失败");
-    });
-  switch_comment.value = false;
-  ownerComment();
-};
+    console.log(modify.Id)
+    APIputComment(modify.Id, { content: content, status: status })
+        .then(res => {
+            console.log(res)
+            ElMessage.success('修改成功')
+        })
+        .catch(err => {
+            ElMessage.error('提交失败')
+        })
+    switch_comment.value = false
+    ownerComment()
+}
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {
+        status_all: []
+    }
+})
+getOpts(['announce_status_1', 'toushu_pub']).then(res => {
+    opts_all.obj = res
+})
 </script>
 <style lang="scss" scoped>
-.record {
-    margin-left: 80px;
-}
 .steps-column {
     display: flex;
     flex-direction: column;
@@ -1238,5 +1254,8 @@ const dialogModifyComment = (content, status) => {
             }
         }
     }
+}
+.w-100 {
+    width: 100px;
 }
 </style>

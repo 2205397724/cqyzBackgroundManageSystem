@@ -7,24 +7,24 @@
             </p>
             <div class="m-t-20 m-b-30">
                 <!-- <el-button-group> -->
-                <el-button type="primary" style="width: 150px;" @click="addActiviesFunc">
+                <el-button type="primary" :icon="Plus" size="large" style="width: 150px;" @click="addActiviesFunc">
                     添加关联活动
                 </el-button>
             </div>
-            <div>
+            <div style="margin-left: -40px;">
                 <el-timeline>
-                    <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" type="primary">
+                    <el-timeline-item v-for="(item,index) in activity_tab.arr" :key="index" :timestamp="item.docable.created_at" placement="top" :type="index == 0 ? 'primary':''">
                         <!-- <el-popconfirm
                             title="确定要删除当前项么?" cancel-button-type="info"
                             @confirm="deleteActivityFunc(item)"
                         > -->
                         <!-- <template #reference> -->
                         <!-- <div class="serve-box"> -->
-                            <div class="delete-service" @click="deleteActivityFunc_1(item)">
-                                <el-icon :size="20" color="#F56C6C">
-                                    <el-icon-circle-close />
-                                </el-icon>
-                            </div>
+                        <div class="delete-service" @click="deleteActivityFunc_1(item)">
+                            <el-icon :size="20" color="#F56C6C">
+                                <el-icon-circle-close />
+                            </el-icon>
+                        </div>
                         <!-- </div> -->
                         <div v-if="item.tgt_type == 'survey'" style="width: 97%;height: 133px;position: absolute;" @click="activitydetailsFunc(item)" />
                         <AnnounceDetails v-if="item.tgt_type == 'announce'" :id="item.docable.id" :name="activeName_1" />
@@ -58,40 +58,48 @@
             width="70%"
         >
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">标题名称：</div>
-                            <el-input v-model="data_search.obj.title" class="search_tb" placeholder="标题名称" clearable />
-                        </div>
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                标题名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-input v-model="data_search.obj.title" class="search_tb" placeholder="标题名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">起始时间：</div>
-                            <el-date-picker
-                                v-model="data_search.obj.created_at"
-                                type="date"
-                                value-format="YYYY-MM-DD"
-                                placeholder="起始时间"
-                                class="search_tb"
-                                :default-value="new Date()"
-                            />
-                        </div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                起始时间：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-date-picker
+                                    v-model="data_search.obj.created_at"
+                                    type="date"
+                                    value-format="YYYY-MM-DD"
+                                    placeholder="起始时间"
+                                    class="search_tb"
+                                    :default-value="new Date()"
+                                />
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :sm="12" :md="12" :lg="12">
-                        <div class="flx">
-                            <div class="w_30%">
-                                <el-button class="m-l-20" type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            </div>
-                            <div v-show="switch_search == true" class="w_70% m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc_1">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ total }}条。
-                                </div>
-                            </div>
-                        </div>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button
+                            v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading"
+                            @click="refreshFunc_1"
+                        >
+                            重置
+                        </el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
@@ -103,7 +111,7 @@
                                 v-loading="loading_tab"
                                 :data="data_announce.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                class="tab_1 pointer"
                                 @row-click="rowClickFunc"
                             >
                                 <el-table-column label="公示主题">
@@ -111,22 +119,17 @@
                                         <span>{{ scope.row.title }} </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="公示id" width="240">
-                                    <template #default="scope">
-                                        <span>{{ scope.row.id }}</span>
-                                    </template>
-                                </el-table-column>
                                 <el-table-column label="公示分类">
                                     <template #default="scope">
                                         <span>{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="公示对象类型">
+                                <el-table-column label="公示区域类型">
                                     <template #default="scope">
                                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="发布人">
+                                <el-table-column label="发布单位">
                                     <template #default="scope">
                                         <span>{{ getNameFunc(userData.arr,scope.row.groupid) }} </span>
                                     </template>
@@ -135,13 +138,13 @@
                                     <template #default="scope">
                                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                                         <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                                     </template>
                                 </el-table-column>
-
-                                <el-table-column />
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
@@ -151,7 +154,7 @@
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                class="tab_1 pointer"
                                 @row-click="rowClickFunc"
                             >
                                 <el-table-column prop="name" label="标题名称" />
@@ -172,16 +175,15 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round effect="dark">筹备阶段</el-tag>
                                         <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
-                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
-                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
-                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
-                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
-                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger">已结束</el-tag>
                                     </template>
                                 </el-table-column>
-                                <el-table-column />
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
@@ -191,7 +193,7 @@
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                class="tab_1 pointer"
                                 @row-click="rowClickFunc"
                             >
                                 <el-table-column prop="name" label="标题名称" />
@@ -212,16 +214,15 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round effect="dark">筹备阶段</el-tag>
                                         <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
-                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
-                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
-                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
-                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
-                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger">已结束</el-tag>
                                     </template>
                                 </el-table-column>
-                                <el-table-column />
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
@@ -231,7 +232,7 @@
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                class="tab_1 pointer"
                                 @row-click="rowClickFunc"
                             >
                                 <el-table-column prop="name" label="标题名称" />
@@ -252,16 +253,15 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round effect="dark">筹备阶段</el-tag>
                                         <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
-                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
-                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
-                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
-                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
-                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger">已结束</el-tag>
                                     </template>
                                 </el-table-column>
-                                <el-table-column />
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
@@ -271,7 +271,7 @@
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;"
+                                class="tab_1 pointer"
                                 @row-click="rowClickFunc"
                             >
                                 <el-table-column prop="name" label="标题名称" />
@@ -292,16 +292,15 @@
                                 </el-table-column>
                                 <el-table-column label="状态" width="150">
                                     <template #default="scope">
-                                        <el-tag v-if="scope.row.status == '1'" size="small" round>筹备阶段</el-tag>
+                                        <el-tag v-if="scope.row.status == '1'" size="small" round effect="dark">筹备阶段</el-tag>
                                         <el-tag v-if="scope.row.status == '2'" size="small" type="primary" round effect="dark">待审</el-tag>
-                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round effect="dark">未开始</el-tag>
-                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round effect="dark">进行中</el-tag>
-                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round effect="dark">暂停</el-tag>
-                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round effect="dark">终止</el-tag>
-                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger" round effect="dark">已结束</el-tag>
+                                        <el-tag v-if="scope.row.status == '3'" size="small" type="info" round>未开始</el-tag>
+                                        <el-tag v-if="scope.row.status == '4'" size="small" type="success" round>进行中</el-tag>
+                                        <el-tag v-if="scope.row.status == '5'" size="small" type="warning" round>暂停</el-tag>
+                                        <el-tag v-if="scope.row.status == '6'" size="small" type="warning" round>终止</el-tag>
+                                        <el-tag v-if="scope.row.status == '7'" size="small" type="danger">已结束</el-tag>
                                     </template>
                                 </el-table-column>
-                                <el-table-column />
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
@@ -373,6 +372,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetActivityEventDetails,
@@ -660,6 +660,7 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
     z-index: 99;
     cursor: pointer;
     background-color: #fff;
+    border-radius: 15px;
 }
 .noDeal {
     margin-left: 6px;
@@ -669,5 +670,8 @@ getOpts(['activity_type', 'activityStatus', 'announce_status', 'article_lv', 'gr
     font-size: 18px;
     color: #00c701;
     padding: 0 10px;
+}
+.el-timeline :deep .el-timeline-item__content {
+    cursor: pointer;
 }
 </style>

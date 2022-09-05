@@ -5,7 +5,7 @@
                 <el-row :gutter="20" class="bottom-btn-box-1">
                     <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                         <el-button class="m-b-20" type="primary" :icon="Plus" size="large" @click="addResidentialFunc()">
-                            添加问卷
+                            添加表决
                         </el-button>
                     </el-col>
                 </el-row>
@@ -62,7 +62,7 @@
             </div>
             <el-radio-group v-model="activeName" size="large" class="m-b-20" @change="handleClick">
                 <el-radio-button label="全部" />>
-                <el-radio-button label="筹备阶段" />>
+                <el-radio-button label="筹备中" />>
                 <el-radio-button label="待审" />>
                 <el-radio-button label="未开始" />>
                 <el-radio-button label="进行中" />>
@@ -70,17 +70,17 @@
                 <el-radio-button label="终止" />>
                 <el-radio-button label="已结束" />>
             </el-radio-group>
-            <!-- 问卷列表 -->
+            <!-- 选举列表 -->
             <div>
                 <el-table
                     v-loading="loading_tab" :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
                 >
-                    <el-table-column prop="name" label="问卷标题" />
+                    <el-table-column prop="name" label="表决标题" />
                     <el-table-column prop="author_cc_name" label="所在区域" />
                     <el-table-column prop="ticketall" label="总票数" align="center" />
-                    <el-table-column label="问卷状态" align="center">
+                    <el-table-column label="表决状态" align="center">
                         <template #default="scope">
                             <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
                             <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
@@ -359,6 +359,7 @@ const checkChangeFunc = val => {
 // 详情
 const detailsFunc = val => {
     data_details.item = ''
+    console.log(val.id)
     APIgetSurveyDetails(val.id).then(res => {
         if (res.status === 200) {
             data_details.item = res.data
@@ -367,8 +368,8 @@ const detailsFunc = val => {
     })
     // switch_details.value = true
 }
-// Tabs标签页点击切换事件,切换显示不同状态的问卷
-// 切换标签后，根据label的值进行if判断，切换不同状态问卷
+// Tabs标签页点击切换事件,切换显示不同状态的表决
+// 切换标签后，根据label的值进行if判断，切换不同状态表决
 const handleClick = tab => {
     let params = {
         page: page.value,
@@ -376,7 +377,7 @@ const handleClick = tab => {
         status: ''
     }
     // tab未label的值
-    if (tab === '筹备阶段') {
+    if (tab === '筹备中') {
         params.status = 1
     } else if (tab === '待审') {
         params.status = 2
@@ -419,7 +420,7 @@ const dialogExamineCloseFunc = (formEl, id) => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
-            from_examine.item.type = 1
+            from_examine.item.type = 3
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APImodifySurvey(id, from_examine.item).then(res => {
@@ -457,7 +458,7 @@ const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value,
-        type: 1
+        type: 3
     }
     console.log(window.location.hash)
     for (let key in data_search.obj) {
@@ -480,7 +481,7 @@ const getTabListFunc = () => {
         from_error.msg = err.data
     })
 }
-// 添加问卷
+// 添加表决
 const addResidentialFunc = () => {
     getChinaName()
     from_error.msg = {}
@@ -498,7 +499,7 @@ const deleteFunc = val => {
         from_error.msg = err.data
     })
 }
-// 修改问卷
+// 修改表决
 const modifySurvey = val => {
     getChinaName()
     from_error.msg = {}
