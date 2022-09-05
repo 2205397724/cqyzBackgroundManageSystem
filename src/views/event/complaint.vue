@@ -171,7 +171,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination
+                <el-pagination
                 v-model:current-page="data_1.page"
                 style="float: right;"
                 layout="prev,next,jumper,"
@@ -584,10 +584,11 @@ import {
 const data_2 = reactive({
     arr: []
 })
+
 const data_1 = reactive({
     search: {},
     switch_search: false,
-    page: 1,
+    page: Number(sessionStorage.getItem('currentPage'))||1,
     total: 50,
     per_page: 15,
     list: [],
@@ -602,13 +603,6 @@ const data_1 = reactive({
 })
 const loading_tab = ref(true)
 const getFuncVoteList = () => {
-    let key = 1
-
-    console.log(sessionStorage.getItem('currentPage2'))
-    key = sessionStorage.getItem('currentPage2')
-    if (key && key != 1) {
-        data_1.page = key
-    }
     let data = {
         page: data_1.page,
         per_page: data_1.per_page,
@@ -972,9 +966,8 @@ const StatusFunk = val => {
 const refreshFunc = () => {
     data_1.search = {}
     data_1.switch_search = false
-    // data_1.page = 1
     index.value = 9
-    sessionStorage.removeItem('currentPage2')
+    // sessionStorage.removeItem('currentPage')
     getFuncVoteList()
 
 }
@@ -985,18 +978,19 @@ const refreshFunc = () => {
 //     console.log(sessionStorage.getItem('currentPage1'))
 // }
 watch(() => data_1.page, new_val => {
+    sessionStorage.setItem('currentPage',new_val)
     getFuncVoteList()
 }, { immediate: true, deep: true })
-watchEffect(() => {
-    console.log(data_1.page)
+// watchEffect(() => {
+//     console.log(data_1.page)
 
-    sessionStorage.setItem('currentPage2', data_1.page)
-    console.log(sessionStorage.getItem('currentPage2'))
+//     sessionStorage.setItem('currentPage2', data_1.page)
+//     console.log(sessionStorage.getItem('currentPage2'))
 
-})
-onUnmounted(()=>{
-    sessionStorage.removeItem('currentPage2')
-})
+// })
+// onUnmounted(()=>{
+//     sessionStorage.removeItem('currentPage2')
+// })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import {
