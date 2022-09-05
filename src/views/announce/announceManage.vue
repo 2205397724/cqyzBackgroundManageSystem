@@ -137,7 +137,6 @@
                         <BerComment :id="scope.row.id" />
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page"
@@ -305,8 +304,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            <div class="m-b-10">
-                                <el-button type="primary" plain @click="addServiceFunc">添加附件</el-button>
+                            <div class="m-b-10" style="margin-left: 52px;">
+                                <el-button type="success" plain @click="addServiceFunc">添加附件</el-button>
                             </div>
                             <div v-for="(item,i) in from_examine.item.affix" :key="i" class="serve-box">
                                 <el-row :gutter="10">
@@ -326,6 +325,37 @@
                                     </el-col>
                                 </el-row>
                                 <div class="delete-service" @click="deleteServiceFunc(i)">
+                                    <el-icon :size="20" color="#F56C6C">
+                                        <el-icon-circle-close />
+                                    </el-icon>
+                                </div>
+                            </div>
+                        </el-col>
+
+                        <el-col :md="24" :lg="24">
+                            <div class="m-b-10" style="margin-left: 52px;">
+                                <el-button type="primary" plain @click="addServiceFunc_1">添加自定义字段</el-button>
+                            </div>
+                            <div v-for="(item, i) in from_examine.item.custom" :key="i" class="serve-box">
+                                <el-row :gutter="10" class="p-t-20">
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item
+                                            label="字段名"
+                                            :error="from_error.msg && from_error.msg['extra.' + i + '.lab'] ? from_error.msg['extra.' + i + '.lab'][0] : ''"
+                                        >
+                                            <el-input v-model="item.label" placeholder="" />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item
+                                            label="字段内容"
+                                            :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
+                                        >
+                                            <el-input v-model="item.val" placeholder="" />
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <div class="delete-service" @click="deleteServiceFunc_1(i)">
                                     <el-icon :size="20" color="#F56C6C">
                                         <el-icon-circle-close />
                                     </el-icon>
@@ -711,6 +741,18 @@ const deleteFunc = val => {
         ElMessage.success('删除成功')
     })
 }
+// 删除
+const deleteServiceFunc_1 = index => {
+    from_examine.item.custom.splice(index, 1)
+}
+// 添加
+const addServiceFunc_1 = index => {
+    let data = {
+        'label': '',
+        'val': ''
+    }
+    from_examine.item.custom.push(data)
+}
 // 添加
 const addResidentialFunc = () => {
     from_pass.obj.reply = ''
@@ -719,26 +761,7 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        // 'title': '气总造毛',
-        // 'totype': 97,
-        // 'toval': 'incididunt',
-        // 'start_at': '2022-07-23 12:23:34',
-        // 'end_at': '2022-07-25 12:23:34',
-        // 'groupid': '45gdfgt687gvfdt54fgrt45f',
-        // 'groupcc': 'irure',
-        // 'grouplv': 45,
-        // 'lv': 0,
-        // 'affix': [
-        //     {
-        //         'title': '生口史',
-        //         'file': 'ut dolore in'
-        //     }
-        // ],
-        // 'custom': [],
-        // 'content': 'minim et pariatur proident non',
-        // 'taskid': '78',
-        // 'relid': '46',
-        // 'reltype': 0
+        custom: []
     }
     switch_examine.value = true
     // passAudit()

@@ -6,7 +6,7 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="50%"
+            width="60%"
             :append-to-body="true"
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -22,6 +22,10 @@
                         <div class="item">
                             <div class="left">公示分类</div>
                             <div class="right">{{ cateName }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="left">公示文号</div>
+                            <div class="right">{{ data_details.item.proof }}</div>
                         </div>
                         <div class="item">
                             <div class="left">公示区域</div>
@@ -61,6 +65,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div
+                            v-for="(item, i) in data_details.item.custom" v-if="data_details.item.custom" :key="i"
+                            class="item"
+                        >
+                            <div class="left">{{ item.label }}</div>
+                            <div class="right">{{ item.val }}</div>
+                        </div>
                         <div class="item">
                             <div class="left">公示内容</div>
                             <div class="right" v-html="data_details.item.content" />
@@ -89,19 +100,15 @@
                                     <el-card>
                                         <div class="details-box">
                                             <div class="item">
-                                                <div class="left">ID</div>
-                                                <div class="right">{{ item.id }}</div>
+                                                <div class="left">公示</div>
+                                                <div class="right">{{ item.auditable?.title }}</div>
                                             </div>
                                             <div class="item">
-                                                <div class="left">公示ID</div>
-                                                <div class="right">{{ item.tgt_id }}</div>
+                                                <div class="left">处理人</div>
+                                                <div class="right">{{ item.auditor?.name? item.auditor?.name:item.auditor?.nickname?item.auditor?.nickname:item.auditor?.username }}</div>
                                             </div>
-                                            <div class="item">
-                                                <div class="left">发布对象</div>
-                                                <div class="right">{{ getNameFunc(userData.arr,item.group_id) }}</div>
-                                            </div>
-                                            <div v-if="article_tab.arr.reply" class="item">
-                                                <div class="left">答复</div>
+                                            <div v-if="item.reply" class="item">
+                                                <div class="left">回复内容</div>
                                                 <div class="right">{{ item.reply }}</div>
                                             </div>
                                             <div class="item">
@@ -111,14 +118,6 @@
                                                     <el-tag v-if="item.status == 20" type="success" size="small">审核通过</el-tag>
                                                     <el-tag v-if="item.status == 30" type="danger" size="small">审核失败</el-tag>
                                                 </div>
-                                            </div>
-                                            <div v-if="item.remark" class="item">
-                                                <div class="left">备注</div>
-                                                <div class="right">{{ item.remark }}</div>
-                                            </div>
-                                            <div class="item">
-                                                <div class="left">修改时间</div>
-                                                <div class="right">{{ item.updated_at }}</div>
                                             </div>
                                         </div>
                                     </el-card>
@@ -189,7 +188,6 @@ const detailsFunc = () => {
         // AudioContext.value = data_details.item.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
         console.log(data_details.item)
         getListArchiveFunc()
-        getUserGroupListFunc()
     })
 }
 import {
@@ -207,32 +205,6 @@ const getListArchiveFunc = () => {
         article_tab.arr = res
     })
 }
-// 获取类别名称
-const getNameFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-}
-const userData = reactive({
-    arr: []
-})
-import {
-    APIgetGroupList
-} from '@/api/custom/custom.js'
-const getUserGroupListFunc = () => {
-    APIgetGroupList().then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            userData.arr = res.data
-        }
-    })
-}
-// defineExpose({
-//     getAnnounceDetailsFunc
-// })
-
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({

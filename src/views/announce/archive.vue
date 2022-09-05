@@ -13,25 +13,25 @@
                 <el-row>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 名称：
                             </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                            <el-input v-model="data_search.name" class="search_tb" placeholder="名称" />
-                        </el-col>
-                            </el-row>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.name" class="search_tb" placeholder="名称" />
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -200,7 +200,6 @@
                         </el-popconfirm>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page2"
@@ -222,7 +221,6 @@
             <el-form
                 ref="ruleFormRef"
                 :model="from_add.obj"
-
             >
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -299,7 +297,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus,Loading } from '@element-plus/icons-vue'
+import { Search, Plus, Loading } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -501,13 +499,13 @@ const err_msg = reactive({
 const from_add = reactive({
     obj: {}
 })
-const V=ref(null)
+const V = ref(null)
 const addArchiveFunc = () => {
 
     switch_add.value = true
     from_add.obj = {}
 }
-const dialogClosed=()=>{
+const dialogClosed = () => {
     V.value.clearFunc()
 }
 const addPostFunc = () => {
@@ -540,7 +538,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['announce_status','article_lv']).then(res => {
+getOpts(['announce_status', 'article_lv']).then(res => {
     opts_all.obj = res
 })
 </script>

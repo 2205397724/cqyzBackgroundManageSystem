@@ -3,7 +3,7 @@
         <page-main style="overflow: hidden;">
             <div class="m-b-20">
                 <el-button
-                     type="primary" :icon="Plus" size="large"
+                    type="primary" :icon="Plus" size="large"
                     @click="addResidentialFunc"
                 >
                     制定计划
@@ -13,80 +13,80 @@
                 <el-row>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    发布人用户组：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                任务派发单位：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
                                 <div class="searchUserGroup">
                                     <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
                                 </div>
                             </el-col>
-                            </el-row>
+                        </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    任务接收对象等级：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
-                            <el-select v-model="data_search.obj.tolv" class="search_tb_1" placeholder="指定单位" clearable>
-                                <el-option v-for="item in opts_all.obj.article_lv_1" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                            </el-row>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                        <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    公示分类：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                计划发布分类：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
                                 <CascaderAnnounce v-model="data_search.obj.cid" />
                             </el-col>
-                            </el-row>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                是否启用：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-select v-model="data_search.obj.isactive" class="search_tb_1" placeholder="是否启用" clearable>
+                                    <el-option v-for="item in opts_all.obj.flow_active" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-row v-if="btnClick==true">
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    是否启用：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
-                            <el-select v-model="data_search.obj.isactive" class="search_tb" placeholder="是否启用" clearable>
-                                <el-option v-for="(item) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                            </el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                是否启用：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-select v-model="data_search.obj.isactive" class="search_tb" placeholder="是否启用" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.tasksd_use" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    下次执行时间：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
-                            <el-date-picker
-                                v-model="data_search.obj.runat"
-                                type="date"
-                                value-format="YYYY-MM-DD"
-                                placeholder="下次执行时间"
-                                class="search_tb"
-                                :default-value="new Date()"
-                            />
-                        </el-col>
-                            </el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                下次执行时间：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14">
+                                <el-date-picker
+                                    v-model="data_search.obj.runat"
+                                    type="date"
+                                    value-format="YYYY-MM-DD"
+                                    placeholder="下次执行时间"
+                                    class="search_tb"
+                                    :default-value="new Date()"
+                                />
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <div class="searchPlay" @click="btnClickFunc">
                         <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
@@ -106,32 +106,33 @@
                         <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
                     </template>
                 </el-table-column> -->
-                <el-table-column label="任务派发单位" width="150">
+                <el-table-column label="任务派发单位">
                     <template #default="scope">
-                        <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span>
+                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span> -->
+                        <span class="m-l-10">{{ scope.row.from }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="接收单位" width="150">
+                <el-table-column label="接收单位等级" width="100">
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv ) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示分类" width="150">
+                <el-table-column label="计划发布分类" width="100">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row?.cate?.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="计划发布周期">
+                <el-table-column label="计划发布周期" width="100">
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.article_rate,scope.row.per ) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="下次执行时间" width="120">
+                <el-table-column label="下次执行时间">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row.runat }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否启用" width="90">
+                <el-table-column label="是否启用" width="80">
                     <template #default="scope">
                         <el-switch
                             v-model="scope.row.isactive"
@@ -175,7 +176,6 @@
                         </el-popconfirm>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page"
@@ -214,7 +214,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
-                            label="任务接收单位"
+                            label="接收单位等级"
                             label-width="100px"
                             :error="from_error.msg&&from_error.msg.tolv?from_error.msg.tolv[0]:''"
                         >
@@ -296,12 +296,9 @@
         >
             <div class="details-box">
                 <div class="item">
-                    <div class="left">任务ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
                     <div class="left">任务派发单位</div>
-                    <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div>
+                    <!-- <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div> -->
+                    <div class="right">{{ data_details.item.from }}</div>
                 </div>
                 <div class="item">
                     <div class="left">任务接收单位等级</div>
@@ -312,8 +309,9 @@
                     <div class="right">{{ getOptVal(opts_all.obj.article_rate,data_details.item.per ) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">公示分类</div>
-                    <div class="right">{{ data_details.item?.cate?.name }}</div>
+                    <div class="left">计划发布分类</div>
+                    <!-- <div class="right">{{ data_details.item?.cate?.name }}</div> -->
+                    <div class="right">{{ data_details.item.cid }}</div>
                 </div>
                 <div class="item">
                     <div class="left">下次执行时间</div>
@@ -325,6 +323,10 @@
                         <el-tag v-if=" data_details.item.isactive == 1" type="success" effect="dark" round class="btnNone">启用</el-tag>
                         <el-tag v-if="data_details.item.isactive == 0" type="danger" effect="dark" round class="btnNone">不启用</el-tag>
                     </div>
+                </div>
+                <div class="item">
+                    <div class="left">任务ID</div>
+                    <div class="right">{{ data_details.item.id }}</div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -360,7 +362,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Loading,Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { Loading, Search, Plus, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 import { useUserOutsideStore } from '@/store/modules/user'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
@@ -640,7 +642,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['article_lv_1', 'tasksd_use', 'article_rate']).then(res => {
+getOpts(['article_lv_1', 'tasksd_use', 'article_rate', 'flow_active']).then(res => {
     opts_all.obj = res
 })
 

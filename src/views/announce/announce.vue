@@ -13,35 +13,35 @@
                 <el-row>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 名称：
                             </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                            <el-input v-model="data_search.obj.name" class="search_tb" placeholder="名称" clearable />
-                        </el-col>
-                            </el-row>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    公示分类：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                公示分类：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <CascaderAnnounce v-model="data_search.obj.cid" />
                             </el-col>
-                            </el-row>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
             </div>
             <el-table
                 v-loading="loading_tab"
@@ -54,17 +54,17 @@
                         <span class="m-l-10">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="id" label="ID" width="250">
-                    <template #default="scope">
-                        <span class="m-l-10">{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
+
                 <el-table-column prop="cid" label="公示分类" width="250">
                     <template #default="scope">
                         <span class="m-l-10">{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
                     </template>
                 </el-table-column>
-
+                <el-table-column prop="id" label="ID" width="250">
+                    <template #default="scope">
+                        <span class="m-l-10">{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
                 <el-table-column />
                 <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
@@ -92,7 +92,6 @@
                         </el-popconfirm>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page"
@@ -218,20 +217,8 @@
             <div class="details-box">
                 <el-scrollbar height="300px">
                     <div class="item">
-                        <div class="left">模板ID</div>
-                        <div class="right">{{ data_details.item.id }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">公示分类</div>
-                        <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">创建时间</div>
-                        <div class="right">{{ data_details.item.created_at }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">更新时间</div>
-                        <div class="right">{{ data_details.item.updated_at }}</div>
+                        <div class="left">模板名称</div>
+                        <div class="right">{{ data_details.item.name }}</div>
                     </div>
                     <div class="item">
                         <div class="left">模板字段</div>
@@ -245,6 +232,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">公示分类</div>
+                        <div class="right">{{ getNameFunc(data_1.arr,data_details.item.cid) }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">模板ID</div>
+                        <div class="right">{{ data_details.item.id }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">创建时间</div>
+                        <div class="right">{{ data_details.item.created_at }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">更新时间</div>
+                        <div class="right">{{ data_details.item.updated_at }}</div>
                     </div>
                 </el-scrollbar>
             </div>
@@ -273,7 +276,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import {Loading, Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -515,22 +518,6 @@ watch(page, () => {
 <style lang="scss" scoped>
 @import "@/assets/styles/resources/variables.scss";
 @include pageStyle;
-.serve-box {
-    border: 1px solid #eee;
-    box-sizing: border-box;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    position: relative;
-    .delete-service {
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 999999;
-        cursor: pointer;
-        background-color: #fff;
-    }
-}
 ::v-deep .el-cascader {
     width: 100% !important;
 }

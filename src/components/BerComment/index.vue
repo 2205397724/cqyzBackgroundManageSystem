@@ -22,14 +22,15 @@
                     @change="switchFnUse"
                 />
                 <div style="margin-left: 20px;display: inline-block;">
-                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(false)">
+                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(true)">
                         <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="item.key" size="large">{{ item.val }}</el-radio>
                     </el-radio-group>
                 </div>
             </div>
             <div>
                 <el-button
-                    class="m-b-20" type="primary" :icon="Plus"
+                    class="m-b-20 m-t-5" type="primary" :icon="Plus"
+                    :disabled="popup1.using ? false:true"
                     @click="()=>{
                         popup2.form = {};
                         popup2.error = {};
@@ -246,6 +247,7 @@ import {
     APIdeleteCommentconfig
 } from '@/api/custom/custom.js'
 const switchFnUse = val => {
+    console.log(val)
     if (val) {
         APIpostCommentconfig(id.value, { scoreper: popup1.scoreper }).then(res => {
             // ElMessage.success('已开启')
@@ -256,15 +258,16 @@ const switchFnUse = val => {
         // ElMessage.success('已开启')
     })
 }
-const switchFnStatus = () => {
-    APIgetCommentconfig(id.value).then(res => {
-        popup1.using = false
-        if (res) {
-            popup1.using = true
-            popup1.scoreper = res.scoreper
-        }
-    })
-}
+// const switchFnStatus = () => {
+//     APIgetCommentconfig(id.value).then(res => {
+//         console.log(res)
+//         popup1.using = false
+//         if (res) {
+//             popup1.using = true
+//             popup1.scoreper = res.scoreper
+//         }
+//     })
+// }
 const data_1 = reactive({
     list: [],
     page: 1,
@@ -362,7 +365,7 @@ const popup3FnDetails = id => {
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 const refreshFn = () => {
     popup1.switch = true
-    switchFnStatus()
+    // switchFnStatus()
     data_1.page = 1
     data1FnGetList()
 }

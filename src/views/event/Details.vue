@@ -1008,7 +1008,7 @@ const popup1 = reactive({
     scoreper: 0
 })
 import {
-    APIgetCommentconfig,
+    // APIgetCommentconfig,
     APIpostCommentconfig,
     APIdeleteCommentconfig,
     APIpostComment
