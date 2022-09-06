@@ -205,7 +205,8 @@
                                             class="region_box_item"
                                             @click="closeShowHouse"
                                         >
-                                            {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
+                                            <!-- {{ item.tgt_obj.pos_name+item.tgt_obj.name }} -->
+                                            {{ item.tgt_obj.name }}
                                             <el-popconfirm
                                                 title="确定要删除当前项么?"
                                                 cancel-button-type="info"
@@ -573,7 +574,9 @@ const tree_item = ref({
     next_type: 'region',
     type: 'region'
 })
-const checkFunc = val => {}
+const checkFunc = val => {
+
+}
 const checkChangeFunc = val => {
     console.log(val)
 }
@@ -960,6 +963,7 @@ const deleteRange = val => {
 // 刷新
 const refreshFunc = () => {
     topicsFunc()
+    rangeFunc()
 }
 // 确定提交添加修改问卷题目
 const dialogExamineCloseFunc = id => {

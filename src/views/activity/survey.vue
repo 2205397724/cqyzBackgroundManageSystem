@@ -229,7 +229,7 @@
                 </template>
             </el-dialog>
             <!-- 详情 -->
-            <el-dialog v-model="switch_details" :title="data_details.item.name" width="95%" destroy-on-close="true">
+            <el-dialog v-model="switch_details" :title="data_details.item.name" width="90%" destroy-on-close="true">
                 <Detail :id="data_details.item.id" />
                 <template #footer>
                     <el-button type="warning" plain @click="switch_details = false">取消</el-button>

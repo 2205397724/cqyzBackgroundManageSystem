@@ -16,14 +16,14 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 row-key="id"
                 :tree-props="{ children: 'children' }"
-                style="width: 100%;min-height: 300px;"
+                class="tab_1"
             >
-                <el-table-column prop="name" label="分类名称" width="180">
+                <el-table-column prop="name" label="分类名称">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="level" label="级别" width="140">
+                <el-table-column prop="level" label="级别">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.level }} </span>
                     </template>
@@ -38,7 +38,7 @@
                         <span style="margin-left: 10px;">{{ scope.row.pid }} </span>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="sort" label="排序" width="180" sortable>
+                <el-table-column prop="sort" label="排序" sortable>
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.sort }} </span>
                     </template>

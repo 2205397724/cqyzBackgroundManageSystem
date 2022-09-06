@@ -27,17 +27,24 @@
                             <div class="left">公示文号</div>
                             <div class="right">{{ data_details.item.proof }}</div>
                         </div>
-                        <div class="item">
+                        <div v-if="data_details.item.toval_name" class="item">
                             <div class="left">公示区域</div>
-                            <div class="right">{{ data_details.item.toval }}</div>
+                            <div class="right">{{ data_details.item.toval_name }}</div>
                         </div>
-                        <div class="item">
+                        <div v-if="data_details.item.totype" class="item">
                             <div class="left">公示区域类型</div>
                             <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
                         </div>
                         <div class="item">
                             <div class="left">发布单位</div>
                             <div class="right">{{ data_details.item.authorgroup?.name }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="left">发布人</div>
+                            <div class="right">
+                                <span>{{ data_details.item.uinfo?.name?data_details.item.uinfo?.name:data_details.item.uinfo?.nickname? data_details.item.uinfo?.nickname:data_details.item.uinfo?.username }}</span>
+                                <span class="m-l-20 size-sm">{{ data_details.item.uinfo?.mobile }}</span>
+                            </div>
                         </div>
                         <div class="item">
                             <div class="left">状态</div>

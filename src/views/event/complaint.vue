@@ -171,7 +171,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-                <el-pagination
+            <el-pagination
                 v-model:current-page="data_1.page"
                 style="float: right;"
                 layout="prev,next,jumper,"
@@ -588,7 +588,7 @@ const data_2 = reactive({
 const data_1 = reactive({
     search: {},
     switch_search: false,
-    page: Number(sessionStorage.getItem('currentPage'))||1,
+    page: Number(sessionStorage.getItem('currentPage')) || 1,
     total: 50,
     per_page: 15,
     list: [],
@@ -967,30 +967,23 @@ const refreshFunc = () => {
     data_1.search = {}
     data_1.switch_search = false
     index.value = 9
-    // sessionStorage.removeItem('currentPage')
+    console.log('成功')
     getFuncVoteList()
 
 }
-// const changePageFunc = val => {
-//     console.log(val)
-//     sessionStorage.removeItem('currentPage1')
-//     sessionStorage.setItem('currentPage1', val)
-//     console.log(sessionStorage.getItem('currentPage1'))
-// }
 watch(() => data_1.page, new_val => {
-    sessionStorage.setItem('currentPage',new_val)
+    sessionStorage.setItem('currentPage', new_val)
     getFuncVoteList()
 }, { immediate: true, deep: true })
-// watchEffect(() => {
-//     console.log(data_1.page)
-
-//     sessionStorage.setItem('currentPage2', data_1.page)
-//     console.log(sessionStorage.getItem('currentPage2'))
-
-// })
-// onUnmounted(()=>{
-//     sessionStorage.removeItem('currentPage2')
-// })
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import {
