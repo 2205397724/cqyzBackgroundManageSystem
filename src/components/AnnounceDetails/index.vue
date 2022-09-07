@@ -1,6 +1,9 @@
 <template>
     <div>
-        <span v-if="props.name == '公式'" @click="detailsFunc">详情</span>
+        <!-- <span v-if="props.name == '公式'" @click="detailsFunc">详情</span> -->
+        <el-tag v-if="props.name == '公示'" type="success" size="small" class="btnNone" @click="detailsFunc">
+            已完成
+        </el-tag>
         <div v-if="props.name == '活动'" style="width: 97%;height: 133px;position: absolute;" @click="detailsFunc" />
         <!-- <div style="width: 97%;height: 133px;background-color: #ccc;position: absolute;" @click="detailsFunc" /> -->
         <el-dialog
@@ -10,90 +13,97 @@
             :append-to-body="true"
         >
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="公示信息" name="1">
-                    <!-- <el-scrollbar height="400px"> -->
-                    <div class="details-box">
-                        <div class="details-tit-sm">基础信息</div>
-                        <div class="item">
-                            <div class="left">公示主题</div>
-                            <div class="right">{{ data_details.item.title }}</div>
-                        </div>
-
-                        <div class="item">
-                            <div class="left">公示分类</div>
-                            <div class="right">{{ cateName }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">公示文号</div>
-                            <div class="right">{{ data_details.item.proof }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">公示区域</div>
-                            <div class="right">{{ data_details.item.toval }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">公示区域类型</div>
-                            <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">发布单位</div>
-                            <div class="right">{{ data_details.item.authorgroup?.name }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">状态</div>
-                            <div class="right">
-                                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                                <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                <el-tab-pane label="公示信息" name="1" height="400px">
+                    <el-scrollbar height="500px">
+                        <div class="details-box">
+                            <div class="details-tit-sm">基础信息</div>
+                            <div class="item">
+                                <div class="left">公示主题</div>
+                                <div class="right">{{ data_details.item.title }}</div>
                             </div>
-                        </div>
-                        <!-- <div class="item">
+
+                            <div class="item">
+                                <div class="left">公示分类</div>
+                                <div class="right">{{ cateName }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示文号</div>
+                                <div class="right">{{ data_details.item.proof }}</div>
+                            </div>
+                            <div v-if="data_details.item.toval_name" class="item">
+                                <div class="left">公示区域</div>
+                                <div class="right">{{ data_details.item.toval_name }}</div>
+                            </div>
+                            <div v-if="data_details.item.totype" class="item">
+                                <div class="left">公示区域类型</div>
+                                <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.totype) }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">发布单位</div>
+                                <div class="right">{{ data_details.item.authorgroup?.name }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">发布人</div>
+                                <div class="right">
+                                    <span>{{ data_details.item.uinfo?.name?data_details.item.uinfo?.name:data_details.item.uinfo?.nickname? data_details.item.uinfo?.nickname:data_details.item.uinfo?.username }}</span>
+                                    <span class="m-l-20 size-sm">{{ data_details.item.uinfo?.mobile }}</span>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="left">状态</div>
+                                <div class="right">
+                                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                    <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                                </div>
+                            </div>
+                            <!-- <div class="item">
                                 <div class="left">附件名称</div>
                                 <div class="right">{{ data_details.item.affix.title }}</div>
                             </div> -->
-                        <div class="item">
-                            <div class="left">附件</div>
-                            <div class="right">
-                                <div v-for="(item,i) in data_details.item.affix" :key="i" class="inline-block m-r-10">
-                                    <el-tag type="success">
-                                        <el-link type="success" class="link" :href="data_details.item.affixs" target="_blank">{{ item.title }}</el-link>
-                                    </el-tag>
+                            <div class="item">
+                                <div class="left">附件</div>
+                                <div class="right">
+                                    <div v-for="(item,i) in data_details.item.affix" :key="i" class="inline-block m-r-10">
+                                        <el-tag type="success">
+                                            <el-link type="success" class="link" :href="data_details.item.affixs" target="_blank">{{ item.title }}</el-link>
+                                        </el-tag>
+                                    </div>
                                 </div>
                             </div>
+                            <div
+                                v-for="(item, i) in data_details.item.custom" v-if="data_details.item.custom" :key="i"
+                                class="item"
+                            >
+                                <div class="left">{{ item.label }}</div>
+                                <div class="right">{{ item.val }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">公示内容</div>
+                                <div class="right" v-html="data_details.item.content" />
+                            </div>
+                            <div class="details-tit-sm">其他信息</div>
+                            <div class="item">
+                                <div class="left">公示ID</div>
+                                <div class="right">{{ data_details.item.id }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">开始时间</div>
+                                <div class="right">{{ data_details.item.start_at }}</div>
+                            </div>
+                            <div class="item">
+                                <div class="left">结束时间</div>
+                                <div class="right">{{ data_details.item.end_at }}</div>
+                            </div>
                         </div>
-                        <div
-                            v-for="(item, i) in data_details.item.custom" v-if="data_details.item.custom" :key="i"
-                            class="item"
-                        >
-                            <div class="left">{{ item.label }}</div>
-                            <div class="right">{{ item.val }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">公示内容</div>
-                            <div class="right" v-html="data_details.item.content" />
-                        </div>
-                        <div class="details-tit-sm">其他信息</div>
-                        <div class="item">
-                            <div class="left">公示ID</div>
-                            <div class="right">{{ data_details.item.id }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">开始时间</div>
-                            <div class="right">{{ data_details.item.start_at }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">结束时间</div>
-                            <div class="right">{{ data_details.item.end_at }}</div>
-                        </div>
-                    </div>
-                <!-- </el-scrollbar> -->
+                    </el-scrollbar>
                 </el-tab-pane>
                 <el-tab-pane label="审核记录" name="2">
-                    <el-scrollbar :height="article_tab.arr.length >= 2 ? '500px': '300px'">
+                    <el-scrollbar height="500px">
                         <div>
                             <el-timeline v-for="(item,index) in article_tab.arr" :key="index">
                                 <el-timeline-item :timestamp="item.created_at" placement="top">
@@ -126,7 +136,7 @@
                         </div>
                         <div v-show="article_tab.arr.length <= 0" class="size-lg">此公式无审核信息</div>
                     </el-scrollbar>
-                <!-- </el-tab-pane>
+                    <!-- </el-tab-pane>
                 <el-tab-pane label="附件" name="3">
                     <el-scrollbar height="400px">
                         <div class="details-box">

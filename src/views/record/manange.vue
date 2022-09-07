@@ -1,9 +1,8 @@
 <template>
     <div>
         <page-main>
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn"
                     type="primary"
                     :icon="Plus"
                     size="large"
@@ -12,48 +11,48 @@
                     添加备案
                 </el-button>
             </div>
-            <div class="search m-t-10">
+            <div class="search">
                 <el-row>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="searchKey">
-                        <div>关键字</div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                备案名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <el-input v-model="data_1.search.title" class="search_tb" placeholder="名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="m-r-10">
-                        <div style="min-width: 150px;">
-                            <el-input
-                                v-model="data_1.search.title"
-                                placeholder="名称"
-                                clearable
-                            />
-                        </div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                所在区域：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <div style="min-width: 150px;">
+                                    <Cascaders v-model="data_1.search.china_code" />
+                                </div>
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <div style="min-width: 150px;">
-                            <Cascaders v-model="data_1.search.china_code" />
-                        </div>
-                    </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="m-l-10">
-                        <el-select
-                            v-model="data_1.search.status"
-                            clearable
-                            placeholder="状态"
-                            style="min-width: 150px;"
-                        >
-                            <el-option
-                                v-for="item in opts_all.obj.record_status"
-                                :key="item.key"
-                                :label="item.val"
-                                :value="item.key"
-                            />
-                        </el-select>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
+                                    <el-option v-for="(item,i) in opts_all.obj.information_status" :key="i" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <br>
                 <el-row>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
                         <el-button
-                            class="m-l-20"
-                            type="primary"
-                            :icon="Search"
+                            type="primary" :icon="Search"
                             @click="
                                 () => {
                                     data_1.switch_search = true;
@@ -64,20 +63,10 @@
                         >
                             筛选
                         </el-button>
-                    </el-col>
-                    <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                        <div v-show="data_1.switch_search" style="margin-bottom: 10px;">
-                            <div style="width: 260px;">
-                                <el-button
-                                    style="margin-right: 10px;"
-                                    type="primary"
-                                    @click="refreshFunc()"
-                                >
-                                    重置
-                                </el-button>
-                                *搜索到相关结果共{{ data_1.total }}条。
-                            </div>
-                        </div>
+                        <el-button v-show="data_1.switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="data_1.switch_search == true" class="size-base">
+                            *搜索到相关结果共{{ data_1.total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
@@ -96,27 +85,22 @@
                                                                                                                                                                 box-sizing: border-box;
 "
             >
-                <el-table-column label="备案名称" width="220">
+                <el-table-column label="备案名称">
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="类别" width="180px">
+                <el-table-column label="类别">
                     <template #default="scope">
                         <span>{{ find_right_typeId_to_name(scope.row.type) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="备案主体" width="180px">
+                <el-table-column label="备案主体">
                     <template #default="scope">
                         <span>{{ scope_row_group_id_chinese(scope.row.group_id) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="备案时间" width="150">
-                    <template #default="scope">
-                        <span>{{ scope.row.startat }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="状态" width="90">
+                <el-table-column label="状态" width="100">
                     <template #default="scope">
                         <el-switch
                             v-model="scope.row.status"
@@ -125,11 +109,19 @@
                             inactive-text="未审"
                             :active-value="1"
                             :inactive-value="0"
+                            style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
                             @change="(val) => switchRecordFun(val, scope.row)"
                         />
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="300">
+                <el-table-column label="备案时间" width="150">
+                    <template #default="scope">
+                        <span>{{ scope.row.startat }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="220">
                     <template #default="scope">
                         <el-button
                             type="primary"
@@ -175,7 +167,7 @@
                         </el-popconfirm>
                     </template>
                 </el-table-column>
-                <el-table-column />
+                <!-- <el-table-column /> -->
             </el-table>
             <!--   <el-pagination
                 v-model:current-page="data_1.page"
@@ -259,6 +251,9 @@
                                     inactive-text="未审"
                                     :active-value="1"
                                     :inactive-value="0"
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
                                     @change="put_record_switch"
                                 />
                                 <el-switch
@@ -269,6 +264,9 @@
                                     inactive-text="未审"
                                     :active-value="1"
                                     :inactive-value="0"
+                                    style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
                                 />
                             </el-form-item>
                         </el-col>
@@ -747,7 +745,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['record_status']).then(res => {
+getOpts(['information_status']).then(res => {
     opts_all.obj = res
 })
 refreshPage()

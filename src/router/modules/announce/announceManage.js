@@ -22,6 +22,19 @@ export default {
             breadcrumb: false,
             activeMenu: '/announce_announceManage',
             auth: ['announce.announceManage.announceManage', '*']
-        }
+        },
+        children: [{
+            path: 'details',
+            name: 'announceDetails',
+            sidebar: false,
+            breadcrumb: false,
+            component: () =>
+                import ('@/views/announce/Details.vue'),
+            meta: {
+                title: '详情',
+                sidebar: false,
+                activeMenu: '/announce_announceManage'
+            }
+        }]
     }]
 }

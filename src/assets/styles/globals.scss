@@ -572,6 +572,9 @@ textarea {
 .hidden {
     overflow: hidden;
 }
+.pointer {
+    cursor: pointer;
+}
 .serve-box {
     border: 1px solid #eee;
     box-sizing: border-box;
@@ -588,4 +591,16 @@ textarea {
         background-color: #fff;
         border-radius: 15px;
     }
+}
+.btnfix {
+    width: 48px;
+    height: 24px;
+    font-size: 12px;
+}
+.details {
+    text-decoration: inherit;
+    font-size: 12px;
+    margin: 0 10px;
+    width: 48px;
+    height: 24px;
 }

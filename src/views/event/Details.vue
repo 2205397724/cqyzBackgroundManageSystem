@@ -5,15 +5,15 @@
             <p class="size-sm sno">
                 受理编号：{{ dataForm.item.sno }}
                 <!-- <el-button round type="success" class="m-10 btn1" size="small">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }}</el-button> -->
-                <el-tag v-show="dataForm.item.status == 0" class="m-t-10 btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 1" class="m-t-10 btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 2" class="m-t-10 btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 3" class="m-t-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 5" class="m-t-10 btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 6" class="m-t-10 btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 7" class="m-t-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 8" class="m-t-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
-                <el-tag v-show="dataForm.item.status == 99" class="m-t-10 btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 0" class="m-t-10 m-l-10 btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 1" class="m-t-10 m-l-10 btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 2" class="m-t-10 m-l-10 btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 3" class="m-t-10 m-l-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 5" class="m-t-10 m-l-10 btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 6" class="m-t-10 m-l-10 btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 7" class="m-t-10 m-l-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 8" class="m-t-10 m-l-10 btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
+                <el-tag v-show="dataForm.item.status == 99" class="m-t-10 m-l-10 btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }} </el-tag>
             </p>
             <div v-if=" dataForm.item.status != 99" class="btn2">
                 <!-- <el-button-group> -->

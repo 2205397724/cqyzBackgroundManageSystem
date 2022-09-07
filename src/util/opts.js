@@ -149,7 +149,7 @@ const opts = {
     }],
     toushu_pub: [{
         key: 0,
-        val: '不公开'
+        val: '关闭'
     }, {
         key: 1,
         val: '公开'
@@ -217,6 +217,25 @@ const opts = {
     }, {
         key: 2,
         val: '待审'
+    }, {
+        key: 3,
+        val: '未开始'
+    }, {
+        key: 4,
+        val: '进行中'
+    }, {
+        key: 5,
+        val: '暂停'
+    }, {
+        key: 6,
+        val: '终止'
+    }, {
+        key: 7,
+        val: '已结束'
+    }],
+    announce_status_1: [{
+        key: 1,
+        val: '筹备中'
     }, {
         key: 3,
         val: '未开始'
@@ -725,18 +744,18 @@ const opts = {
         key: 1,
         val: 'survey',
         leb: 'survey'
-            // }, {
-            //     key: 2,
-            //     val: 'survey',
-            //     leb: 'jointly'
-            // }, {
-            //     key: 3,
-            //     val: 'survey',
-            //     leb: 'vote'
-            // }, {
-            //     key: 4,
-            //     val: 'survey',
-            //     leb: 'elect'
+        // }, {
+        //     key: 2,
+        //     val: 'survey',
+        //     leb: 'jointly'
+        // }, {
+        //     key: 3,
+        //     val: 'survey',
+        //     leb: 'vote'
+        // }, {
+        //     key: 4,
+        //     val: 'survey',
+        //     leb: 'elect'
     }],
     activity_type: [{
         key: 1,
@@ -808,9 +827,9 @@ const opts = {
 
 export async function getOpts(arr) {
     const res = await api2.post('/optitem', {
-            lab: arr
-        })
-        // console.log(res)
+        lab: arr
+    })
+    // console.log(res)
     const opt_up = {}
     for (let key in res) {
         opt_up[key] = res[key]

@@ -101,28 +101,22 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <!-- <el-table-column label="指定范围" width="160">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.fromchina.name }} </span>
-                    </template>
-                </el-table-column> -->
                 <el-table-column label="任务派发单位">
                     <template #default="scope">
-                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span> -->
-                        <span class="m-l-10">{{ scope.row.from }}</span>
+                        <span class="m-l-10">{{ scope.row.fromgroup?.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="接收单位等级" width="100">
+                <el-table-column label="接收单位等级" width="120">
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv ) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="计划发布分类" width="100">
+                <el-table-column label="计划发布分类" width="120">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row?.cate?.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="计划发布周期" width="100">
+                <el-table-column label="计划发布周期" width="120">
                     <template #default="scope">
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.article_rate,scope.row.per ) }} </span>
                     </template>
@@ -298,7 +292,7 @@
                 <div class="item">
                     <div class="left">任务派发单位</div>
                     <!-- <div class="right">{{ getNameFunc(userData.arr,data_details.item.from) }}</div> -->
-                    <div class="right">{{ data_details.item.from }}</div>
+                    <div class="right">{{ data_details.item.fromgroup?.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">任务接收单位等级</div>
@@ -311,7 +305,7 @@
                 <div class="item">
                     <div class="left">计划发布分类</div>
                     <!-- <div class="right">{{ data_details.item?.cate?.name }}</div> -->
-                    <div class="right">{{ data_details.item.cid }}</div>
+                    <div class="right">{{ data_details.item.cate?.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">下次执行时间</div>
@@ -574,7 +568,6 @@ const addResidentialFunc = () => {
     switch_examine.value = true
 }
 // 修改
-const userId = ref('')
 const userGroupName = ref('')
 const modifyResidentialFunc = val => {
     // V.value.rowClickFunc()
@@ -582,9 +575,8 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改计划'
     APIgetTasksdDetails(val.id).then(res => {
         from_examine.item = res
-        userId.value = from_examine.item.from
         switch_examine.value = true
-        userGroupName.value = getNameFunc(userData.arr, from_examine.item.from)
+        userGroupName.value = from_examine.item.fromgroup?.name
     })
 }
 // dialog关闭回调
@@ -595,44 +587,11 @@ const modifyResidentialFunc = val => {
 //     }
 // }
 // 选择用户组name
-const userData = reactive({
-    arr: []
-})
 const checkNameFunc = val => {
     console.log(val)
     data_search.obj.from = val.id
     from_examine.item.from = val.id
 }
-import {
-    APIgetGroupList
-} from '@/api/custom/custom.js'
-APIgetGroupList().then(res => {
-    if (res.status == 200) {
-        console.log(res)
-        loading_tab.value = false
-        userData.arr = res.data
-    }
-})
-const getNameFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-}
-// 获取类别名称
-let data_1 = reactive({
-    arr: []
-})
-// import {
-//     APIgetTypeList
-// } from '@/api/custom/custom.js'
-// // 获取公式列表api请求
-// const main_type = ref('announce')
-// APIgetTypeList(main_type.value).then(res => {
-//     console.log(res)
-//     data_1.arr = res
-// })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()

@@ -10,67 +10,67 @@ const { isLoading } = useNProgress()
 
 // 固定路由
 const constantRoutes = [{
-            path: '/login',
-            name: 'login',
-            component: () =>
-                import ('@/views/login.vue'),
-            meta: {
-                title: '登录'
+    path: '/login',
+    name: 'login',
+    component: () =>
+        import ('@/views/login.vue'),
+    meta: {
+        title: '登录'
+    }
+},
+{
+    path: '/',
+    component: () =>
+        import ('@/layout/index.vue'),
+    redirect: '/dashboard',
+    children: [{
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () =>
+            import ('@/views/index.vue'),
+        meta: {
+            title: () => {
+                const settingsOutsideStore = useSettingsOutsideStore()
+                return settingsOutsideStore.dashboard.title
             }
-        },
-        {
-            path: '/',
-            component: () =>
-                import ('@/layout/index.vue'),
-            redirect: '/dashboard',
-            children: [{
-                    path: 'dashboard',
-                    name: 'dashboard',
-                    component: () =>
-                        import ('@/views/index.vue'),
-                    meta: {
-                        title: () => {
-                            const settingsOutsideStore = useSettingsOutsideStore()
-                            return settingsOutsideStore.dashboard.title
-                        }
-                    }
-                },
-                {
-                    path: 'personal/setting',
-                    name: 'personalSetting',
-                    component: () =>
-                        import ('@/views/personal/setting.vue'),
-                    meta: {
-                        title: '个人设置',
-                        cache: 'personalEditPassword',
-                        breadcrumbNeste: [
-                            { title: '个人设置', path: '/personal/setting' }
-                        ]
-                    }
-                },
-                {
-                    path: 'personal/edit/password',
-                    name: 'personalEditPassword',
-                    component: () =>
-                        import ('@/views/personal/edit.password.vue'),
-                    meta: {
-                        title: '修改密码',
-                        breadcrumbNeste: [
-                            { title: '修改密码', path: '/personal/edit/password' }
-                        ]
-                    }
-                },
-                {
-                    path: 'reload',
-                    name: 'reload',
-                    component: () =>
-                        import ('@/views/reload.vue')
-                }
+        }
+    },
+    {
+        path: 'personal/setting',
+        name: 'personalSetting',
+        component: () =>
+            import ('@/views/personal/setting.vue'),
+        meta: {
+            title: '个人设置',
+            cache: 'personalEditPassword',
+            breadcrumbNeste: [
+                { title: '个人设置', path: '/personal/setting' }
             ]
         }
+    },
+    {
+        path: 'personal/edit/password',
+        name: 'personalEditPassword',
+        component: () =>
+            import ('@/views/personal/edit.password.vue'),
+        meta: {
+            title: '修改密码',
+            breadcrumbNeste: [
+                { title: '修改密码', path: '/personal/edit/password' }
+            ]
+        }
+    },
+    {
+        path: 'reload',
+        name: 'reload',
+        component: () =>
+            import ('@/views/reload.vue')
+    }
     ]
-    // 民事
-    // 活动
+}
+]
+// 民事
+// 活动
 import activityJointly from './modules/activity/jointly.js'
 import activityEvent from './modules/activity/event.js'
 import activitySurvey from './modules/activity/survey.js'
@@ -86,13 +86,13 @@ import announcelTasksd from './modules/announce/tasksd.js'
 // 管理
 import superviseHome from './modules/supervise/home.js'
 import superviseWorkbench from './modules/supervise/workbench.js'
-// 统计
-import statisticsComplaint from './modules/statistics/complaint.js'
-import statisticsEnterprise from './modules/statistics/enterprise.js'
-import statisticsEquipment from './modules/statistics/equipment.js'
-import statisticsEvent from './modules/statistics/event.js'
-import statisticsHouse from './modules/statistics/house.js'
-import statisticsRepair from './modules/statistics/repair.js'
+// // 统计
+// import statisticsComplaint from './modules/statistics/complaint.js'
+// import statisticsEnterprise from './modules/statistics/enterprise.js'
+// import statisticsEquipment from './modules/statistics/equipment.js'
+// import statisticsEvent from './modules/statistics/event.js'
+// import statisticsHouse from './modules/statistics/house.js'
+// import statisticsRepair from './modules/statistics/repair.js'
 // 房源
 import houseHousingManagement from './modules/house/housing_management.js'
 import houseEnterprise from './modules/house/enterprise.js'
@@ -126,161 +126,161 @@ import setupOption from './modules/setup/option.js'
 import setupType from './modules/setup/type.js'
 import setupAPP from './modules/setup/APP.js'
 // 申请
-import joinPlatform from './modules/join/platform.js'
-import joinResidential from './modules/join/residential.js'
+// import joinPlatform from './modules/join/platform.js'
+// import joinResidential from './modules/join/residential.js'
 // 备案
 import recordManage from './modules/record/manange.js'
 import recordType from './modules/record/type'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [{
-        meta: {
-            title: '管理',
-            icon: 'manage',
-            auth: ['supervise', '*']
-        },
-        children: [
-            superviseHome,
-            superviseWorkbench
-        ]
+    meta: {
+        title: '管理',
+        icon: 'manage',
+        auth: ['supervise', '*']
     },
-    // {
-    //     meta: {
-    //         title: '统计',
-    //         icon: 'data',
-    //         auth: ['statistics', '*']
-    //     },
-    //     children: [
-    //         statisticsHouse,
-    //         statisticsEvent,
-    //         statisticsComplaint,
-    //         statisticsRepair,
-    //         statisticsEnterprise,
-    //         statisticsEquipment
-    //     ]
-    // },
-    {
-        meta: {
-            title: '小区',
-            icon: 'house',
-            auth: ['house', '*']
-        },
-        children: [
-            houseResidential,
-            houseHousingManagement,
-            houseBind,
-            houseProperty,
-            houseEnterprise,
-            houseEnterpriseApply,
-            eventDevice,
-            eventDeviceArchive,
-            eventDeviceRepair
-        ]
+    children: [
+        superviseHome,
+        superviseWorkbench
+    ]
+},
+// {
+//     meta: {
+//         title: '统计',
+//         icon: 'data',
+//         auth: ['statistics', '*']
+//     },
+//     children: [
+//         statisticsHouse,
+//         statisticsEvent,
+//         statisticsComplaint,
+//         statisticsRepair,
+//         statisticsEnterprise,
+//         statisticsEquipment
+//     ]
+// },
+{
+    meta: {
+        title: '小区',
+        icon: 'house',
+        auth: ['house', '*']
     },
-    {
-        meta: {
-            title: '公示',
-            icon: 'announce',
-            auth: ['announce', '*']
-        },
-        children: [
-            announceManage,
-            announceArchive,
-            announceCategory,
-            announceAnnounce,
-            announceTask,
-            announcelTasksd
-        ]
+    children: [
+        houseResidential,
+        houseHousingManagement,
+        houseBind,
+        houseProperty,
+        houseEnterprise,
+        houseEnterpriseApply,
+        eventDevice,
+        eventDeviceArchive,
+        eventDeviceRepair
+    ]
+},
+{
+    meta: {
+        title: '公示',
+        icon: 'announce',
+        auth: ['announce', '*']
     },
-    {
-        meta: {
-            title: '议事',
-            icon: 'survey',
-            auth: ['activity', '*']
-        },
-        children: [
-            activityEvent,
-            activityJointly,
-            activityVote,
-            activityElect,
-            activitySurvey
-        ]
+    children: [
+        announceManage,
+        announceArchive,
+        announceCategory,
+        announceAnnounce,
+        announceTask,
+        announcelTasksd
+    ]
+},
+{
+    meta: {
+        title: '议事',
+        icon: 'survey',
+        auth: ['activity', '*']
     },
-    {
-        meta: {
-            title: '民生',
-            icon: 'service',
-            auth: ['event', '*']
-        },
-        children: [
-            eventEvents,
-            eventFlow,
-            eventVote,
-            eventEntry,
-            eventComplaint,
-            eventIllegal,
-            eventRepair
-        ]
+    children: [
+        activityEvent,
+        activitySurvey,
+        activityElect,
+        activityVote,
+        activityJointly
+    ]
+},
+{
+    meta: {
+        title: '民生',
+        icon: 'service',
+        auth: ['event', '*']
     },
-    {
-        meta: {
-            title: '备案',
-            icon: 'filing',
-            auth: ['record', '*']
-        },
-        children: [
-            recordManage,
-            recordType
-        ]
+    children: [
+        eventEvents,
+        eventFlow,
+        eventVote,
+        eventEntry,
+        eventComplaint,
+        eventIllegal,
+        eventRepair
+    ]
+},
+{
+    meta: {
+        title: '备案',
+        icon: 'filing',
+        auth: ['record', '*']
     },
-    {
-        meta: {
-            title: '资讯',
-            icon: 'news',
-            auth: [' information', '*']
-        },
-        children: [
-            informationManage,
-            informationCategory
-        ]
+    children: [
+        recordManage,
+        recordType
+    ]
+},
+{
+    meta: {
+        title: '资讯',
+        icon: 'news',
+        auth: [' information', '*']
     },
-    {
-        meta: {
-            title: '用户',
-            icon: 'users',
-            auth: ['users', '*']
-        },
-        children: [
-            userRegister,
-            userGroup,
-            userRoles,
-            userPerms
-        ]
+    children: [
+        informationManage,
+        informationCategory
+    ]
+},
+{
+    meta: {
+        title: '用户',
+        icon: 'users',
+        auth: ['users', '*']
     },
-    // {
-    //     meta: {
-    //         title: '申请',
-    //         icon: 'apply',
-    //         auth: ['join', '*']
-    //     },
-    //     children: [
-    //         joinPlatform,
-    //         joinResidential
-    //     ]
-    // },
-    {
-        meta: {
-            title: '设置',
-            icon: 'setting',
-            auth: ['setup', '*']
-        },
-        children: [
-            setupRegion,
-            setupFile,
-            setupOption,
-            setupType,
-            setupAPP
-        ]
-    }
+    children: [
+        userRegister,
+        userGroup,
+        userRoles,
+        userPerms
+    ]
+},
+// {
+//     meta: {
+//         title: '申请',
+//         icon: 'apply',
+//         auth: ['join', '*']
+//     },
+//     children: [
+//         joinPlatform,
+//         joinResidential
+//     ]
+// },
+{
+    meta: {
+        title: '设置',
+        icon: 'setting',
+        auth: ['setup', '*']
+    },
+    children: [
+        setupRegion,
+        setupFile,
+        setupOption,
+        setupType,
+        setupAPP
+    ]
+}
 ]
 
 const lastRoute = {
@@ -302,7 +302,7 @@ router.beforeEach(async(to, from, next) => {
     const userOutsideStore = useUserOutsideStore()
     const menuOutsideStore = useMenuOutsideStore()
     settingsOutsideStore.app.enableProgress && (isLoading.value = true)
-        // 是否已登录
+    // 是否已登录
     if (userOutsideStore.isLogin) {
         // 是否已根据权限动态生成并挂载路由
         if (menuOutsideStore.isGenerate) {
@@ -348,13 +348,13 @@ router.beforeEach(async(to, from, next) => {
             accessRoutes.push(lastRoute)
             let removeRoutes = []
             accessRoutes.forEach(route => {
-                    if (!/^(https?:|mailto:|tel:)/.test(route.path)) {
-                        removeRoutes.push(router.addRoute(route))
-                    }
-                })
-                // 记录的 accessRoutes 路由数据，在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
+                if (!/^(https?:|mailto:|tel:)/.test(route.path)) {
+                    removeRoutes.push(router.addRoute(route))
+                }
+            })
+            // 记录的 accessRoutes 路由数据，在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
             menuOutsideStore.setCurrentRemoveRoutes(removeRoutes)
-            next({...to, replace: true })
+            next({ ...to, replace: true })
         }
     } else {
         if (to.name != 'login') {
@@ -374,9 +374,9 @@ router.afterEach((to, from) => {
     const settingsOutsideStore = useSettingsOutsideStore()
     const keepAliveOutsideStore = useKeepAliveOutsideStore()
     settingsOutsideStore.app.enableProgress && (isLoading.value = false)
-        // 设置页面 title
+    // 设置页面 title
     to.meta.title && settingsOutsideStore.setTitle(typeof to.meta.title === 'function' ? to.meta.title() : to.meta.title)
-        // 判断当前页面是否开启缓存，如果开启，则将当前页面的 name 信息存入 keep-alive 全局状态
+    // 判断当前页面是否开启缓存，如果开启，则将当前页面的 name 信息存入 keep-alive 全局状态
     if (to.meta.cache) {
         let componentName = to.matched[to.matched.length - 1].components.default.name
         if (componentName) {
@@ -388,7 +388,7 @@ router.afterEach((to, from) => {
     // 判断离开页面是否开启缓存，如果开启，则根据缓存规则判断是否需要清空 keep-alive 全局状态里离开页面的 name 信息
     if (from.meta.cache) {
         let componentName = from.matched[from.matched.length - 1].components.default.name
-            // 通过 meta.cache 判断针对哪些页面进行缓存
+        // 通过 meta.cache 判断针对哪些页面进行缓存
         switch (typeof from.meta.cache) {
             case 'string':
                 if (from.meta.cache != to.name) {

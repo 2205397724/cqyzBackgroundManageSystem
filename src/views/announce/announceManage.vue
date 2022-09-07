@@ -75,11 +75,11 @@
                         <span>{{ scope.row.cate.name }}</span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="公示区域" width="220">
+                <el-table-column label="公示区域">
                     <template #default="scope">
-                        <span>{{ scope.row.toval }} </span>
+                        <span>{{ scope.row.toval_name }} </span>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
                 <el-table-column label="公示区域类型">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
@@ -101,28 +101,28 @@
                         <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="280">
+                <el-table-column fixed="right" label="操作" width="220">
                     <template #default="scope">
                         <el-button
-                            type="primary" size="small"
+                            type="primary" class="btnfix"
                             @click="modifyResidentialFunc(scope.row)"
                         >
                             修改
                         </el-button>
-                        <el-button
+                        <!-- <el-button
                             size="small"
                         >
                             <AnnounceDetails :id="scope.row.id" :name="announceName" />
-                        </el-button>
-                        <!-- <span style="display: inline-block; width: 30px;"> -->
-                        <!-- <AnnounceDetails :id=""></AnnounceDetails> -->
-                        <!-- </span> -->
+                        </el-button> -->
+                        <el-link :underline="false" type="primary">
+                            <router-link class="el-button details" :to="{name: 'announceDetails',query:{ id : scope.row.id }}">详情</router-link>
+                        </el-link>
                         <el-popconfirm
                             title="确定要删除当前项么?" cancel-button-type="info"
                             @confirm="deleteFunc(scope.row)"
                         >
                             <template #reference>
-                                <el-button type="danger" size="small">
+                                <el-button type="danger" class="btnfix">
                                     删除
                                 </el-button>
                             </template>
@@ -134,7 +134,7 @@
                         >
                             审核
                         </el-button> -->
-                        <BerComment :id="scope.row.id" />
+                        <!-- <BerComment :id="scope.row.id" /> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -535,9 +535,6 @@ let switch_search = ref(false)
 let data_search = reactive({
     obj: {}
 })
-const announceName = ref('公式')
-// 详情
-let switch_details = ref(false)
 // dialog关闭回调
 
 // 列表
@@ -550,14 +547,10 @@ let data_tab = reactive({
 let data_dialog = reactive({
     obj: {}
 })
-// 详情
-const data_details = reactive({
-    item: ''
-})
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -565,7 +558,6 @@ let from_examine = reactive({
         custom: [],
         affix: [],
         groupcc: '',
-        relid: '',
         groupid: ''
     }
 })
@@ -584,36 +576,26 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    // V.value.clearFunc()
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
     getChinaName()
 }
-// const V_1 = ref(null)
-// const refreshFunc_1 = () => {
-//     V_1.value.clearFunc()
-//     refreshFunc()
-// }
 // 监听分页
 watch(page, () => {
+    console.log(page)
+    sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
 })
-// const V_2 = ref(null)
-// 详情
-// const detailsFunc = row => {
-//     switch_details.value = true
-//     APIgetEventArticleDetails(row.id).then(res => {
-//         data_details.item = res
-//         console.log(data_details.item)
-//         res.affixs = []
-//         for (let i in res.affix) {
-//             res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i].file)
-//         }
-//     })
-//     // V_2.value.getAnnounceDetailsFunc()
-// }
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
+})
 // 同意拒绝提交
 import { getFilesKeys } from '@/util/files.js'
 const V = ref(null)
@@ -627,33 +609,18 @@ const add_dialog_close = () => {
 const dialogExamineCloseFunc = () => {
     V.value.clearFunc()
     selectedZone_id.value = ''
-    // console.log(formEl)
-    // from_error.msg = {}
-    // if (!formEl) return
-    // formEl.validate(valid => {
-    //     if (valid) {
     let files_arr = []
 
     for (let i in from_examine.item.affix) {
         files_arr.push(from_examine.item.affix[i].file)
     }
+    delete from_examine.item.relid
+    delete from_examine.item.taskid
     console.log(files_arr)
     if (files_arr.length <= 0) {
         if (str_title.value == '修改') {
-            // from_examine.item = {
-            //     custom: [],
-            //     groupcc: '',
-            //     taskid: ''
-            // }
-            from_examine.item.custom = []
-            // from_examine.item.relid = 'ggtr4535'
-            // from_examine.item.taskid = 'gdhfth454g'
-            delete from_examine.item.relid
-            delete from_examine.item.taskid
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                 refreshFunc()
-                // ElMessage.success('修改成功')
-                // switch_examine.value = false
             }).catch(err => {
                 ElMessage.error('修改失败')
             })
@@ -674,7 +641,6 @@ const dialogExamineCloseFunc = () => {
             from_examine.item.affix[i].file = files[i]
         }
         if (str_title.value == '修改') {
-            from_examine.item.custom = []
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                 refreshFunc()
                 // ElMessage.success('修改成功')
@@ -770,7 +736,6 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_pass.obj.reply = ''
     active.value = 0
-    getUsergroupList()
     from_error.msg = {}
     str_title.value = '修改'
     switch_examine.value = true
@@ -787,8 +752,9 @@ const modifyResidentialFunc = val => {
         from_examine.item = res
         switch_examine.value = true
         announce_id.value = from_examine.item.id,
-        group_id.value = from_examine.item.groupid
-        userGroupName.value = getNameFunc_1(userData.arr, from_examine.item.groupid)
+        group_id.value = from_examine.item.groupid9
+        userGroupName.value = res.authorgroup?.name
+        selectedZone_id.value = res.toval_name
     })
 
 }
@@ -830,8 +796,7 @@ const next = () => {
                 page: page.value,
                 per_page: per_page.value,
                 tgt_type: 'announce',
-                tgt_id: announce_id.value,
-                group_id: group_id.value
+                tgt_id: announce_id.value
             }
             APIgetListArchiveAudit(params).then(res => {
                 console.log(res)
@@ -862,8 +827,7 @@ const next = () => {
 import {
     APIpostArchiveAudit,
     APIgetListArchiveAudit,
-    APIputArchiveAudit,
-    APIgetDetailsArchiveAudit
+    APIputArchiveAudit
 } from '@/api/custom/custom.js'
 
 const switch_pass = ref(false)
@@ -998,17 +962,8 @@ const checkNameFunc = val => {
     console.log(val)
     from_examine.item.groupid = val.id
     userGroupName.value = ''
-}
-import {
-    APIgetGroupList
-} from '@/api/custom/custom.js'
-const getUsergroupList = () => {
-    APIgetGroupList().then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            userData.arr = res.data
-        }
-    })
+    from_examine.item.groupcc = val.region_cc
+    from_examine.item.grouplv = val.region_type
 }
 const getNameFunc = (arr, key) => {
     for (let i in arr) {
@@ -1017,26 +972,6 @@ const getNameFunc = (arr, key) => {
         }
     }
 }
-const getNameFunc_1 = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-}
-// 获取类别名称
-// let data_1 = reactive({
-//     arr: []
-// })
-// import {
-//     APIgetTypeList
-// } from '@/api/custom/custom.js'
-// // 获取公式列表api请求
-// const main_type = ref('announce')
-// APIgetTypeList(main_type.value).then(res => {
-//     console.log(res)
-//     data_1.arr = res
-// })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -1120,5 +1055,16 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', '
 }
 ::v-deep .el-date-editor.el-input {
     width: 100%;
+}
+.details {
+    text-decoration: inherit;
+    font-size: 12px;
+    margin: 0 10px;
+    height: 24px;
+    width: 48px;
+}
+.el-button--small {
+    height: 32px;
+    width: 58px;
 }
 </style>
