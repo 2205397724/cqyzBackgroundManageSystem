@@ -19,10 +19,10 @@
                 <el-row>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                标题名称：
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                投诉名称：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="14">
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
                             </el-col>
                         </el-row>
@@ -30,24 +30,24 @@
 
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                状态：
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                投诉状态：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="14">
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
-                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="i" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
                         </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 是否匿名：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="14">
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-select v-model="data_1.search.ano" class="search_tb" clearable placeholder="是否匿名">
-                                    <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="i" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -73,28 +73,29 @@
                     </el-col>
                 </el-row>
             </div>
-            <div class="btn">
-                <el-badge :value="index == 0 ? data_1.total : ''" class="item" :hidden="flag">
-                    <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">
-                        未处理
-                    </el-button>
-                </el-badge>
-                <el-badge :value="index == 1 ? data_1.total : ''" class="item" :hidden="flag1">
-                    <el-button :type="index == 1 ? 'primary' : ''" @click="StatusFunk(1)">
-                        办理中
-                    </el-button>
-                </el-badge>
-                <el-badge :value="index == 3 ? data_1.total : ''" class="item" :hidden="flag2">
-                    <el-button :type="index == 3 ? 'primary' : ''" @click="StatusFunk(3)">
-                        已回复
-                    </el-button>
-                </el-badge>
-                <el-badge :value="index == 4 ? data_1.total : ''" class="item" :hidden="flag3">
-                    <el-button :type="index == 4 ? 'primary' : ''" @click="StatusFunk(4)">
-                        已结案
-                    </el-button>
-                </el-badge>
-            </div>
+            <el-button-group class="btn m-b-20">
+                <el-button :type="index == 10 ? 'primary' : ''" @click="StatusFunk(10)">全部</el-button>
+                <!-- <el-badge :value="index == 0 ? data_1.total : ''" class="item" :hidden="flag"> -->
+                <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">
+                    未处理
+                </el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 1 ? data_1.total : ''" class="item" :hidden="flag1"> -->
+                <el-button :type="index == 1 ? 'primary' : ''" @click="StatusFunk(1)">
+                    已审核
+                </el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 3 ? data_1.total : ''" class="item" :hidden="flag2"> -->
+                <el-button :type="index == 5 ? 'primary' : ''" @click="StatusFunk(5)">
+                    已转办
+                </el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 4 ? data_1.total : ''" class="item" :hidden="flag3"> -->
+                <el-button :type="index == 99 ? 'primary' : ''" @click="StatusFunk(99)">
+                    已结案
+                </el-button>
+                <!-- </el-badge> -->
+            </el-button-group>
             <el-table
                 v-loading="loading_tab"
                 :data="data_1.list"
@@ -124,14 +125,14 @@
                 <el-table-column label="状态" width="100">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="success" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 99" class="btnNone" type="info" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 99" class="btnNone" type="info">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <!-- <div style=":background-color"></div> -->
                     </template>
                 </el-table-column>
@@ -145,10 +146,10 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="250">
+                <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
-                            type="primary" size="small"
+                            type="primary" class="btnfix"
                             @click="clickFuncModify(scope.row)"
                         >
                             修改
@@ -163,7 +164,7 @@
                             转办
                         </el-button> -->
                         <el-button
-                            size="small"
+                            class="btnfix"
                             @click="clickFuncAllot4(scope.row.id)"
                         >
                             违建
@@ -289,9 +290,9 @@
                                     clearable
                                 />
                             </el-form-item>
-                            <el-icon :size="15" color="#F56C6C" class="icon">
+                            <!-- <el-icon :size="15" color="#F56C6C" class="icon">
                                 <StarFilled />
-                            </el-icon>
+                            </el-icon> -->
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
@@ -318,9 +319,9 @@
                                     clearable
                                 />
                             </el-form-item>
-                            <el-icon :size="15" color="#F56C6C" class="icon_1">
+                            <!-- <el-icon :size="15" color="#F56C6C" class="icon_1">
                                 <StarFilled />
-                            </el-icon>
+                            </el-icon> -->
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <comment-switch :id="data_1.add_form.id" />
@@ -602,11 +603,15 @@ const data_1 = reactive({
     details_switch: false
 })
 const loading_tab = ref(true)
-const getFuncVoteList = () => {
+const getFuncVoteList = val => {
     let data = {
         page: data_1.page,
         per_page: data_1.per_page,
-        kind: 2
+        kind: 2,
+        status: val
+    }
+    if (val == 10) {
+        delete data.status
     }
     for (let key in data_1.search) {
         let item = data_1.search[key]
@@ -933,22 +938,10 @@ const popupFuncAdd4 = val => {
     })
 }
 // 待处理点击事件
-const index = ref(0)
+const index = ref(10)
 const noDeal = val => {
     index.value = val
-    data_1.page = 1
-    data_1.list.type = 0
-    let data1 = {
-        page: data_1.page,
-        per_page: data_1.per_page,
-        kind: 2,
-        status: val
-    }
-    APIgetComplaintList(data1).then(res => {
-        console.log(res)
-        data_1.total = res.length
-        data_1.list = res
-    })
+    getFuncVoteList(val)
 }
 const flag = ref(true)
 const flag1 = ref(true)
@@ -1033,11 +1026,6 @@ import { Search, Plus, StarFilled } from '@element-plus/icons-vue'
 .noDeal {
     margin-left: 12px;
 }
-.details {
-    text-decoration: inherit;
-    font-size: small;
-    margin: 0 10px;
-}
 .el-button--small {
     height: 32px;
     width: 58px;
@@ -1045,14 +1033,7 @@ import { Search, Plus, StarFilled } from '@element-plus/icons-vue'
 .el-badge {
     margin-right: 25px;
 }
-.icon {
-    position: absolute;
-    top: 95px;
-    left: 10px;
-}
-.icon_1 {
-    position: absolute;
-    top: 95px;
-    right: 340px;
+.btn button {
+    padding: 20px 40px;
 }
 </style>

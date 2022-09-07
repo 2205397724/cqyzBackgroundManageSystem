@@ -1,9 +1,9 @@
 <template>
     <div class="articletparticletpl">
         <page-main style="overflow: hidden;">
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus" @click="()=>{
+                    type="primary" size="large" :icon="Plus" @click="()=>{
                         data_1.add_form={};
                         data_1.add_error={};
                         data_1.add_switch=true;
@@ -15,106 +15,62 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 违建名称：
-                            </div>
-                            <el-input v-model="data_1.search.title" class="search_tb" placeholder="违建名称" clearable />
-                        </div>
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_1.search.title" class="search_tb" placeholder="违建名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">违建状态：</div>
-                            <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                违建状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_1.search.status" class="search_tb" clearable placeholder="状态">
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                是否匿名：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_1.search.ano" class="search_tb" clearable placeholder="是否匿名">
+                                    <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="i" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button
-                                    class="m-l-20" type="primary" :icon="Search"
-                                    @click="()=>{
-                                        data_1.switch_search = true;
-                                        data_1.page = 1;
-                                        getFuncVoteList()
-                                    }"
-                                >
-                                    筛选
-                                </el-button>
-                            </div>
-                            <div v-show=" data_1.switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ data_1.total }}条。
-                                </div>
-                            </div>
-                        </div>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button
+                            type="primary" :icon="Search"
+                            @click="()=>{
+                                data_1.switch_search = true;
+                                data_1.page = 1;
+                                getFuncVoteList()
+                            }"
+                        >
+                            筛选
+                        </el-button>
+                        <el-button v-show="data_1.switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="data_1.switch_search == true" class="size-base">
+                            *搜索到相关结果共{{ data_1.total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
-            <!-- <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="id" label="违建ID" width="250">
-                            <template #default="scope">
-                                <span>{{ scope.row.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="cid" label="违建对象">
-                            <template #default="scope">
-                                <span>{{ scope.row?.tgt_able?.name }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="type" label="违建类型">
-                            <template #default="scope">
-                                <span>{{ getOptVal(opts_all.obj.illegal_type,scope.row.type) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="status" label="状态">
-                            <template #default="scope">
-                                <el-tag v-show="scope.row.status == 10" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </el-tag>
-                                <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </el-tag>
-                                <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.illegal_user,scope.row.status) }} </el-tag>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="detailsFunc(scope.row)"
-                                >
-                                    详情
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                    </el-table> -->
             <el-table
                 :data="data_1.list"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -130,7 +86,7 @@
                         <span>{{ scope.row.cc_name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="业务编号" width="180">
+                <el-table-column label="业务编号" width="150">
                     <template #default="scope">
                         <span>{{ scope.row.sno }} </span>
                     </template>
@@ -140,17 +96,17 @@
                         <span>{{ scope.row?.zone?.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态">
+                <el-table-column label="状态" width="100">
                     <template #default="scope">
-                        <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="info" effect="dark" size="large">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="warning">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 8" class="btnNone" type="info">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否匿名">
@@ -163,10 +119,10 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="250">
+                <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
-                            type="primary"
+                            type="primary" class="btnfix"
                             @click="clickFuncModify(scope.row)"
                         >
                             修改
@@ -186,13 +142,13 @@
                             转办
                         </el-button> -->
                         <el-button
+                            class="btnfix"
                             @click="clickFuncAllot4(scope.row.id)"
                         >
                             违建
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="data_1.page"
@@ -287,7 +243,7 @@
                                     clearable
                                 />
                             </el-form-item>
-                            <el-icon :size="15" color="#F56C6C" class="icon">
+                            <el-icon :size="15" color="#F56C6C" class="iconfont">
                                 <StarFilled />
                             </el-icon>
                         </el-col>
@@ -316,7 +272,7 @@
                                     clearable
                                 />
                             </el-form-item>
-                            <el-icon :size="15" color="#F56C6C" class="icon_1">
+                            <el-icon :size="15" color="#F56C6C" class="iconfont_1">
                                 <StarFilled />
                             </el-icon>
                         </el-col>
@@ -450,99 +406,41 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 修改添加 -->
-        <!-- <el-dialog
-            v-model="switch_examine"
-            :title="str_title"
-            width="50%"
-            @closed="dialogClosed"
+        v-model="switch_details"
+        title="详情"
+        width="50%"
         >
-            <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                >
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label-width="90px"
-                                label="违建对象"
-                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
-                            >
-                                <div v-show="opts_all.obj.illegal_type&&opts_all.obj.illegal_type[0]&&(from_examine.item.type==opts_all.obj.illegal_type[0].key)" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
-                                    <SearchHouse ref="V_1" v-model:name="houseName" @checkFunc="checkNameFunc_1" />
-                                </div>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="对象类型"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.type?from_error.msg.type[0]:''"
-                            >
-                                <el-select v-model="from_examine.item.type" class="head-btn" placeholder="处理状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.illegal_type" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label="处理状态"
-                                label-width="90px"
-                                :error="from_error.msg&&from_error.msg.status?from_error.msg.status[0]:''"
-                            >
-                                <el-select v-model="from_examine.item.status" class="head-btn" placeholder="" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.illegal_user" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
+        <div class="details-box">
+            <div class="item">
+                <div class="left">违建ID</div>
+                <div class="right">{{ data_details.item.id }}</div>
             </div>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="switch_examine=false">取消</el-button>
-                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
-                </div>
-            </template>
-        </el-dialog> -->
-        <!-- 详情 -->
-        <!-- <el-dialog
-            v-model="switch_details"
-            title="详情"
-            width="50%"
-        >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">违建ID</div>
-                    <div class="right">{{ data_details.item.id }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">违建对象</div>
-                    <div class="right">{{ data_details.item.tgt }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">违建类型</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.illegal_type,data_details.item.type) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.illegal_user,data_details.item.status) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-                    <div class="right">{{ data_details.item.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">更新时间</div>
-                    <div class="right">{{ data_details.item.updated_at }}</div>
-                </div>
+            <div class="item">
+                <div class="left">违建对象</div>
+                <div class="right">{{ data_details.item.tgt }}</div>
             </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="switch_details = false">取消</el-button>
-                </span>
-            </template>
+            <div class="item">
+                <div class="left">违建类型</div>
+                <div class="right">{{ getOptVal(opts_all.obj.illegal_type,data_details.item.type) }}</div>
+            </div>
+            <div class="item">
+                <div class="left">状态</div>
+                <div class="right">{{ getOptVal(opts_all.obj.illegal_user,data_details.item.status) }}</div>
+            </div>
+            <div class="item">
+                <div class="left">创建时间</div>
+                <div class="right">{{ data_details.item.created_at }}</div>
+            </div>
+            <div class="item">
+                <div class="left">更新时间</div>
+                <div class="right">{{ data_details.item.updated_at }}</div>
+            </div>
+        </div>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="switch_details = false">取消</el-button>
+            </span>
+        </template>
         </el-dialog> -->
     </div>
 </template>
@@ -555,7 +453,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus, StarFilled } from '@element-plus/icons-vue'
+import { Loading, Search, Plus, StarFilled } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetComplaintList,
@@ -626,7 +524,7 @@ const clickFuncAddVote = () => {
     }
     data_1.add_error = {}
     if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
+        getFilesKeys(files, 'illegal').then(arr => {
             data_1.add_form.affix = file_key.concat(arr)
             if (data_1.add_title == '添加') {
                 APIpostComplaint(data_1.add_form).then(res => {
@@ -888,200 +786,6 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
     })
 })
 
-// import {
-//     APIgetIllegalList,
-//     APIgetIllegalDetails,
-//     APIdeleteIllegal,
-//     APIputIllegal,
-//     APIpostIllegal
-// } from '@/api/custom/custom.js'
-// import {
-//     reactive,
-//     ref,
-//     watch
-// } from 'vue'
-// import {
-//     ElMessage
-// } from 'element-plus'
-// import { Search } from '@element-plus/icons-vue'
-// /* ----------------------------------------------------------------------------------------------------------------------- */
-// // 数据
-// // 搜索
-// let switch_search = ref(false)
-// let data_search = reactive({ obj: {} })
-// // 详情
-// let switch_details = ref(false)
-// // 列表
-// let ruleFormRef = ref('')
-// let loading_tab = ref(false)
-// let data_tab = reactive({
-//     arr: []
-// })
-// // 操作事件 列表单个行数据
-// let data_dialog = reactive({
-//     obj: {}
-// })
-// // 详情
-// const data_details = reactive({
-//     item: ''
-// })
-// // 分页
-// let total = ref(100)
-// let per_page = ref(15)
-// let page = ref(1)
-// // 添加，修改
-// let switch_examine = ref(false)
-// let from_examine = reactive({
-//     item: {
-//         fields: []
-//     }
-// })
-// const str_title = ref('添加')
-// const from_error = reactive({
-//     msg: {}
-// })
-
-// import {
-//     APIgetTypeList
-// } from '@/api/custom/custom.js'
-// const options = reactive({ arr: [] })
-// APIgetTypeList('announce').then(res => {
-//     options.arr = res
-// })
-// /* ----------------------------------------------------------------------------------------------------------------------- */
-// // 方法
-// // 搜索
-// const searchFunc = () => {
-//     page.value = 1
-//     switch_search.value = true
-//     getTabListFunc()
-// }
-// // 刷新
-// const refreshFunc = () => {
-//     page.value = 1
-//     switch_search.value = false
-//     data_search.obj = {}
-//     getTabListFunc()
-// }
-// const V = ref(null)
-// const refreshFunc_1 = () => {
-//     V.value.clearFunc()
-//     refreshFunc()
-// }
-// const checkNameFunc = val => {
-//     data_search.obj.tgt = val
-// }
-// // 详情
-// const detailsFunc = val => {
-//     data_dialog.obj = val
-//     APIgetIllegalDetails(val.id).then(res => {
-//         data_details.item = res
-//         switch_details.value = true
-//     })
-// }
-// // 监听分页
-// watch(page, () => {
-//     getTabListFunc()
-// })
-// // 同意拒绝提交
-// const dialogExamineCloseFunc = formEl => {
-//     from_error.msg = {}
-//     if (!formEl) return
-//     formEl.validate(valid => {
-//         if (valid) {
-//             if (str_title.value == '修改') {
-//                 APIputIllegal(from_examine.item.id, from_examine.item).then(res => {
-//                     refreshFunc()
-//                     ElMessage.success('修改成功')
-//                     switch_examine.value = false
-//                 }).catch(err => {
-//                     ElMessage.success('修改失败')
-//                 })
-//             } else {
-//                 console.log(from_examine.item)
-//                 APIpostIllegal('62cbf190ee857750a615a1d5', from_examine.item).then(res => {
-//                     refreshFunc()
-//                     ElMessage.success('添加成功')
-//                     switch_examine.value = false
-//                 }).catch(err => {
-//                     ElMessage.success('添加失败')
-//                 })
-//             }
-//         } else {
-//             return false
-//         }
-//     })
-// }
-// // 获取列表api请求
-// const getTabListFunc = () => {
-//     let params = {
-//         page: page.value,
-//         per_page: per_page.value
-//         // cid: "62cbf190ee857750a615a1d5",
-//         // status: 10
-//     }
-//     for (let key in data_search.obj) {
-//         if (data_search.obj[key] || data_search.obj[key] === 0) {
-//             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
-//                 continue
-//             }
-//             params[key] = data_search.obj[key]
-//         }
-//     }
-//     if (params.time_deal) {
-//         let updated_str = ''
-//         for (let i in params.time_deal) {
-//             updated_str += ',' + params.time_deal[i]
-//         }
-//         params.time_deal = updated_str.substring(1)
-//     }
-//     if (params.created_at) {
-//         let updated_str = ''
-//         for (let i in params.created_at) {
-//             updated_str += ',' + params.created_at[i]
-//         }
-//         params.created_at = updated_str.substring(1)
-//     }
-//     if (params.updated_at) {
-//         let updated_str = ''
-//         for (let i in params.updated_at) {
-//             updated_str += ',' + params.updated_at[i]
-//         }
-//         params.updated_at = updated_str.substring(1)
-//     }
-//     loading_tab.value = true
-//     APIgetIllegalList(params).then(res => {
-//         console.log(res)
-//         loading_tab.value = false
-//         data_tab.arr = res
-//         total.value = res.length
-//     })
-// }
-// // 删除
-// const deleteFunc = val => {
-//     APIdeleteIllegal(val.id).then(res => {
-//         refreshFunc()
-//         ElMessage.success('删除成功')
-//     })
-// }
-// const houseName = ref('')
-// const V_1 = ref(null)
-// const dialogClosed = () => {
-//     V_1.value.clearFunc()
-//     houseName.value = ''
-// }
-// /* ----------------------------------------------------------------------------------------------------------------------- */
-// // 执行
-// refreshFunc()
-// /* ----------------------------------------------------------------------------------------------------------------------- */
-// // 配置项
-// import { getOpts, getOptVal } from '@/util/opts.js'
-// const opts_all = reactive({
-//     obj: {}
-// })
-// getOpts(['illegal_user', 'illegal_type']).then(res => {
-//     opts_all.obj = res
-// })
 </script>
 <style lang="scss">
     .articletparticletpl {
@@ -1117,21 +821,6 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
 }
 ::v-deep .el-cascader {
     width: 100%;
-}
-.icon {
-    position: absolute;
-    top: 65px;
-    left: 10px;
-}
-.icon_1 {
-    position: absolute;
-    top: 65px;
-    right: 340px;
-}
-.details {
-    text-decoration: inherit;
-    font-size: small;
-    margin: 0 10px;
 }
 :deep .el-button {
     font-size: 12px;

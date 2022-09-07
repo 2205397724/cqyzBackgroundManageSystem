@@ -101,10 +101,10 @@
                         <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="280">
+                <el-table-column fixed="right" label="操作" width="220">
                     <template #default="scope">
                         <el-button
-                            type="primary" size="small"
+                            type="primary" class="btnfix"
                             @click="modifyResidentialFunc(scope.row)"
                         >
                             修改
@@ -122,7 +122,7 @@
                             @confirm="deleteFunc(scope.row)"
                         >
                             <template #reference>
-                                <el-button type="danger" size="small">
+                                <el-button type="danger" class="btnfix">
                                     删除
                                 </el-button>
                             </template>
@@ -134,7 +134,7 @@
                         >
                             审核
                         </el-button> -->
-                        <BerComment :id="scope.row.id" />
+                        <!-- <BerComment :id="scope.row.id" /> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -736,7 +736,6 @@ const addResidentialFunc = () => {
 const modifyResidentialFunc = val => {
     from_pass.obj.reply = ''
     active.value = 0
-    getUsergroupList()
     from_error.msg = {}
     str_title.value = '修改'
     switch_examine.value = true
@@ -753,8 +752,9 @@ const modifyResidentialFunc = val => {
         from_examine.item = res
         switch_examine.value = true
         announce_id.value = from_examine.item.id,
-        group_id.value = from_examine.item.groupid
-        userGroupName.value = getNameFunc_1(userData.arr, from_examine.item.groupid)
+        group_id.value = from_examine.item.groupid9
+        userGroupName.value = res.authorgroup?.name
+        selectedZone_id.value = res.toval_name
     })
 
 }
@@ -796,8 +796,7 @@ const next = () => {
                 page: page.value,
                 per_page: per_page.value,
                 tgt_type: 'announce',
-                tgt_id: announce_id.value,
-                group_id: group_id.value
+                tgt_id: announce_id.value
             }
             APIgetListArchiveAudit(params).then(res => {
                 console.log(res)
@@ -963,17 +962,8 @@ const checkNameFunc = val => {
     console.log(val)
     from_examine.item.groupid = val.id
     userGroupName.value = ''
-}
-import {
-    APIgetGroupList
-} from '@/api/custom/custom.js'
-const getUsergroupList = () => {
-    APIgetGroupList().then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            userData.arr = res.data
-        }
-    })
+    from_examine.item.groupcc = val.region_cc
+    from_examine.item.grouplv = val.region_type
 }
 const getNameFunc = (arr, key) => {
     for (let i in arr) {
@@ -982,14 +972,6 @@ const getNameFunc = (arr, key) => {
         }
     }
 }
-const getNameFunc_1 = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-}
-
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
@@ -1076,8 +1058,10 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', '
 }
 .details {
     text-decoration: inherit;
-    font-size: small;
+    font-size: 12px;
     margin: 0 10px;
+    height: 24px;
+    width: 48px;
 }
 .el-button--small {
     height: 32px;

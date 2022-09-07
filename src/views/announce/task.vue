@@ -63,15 +63,10 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <!-- <el-table-column label="任务ID" width="240">
+                <el-table-column label="任务接收单位">
                     <template #default="scope">
-                        <span class="m-l-10">{{ scope.row.id }}</span>
-                    </template>
-                </el-table-column> -->
-                <el-table-column label="任务派发单位">
-                    <template #default="scope">
-                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.from) }}</span> -->
-                        <span class="m-l-10">{{ scope.row.fromgroup?.name }}</span>
+                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.to) }}</span> -->
+                        <span class="m-l-10">{{ scope.row.togroup?.name }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="公示分类">
@@ -84,16 +79,11 @@
                         <span class="m-l-10">{{ getOptVal(opts_all.obj.article_lv_1,scope.row.tolv) }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="任务接收单位">
-                    <template #default="scope">
-                        <!-- <span class="m-l-10">{{ getNameFunc(userData.arr,scope.row.to) }}</span> -->
-                        <span class="m-l-10">{{ scope.row.togroup?.name }}</span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="是否完成">
                     <template #default="scope">
-                        <el-tag v-if=" scope.row.iscpt" type="success" size="small" round>已完成</el-tag>
-                        <el-tag v-if="!scope.row.iscpt" type="danger" size="small" round>未完成</el-tag>
+                        <!-- <el-tag v-if=" scope.row.iscpt" type="success" size="small" round>已完成</el-tag> -->
+                        <announceDetails v-if=" scope.row.iscpt == 1" :id="scope.row.aid" :name="announceName" />
+                        <el-tag v-if="scope.row.iscpt == 0" type="danger" size="small" class="btnNone" round>未完成</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="300">
@@ -121,7 +111,7 @@
                             </template>
                         </el-popconfirm>
                         <el-button
-                            type="success" size="small"
+                            type="success" size="small" :disabled="scope.row.aid ? true: false"
                             @click="upResidentialFunc(scope.row)"
                         >
                             发布公示
@@ -532,6 +522,7 @@ const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
 })
+const announceName = ref('公示')
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索

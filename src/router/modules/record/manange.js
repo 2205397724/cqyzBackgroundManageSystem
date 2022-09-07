@@ -23,13 +23,14 @@ export default {
             activeMenu: '/record_manange',
             auth: ['record.manange.manange', '*']
         },
-        children:[{
-            path:'detail',
-            name:'recordManangeDetail',
-            component:()=>import('@/views/record/add.vue'),
-            meta:{
-                title:'备案管理详情',
-                auth:['record.manange.add', '*']
+        children: [{
+            path: 'detail',
+            name: 'recordManangeDetail',
+            component: () => import('@/views/record/add.vue'),
+            meta: {
+                title: '详情',
+                activeMenu: '/record_manange',
+                auth: ['record.manange.add', '*']
             }
         }]
     }]

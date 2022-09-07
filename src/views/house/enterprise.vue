@@ -54,7 +54,7 @@
                 <el-table-column prop="logo_1" label="企业logo">
                     <template #default="scope">
                         <span class="m-l-10">
-                            <el-image :src="scope.row.logo_1" alt="" style="width: 36px;" /></span>
+                            <el-image :src="scope.row.logo_1" alt="" style="width: 36px; height: 27px;" /></span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="企业名称" />
@@ -290,7 +290,7 @@
                         <div class="item">
                             <div class="left">企业logo</div>
                             <div class="right">
-                                <el-image :src="VITE_APP_FOLDER_SRC+details_item.obj.logo" :preview-src-list="logo_1.arr" alt="" style="width: 40px;" />
+                                <el-image :src="VITE_APP_FOLDER_SRC+details_item.obj.logo" :preview-src-list="logo_1.arr" alt="" style="width: 40px; height: 27px;" />
                             </div>
                         </div>
                         <div class="item">
@@ -319,7 +319,7 @@
                             <div class="right">{{ details_item.obj.desc }} </div>
                         </div>
                         <div
-                            v-for="(item,i) in details_item.obj.extra" v-if="details_item.obj.extra" :key="i"
+                            v-for="(item,i) in details_item.obj.extra" :key="i"
                             class="item"
                         >
                             <div class="left">{{ item.lab }}</div>
@@ -1417,9 +1417,7 @@ const userNames = ref('')
 const optValModifyFunc = val => {
     switch_opt_val_add.value = true
     str_opt_val_title.value = '修改'
-    from_opt_val.obj = {
-        ...val
-    }
+    from_opt_val.obj = val
 }
 // 提交
 const dialogOptValFunc = () => {
