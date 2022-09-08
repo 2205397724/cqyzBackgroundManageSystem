@@ -92,7 +92,7 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="300">
                     <template #default="scope">
-                        <el-button size="small" @click="add_record_type(scope.row)">
+                        <el-button size="small" type="success" @click="add_record_type(scope.row)">
                             添加子分类
                         </el-button>
                         <el-button
@@ -130,35 +130,28 @@
             /> -->
         </page-main>
         <!-- 添加dialog -->
-        <el-dialog v-model="switch_add_recordKind" :title="add_put_title" @close="add_dialog_close">
+        <el-dialog v-model="switch_add_recordKind" :title="add_put_title" width="30%" @close="add_dialog_close">
             <el-form ref="ruleFormRef" :model="from_record.item">
                 <el-row :gutter="10">
-                    <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-            <el-form-item label-width="85px" label="种类">
-              <el-input v-model="from_record.item.kind" />
-            </el-form-item>
-          </el-col> -->
-                </el-row>
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item label-width="85px" label="分类名称">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item label-width="85px" prop="name" label="分类名称">
                             <el-input v-model="from_record.item.name" />
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row v-if="add_put_title=='添加'||from_record.item.pid" :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item label-width="85px" label="上级分类ID">
-                            <el-input v-model="from_record.item.pid" />
+                            <el-input v-model="from_record.item.pid" placeholder="可不填(一级)" />
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item label-width="85px" label="排序">
                             <el-input
                                 v-model="from_record.item.sort"
-                                placeholder="可以不填"
+                                placeholder="可不填(0)"
                             />
                         </el-form-item>
                     </el-col>
@@ -169,19 +162,19 @@
             </template>
         </el-dialog>
         <!-- 添加子类别 -->
-        <el-dialog v-model="switch_add_recordKind_children" title="添加子备案">
-            <el-form :model="from_record_children.item" label-position="left">
+        <el-dialog v-model="switch_add_recordKind_children" width="30%" title="添加子备案">
+            <el-form :model="from_record_children.item">
                 <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item label="子备案类型名称" prop="name" label-width="110px">
                             <el-input v-model="from_record_children.item.name" />
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item label="排序" prop="sort" label-width="110px">
-                            <el-input v-model="from_record_children.item.sort" placeholder="可不填" />
+                            <el-input v-model="from_record_children.item.sort" placeholder="可不填(0)" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -219,8 +212,7 @@ const switch_add_recordKind_children = ref(false)
 const from_record_children = reactive({
     item: {
         name: '',
-        pid: '',
-        sort: 0
+        pid: ''
     }
 })
 const switch_add_recordKind = ref(false)

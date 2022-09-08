@@ -127,6 +127,7 @@
                 <el-button
                     type="primary"
                     class="m-tb-10"
+                    plain
                     style="position: relative;"
                     @click="detail_set_area"
                 >
@@ -162,13 +163,13 @@
                     </el-table-column>
                 </el-table> -->
 
-                <el-row>
-                    <el-col :sm="3" :md="3" :lg="3">
+                <el-row class="m-l-30">
+                    <el-col :sm="3" :md="3" :lg="5">
                         <div class="set_range_box">
                             <div>
-                                <div class="m-b-10">已选择区域</div>
+                                <div class="m-b-10 m-l-50">已选择区域</div>
                             </div>
-                            <el-scrollbar height="300px">
+                            <el-scrollbar height="310px">
                                 <div class="region_box">
                                     <div v-for="item in data_range.arr" :key="item.id">
                                         <div
@@ -189,15 +190,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </el-scrollbar>
-                        </div>
-                    </el-col>
-                    <el-col :sm="3" :md="3" :lg="3">
-                        <div class="set_range_box">
-                            <div class="m-b-10">
-                                <div>已选择小区</div>
-                            </div>
-                            <el-scrollbar height="300px">
+                                <!-- 已选择小区 -->
                                 <div class="region_box">
                                     <div v-for="item in data_range.arr" :key="item.id">
                                         <div
@@ -219,20 +212,12 @@
                                         </div>
                                     </div>
                                     <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
-                                        <div class="region_box_item region_box_item_house">
+                                        <div v-if="!house.name&&!house.building?.name" class="region_box_item region_box_item_house">
                                             {{ house.building.zone.name }}
                                         </div>
                                     </div>
                                 </div>
-                            </el-scrollbar>
-                        </div>
-                    </el-col>
-                    <el-col :sm="3" :md="3" :lg="3">
-                        <div class="set_range_box">
-                            <div>
-                                <div>可参与楼栋</div>
-                            </div>
-                            <el-scrollbar height="300px">
+                                <!-- 可参与楼栋 -->
                                 <div class="region_box">
                                     <div v-for="item in data_range.arr" :key="item.id">
                                         <div
@@ -240,7 +225,7 @@
                                             class="region_box_item"
                                             @click="closeShowHouse"
                                         >
-                                            {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
+                                            {{ item.tgt_obj?.pos_name+item.tgt_obj?.name }}
                                             <el-popconfirm
                                                 title="确定要删除当前项么?"
                                                 cancel-button-type="info"
@@ -253,20 +238,12 @@
                                         </div>
                                     </div>
                                     <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
-                                        <div class="region_box_item region_box_item_house">
+                                        <div v-if="!house.name" class="region_box_item region_box_item_house">
                                             {{ house.building.name }}
                                         </div>
                                     </div>
                                 </div>
-                            </el-scrollbar>
-                        </div>
-                    </el-col>
-                    <el-col :sm="3" :md="3" :lg="3">
-                        <div class="set_range_box">
-                            <div>
-                                <div>可参与单元</div>
-                            </div>
-                            <el-scrollbar height="300px">
+                                <!-- 可参与单元 -->
                                 <div class="region_box">
                                     <!-- <div v-for="item in data_range_units.arr" :key="item.id">
                     <div class="region_box_item" @click="clickUnits(item)">
@@ -312,10 +289,10 @@
                             </el-scrollbar>
                         </div>
                     </el-col>
-                    <el-col :sm="11" :md="11" :lg="11">
+                    <el-col :sm="11" :md="11" :lg="19">
                         <div v-if="showHouses" class="table">
                             <div class="header" />
-                            <el-scrollbar style="height: 504px;">
+                            <el-scrollbar style="height: 300px;">
                                 <div>
                                     <div
                                         v-for="(floor, index) in floors.arr"
@@ -341,6 +318,39 @@
                         </div>
                     </el-col>
                 </el-row>
+                <!-- <el-row>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div class="m-b-10">
+                                <div>已选择小区</div>
+                            </div>
+                            <el-scrollbar height="300px" />
+                        </div>
+                    </el-col>
+                </el-row> -->
+                <!-- <el-row>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div>
+                                <div>可参与楼栋</div>
+                            </div>
+                            <el-scrollbar height="300px">
+
+                            </el-scrollbar>
+                        </div>
+                    </el-col>
+                </el-row> -->
+                <!-- <el-row>
+                    <el-col :sm="3" :md="3" :lg="3">
+                        <div class="set_range_box">
+                            <div>
+                                <div>可参与单元</div>
+                            </div>
+                            <el-scrollbar height="300px" />
+                        </div>
+                    </el-col>
+                </el-row> -->
+                <el-row />
             </el-tab-pane>
             <el-tab-pane :label="activeName_1+'题目'" name="3">
                 <SurveyQuestions :id="props.id" />
@@ -515,6 +525,7 @@
             v-model:showabled="switch_set_area"
             :tree_item="tree_item"
             :surveyid="props.id"
+            @onRangeFunc="rangeFunc"
             @checkFunc="checkFunc"
             @checkChangeFunc="checkChangeFunc"
         />
@@ -698,8 +709,8 @@ const rangeFunc = () => {
         page: 1,
         per_page: 100,
         sid: props.id,
-        can_type: 2,
-        type_many: [2, 3, 4, 5]
+        can_type: 2
+        // type_many: [2, 3, 4, 5]
     }
     APIgetSurveyRange(params)
         .then(res => {
@@ -717,6 +728,7 @@ const rangeFunc = () => {
             from_error.msg = err.data
         })
     APIgetSurverRangeWhenHouse({ sid: props.id, can_type: 2 }).then(res => {
+        console.log(res)
         surverRangeWhenHouse.arr = res.data.units
         console.log(surverRangeWhenHouse.arr)
     })
@@ -1212,8 +1224,8 @@ getOpts(['announce_status_1', 'toushu_pub']).then(res => {
 }
 .table {
     display: inline-block;
-    width: 65%;
-    height: 500px;
+    width: 77%;
+    height: 300px;
     position: absolute;
     .header {
         width: 100%;
