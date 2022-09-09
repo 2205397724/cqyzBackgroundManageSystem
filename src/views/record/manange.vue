@@ -210,7 +210,7 @@
 "
                                 @click="click_add_record_zone_id"
                             >
-                                <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                <span style="margin-left: 11px; color: #c3c4cf;">{{ selectedZone_id }}</span>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -305,7 +305,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <div style="margin-bottom: 10px;">
+                <div class="m-b-10">
                     <el-button type="primary" plain @click="addRecordDialog_arr">
                         添加备案附件
                     </el-button>
@@ -319,17 +319,18 @@
                         <el-col :xs="24" :sm="24">
                             <el-form-item label-width="70px" label="附件">
                                 <el-upload
+                                    multiple
                                     action="***"
                                     :auto-upload="false"
-                                    :file-list="fileListFn(item.key)"
+                                    :file-list="item.key"
                                     :on-change="
                                         (file, files) => {
-                                            item.key = file;
+                                            item.key = files;
                                         }
                                     "
                                     :on-remove="
                                         (file, files) => {
-                                            item.key = file;
+                                            item.key = files;
                                         }
                                     "
                                 >
@@ -337,19 +338,23 @@
                                 </el-upload>
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="12" :sm="12">
+                        <el-col :xs="24" :sm="24">
                             <el-form-item label-width="70px" label="文件类型">
-                                <el-input v-model="item.type" placeholder="" />
+                                <el-radio-group v-model="item.type" class="ml-4">
+                                    <el-radio label="image">图片</el-radio>
+                                    <el-radio label="file">文件</el-radio>
+                                    <el-radio label="audio">音频</el-radio>
+                                </el-radio-group>
                             </el-form-item>
                         </el-col>
-                        <el-col :xs="12" :sm="12">
+                        <el-col :xs="24" :sm="24">
                             <el-form-item label-width="70px" label="文件名">
                                 <el-input v-model="item.name" placeholder="" />
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <div
-                        v-if="from_record.item.affix.length > 1"
+
                         class="delete-service"
                         @click="deleteRecordDialog_arr(i)"
                     >
@@ -522,9 +527,9 @@ const scope_row_group_id_chinese = val => {
 // 添加 添加弹出框里面的附件数组
 const addRecordDialog_arr = () => {
     let data = {
-        name: '',
-        type: '',
-        key: ''
+        'name': '',
+        'type': '',
+        'key': []
     }
     from_record.item.affix.push(data)
 }
@@ -684,6 +689,18 @@ const putRecord = val => {
     current_record.item = val
     APIgetRecordDetail(val.id).then(res => {
         console.log(res)
+        for (let i in res.affix) {
+            res.affix[i].arr = []
+            if (res.affix[i]) {
+                for (let j in res.affix[i].key) {
+                    res.affix[i].arr.push({
+                        name: res.affix[i].key[j]
+                    })
+                }
+                res.affix[i].key = res.affix[i].arr
+                delete res.affix[i].arr
+            }
+        }
         from_record.item = res
     })
 }
@@ -692,29 +709,76 @@ const current_record = reactive({
 })
 // 添加确认按钮
 const dialogExamineCloseFunc = () => {
-    let obj = {}
-    add_put_title.value == '添加备案'
-    for (let i in from_record.item.affix) {
-        if (typeof from_record.item.affix[i].key != 'string') {
-            obj[i] = from_record.item.affix[i].key
-        }
-    }
     let files = []
-    for (let i in obj) {
-        files.push(obj[i].raw)
+    let everyKeyLength = [] // 多文件上传处理
+    let everyKeyLength_1 = [] // 多文件上传处理
+    from_record.item.affix.forEach((item, index) => {
+        everyKeyLength.push(item.key.length)
+    })
+    for (let x in from_record.item.affix) {
+        from_record.item.affix[x].Array = []
+        for (let y in from_record.item.affix[x].key) {
+            if (!from_record.item.affix[x].key[y].raw) {
+                from_record.item.affix[x].Array.push(from_record.item.affix[x].key[y].name)
+            } else {
+                files.push(from_record.item.affix[x].key[y].raw)
+            }
+        }
+
+        from_record.item.affix[x].key = from_record.item.affix[x].Array
+        delete from_record.item.affix[x].Array
     }
+    from_record.item.affix.forEach((item, index) => {
+        everyKeyLength_1.push(item.key.length)
+    })
     if (files.length > 0) {
-        getFilesKeys(files, 'record').then(arr => {
-            let o = 0
-            for (let i in obj) {
-                from_record.item.affix[i].key = arr[o]
-                o++
+        getFilesKeys(files, 'archive').then(res => {
+            let whereKey = 0
+            if (add_put_title.value == '添加备案') {
+                for (let x = 0; x < everyKeyLength.length; x++) { // 多文件上传处理
+                    for (let y = 0; y < everyKeyLength[x]; y++) {
+                        from_record.item.affix[x].key[y] = res[whereKey]
+                        whereKey++
+                    }
+                }
+            } else {
+                everyKeyLength.forEach((item, index) => {
+                    if (item != everyKeyLength_1[index]) {
+                        let key = 0
+                        key = everyKeyLength[index] - everyKeyLength_1[index]
+                        for (let i = 0; i < key; i++) {
+                            from_record.item.affix[index].key.push(res[i])
+                        }
+                    }
+                })
             }
             submit_post_put()
         })
         return false
     }
     submit_post_put()
+    // add_put_title.value == '添加备案'
+    // for (let i in from_record.item.affix) {
+    //     if (typeof from_record.item.affix[i].key != 'string') {
+    //         obj[i] = from_record.item.affix[i].key
+    //     }
+    // }
+    // let files = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'record').then(arr => {
+    //         let o = 0
+    //         for (let i in obj) {
+    //             from_record.item.affix[i].key = arr[o]
+    //             o++
+    //         }
+    //         submit_post_put()
+    //     })
+    //     return false
+    // }
+    // submit_post_put()
 }
 const submit_post_put = () => {
     if (add_put_title.value == '修改备案') {
@@ -744,22 +808,6 @@ refreshPage()
 </script>
 
 <style scoped lang="scss">
-.serve-box {
-    border: 1px solid #eee;
-    box-sizing: border-box;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    position: relative;
-    .delete-service {
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 999999;
-        cursor: pointer;
-        background-color: #fff;
-    }
-}
 ::v-deep .el-form-item__content {
     align-items: inherit !important;
 }

@@ -170,7 +170,7 @@
                                 <div class="m-b-10 m-l-50">已选择区域</div>
                             </div>
                             <el-scrollbar height="310px">
-                                <div class="region_box">
+                                <div class="region_box btnNone">
                                     <div v-for="item in data_range.arr" :key="item.id">
                                         <div
                                             v-if="item.type == 5"
@@ -191,7 +191,7 @@
                                     </div>
                                 </div>
                                 <!-- 已选择小区 -->
-                                <div class="region_box">
+                                <div class="region_box btnNone">
                                     <div v-for="item in data_range.arr" :key="item.id">
                                         <div
                                             v-if="item.type == 4"
@@ -218,7 +218,7 @@
                                     </div>
                                 </div>
                                 <!-- 可参与楼栋 -->
-                                <div class="region_box">
+                                <div class="region_box btnNone">
                                     <div v-for="item in data_range.arr" :key="item.id">
                                         <div
                                             v-if="item.type == 3"
@@ -244,7 +244,7 @@
                                     </div>
                                 </div>
                                 <!-- 可参与单元 -->
-                                <div class="region_box">
+                                <div class="region_box" btnNone>
                                     <!-- <div v-for="item in data_range_units.arr" :key="item.id">
                     <div class="region_box_item" @click="clickUnits(item)">
                       {{ item.name }}
@@ -281,7 +281,7 @@
                                         v-for="house in surverRangeWhenHouse.arr"
                                         :key="house.id"
                                     >
-                                        <div class="region_box_item region_box_item_house" @click="clickUnits(house)">
+                                        <div class="region_box_item region_box_item_house" @click="clickUnits(house.id)">
                                             {{ house.name }}
                                         </div>
                                     </div>
@@ -290,7 +290,7 @@
                         </div>
                     </el-col>
                     <el-col :sm="11" :md="11" :lg="19">
-                        <div v-if="showHouses" class="table">
+                        <div v-if="showHouses" class="table btnNone">
                             <div class="header" />
                             <el-scrollbar style="height: 300px;">
                                 <div>
@@ -310,6 +310,15 @@
                                                 }"
                                             >
                                                 {{ house.house_num }}
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?"
+                                                    cancel-button-type="info"
+                                                    @confirm="deleteHouse(house.id)"
+                                                >
+                                                    <template #reference>
+                                                        <div v-if="house.can_exist" class="region_box_item_del_1">✖</div>
+                                                    </template>
+                                                </el-popconfirm>
                                             </div>
                                         </div>
                                     </div>
@@ -417,6 +426,69 @@
                         </el-table-column>
                     </el-table>
                 </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane label="访问记录" name="6">
+                <el-table
+                    :data="data_2.list"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    class="tab_1"
+                >
+                    <el-table-column label="访问者">
+                        <template #default="scope">
+                            <span>{{ scope.row.uinfo?.name?scope.row.uinfo?.name:scope.row.uinfo?.nickname?scope.row.uinfo?.nickname:scope.row.uinfo?.username }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="访问时间">
+                        <template #default="scope">
+                            <span>{{ scope.row.created_at }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="ip地址" align="center">
+                        <template #default="scope">
+                            <span>{{ scope.row.ip }} </span>
+                        </template>
+                    </el-table-column>
+                    <!-- <el-table-column label="评论时间" width="200">
+                                <template #default="scope">
+                                    <span>{{ scope.row.created_at }} </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column fixed="right" label="操作" width="260">
+                                <template #default="scope">
+                                    <el-button
+                                        type="primary" size="small"
+                                        @click="popup2FnModify(scope.row)"
+                                    >
+                                        修改
+                                    </el-button>
+                                    <el-button
+                                        size="small"
+                                        @click="popup3FnDetails(scope.row.id)"
+                                    >
+                                        详情
+                                    </el-button>
+                                    <el-button
+                                        type="primary"
+                                        size="small"
+                                        @click="popup2FnReply(scope.row)"
+                                    >
+                                        回复
+                                    </el-button>
+                                </template>
+                            </el-table-column> -->
+                </el-table>
+                <el-pagination
+                    v-model:current-page="data_2.page"
+                    style="float: right;"
+                    class="btnClass"
+                    layout="prev,next,jumper,"
+                    :total="50"
+                    :page-size="data_2.per_page"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
             </el-tab-pane>
         </el-tabs>
         <!-- 修改问卷评论 -->
@@ -557,7 +629,9 @@ import {
     APIgetCommentList,
     APIgetCommentDetails,
     APIputComment,
-    APIgetBuildListHouse
+    APIgetBuildListHouse,
+    // 访问记录
+    APIRecordList
 } from '@/api/custom/custom.js'
 // 导入图标
 import { Edit, Search } from '@element-plus/icons-vue'
@@ -565,6 +639,11 @@ import { ElMessage } from 'element-plus'
 const from_error = reactive({
     msg: {}
 })
+import {
+    reactive,
+    ref,
+    watch
+} from 'vue'
 // 修改问卷状态
 const exchangeStatus = status => {
     APImodifySurveyStatus(props.id, { status: status })
@@ -641,6 +720,12 @@ const addopts = () => {
         sort: ''
     })
 }
+const data_2 = reactive({
+    list: [],
+    page: 1,
+    total: 50,
+    per_page: 15
+})
 onMounted(() => {
     detailsFunc(props.id)
 })
@@ -714,15 +799,17 @@ const rangeFunc = () => {
     }
     APIgetSurveyRange(params)
         .then(res => {
-            console.log(res)
-            let newarr = []
-            res.data.forEach(item => {
-                let check = newarr.every(items => {
-                    return item.tgt !== items.tgt
-                })
-                check ? newarr.push(item) : ''
-            })
-            data_range.arr = newarr
+
+            for (let i = 0;i < res.data.length;i++) {
+                for (let j = i + 1; j < res.data.length;j++) {
+                    if (res.data[i].tgt == res.data[j].tgt) {
+                        res.data.splice(j, 1)
+                        j--
+                    }
+                }
+            }
+            console.log(res.data)
+            data_range.arr = res.data
         })
         .catch(err => {
             from_error.msg = err.data
@@ -732,7 +819,39 @@ const rangeFunc = () => {
         surverRangeWhenHouse.arr = res.data.units
         console.log(surverRangeWhenHouse.arr)
     })
+    showHouses.value = false
 }
+// 获取访问记录
+const getRecordListunc = () => {
+    let params = {
+        page: data_2.page,
+        per_page: data_2.per_page,
+        tgt_id: props.id
+    }
+    APIRecordList(params).then(res => {
+        console.log(res)
+        data_2.list = res
+        data_2.total = res.length
+        let btnNext1 = document.querySelector('.btnClass')
+        let btnNext2 = btnNext1.children[1]
+        console.log(btnNext1.children[1])
+        if (res.length < data_2.per_page) {
+            console.log('gouqi')
+            btnNext2.classList.add('not_allowed')
+            btnNext2.setAttribute('disabled', true)
+            btnNext2.setAttribute('aria-disabled', true)
+        } else {
+            btnNext2.classList.remove('not_allowed')
+            btnNext2.removeAttribute('disabled')
+            btnNext2.setAttribute('aria-disabled', false)
+        }
+    })
+}
+watch(() => data_2.page, new_val => {
+    // console.log(data_2.page)
+    // data1FnGetList()
+    getRecordListunc()
+}, { immediate: true, deep: true })
 // 问卷范围点击小区事件
 const data_range_buildings = reactive({
     arr: []
@@ -785,7 +904,7 @@ const floors = reactive({
 const clickUnits = val => {
     console.log(val)
     APIgetHouseListSort({
-        houseable_id: val.id,
+        houseable_id: val,
         houseable_type: 'units',
         sid: props.id,
         can_type: 2
@@ -972,6 +1091,11 @@ const deleteRange = val => {
         ElMessage.success('删除成功')
     })
 }
+// 删除问卷房屋
+const deleteHouse = houseid => {
+    APIdeleteSurveyRange({ sid: props.id, can_type: 2, type: 1, tgt: [houseid] })
+    rangeFunc()
+}
 // 刷新
 const refreshFunc = () => {
     topicsFunc()
@@ -1134,6 +1258,8 @@ getOpts(['announce_status_1', 'toushu_pub']).then(res => {
 })
 </script>
 <style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .steps-column {
     display: flex;
     flex-direction: column;
@@ -1264,9 +1390,24 @@ getOpts(['announce_status_1', 'toushu_pub']).then(res => {
                 font-size: 20px;
                 line-height: 40px;
                 text-align: center;
+                position: absolute;
                 &.bg {
                     background-color: #409eff;
                 }
+            }
+            .region_box_item_del_1 {
+                width: 20px;
+                height: 20px;
+                line-height: 16px;
+                transform: scale(0.7);
+                position: absolute;
+                right: -9px;
+                top: -8px;
+                border-radius: 50%;
+                border: 2px solid red;
+                cursor: pointer;
+                font-weight: bold;
+                color: red;
             }
         }
     }

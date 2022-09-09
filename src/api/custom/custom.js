@@ -1536,3 +1536,7 @@ export function APIdeleteActivitiesEvent(vein, data) {
 export function APIpostActivitiesEvent(vein, data) {
     return api2.post(`/vein/${vein}/docs`, data)
 }
+// 访问记录
+export function APIRecordList(params) {
+    return api2.get('/visitlog', { params: params })
+}

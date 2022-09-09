@@ -1293,8 +1293,6 @@ const formFnUpload_1 = () => {
 const dialogExamineCloseFunc_2 = () => {
     from_error.msg = {}
     let files = []
-    let file_key = []
-    let arr = []
     let everyKeyLength = [] // 多文件上传处理
     let everyKeyLength_1 = [] // 多文件上传处理
     addArchive.item.content.forEach((item, index) => {

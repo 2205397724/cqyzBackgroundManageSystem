@@ -35,7 +35,7 @@
             </div>
             <div class="flex-column m-t-40">
                 <span style="color: #409eff;" class="size-base strong">备案资料</span>
-                <div style="width: 96%;height: 1px;background-color: #dcdfe6;" class="m-tb-10" />
+                <!-- <div style="width: 96%;height: 1px;background-color: #dcdfe6;" class="m-tb-10" />
                 <div v-for="(item,index) in current_record_detail.item.affix" :key="item.key">
                     <div style="color: #909399;" class="size-base m-tb-10">{{ item.name }}</div>
                     <div class="flex-row">
@@ -45,6 +45,32 @@
                             :initial-index="index"
                             class="m-r-20 m-b-20"
                         />
+                    </div>
+                </div> -->
+                <div v-if="current_record_detail.item.affix && current_record_detail.item.affix.length >= 1" class="item">
+                    <div class="m-t-20 flx">
+                        <div v-for="(val, i) in current_record_detail.item.affix" :key="i" class="inline-block">
+                            <div v-for="(row, j) in val.key" v-if="val.type == 'file'" class="inline-block image m-r-10" style="text-align: center; background-color: #f0f9eb; vertical-align: center;">
+                                <el-link type="success" class="link" :href="VITE_APP_FOLDER_SRC+row" target="_blank">{{ val.name }}</el-link>
+                            </div>
+                            <!-- <el-tag
+                                                            v-if="val.type == 'file'" type="success" size="small"
+                                                            class="m-r-10"
+                                                        >
+                                                            {{ val.name }}
+                                                        </el-tag> -->
+                            <el-image
+                                v-for="(row, j) in val.key" v-if="val.type == 'image'"
+                                :preview-src-list="val.keys"
+                                class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + row"
+                                fit="cover"
+                            />
+                            <vue3VideoPlay
+                                v-for="(row, j) in val.key"
+                                v-if="val.type == 'audio'" v-bind="optionsAll"
+                                :src="VITE_APP_FOLDER_SRC + row" class="image m-r-10"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,9 +85,9 @@ import {
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { APIgetRecordList,
-         APIgetRecordDetail,
-         APIgetKindList,
-         APIputRecord } from '@/api/custom/custom'
+    APIgetRecordDetail,
+    APIgetKindList,
+    APIputRecord } from '@/api/custom/custom'
 const VITE_APP_FOLDER_SRC = import.meta.env.VITE_APP_FOLDER_SRC
 const route = useRoute()
 const preImg = reactive({
@@ -154,5 +180,14 @@ const find_right_typeId_to_name = typeid => {
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
     width: 50px !important;
+}
+.link {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.d-player-wrap {
+    width: 160px;
+    height: 100px;
 }
 </style>
