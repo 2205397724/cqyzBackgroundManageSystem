@@ -184,183 +184,186 @@
             :title="add_put_title"
             @close="record_dialog_close"
         >
-            <el-scrollbar height="600px">
-                <el-form ref="ruleFormRef" :model="from_record.item">
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="类型">
-                                <el-cascader
-                                    v-model="from_record.item.type"
-                                    :options="recordKindList.arr"
-                                    :show-all-levels="false"
-                                    :props="add_record_props.item"
-                                    @change="add_recode_type_change"
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="备案小区">
-                                <div
-                                    style="
+            <el-form ref="ruleFormRef" :model="from_record.item">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="类型">
+                            <el-cascader
+                                v-model="from_record.item.type"
+                                :options="recordKindList.arr"
+                                :show-all-levels="false"
+                                :props="add_record_props.item"
+                                @change="add_recode_type_change"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="备案小区">
+                            <div
+                                style="
                                                                                                                                                                                                                                                                                                                                 width: 100%;
                                                                                                                                                                                                                                                                                                                                 height: 32px;
                                                                                                                                                                                                                                                                                                                                 border: 1px solid #dcdfe6;
                                                                                                                                                                                                                                                                                                                                 border-radius: 4px;
 "
-                                    @click="click_add_record_zone_id"
-                                >
-                                    <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
-                                </div>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                                @click="click_add_record_zone_id"
+                            >
+                                <span style="margin-left: 11px; color: #c3c4cf;">{{ selectedZone_id }}</span>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="备案主体">
+                            <GroupListTabs
+                                :placeholder="'请选择备案主体'"
+                                @change="
+                                    (val) => {
+                                        from_record.item.group_id = val.id;
+                                    }
+                                "
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="备案主题">
+                            <el-input
+                                :value="add_record_title_computed"
+                                placeholder="小区名称 类别名称"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="状态">
+                            <el-switch
+                                v-if="add_put_title == '修改备案'"
+                                v-model="from_record.item.status"
+                                class="mb-2 switchStyle"
+                                active-text="已审"
+                                inactive-text="未审"
+                                :active-value="1"
+                                :inactive-value="0"
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                                @change="put_record_switch"
+                            />
+                            <el-switch
+                                v-else
+                                v-model="from_record.item.status"
+                                class="mb-2 switchStyle"
+                                active-text="已审"
+                                inactive-text="未审"
+                                :active-value="1"
+                                :inactive-value="0"
+                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="备案编号">
+                            <el-input v-model="from_record.item.sno" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item label-width="70px" label="有效期">
+                            <el-date-picker
+                                v-model="from_record.item.startat"
+                                style="width: 100%;"
+                                start-placeholder="有效时间"
+                                value-format="YYYY-MM-DD"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item label-width="70px">
+                            <el-date-picker
+                                v-model="from_record.item.endat"
+                                style="width: 100%;"
+                                value-format="YYYY-MM-DD"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+                        <el-form-item label-width="70px" label="说明">
+                            <el-input v-model="from_record.item.desc" type="textarea" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <div class="m-b-10">
+                    <el-button type="primary" plain @click="addRecordDialog_arr">
+                        添加备案附件
+                    </el-button>
+                </div>
+                <div
+                    v-for="(item, i) in from_record.item.affix"
+                    :key="i"
+                    class="serve-box"
+                >
                     <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="备案主体">
-                                <GroupListTabs
-                                    :placeholder="'请选择备案主体'"
-                                    @change="
-                                        (val) => {
-                                            from_record.item.group_id = val.id;
+                        <el-col :xs="24" :sm="24">
+                            <el-form-item label-width="70px" label="附件">
+                                <el-upload
+                                    multiple
+                                    action="***"
+                                    :auto-upload="false"
+                                    :file-list="item.key"
+                                    :on-change="
+                                        (file, files) => {
+                                            item.key = files;
                                         }
                                     "
-                                />
+                                    :on-remove="
+                                        (file, files) => {
+                                            item.key = files;
+                                        }
+                                    "
+                                >
+                                    <el-button type="primary">选择附件</el-button>
+                                </el-upload>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24">
+                            <el-form-item label-width="70px" label="文件类型">
+                                <el-radio-group v-model="item.type" class="ml-4">
+                                    <el-radio label="image">图片</el-radio>
+                                    <el-radio label="file">文件</el-radio>
+                                    <el-radio label="audio">音频</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24">
+                            <el-form-item label-width="70px" label="文件名">
+                                <el-input v-model="item.name" placeholder="" />
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="备案主题">
-                                <el-input
-                                    :value="add_record_title_computed"
-                                    placeholder="小区名称 类别名称"
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="状态">
-                                <el-switch
-                                    v-if="add_put_title == '修改备案'"
-                                    v-model="from_record.item.status"
-                                    class="mb-2 switchStyle"
-                                    active-text="已审"
-                                    inactive-text="未审"
-                                    :active-value="1"
-                                    :inactive-value="0"
-                                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                    @change="put_record_switch"
-                                />
-                                <el-switch
-                                    v-else
-                                    v-model="from_record.item.status"
-                                    class="mb-2 switchStyle"
-                                    active-text="已审"
-                                    inactive-text="未审"
-                                    :active-value="1"
-                                    :inactive-value="0"
-                                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="备案编号">
-                                <el-input v-model="from_record.item.sno" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                            <el-form-item label-width="70px" label="说明">
-                                <el-input v-model="from_record.item.desc" type="textarea" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <div style="margin-bottom: 10px;">
-                        <el-button type="primary" plain @click="addRecordDialog_arr">
-                            添加备案附件
-                        </el-button>
-                    </div>
                     <div
-                        v-for="(item, i) in from_record.item.affix"
-                        :key="i"
-                        class="serve-box"
+
+                        class="delete-service"
+                        @click="deleteRecordDialog_arr(i)"
                     >
-                        <el-row :gutter="10">
-                            <el-col :xs="24" :sm="24">
-                                <el-form-item label-width="70px" label="附件">
-                                    <el-upload
-                                        action="***"
-                                        :auto-upload="false"
-                                        :file-list="fileListFn(item.key)"
-                                        :on-change="
-                                            (file, files) => {
-                                                item.key = file;
-                                            }
-                                        "
-                                        :on-remove="
-                                            (file, files) => {
-                                                item.key = file;
-                                            }
-                                        "
-                                    >
-                                        <el-button type="primary">选择附件</el-button>
-                                    </el-upload>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :xs="12" :sm="12">
-                                <el-form-item label-width="70px" label="文件类型">
-                                    <el-input v-model="item.type" placeholder="" />
-                                </el-form-item>
-                            </el-col>
-                            <el-col :xs="12" :sm="12">
-                                <el-form-item label-width="70px" label="文件名">
-                                    <el-input v-model="item.name" placeholder="" />
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <div
-                            v-if="from_record.item.affix.length > 1"
-                            class="delete-service"
-                            @click="deleteRecordDialog_arr(i)"
-                        >
-                            <el-icon :size="20" color="#F56C6C">
-                                <el-icon-circle-close />
-                            </el-icon>
-                        </div>
+                        <el-icon :size="20" color="#F56C6C">
+                            <el-icon-circle-close />
+                        </el-icon>
                     </div>
-                    <el-row>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label-width="70px" label="有效期">
-                                <el-date-picker
-                                    v-model="from_record.item.startat"
-                                    style="width: 100%;"
-                                    start-placeholder="有效时间"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item label-width="70px">
-                                <el-date-picker
-                                    v-model="from_record.item.endat"
-                                    style="width: 100%;"
-                                    value-format="YYYY-MM-DD"
-                                />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </el-scrollbar>
+                </div>
+            </el-form>
             <template #footer>
                 <el-button type="primary" @click="dialogExamineCloseFunc">
                     确认
@@ -524,9 +527,9 @@ const scope_row_group_id_chinese = val => {
 // 添加 添加弹出框里面的附件数组
 const addRecordDialog_arr = () => {
     let data = {
-        name: '',
-        type: '',
-        key: ''
+        'name': '',
+        'type': '',
+        'key': []
     }
     from_record.item.affix.push(data)
 }
@@ -649,11 +652,7 @@ const switchRecordFun = (status, val) => {
         }
     }
     params.status = status
-    APIputRecord(val.id, params).then(res => {
-        if ((res.status = 200)) {
-            ElMessage.success('修改成功')
-        }
-    })
+    APIputRecord(val.id, params).then()
 }
 const deleteRecord = val => {
     APIdeleteRecord(val).then(res => {
@@ -690,6 +689,18 @@ const putRecord = val => {
     current_record.item = val
     APIgetRecordDetail(val.id).then(res => {
         console.log(res)
+        for (let i in res.affix) {
+            res.affix[i].arr = []
+            if (res.affix[i]) {
+                for (let j in res.affix[i].key) {
+                    res.affix[i].arr.push({
+                        name: res.affix[i].key[j]
+                    })
+                }
+                res.affix[i].key = res.affix[i].arr
+                delete res.affix[i].arr
+            }
+        }
         from_record.item = res
     })
 }
@@ -698,38 +709,83 @@ const current_record = reactive({
 })
 // 添加确认按钮
 const dialogExamineCloseFunc = () => {
-    let obj = {}
-    add_put_title.value == '添加备案'
-    for (let i in from_record.item.affix) {
-        if (typeof from_record.item.affix[i].key != 'string') {
-            obj[i] = from_record.item.affix[i].key
-        }
-    }
     let files = []
-    for (let i in obj) {
-        files.push(obj[i].raw)
+    let everyKeyLength = [] // 多文件上传处理
+    let everyKeyLength_1 = [] // 多文件上传处理
+    from_record.item.affix.forEach((item, index) => {
+        everyKeyLength.push(item.key.length)
+    })
+    for (let x in from_record.item.affix) {
+        from_record.item.affix[x].Array = []
+        for (let y in from_record.item.affix[x].key) {
+            if (!from_record.item.affix[x].key[y].raw) {
+                from_record.item.affix[x].Array.push(from_record.item.affix[x].key[y].name)
+            } else {
+                files.push(from_record.item.affix[x].key[y].raw)
+            }
+        }
+
+        from_record.item.affix[x].key = from_record.item.affix[x].Array
+        delete from_record.item.affix[x].Array
     }
+    from_record.item.affix.forEach((item, index) => {
+        everyKeyLength_1.push(item.key.length)
+    })
     if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
-            let o = 0
-            for (let i in obj) {
-                from_record.item.affix[i].key = arr[o]
-                o++
+        getFilesKeys(files, 'archive').then(res => {
+            let whereKey = 0
+            if (add_put_title.value == '添加备案') {
+                for (let x = 0; x < everyKeyLength.length; x++) { // 多文件上传处理
+                    for (let y = 0; y < everyKeyLength[x]; y++) {
+                        from_record.item.affix[x].key[y] = res[whereKey]
+                        whereKey++
+                    }
+                }
+            } else {
+                everyKeyLength.forEach((item, index) => {
+                    if (item != everyKeyLength_1[index]) {
+                        let key = 0
+                        key = everyKeyLength[index] - everyKeyLength_1[index]
+                        for (let i = 0; i < key; i++) {
+                            from_record.item.affix[index].key.push(res[i])
+                        }
+                    }
+                })
             }
             submit_post_put()
         })
         return false
     }
     submit_post_put()
+    // add_put_title.value == '添加备案'
+    // for (let i in from_record.item.affix) {
+    //     if (typeof from_record.item.affix[i].key != 'string') {
+    //         obj[i] = from_record.item.affix[i].key
+    //     }
+    // }
+    // let files = []
+    // for (let i in obj) {
+    //     files.push(obj[i].raw)
+    // }
+    // if (files.length > 0) {
+    //     getFilesKeys(files, 'record').then(arr => {
+    //         let o = 0
+    //         for (let i in obj) {
+    //             from_record.item.affix[i].key = arr[o]
+    //             o++
+    //         }
+    //         submit_post_put()
+    //     })
+    //     return false
+    // }
+    // submit_post_put()
 }
 const submit_post_put = () => {
     if (add_put_title.value == '修改备案') {
         APIputRecord(current_record.item.id, from_record.item).then(res => {
-            if (res.status == 200) {
-                ElMessage.success('修改成功')
-                switch_add_record.value = false
-                refreshPage()
-            }
+            ElMessage.success('修改成功')
+            switch_add_record.value = false
+            refreshPage()
         })
     }
     if (add_put_title.value == '添加备案') {
@@ -752,22 +808,6 @@ refreshPage()
 </script>
 
 <style scoped lang="scss">
-.serve-box {
-    border: 1px solid #eee;
-    box-sizing: border-box;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    position: relative;
-    .delete-service {
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 999999;
-        cursor: pointer;
-        background-color: #fff;
-    }
-}
 ::v-deep .el-form-item__content {
     align-items: inherit !important;
 }

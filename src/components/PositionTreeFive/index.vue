@@ -70,7 +70,7 @@ import { ref, toRefs, reactive, defineProps, defineEmits, watch } from 'vue'
 const props = defineProps(['tree_item', 'type', 'showabled', 'surveyid'])
 const showFamily = ref(false)
 const type = reactive(props.type)
-const emit = defineEmits(['checkFunc', 'update:showabled'])
+const emit = defineEmits(['checkFunc', 'update:showabled', 'onRangeFunc'])
 const { tree_item, showabled } = toRefs(props)
 const treeDetail = reactive({
     arr: {}
@@ -79,6 +79,7 @@ const range = ref(0) // 活动参与范围
 watch(showabled, newVal => {
     showabled.value = newVal.value
 })
+
 const selected_all = reactive({
     arr: []
 })
@@ -125,6 +126,10 @@ const do_type = reactive({
         }
     ]
 })
+// 刷新
+const refreshFunc = () => {
+
+}
 const dialogClose = () => {
     emit('update:showabled', false)
 }
@@ -156,9 +161,7 @@ const selectedHouseFun = houseid => {
     if (selected_house.arr.includes(houseid)) {
         let index = selected_house.arr.indexOf(houseid)
         selected_house.arr.splice(index, 1)
-        APIdeleteSurveyRange({ sid: props.surveyid, can_type: 2, type: 1, tgt: [houseid] })
     } else {
-        APIaddSurveyRange({ sid: props.surveyid, can_type: 2, type: 1, tgt: [houseid] })
         selected_house.arr.push(houseid)
     }
     console.log(selected_house.arr)
@@ -185,6 +188,7 @@ const submit = () => {
                 break
         }
     })
+    console.log(selected_region.arr)
     let promiseAll = []
     if (selected_region.arr.length > 0) {
         promiseAll.push(
@@ -231,10 +235,12 @@ const submit = () => {
             // 并发接口
             ElMessage.success('设置成功')
             emit('update:showabled', false)
+            emit('onRangeFunc')
         })
         .catch(e => {
             ElMessage.error('设置失败请重试')
         })
+    APIaddSurveyRange({ sid: props.surveyid, can_type: 2, type: 1, tgt: selected_house.arr })
 }
 // 点击节点触发
 const nodeClick = (node, treenode, event) => {

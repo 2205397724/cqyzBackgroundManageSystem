@@ -1371,7 +1371,7 @@ export function APIgetHouseHouse(params) {
 // 个人信息
 export function APIgetUserinfo(params) {
     return api.get('/member/home/userinfo', { baseURL: '/mock/', params: params })
-        // return api.get('/user/me', { params: params })
+    // return api.get('/user/me', { params: params })
 }
 // 统计
 export function APIgetTipsnum(params) {
@@ -1447,9 +1447,10 @@ export function APImodifySurveyStatus(id, data) {
 export function APIgetSurveyRange(params) {
     return api.get('/s/can', { params: params })
 }
-//获取参与范围是房屋时上级
-export function APIgetSurverRangeWhenHouse(params){
-    return api.get(`/s-can-h-p`,{params:params})
+
+// 获取参与范围是房屋时上级
+export function APIgetSurverRangeWhenHouse(params) {
+    return api.get('/s-can-h-p', { params: params })
 }
 // // 问卷设置范围详情
 // export function APIsetSurveyDetails(props) {
@@ -1534,4 +1535,8 @@ export function APIdeleteActivitiesEvent(vein, data) {
 // 添加
 export function APIpostActivitiesEvent(vein, data) {
     return api2.post(`/vein/${vein}/docs`, data)
+}
+// 访问记录
+export function APIRecordList(params) {
+    return api2.get('/visitlog', { params: params })
 }

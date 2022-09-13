@@ -218,17 +218,69 @@
                             </div>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <!-- <el-tab-pane label="评分" name="4">
-                        <div>
-                            <el-rate
-                                v-model="score"
-                                disabled
-                                show-score
-                                text-color="#ff9900"
-                                score-template="{value} 分"
-                            />
-                        </div>
-                    </el-tab-pane> -->
+                    <el-tab-pane label="访问记录" name="4">
+                        <el-table
+                            :data="data_2.list"
+                            :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                            class="tab_1"
+                        >
+                            <el-table-column label="访问者">
+                                <template #default="scope">
+                                    <span>{{ scope.row.uinfo?.name?scope.row.uinfo?.name:scope.row.uinfo?.nickname?scope.row.uinfo?.nickname:scope.row.uinfo?.username }} </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="访问时间">
+                                <template #default="scope">
+                                    <span>{{ scope.row.created_at }} </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="ip地址" align="center">
+                                <template #default="scope">
+                                    <span>{{ scope.row.ip }} </span>
+                                </template>
+                            </el-table-column>
+                            <!-- <el-table-column label="评论时间" width="200">
+                                <template #default="scope">
+                                    <span>{{ scope.row.created_at }} </span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column fixed="right" label="操作" width="260">
+                                <template #default="scope">
+                                    <el-button
+                                        type="primary" size="small"
+                                        @click="popup2FnModify(scope.row)"
+                                    >
+                                        修改
+                                    </el-button>
+                                    <el-button
+                                        size="small"
+                                        @click="popup3FnDetails(scope.row.id)"
+                                    >
+                                        详情
+                                    </el-button>
+                                    <el-button
+                                        type="primary"
+                                        size="small"
+                                        @click="popup2FnReply(scope.row)"
+                                    >
+                                        回复
+                                    </el-button>
+                                </template>
+                            </el-table-column> -->
+                        </el-table>
+                        <el-pagination
+                            v-model:current-page="data_2.page"
+                            style="float: right;"
+                            class="btnClass"
+                            layout="prev,next,jumper,"
+                            :total="50"
+                            :page-size="data_2.per_page"
+                            background
+                            prev-text="上一页"
+                            next-text="下一页"
+                            hide-on-single-page
+                        />
+                    </el-tab-pane>
                 </el-tabs>
             </div>
         </page-main>
@@ -713,7 +765,8 @@ import {
     APIgetCommentList,
     // APIpostComment,
     APIgetCommentDetails,
-    APIputComplaint
+    APIputComplaint,
+    APIRecordList
 } from '@/api/custom/custom.js'
 const dataForm = reactive({
     item: {
@@ -759,6 +812,42 @@ const getComplaintDetailsFunc = () => {
         getOptsFunc()
     })
 }
+const data_2 = reactive({
+    list: [],
+    page: 1,
+    total: 50,
+    per_page: 15
+})
+// 获取访问记录
+const getRecordListunc = () => {
+    let params = {
+        page: data_2.page,
+        per_page: data_2.per_page,
+        tgt_id: route.query.id
+    }
+    APIRecordList(params).then(res => {
+        console.log(res)
+        data_2.list = res
+        data_2.total = res.length
+        let btnNext1 = document.querySelector('.btnClass')
+        let btnNext2 = btnNext1.children[1]
+        console.log(btnNext1.children[1])
+        if (res.length < data_2.per_page) {
+            btnNext2.classList.add('not_allowed')
+            btnNext2.setAttribute('disabled', true)
+            btnNext2.setAttribute('aria-disabled', true)
+        } else {
+            btnNext2.classList.remove('not_allowed')
+            btnNext2.removeAttribute('disabled')
+            btnNext2.setAttribute('aria-disabled', false)
+        }
+    })
+}
+watch(() => data_2.page, new_val => {
+    // console.log(data_2.page)
+    // data1FnGetList()
+    getRecordListunc()
+}, { immediate: true, deep: true })
 const data = {
     content: '对方能够代加工',
     score: 9,
@@ -1215,7 +1304,9 @@ const getOptsFunc = () => {
 }
 import { Delete, Edit } from '@element-plus/icons-vue'
 </script>
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .sno {
     color: #b7b1b1;
 }

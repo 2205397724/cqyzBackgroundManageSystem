@@ -384,6 +384,9 @@ const detailsFunc = val => {
 watch(page, () => {
     getTabListFunc()
 })
+// watch(page_1, () => {
+//     detailsFunc()
+// })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
@@ -455,13 +458,11 @@ const getTabListFunc = () => {
         let btnNext1 = document.querySelector('.btnClass')
         let btnNext2 = btnNext1.children[1]
         console.log(btnNext1.children[1])
-        if (res.data.length <= per_page.value) {
-            flag.value = true
+        if (res.data.length < per_page.value) {
             btnNext2.classList.add('not_allowed')
             btnNext2.setAttribute('disabled', true)
             btnNext2.setAttribute('aria-disabled', true)
         } else {
-            flag.value = false
             btnNext2.classList.remove('not_allowed')
             btnNext2.removeAttribute('disabled')
             btnNext2.setAttribute('aria-disabled', false)
