@@ -1,12 +1,12 @@
 <template>
     <div style="height: 100%;display: inline-block;width: 100%;">
         <div
-            class="tit-box" :class="{ 'nostr': !userName }"
+            class="tit-box" :class="{ 'nostr': !userName&&!userMobile }"
             style="height: 100%;width: 100%;display: flex;align-items: center;cursor: pointer;padding-left: 11px;"
             @click="openDigFunc" @mouseenter="icon_hover = true" @mouseleave="icon_hover = false"
         >
             <span v-if="!props.name" style="line-height: 1rem;white-space: nowrap;overflow: hidden;">{{
-                userName ? userName : '请点击选择'
+                userName ? userName : userMobile? userMobile:'请点击选择'
             }}</span>
             <span v-if="props.name" class="head_tb" style="color: #626466;">{{ props.name }}</span>
             <el-icon
@@ -209,14 +209,17 @@ const getTabListFunc = () => {
     })
 }
 const userName = ref('')
+const userMobile = ref('')
 const rowClickFunc = row => {
     // name.value = row.name
     emit('checkName', row)
-    userName.value = row.mobile
+    userName.value = row.username
+    userMobile.value = row.mobile
     switch_list.value = false
 }
 const clearFunc = () => {
     userName.value = ''
+    userMobile.value = ''
 }
 defineExpose({
     clearFunc

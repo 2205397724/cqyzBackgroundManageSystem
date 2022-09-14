@@ -19,16 +19,16 @@
                         />
                         <div style="padding: 20px 20px 0;box-sizing: border-box;">
                             <div class="search">
-                                    <el-row>
-                                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                            <el-row>
-                                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                                    房屋使用状态：
+                                <el-row>
+                                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                                        <el-row>
+                                            <el-col :sm="4" :xs="6" :md="11" class="search_th">
+                                                房屋使用状态：
                                             </el-col>
-                                            <el-col :sm="20" :xs="18" :md="14">
+                                            <el-col :sm="20" :xs="18" :md="13">
                                                 <el-select
                                                     v-model="data_search.obj.status_use"
-                                                    class="search_tb" placeholder="*房屋使用状态"
+                                                    class="search_tb" placeholder="*状态"
                                                     clearable
                                                 >
                                                     <el-option
@@ -37,17 +37,17 @@
                                                     />
                                                 </el-select>
                                             </el-col>
-                                          </el-row>
-                                        </el-col>
-                                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                                    房屋安全状态：
-                                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
+                                        </el-row>
+                                    </el-col>
+                                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                                        <el-row>
+                                            <el-col :sm="4" :xs="6" :md="11" class="search_th">
+                                                房屋安全状态：
+                                            </el-col>
+                                            <el-col :sm="20" :xs="18" :md="13">
                                                 <el-select
                                                     v-model="data_search.obj.status_safe"
-                                                    class="search_tb" placeholder="*房屋安全状态"
+                                                    class="search_tb" placeholder="*状态"
                                                     clearable
                                                 >
                                                     <el-option
@@ -56,14 +56,14 @@
                                                     />
                                                 </el-select>
                                             </el-col>
-                            </el-row>
-                                        </el-col>
-                                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                                    是否绑定：
-                                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14">
+                                        </el-row>
+                                    </el-col>
+                                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                                        <el-row>
+                                            <el-col :sm="4" :xs="6" :md="11" class="search_th">
+                                                是否绑定：
+                                            </el-col>
+                                            <el-col :sm="20" :xs="18" :md="13">
                                                 <el-select
                                                     v-model="data_search.obj.is_bind_property"
                                                     class="search_tb"
@@ -76,19 +76,19 @@
                                                     />
                                                 </el-select>
                                             </el-col>
-                            </el-row>
-                                        </el-col>
-                                    </el-row>
-                                    <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                                        </el-row>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                                        <span v-show="switch_search == true" class="size-base">
+                                            *共搜索到{{ total }}条。
+                                        </span>
+                                    </el-col>
+                                </el-row>
                             </div>
                             <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
                                 <div class="font-grey size-base">户数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_house }} </strong>户</div>
@@ -1041,7 +1041,7 @@ import {
     APIgetUnitsDetailsHouse,
     APIgetBuildDetailsHouse
 } from '@/api/custom/custom.js'
-import {Loading, Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 // 获取楼栋单元
 const details_data = reactive({
     obj: {}

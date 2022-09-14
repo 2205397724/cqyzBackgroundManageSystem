@@ -27,14 +27,14 @@
                         </el-col>
                     </el-row>
                 </div> -->
-                <div v-show="switch_search" class="search-tips">
+                <!-- <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
-                </div>
+                </div> -->
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加城市</el-button>
+                            <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addResidentialFunc">添加城市</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -45,12 +45,12 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="名称" width="100">
+                        <el-table-column prop="name" label="名称">
                             <template #default="scope">
                                 <span>{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="china_code" label="区域代码" width="100">
+                        <el-table-column prop="china_code" label="区域代码">
                             <template #default="scope">
                                 <span style="margin-left: 15px;">{{ scope.row.china_code }} </span>
                             </template>
@@ -65,7 +65,7 @@
                                 <span>{{ scope.row.rpc_port }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="updated_at" label="auth_sk">
+                        <el-table-column prop="updated_at" label="授权密钥">
                             <template #default="scope">
                                 <span>{{ scope.row.auth_sk }} </span>
                             </template>
@@ -96,7 +96,6 @@
                                 </el-button>
                             </template> -->
                         </el-table-column>
-                        <el-table-column />
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -152,7 +151,7 @@
                     <el-row :gutter="10">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="名称" prop="name"
+                                label="名称" prop="name" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
                                 <el-input
@@ -163,7 +162,7 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="区域代码" prop="china_code"
+                                label="区域代码" prop="china_code" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''"
                             >
                                 <Cascaders v-model="from_examine.item.china_code" />
@@ -171,7 +170,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="服务域名" prop="base_url"
+                                label="服务域名" prop="base_url" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
                                 <el-input
@@ -183,7 +182,7 @@
 
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="rpc端口" prop="rpc_port"
+                                label="rpc端口" prop="rpc_port" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
                                 <el-input
@@ -194,7 +193,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="auth_sk" prop="auth_sk"
+                                label="授权密钥" prop="auth_sk" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
                                 <el-input
@@ -205,7 +204,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="启用授权" prop="active"
+                                label="启用授权" prop="active" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
                                 <el-switch
@@ -258,8 +257,15 @@
                     <div class="right">{{ data_details.item.rpc_port }} </div>
                 </div>
                 <div class="item">
-                    <div class="left">auth_sk</div>
+                    <div class="left">授权密钥</div>
                     <div class="right">{{ data_details.item.auth_sk }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">启用授权</div>
+                    <div class="right">
+                        <el-tag v-if="data_details.item.active == 1" size="small" round type="success">启用</el-tag>
+                        <el-tag v-if="data_details.item.active == 0" size="small" round type="danger">禁用</el-tag>
+                    </div>
                 </div>
                 <div class="item">
                     <div class="left">创建时间</div>
@@ -296,6 +302,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索

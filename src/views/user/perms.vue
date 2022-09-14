@@ -2,9 +2,9 @@
     <div>
         <page-main>
             <div :gutter="20" class="bottom-btn-box-2">
-                <el-row>
+                <el-row class="m-b-20">
                     <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                        <el-button type="primary" class="m-b-10" :icon="Plus" @click="addPerms">添加权限</el-button>
+                        <el-button type="primary" size="large" :icon="Plus" @click="addPerms">添加权限</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -18,24 +18,24 @@
                     :tree-props="{ children: 'children' }"
                     style="width: 100%;min-height: 300px;"
                 >
-                    <el-table-column prop="name" label="权限名称" width="150px">
+                    <el-table-column prop="name" label="权限名称">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="utype" label="权限所属" width="80">
+                    <el-table-column prop="desc" label="权限描述" width="120px">
                         <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.utype }} </span>
+                            <span class="m-l-10">{{ scope.row.desc }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="utype" label="权限所属" width="100px">
+                        <template #default="scope">
+                            <span class="m-l-10">{{ getOptVal(opts_all.obj.put_perms_utype,scope.row.utype) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id" label="权限ID" width="250px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.id }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="desc" label="权限描述">
-                        <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="320">
@@ -97,7 +97,7 @@
                         <el-col :xs="8" :sm="12" :md="12" :lg="24">
                             <el-form-item label="权限类型" prop="utype">
                                 <el-select v-model="from_add_perms.item.utype">
-                                    <el-option v-for="item in put_perms_utype.arr" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="item in opts_all.obj.put_perms_utype" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -135,7 +135,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                             <el-form-item label="权限所属" prop="utype">
                                 <el-select v-model="from_add_perms.item.utype">
-                                    <el-option v-for="item in put_perms_utype.arr" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="item in opts_all.obj.put_perms_utype" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -143,7 +143,7 @@
                 </el-form>
                 <template #footer>
                     <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                        <el-button @click="switch_add_post=false">取消</el-button>
+                        <el-button @click="switch_put_perms=false">取消</el-button>
                         <el-button type="primary" @click="put_perms_submit()">确定</el-button>
                     </div>
                 </template>
@@ -232,7 +232,7 @@ import {
 } from '@/api/custom/custom'
 const loading_tab = ref(false)
 const page = ref(1)
-const per_page = ref(10)
+const per_page = ref(15)
 const switch_put_perms = ref(false)
 const switch_perms_roles = ref(false)
 const current_perms_id = ref('')
@@ -272,8 +272,6 @@ const from_add_perms = reactive({
     }
 })
 const refreshFunc = () => {
-    page.value = 1
-    per_page.value = 10
     getTabListFun()
 }
 // 分页功能板块
@@ -336,16 +334,6 @@ const postPerms_roles = () => {
     })
 }
 // 修改权限
-const put_perms_utype = reactive({ arr: [{
-    key: 'gov',
-    val: '管理端'
-}, {
-    key: 'pm',
-    val: '物业端'
-}, {
-    key: 'mbr',
-    val: '业主端'
-}] })
 const postPermsFun = val => {
     from_add_perms.item.id = val.id
     switch_put_perms.value = true
@@ -353,6 +341,7 @@ const postPermsFun = val => {
         from_add_perms.item = res.data
     })
 }
+
 // 删除角色拥有的角色
 const deletePerms_roles = val => {
     APIdeletePerms_Roles(current_perms_id.value, { data: { role_ids: [val.id] } }).then(res => {
@@ -415,7 +404,13 @@ const getTabListFun = () => {
     })
 }
 import { getOptVal, getOpts } from '@/util/opts'
-getOpts(['terminal_perms'])
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['terminal_perms', 'put_perms_utype']).then(res => {
+    opts_all.obj = res
+    console.log(res)
+})
 refreshFunc()
 </script>
 <style lang="scss" scoped>

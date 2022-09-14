@@ -1,7 +1,7 @@
 <template>
     <div class="setuptype">
         <page-main>
-            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加分类</el-button>
+            <el-button class="m-b-20 m-r-10" type="primary" size="large" :icon="Plus" @click="addResidentialFunc">添加分类</el-button>
 
             <el-select v-model="main_type" class="head-btn" placeholder="分类种类" style="width: 200px;">
                 <el-option
@@ -15,37 +15,36 @@
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    default-expand-all
                     row-key="id"
                     :tree-props="{ children: 'children' }"
                     style="width: 100%;min-height: 300px;"
                 >
-                    <el-table-column prop="name" label="名称" width="180">
+                    <el-table-column prop="name" label="名称">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="level" label="级别" width="140">
+                    <el-table-column prop="level" label="级别">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.level }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="ID" width="250">
+                    <!-- <el-table-column prop="id" label="ID" width="250">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                         </template>
-                    </el-table-column>
-                    <el-table-column prop="kind" label="分类种类" width="180">
+                    </el-table-column> -->
+                    <el-table-column prop="kind" label="分类种类">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.kind,scope.row.kind) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="pid" label="上级ID" width="250">
+                    <!-- <el-table-column prop="pid" label="上级ID" width="250">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.pid }} </span>
                         </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="排序" width="180">
+                    </el-table-column> -->
+                    <el-table-column prop="sort" label="排序">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.sort }} </span>
                         </template>
@@ -60,21 +59,22 @@
                             <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
                         </template>
                     </el-table-column> -->
-                    <el-table-column />
-                    <el-table-column fixed="right" label="操作" width="200">
+
+                    <el-table-column fixed="right" label="操作" width="250">
                         <template #default="scope">
+                            <el-button
+                                type="success" size="small"
+                                @click="addResidentialFunc(scope.row)"
+                            >
+                                添加子分类
+                            </el-button>
                             <el-button
                                 type="primary" size="small"
                                 @click="modifyResidentialFunc(scope.row)"
                             >
                                 修改
                             </el-button>
-                            <el-button
-                                type="primary" size="small"
-                                @click="addResidentialFunc(scope.row)"
-                            >
-                                添加
-                            </el-button>
+
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
                                 @confirm="deleteFunc(scope.row)"
@@ -121,6 +121,7 @@
                                 <el-input
                                     v-model="from_examine.item.pid"
                                     placeholder=""
+                                    disabled
                                 />
                             </el-form-item>
                         </el-col>
@@ -162,6 +163,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import {  Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 const show_pid = ref(false)

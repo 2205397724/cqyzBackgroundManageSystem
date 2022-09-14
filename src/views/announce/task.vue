@@ -232,9 +232,9 @@
                 <div class="item">
                     <div class="left">是否完成</div>
                     <div class="right">
-                        <el-tag v-if=" data_details.item.iscpt" type="success" effect="dark" round class="btnNone">已完成</el-tag>
-                        <el-tag v-if=" data_details.item.iscpt" class="m-l-10 btnNone" type="default" round>查看{{ data_details.item.aid }}</el-tag>
-                        <el-tag v-if="!data_details.item.iscpt" type="danger" effect="dark" round class="btnNone">未完成</el-tag>
+                        <el-tag v-if="data_details.item.iscpt" type="success" effect="dark" round class="btnNone">已完成</el-tag>
+                        <announceDetails v-if="data_details.item.iscpt" :id="data_details.item.aid" :name="announceName_1" />
+                        <el-tag v-if="!data_details.item.iscpt" type="danger" round class="btnNone">未完成</el-tag>
                     </div>
                 </div>
                 <div class="item">
@@ -523,6 +523,7 @@ const from_error = reactive({
     msg: {}
 })
 const announceName = ref('公示')
+const announceName_1 = ref('查看')
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索

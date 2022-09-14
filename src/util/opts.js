@@ -822,6 +822,23 @@ const opts = {
     }, {
         key: 30,
         val: '审核失败'
+    }],
+    rolesSpec: [{
+        key: 0,
+        val: '无'
+    }, {
+        key: 1,
+        val: '业主'
+    }],
+    put_perms_utype: [{
+        key: 'gov',
+        val: '管理端'
+    }, {
+        key: 'pm',
+        val: '物业端'
+    }, {
+        key: 'mbr',
+        val: '业主端'
     }]
 }
 

@@ -27,14 +27,14 @@
                         </el-col>
                     </el-row>
                 </div> -->
-                <div v-show="switch_search" class="search-tips">
+                <!-- <div v-show="switch_search" class="search-tips">
                     <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
                     *搜索到相关结果共{{ total }}条。
-                </div>
+                </div> -->
                 <div>
                     <el-row :gutter="20" class="bottom-btn-box-2">
                         <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addSurvey">添加区域</el-button>
+                            <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addSurvey">添加区域</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -45,22 +45,21 @@
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                         style="width: 100%;min-height: 300px;"
                     >
-                        <el-table-column prop="name" label="区域名称" width="180">
+                        <el-table-column prop="name" label="区域名称">
                             <template #default="scope">
                                 <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="code" label="区域代码" width="180">
+                        <el-table-column prop="code" label="区域代码">
                             <template #default="scope">
                                 <span style="margin-left: 10px;">{{ scope.row.code }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="level" label="区域等级" width="120">
+                        <el-table-column prop="level" label="区域等级">
                             <template #default="scope">
                                 <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.china_level,scope.row.level) }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column />
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button
@@ -207,6 +206,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -344,8 +344,8 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteChina(val.id).then(res => {
-            refreshFunc()
-            ElMessage.success(res.msg)
+        refreshFunc()
+        ElMessage.success(res.msg)
     })
 }
 // 添加问卷

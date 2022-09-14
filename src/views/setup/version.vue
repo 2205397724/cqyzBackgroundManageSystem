@@ -1,34 +1,34 @@
 <template>
     <div class="setupAPP">
         <page-main>
-            <el-button class="head-btn" type="primary" @click="addresidentialFunc">添加App版本</el-button>
+            <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addresidentialFunc">添加App版本</el-button>
             <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 400px; max-height: 500px;">
                 <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}" default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
-                    <el-table-column prop="type" label="app类别" width="180">
+                    <el-table-column prop="version_name" label="版本名称">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_type,scope.row.type) }} </span>
+                            <span>{{ scope.row.version_name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="version" label="版本号" width="160">
+                    <el-table-column prop="version" label="版本号">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.version }} </span>
+                            <span>{{ scope.row.version }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="version_name" label="版本名称" width="160">
+                    <el-table-column prop="type" label="app类别" align="center">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.version_name }} </span>
+                            <span>{{ getOptVal(opts_all.obj.sys_is_type,scope.row.type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="force" label="是否强制更新" width="160">
+                    <el-table-column prop="force" label="是否强制更新" align="center">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_force,scope.row.force) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.sys_is_force,scope.row.force) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="url" label="下载地址">
+                    <!-- <el-table-column prop="url" label="下载地址">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.url }} </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="status" label="状态" width="160">
                         <template #default="scope">
                             <el-switch
@@ -208,6 +208,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import {  Plus } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 let data_tab = reactive({

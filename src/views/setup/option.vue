@@ -1,97 +1,132 @@
 <template>
     <div class="setupoption">
         <page-main>
+            <div class="m-b-20">
+                <el-button
+                    size="large"
+                    type="primary"
+                    :icon="Plus"
+                    @click="addResidentialFunc"
+                >
+                    添加配置
+                </el-button>
+            </div>
+            <div class="search">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                选项配置标签：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-input v-model="data_search.label" class="search_tb" placeholder="配置标签" clearable />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                是否系统级别：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-select v-model="data_search.is_sys" class="search_tb" placeholder="是否系统级别" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.app_show" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                启用状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-select v-model="data_search.is_active" class="search_tb" placeholder="启用状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">
+                            筛选
+                        </el-button>
+                        <el-button
+                            v-if="switch_search == true"
+                            class="m-l-20 m-r-10"
+                            :icon="Loading"
+                            @click="refreshFunc()"
+                        >
+                            重置
+                        </el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *搜索到相关结果共{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
+            </div>
             <div>
-                <div>
-                    <el-row :gutter="10">
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3" class="el-cascader-box-my">
-                            <el-input v-model="data_search.label" class="head-btn" placeholder="选项配置标签" clearable />
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.is_sys" class="head-btn" placeholder="系统级别" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                            <el-select v-model="data_search.is_active" class="head-btn" placeholder="启用状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                        <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                            <el-button class="head-btn" type="primary" @click="searchFunc">搜索</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div v-show="switch_search" class="search-tips">
-                    <el-button style="margin-right: 10px;" @click="refreshFunc">重置</el-button>
-                    *搜索到相关结果共{{ total }}条。
-                </div>
-                <div>
-                    <el-row :gutter="20" class="bottom-btn-box-2">
-                        <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加配置</el-button>
-                        </el-col>
-                    </el-row>
-                </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
-                    <el-table
-                        v-loading="loading_tab"
-                        :data="data_tab.arr"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
-                    >
-                        <el-table-column prop="name" label="配置名称" width="180" />
-                        <el-table-column prop="label" label="配置标签" width="180" />
-                        <el-table-column prop="desc" label="备注" width="220" />
-                        <el-table-column prop="is_sys" label="系统级别" width="180">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="is_active" label="启用状态" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_sys,scope.row.is_active) }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column />
-                        <el-table-column fixed="right" label="操作" width="200">
-                            <template #default="scope">
-                                <el-button
-                                    type="primary" size="small"
-                                    @click="modifyResidentialFunc(scope.row)"
-                                >
-                                    修改
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    @click="optValFunc(scope.row)"
-                                >
-                                    配置
-                                </el-button>
-                                <el-popconfirm
-                                    title="确定要删除当前项么?" cancel-button-type="info"
-                                    @confirm="deleteFunc(scope.row)"
-                                >
-                                    <template #reference>
-                                        <el-button type="danger" size="small">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-                <div style="padding-top: 20px;">
-                    <el-pagination
-                        v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
-                        :page-size="per_page"
-                        background
-                        hide-on-single-page
-                    />
-                </div>
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    class="tab_1"
+                >
+                    <el-table-column prop="name" label="配置名称" />
+                    <el-table-column prop="label" label="配置标签" />
+                    <el-table-column prop="is_sys" label="是否系统级别">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="is_active" label="启用状态">
+                        <template #default="scope">
+                            <span style="margin-left: 10px;">
+                                <el-tag v-if="scope.row.is_active == 1" type="success" size="small" round>开启</el-tag>
+                                <el-tag v-if="scope.row.is_active == 0" type="danger" size="small" round>关闭</el-tag>
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="optValFunc(scope.row)"
+                            >
+                                配置
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div style="padding-top: 20px;">
+                <el-pagination
+                    v-model:current-page="page"
+                    layout="total,prev,pager,next,jumper,"
+                    :total="total"
+                    :page-size="per_page"
+                    background
+                    hide-on-single-page
+                />
             </div>
         </page-main>
         <!-- 修改添加 -->
@@ -109,7 +144,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="配置名称" prop="name"
+                                label="配置名称" prop="name" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                             >
                                 <el-input
@@ -120,7 +155,7 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="配置标签" prop="label"
+                                label="配置标签" prop="label" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.label?from_error.msg.label[0]:''"
                             >
                                 <el-input
@@ -131,17 +166,17 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="系统级别" prop="is_sys"
+                                label="是否系统级别" prop="is_sys" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.is_sys?from_error.msg.is_sys[0]:''"
                             >
-                                <el-select v-model="from_examine.item.is_sys" class="head-btn" placeholder="系统级别" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-select v-model="from_examine.item.is_sys" class="head-btn" placeholder="是否系统级别" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.app_show" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="启用状态" prop="is_active"
+                                label="启用状态" prop="is_active" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.is_active?from_error.msg.is_active[0]:''"
                             >
                                 <el-select v-model="from_examine.item.is_active" class="head-btn" placeholder="启用状态" clearable>
@@ -151,7 +186,7 @@
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="备注" prop="desc"
+                                label="备注" prop="desc" label-width="100px"
                                 :error="from_error.msg&&from_error.msg.desc?from_error.msg.desc[0]:''"
                             >
                                 <el-input
@@ -179,36 +214,71 @@
             :title="`“${item_opt.obj.name}”配置项`"
             width="70%"
         >
-            <el-row :gutter="10">
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="opt_search.key" class="head-btn" placeholder="选项键值" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-input v-model="opt_search.val" class="head-btn" placeholder="选项名称" clearable />
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="opt_search.is_sys" class="head-btn" placeholder="系统级别" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="3">
-                    <el-select v-model="opt_search.is_active" class="head-btn" placeholder="启用状态" clearable>
-                        <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
-                    </el-select>
-                </el-col>
-                <el-col :xs="12" :sm="8" :md="6" :lg="2" :xl="3">
-                    <el-button class="head-btn" type="primary" @click="optValSearchFunc">搜索</el-button>
-                </el-col>
-            </el-row>
-            <div v-show="switch_opt_val_search" class="search-tips">
-                <el-button style="margin-right: 10px;" @click="optValRefreshFunc">重置</el-button>
-                *搜索到相关结果共{{ opt_total }}条。
+            <div class="m-b-20">
+                <el-button
+                    size="large"
+                    type="primary"
+                    :icon="Plus"
+                    @click="optValAddFunc"
+                >
+                    添加配置项
+                </el-button>
             </div>
-            <el-row :gutter="20" class="bottom-btn-box-2">
-                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="optValAddFunc">添加配置项</el-button>
-                </el-col>
-            </el-row>
+            <div class="search">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="7" class="search_th">
+                                选项键值：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="17">
+                                <el-input v-model="opt_search.key" class="search_tb" placeholder="选项键值" clearable />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="7" class="search_th">
+                                选项名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="17">
+                                <el-input v-model="opt_search.val" class="search_tb" placeholder="选项名称" clearable />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="7" class="search_th">
+                                启用状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="17">
+                                <el-select v-model="opt_search.is_active" class="search_tb" placeholder="启用状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_active" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="optValSearchFunc">
+                            筛选
+                        </el-button>
+                        <el-button
+                            v-if="switch_opt_val_search == true"
+                            class="m-l-20 m-r-10"
+                            :icon="Loading"
+                            @click="optValRefreshFunc()"
+                        >
+                            重置
+                        </el-button>
+                        <span v-show="switch_opt_val_search == true" class="size-base">
+                            *搜索到相关结果共{{ opt_total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
+            </div>
             <el-table
                 v-loading="opt_loading"
                 :data="opt_tab.arr"
@@ -216,21 +286,21 @@
                 style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
                 max-height="400"
             >
-                <el-table-column prop="sort" label="排序" width="60" />
-                <el-table-column prop="val" label="选项名称" width="180" />
-                <el-table-column prop="key" label="选项键值" width="120" />
-                <el-table-column prop="desc" label="备注" width="220" />
-                <el-table-column prop="is_sys" label="系统级别" width="100">
+                <el-table-column prop="val" label="选项名称" />
+                <el-table-column prop="key" label="选项键值" />
+                <el-table-column prop="is_sys" label="是否系统级别">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_sys,scope.row.is_sys) }} </span>
+                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="is_active" label="启用状态" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sys_is_active,scope.row.is_active) }} </span>
+                        <span style="margin-left: 10px;">
+                            <el-tag v-if="scope.row.is_active == 1" type="success" size="small" round>开启</el-tag>
+                            <el-tag v-if="scope.row.is_active == 0" type="danger" size="small" round>关闭</el-tag>
+                        </span>
                     </template>
                 </el-table-column>
-                <el-table-column />
                 <el-table-column fixed="right" label="操作" width="160">
                     <template #default="scope">
                         <el-button
@@ -276,7 +346,7 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="选项键值" prop="key"
-                                label-width="70px"
+                                label-width="110px"
                                 :error="err_opt.msg&&err_opt.msg.key?err_opt.msg.key[0]:''"
                             >
                                 <el-input
@@ -288,7 +358,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="选项名称" prop="val"
-                                label-width="70px"
+                                label-width="110px"
                                 :error="err_opt.msg&&err_opt.msg.val?err_opt.msg.val[0]:''"
                             >
                                 <el-input
@@ -299,19 +369,19 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="系统级别" prop="is_sys"
-                                label-width="70px"
+                                label="是否系统级别" prop="is_sys"
+                                label-width="110px"
                                 :error="err_opt.msg&&err_opt.msg.is_sys?err_opt.msg.is_sys[0]:''"
                             >
-                                <el-select v-model="from_opt_val.obj.is_sys" class="head-btn" placeholder="系统级别" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.sys_is_sys" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-select v-model="from_opt_val.obj.is_sys" class="head-btn" placeholder="是否系统级别" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.app_show" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="启用状态" prop="is_active"
-                                label-width="70px"
+                                label-width="110px"
                                 :error="err_opt.msg&&err_opt.msg.is_active?err_opt.msg.is_active[0]:''"
                             >
                                 <el-select v-model="from_opt_val.obj.is_active" class="head-btn" placeholder="启用状态" clearable>
@@ -322,7 +392,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label="排序" prop="sort"
-                                label-width="70px"
+                                label-width="110px"
                                 :error="err_opt.msg&&err_opt.msg.sort?err_opt.msg.sort[0]:''"
                             >
                                 <el-input
@@ -333,7 +403,7 @@
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="备注" prop="desc"
+                                label="备注" prop="desc" label-width="110px"
                                 :error="err_opt.msg&&err_opt.msg.desc?err_opt.msg.desc[0]:''"
                             >
                                 <el-input
@@ -371,6 +441,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -603,15 +674,7 @@ watch(opt_page, () => {
 const optValAddFunc = () => {
     err_opt.msg = {}
     str_opt_val_title.value = '添加'
-    from_opt_val.obj = {
-        'name': '',
-        'label': '',
-        'is_active': 0,
-        'is_sys': 0,
-        'desc': '',
-        'sort': 0,
-        'opt_id': item_opt.obj.id
-    }
+    from_opt_val.obj = {}
     switch_opt_val_add.value = true
 }
 // 修改
@@ -681,7 +744,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['sys_is_sys', 'sys_is_active']).then(res => {
+getOpts(['sys_is_sys', 'sys_is_active', 'app_show']).then(res => {
     opts_all.obj = res
 })
 

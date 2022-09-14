@@ -877,16 +877,16 @@ export function APIpostGroupPerms(gid, data) {
 export function APIdeleteGroupPerms(gid) {
     return api.delete(`/groups/${gid}/perms`)
 }
-// 获取角色拥有所有权限
-export function getRoles_perms(role) {
-    return api.get(`/roles/${role}/perms`)
-}
-export function payRoles_perms(role, data) {
-    return api.post(`/roles/${role}/perms`, data)
-}
-export function deleteRoles_perms(role, data) {
-    return api.delete(`/roles/${role}/perms`, data)
-}
+// // 获取角色拥有所有权限
+// export function getRoles_perms(role) {
+//     return api.get(`/roles/${role}/perms`)
+// }
+// export function payRoles_perms(role, data) {
+//     return api.post(`/roles/${role}/perms`, data)
+// }
+// export function deleteRoles_perms(role, data) {
+//     return api.delete(`/roles/${role}/perms`, data)
+// }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
 // 列表
