@@ -1,8 +1,15 @@
-
 import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
 import { ElMessage } from 'element-plus'
-import { APIlogin, APIgetPermissions, APIeditPassword, APIgetPermsList, APIgetloginUserPerms } from '@/api/custom/custom.js'
+import {
+    APIlogin,
+    APIgetPermissions,
+    APIeditPassword,
+    APIgetLoginUserGroup,
+    APIgetPermsList,
+    APIgetloginUserPerms,
+    APIgetGroupPerms
+} from '@/api/custom/custom.js'
 import { useMenuStore } from './menu'
 import * as md5 from 'md5'
 // import { resolve } from 'path-browserify'
@@ -17,6 +24,7 @@ export const useUserStore = defineStore(
             permissions: [],
             utype: '',
             china_code: '',
+            gid: '',
             isChooseCity: false,
             groupChinaCode: ''
         }),
@@ -75,20 +83,36 @@ export const useUserStore = defineStore(
                         this.permissions = ['*']
                         resolve(this.permissions)
                     } else {
-                        let perms = []
-                        APIgetPermsList().then(res => {
-                            console.log(res)
-                            res.data.forEach(item => {
-                                for (let key in item) {
-                                    if (key == 'name') {
-                                        perms.push(item[key])
+                        // APIgetPermsList().then(res => {
+                        //     console.log(res)
+                        //     res.data.forEach(item => {
+                        //         for (let key in item) {
+                        //             if (key == 'name') {
+                        //                 perms.push(item[key])
+                        //             }
+                        //         }
+                        //     })
+                        //     this.permissions = perms
+                        //     console.log(perms)
+                        //     console.log('获取权限')
+                        //     resolve(perms)
+                        // })
+                        let allPermisson = []
+                        APIgetLoginUserGroup().then(res => {
+                            let currentGId = res.data[0].id
+                            APIgetGroupPerms(currentGId).then(res => {
+                                console.log(res)
+                                res.data.forEach(item => {
+                                    for (let key in item) {
+                                        if (key == 'name') {
+                                            allPermisson.push(item[key])
+                                        }
                                     }
-                                }
+                                })
+                                console.log(allPermisson)
+                                this.permissions = allPermisson
+                                resolve(this.permissions)
                             })
-                            this.permissions = perms
-                            console.log(perms)
-                            console.log('获取权限')
-                            resolve(perms)
                         })
                     }
                 })

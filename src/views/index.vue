@@ -160,7 +160,7 @@ const choose_city_end = () => {
     }
     console.log(choosed_city.value)
     userStore.china_code  = choosed_city.value
-    console.log(userStore)
+    console.log(userStore.china_code)
     localStorage.setItem('china_code', choosed_city.value)
     ElMessage.success('选择成功')
     switch_choose_city.value = false

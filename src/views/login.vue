@@ -91,7 +91,7 @@
 
 <script setup name="Login">
 import md5 from 'md5'
-import { APIgetLoginUserGroup, APIgetLoginUserGroupPerms } from '@/api/custom/custom'
+import { APIgetLoginUserGroup, APIgetLoginUserGroupPerms ,APIgetGroupPerms} from '@/api/custom/custom'
 const { proxy } = getCurrentInstance()
 const route = useRoute(), router = useRouter()
 import { ElMessage } from 'element-plus'
@@ -189,23 +189,8 @@ function handleLogin() {
                     sessionStorage.setItem('utype', 'none')
                     userStore.isChooseCity = true
                     sessionStorage.setItem('isChooseCity', true)
+                    userStore.getPermissions()
                 }
-                APIgetLoginUserGroup().then(res => {
-                    console.log(res)
-                    userGroup.arr = res.data
-                    if (res.data.length > 0) {
-                        userStore.groupChinaCode = res.data[0].region_cc
-                        localStorage.setItem('groupChinaCode', res.data[0].region_cc)
-                    } else {
-                        console.log('登录失败')
-                    }
-                    let params = {
-                        group_id: res.data[0].id
-                    }
-                    APIgetLoginUserGroupPerms(params).then(res => {
-                        console.log(res)
-                    })
-                })
                 // console.log(userGroup.arr)
                 // if (userGroup.arr.length > 0) {
                 //     console.log(userGroup.arr)
