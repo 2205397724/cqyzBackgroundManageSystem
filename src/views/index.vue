@@ -84,14 +84,16 @@
                 </el-col>
             </el-row>
         </page-main>
-        <el-dialog title="请选择地区" v-model="switch_choose_city"
-        width="40%" :close-on-click-modal="false" :show-close="false">
-           <!--  <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
+        <el-dialog
+            v-model="switch_choose_city" title="请选择地区"
+            width="40%" :close-on-click-modal="false" :show-close="false"
+        >
+            <!--  <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
             :show-all-levels="false" style="width: 100%;"
             ></el-cascader> -->
             <!-- <position-tree-fourth :tree_item="tree_item" @checkFunc="checkFunc"></position-tree-fourth> -->
             <el-select v-model="choosed_city" placeholder="请选择区域">
-              <el-option :label="item.name" :value="item.china_code" v-for="item in city_list.arr" :key="item.ip"></el-option>
+                <el-option v-for="item in city_list.arr" :key="item.ip" :label="item.name" :value="item.china_code" />
             </el-select>
             <template #footer>
                 <el-button type="primary" @click="choose_city_end">确认</el-button>
@@ -100,7 +102,7 @@
     </div>
 </template>
 <script setup>
-import {useUserOutsideStore} from "@/store/modules/user"
+import { useUserOutsideStore } from '@/store/modules/user'
 import {
     APIgetUserinfo,
     APIgetTipsnum,
@@ -108,78 +110,85 @@ import {
     APIgetLoginUserGroup,
     APIgetCityNotPm
 } from '@/api/custom/custom.js'
-import {ElMessage} from "element-plus"
+import { ElMessage } from 'element-plus'
 import md5 from 'md5'
 import area from '@/util/area'
-const choose_city_props=reactive({
-    item:{
-        value:'code',
-        label:'name',
-        children:'children'
+const choose_city_props = reactive({
+    item: {
+        value: 'code',
+        label: 'name',
+        children: 'children'
     }
 })
 
-const userStore=useUserOutsideStore()
+const userStore = useUserOutsideStore()
 // 公共导入 cscs
-const switch_choose_city=ref(false)
-const choosed_city=ref("")
+const switch_choose_city = ref(false)
+const choosed_city = ref('')
 
-const city_list=reactive({
-    arr:[]
+const city_list = reactive({
+    arr: []
 })
-//获取城市配置
-const getCityList=()=>{
-    APIgetCityNotPm().then(res=>{
-        city_list.arr=res.data
+// 获取城市配置
+const getCityList = () => {
+    APIgetCityNotPm().then(res => {
+        city_list.arr = res.data
         console.log(res)
     })
 }
-//选择地区弹出框
+// 选择地区弹出框
 const tree_item = ref({
-  id: "50",
-  name: "重庆市",
-  next_type: "region",
-  type: "region",
-});
-const checkFunc = (val) => {
-  choosed_city.value=val.china_code
-  console.log(val);
-  userStore.china_code=val.china_code
-  localStorage.setItem("china_code",val.china_code)
-};
-//选择 后确认按钮
-const choose_city_end=()=>{
-    if(!choosed_city.value){
-        ElMessage.error("请选择城市")
+    id: '50',
+    name: '重庆市',
+    next_type: 'region',
+    type: 'region'
+})
+const checkFunc = val => {
+    choosed_city.value = val.china_code
+    console.log(val)
+    userStore.china_code = val.china_code
+    localStorage.setItem('china_code', val.china_code)
+}
+const show = reactive({
+    name: ''
+})
+// 选择 后确认按钮
+const choose_city_end = () => {
+    if (!choosed_city.value) {
+        ElMessage.error('请选择城市')
         return
     }
-    userStore.china_code=choosed_city.value
-    localStorage.setItem("china_code",choosed_city.value)
-    ElMessage.success("选择成功")
-    switch_choose_city.value=false
-    sessionStorage.setItem("isChooseCity",false)
-
+    console.log(choosed_city.value)
+    userStore.china_code  = choosed_city.value
+    console.log(userStore)
+    localStorage.setItem('china_code', choosed_city.value)
+    ElMessage.success('选择成功')
+    switch_choose_city.value = false
+    sessionStorage.setItem('isChooseCity', true)
+    console.log(sessionStorage.getItem('isChooseCity'))
 }
-//进入首页进行判断
-import {auth, authAll} from '../util/index'
-const choose_city=()=>{
-    if(sessionStorage.getItem("utype")==md5('pt')||sessionStorage.getItem("isChooseCity")){
-        sessionStorage.setItem("isChooseCity",false)
-        userStore.isChooseCity=false
-        switch_choose_city.value=false
-    }else{
+// 进入首页进行判断
+import { auth, authAll } from '../util/index'
+const choose_city = () => {
+    console.log(sessionStorage.getItem('utype'))
+    console.log(md5('pt'))
+    // if (sessionStorage.getItem('utype') == md5('pt') || sessionStorage.getItem('isChooseCity')) {
+    if (sessionStorage.getItem('isChooseCity') == 'true') {
+        sessionStorage.setItem('isChooseCity', false)
+        userStore.isChooseCity = false
+        switch_choose_city.value = false
+    } else {
         getCityList()
-        sessionStorage.setItem("isChooseCity",true)
-        userStore.isChooseCity=true
-        switch_choose_city.value=true
+        userStore.isChooseCity = true
+        switch_choose_city.value = true
     }
-    console.log(sessionStorage.getItem("isChooseCity"))
+    console.log(sessionStorage.getItem('isChooseCity'))
 }
 choose_city()
-const choose_cityFun=()=>{
-    userStore.isChooseCity=true
-    sessionStorage.setItem('IS_chooseCity',false)
-    console.log(sessionStorage.getItem("china_code"))
+const choose_cityFun = () => {
+    userStore.isChooseCity = true
+    sessionStorage.setItem('IS_chooseCity', false)
+    console.log(sessionStorage.getItem('china_code'))
 }
 import { reactive } from 'vue'
 // const refreshCurPage=()=>{
@@ -190,19 +199,19 @@ import { reactive } from 'vue'
 const data = reactive({ userinfo: '', tipsnum: '', eventnum: '', echarts: '' })
 APIgetUserinfo().then(res => {
     console.log(res)
-        data.userinfo = res.data.data
+    data.userinfo = res.data
 }).catch(error => {
     console.log(error)
 })
 APIgetTipsnum().then(res => {
     // console.log(res)
-        data.tipsnum = res.data.data
+    data.tipsnum = res.data.data
 }).catch(error => {
     console.log(error)
 })
 APIgetEventnum().then(res => {
     // console.log(res)
-        data.eventnum = res.data.data
+    data.eventnum = res.data.data
 }).catch(error => {
     console.log(error)
 })
@@ -213,7 +222,7 @@ import {
 } from '@/api/custom/custom.js'
 APIgetEchartsHome().then(res => {
     // console.log(res)
-        data.echarts = res.data
+    data.echarts = res.data
 }).catch(error => {
     console.log(error)
 })

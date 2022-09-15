@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="bg-banner"></div>
+        <div class="bg-banner" />
         <div id="login-box">
             <!-- <div class="logo">
                 <img src="../assets/images/logo2.png" alt="">
@@ -91,17 +91,17 @@
 
 <script setup name="Login">
 import md5 from 'md5'
-import {APIgetLoginUserGroup} from '@/api/custom/custom'
+import { APIgetLoginUserGroup, APIgetLoginUserGroupPerms } from '@/api/custom/custom'
 const { proxy } = getCurrentInstance()
 const route = useRoute(), router = useRouter()
-import {ElMessage} from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 // import { APIgetUser_where_group } from '@/api/custom/custom'
 const title = import.meta.env.VITE_APP_TITLE
-const user_utype=ref("")
+const user_utype = ref('')
 // 表单类型，login 登录，reset 重置密码
 const formType = ref('login')
 
@@ -109,7 +109,7 @@ const loginForm = ref({
     account: localStorage.login_account || '',
     password: '',
     remember: !!localStorage.login_account,
-    user_utype : '',
+    user_utype: '',
     domain: localStorage.domain || ''
 })
 const loginRules = ref({
@@ -157,7 +157,9 @@ function showPassword() {
         proxy.$refs.password.focus()
     })
 }
-
+const userGroup = reactive({
+    arr: []
+})
 function handleLogin() {
     proxy.$refs.loginFormRef.validate(valid => {
         if (valid) {
@@ -168,8 +170,8 @@ function handleLogin() {
                 'password': loginForm.value.password
             }
             userStore.login(data).then(() => {
-                localStorage.removeItem("utype")
-                userStore.utype=data.auth_type
+                localStorage.removeItem('utype')
+                userStore.utype = data.auth_type
                 loading.value = false
                 localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
                 if (loginForm.value.remember) {
@@ -177,22 +179,41 @@ function handleLogin() {
                 } else {
                     localStorage.removeItem('login_account')
                 }
-                if(data.auth_type==="pt"){
-                    userStore.utype="pt"
-                    sessionStorage.setItem("utype",md5('pt'))
-                    sessionStorage.setItem("isChooseCity",false)
+                if (data.auth_type === 'pt') {
+                    userStore.utype = 'pt'
+                    sessionStorage.setItem('utype', md5('pt'))
+                    sessionStorage.setItem('isChooseCity', false)
                 }
-                if(data.auth_type!=="pt"){
-                    userStore.utype=data.auth_type
-                    sessionStorage.setItem("utype",'none')
-                    userStore.isChooseCity=true
-                    sessionStorage.setItem("isChooseCity",true)
+                if (data.auth_type !== 'pt') {
+                    userStore.utype = data.auth_type
+                    sessionStorage.setItem('utype', 'none')
+                    userStore.isChooseCity = true
+                    sessionStorage.setItem('isChooseCity', true)
                 }
-                APIgetLoginUserGroup().then(res=>{
+                APIgetLoginUserGroup().then(res => {
                     console.log(res)
-                    userStore.groupChinaCode=res.data[0].region_cc
-                    localStorage.setItem("groupChinaCode",res.data[0].region_cc)
+                    userGroup.arr = res.data
+                    if (res.data.length > 0) {
+                        userStore.groupChinaCode = res.data[0].region_cc
+                        localStorage.setItem('groupChinaCode', res.data[0].region_cc)
+                    } else {
+                        console.log('登录失败')
+                    }
+                    let params = {
+                        group_id: res.data[0].id
+                    }
+                    APIgetLoginUserGroupPerms(params).then(res => {
+                        console.log(res)
+                    })
                 })
+                // console.log(userGroup.arr)
+                // if (userGroup.arr.length > 0) {
+                //     console.log(userGroup.arr)
+                //     APIgetLoginUserGroupPerms(userGroup.arr[0].id).then(res => {
+                //         console.log(res)
+                //     })
+                // }
+
                 router.push(redirect.value)
             }).catch(() => {
 

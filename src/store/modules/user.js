@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
 import { ElMessage } from 'element-plus'
-import { APIlogin, APIgetPermissions, APIeditPassword, APIgetPermsList,APIgetloginUserPerms } from '@/api/custom/custom.js'
+import { APIlogin, APIgetPermissions, APIeditPassword, APIgetPermsList, APIgetloginUserPerms } from '@/api/custom/custom.js'
 import { useMenuStore } from './menu'
 import * as md5 from 'md5'
 // import { resolve } from 'path-browserify'
@@ -15,10 +15,10 @@ export const useUserStore = defineStore(
             token: localStorage.token || '',
             failure_time: localStorage.failure_time || '',
             permissions: [],
-            utype: "",
-            china_code: "",
+            utype: '',
+            china_code: '',
             isChooseCity: false,
-            groupChinaCode:""
+            groupChinaCode: ''
         }),
         getters: {
             isLogin: state => {
@@ -47,7 +47,7 @@ export const useUserStore = defineStore(
                         this.token = token
                         this.failure_time = time
                         this.utype = utype
-                        ElMessage.success("登录成功")
+                        ElMessage.success('登录成功')
                         resolve()
                     }).catch(error => {
                         reject(error)
@@ -71,22 +71,23 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    if (sessionStorage.getItem("utype") == md5('pt')) {
+                    if (sessionStorage.getItem('utype') == md5('pt')) {
                         this.permissions = ['*']
                         resolve(this.permissions)
                     } else {
-                        let perms=[]
+                        let perms = []
                         APIgetPermsList().then(res => {
-                            res.data.forEach(item=>{
-                                for(let key in item){
-                                    if(key=='name'){
+                            console.log(res)
+                            res.data.forEach(item => {
+                                for (let key in item) {
+                                    if (key == 'name') {
                                         perms.push(item[key])
                                     }
                                 }
                             })
-                            this.permissions=perms
+                            this.permissions = perms
                             console.log(perms)
-                            console.log("获取权限")
+                            console.log('获取权限')
                             resolve(perms)
                         })
                     }

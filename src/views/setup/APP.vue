@@ -128,18 +128,31 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="12">
+                                <el-col :md="24" :lg="24">
                                     <el-form-item
                                         label="图标地址" prop="logo" label-width="80px"
                                         :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                                     >
+                                        <el-upload
+                                            action="***"
+                                            :auto-upload="false"
+                                            :file-list="fileListFn(addMenuForm.item.logo)"
+                                            :on-change="(file,files)=>{
+                                                addMenuForm.item.logo = file
+                                            }"
+                                            :on-remove="(file,files)=>{
+                                                addMenuForm.item.logo = file
+                                            }"
+                                        >
+                                            <el-button type="primary" class="m-b-10">选择</el-button>
+                                        </el-upload>
                                         <el-input
-                                            v-model="addMenuForm.item.logo"
+                                            v-model="logoName"
                                             placeholder=""
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="12">
+                                <el-col :md="24" :lg="24">
                                     <el-form-item
                                         label="状态" prop="status" label-width="80px"
                                         :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
@@ -199,10 +212,10 @@
                             <div class="left">区域代码</div>
                             <div class="right">{{ data_details.item.china_code }} </div>
                         </div>
-                        <div class="item">
+                        <!-- <div class="item">
                             <div class="left">图标地址</div>
                             <div class="right">{{ data_details.item.logo }} </div>
-                        </div>
+                        </div> -->
                         <div class="item">
                             <div class="left">内容</div>
                             <div class="right">{{ data_details.item.content }} </div>
@@ -337,16 +350,60 @@ refreshFunc()
 const addresidentialFunc = () => {
     from_error.value.msg = {}
     str_title.value = '添加'
-    addMenuForm.item = {}
+    addMenuForm.item = {
+        logo: ''
+    }
     switch_examine.value = true
 }
+import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const dialogExamineCloseFunc = ()  => {
-    // console.log(formEl)
-    // from_error.msg = {}
-    // if (!formEl) return
-    // formEl.validate(valid => {
-    //     if (valid) {
+    let obj = {}
+    // for (let i in addArchive.item.content) {
+    if (typeof addMenuForm.item.logo != 'string') {
+        obj = addMenuForm.item.logo
+    }
+    console.log(addMenuForm.item.logo)
+    console.log(obj)
+    let files = []
+    // for (let i in obj) {
+    files.push(obj.raw)
+    // }
+    console.log(files)
+    if (files.length > 0) {
+        getFilesKeys(files, 'folder').then(arr => {
+            // let o = 0
+            // for (let i in obj) {
+            //     addMenuForm.item.logo = arr[o]
+            //     o++
+            // }
+            console.log(arr)
+            addMenuForm.item.logo = arr[0]
+            if (str_title.value == '修改') {
+                switchFunk(addMenuForm.item.status)
+                APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
+                    console.log(res)
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.success('修改失败')
+                })
+            } else {
+                switchFunk()
+                console.log(addMenuForm.item)
+                APIpostAPP(addMenuForm.item).then(res => {
+                    // console.log(from_examine.item)
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.success('添加失败')
+                })
+            }
+        })
+        return false
+    }
     if (str_title.value == '修改') {
         switchFunk(addMenuForm.item.status)
         APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
@@ -369,20 +426,40 @@ const dialogExamineCloseFunc = ()  => {
             ElMessage.success('添加失败')
         })
     }
+
     //     } else {
     //         return false
     //     }
     // })
 }
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 // 修改
 const modifyResidentialFunc = val => {
     from_error.value.msg = {}
     str_title.value = '修改'
     APIgetAPPListDetails(val.id).then(res => {
         addMenuForm.item = res
+
+        console.log(logoName.value)
         switch_examine.value = true
     })
     switch_examine.value = true
+}
+const logoName = ref('')
+const fileListFn = val => {
+    if (str_title.value != '修改' && str_title.value != '添加') {
+        logoName.value = VITE_APP_FOLDER_SRC.value + val.name
+    } else {
+        logoName.value = val
+    }
+    return []
+    // }
+    // if (typeof val == 'string') {
+    //     return [{
+    //         name: val
+    //     }]
+    // }
+    // return [val]
 }
 // 详情
 const addResidentialFunc = val => {

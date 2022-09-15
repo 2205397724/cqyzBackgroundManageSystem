@@ -1041,6 +1041,10 @@ export function APIgetloginUserPerms() {
 export function APIgetLoginUserGroup() {
     return api.get('/me/groups')
 }
+// 获取所在用户组权限
+export function APIgetLoginUserGroupPerms(params) {
+    return api.get('/me/group-perms', { params: params })
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 产权
 // 列表
@@ -1370,7 +1374,7 @@ export function APIgetHouseHouse(params) {
 // 控制台首页
 // 个人信息
 export function APIgetUserinfo(params) {
-    return api.get('/member/home/userinfo', { baseURL: '/mock/', params: params })
+    return api.get('/me', { params: params })
     // return api.get('/user/me', { params: params })
 }
 // 统计
