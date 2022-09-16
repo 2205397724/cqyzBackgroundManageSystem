@@ -20,8 +20,7 @@ export default {
             title: '房屋管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/house_housing_management',
-            auth: ['house.housing_management.housing_management', '*']
+            activeMenu: '/house_housing_management'
         }
     }]
 }

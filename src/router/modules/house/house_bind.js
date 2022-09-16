@@ -20,8 +20,7 @@ export default {
             title: '企业管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/house_bind',
-            auth: ['house.bind.bind', '*']
+            activeMenu: '/house_bind'
         }
     }]
 }

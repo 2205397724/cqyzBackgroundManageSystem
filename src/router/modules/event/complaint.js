@@ -20,8 +20,7 @@ export default {
             title: '投诉管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/event_complaint',
-            auth: ['event.complaint.complaint', '*']
+            activeMenu: '/event_complaint'
         },
         children: [{
             path: 'details',
@@ -33,7 +32,8 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/event_complaint'
+                activeMenu: '/event_complaint',
+                auth: ['event.complaint.details', '*']
             }
         }]
     }]

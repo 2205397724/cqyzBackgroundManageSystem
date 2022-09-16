@@ -20,8 +20,7 @@ export default {
             title: '备案分类',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/record_type',
-            auth: ['record.type.type', '*']
+            activeMenu: '/record_type'
         }
     }]
 }

@@ -20,8 +20,8 @@ export default {
                 sidebar: false,
                 // 在面包屑展示
                 breadcrumb: false,
-                activeMenu: '/activity_survey',
+                activeMenu: '/activity_survey'
             }
-        },
+        }
     ]
 }

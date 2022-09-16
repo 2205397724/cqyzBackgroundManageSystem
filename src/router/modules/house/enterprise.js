@@ -20,8 +20,7 @@ export default {
             title: '企业管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/house_enterprise',
-            auth: ['house.enterprise.enterprise', '*']
+            activeMenu: '/house_enterprise'
         }
     }]
 }

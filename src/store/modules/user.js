@@ -3,11 +3,8 @@ import { piniaStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import {
     APIlogin,
-    APIgetPermissions,
     APIeditPassword,
     APIgetLoginUserGroup,
-    APIgetPermsList,
-    APIgetloginUserPerms,
     APIgetGroupPerms
 } from '@/api/custom/custom.js'
 import { useMenuStore } from './menu'
@@ -100,6 +97,7 @@ export const useUserStore = defineStore(
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
                             let currentGId = res.data[0].id
+                            sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
                             APIgetGroupPerms(currentGId).then(res => {
                                 console.log(res)
                                 res.data.forEach(item => {

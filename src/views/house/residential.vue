@@ -4,7 +4,7 @@
             <div class="tree-item" style="background-color: white;">
                 <div style="height: calc(100% - 60px);">
                     <position-tree-second
-                        :tree_item="tree_item"
+                        :tree_item="tree_item_1.arr"
                         :type="no_zone"
                         @checkFunc="checkFunc"
                     />
@@ -760,13 +760,37 @@ const tree_item = ref({
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
-APIgetChinaRegion().then(res => {
-    console.log(res)
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
+const tree_item_1 = reactive({
+    arr: []
 })
+// APIgetChinaRegion().then(res => {
+
+const getChinaRegionunc = () => {
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        console.log(res)
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
+        console.log(tree_item_1.arr)
+    // tree_item.value.id = res.data[0].code
+    // tree_item.value.name = res.data[0].name
+    // tree_item.value.next_type = 'region'
+    // tree_item.value.type = 'region'
+    // tree_item_1.arr = res
+    })
+}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -781,6 +805,7 @@ const refreshFunc = () => {
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
+    getChinaRegionunc()
 }
 
 // 详情

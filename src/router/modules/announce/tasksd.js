@@ -20,8 +20,7 @@ export default {
             title: '公示计划',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/announce_tasksd',
-            auth: ['announce.tasksd.tasksd', '*']
+            activeMenu: '/announce_tasksd'
         }
     }]
 }

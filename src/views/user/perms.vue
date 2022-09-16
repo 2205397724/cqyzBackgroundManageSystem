@@ -23,21 +23,21 @@
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="desc" label="权限描述" width="120px">
+                    <el-table-column prop="desc" label="权限描述" width="180px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="utype" label="权限所属" width="100px">
+                    <el-table-column prop="utype" label="权限所属" width="150px">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.put_perms_utype,scope.row.utype) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="权限ID" width="250px">
+                    <!-- <el-table-column prop="id" label="权限ID" width="250px">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.id }} </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column fixed="right" label="操作" width="320">
                         <template #default="scope">
                             <el-button
@@ -94,18 +94,18 @@
                         </el-col>
                     </el-row>
                     <el-row>
+                        <el-col :xs="8" :sm="23" :md="23" :lg="24">
+                            <el-form-item label="权限描述" prop="desc">
+                                <el-input v-model="from_add_perms.item.desc" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
                         <el-col :xs="8" :sm="12" :md="12" :lg="24">
                             <el-form-item label="权限类型" prop="utype">
                                 <el-select v-model="from_add_perms.item.utype">
                                     <el-option v-for="item in opts_all.obj.put_perms_utype" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :xs="8" :sm="23" :md="23" :lg="24">
-                            <el-form-item label="权限描述" prop="desc">
-                                <el-input v-model="from_add_perms.item.desc" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -355,6 +355,7 @@ const deletePerms_roles = val => {
 }
 // 添加权限
 const addPerms = () => {
+    from_add_perms.item = {}
     switch_add_perms.value = true
 }
 // 修改提交

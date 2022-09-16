@@ -3,6 +3,12 @@
         <page-main>
             <div class="m-b-20">
                 <el-button type="primary" size="large" :icon="Plus" @click="addResidentialFunc">添加用户</el-button>
+                <el-select v-model="main_type" class="m-l-10" placeholder="用户端类型" style="width: 200px;">
+                    <el-option
+                        v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val"
+                        :value="item.key"
+                    />
+                </el-select>
             </div>
             <div class="search">
                 <el-row>
@@ -12,7 +18,7 @@
                                 用户名：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="data_search.username" class="search_tb" placeholder="用户名" clearable />
+                                <el-input v-model="data_search.obj.username" class="search_tb" placeholder="用户名" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -22,7 +28,7 @@
                                 手机号：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="data_search.mobile" class="search_tb" placeholder="手机号" clearable />
+                                <el-input v-model="data_search.obj.mobile" class="search_tb" placeholder="手机号" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -32,7 +38,7 @@
                                 身份证号：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="data_search.id_card" class="search_tb" placeholder="身份证号" clearable />
+                                <el-input v-model="data_search.obj.id_card" class="search_tb" placeholder="身份证号" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -44,7 +50,7 @@
                                 性别：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-select v-model="data_search.gender" class="search_tb" placeholder="性别" clearable>
+                                <el-select v-model="data_search.obj.gender" class="search_tb" placeholder="性别" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
@@ -56,7 +62,7 @@
                                 认证状态：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-select v-model="data_search.status_cert" class="search_tb" placeholder="认证状态" clearable>
+                                <el-select v-model="data_search.obj.status_cert" class="search_tb" placeholder="认证状态" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
@@ -68,7 +74,7 @@
                                 终端类型：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-select v-model="data_search.auth_type" class="search_tb" placeholder="终端类型" clearable>
+                                <el-select v-model="data_search.obj.auth_type" class="search_tb" placeholder="终端类型" clearable>
                                     <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
@@ -355,6 +361,7 @@ import { Loading, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 方法
+const main_type = ref('gov')
 let btnClick = ref(false)
 const isSearch3 = ref(false)
 const isSearch2 = ref(true)
@@ -365,7 +372,9 @@ const btnClickFunc = () => {
 }
 // 搜索
 let switch_search = ref(false)
-let data_search = reactive({ })
+let data_search = reactive({
+    obj: {}
+})
 // 详情
 let switch_details = ref(false)
 // 列表
@@ -454,7 +463,7 @@ const searchMore = () => {
 const refreshFunc = () => {
     page.value = 1
     switch_search.value = false
-    data_search = {}
+    data_search.obj = {}
     getTabListFunc()
 }
 
@@ -470,6 +479,9 @@ const detailsFunc = val => {
 }
 // 监听分页
 watch(page, () => {
+    getTabListFunc()
+})
+watch(main_type, () => {
     getTabListFunc()
 })
 // 同意拒绝提交
@@ -510,14 +522,15 @@ const flag = ref(false)
 const getTabListFunc = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value
+        per_page: per_page.value,
+        auth_type: main_type.value
     }
-    for (let key in data_search) {
-        if (data_search[key] || data_search[key] === 0) {
-            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
                 continue
             }
-            params[key] = data_search[key]
+            params[key] = data_search.obj[key]
         }
     }
     if (params.time_deal) {
@@ -563,7 +576,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteUser(val.auth_type).then(res => {
+    APIdeleteUser(main_type.value, val.id).then(res => {
         if (res.status === 200) {
             refreshFunc()
             ElMessage.success('删除成功')

@@ -7,7 +7,7 @@ export default {
     redirect: '/record_manange/manange',
     name: 'recordManangeBox',
     meta: {
-        title: '备案管理',
+        title: '',
         icon: 'el-icon-document',
         auth: ['record.manange', '*']
     },
@@ -20,8 +20,7 @@ export default {
             title: '备案管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/record_manange',
-            auth: ['record.manange.manange', '*']
+            activeMenu: '/record_manange'
         },
         children: [{
             path: 'detail',
@@ -30,7 +29,7 @@ export default {
             meta: {
                 title: '详情',
                 activeMenu: '/record_manange',
-                auth: ['record.manange.add', '*']
+                auth: ['record.manange.detail', '*']
             }
         }]
     }]

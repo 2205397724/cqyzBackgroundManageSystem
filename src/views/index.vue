@@ -92,12 +92,15 @@
             :show-all-levels="false" style="width: 100%;"
             ></el-cascader> -->
             <!-- <position-tree-fourth :tree_item="tree_item" @checkFunc="checkFunc"></position-tree-fourth> -->
-            <el-select v-model="choosed_city" placeholder="请选择区域">
+            <!-- <el-select v-model="choosed_city" placeholder="请选择区域">
                 <el-option v-for="item in city_list.arr" :key="item.ip" :label="item.name" :value="item.china_code" />
-            </el-select>
-            <template #footer>
+            </el-select> -->
+            <div>
+                <span v-for="item in city_list.arr" :key="item.ip" class="cityBox" @click="choose_city_end(item)">{{ item.name }}</span>
+            </div>
+            <!-- <template #footer>
                 <el-button type="primary" @click="choose_city_end">确认</el-button>
-            </template>
+            </template> -->
         </el-dialog>
     </div>
 </template>
@@ -153,15 +156,14 @@ const show = reactive({
     name: ''
 })
 // 选择 后确认按钮
-const choose_city_end = () => {
-    if (!choosed_city.value) {
+const choose_city_end = val => {
+    if (!val.china_code) {
         ElMessage.error('请选择城市')
         return
     }
-    console.log(choosed_city.value)
-    userStore.china_code  = choosed_city.value
-    console.log(userStore.china_code)
-    localStorage.setItem('china_code', choosed_city.value)
+    console.log(val.china_code)
+    userStore.china_code  = val.china_code
+    localStorage.setItem('china_code', val.china_code)
     ElMessage.success('选择成功')
     switch_choose_city.value = false
     sessionStorage.setItem('isChooseCity', true)
@@ -339,5 +341,15 @@ const aaa = ref()
                 // background-color: #F2F2F2;
             }
         }
+    }
+    .cityBox {
+        display: flex;
+        width: 50px;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        color: #67c23a;
+        background-color: #f0f9eb;
     }
 </style>

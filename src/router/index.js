@@ -101,18 +101,12 @@ import houseProperty from './modules/house/property.js'
 import houseResidential from './modules/house/residential.js'
 import houseBind from './modules/house/house_bind.js'
 import eventDevice from './modules/house/device.js'
-import eventDeviceArchive from './modules/house/device_archive.js'
-import eventDeviceRepair from './modules/house/device_repair.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
 import userRoles from './modules/user/roles'
 import userPerms from './modules/user/perms'
 // 事件
-import eventFlow from './modules/event/flow.js'
-import eventEvents from './modules/event/flow_events.js'
-import eventVote from './modules/event/vote.js'
-import eventEntry from './modules/event/entry.js'
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
 import eventRepair from './modules/event/repair.js'
@@ -121,7 +115,6 @@ import informationManage from './modules/information/manage.js'
 import informationCategory from './modules/information/category.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
-import setupFile from './modules/setup/file.js'
 import setupOption from './modules/setup/option.js'
 import setupType from './modules/setup/type.js'
 import setupAPP from './modules/setup/APP.js'
@@ -171,9 +164,7 @@ const asyncRoutes = [{
         houseProperty,
         houseEnterprise,
         houseEnterpriseApply,
-        eventDevice,
-        eventDeviceArchive,
-        eventDeviceRepair
+        eventDevice
     ]
 },
 {
@@ -212,10 +203,6 @@ const asyncRoutes = [{
         auth: ['event', '*']
     },
     children: [
-        eventEvents,
-        eventFlow,
-        eventVote,
-        eventEntry,
         eventComplaint,
         eventIllegal,
         eventRepair
@@ -275,7 +262,6 @@ const asyncRoutes = [{
     },
     children: [
         setupRegion,
-        setupFile,
         setupOption,
         setupType,
         setupAPP

@@ -106,7 +106,7 @@
                     :data="data_tab.arr"
                     :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1"
                 >
-                    <el-table-column prop="id" label="设备名称" width="180">
+                    <el-table-column prop="id" label="设备名称">
                         <template #default="scope">
                             <span>{{ scope.row.name }} </span>
                         </template>
@@ -184,7 +184,6 @@
                             </el-popconfirm>
                         </template>
                     </el-table-column>
-                    <el-table-column />
                 </el-table>
             </div>
             <el-pagination
@@ -885,6 +884,10 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params.cc = sessionStorage.getItem('groupChinaCode')
+    }
+    console.log(params)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {

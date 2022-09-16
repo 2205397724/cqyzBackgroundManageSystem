@@ -1,6 +1,6 @@
 <template>
     <div class="housing-management">
-        <House :tree_item="tree_item" />
+        <House :tree_item="tree_item_1.arr" />
     </div>
 </template>
 <script setup>
@@ -19,13 +19,31 @@ const tree_item = ref({
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
-APIgetChinaRegion().then(res => {
-    console.log(res)
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
+const tree_item_1 = reactive({
+    arr: []
 })
+const getChinaRegionunc = () => {
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        console.log(res)
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
+        console.log(tree_item_1.arr)
+    })
+}
+getChinaRegionunc()
 </script>
 <style lang="scss" >
     .housing-management {

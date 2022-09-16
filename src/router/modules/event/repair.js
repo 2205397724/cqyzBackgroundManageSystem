@@ -17,11 +17,10 @@ export default {
         component: () =>
             import ('@/views/event/repair.vue'),
         meta: {
-            title: '投诉管理',
+            title: '报修管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/event_repair',
-            auth: ['event.repair.repair', '*']
+            activeMenu: '/event_repair'
         },
         children: [{
             path: 'details',
@@ -33,7 +32,8 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/event_repair'
+                activeMenu: '/event_repair',
+                auth: ['event.repair.details', '*']
             }
         }]
     }]

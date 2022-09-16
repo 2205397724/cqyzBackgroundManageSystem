@@ -19,15 +19,6 @@ export default {
                 title: '城市配置',
                 auth: ['setup.region.city', '*']
             }
-        },
-        {
-            path: 'china',
-            name: 'setupRegionChina',
-            component: () => import('@/views/setup/region/china.vue'),
-            meta: {
-                title: 'CHINA',
-                auth: ['setup.region.china', '*']
-            }
         }
     ]
 }

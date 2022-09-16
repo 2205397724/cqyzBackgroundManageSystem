@@ -20,8 +20,7 @@ export default {
             title: '公示模板',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/announce_announce',
-            auth: ['announce.announce.announce', '*']
+            activeMenu: '/announce_announce'
         }
     }]
 }

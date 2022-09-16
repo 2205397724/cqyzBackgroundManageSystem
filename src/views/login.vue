@@ -91,7 +91,7 @@
 
 <script setup name="Login">
 import md5 from 'md5'
-import { APIgetLoginUserGroup, APIgetLoginUserGroupPerms ,APIgetGroupPerms} from '@/api/custom/custom'
+import { APIgetLoginUserGroup, APIgetLoginUserGroupPerms, APIgetGroupPerms } from '@/api/custom/custom'
 const { proxy } = getCurrentInstance()
 const route = useRoute(), router = useRouter()
 import { ElMessage } from 'element-plus'
@@ -190,6 +190,7 @@ function handleLogin() {
                     userStore.isChooseCity = true
                     sessionStorage.setItem('isChooseCity', true)
                     userStore.getPermissions()
+                    console.log(sessionStorage.getItem('groupChinaCode'))
                 }
                 // console.log(userGroup.arr)
                 // if (userGroup.arr.length > 0) {

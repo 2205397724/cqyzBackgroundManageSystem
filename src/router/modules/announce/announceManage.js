@@ -20,8 +20,7 @@ export default {
             title: '管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/announce_announceManage',
-            auth: ['announce.announceManage.announceManage', '*']
+            activeMenu: '/announce_announceManage'
         },
         children: [{
             path: 'details',
@@ -33,7 +32,8 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/announce_announceManage'
+                activeMenu: '/announce_announceManage',
+                auth: ['announce.announceManage.details', '*']
             }
         }]
     }]
