@@ -36,25 +36,22 @@ api.interceptors.request.use(
             background: 'rgba(0, 0, 0, 0.7)'
         })
         const userOutsideStore = useUserOutsideStore()
-            /**
+        /**
              * 全局拦截请求发送前提交的参数
              * 以下代码为示例，在请求头里带上 token 信息
              */
         if (userOutsideStore.isLogin) {
-            console.log('成功')
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
-            console.log(localStorage.getItem('china_code'))
             request.headers['X-Cc'] = localStorage.getItem('china_code')
-                // request.headers['Token'] = userOutsideStore.token
+            // request.headers['Token'] = userOutsideStore.token
         }
-        console.log(userOutsideStore.china_code)
         var time = new Date().getTime().toString()
         var eqtype = '2'
         var secret = 'secret'
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
         request.headers['X-Cc'] = localStorage.getItem('china_code')
-            // 是否将 POST 请求参数进行字符串化处理
+        // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {
             // request.data = qs.stringify(request.data, {
             //     arrayFormat: 'brackets'
@@ -67,7 +64,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     response => {
         loading.close()
-            /**
+        /**
              * 全局拦截请求发送后返回的数据，如果数据有报错则在这做全局的错误提示
              * 假设返回数据格式为：{ status: 1, error: '', data: '' }
              * 规则是当 status 为 1 时表示请求成功，为 0 时表示接口需要登录或者登录状态失效，需要重新登录
@@ -76,10 +73,10 @@ api.interceptors.response.use(
         if (response.status === 200) {
             // if (!response.code) {
             return Promise.resolve(response)
-                // } else {
+            // } else {
             ElMessage.error(response.message)
-                // return Promise.reject(response)
-                // }
+            // return Promise.reject(response)
+            // }
         } else {
             console.log(response.message)
             toLogin()

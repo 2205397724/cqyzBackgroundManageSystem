@@ -23,12 +23,12 @@
                             <span class="m-l-10">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="desc" label="权限描述" width="180px">
+                    <el-table-column prop="desc" label="权限描述">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="utype" label="权限所属" width="150px">
+                    <el-table-column prop="utype" label="权限所属" width="200px">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.put_perms_utype,scope.row.utype) }} </span>
                         </template>
@@ -392,12 +392,10 @@ const getTabListFun = () => {
         data_tab_list.arr = res.data
         let btnNext = document.querySelector('.btn-next')
         if (res.data.length < per_page.value) {
-            flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
         } else {
-            flag.value = false
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)

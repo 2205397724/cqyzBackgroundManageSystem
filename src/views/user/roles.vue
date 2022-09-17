@@ -283,8 +283,6 @@ const data_tab_roles_perms = reactive({
     arr: []
 })
 const refreshFunc = () => {
-    page.value = 1
-    per_page.value = 10
     switch_add_post.value = false
     getTabListFunc()
 }

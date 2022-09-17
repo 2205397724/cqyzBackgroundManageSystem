@@ -62,17 +62,17 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;background-color: white;">
+                        <div style="background-color: white;" class="hidden">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                 class="tab_1"
                             >
-                                <el-table-column prop="name" label="名称" width="180" />
-                                <el-table-column prop="addr" label="地址" width="220" />
-                                <el-table-column prop="china_code" label="所在区域" width="180" />
-                                <el-table-column prop="area_floor" label="总占地面积" width="140">
+                                <el-table-column prop="name" label="名称" width="150" />
+                                <el-table-column prop="addr" label="地址" width="200" />
+                                <!-- <el-table-column prop="china_code" label="所在区域" width="180" /> -->
+                                <!-- <el-table-column prop="area_floor" label="总占地面积" width="140">
                                     <template #default="scope">
                                         <span>{{ scope.row.area_floor }} m²</span>
                                     </template>
@@ -81,27 +81,27 @@
                                     <template #default="scope">
                                         <span>{{ scope.row.area_build }} m²</span>
                                     </template>
-                                </el-table-column>
+                                </el-table-column> -->
                                 <!-- <el-table-column prop="area_support" label="配套用房总面积" width="140">
                             <template #default="scope">
                                 <span>{{ scope.row.area_support }} m²</span>
                             </template>
                         </el-table-column> -->
-                                <el-table-column prop="cnt_building" label="楼栋数" width="140">
+                                <el-table-column prop="cnt_building" label="楼栋数" width="100">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="cnt_live" label="住房总套数" width="140">
+                                <el-table-column prop="cnt_live" label="住房总套数" width="100">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_zone_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="cnt_live" label="业委会" width="140">
+                                <el-table-column prop="cnt_live" label="业委会" width="100">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id,china_code: scope.row.china_code }}">业委会</router-link>
@@ -131,7 +131,6 @@
                                         </el-popconfirm>
                                     </template>
                                 </el-table-column>
-                                <el-table-column />
                             </el-table>
                             <el-pagination
                                 v-model:current-page="page"
@@ -181,9 +180,21 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="12">
+                                <el-col v-if="!china_code" :md="24" :lg="12">
                                     <el-form-item label="所在区域" label-width="120px" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
-                                        <Cascaders v-model="from_examine.item.china_code" />
+                                        <!-- <Cascaders v-model="from_examine.item.china_code" /> -->
+                                        <div
+                                            style="
+                                                                                                                                                                width: 100%;
+                                                                                                                                                                height: 32px;
+                                                                                                                                                                border: 1px solid #dcdfe6;
+                                                                                                                                                                border-radius: 4px;
+"
+                                            @click="click_add_group_zone_id"
+                                        >
+                                            <span v-if="!selectedZone_id" style="margin-left: 11px; color: #ccc;">请选择区域</span>
+                                            <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                        </div>
                                     </el-form-item>
                                 </el-col>
                                 <!-- <el-col :md="24" :lg="12">
@@ -374,16 +385,11 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <!-- <el-col :md="24" :lg="24">
+                                <el-col :md="24" :lg="24">
                                     <el-form-item label="简介" label-width="120px" :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''">
-                                        <el-input
-                                            v-model="from_examine.item.addition.desc"
-                                            :autosize="{ minRows: 2, maxRows: 6 }"
-                                            type="textarea"
-                                            placeholder=""
-                                        />
+                                        <editor v-model="from_examine.item.addition.desc" class="w-100" />
                                     </el-form-item>
-                                </el-col> -->
+                                </el-col>
                                 <el-col :xs="24"><div class="details-tit-sm m-b-10">便民信息</div></el-col>
                                 <el-col :md="24" :lg="24">
                                     <div style="margin-bottom: 10px;">
@@ -585,7 +591,7 @@
                             </div>
                             <div class="item">
                                 <div class="left">简介</div>
-                                <div v-if="data_details.item.addition" class="right">{{ data_details.item.addition.desc }}</div>
+                                <div v-if="data_details.item.addition" class="right" v-html="data_details.item.addition.desc" />
                                 <div v-else class="right">~无简介信息</div>
                             </div>
                             <div class="details-tit-sm">便民信息</div>
@@ -627,6 +633,15 @@
                 <House :tree_item="tree_item.obj" />
             </div>
         </el-dialog>
+        <el-dialog v-model="switch_choose_zone" title="选择区域">
+            <el-scrollbar height="250px">
+                <position-tree-fourth
+                    :tree_item="tree_item_1.arr"
+                    @checkChangeFunc="checkChangeFunc"
+                    @checkFunc="checkFunc_1"
+                />
+            </el-scrollbar>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -653,28 +668,18 @@ import House from '@/components/House/index.vue'
 // })
 const activeName = ref('1')
 const edit_house = ref(false)
-const showHouseFunc = val => {
-    console.log(val)
-    tree_item.value.obj = {
-        id: val.id,
-        name: val.name,
-        next_type: 'building',
-        type: 'region'
-    }
-    edit_house.value = true
-}
+
 const active_obj = reactive({
     obj: {}
 })
 // const treeDetail = reactive({
 //     arr: {}
 // })
-const item = reactive({
-    arr: []
-})
+const china_code = ref('')
 const checkFunc = val => {
     active_obj.obj = val
     console.log(val)
+    china_code.value = val.id
     let cur = active_obj.obj.name || ''
     if (cur.includes('社区') || cur.includes('街道') || cur.includes('镇') || cur.includes('区') || cur.includes('县')) {
         APIgetResidentialListHouse({ page: 1, per_page: 5, china_code: active_obj.obj.id }).then(res => {
@@ -714,26 +719,6 @@ let page = ref(1)
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        'name': '',
-        'addr': '',
-        'area_floor': '',
-        'area_build': '',
-        'area_support': '',
-        'area_part': '',
-        'area_exc': 0,
-        'area_live': 0,
-        'cnt_building': 0,
-        'cnt_live': 0,
-        'cnt_support': 0,
-        'cnt_part': 0,
-        'company_build': '',
-        'time_build_end': '',
-        'time_build_start': '',
-        'time_pro_setup': '',
-        'time_turn': '',
-        'time_use': '',
-        'china_code': '',
-        'remark': '',
         'addition': {
             'extra': {
                 'convenience': [],
@@ -749,14 +734,22 @@ let from_examine = reactive({
         }
     }
 })
+const switch_choose_zone = ref(false)
+const click_add_group_zone_id = () => {
+    switch_choose_zone.value = true
+    console.log('成功')
+}
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
-})
+const checkFunc_1 = val => {
+    selectedZone_id.value = val.name
+    from_examine.item.china_code = val.china_code
+
+}
+const checkChangeFunc = val => {
+    switch_choose_zone.value = false
+}
+const selectedZone_id = ref('')
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
@@ -783,7 +776,6 @@ const getChinaRegionunc = () => {
                 tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
             }
         }
-        console.log(tree_item_1.arr)
     // tree_item.value.id = res.data[0].code
     // tree_item.value.name = res.data[0].name
     // tree_item.value.next_type = 'region'
@@ -801,7 +793,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
@@ -830,24 +821,23 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             if (str_title.value == '修改') {
                 APIputResidentialHouse(from_examine.item.id, from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('修改失败')
                 })
             } else {
+                if (china_code.value) {
+                    from_examine.item.china_code = china_code.value
+                }
                 from_examine.item.addition.desc = `${from_examine.item.addition.desc}`
                 APIpostResidentialHouse(from_examine.item).then(res => {
-                    if (!res.code) {
-                        refreshFunc()
-                        ElMessage.success(res.msg)
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('添加失败')
                 })
             }
         } else {
@@ -942,33 +932,16 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteResidentialHouse(val.id).then(res => {
-        if (res.code === 0) {
-            refreshFunc()
-            ElMessage.success(res.msg)
-        }
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加小区
 const addResidentialFunc = () => {
+    selectedZone_id.value = ''
     from_error.msg = {}
     str_title.value = '添加小区'
     from_examine.item = {
-        'name': '',
-        'addr': '',
-        'area_floor': '',
-        'area_build': '',
-        'area_support': '',
-        'cnt_building': 0,
-        'cnt_live': 0,
-        'cnt_support': 0,
-        'company_build': '',
-        'time_build_end': '',
-        'time_build_start': '',
-        'time_pro_setup': '',
-        'time_turn': '',
-        'time_use': '',
-        'china_code': '',
-        'remark': '',
         'addition': {
             'extra': {
                 'convenience': []
@@ -980,6 +953,7 @@ const addResidentialFunc = () => {
 }
 // 修改
 const modifyResidentialFunc = val => {
+    selectedZone_id.value = ''
     from_error.msg = {}
     str_title.value = '修改'
     APIgetResidentialDetailsHouse(val.id).then(res => {

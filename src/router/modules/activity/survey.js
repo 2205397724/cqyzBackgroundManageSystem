@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '问卷',
         icon: 'el-icon-document',
-        auth: ['event.events', '*']
+        auth: ['activity.survey', '*']
     },
     children: [
         {

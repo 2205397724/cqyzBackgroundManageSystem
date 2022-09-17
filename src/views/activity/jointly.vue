@@ -71,7 +71,7 @@
                 <el-radio-button label="已结束" />>
             </el-radio-group>
             <!-- 联名列表 -->
-            <div>
+            <div class="hidden">
                 <el-table
                     v-loading="loading_tab" :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -118,6 +118,17 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper,"
+                    :total="50"
+                    :page-size="per_page"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
             </div>
             <!-- 修改添加 -->
             <el-dialog v-model="switch_examine" :title="str_title" width="50%" @closed="dialogClosed">
@@ -235,10 +246,10 @@
                     <el-button type="warning" plain @click="switch_details = false">取消</el-button>
                 </template>
             </el-dialog>
-            <el-dialog v-model="switch_choose_zone" title="选择小区">
+            <el-dialog v-model="switch_choose_zone" title="选择区域">
                 <el-scrollbar height="250px">
                     <position-tree-fourth
-                        :tree_item="tree_item"
+                        :tree_item="tree_item.arr"
                         @checkChangeFunc="checkChangeFunc"
                         @checkFuncDate="checkFunc"
                     />
@@ -306,7 +317,6 @@ const from_error = reactive({
 })
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     data_search.obj = {}
     selectedZone_id.value = ''
     switch_search.value = false
@@ -314,21 +324,28 @@ const refreshFunc = () => {
     getChinaName()
 }
 // 添加弹出框选择小区
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
+const tree_item = reactive({
+    arr: []
 })
 const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
-    APIgetChinaRegion().then(res => {
-        console.log(res)
-        tree_item.value.id = res.data[0].code
-        tree_item.value.name = res.data[0].name
-        tree_item.value.next_type = 'region'
-        tree_item.value.type = 'region'
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
     })
 }
 const click_add_group_zone_id = () => {
@@ -460,6 +477,9 @@ const getTabListFunc = () => {
         per_page: per_page.value,
         type: 4
     }
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params.author_tgt = sessionStorage.getItem('groupChinaCode')
+    }
     console.log(window.location.hash)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
@@ -475,6 +495,16 @@ const getTabListFunc = () => {
             loading_tab.value = false
             data_tab.arr = res.data
             total.value = res.data.length
+            let btnNext = document.querySelector('.btn-next')
+            if (res.data.length < per_page.value) {
+                btnNext.classList.add('not_allowed')
+                btnNext.setAttribute('disabled', true)
+                btnNext.setAttribute('aria-disabled', true)
+            } else {
+                btnNext.classList.remove('not_allowed')
+                btnNext.removeAttribute('disabled')
+                btnNext.setAttribute('aria-disabled', false)
+            }
         }
         console.log(data_tab.arr)
     }).catch(err => {
@@ -537,6 +567,8 @@ getOpts(['announce_status_1', 'toushu_pub']).then(res => {
 })
 </script>
 <style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .selecZone {
     width: 100%;
     height: 32px;

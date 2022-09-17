@@ -19,8 +19,7 @@ export default {
                 title: '用户组管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/user_group',
-                auth: ['user.group.group', '*']
+                activeMenu: '/user_group'
             }
         }
     ]

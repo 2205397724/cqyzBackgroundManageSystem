@@ -210,7 +210,8 @@
 "
                                 @click="click_add_record_zone_id"
                             >
-                                <span style="margin-left: 11px; color: #c3c4cf;">{{ selectedZone_id }}</span>
+                                <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                <span v-if="!selectedZone_id" style=" color: #c0c4cc;">请选择小区</span>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -229,7 +230,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row :gutter="10">
+                <!-- <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                         <el-form-item label-width="70px" label="备案主题">
                             <el-input
@@ -238,7 +239,7 @@
                             />
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
                         <el-form-item label-width="70px" label="状态">
@@ -371,8 +372,8 @@
             </template>
         </el-dialog>
         <el-dialog v-model="switch_choose_zone" title="选择小区">
-            <el-scrollbar height="250px">
-                <position-tree-fourth :tree_item="tree_item" @checkFunc="checkFunc" />
+            <el-scrollbar height="350px">
+                <position-tree-fourth :tree_item="tree_item.arr" @checkFunc="checkFunc" />
             </el-scrollbar>
         </el-dialog>
     </div>
@@ -407,7 +408,7 @@ const add_record_props = reactive({
         children: 'children'
     }
 })
-const selectedZone_id = ref('请选择小区')
+const selectedZone_id = ref('')
 const switch_choose_zone = ref(false)
 // 把备案ID转换成对应名字
 const find_right_typeId_to_name = typeid => {
@@ -486,8 +487,10 @@ const from_record = reactive({
 })
 const add_put_title = ref('')
 const addRecord = () => {
+    current_record.item = {}
     switch_add_record.value = true
     add_put_title.value = '添加备案'
+    getChinaName()
 }
 const put_record_switch = status => {
     current_record.item.status = status
@@ -495,12 +498,6 @@ const put_record_switch = status => {
         ElMessage.success('修改成功')
     })
 }
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
-})
 // 用户组id转换成中文
 const tab_group_list = reactive({ arr: [] })
 const getGroupList = () => {
@@ -632,16 +629,29 @@ const data_1 = reactive({
     add_switch: false
 })
 // 城市接口
-import {
-    APIgetChinaRegion
-} from '@/api/custom/custom.js'
-APIgetChinaRegion().then(res => {
-    console.log(res)
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
+const tree_item = reactive({
+    arr: []
 })
+import { APIgetChinaRegion } from '@/api/custom/custom.js'
+const getChinaName = () => {
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
+    })
+}
 // switch开关
 const switchRecordFun = (status, val) => {
     let params = {}
@@ -664,7 +674,6 @@ const deleteRecord = val => {
 const refreshFunc = () => {
     data_1.search = {}
     data_1.switch_search = false
-    data_1.page = 1
     getFunRecordList()
 }
 // 监听事件
@@ -686,6 +695,7 @@ const getRecordList = () => {
 const putRecord = val => {
     switch_add_record.value = true
     add_put_title.value = '修改备案'
+    getChinaName()
     current_record.item = val
     APIgetRecordDetail(val.id).then(res => {
         console.log(res)

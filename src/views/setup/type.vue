@@ -10,14 +10,14 @@
                 />
             </el-select>
 
-            <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+            <div>
                 <el-table
                     v-loading="loading_tab"
                     :data="data_tab.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     row-key="id"
                     :tree-props="{ children: 'children' }"
-                    style="width: 100%;min-height: 300px;"
+                    class="tab_1"
                 >
                     <el-table-column prop="name" label="名称">
                         <template #default="scope">

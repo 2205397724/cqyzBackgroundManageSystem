@@ -451,7 +451,6 @@ const DeleteHouseBindFunc = val => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     getHouseBindListFunc()
 }
 // 执行

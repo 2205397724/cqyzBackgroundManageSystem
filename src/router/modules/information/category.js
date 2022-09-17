@@ -20,8 +20,7 @@ export default {
             title: '资讯类别',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/information_category',
-            auth: ['information.category.category', '*']
+            activeMenu: '/information_category'
         }
     }]
 }

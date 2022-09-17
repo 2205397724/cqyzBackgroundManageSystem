@@ -32,8 +32,7 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/event_complaint',
-                auth: ['event.complaint.details', '*']
+                activeMenu: '/event_complaint'
             }
         }]
     }]

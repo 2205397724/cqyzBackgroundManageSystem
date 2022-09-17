@@ -435,11 +435,9 @@ const searchFunc = () => {
 // :disabled="activeName !== '5' ? true : false"
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     getActivitiesEventList()
 }
 const refreshFunc_1 = () => {
-    page.value = 1
     getTabListFunc()
     getSurveyListFunc(activeName.value)
     data_search.obj = {}

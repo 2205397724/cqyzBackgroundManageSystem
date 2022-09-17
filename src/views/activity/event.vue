@@ -1,6 +1,6 @@
 <template>
     <div class="propertypropertylist">
-        <page-main>
+        <page-main class="hidden">
             <div class="m-b-20">
                 <el-button
                     type="primary" :icon="Plus" size="large"
@@ -117,16 +117,17 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <div class="p-t-20">
-                <el-pagination
-                    v-model:current-page="page"
-                    layout="total,prev,pager,next,jumper,"
-                    :total="total"
-                    :page-size="per_page"
-                    background
-                    hide-on-single-page
-                />
-            </div>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -447,7 +448,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
@@ -564,6 +564,9 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params.region_cc = sessionStorage.getItem('groupChinaCode')
+    }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
@@ -591,7 +594,18 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        total.value = data_tab.arr.length
+        total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
+
     })
 }
 // 删除
@@ -633,7 +647,9 @@ getOpts(['device_show', 'group_user_region_type', 'activityEvent_type']).then(re
 })
 
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .propertypropertylist {
     .el-cascader-box-my {
         .el-cascader {

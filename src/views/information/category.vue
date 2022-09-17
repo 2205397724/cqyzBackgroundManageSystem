@@ -323,7 +323,6 @@ const SwitchFunc = row => {
 const refreshFunc = () => {
     data_1.search = {}
     data_1.switch_search = false
-    data_1.page = 1
     getFuncCategoryList()
 }
 watch(data_1.page, () => {

@@ -292,7 +292,7 @@
         <el-dialog v-model="switch_choose_zone" title="选择小区">
             <el-scrollbar height="250px">
                 <position-tree-fourth
-                    :tree_item="tree_item"
+                    :tree_item="tree_item.arr"
                     @checkChangeFunc="checkChangeFunc"
                     @checkFunc="checkFunc"
                 />
@@ -918,6 +918,7 @@ const data_search = reactive({
 })
 
 const data_searchFun = () => {
+    page.value = 1
     let params = {}
     for (let key in data_search.item) {
         if (data_search.item[key] && key !== 'switch') {
@@ -941,7 +942,7 @@ let from_addRoles = reactive({
 })
 // 用户组分页板块
 const page = ref(1)
-const per_page = ref(15)
+const per_page = ref(12)
 const total = ref(50)
 watch(page, () => {
     getTabListFunc()
@@ -1067,13 +1068,25 @@ const type_change = val => {
     }
 }
 // 添加弹出框选择小区
-APIgetChinaRegion().then(res => {
-    console.log(res)
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
-})
+const getChinaName = () => {
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.value.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.value.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
+    })
+}
 const click_add_group_zone_id = () => {
     switch_choose_zone.value = true
 }
@@ -1097,10 +1110,7 @@ const checkChangeFunc = val => {
 }
 const selectedZone_id = ref('')
 const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
+    arr: []
 })
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const cascader_props = {
@@ -1466,6 +1476,7 @@ const addResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '添加用户组'
     switch_examine.value = true
+    getChinaName()
 }
 // 修改用户组
 const modifyResidentialFunc = val => {
@@ -1476,6 +1487,7 @@ const modifyResidentialFunc = val => {
     }
     selectedZone_id.value = from_examine.item.region_val_name
     switch_examine.value = true
+    getChinaName()
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------- */

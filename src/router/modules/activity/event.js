@@ -9,7 +9,7 @@ export default {
     meta: {
         title: '事件专题',
         icon: 'el-icon-document',
-        auth: ['event.events', '*']
+        auth: ['activity.event', '*']
     },
     children: [{
         path: 'event',
@@ -33,8 +33,7 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/activity_event',
-                auth: ['event.events.details', '*']
+                activeMenu: '/activity_event'
             }
         }]
     }]

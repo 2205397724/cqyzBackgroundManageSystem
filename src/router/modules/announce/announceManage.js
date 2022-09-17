@@ -17,7 +17,7 @@ export default {
         component: () =>
             import ('@/views/announce/announceManage.vue'),
         meta: {
-            title: '管理',
+            title: '公示管理',
             sidebar: false,
             breadcrumb: false,
             activeMenu: '/announce_announceManage'
@@ -32,8 +32,7 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/announce_announceManage',
-                auth: ['announce.announceManage.details', '*']
+                activeMenu: '/announce_announceManage'
             }
         }]
     }]

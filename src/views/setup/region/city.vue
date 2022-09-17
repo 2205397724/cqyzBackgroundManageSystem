@@ -38,12 +38,12 @@
                         </el-col>
                     </el-row>
                 </div>
-                <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                <div class="hidden">
                     <el-table
                         v-loading="loading_tab"
                         :data="data_tab.arr"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        style="width: 100%;min-height: 300px;"
+                        class="tab_1"
                     >
                         <el-table-column prop="name" label="名称">
                             <template #default="scope">
@@ -123,14 +123,15 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </div>
-                <div style="padding-top: 20px;">
                     <el-pagination
                         v-model:current-page="page"
-                        layout="total,prev,pager,next,jumper,"
-                        :total="total"
                         :page-size="per_page"
+                        style="float: right;"
                         background
+                        layout="prev,next,jumper"
+                        :total="50"
+                        prev-text="上一页"
+                        next-text="下一页"
                         hide-on-single-page
                     />
                 </div>
@@ -360,20 +361,7 @@ let from_examine = reactive({
         'updated_at': '2022-07-09T01:39:09.000000Z'
     }
 })
-let from_examine_ = reactive({
-    item: {
-        'active': '',
-        'auth_sk': '',
-        'china_code': '',
-        'created_at': '',
-        'time_build_end': '',
-        'id': '',
-        'ip': '',
-        'name': '',
-        'rpc_port': 0,
-        'updated_at': ''
-    }
-})
+
 const str_title = ref('添加')
 const from_error = reactive({
     msg: {}
@@ -381,14 +369,8 @@ const from_error = reactive({
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
-const searchFunc = () => {
-    page.value = 1
-    switch_search.value = true
-    getTabListFunc()
-}
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.keyword = ''
     getTabListFunc()
@@ -490,18 +472,26 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetCityList(params).then(res => {
         // console.log(res)
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = res.data.rpc_port
+        loading_tab.value = false
+        data_tab.arr = res.data
+        total.value = res.data.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.data.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
         }
     })
 }
 // 删除
 const deleteFunc = val => {
     APIdeleteCity(val.id).then(res => {
+        ElMessage.success('删除成功')
         refreshFunc()
-        ElMessage.success(res.msg)
     })
 }
 // 添加楼栋
@@ -518,44 +508,59 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改'
     APIgetCityDetails(val.id).then(res => {
         console.log(res)
-        if (res.status == 200) {
-            from_examine.item = res.data
-            switch_examine.value = true
+        from_examine.item = res.data
+        console.log(from_examine.item.addition)
+        if (!from_examine.item.addition) {
+            from_examine.item.addition = {
+                created_at:
+                    '2022-07-21 15:36:37',
+                desc:
+                    '闺女的风格',
+                extra:
+                    { geo: { lat: 57, lon: 79 }, convenience: [{ phone: '19862282424', title: '部分' }] },
+                id:
+                    '62d90205615d750a917fe688',
+                updated_at:
+                    '2022-09-17 16:42:30'
+            }
         }
+        switch_examine.value = true
     })
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
 refreshFunc()
 </script>
-<style lang="scss">
-    .regioncity {
-        .el-cascader-box-my {
-            .el-cascader {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-        }
-        .serve-box {
-            border: 1px solid #eee;
-            box-sizing: border-box;
-            padding: 10px;
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.regioncity {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
             margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-            .el-form-item {
-                margin: 0;
-            }
-            .delete-service {
-                position: absolute;
-                right: 0;
-                top: 0;
-                z-index: 999999;
-                cursor: pointer;
-                background-color: #fff;
-            }
         }
     }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .el-form-item {
+            margin: 0;
+        }
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
 </style>
 <style lang="scss" scoped>
     .search-tips {

@@ -395,9 +395,7 @@ const str_title = ref('添加计划')
 const from_error = reactive({
     msg: {}
 })
-import {
-    APIgetChinaRegion
-} from '@/api/custom/custom.js'
+
 const isSearch3 = ref(false)
 const isSearch2 = ref(true)
 const btnClickFunc = () => {
@@ -407,38 +405,6 @@ const btnClickFunc = () => {
 }
 // const style1 = ref({})
 // // style1.value={height: 200px}
-const cascader_props = {
-    multiple: false,
-    emitPath: false,
-    lazy: true,
-    value: 'code',
-    label: 'name',
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-        const {
-            data
-        } = node
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res)
-        })
-    }
-}
-const cascader_props2 = {
-    multiple: true,
-    emitPath: false,
-    lazy: true,
-    value: 'code',
-    label: 'name',
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-        const {
-            data
-        } = node
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
-            resolve(res)
-        })
-    }
-}
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -449,7 +415,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()

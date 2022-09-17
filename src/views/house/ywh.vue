@@ -353,7 +353,6 @@ const from_error = reactive({
 // 方法
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     data_search.name = ''
     getTabListFunc()
 }

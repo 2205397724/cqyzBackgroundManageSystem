@@ -280,7 +280,6 @@ const statusFunk = row => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     getTabListFunc()
 }
 // 获取列表

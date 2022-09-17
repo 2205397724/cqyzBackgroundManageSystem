@@ -32,8 +32,7 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/event_illegal',
-                auth: ['event.illegal.details', '*']
+                activeMenu: '/event_illegal'
             }
         }]
     }]

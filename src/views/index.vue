@@ -17,12 +17,11 @@
                             :xs="24" :sm="24" :lg="18"
                             style="display: flex;flex-direction: column;justify-content: space-between;"
                         >
-                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.nickname }}</div>
+                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.name? data.userinfo.name:data.userinfo.nickname?data.userinfo.nickname:data.userinfo.username }}</div>
                             <div style="color: #666;font-weight: 400;">
                                 <div style="font-size: 14px;">{{ data.userinfo.address }} {{ data.userinfo.department }} {{ data.userinfo.job }}</div>
                                 <div style="font-size: 12px;">
-                                    手机号码：{{ data.userinfo.tel }} 最后登录：{{ data.userinfo.lasttime }}
-                                    登录IP：{{ data.userinfo.ip }}
+                                    手机号码：{{ data.userinfo.mobile }} &nbsp;&nbsp;&nbsp; 最后登录：{{ data.userinfo.updated_at }}
                                 </div>
                             </div>
                         </el-col>
@@ -173,25 +172,20 @@ const choose_city_end = val => {
 import { auth, authAll } from '../util/index'
 const choose_city = () => {
     console.log(sessionStorage.getItem('utype'))
-    console.log(md5('pt'))
+    // console.log(md5('pt'))
     // if (sessionStorage.getItem('utype') == md5('pt') || sessionStorage.getItem('isChooseCity')) {
+    console.log(sessionStorage.getItem('isChooseCity'))
     if (sessionStorage.getItem('isChooseCity') == 'true') {
-        sessionStorage.setItem('isChooseCity', false)
         userStore.isChooseCity = false
         switch_choose_city.value = false
     } else {
+        console.log(sessionStorage.getItem('isChooseCity'))
         getCityList()
         userStore.isChooseCity = true
         switch_choose_city.value = true
     }
-    console.log(sessionStorage.getItem('isChooseCity'))
 }
 choose_city()
-const choose_cityFun = () => {
-    userStore.isChooseCity = true
-    sessionStorage.setItem('IS_chooseCity', false)
-    console.log(sessionStorage.getItem('china_code'))
-}
 import { reactive } from 'vue'
 // const refreshCurPage=()=>{
 //     location.reload()

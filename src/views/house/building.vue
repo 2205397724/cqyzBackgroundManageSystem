@@ -10,48 +10,49 @@
                 </el-button>
             </div>
             <div class="search">
-                    <el-row>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    楼栋编号：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="data_search.obj.sno" class="search_tb" placeholder="楼栋编号" clearable />
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                楼栋名称：
                             </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    楼栋名称：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="data_search.obj.name" class="search_tb" placeholder="楼栋名称" clearable />
                             </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    地址：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                楼栋编号：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.sno" class="search_tb" placeholder="楼栋编号" clearable />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                地址：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="data_search.obj.addr" class="search_tb" placeholder="地址" clearable />
                             </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
             </div>
             <!-- <el-col :xs="12" :sm="8" :md="6" :lg="5" :xl="4">
                         <el-input v-model="data_search.obj.addr" class="head-btn" placeholder="地址" clearable />
@@ -430,12 +431,13 @@
                                     label="简介" prop="addition.desc" label-width="100px"
                                     :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''"
                                 >
-                                    <el-input
+                                    <!-- <el-input
                                         v-model="from_examine.item.addition.desc"
                                         :autosize="{ minRows: 2, maxRows: 6 }"
                                         type="textarea"
                                         placeholder=""
-                                    />
+                                    /> -->
+                                    <editor v-model="from_examine.item.addition.desc" class="w-100" />
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -456,113 +458,113 @@
             title="详情"
             width="50%"
         >
-            <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="基础信息" name="1">
-                    <el-scrollbar height="400px">
-                        <div class="details-box">
-                            <div class="details-tit-sm">楼栋信息</div>
-                            <div class="item">
-                                <div class="left">楼栋名称</div>
-                                <div class="right">{{ data_details.item.name }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">楼栋编号</div>
-                                <div class="right">{{ data_details.item.sno }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">所属小区</div>
-                                <div class="right">{{ data_details.item.zone_id }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">楼栋地址</div>
-                                <div class="right">{{ data_details.item.addr }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">供水方式</div>
-                                <div class="right">{{ getOptVal(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">建筑结构</div>
-                                <div class="right">{{ getOptVal(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
-                            </div>
+            <!-- <el-tabs v-model="activeName" @tab-click="handleClick"> -->
+            <!-- <el-tab-pane label="基础信息" name="1"> -->
+            <el-scrollbar height="400px">
+                <div class="details-box">
+                    <div class="details-tit-sm">楼栋信息</div>
+                    <div class="item">
+                        <div class="left">楼栋名称</div>
+                        <div class="right">{{ data_details.item.name }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">楼栋编号</div>
+                        <div class="right">{{ data_details.item.sno }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">所属小区</div>
+                        <div class="right">{{ data_details.item.zone_id }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">楼栋地址</div>
+                        <div class="right">{{ data_details.item.addr }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">供水方式</div>
+                        <div class="right">{{ getOptVal(opts_all.obj.build_type_water,data_details.item.type_water) }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">建筑结构</div>
+                        <div class="right">{{ getOptVal(opts_all.obj.build_type_construct,data_details.item.type_construct) }}</div>
+                    </div>
 
-                            <div class="details-tit-sm">数量/面积信息</div>
-                            <div class="item">
-                                <div class="left">楼层数</div>
-                                <div class="right">{{ data_details.item.cnt_floor }} 层</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">单元个数</div>
-                                <div class="right">{{ data_details.item.cnt_unit }} 个</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">电梯数</div>
-                                <div class="right">{{ data_details.item.cnt_lift }} 台</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">总建筑面积</div>
-                                <div class="right">{{ data_details.item.area_build }} m²</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">总专有面积</div>
-                                <div class="right">{{ data_details.item.area_exc }} m²</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">住宅总套数</div>
-                                <div class="right">{{ data_details.item.cnt_live }} 套</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">住宅总面积</div>
-                                <div class="right">{{ data_details.item.area_live }} m²</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">非住宅套数</div>
-                                <div class="right">{{ data_details.item.cnt_live_not }} 套</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">非住宅面积</div>
-                                <div class="right">{{ data_details.item.area_live_not }} m²</div>
-                            </div>
-                            <div class="details-tit-sm">建设信息</div>
-                            <div class="item">
-                                <div class="left">楼栋报建名</div>
-                                <div class="right">{{ data_details.item.report_name }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">建设业主单位</div>
-                                <div class="right">{{ data_details.item.by_build_owner }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">建设单位</div>
-                                <div class="right">{{ data_details.item.by_build }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">建成时间</div>
-                                <div class="right">{{ data_details.item.time_build_end }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">移交时间</div>
-                                <div class="right">{{ data_details.item.time_turn }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">投用时间</div>
-                                <div class="right">{{ data_details.item.time_use }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">备注</div>
-                                <div class="right">{{ data_details.item.remark }}</div>
-                            </div>
-                            <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
-                                <div class="left">简介</div>
-                                <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
-                            </div>
-                        </div>
-                    </el-scrollbar>
-                </el-tab-pane>
-                <el-tab-pane label="档案信息" name="2">
+                    <div class="details-tit-sm">数量/面积信息</div>
+                    <div class="item">
+                        <div class="left">楼层数</div>
+                        <div class="right">{{ data_details.item.cnt_floor }} 层</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">单元个数</div>
+                        <div class="right">{{ data_details.item.cnt_unit }} 个</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">电梯数</div>
+                        <div class="right">{{ data_details.item.cnt_lift }} 台</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">总建筑面积</div>
+                        <div class="right">{{ data_details.item.area_build }} m²</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">总专有面积</div>
+                        <div class="right">{{ data_details.item.area_exc }} m²</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">住宅总套数</div>
+                        <div class="right">{{ data_details.item.cnt_live }} 套</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">住宅总面积</div>
+                        <div class="right">{{ data_details.item.area_live }} m²</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">非住宅套数</div>
+                        <div class="right">{{ data_details.item.cnt_live_not }} 套</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">非住宅面积</div>
+                        <div class="right">{{ data_details.item.area_live_not }} m²</div>
+                    </div>
+                    <div class="details-tit-sm">建设信息</div>
+                    <div class="item">
+                        <div class="left">楼栋报建名</div>
+                        <div class="right">{{ data_details.item.report_name }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">建设业主单位</div>
+                        <div class="right">{{ data_details.item.by_build_owner }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">建设单位</div>
+                        <div class="right">{{ data_details.item.by_build }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">建成时间</div>
+                        <div class="right">{{ data_details.item.time_build_end }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">移交时间</div>
+                        <div class="right">{{ data_details.item.time_turn }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">投用时间</div>
+                        <div class="right">{{ data_details.item.time_use }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">备注</div>
+                        <div class="right">{{ data_details.item.remark }}</div>
+                    </div>
+                    <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
+                        <div class="left">简介</div>
+                        <div class="right" v-html="data_details.item.addition?data_details.item.addition.desc:''" />
+                    </div>
+                </div>
+            </el-scrollbar>
+            <!-- </el-tab-pane> -->
+            <!-- <el-tab-pane label="档案信息" name="2">
                     <el-scrollbar height="400px" />
-                </el-tab-pane>
-            </el-tabs>
+                </el-tab-pane> -->
+            <!-- </el-tabs> -->
             <template #footer>
                 <span class="dialog-footer">
                     <el-button type="primary" @click="modifyResidentialFunc(data_details.item)">修改</el-button>
@@ -599,7 +601,7 @@ const showHouseFunc = val => {
     }
     edit_house.value = true
 }
-import {Loading, Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 import SearchResidential from '@/components/SearchResidential/index.vue'
 import {
     APIgetBuildListHouse,
@@ -648,29 +650,8 @@ let page = ref(1)
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        'zone_id': '62174812e2f596482a1db206',
-        'addr': '四川省 巴中市 恩阳区',
-        'area_live': '489463.6',
-        'area_build': '6981.6',
-        'area_live_not': '198720.6',
-        'cnt_floor': 32,
-        'cnt_unit': 98,
-        'cnt_live': 57,
-        'by_build_owner': '形革快织象之按道听总',
-        'time_build_end': '1991-10-16',
-        'time_turn': '1984-09-01',
-        'time_use': '1992-07-17',
-        'sno': 24,
-        'report_name': '调二开题几',
-        'name': '建法感东见',
-        'type_water': '100',
-        'type_construct': '100',
-        'cnt_lift': 95,
-        'cnt_live_not': 88,
-        'by_build': '体色时收养领研',
-        'remark': '',
         'addition': {
-            'desc': '决世非单程决今加千便度温更。把取办明部开边任器示研广增按所。统格活从律到除海在率内却把出当且。都已亲许也公品她装运干明矿非或管放。史结以造思运很最加来党包共电气。'
+            'desc': ''
         }
     }
 })
@@ -688,7 +669,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
@@ -798,7 +778,7 @@ const getTabListFunc = () => {
         data_tab.arr = res
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -816,37 +796,15 @@ const deleteFunc = val => {
         ElMessage.success('删除成功')
     })
 }
-from_examine.item = {
-    'zone_id': '',
-    'addr': '',
-    'area_live': '',
-    'area_build': '',
-    'area_live_not': '',
-    'cnt_floor': 0,
-    'cnt_unit': 0,
-    'cnt_live': 0,
-    'by_build_owner': '',
-    'time_build_end': '',
-    'time_turn': '',
-    'time_use': '',
-    'sno': 0,
-    'report_name': '',
-    'name': '',
-    'type_water': '',
-    'type_construct': '',
-    'cnt_lift': 0,
-    'cnt_live_not': 0,
-    'by_build': '',
-    'remark': '',
-    'addition': {
-        'desc': ''
-    }
-}
 // 添加楼栋
 const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
-    from_examine.item = {}
+    from_examine.item = {
+        addition: {
+            desc: ''
+        }
+    }
     switch_examine.value = true
 }
 // 修改

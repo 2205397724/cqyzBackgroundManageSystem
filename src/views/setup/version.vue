@@ -2,8 +2,8 @@
     <div class="setupAPP">
         <page-main>
             <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addresidentialFunc">添加App版本</el-button>
-            <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 400px; max-height: 500px;">
-                <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}" default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
+            <div class="hidden">
+                <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}" default-expand-all row-key="id" :tree-props="{children: 'children'}" class="tab_1">
                     <el-table-column prop="version_name" label="版本名称">
                         <template #default="scope">
                             <span>{{ scope.row.version_name }} </span>
@@ -68,6 +68,17 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    v-model:current-page="page"
+                    :page-size="per_page"
+                    style="float: right;"
+                    background
+                    layout="prev,next,jumper"
+                    :total="50"
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
                 <!-- 修改添加 -->
                 <el-dialog
                     v-model="switch_examine"
@@ -261,7 +272,6 @@ const statusFunk = row => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     getTabListFunc()
 }
 // 获取列表
@@ -278,6 +288,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 const switchFunk = row => {
@@ -352,3 +372,7 @@ getOpts(['sys_is_status', 'sys_is_force', 'sys_is_type']).then(res => {
     opts_all.obj = res
 })
 </script>
+<style lang="scss" scoped>
+    @import "@/assets/styles/resources/variables.scss";
+    @include pageStyle;
+</style>

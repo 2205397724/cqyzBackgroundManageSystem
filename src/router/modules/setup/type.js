@@ -19,8 +19,7 @@ export default {
                 title: '分类管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup_type',
-                auth: ['setup.type.type', '*']
+                activeMenu: '/setup_type'
             }
         }
     ]

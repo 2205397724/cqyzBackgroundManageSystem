@@ -8,14 +8,14 @@ export default {
     meta: {
         title: '选举',
         icon: 'el-icon-document',
-        auth: ['event.events', '*']
+        auth: ['activity.elect', '*']
     },
     children: [
         {
             path: 'elect',
             component: () => import('@/views/activity/elect.vue'),
             meta: {
-                title: '选举管理',
+                title: '选举',
                 // 在侧边导航栏显示
                 sidebar: false,
                 // 在面包屑展示

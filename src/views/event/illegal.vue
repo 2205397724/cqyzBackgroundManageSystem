@@ -721,7 +721,6 @@ const refreshFunc = () => {
         kind: 1
     }
     data_1.switch_search = false
-    data_1.page = 1
     getFuncVoteList()
 }
 watch(() => data_1.page, new_val => {

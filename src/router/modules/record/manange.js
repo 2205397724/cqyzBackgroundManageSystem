@@ -7,7 +7,7 @@ export default {
     redirect: '/record_manange/manange',
     name: 'recordManangeBox',
     meta: {
-        title: '',
+        title: '备案管理',
         icon: 'el-icon-document',
         auth: ['record.manange', '*']
     },
@@ -28,8 +28,7 @@ export default {
             component: () => import('@/views/record/add.vue'),
             meta: {
                 title: '详情',
-                activeMenu: '/record_manange',
-                auth: ['record.manange.detail', '*']
+                activeMenu: '/record_manange'
             }
         }]
     }]

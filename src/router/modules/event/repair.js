@@ -32,8 +32,7 @@ export default {
             meta: {
                 title: '详情',
                 sidebar: false,
-                activeMenu: '/event_repair',
-                auth: ['event.repair.details', '*']
+                activeMenu: '/event_repair'
             }
         }]
     }]
