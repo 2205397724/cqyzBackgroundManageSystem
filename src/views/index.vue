@@ -87,19 +87,9 @@
             v-model="switch_choose_city" title="请选择地区"
             width="40%" :close-on-click-modal="false" :show-close="false"
         >
-            <!--  <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
-            :show-all-levels="false" style="width: 100%;"
-            ></el-cascader> -->
-            <!-- <position-tree-fourth :tree_item="tree_item" @checkFunc="checkFunc"></position-tree-fourth> -->
-            <!-- <el-select v-model="choosed_city" placeholder="请选择区域">
-                <el-option v-for="item in city_list.arr" :key="item.ip" :label="item.name" :value="item.china_code" />
-            </el-select> -->
-            <div>
-                <span v-for="item in city_list.arr" :key="item.ip" class="cityBox" @click="choose_city_end(item)">{{ item.name }}</span>
+            <div class="cityBox">
+                <div v-for="item in city_list.arr" :key="item.ip" class="city" @click="choose_city_end(item)">{{ item.name }}</div>
             </div>
-            <!-- <template #footer>
-                <el-button type="primary" @click="choose_city_end">确认</el-button>
-            </template> -->
         </el-dialog>
     </div>
 </template>
@@ -131,9 +121,15 @@ const choosed_city = ref('')
 const city_list = reactive({
     arr: []
 })
+const page = ref(1)
+const per_page = ref(15)
 // 获取城市配置
 const getCityList = () => {
-    APIgetCityNotPm().then(res => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetCityNotPm(params).then(res => {
         city_list.arr = res.data
         console.log(res)
     })
@@ -338,12 +334,27 @@ const aaa = ref()
     }
     .cityBox {
         display: flex;
-        width: 50px;
-        height: 50px;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         flex-wrap: wrap;
-        color: #67c23a;
-        background-color: #f0f9eb;
+        .city {
+            text-align: center;
+            margin-right: 20px;
+            height: 50px;
+            padding: 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+        .city:hover {
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
+        .city:visited {
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
     }
+
 </style>

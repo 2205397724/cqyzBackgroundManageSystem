@@ -884,6 +884,7 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
+    console.log(sessionStorage.getItem('groupChinaCode'))
     if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
         params.cc = sessionStorage.getItem('groupChinaCode')
     }

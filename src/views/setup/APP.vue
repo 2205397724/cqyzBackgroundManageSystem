@@ -3,10 +3,15 @@
         <page-main>
             <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addresidentialFunc">添加App</el-button>
             <div>
-                <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}" default-expand-all row-key="id" :tree-props="{children: 'children'}" class="tab_1">
+                <el-table
+                    v-loading="loading_tab" :data="data_tab.arr" :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    row-key="id"
+                    :tree-props="{ children: 'children' }"
+                    class="tab_1"
+                >
                     <el-table-column prop="logo" label="图标" width="100">
                         <template #default="scope">
-                            <img :src="scope.row.logo" alt="" style="width: 50px; height: 50px;">
+                            <el-iamge :src="scope.row.logo" alt="" style="width: 50px; height: 50px;" /></el-iamge>
                         </template>
                     </el-table-column>
                     <el-table-column prop="name" label="APP名称">
@@ -370,7 +375,7 @@ const dialogExamineCloseFunc = ()  => {
     // }
     console.log(files)
     if (files.length > 0) {
-        getFilesKeys(files, 'folder').then(arr => {
+        getFilesKeys(files, 'APP').then(arr => {
             // let o = 0
             // for (let i in obj) {
             //     addMenuForm.item.logo = arr[o]

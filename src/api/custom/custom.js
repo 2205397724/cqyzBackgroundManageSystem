@@ -868,7 +868,7 @@ export function APIpostGroup(data) {
 export function APIgetGroupDetails(id) {
     return api.get(`/groups/${id}`)
 }
-//用户组权限
+// 用户组权限
 export function APIgetGroupPerms(gid) {
     return api.get(`/groups/${gid}/perms`)
 }
@@ -1376,7 +1376,12 @@ export function APIgetHouseHouse(params) {
 // 个人信息
 export function APIgetUserinfo(params) {
     return api.get('/me', { params: params })
-        // return api.get('/user/me', { params: params })
+    // return api.get('/user/me', { params: params })
+}
+// 修改个人信息
+export function APIputUserinfo(data) {
+    return api.put('/me/custom', data)
+    // return api.get('/user/me', { params: params })
 }
 // 统计
 export function APIgetTipsnum(params) {
