@@ -12,7 +12,7 @@
                                     <el-input placeholder="请输入你的真实姓名" />
                                 </el-form-item> -->
                                 <el-form-item label="昵称" prop="nickname">
-                                    <el-input v-model="form.item.nickname" placeholder="请输入你的用户名" />
+                                    <el-input v-model="form.item.nickname" placeholder="请输入昵称" />
                                 </el-form-item>
                                 <!-- <el-form-item label="手机号">
                                     <el-input v-model="form.item.mobile" placeholder="请输入你的手机号" />
@@ -86,7 +86,7 @@
                                 <div class="portrait">
                                     <span v-if="!form.item.avatar" style="position: absolute; top: 43%; left: 35%; color: #fe9c7d;">头像</span>
                                     <el-image v-if="form.item.avatar&&!portrait.item.image" :src="VITE_APP_FOLDER_SRC+form.item.avatar" alt="" class="portrait" style="top: 80% ;left: 45%;" />
-                                    <el-image v-if="portrait.item.image" :src="portrait.item.image" alt="" class="portrait" style="top: 80% ;left: 45%;" />
+                                    <el-image v-if="portrait.item.image" :src="portrait.item.image" alt="" class="portrait" style="top: 81% ;left: 46%;" />
                                 </div>
                             </el-upload>
                         </el-col>
@@ -198,7 +198,7 @@ const fileListFn = val => {
         files.push(val.raw)
         // }
         console.log(files)
-        if (files.length > 0) {
+        if (files.length > 0 && files[0]) {
             getFilesKeys(files, 'portrait').then(arr => {
                 // let o = 0
                 // for (let i in obj) {
@@ -235,7 +235,7 @@ APIgetUserinfo().then(res => {
 })
 APIgetLoginUserGroup().then(res => {
     console.log(res)
-    if (sessionStorage.getItem('utype') == md5('pt')) {
+    if (localStorage.getItem('utype') == md5('pt')) {
         flag_1.value = false
     } else {
         flag_1.value = true
@@ -258,15 +258,19 @@ APIgetLoginUserGroup().then(res => {
     userGroup.arr = res.data
 })
 const ChangeUserGroupFunc = (val, i) => {
+    console.log(i)
+    console.log(val.flag)
     val.flag = !val.flag
     if (val.flag == true) {
         userGroup.arr.forEach((item, index) => {
-            if (val == item) {
-                item
+            if (index != i) {
+                item.flag = false
             }
         })
         sessionStorage.setItem('groupChinaCode', val.region_cc)
-        APIgetLoginUserGroup()
+        console.log(sessionStorage.getItem('groupChinaCode'))
+        // APIgetLoginUserGroup()
+        // userGroup.arr[i]
     }
 }
 const flag = ref(false)

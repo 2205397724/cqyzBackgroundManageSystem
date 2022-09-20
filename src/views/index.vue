@@ -9,7 +9,7 @@
                             style="display: flex;justify-content: center;align-items: center;box-sizing: border-box;padding-right: 20px;min-width: 135px;"
                         >
                             <image-preview
-                                :src="data.userinfo.avatar" width="90px" height="90px"
+                                :src="VITE_APP_FOLDER_SRC+data.userinfo.avatar" width="90px" height="90px"
                                 style="border-radius: 50%;height: 90px;width: 90px;"
                             />
                         </el-col>
@@ -85,7 +85,7 @@
         </page-main>
         <el-dialog
             v-model="switch_choose_city" title="请选择地区"
-            width="40%" :close-on-click-modal="false" :show-close="false"
+            width="30%" :close-on-click-modal="false" :show-close="false"
         >
             <div class="cityBox">
                 <div v-for="item in city_list.arr" :key="item.ip" class="city" @click="choose_city_end(item)">{{ item.name }}</div>
@@ -112,7 +112,7 @@ const choose_city_props = reactive({
         children: 'children'
     }
 })
-
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const userStore = useUserOutsideStore()
 // 公共导入 cscs
 const switch_choose_city = ref(false)
@@ -161,17 +161,17 @@ const choose_city_end = val => {
     localStorage.setItem('china_code', val.china_code)
     ElMessage.success('选择成功')
     switch_choose_city.value = false
-    sessionStorage.setItem('isChooseCity', true)
+    sessionStorage.setItem('isChooseCity', false)
     console.log(sessionStorage.getItem('isChooseCity'))
 }
 // 进入首页进行判断
 import { auth, authAll } from '../util/index'
 const choose_city = () => {
-    console.log(sessionStorage.getItem('utype'))
+    console.log(localStorage.getItem('utype'))
     // console.log(md5('pt'))
-    // if (sessionStorage.getItem('utype') == md5('pt') || sessionStorage.getItem('isChooseCity')) {
+
     console.log(sessionStorage.getItem('isChooseCity'))
-    if (sessionStorage.getItem('isChooseCity') == 'true') {
+    if (sessionStorage.getItem('isChooseCity') != 'true') {
         userStore.isChooseCity = false
         switch_choose_city.value = false
     } else {

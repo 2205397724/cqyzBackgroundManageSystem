@@ -22,9 +22,15 @@ import {
 const tree_item_1 = reactive({
     arr: []
 })
+
+import md5 from 'md5'
 const getChinaRegionunc = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }

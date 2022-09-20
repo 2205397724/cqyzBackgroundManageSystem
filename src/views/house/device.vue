@@ -878,6 +878,8 @@ const btnClickFunc = () => {
     // isSearch3.value = !isSearch3.value
     // isSearch2.value = !isSearch2.value
 }
+
+import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -885,7 +887,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     console.log(sessionStorage.getItem('groupChinaCode'))
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.cc = sessionStorage.getItem('groupChinaCode')
     }
     console.log(params)

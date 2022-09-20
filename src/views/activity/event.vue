@@ -558,13 +558,15 @@ const dialogExamineCloseFunc = formEl => {
         }
     })
 }
+
+import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.region_cc = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {

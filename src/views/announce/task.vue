@@ -646,10 +646,16 @@ const upResidentialFunc = row => {
 const tree_item = reactive({
     arr: []
 })
+
+import md5 from 'md5'
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }

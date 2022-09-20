@@ -65,6 +65,7 @@ export const useUserStore = defineStore(
                     localStorage.removeItem('account')
                     localStorage.removeItem('token')
                     localStorage.removeItem('failure_time')
+                    sessionStorage.removeItem('isChooseCity')
                     this.account = ''
                     this.token = ''
                     this.failure_time = ''
@@ -76,7 +77,7 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    if (sessionStorage.getItem('utype') == md5('pt')) {
+                    if (localStorage.getItem('utype') == md5('pt')) {
                         this.permissions = ['*']
                         resolve(this.permissions)
                     } else {

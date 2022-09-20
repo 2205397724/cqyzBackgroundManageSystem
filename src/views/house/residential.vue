@@ -55,7 +55,7 @@
                                 <el-col :xs="0" :sm="4" :md="3" :lg="2" />
                                 <el-col :xs="24" :sm="20" :md="21" :lg="22">
                                     <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                                    <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                                    <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
                                     <span v-show="switch_search == true" class="size-base">
                                         *共搜索到{{ total }}条。
                                     </span>
@@ -69,8 +69,8 @@
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                                 class="tab_1"
                             >
-                                <el-table-column prop="name" label="名称" width="150" />
-                                <el-table-column prop="addr" label="地址" width="200" />
+                                <el-table-column prop="name" label="名称" />
+                                <el-table-column prop="addr" label="地址" />
                                 <!-- <el-table-column prop="china_code" label="所在区域" width="180" /> -->
                                 <!-- <el-table-column prop="area_floor" label="总占地面积" width="140">
                                     <template #default="scope">
@@ -87,21 +87,21 @@
                                 <span>{{ scope.row.area_support }} m²</span>
                             </template>
                         </el-table-column> -->
-                                <el-table-column prop="cnt_building" label="楼栋数" width="100">
+                                <el-table-column prop="cnt_building" label="楼栋数">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="cnt_live" label="住房总套数" width="100">
+                                <el-table-column prop="cnt_live" label="住房总套数">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_zone_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
                                         </el-link>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="cnt_live" label="业委会" width="100">
+                                <el-table-column prop="cnt_live" label="业委会">
                                     <template #default="scope">
                                         <el-link :underline="false" type="primary">
                                             <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id,china_code: scope.row.china_code }}">业委会</router-link>
@@ -758,9 +758,14 @@ const tree_item_1 = reactive({
 })
 // APIgetChinaRegion().then(res => {
 
+import md5 from 'md5'
 const getChinaRegionunc = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
@@ -789,6 +794,11 @@ const getChinaRegionunc = () => {
 const searchFunc = () => {
     page.value = 1
     switch_search.value = true
+    getTabListFunc()
+}
+const refreshFunc_1 = () => {
+    switch_search.value = false
+    data_search.obj = {}
     getTabListFunc()
 }
 // 刷新

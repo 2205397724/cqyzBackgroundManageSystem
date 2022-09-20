@@ -240,7 +240,7 @@
                     :model="from_examine.item"
                 >
                     <el-row :gutter="10">
-                        <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="17">
                             <el-form-item
                                 label="直属上级类型" prop="houseable_type" label-width="120px"
                                 :error="from_error.msg&&from_error.msg.houseable_type?from_error.msg.houseable_type[0]:''"
@@ -254,7 +254,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col v-if="from_examine.item.houseable_type" :md="24" :lg="12">
+                        <el-col v-if="from_examine.item.houseable_type" :md="24" :lg="17">
                             <el-form-item
                                 label="直属楼栋/单元ID" prop="houseable_id" label-width="120px"
                                 :error="from_error.msg&&from_error.msg.houseable_id?from_error.msg.houseable_id[0]:''"
@@ -722,7 +722,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="任务名称" prop="name"
+                                label="任务名称" prop="name" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.name?err_files.obj.name[0]:''"
                             >
                                 <el-input
@@ -731,31 +731,37 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="14">
                             <el-form-item
-                                label="直属上级类型" prop="loc"
+                                label="直属上级类型" prop="loc" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.loc?err_files.obj.loc[0]:''"
                             >
-                                <el-select v-model="files_obj.obj.loc" style="width: 100%;" placeholder="直属上级类型" clearable>
+                                <el-select v-model="files_obj.obj.loc" style="width: 100%;" placeholder="直属上级类型" clearable @change="from_examine.item.houseable_id = ''">
                                     <el-option label="楼栋" value="buildings" />
                                     <el-option label="单元" value="units" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col v-if="files_obj.obj.loc" :md="24" :lg="14">
                             <el-form-item
-                                label="直属类型ID" prop="loc_id"
+                                label="直属楼栋/单元ID" prop="loc_id" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.loc_id?err_files.obj.loc_id[0]:''"
                             >
-                                <el-input
+                                <!-- <el-input
                                     v-model="files_obj.obj.loc_id"
                                     placeholder=""
-                                />
+                                /> -->
+                                <div v-if="files_obj.obj.loc=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchBuilding v-model:str="files_obj.obj.loc_id" />
+                                </div>
+                                <div v-else-if="files_obj.obj.loc=='units'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchUnit v-model:str="files_obj.obj.loc_id" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :md="24">
                             <el-form-item
-                                label="选择文件" prop="file_src"
+                                label="附件" prop="file_src" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.file_src?err_files.obj.file_src[0]:''"
                             >
                                 <el-upload
@@ -796,7 +802,8 @@ import {
     APIdeleteHouseHouse,
     APIputHouseHouse,
     APIpostHouseHouse,
-    APIputAllHouseHouse
+    APIputAllHouseHouse,
+    APIpostFilesList
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -1140,7 +1147,7 @@ const getFilesFunc = () => {
         files_loading.value = false
     })
 }
-
+import { getFilesKeys } from '@/util/files.js'
 const filesUpFunc = () => {
     err_files.obj = {}
     let error = false
@@ -1163,34 +1170,23 @@ const filesUpFunc = () => {
     if (error) {
         return false
     }
-    APIpostFiles({ 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }).then(res => {
-        // 发送 POST 请求
-        console.log(files_obj.obj.file_src)
-        console.log(typeof files_obj.obj.file_src)
-        const formData = new FormData()
-        formData.append('Policy', res.data.inputs.Policy)
-        formData.append('X-Amz-Algorithm', res.data.inputs['X-Amz-Algorithm'])
-        formData.append('X-Amz-Credential', res.data.inputs['X-Amz-Credential'])
-        formData.append('X-Amz-Date', res.data.inputs['X-Amz-Date'])
-        formData.append('X-Amz-Signature', res.data.inputs['X-Amz-Signature'])
-        formData.append('acl', res.data.inputs.acl)
-        formData.append('key', `${import.meta.env.VITE_APP_FOLDER_ADDHOUSE}/${res.data.keys[0]}`)
-        formData.append('Content-Type', files_obj.obj.file_src.type)
-        formData.append('file', files_obj.obj.file_src)
-        const api = axios.create({
-            baseURL: res.data.attrs.action,
-            timeout: 1000,
-            headers: { 'Content-Type': res.data.attrs.enctype }
-        })
-        api[res.data.attrs.method.toLowerCase()]('', formData)
-            .then(res => {
-                // ElMessage.success(res.statusText)
-                switch_files.value = false
+    console.log(files_obj.obj.file_src)
+    let arr = []
+    arr.push(files_obj.obj.file_src)
+    if (files_obj.obj.file_src) {
+        getFilesKeys(arr, 'addHouse').then(arr => {
+            files_obj.obj.file_src = arr[0]
+            APIpostFilesList(files_obj.obj).then(res => {
+                ElMessage.success('导入成功')
                 refreshFilesListFunc()
-            }).catch(err => {
-                // ElMessage.error(res.statusText)
+                switch_files.value = false
+                arr = []
+            }).catch(() => {
+                ElMessage.error('上传失败')
             })
-    })
+
+        })
+    }
 }
 const refreshFilesListFunc = () => {
     getFilesFunc()

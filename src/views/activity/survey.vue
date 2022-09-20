@@ -327,11 +327,17 @@ const refreshFunc = () => {
 const tree_item = reactive({
     arr: []
 })
+
+import md5 from 'md5'
 const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
@@ -468,6 +474,8 @@ const dialogExamineCloseFunc = (formEl, id) => {
         }
     })
 }
+
+import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     // 请求信息
@@ -476,7 +484,7 @@ const getTabListFunc = () => {
         per_page: per_page.value,
         type: 1
     }
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.author_tgt = sessionStorage.getItem('groupChinaCode')
     }
     console.log(window.location.hash)

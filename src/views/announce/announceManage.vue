@@ -670,7 +670,7 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.tovalcan = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {
@@ -925,12 +925,18 @@ const chooseFile = i => {
 const tree_item = reactive({
     arr: []
 })
+
+import md5 from 'md5'
 const switch_choose_zone = ref(false)
 const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
