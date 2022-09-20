@@ -20,20 +20,20 @@
                 <el-row>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    公示分类：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14" class="search_tb">
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                公示分类：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14" class="search_tb">
                                 <CascaderAnnounce v-model="data_search.obj.cid" />
                             </el-col>
-                            </el-row>
+                        </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    发布人用户组：
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                发布人用户组：
                             </el-col>
-                                <el-col :sm="20" :xs="18" :md="14" class="search_tb">
+                            <el-col :sm="20" :xs="18" :md="14" class="search_tb">
                                 <div class="searchUserGroup">
                                     <SearchUserGroup ref="V_1" @checkName="checkNameFunc" />
                                 </div>
@@ -42,27 +42,27 @@
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                    状态：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="14" class="search_tb">
-                            <el-select v-model="data_search.obj.status" class="search_tb" placeholder="审核状态" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-col>
-                            </el-row>
+                            <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="14" class="search_tb">
+                                <el-select v-model="data_search.obj.status" class="search_tb" placeholder="审核状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
                 <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
             </div>
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;padding-top: 8px;">*点击公示行选择该公示ID</div>
             <div class="hidden">
@@ -81,14 +81,14 @@
                         </el-table-column>
                         <el-table-column label="公示分类">
                             <template #default="scope">
-                                <span>{{ scope.row.cate.name  }} </span>
+                                <span>{{ scope.row.cate.name }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column label="公示对象" width="220">
-                    <template #default="scope">
-                        <span>{{ scope.row.toval }} </span>
-                    </template>
-                </el-table-column>
+                            <template #default="scope">
+                                <span>{{ scope.row.toval }} </span>
+                            </template>
+                        </el-table-column>
                         <el-table-column label="公示对象类型">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
@@ -102,12 +102,12 @@
                         <el-table-column label="状态">
                             <template #default="scope">
                                 <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                                <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                             </template>
                         </el-table-column>
 
@@ -115,18 +115,17 @@
                     </el-table>
                 </el-scrollbar>
                 <el-pagination
-                v-model:current-page="page"
-                style="float: right;"
-                layout="prev,next,jumper,"
-                :total="50"
-                :page-size="per_page"
-                background
-                prev-text="上一页"
-                next-text="下一页"
-                hide-on-single-page
-            />
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper,"
+                    :total="50"
+                    :page-size="per_page"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
             </div>
-
         </el-dialog>
     </div>
 </template>
@@ -146,7 +145,7 @@ import {
 const switch_list = ref(false)
 // const props = defineProps(['str'])
 const emit = defineEmits(['checkUserNameFunc'])
-import {Loading, Search } from '@element-plus/icons-vue'
+import { Loading, Search } from '@element-plus/icons-vue'
 const loading_tab = ref(false)
 const data_tab = reactive({
     arr: []
@@ -210,7 +209,7 @@ const rowClickFunc = row => {
 }
 const clearFunc = () => {
     emit('checkUserNameFunc', '')
-    userGroupName.value=''
+    userGroupName.value = ''
 }
 // 刷新
 const refreshFunc = () => {

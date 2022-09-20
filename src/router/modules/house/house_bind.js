@@ -17,11 +17,10 @@ export default {
         component: () =>
             import ('@/views/house/houseBind.vue'),
         meta: {
-            title: '企业管理',
+            title: '房屋绑定申请',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/house_bind',
-            auth: ['house.bind.bind', '*']
+            activeMenu: '/house_bind'
         }
     }]
 }

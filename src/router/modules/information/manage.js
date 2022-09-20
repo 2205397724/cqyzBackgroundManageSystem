@@ -20,8 +20,7 @@ export default {
             title: '资讯管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/information_manage',
-            auth: ['information.manage.manage', '*']
+            activeMenu: '/information_manage'
         }
     }]
 }

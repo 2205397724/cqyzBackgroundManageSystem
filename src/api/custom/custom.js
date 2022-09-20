@@ -868,6 +868,7 @@ export function APIpostGroup(data) {
 export function APIgetGroupDetails(id) {
     return api.get(`/groups/${id}`)
 }
+// 用户组权限
 export function APIgetGroupPerms(gid) {
     return api.get(`/groups/${gid}/perms`)
 }
@@ -877,16 +878,16 @@ export function APIpostGroupPerms(gid, data) {
 export function APIdeleteGroupPerms(gid) {
     return api.delete(`/groups/${gid}/perms`)
 }
-// 获取角色拥有所有权限
-export function getRoles_perms(role) {
-    return api.get(`/roles/${role}/perms`)
-}
-export function payRoles_perms(role, data) {
-    return api.post(`/roles/${role}/perms`, data)
-}
-export function deleteRoles_perms(role, data) {
-    return api.delete(`/roles/${role}/perms`, data)
-}
+// // 获取角色拥有所有权限
+// export function getRoles_perms(role) {
+//     return api.get(`/roles/${role}/perms`)
+// }
+// export function payRoles_perms(role, data) {
+//     return api.post(`/roles/${role}/perms`, data)
+// }
+// export function deleteRoles_perms(role, data) {
+//     return api.delete(`/roles/${role}/perms`, data)
+// }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 用户组 /api/cc/{cc}/group
 // 列表
@@ -1040,6 +1041,10 @@ export function APIgetloginUserPerms() {
 // 获取我的所在用户组
 export function APIgetLoginUserGroup() {
     return api.get('/me/groups')
+}
+// 获取所在用户组权限
+export function APIgetLoginUserGroupPerms(params) {
+    return api.get('/me/group-perms', { params: params })
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 产权
@@ -1370,7 +1375,12 @@ export function APIgetHouseHouse(params) {
 // 控制台首页
 // 个人信息
 export function APIgetUserinfo(params) {
-    return api.get('/member/home/userinfo', { baseURL: '/mock/', params: params })
+    return api.get('/me', { params: params })
+    // return api.get('/user/me', { params: params })
+}
+// 修改个人信息
+export function APIputUserinfo(data) {
+    return api.put('/me/custom', data)
     // return api.get('/user/me', { params: params })
 }
 // 统计

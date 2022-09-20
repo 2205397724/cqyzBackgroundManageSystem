@@ -20,8 +20,7 @@ export default {
             title: '设备管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/event_device',
-            auth: ['event.device.device', '*']
+            activeMenu: '/event_device'
         }
     }]
 }

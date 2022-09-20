@@ -19,8 +19,7 @@ export default {
                 title: '角色管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/user_roles',
-                auth: ['user.roles.roles', '*']
+                activeMenu: '/user_roles'
             }
         }
     ]

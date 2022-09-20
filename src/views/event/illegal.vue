@@ -406,42 +406,6 @@
                 </div>
             </template>
         </el-dialog>
-        v-model="switch_details"
-        title="详情"
-        width="50%"
-        >
-        <div class="details-box">
-            <div class="item">
-                <div class="left">违建ID</div>
-                <div class="right">{{ data_details.item.id }}</div>
-            </div>
-            <div class="item">
-                <div class="left">违建对象</div>
-                <div class="right">{{ data_details.item.tgt }}</div>
-            </div>
-            <div class="item">
-                <div class="left">违建类型</div>
-                <div class="right">{{ getOptVal(opts_all.obj.illegal_type,data_details.item.type) }}</div>
-            </div>
-            <div class="item">
-                <div class="left">状态</div>
-                <div class="right">{{ getOptVal(opts_all.obj.illegal_user,data_details.item.status) }}</div>
-            </div>
-            <div class="item">
-                <div class="left">创建时间</div>
-                <div class="right">{{ data_details.item.created_at }}</div>
-            </div>
-            <div class="item">
-                <div class="left">更新时间</div>
-                <div class="right">{{ data_details.item.updated_at }}</div>
-            </div>
-        </div>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="switch_details = false">取消</el-button>
-            </span>
-        </template>
-        </el-dialog> -->
     </div>
 </template>
 <script setup>
@@ -757,7 +721,6 @@ const refreshFunc = () => {
         kind: 1
     }
     data_1.switch_search = false
-    data_1.page = 1
     getFuncVoteList()
 }
 watch(() => data_1.page, new_val => {

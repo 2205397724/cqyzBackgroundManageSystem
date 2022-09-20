@@ -803,10 +803,10 @@
             </div>
         </el-dialog>
         <!-- 添加项目部弹窗中选择区域弹窗 -->
-        <el-dialog v-model="switch_choose_zone" title="选择小区">
+        <el-dialog v-model="switch_choose_zone" title="选择区域">
             <el-scrollbar height="250px">
                 <position-tree-fourth
-                    :tree_item="tree_item"
+                    :tree_item="tree_item.arr"
                     @checkChangeFunc="checkChangeFunc"
                     @checkFunc="checkFunc"
                 />
@@ -1035,6 +1035,7 @@ watch(page, () => {
     getTabListFunc()
 })
 const searchFunc = () => {
+    page.value = 1
     switch_search.value = true
     getTabListFunc()
 }
@@ -1263,6 +1264,7 @@ const addUserGroupFunc = val => {
     from_examine.item.type = 7
     from_examine.item.region_val = ''
     switch_examine.value = true
+    getChinaName()
 }
 // 企业成员修改
 const modifyResidentialFunc = val => {
@@ -1271,6 +1273,7 @@ const modifyResidentialFunc = val => {
         ...val
     }
     switch_examine.value = true
+    getChinaName()
 }
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
@@ -1323,21 +1326,30 @@ const checkChangeFunc = val => {
     switch_choose_zone.value = false
 }
 const selectedZone_id = ref('')
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
+// 添加弹出框选择小区
+const tree_item = reactive({
+    arr: []
 })
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
-// 添加弹出框选择小区
-APIgetChinaRegion().then(res => {
-    console.log(res)
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
-})
+const getChinaName = () => {
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
+    })
+}
 // // 企业成员搜索
 // const switch_search_1 = ref(false)
 // const searchFunc_1 = () => {

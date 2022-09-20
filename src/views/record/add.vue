@@ -4,19 +4,11 @@
             <div style="font-size: 22px;">
                 {{ route.query.title }}
             </div>
-            <div class="flex-row flex-zhu-center flex-between" style="width: 200px;height: 60px;">
+            <div class="flex-row flex-zhu-center flex-between" style="width: 160px;height: 60px;">
                 <div class="size-sm" style="color: #999;">备案编号: {{ route.query.sno }}</div>
                 <div>
-                    <el-switch
-                        v-model="current_record_detail.item.status" active-text="已审" inactive-text="未审"
-                        :active-value="1"
-                        :inactive-value="0"
-                        class="mb-2 switchStyle"
-                        style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                        @change="switchRecordFun"
-                    />
+                    <el-tag v-if="current_record_detail.item.status" round size="small">已审</el-tag>
+                    <el-tag v-if="!current_record_detail.item.status">未审</el-tag>
                 </div>
             </div>
             <div class="flex-row m-t-40">
@@ -24,7 +16,6 @@
                     <span style="color: #409eff;" class="size-base strong">备案主体</span>
                     <div style="width: 90%;height: 1px;background-color: #dcdfe6;" class="m-tb-10" />
                     <span style="color: #909399;" class="size-base m-t-10">主体名称: {{ route.query.gruop_name }}</span>
-                    <span style="color: #909399;" class="size-base">统一信用代码:{{}}</span>
                 </div>
                 <div class="flex-column" style="flex: 1;">
                     <span style="color: #409eff;" class="size-base strong">备案项目</span>
@@ -85,9 +76,9 @@ import {
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { APIgetRecordList,
-    APIgetRecordDetail,
-    APIgetKindList,
-    APIputRecord } from '@/api/custom/custom'
+         APIgetRecordDetail,
+         APIgetKindList,
+         APIputRecord } from '@/api/custom/custom'
 const VITE_APP_FOLDER_SRC = import.meta.env.VITE_APP_FOLDER_SRC
 const route = useRoute()
 const preImg = reactive({

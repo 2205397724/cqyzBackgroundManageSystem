@@ -61,9 +61,9 @@ const filterNode = (value, data, node) => {
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
         nodeCopy = node
-        resolve([tree_item.value])
+        // resolve([tree_item.value])
         emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
-        return false
+        return resolve(tree_item.value)
     }
     switch (node.data.next_type) {
         case 'region':

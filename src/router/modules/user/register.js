@@ -19,8 +19,7 @@ export default {
                 title: '用户管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/user_register',
-                auth: ['user.register.register', '*']
+                activeMenu: '/user_register'
             }
         }
     ]

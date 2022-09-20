@@ -20,8 +20,7 @@ export default {
             title: '违建管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/event_illegal',
-            auth: ['event.illegal.illegal', '*']
+            activeMenu: '/event_illegal'
         },
         children: [{
             path: 'details',

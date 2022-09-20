@@ -1,9 +1,13 @@
 <template>
     <div class="tools">
         <div class="buttons">
-            <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">
+            <!-- <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">
                 <svg-icon name="pro" />
                 <span class="title">智慧物业</span>
+            </span> -->
+            <span class="item" @click="switchCity">
+                <el-icon><Switch /></el-icon>
+                <!-- <svg-icon name="switch" /> -->
             </span>
             <span v-if="settingsStore.topbar.enableNavSearch" class="item" @click="$eventBus.emit('global-search-toggle')">
                 <svg-icon name="search" />
@@ -34,13 +38,23 @@
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
+        <!-- <page-main> -->
+        <el-dialog
+            v-model="switch_choose_city" title="请选择地区"
+            width="40%" :close-on-click-modal="false" :show-close="false"
+        >
+            <div class="cityBox">
+                <div v-for="item in city_list.arr" :key="item.ip" class="city" @click="choose_city_end(item)">{{ item.name }}</div>
+            </div>
+        </el-dialog>
+        <!-- </page-main> -->
     </div>
 </template>
 
 <script setup>
 const reload = inject('reload')
 const router = useRouter()
-
+import { Switch } from '@element-plus/icons-vue'
 import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
 import { useUserStore } from '@/store/modules/user'
@@ -72,6 +86,45 @@ function userCommand(command) {
 }
 function pro() {
     window.open('https://app.cqyezhuapp.com/edatachart/', 'top')
+}
+const switch_choose_city = ref(false)
+const switchCity = () => {
+    getCityList()
+    switch_choose_city.value = true
+}
+import {
+    APIgetCityNotPm
+} from '@/api/custom/custom.js'
+import { ElMessage } from 'element-plus'
+const city_list = reactive({
+    arr: []
+})
+const page = ref(1)
+const per_page = ref(15)
+// 获取城市配置
+const getCityList = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetCityNotPm(params).then(res => {
+        city_list.arr = res.data
+        console.log(res)
+    })
+}
+// 选择 后确认按钮
+const choose_city_end = val => {
+    if (!val.china_code) {
+        ElMessage.error('请选择城市')
+        return
+    }
+    console.log(val.china_code)
+    userStore.china_code  = val.china_code
+    localStorage.setItem('china_code', val.china_code)
+    ElMessage.success('选择成功')
+    switch_choose_city.value = false
+    sessionStorage.setItem('isChooseCity', true)
+    console.log(sessionStorage.getItem('isChooseCity'))
 }
 </script>
 

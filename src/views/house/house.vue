@@ -3,9 +3,9 @@
         <page-main class="hidden">
             <div>
                 <div class="search">
-                        <el-row>
-                            <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                <el-row>
+                    <el-row>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
                                 <el-col :sm="4" :xs="6" :md="10" class="search_th">
                                     房屋名称：
                                 </el-col>
@@ -13,19 +13,19 @@
                                     <el-input v-model="data_search.name" class="search_tb" placeholder="房屋名称" clearable />
                                 </el-col>
                             </el-row>
-                            </el-col>
-                            <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                <el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
                                 <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                        地址：
-                                    </el-col>
+                                    地址：
+                                </el-col>
                                 <el-col :sm="20" :xs="18" :md="14">
                                     <el-input v-model="data_search.addr" class="search_tb" placeholder="地址" clearable />
                                 </el-col>
                             </el-row>
-                            </el-col>
-                            <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                <el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
                                 <el-col :sm="4" :xs="6" :md="10" class="search_th">
                                     物理楼层：
                                 </el-col>
@@ -33,21 +33,21 @@
                                     <el-input v-model="data_search.floor_truth" class="search_tb" placeholder="*物理楼层" clearable />
                                 </el-col>
                             </el-row>
-                            </el-col>
-                        </el-row>
-                        <el-row v-if="btnClick==true">
-                            <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                <el-row>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="btnClick==true">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
                                 <el-col :sm="4" :xs="6" :md="10" class="search_th">
-                                        名义层：
-                                    </el-col>
+                                    名义层：
+                                </el-col>
                                 <el-col :sm="20" :xs="18" :md="14">
                                     <el-input v-model="data_search.floor_alias" class="search_tb" placeholder="*名义层" clearable />
                                 </el-col>
                             </el-row>
-                            </el-col>
-                            <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                <el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
                                 <el-col :sm="4" :xs="6" :md="10" class="search_th">
                                     户型：
                                 </el-col>
@@ -57,9 +57,9 @@
                                     </el-select>
                                 </el-col>
                             </el-row>
-                            </el-col>
-                            <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                <el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
                                 <el-col :sm="4" :xs="6" :md="10" class="search_th">
                                     是否绑定产权：
                                 </el-col>
@@ -69,14 +69,14 @@
                                     </el-select>
                                 </el-col>
                             </el-row>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2" />
                         <el-col :xs="24" :sm="20" :md="21" :lg="22">
                             <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                             <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
+                            <span v-show="switch_search == true" class="size-base">
                                 *共搜索到{{ total }}条。
                             </span>
                         </el-col>
@@ -682,7 +682,7 @@
             title="上传"
             width="70%"
         >
-            <el-row :gutter="20" class="bottom-btn-box-2">
+            <el-row :gutter="20" class="bottom-btn-box-2 m-b-10">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
                     <el-button class="head-btn" @click="refreshFilesListFunc">刷新</el-button>
                 </el-col>
@@ -806,7 +806,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import {Loading, Search, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import { Loading, Search, CaretTop, CaretBottom } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -939,12 +939,12 @@ const handleSelectionChange = res => {
 }
 // 搜索
 const searchFunc = () => {
+    page.value = 1
     switch_search.value = true
     getTabListFunc()
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.houseable_type = ''
     data_search.houseable_id = ''
@@ -1056,7 +1056,7 @@ const getTabListFunc = () => {
         total.value = res.length
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)

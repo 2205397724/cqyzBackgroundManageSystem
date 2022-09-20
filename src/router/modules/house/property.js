@@ -20,8 +20,7 @@ export default {
             title: '产权管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/house_property',
-            auth: ['house.property_list.property_list', '*']
+            activeMenu: '/house_property'
         }
     }]
 }

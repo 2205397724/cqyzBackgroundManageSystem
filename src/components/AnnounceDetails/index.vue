@@ -1,8 +1,11 @@
 <template>
-    <div>
+    <div class="inline-block">
         <!-- <span v-if="props.name == '公式'" @click="detailsFunc">详情</span> -->
-        <el-tag v-if="props.name == '公示'" type="success" size="small" class="btnNone" @click="detailsFunc">
+        <el-tag v-if="props.name == '公示'" type="success" size="small" class="btnNone" effect="dark" @click="detailsFunc">
             已完成
+        </el-tag>
+        <el-tag v-if="props.name == '查看'" type="warning" size="small" class="btnNone m-l-10" effect="dark" @click="detailsFunc">
+            查看公示
         </el-tag>
         <div v-if="props.name == '活动'" style="width: 97%;height: 133px;position: absolute;" @click="detailsFunc" />
         <!-- <div style="width: 97%;height: 133px;background-color: #ccc;position: absolute;" @click="detailsFunc" /> -->

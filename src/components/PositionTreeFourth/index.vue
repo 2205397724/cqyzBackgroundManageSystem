@@ -11,7 +11,7 @@
                 show-checkbox
                 :check-strictly="true"
                 accordion
-                :default-checked-keys="[tree_item.id]"
+
                 :filter-node-method="filterNode"
                 @check="handleCheck"
                 @check-change="handleCheckChange"
@@ -58,9 +58,10 @@ const filterNode = (value, data, node) => {
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
         nodeCopy = node
-        resolve([tree_item.value])
+        console.log(node)
+        // resolve([tree_item.value])
         emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
-        return false
+        return resolve(tree_item.value)
     }
     switch (node.data.next_type) {
         case 'region':

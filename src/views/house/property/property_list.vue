@@ -10,57 +10,57 @@
                 </el-button>
             </div>
             <div class="search">
-                    <el-row>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    房屋id：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18" class="search_tb">
-                                    <div class="searchUserGroup">
-                                        <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
-                                    </div>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    产权证号：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                房屋id：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <div class="searchUserGroup">
+                                    <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                产权证号：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="data_search.obj.code_property" class="search_tb" placeholder="产权证号" clearable />
                             </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    地房籍号：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                地房籍号：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="data_search.obj.code_room" class="search_tb" placeholder="地房籍号" clearable />
                             </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row v-if="btnClick==true">
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    产权人姓名：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick==true">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                产权人姓名：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-input v-model="data_search.obj.owner_name" class="search_tb" placeholder="产权人姓名" clearable />
                             </el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                            <el-row>
-                                <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                    交易时间：
-                                </el-col>
-                                <el-col :sm="20" :xs="18" :md="18">
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                交易时间：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-date-picker
                                     v-model="data_search.obj.time_deal"
                                     type="daterange"
@@ -71,26 +71,26 @@
                                     value-format="YYYY-MM-DD"
                                 />
                             </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :xs="0" :sm="4" :md="3" :lg="2"></el-col>
-                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
-                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
-                            <span class="size-base" v-show="switch_search == true">
-                                *共搜索到{{ total }}条。
-                            </span>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <div class="searchPlay" @click="btnClickFunc">
-                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
-                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
-                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
-                        </div>
-                    </el-row>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc_1">重置</el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div class="searchPlay" @click="btnClickFunc">
+                        <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                        <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
+                        <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
+                    </div>
+                </el-row>
             </div>
             <div>
                 <el-table
@@ -262,7 +262,7 @@
                                                 </el-form-item>
                                             </el-col>
                                         </el-row>
-                                        <div class="delete-service"  @click="deleteServiceFunc(i)">
+                                        <div class="delete-service" @click="deleteServiceFunc(i)">
                                             <el-icon :size="20" color="#F56C6C">
                                                 <el-icon-circle-close />
                                             </el-icon>
@@ -375,7 +375,7 @@ import {
     watch
 } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Search, Plus, CaretTop, CaretBottom,Loading } from '@element-plus/icons-vue'
+import { Search, Plus, CaretTop, CaretBottom, Loading } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const searchVisible = ref(false)
 // 数据
@@ -433,7 +433,6 @@ const showForm = () => {
 const V_1 = ref(null)
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()

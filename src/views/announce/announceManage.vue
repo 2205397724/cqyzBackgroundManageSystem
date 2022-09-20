@@ -497,7 +497,7 @@
         <!-- 选择公示区域 -->
         <el-dialog v-model="switch_choose_zone" title="选择公示区域">
             <el-scrollbar height="250px">
-                <position-tree-fourth :tree_item="tree_item" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
+                <position-tree-fourth :tree_item="tree_item.arr" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
             </el-scrollbar>
         </el-dialog>
     </div>
@@ -669,6 +669,9 @@ const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value
+    }
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params.tovalcan = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
@@ -919,17 +922,29 @@ const chooseFile = i => {
     file.click()
 }
 // 选择公示区域
-const tree_item = ref({})
+const tree_item = reactive({
+    arr: []
+})
 const switch_choose_zone = ref(false)
 const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
-    APIgetChinaRegion().then(res => {
-        console.log(res)
-        tree_item.value.id = res.data[0].code
-        tree_item.value.name = res.data[0].name
-        tree_item.value.next_type = 'region'
-        tree_item.value.type = 'region'
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
     })
 }
 const checkFunc = val => {

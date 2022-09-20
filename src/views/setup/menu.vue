@@ -1,52 +1,55 @@
 <template>
     <div class="setupAPP">
         <page-main>
-            <el-button class="head-btn" type="primary" @click="addresidentialFunc">添加App菜单</el-button>
+            <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addresidentialFunc">添加App菜单</el-button>
             <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 400px;">
                 <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}" default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
-                    <el-table-column prop="icon" label="图标" width="80">
+                    <el-table-column prop="icon" label="图标" width="100">
                         <template #default="scope">
                             <img :src="scope.row.icon" alt="" style="width: 50%; height: 50%;">
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="菜单名称" width="100">
+                    <el-table-column prop="name" label="菜单名称">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                            <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="appid" label="APPID" width="240">
+                    <!-- <el-table-column prop="appid" label="APPID" width="240">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.appid }} </span>
                         </template>
-                    </el-table-column>
-                    <el-table-column prop="china_code" label="区域id" width="100">
+                    </el-table-column> -->
+                    <el-table-column prop="china_code" label="区域代码">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.china_code }} </span>
+                            <span>{{ scope.row.china_code }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="url" label="跳转地址">
+                    <!-- <el-table-column prop="url" label="跳转地址">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.url }} </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="place" label="菜单位置">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.sele_menu,scope.row.place) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.sele_menu,scope.row.place) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="type" label="跳转方式">
+                    <!-- <el-table-column prop="type" label="跳转方式">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.type }} </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="sort" label="排序" width="80">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.sort }} </span>
+                            <span>{{ scope.row.sort }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="show" label="是否显示" width="120">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.app_show,scope.row.show) }} </span>
+                            <span>
+                                <el-tag v-if="scope.row.show == 1" type="success" size="small" round>显示</el-tag>
+                                <el-tag v-if="scope.row.show == 0" type="danger" size="small" round>隐藏</el-tag>
+                            </span>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="id" label="APP 相关" width="250">
@@ -225,6 +228,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import {  Plus } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 let data_tab = reactive({
@@ -276,7 +280,6 @@ const statusFunk = row => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     getTabListFunc()
 }
 // 获取列表

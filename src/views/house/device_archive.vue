@@ -364,7 +364,6 @@ const searchFunc = () => {
 const V = ref(null)
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()

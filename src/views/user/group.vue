@@ -1,9 +1,9 @@
 <template>
     <div class="usergroup">
         <page-main>
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn"
+                    size="large"
                     type="primary"
                     :icon="Plus"
                     @click="addResidentialFunc"
@@ -12,68 +12,74 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">用户组名称：</div>
-                            <el-input v-model="data_search.item.name" class="search_tb" placeholder="用户组名称" />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">所在区域：</div>
-
-                            <div class="search_tb">
+                <el-row>
+                    <!-- <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                用户组名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-input v-model="data_search.item.name" class="search_tb" placeholder="用户组名称" />
+                            </el-col>
+                        </el-row>
+                    </el-col> -->
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                所在区域：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
                                 <el-cascader
                                     v-model="data_search.item.region_cc"
-                                    class="head-btn"
+                                    class="search_tb"
                                     placeholder="区域"
                                     :props="cascader_props"
                                     collapse-tags
                                     collapse-tags-tooltip
                                     :show-all-levels="false"
                                 />
-                            </div>
-                        </div>
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">类型：</div>
-                            <el-select
-                                v-model="data_search.item.type"
-                                placeholder="请选择类型"
-                                class="search_tb"
-                            >
-                                <el-option
-                                    v-for="item in opts_all.obj.toushu_return_type"
-                                    :key="item.key"
-                                    :value="item.key"
-                                    :label="item.val"
-                                />
-                            </el-select>
-                        </div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                类型：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select
+                                    v-model="data_search.item.type"
+                                    placeholder="请选择类型"
+                                    class="search_tb"
+                                >
+                                    <el-option
+                                        v-for="item in opts_all.obj.toushu_return_type"
+                                        :key="item.key"
+                                        :value="item.key"
+                                        :label="item.val"
+                                    />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button type="primary" class="m-l-20" :icon="Search" @click="data_searchFun">
-                                    筛选
-                                </el-button>
-                            </div>
-                            <div v-show="data_search.switch == true" class="w_70 m-l-30">
-                                <el-button
-                                    class="m-r-10"
-                                    @click="refreshSearch()"
-                                >
-                                    重置
-                                </el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ data_search.total }}条。
-                                </div>
-                            </div>
-                        </div>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="data_searchFun">
+                            筛选
+                        </el-button>
+                        <el-button
+                            v-if="data_search.switch == true"
+                            class="m-l-20 m-r-10"
+                            :icon="Loading"
+                            @click="refreshSearch()"
+                        >
+                            重置
+                        </el-button>
+                        <span v-show="data_search.switch == true" class="size-base">
+                            *搜索到相关结果共{{ data_search.total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
@@ -98,7 +104,7 @@
                     :tree-props="{ children: 'children' }"
                     style="width: 100%; min-height: 300px;"
                 >
-                    <el-table-column prop="name" label="用户组名称" width="180">
+                    <el-table-column prop="name" label="用户组名称">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
@@ -108,7 +114,7 @@
               <span style="margin-left: 10px">{{ scope.row.id }} </span>
             </template>
           </el-table-column> -->
-                    <el-table-column prop="type" label="类型" width="180">
+                    <el-table-column prop="type" label="类型">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{
                                 getOptVal(opts_all.obj.toushu_return_type, scope.row.type)
@@ -116,7 +122,7 @@
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="成员" width="180">
+                    <el-table-column label="成员">
                         <template #default="scope">
                             <el-button
                                 type="primary"
@@ -128,7 +134,7 @@
                             </el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="权限" width="180">
+                    <el-table-column label="权限">
                         <template #default="scope">
                             <el-button
                                 size="small"
@@ -140,7 +146,7 @@
                             </el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="角色" width="180">
+                    <el-table-column label="角色">
                         <template #default="scope">
                             <el-button
                                 type="success"
@@ -152,8 +158,7 @@
                             </el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column />
-                    <el-table-column fixed="right" label="操作" width="320">
+                    <el-table-column fixed="right" label="操作" width="200">
                         <template #default="scope">
                             <el-button
                                 type="primary"
@@ -259,7 +264,8 @@
 "
                                     @click="click_add_group_zone_id"
                                 >
-                                    <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                    <span v-if="!selectedZone_id" style="margin-left: 11px; color: #c0c4cc;">请选择区域</span>
+                                    <span v-else style="margin-left: 11px;">{{ selectedZone_id }}</span>
                                 </div>
                             </el-form-item>
                         </el-col>
@@ -286,7 +292,7 @@
         <el-dialog v-model="switch_choose_zone" title="选择小区">
             <el-scrollbar height="250px">
                 <position-tree-fourth
-                    :tree_item="tree_item"
+                    :tree_item="tree_item.arr"
                     @checkChangeFunc="checkChangeFunc"
                     @checkFunc="checkFunc"
                 />
@@ -299,9 +305,9 @@
             :title="`“${item_opt.obj.name}”所有成员`"
             width="70%"
         >
-            <el-row :gutter="20" class="bottom-btn-box-2">
+            <el-row :gutter="20" class="bottom-btn-box-2 m-b-20">
                 <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
-                    <el-button class="head-btn" type="primary" @click="optValAddFunc">
+                    <el-button type="primary" :icon="Plus" @click="optValAddFunc">
                         添加成员
                     </el-button>
                 </el-col>
@@ -323,12 +329,12 @@
 "
                 max-height="400"
             >
-                <el-table-column prop="name" label="姓名" width="80">
+                <el-table-column prop="name" label="姓名">
                     <template #default="scope">
                         <span>{{ scope.row.username }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="gender" label="性别" width="150">
+                <el-table-column prop="gender" label="性别">
                     <template #default="scope">
                         <span>{{
                             getOptVal(
@@ -343,17 +349,17 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="mobile" label="电话" width="130">
+                <el-table-column prop="mobile" label="电话">
                     <template #default="scope">
                         <span>{{ scope.row.mobile }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="post" label="职位" width="100">
+                <el-table-column prop="post" label="职位描述">
                     <template #default="scope">
                         <span>{{ scope.row.post }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="角色" width="100">
+                <el-table-column label="角色">
                     <template #default="scope">
                         <el-button
                             type="success"
@@ -365,7 +371,7 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="权限" width="100">
+                <el-table-column label="权限">
                     <template #default="scope">
                         <el-button
                             type="warning"
@@ -377,8 +383,7 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column />
-                <el-table-column label="操作" width="200px" fixed="right">
+                <el-table-column label="操作" width="150px" fixed="right">
                     <template #default="scope">
                         <el-button
                             type="primary"
@@ -387,9 +392,9 @@
                         >
                             修改
                         </el-button>
-                        <el-button size="small" @click="getUserDetail(scope.row)">
-                            详细
-                        </el-button>
+                        <!-- <el-button size="small" @click="getUserDetail(scope.row)">
+                            详情
+                        </el-button> -->
                         <el-popconfirm
                             title="确定要删除当前项么?"
                             cancel-button-type="info"
@@ -416,18 +421,30 @@
             v-model="switch_opt_val_add"
             :title="str_opt_val_title"
             width="50%"
+            @closed="dialogClosed"
         >
             <div>
                 <el-form ref="ruleFormRef" :model="from_opt_val.obj" label-width="80px">
                     <el-row :gutter="10">
                         <el-col :sm="24" :md="24" :lg="12">
-                            <el-form-item label="用户ID" prop="id">
-                                <SearchUser v-model:str="from_opt_val.obj.user_id" @checkName="group_user_check_userid" />
+                            <el-form-item label="用户名" prop="id">
+                                <div class="searchUserGroup">
+                                    <SearchUser ref="V" v-model:name="username" @checkName="group_user_check_userid" />
+                                </div>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label="职位" prop="flg">
-                                <el-input v-model="from_opt_val.obj.flg" placeholder="" />
+                                <el-select
+                                    v-model="from_opt_val.obj.flg"
+                                >
+                                    <el-option
+                                        v-for="item in opts_all.obj.group_user_flg"
+                                        :key="item.key"
+                                        :value="item.key"
+                                        :label="item.val"
+                                    />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -453,26 +470,16 @@
         </el-dialog>
         <!-- 角色部分 -->
         <el-dialog v-model="switch_roles" title="角色信息" center width="65%">
-            <el-button type="primary" class="m-b-10" @click="addGroupRoles">
+            <el-button type="primary" class="m-b-10" :icon="Plus" @click="addGroupRoles">
                 添加用户组角色
             </el-button>
             <!-- <el-input v-model="from_addRoles.item.role_ids[0]" class="p-b-10">
                 <template #prepend>角色ID集</template>
             </el-input> -->
-            <el-table v-loading="loading_tab" :data="data_tab_roles.arr">
+            <el-table v-loading="loading_tab" :data="data_tab_roles.arr" class="tab_1">
                 <el-table-column label="角色名称" prop="name">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="角色ID" prop="id" width="250px">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="角色所属" prop="group_id" width="250px">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="标识" prop="spec">
@@ -480,6 +487,17 @@
                         <span style="margin-left: 10px;">{{ scope.row.spec }} </span>
                     </template>
                 </el-table-column>
+                <el-table-column label="角色ID" prop="id" width="250px">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column label="角色所属" prop="group_id" width="250px">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
+                    </template>
+                </el-table-column> -->
+
                 <el-table-column fixed="right" label="操作" width="80">
                     <template #default="scope">
                         <el-popconfirm
@@ -532,7 +550,7 @@
         </el-dialog>
         <!-- 成员角色部分 -->
         <el-dialog v-model="switch_group_roles" title="成员角色">
-            <el-button type="primary" @click="addGroupUser_rolesFun">
+            <el-button type="primary" :icon="Plus" @click="addGroupUser_rolesFun">
                 添加角色
             </el-button>
             <el-select
@@ -547,20 +565,10 @@
                     :value="item.id"
                 />
             </el-select>
-            <el-table v-loading="loading_tab" :data="data_tab_user_roles.arr">
+            <el-table v-loading="loading_tab" :data="data_tab_user_roles.arr" class="tab_1">
                 <el-table-column label="角色名称" prop="name">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="角色ID" prop="id" width="250px">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="角色所属" prop="group_id" width="250px">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="标识" prop="spec">
@@ -568,6 +576,17 @@
                         <span style="margin-left: 10px;">{{ scope.row.spec }} </span>
                     </template>
                 </el-table-column>
+                <el-table-column label="角色ID" prop="id" width="250px">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column label="角色所属" prop="group_id" width="250px">
+                    <template #default="scope">
+                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
+                    </template>
+                </el-table-column> -->
+
                 <el-table-column fixed="right" label="操作" width="80">
                     <template #default="scope">
                         <el-popconfirm
@@ -699,16 +718,16 @@
             </template>
         </el-dialog>
         <!-- 用户组成员详情 -->
-        <el-dialog v-model="switch_user_details" title="详情" width="50%">
+        <!-- <el-dialog v-model="switch_user_details" title="详情" width="50%">
             <el-scrollbar height="400px">
                 <div class="details-box">
                     <div class="item">
-                        <div class="left">用户真实名</div>
-                        <div class="right">{{ data_user_detail.item.name }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">用户昵称</div>
+                        <div class="left">用户名</div>
                         <div class="right">{{ data_user_detail.item.username }}</div>
+                    </div>
+                    <div v-if="data_user_detail.item.name" class="item">
+                        <div class="left">真实名称</div>
+                        <div class="right">{{ data_user_detail.item.name }}</div>
                     </div>
                     <div class="item">
                         <div class="left">性别</div>
@@ -725,7 +744,7 @@
                             }}
                         </div>
                     </div>
-                    <div class="item">
+                    <div v-if="data_user_detail.item.id_card" class="item">
                         <div class="left">身份证号</div>
                         <div class="right">{{ data_user_detail.item.id_card }}</div>
                     </div>
@@ -747,13 +766,17 @@
                     </div>
                 </div>
             </el-scrollbar>
-        </el-dialog>
+        </el-dialog> -->
         <!-- 用户组详情 -->
         <el-dialog v-model="switch_group_details" title="详情" width="50%">
             <div class="details-box">
                 <div class="item">
                     <div class="left">用户组名称</div>
                     <div class="right">{{ data_group_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">所在区域</div>
+                    <div class="right">{{ data_group_details.item.region_val_name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">类型</div>
@@ -766,22 +789,26 @@
                         }}
                     </div>
                 </div>
-                <div class="item">
-                    <div class="left">关联</div>
-                    <div class="right">{{ data_group_details.item.ref }}</div>
-                </div>
+
                 <div class="item">
                     <div class="left">区域类型</div>
                     <div class="right">{{ getOptVal(opts_all.obj.group_user_region_type,data_group_details.item.region_type) }}</div>
                 </div>
                 <div class="item">
-                    <div class="left">区域类型对应值</div>
-                    <div class="right">{{ data_group_details.item.region_val }}</div>
+                    <div class="left">是否启用</div>
+                    <div class="right">
+                        <el-tag v-if="data_group_details.item.active == 1" type="success" round size="small"> 启用</el-tag>
+                        <el-tag v-if="data_group_details.item.active == 0" type="danger" round size="small"> 禁用</el-tag>
+                    </div>
                 </div>
-                <div class="item">
+                <div v-if="data_group_details.item.ref" class="item">
+                    <div class="left">关联企业</div>
+                    <div class="right">{{ data_group_details.item.ref }}</div>
+                </div>
+                <!-- <div class="item">
                     <div class="left">最小中国区域代码</div>
                     <div class="right">{{ data_group_details.item.region_cc }}</div>
-                </div>
+                </div> -->
                 <div class="item">
                     <div class="left">用户组ID</div>
                     <div class="right">{{ data_group_details.item.id }}</div>
@@ -822,7 +849,7 @@ import {
 } from '@/api/custom/custom.js'
 import { ref, watch, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 分类种类
@@ -891,6 +918,7 @@ const data_search = reactive({
 })
 
 const data_searchFun = () => {
+    page.value = 1
     let params = {}
     for (let key in data_search.item) {
         if (data_search.item[key] && key !== 'switch') {
@@ -914,7 +942,7 @@ let from_addRoles = reactive({
 })
 // 用户组分页板块
 const page = ref(1)
-const per_page = ref(15)
+const per_page = ref(12)
 const total = ref(50)
 watch(page, () => {
     getTabListFunc()
@@ -1040,13 +1068,25 @@ const type_change = val => {
     }
 }
 // 添加弹出框选择小区
-APIgetChinaRegion().then(res => {
-    console.log(res)
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
-    tree_item.value.next_type = 'region'
-    tree_item.value.type = 'region'
-})
+const getChinaName = () => {
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.value.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.value.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
+    })
+}
 const click_add_group_zone_id = () => {
     switch_choose_zone.value = true
 }
@@ -1068,12 +1108,9 @@ const checkFunc = val => {
 const checkChangeFunc = val => {
     switch_choose_zone.value = false
 }
-const selectedZone_id = ref('请选择区域')
+const selectedZone_id = ref('')
 const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
+    arr: []
 })
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const cascader_props = {
@@ -1094,20 +1131,23 @@ const cascader_props = {
 const getGroupDetail = val => {
     APIgetGroupDetails(val.id).then(res => {
         if (res.status == 200) {
+            if (res.data.type != 7) {
+                delete res.data.ref
+            }
             data_group_details.item = res.data
             switch_group_details.value = true
         }
     })
 }
 // 用户组成员详细
-const getUserDetail = val => {
-    APIgetUserDetails(val.user_id).then(res => {
-        if (res.status === 200) {
-            data_user_detail.item = res.data
-            switch_user_details.value = true
-        }
-    })
-}
+// const getUserDetail = val => {
+//     APIgetUserDetails(val.user_id).then(res => {
+//         if (res.status === 200) {
+//             data_user_detail.item = res.data
+//             switch_user_details.value = true
+//         }
+//     })
+// }
 // 删除组权限
 const deleteGroup_perms = val => {
     APIdeleteGroupPerms(current_group_perms.item.id, {
@@ -1298,7 +1338,9 @@ const refreshFunc = () => {
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
-    delete from_examine.item.ref
+    if (from_examine.item.type != 7) {
+        delete from_examine.item.ref
+    }
     if (str_title.value == '修改用户组') {
 
         APIputGroup(from_examine.item.id, from_examine.item)
@@ -1429,10 +1471,12 @@ const addGroupRoles = () => {
 }
 // 添加用户组
 const addResidentialFunc = val => {
+    selectedZone_id.value = ''
     from_examine.item = {}
     from_error.msg = {}
     str_title.value = '添加用户组'
     switch_examine.value = true
+    getChinaName()
 }
 // 修改用户组
 const modifyResidentialFunc = val => {
@@ -1441,7 +1485,9 @@ const modifyResidentialFunc = val => {
     from_examine.item = {
         ...val
     }
+    selectedZone_id.value = from_examine.item.region_val_name
     switch_examine.value = true
+    getChinaName()
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -1510,6 +1556,12 @@ const dialogOptValFunc = () => {
             })
     }
 }
+const V = ref(null)
+// 关闭谈话框
+const dialogClosed = () => {
+    V.value.clearFunc()
+    username.value = ''
+}
 // 添加
 const optValAddFunc = () => {
     err_opt.msg = {}
@@ -1519,6 +1571,7 @@ const optValAddFunc = () => {
     switch_opt_val_add.value = true
 }
 // 修改
+const username = ref('')
 const optValModifyFunc = val => {
     err_opt.msg = {}
     str_opt_val_title.value = '修改'
@@ -1526,6 +1579,7 @@ const optValModifyFunc = val => {
     from_opt_val.obj = {
         ...val
     }
+    username.value = from_opt_val.obj.username
     switch_opt_val_add.value = true
 }
 // 删除

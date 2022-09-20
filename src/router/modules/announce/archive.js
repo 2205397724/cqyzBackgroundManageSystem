@@ -9,7 +9,7 @@ export default {
     meta: {
         title: '公示归档',
         icon: 'el-icon-document',
-        auth: ['announce.Archive', '*']
+        auth: ['announce.archive', '*']
     },
     children: [{
         path: 'archive',
@@ -20,8 +20,7 @@ export default {
             title: '公示归档',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/announce_archive',
-            auth: ['announce.archive.archive', '*']
+            activeMenu: '/announce_archive'
         }
     }]
 }

@@ -8,7 +8,7 @@ export default {
     meta: {
         title: '问卷',
         icon: 'el-icon-document',
-        auth: ['event.events', '*']
+        auth: ['activity.survey', '*']
     },
     children: [
         {
@@ -20,8 +20,8 @@ export default {
                 sidebar: false,
                 // 在面包屑展示
                 breadcrumb: false,
-                activeMenu: '/activity_survey',
+                activeMenu: '/activity_survey'
             }
-        },
+        }
     ]
 }

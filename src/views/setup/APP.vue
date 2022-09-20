@@ -1,29 +1,34 @@
 <template>
     <div class="setupAPP">
         <page-main>
-            <el-button class="head-btn" type="primary" @click="addresidentialFunc">添加App</el-button>
-            <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4; box-sizing: border-box; max-height: 500px;">
-                <el-table v-loading="loading_tab" :data="data_tab.arr" :head-cell-style="{background:'#fbfbfb',color: '#9999','font-size': '12px'}" default-expand-all row-key="id" :tree-props="{children: 'children'}" style="width: 100%;min-height: 300px;">
+            <el-button class="m-b-20" type="primary" size="large" :icon="Plus" @click="addresidentialFunc">添加App</el-button>
+            <div>
+                <el-table
+                    v-loading="loading_tab" :data="data_tab.arr" :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    row-key="id"
+                    :tree-props="{ children: 'children' }"
+                    class="tab_1"
+                >
                     <el-table-column prop="logo" label="图标" width="100">
                         <template #default="scope">
-                            <img :src="scope.row.logo" alt="" style="width: 50px; height: 50px;">
+                            <el-iamge :src="scope.row.logo" alt="" style="width: 50px; height: 50px;" /></el-iamge>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="APP名称" width="120">
+                    <el-table-column prop="name" label="APP名称">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="china_code" label="区域id" width="120">
+                    <el-table-column prop="china_code" label="区域代码">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.china_code }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="appid" width="260">
+                    <!-- <el-table-column prop="id" label="appid" width="260">
                         <template #default="scope">
                             <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="status" label="状态" width="120">
                         <template #default="scope">
                             <el-switch
@@ -42,7 +47,7 @@
                             />
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="APP相关" width="250">
+                    <el-table-column label="APP相关" width="250">
                         <template #default="scope">
                             <el-link :underline="false" type="primary" style="padding-right: 10px;">
                                 <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppMenu',query:{ appid: scope.row.id }}">APP菜单管理</router-link>
@@ -128,18 +133,31 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="12">
+                                <el-col :md="24" :lg="24">
                                     <el-form-item
                                         label="图标地址" prop="logo" label-width="80px"
                                         :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
                                     >
+                                        <el-upload
+                                            action="***"
+                                            :auto-upload="false"
+                                            :file-list="fileListFn(addMenuForm.item.logo)"
+                                            :on-change="(file,files)=>{
+                                                addMenuForm.item.logo = file
+                                            }"
+                                            :on-remove="(file,files)=>{
+                                                addMenuForm.item.logo = file
+                                            }"
+                                        >
+                                            <el-button type="primary" class="m-b-10">选择</el-button>
+                                        </el-upload>
                                         <el-input
-                                            v-model="addMenuForm.item.logo"
+                                            v-model="logoName"
                                             placeholder=""
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col :md="24" :lg="12">
+                                <el-col :md="24" :lg="24">
                                     <el-form-item
                                         label="状态" prop="status" label-width="80px"
                                         :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
@@ -199,18 +217,17 @@
                             <div class="left">区域代码</div>
                             <div class="right">{{ data_details.item.china_code }} </div>
                         </div>
-                        <div class="item">
-                            <div class="left">APPID</div>
-                            <div class="right">{{ data_details.item.id }} </div>
-                        </div>
-
+                        <!-- <div class="item">
+                            <div class="left">图标地址</div>
+                            <div class="right">{{ data_details.item.logo }} </div>
+                        </div> -->
                         <div class="item">
                             <div class="left">内容</div>
                             <div class="right">{{ data_details.item.content }} </div>
                         </div>
                         <div class="item">
-                            <div class="left">图标地址</div>
-                            <div class="right">{{ data_details.item.logo }} </div>
+                            <div class="left">APPID</div>
+                            <div class="right">{{ data_details.item.id }} </div>
                         </div>
                         <div class="item">
                             <div class="left">创建时间</div>
@@ -262,6 +279,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import {  Plus } from '@element-plus/icons-vue'
 let data_tab = reactive({
     arr: []
 })
@@ -310,7 +328,6 @@ const statusFunk = row => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     getTabListFunc()
 }
 // 获取列表-
@@ -337,16 +354,60 @@ refreshFunc()
 const addresidentialFunc = () => {
     from_error.value.msg = {}
     str_title.value = '添加'
-    addMenuForm.item = {}
+    addMenuForm.item = {
+        logo: ''
+    }
     switch_examine.value = true
 }
+import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const dialogExamineCloseFunc = ()  => {
-    // console.log(formEl)
-    // from_error.msg = {}
-    // if (!formEl) return
-    // formEl.validate(valid => {
-    //     if (valid) {
+    let obj = {}
+    // for (let i in addArchive.item.content) {
+    if (typeof addMenuForm.item.logo != 'string') {
+        obj = addMenuForm.item.logo
+    }
+    console.log(addMenuForm.item.logo)
+    console.log(obj)
+    let files = []
+    // for (let i in obj) {
+    files.push(obj.raw)
+    // }
+    console.log(files)
+    if (files.length > 0) {
+        getFilesKeys(files, 'APP').then(arr => {
+            // let o = 0
+            // for (let i in obj) {
+            //     addMenuForm.item.logo = arr[o]
+            //     o++
+            // }
+            console.log(arr)
+            addMenuForm.item.logo = arr[0]
+            if (str_title.value == '修改') {
+                switchFunk(addMenuForm.item.status)
+                APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
+                    console.log(res)
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.success('修改失败')
+                })
+            } else {
+                switchFunk()
+                console.log(addMenuForm.item)
+                APIpostAPP(addMenuForm.item).then(res => {
+                    // console.log(from_examine.item)
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.success('添加失败')
+                })
+            }
+        })
+        return false
+    }
     if (str_title.value == '修改') {
         switchFunk(addMenuForm.item.status)
         APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
@@ -369,20 +430,40 @@ const dialogExamineCloseFunc = ()  => {
             ElMessage.success('添加失败')
         })
     }
+
     //     } else {
     //         return false
     //     }
     // })
 }
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 // 修改
 const modifyResidentialFunc = val => {
     from_error.value.msg = {}
     str_title.value = '修改'
     APIgetAPPListDetails(val.id).then(res => {
         addMenuForm.item = res
+
+        console.log(logoName.value)
         switch_examine.value = true
     })
     switch_examine.value = true
+}
+const logoName = ref('')
+const fileListFn = val => {
+    if (str_title.value != '修改' && str_title.value != '添加') {
+        logoName.value = VITE_APP_FOLDER_SRC.value + val.name
+    } else {
+        logoName.value = val
+    }
+    return []
+    // }
+    // if (typeof val == 'string') {
+    //     return [{
+    //         name: val
+    //     }]
+    // }
+    // return [val]
 }
 // 详情
 const addResidentialFunc = val => {

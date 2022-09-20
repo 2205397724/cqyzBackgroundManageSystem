@@ -106,7 +106,7 @@
                     :data="data_tab.arr"
                     :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1"
                 >
-                    <el-table-column prop="id" label="设备名称" width="180">
+                    <el-table-column prop="id" label="设备名称">
                         <template #default="scope">
                             <span>{{ scope.row.name }} </span>
                         </template>
@@ -184,7 +184,6 @@
                             </el-popconfirm>
                         </template>
                     </el-table-column>
-                    <el-table-column />
                 </el-table>
             </div>
             <el-pagination
@@ -885,6 +884,11 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
+    console.log(sessionStorage.getItem('groupChinaCode'))
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params.cc = sessionStorage.getItem('groupChinaCode')
+    }
+    console.log(params)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
@@ -922,12 +926,10 @@ const getTabListFunc = () => {
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length <= per_page.value) {
-            flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
         } else {
-            flag.value = false
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
@@ -943,7 +945,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()

@@ -1,14 +1,15 @@
 <template>
     <div class="vote">
         <page-main>
-            <div>
+            <div class="m-b-20">
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    type="primary" :icon="Plus" size="large"
                     @click="()=>{
                         data_1.add_form={status:opts_all.obj.information_status[0].key};
                         data_1.add_error={};
                         data_1.add_switch=true;
                         file_list=[];
+                        getCategoryList()
                         data_1.add_title = '添加'
                     }"
                 >
@@ -16,53 +17,56 @@
                 </el-button>
             </div>
             <div class="search">
-                <el-row :gutter="10">
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 标题名称：
-                            </div>
-                            <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
-                        </div>
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <el-input v-model="data_1.search.title" class="search_tb" placeholder="标题名称" clearable />
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">区域代码：</div>
-                            <div class="search_tb">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                区域代码：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
                                 <Cascaders v-model="data_1.search.china_code" />
-                            </div>
-                        </div>
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8">
-                        <div class="searchBox">
-                            <div class="search_th">状态：</div>
-                            <el-select v-model="data_1.search.status" clearable placeholder="状态" class="search_tb">
-                                <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </div>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                状态：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_1.search.status" clearable placeholder="状态" class="search_tb">
+                                    <el-option v-for="(item) in opts_all.obj.information_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
-                <el-row class="m-t-20">
-                    <el-col :xs="24" :md="24" :lg="10">
-                        <div class="flx">
-                            <div class="w_30">
-                                <el-button
-                                    class="m-l-20" type="primary" :icon="Search" @click="()=>{
-                                        data_1.switch_search = true;
-                                        data_1.page = 1;
-                                        getFuncManageList()
-                                    }"
-                                >
-                                    筛选
-                                </el-button>
-                            </div>
-                            <div v-show="data_1.switch_search == true" class="w_70 m-l-30">
-                                <el-button class="m-r-10" @click="refreshFunc">重置</el-button>
-                                <div class="searchDetail">
-                                    *搜索到相关结果共{{ data_1.total }}条。
-                                </div>
-                            </div>
-                        </div>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button
+                            type="primary" :icon="Search" @click="()=>{
+                                data_1.switch_search = true;
+                                data_1.page = 1;
+                                getFuncManageList()
+                            }"
+                        >
+                            筛选
+                        </el-button>
+                        <el-button v-show="data_1.switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <span v-show="data_1.switch_search == true" class="size-base">
+                            *搜索到相关结果共{{ data_1.total }}条。
+                        </span>
                     </el-col>
                 </el-row>
             </div>
@@ -70,7 +74,7 @@
                 :data="data_1.list"
                 :load="loading_tab"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
+                class="tab_1"
             >
                 <el-table-column label="标题">
                     <template #default="scope">
@@ -89,11 +93,11 @@
                         <span>{{ scope.row.china_name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="所在小区" width="240">
+                <!-- <el-table-column label="所在小区">
                     <template #default="scope">
                         <span>{{ getZoneName(zone_list.arr,scope.row.zone_id) }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="状态">
                     <template #default="scope">
                         <el-switch
@@ -111,7 +115,7 @@
                         />
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="300">
+                <el-table-column fixed="right" label="操作" width="220">
                     <template #default="scope">
                         <el-button
                             type="primary" size="small"
@@ -139,9 +143,8 @@
                         </el-popconfirm>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
-            <el-pagination
+            <!-- <el-pagination
                 v-model:current-page="data_1.page"
                 style="padding-top: 20px;"
                 layout="total,prev,pager,next,jumper,"
@@ -149,7 +152,7 @@
                 :page-size="data_1.per_page"
                 background
                 hide-on-single-page
-            />
+            /> -->
         </page-main>
         <!-- 修改添加 -->
         <el-dialog
@@ -310,41 +313,23 @@
             width="50%"
         >
             <div class="details-box">
+                <div class="details-tit-sm">基础信息</div>
                 <div class="item">
-                    <div class="left">标题</div>
+                    <div class="left">资讯标题</div>
                     <div class="right">{{ data_1.details_data.title }}</div>
                 </div>
-                <div class="item">
-                    <div class="left">资讯id</div>
-                    <div class="right">{{ data_1.details_data.id }}</div>
-                </div>
-                <div v-if="data_1.details_data.zone_id" class="item">
+
+                <!-- <div v-if="data_1.details_data.zone_id" class="item">
                     <div class="left">所在小区</div>
                     <div class="right">{{ getZoneName(zone_list.arr, data_1.details_data.zone_id) }}</div>
-                </div>
+                </div> -->
                 <div class="item">
                     <div class="left">资讯类别</div>
-                    <div class="right">{{ data_1.details_data.cate_id }}</div>
+                    <div class="right">{{ data_1.details_data.cate?.name }}</div>
                 </div>
-                <div class="item">
+                <div v-if="data_1.details_data.china_name" class="item">
                     <div class="left">所在区域</div>
                     <div class="right">{{ data_1.details_data.china_name }}</div>
-                </div>
-                <div v-if="data_1.details_data.affix&&data_1.details_data.affix.length>0" class="item">
-                    <div class="left">附件</div>
-                    <div class="right">
-                        <el-image
-                            v-for="(item,i) in data_1.details_data.affixs" :key="i" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
-                        />
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">资讯时间</div>
-                    <div class="right">{{ data_1.details_data.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">修改时间</div>
-                    <div class="right">{{ data_1.details_data.updated_at }}</div>
                 </div>
                 <div class="item">
                     <div class="left">状态</div>
@@ -356,6 +341,27 @@
                 <div class="item">
                     <div class="left">内容</div>
                     <div class="right">{{ AudioContext }}</div>
+                </div>
+                <div v-if="data_1.details_data.affix&&data_1.details_data.affix.length>0" class="item">
+                    <div class="left">附件</div>
+                    <div class="right">
+                        <el-image
+                            v-for="(item,i) in data_1.details_data.affixs" :key="i" :preview-src-list="data_1.details_data.affixs" style="width: 100px; height: 100px;margin-right: 10px;" :src="item" fit="cover"
+                        />
+                    </div>
+                </div>
+                <div class="details-tit-sm">其他信息</div>
+                <div class="item">
+                    <div class="left">资讯id</div>
+                    <div class="right">{{ data_1.details_data.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">资讯时间</div>
+                    <div class="right">{{ data_1.details_data.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">修改时间</div>
+                    <div class="right">{{ data_1.details_data.updated_at }}</div>
                 </div>
             </div>
             <template #footer>
@@ -375,7 +381,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
@@ -514,14 +520,14 @@ let params = {
     // page: page.value,
     // per_page: per_page.value
 }
-// const getCategoryList=()=>{
-// APIgetInforCategoryList(params).then(res => {
-//     console.log(res)
-//     data_tab.arr = res
-//     // NewArr.arr = data_tab.arr.map(item => { return Object.assign({}, { 'id': item.id, 'name': item.name }) })
-//     // console.log(NewArr.arr)
-// })
-// }
+const getCategoryList = () => {
+    APIgetInforCategoryList(params).then(res => {
+        console.log(res)
+        data_tab.arr = res
+    // NewArr.arr = data_tab.arr.map(item => { return Object.assign({}, { 'id': item.id, 'name': item.name }) })
+    // console.log(NewArr.arr)
+    })
+}
 const props = { multiple: false, emitPath: false, checkStrictly: true, value: 'id', label: 'name' }
 const V = ref(null)
 const zoneName = ref('')
@@ -614,6 +620,7 @@ const getCategoryName = (arr, id) => {
 // 修改
 const clickFuncModify = row => {
     getZoneListFunc()
+    getCategoryList()
     data_1.add_title = '修改'
     console.log(row)
     APIgetInforManageDetails(row.id).then(res => {
@@ -662,7 +669,6 @@ const SwitchFunc = row => {
 const refreshFunc = () => {
     data_1.search = {}
     data_1.switch_search = false
-    data_1.page = 1
     getFuncManageList()
 }
 watch(data_1.page, () => {

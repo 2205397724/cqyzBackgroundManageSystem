@@ -20,8 +20,7 @@ export default {
             title: '企业申请管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/house_enterprise_apply',
-            auth: ['house.enterprise_apply.enterprise_apply', '*']
+            activeMenu: '/house_enterprise_apply'
         }
     }]
 }

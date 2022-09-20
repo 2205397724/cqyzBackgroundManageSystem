@@ -84,10 +84,10 @@ const opts = {
     }],
     // 是否显示1
     app_show: [{
-        key: 0,
+        key: 1,
         val: '是'
     }, {
-        key: 1,
+        key: 0,
         val: '否'
     }],
     // 设备状态
@@ -654,10 +654,10 @@ const opts = {
     }],
     // 是否强制更新
     sys_is_force: [{
-        key: 0,
+        key: 1,
         val: '是'
     }, {
-        key: 1,
+        key: 0,
         val: '否'
     }],
     // app类别
@@ -822,6 +822,23 @@ const opts = {
     }, {
         key: 30,
         val: '审核失败'
+    }],
+    rolesSpec: [{
+        key: 0,
+        val: '无'
+    }, {
+        key: 1,
+        val: '业主'
+    }],
+    put_perms_utype: [{
+        key: 'gov',
+        val: '管理端'
+    }, {
+        key: 'pm',
+        val: '物业端'
+    }, {
+        key: 'mbr',
+        val: '业主端'
     }]
 }
 

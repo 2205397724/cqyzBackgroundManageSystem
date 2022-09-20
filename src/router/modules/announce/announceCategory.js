@@ -7,7 +7,7 @@ export default {
     redirect: '/announce_announceCategory/announceCategory',
     name: 'announceCategoryBox',
     meta: {
-        title: '公式分类',
+        title: '公示分类',
         icon: 'el-icon-document',
         auth: ['announce.announceCategory', '*']
     },
@@ -17,11 +17,10 @@ export default {
         component: () =>
             import ('@/views/announce/announceCategory.vue'),
         meta: {
-            title: '公式分类',
+            title: '公示分类',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/announce_announceCategory',
-            auth: ['announce.aannounceCategory.announceCategory', '*']
+            activeMenu: '/announce_announceCategory'
         }
     }]
 }

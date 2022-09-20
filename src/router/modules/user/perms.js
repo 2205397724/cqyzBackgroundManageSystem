@@ -19,8 +19,7 @@ export default {
                 title: '权限管理',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/user_perms',
-                auth: ['user.perms.perms', '*']
+                activeMenu: '/user_perms'
             }
         }
     ]

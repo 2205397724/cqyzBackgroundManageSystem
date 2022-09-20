@@ -19,8 +19,7 @@ export default {
                 title: '选项配置',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/setup_option',
-                auth: ['setup.option.option', '*']
+                activeMenu: '/setup_option'
             }
         }
     ]

@@ -232,9 +232,9 @@
                 <div class="item">
                     <div class="left">是否完成</div>
                     <div class="right">
-                        <el-tag v-if=" data_details.item.iscpt" type="success" effect="dark" round class="btnNone">已完成</el-tag>
-                        <el-tag v-if=" data_details.item.iscpt" class="m-l-10 btnNone" type="default" round>查看{{ data_details.item.aid }}</el-tag>
-                        <el-tag v-if="!data_details.item.iscpt" type="danger" effect="dark" round class="btnNone">未完成</el-tag>
+                        <el-tag v-if="data_details.item.iscpt" type="success" effect="dark" round class="btnNone">已完成</el-tag>
+                        <announceDetails v-if="data_details.item.iscpt" :id="data_details.item.aid" :name="announceName_1" />
+                        <el-tag v-if="!data_details.item.iscpt" type="danger" round class="btnNone">未完成</el-tag>
                     </div>
                 </div>
                 <div class="item">
@@ -455,7 +455,7 @@
         <!-- 选择公示对象 -->
         <el-dialog v-model="switch_choose_zone" title="选择公示对象">
             <el-scrollbar height="250px">
-                <position-tree-fourth :tree_item="tree_item" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
+                <position-tree-fourth :tree_item="tree_item.arr" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
             </el-scrollbar>
         </el-dialog>
     </div>
@@ -523,6 +523,7 @@ const from_error = reactive({
     msg: {}
 })
 const announceName = ref('公示')
+const announceName_1 = ref('查看')
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 // 搜索
@@ -534,7 +535,6 @@ const searchFunc = () => {
 // 刷新
 const V_2 = ref(null)
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()
@@ -642,15 +642,28 @@ const upResidentialFunc = row => {
     getChinaName()
     switch_announce.value = true
 }
-const tree_item = ref({})
+// 选择公示区域
+const tree_item = reactive({
+    arr: []
+})
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
-    APIgetChinaRegion().then(res => {
-        console.log(res)
-        tree_item.value.id = res.data[0].code
-        tree_item.value.name = res.data[0].name
-        tree_item.value.next_type = 'region'
-        tree_item.value.type = 'region'
+    let params = {}
+    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+        params = {
+            p_code: sessionStorage.getItem('groupChinaCode')
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res.data) {
+            if (res.data[i].level < 5) {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+            } else {
+                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+            }
+        }
     })
 }
 const checkFunc = val => {

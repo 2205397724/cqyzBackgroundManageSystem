@@ -162,11 +162,11 @@
             </template>
         </el-dialog>
         <!-- 添加子类别 -->
-        <el-dialog v-model="switch_add_recordKind_children" width="30%" title="添加子备案">
+        <el-dialog v-model="switch_add_recordKind_children" width="30%" title="添加子分类">
             <el-form :model="from_record_children.item">
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item label="子备案类型名称" prop="name" label-width="110px">
+                        <el-form-item label="子分类名称" prop="name" label-width="110px">
                             <el-input v-model="from_record_children.item.name" />
                         </el-form-item>
                     </el-col>

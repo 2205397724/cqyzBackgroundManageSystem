@@ -20,8 +20,7 @@ export default {
             title: '备案管理',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/record_manange',
-            auth: ['record.manange.manange', '*']
+            activeMenu: '/record_manange'
         },
         children: [{
             path: 'detail',
@@ -29,8 +28,7 @@ export default {
             component: () => import('@/views/record/add.vue'),
             meta: {
                 title: '详情',
-                activeMenu: '/record_manange',
-                auth: ['record.manange.add', '*']
+                activeMenu: '/record_manange'
             }
         }]
     }]

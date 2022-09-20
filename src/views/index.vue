@@ -17,12 +17,11 @@
                             :xs="24" :sm="24" :lg="18"
                             style="display: flex;flex-direction: column;justify-content: space-between;"
                         >
-                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.nickname }}</div>
+                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.name? data.userinfo.name:data.userinfo.nickname?data.userinfo.nickname:data.userinfo.username }}</div>
                             <div style="color: #666;font-weight: 400;">
                                 <div style="font-size: 14px;">{{ data.userinfo.address }} {{ data.userinfo.department }} {{ data.userinfo.job }}</div>
                                 <div style="font-size: 12px;">
-                                    手机号码：{{ data.userinfo.tel }} 最后登录：{{ data.userinfo.lasttime }}
-                                    登录IP：{{ data.userinfo.ip }}
+                                    手机号码：{{ data.userinfo.mobile }} &nbsp;&nbsp;&nbsp; 最后登录：{{ data.userinfo.updated_at }}
                                 </div>
                             </div>
                         </el-col>
@@ -84,23 +83,18 @@
                 </el-col>
             </el-row>
         </page-main>
-        <el-dialog title="请选择地区" v-model="switch_choose_city"
-        width="40%" :close-on-click-modal="false" :show-close="false">
-           <!--  <el-cascader :options="city_list.arr"  v-model="choosed_city" :props="choose_city_props.item" @change="change_china_code"
-            :show-all-levels="false" style="width: 100%;"
-            ></el-cascader> -->
-            <!-- <position-tree-fourth :tree_item="tree_item" @checkFunc="checkFunc"></position-tree-fourth> -->
-            <el-select v-model="choosed_city" placeholder="请选择区域">
-              <el-option :label="item.name" :value="item.china_code" v-for="item in city_list.arr" :key="item.ip"></el-option>
-            </el-select>
-            <template #footer>
-                <el-button type="primary" @click="choose_city_end">确认</el-button>
-            </template>
+        <el-dialog
+            v-model="switch_choose_city" title="请选择地区"
+            width="40%" :close-on-click-modal="false" :show-close="false"
+        >
+            <div class="cityBox">
+                <div v-for="item in city_list.arr" :key="item.ip" class="city" @click="choose_city_end(item)">{{ item.name }}</div>
+            </div>
         </el-dialog>
     </div>
 </template>
 <script setup>
-import {useUserOutsideStore} from "@/store/modules/user"
+import { useUserOutsideStore } from '@/store/modules/user'
 import {
     APIgetUserinfo,
     APIgetTipsnum,
@@ -108,79 +102,86 @@ import {
     APIgetLoginUserGroup,
     APIgetCityNotPm
 } from '@/api/custom/custom.js'
-import {ElMessage} from "element-plus"
+import { ElMessage } from 'element-plus'
 import md5 from 'md5'
 import area from '@/util/area'
-const choose_city_props=reactive({
-    item:{
-        value:'code',
-        label:'name',
-        children:'children'
+const choose_city_props = reactive({
+    item: {
+        value: 'code',
+        label: 'name',
+        children: 'children'
     }
 })
 
-const userStore=useUserOutsideStore()
+const userStore = useUserOutsideStore()
 // 公共导入 cscs
-const switch_choose_city=ref(false)
-const choosed_city=ref("")
+const switch_choose_city = ref(false)
+const choosed_city = ref('')
 
-const city_list=reactive({
-    arr:[]
+const city_list = reactive({
+    arr: []
 })
-//获取城市配置
-const getCityList=()=>{
-    APIgetCityNotPm().then(res=>{
-        city_list.arr=res.data
+const page = ref(1)
+const per_page = ref(15)
+// 获取城市配置
+const getCityList = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetCityNotPm(params).then(res => {
+        city_list.arr = res.data
         console.log(res)
     })
 }
-//选择地区弹出框
+// 选择地区弹出框
 const tree_item = ref({
-  id: "50",
-  name: "重庆市",
-  next_type: "region",
-  type: "region",
-});
-const checkFunc = (val) => {
-  choosed_city.value=val.china_code
-  console.log(val);
-  userStore.china_code=val.china_code
-  localStorage.setItem("china_code",val.china_code)
-};
-//选择 后确认按钮
-const choose_city_end=()=>{
-    if(!choosed_city.value){
-        ElMessage.error("请选择城市")
+    id: '50',
+    name: '重庆市',
+    next_type: 'region',
+    type: 'region'
+})
+const checkFunc = val => {
+    choosed_city.value = val.china_code
+    console.log(val)
+    userStore.china_code = val.china_code
+    localStorage.setItem('china_code', val.china_code)
+}
+const show = reactive({
+    name: ''
+})
+// 选择 后确认按钮
+const choose_city_end = val => {
+    if (!val.china_code) {
+        ElMessage.error('请选择城市')
         return
     }
-    userStore.china_code=choosed_city.value
-    localStorage.setItem("china_code",choosed_city.value)
-    ElMessage.success("选择成功")
-    switch_choose_city.value=false
-    sessionStorage.setItem("isChooseCity",false)
-
+    console.log(val.china_code)
+    userStore.china_code  = val.china_code
+    localStorage.setItem('china_code', val.china_code)
+    ElMessage.success('选择成功')
+    switch_choose_city.value = false
+    sessionStorage.setItem('isChooseCity', true)
+    console.log(sessionStorage.getItem('isChooseCity'))
 }
-//进入首页进行判断
-import {auth, authAll} from '../util/index'
-const choose_city=()=>{
-    if(sessionStorage.getItem("utype")==md5('pt')||sessionStorage.getItem("isChooseCity")){
-        sessionStorage.setItem("isChooseCity",false)
-        userStore.isChooseCity=false
-        switch_choose_city.value=false
-    }else{
+// 进入首页进行判断
+import { auth, authAll } from '../util/index'
+const choose_city = () => {
+    console.log(sessionStorage.getItem('utype'))
+    // console.log(md5('pt'))
+    // if (sessionStorage.getItem('utype') == md5('pt') || sessionStorage.getItem('isChooseCity')) {
+    console.log(sessionStorage.getItem('isChooseCity'))
+    if (sessionStorage.getItem('isChooseCity') == 'true') {
+        userStore.isChooseCity = false
+        switch_choose_city.value = false
+    } else {
+        console.log(sessionStorage.getItem('isChooseCity'))
         getCityList()
-        sessionStorage.setItem("isChooseCity",true)
-        userStore.isChooseCity=true
-        switch_choose_city.value=true
+        userStore.isChooseCity = true
+        switch_choose_city.value = true
     }
-    console.log(sessionStorage.getItem("isChooseCity"))
 }
 choose_city()
-const choose_cityFun=()=>{
-    userStore.isChooseCity=true
-    sessionStorage.setItem('IS_chooseCity',false)
-    console.log(sessionStorage.getItem("china_code"))
-}
 import { reactive } from 'vue'
 // const refreshCurPage=()=>{
 //     location.reload()
@@ -190,19 +191,19 @@ import { reactive } from 'vue'
 const data = reactive({ userinfo: '', tipsnum: '', eventnum: '', echarts: '' })
 APIgetUserinfo().then(res => {
     console.log(res)
-        data.userinfo = res.data.data
+    data.userinfo = res.data
 }).catch(error => {
     console.log(error)
 })
 APIgetTipsnum().then(res => {
     // console.log(res)
-        data.tipsnum = res.data.data
+    data.tipsnum = res.data.data
 }).catch(error => {
     console.log(error)
 })
 APIgetEventnum().then(res => {
     // console.log(res)
-        data.eventnum = res.data.data
+    data.eventnum = res.data.data
 }).catch(error => {
     console.log(error)
 })
@@ -213,7 +214,7 @@ import {
 } from '@/api/custom/custom.js'
 APIgetEchartsHome().then(res => {
     // console.log(res)
-        data.echarts = res.data
+    data.echarts = res.data
 }).catch(error => {
     console.log(error)
 })
@@ -331,4 +332,29 @@ const aaa = ref()
             }
         }
     }
+    .cityBox {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        .city {
+            text-align: center;
+            margin-right: 20px;
+            height: 50px;
+            padding: 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+        .city:hover {
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
+        .city:visited {
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
+    }
+
 </style>

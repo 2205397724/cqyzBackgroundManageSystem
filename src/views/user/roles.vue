@@ -1,12 +1,12 @@
 <template>
     <div class="userRoles">
         <page-main>
-            <el-row>
+            <el-row class="m-b-20">
                 <el-col>
-                    <el-button type="primary" :icon="Plus" class="m-b-20" @click="addRolesFun">添加用户组角色</el-button>
+                    <el-button type="primary" size="large" :icon="Plus" @click="addRolesFun">添加用户组角色</el-button>
                 </el-col>
             </el-row>
-            <div style="width: 100%; overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+            <div>
                 <el-table
                     v-loading="loading_tab"
                     :data="data_tab.arr"
@@ -14,29 +14,30 @@
                     default-expand-all
                     row-key="id"
                     :tree-props="{ children: 'children' }"
-                    style="width: 100%;min-height: 300px;"
+                    class="tab_1"
                 >
-                    <el-table-column prop="name" label="角色名称" width="180">
+                    <el-table-column prop="name" label="角色名称">
                         <template #default="scope">
                             <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="角色ID" width="230px">
+
+                    <!-- <el-table-column prop="group_id" label="所属用户组">
+                        <template #default="scope">
+                            <span>{{ find_groupid_name(scope.row.group_id) }} </span>
+                        </template>
+                    </el-table-column> -->
+                    <el-table-column prop="spec" label="特有标识">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.rolesSpec,scope.row.spec) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="角色ID" width="250px">
                         <template #default="scope">
                             <span>{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="group_id" label="所属用户组">
-                        <template #default="scope">
-                            <span>{{ find_groupid_name(scope.row.group_id) }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="spec" label="特有标识" width="180">
-                        <template #default="scope">
-                            <span>{{ scope.row.spec }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="270px">
+                    <el-table-column fixed="right" label="操作" width="200px">
                         <template #default="scope">
                             <el-button
                                 type="primary" size="small"
@@ -122,12 +123,12 @@
             </el-dialog>
             <!-- 角色获取权限 -->
             <el-dialog v-model="switch_roles_perms" title="角色拥有权限" width="60%">
-                <el-button type="primary" @click="post_roles_perms">给角色赋权限</el-button>
-                <el-input v-model="from_post_roles_perms.item.perm_ids[0]" class="m-tb-20">
+                <el-button class="m-b-20" type="primary" @click="getGroup_perms">给角色赋权限</el-button>
+                <!-- <el-input v-model="from_post_roles_perms.item.perm_ids[0]" class="m-tb-20">
                     <template #prepend>
                         权限ID
                     </template>
-                </el-input>
+                </el-input> -->
                 <el-table
                     v-loading="loading_tab"
                     :data="data_tab_roles_perms.arr"
@@ -135,21 +136,11 @@
                     default-expand-all
                     row-key="id"
                     :tree-props="{ children: 'children' }"
-                    style="width: 100%;min-height: 300px;"
+                    class="tab_1"
                 >
-                    <el-table-column prop="name" label="权限名称" width="180px">
+                    <el-table-column prop="name" label="权限名称">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="id" label="权限ID" width="240px">
-                        <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.id }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="utype" label="utype" width="180px">
-                        <template #default="scope">
-                            <span class="m-l-10">{{ scope.row.utype }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="desc" label="权限描述" width="180px">
@@ -157,6 +148,17 @@
                             <span class="m-l-10">{{ scope.row.desc }} </span>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="utype" label="权限所属" width="150px">
+                        <template #default="scope">
+                            <span class="m-l-10">{{ getOptVal(opts_all.obj.put_perms_utype,scope.row.utype) }} </span>
+                        </template>
+                    </el-table-column>
+
+                    <!-- <el-table-column prop="id" label="权限ID" width="240px">
+                        <template #default="scope">
+                            <span class="m-l-10">{{ scope.row.id }} </span>
+                        </template>
+                    </el-table-column> -->
                     <el-table-column fixed="right" label="操作" width="100px">
                         <template #default="scope">
                             <el-popconfirm
@@ -174,6 +176,66 @@
                 </el-table>
             </el-dialog>
         </page-main>
+        <!-- 组权限 -->
+        <el-dialog
+            v-model="switch_group_perms"
+            title="用户组权限"
+            width="60%"
+            @closed="group_perms_close"
+        >
+            <el-tabs>
+                <el-tab-pane label="管理端权限">
+                    <!-- <el-checkbox-group v-model="data_tab_group_perms_selected_gov.arr"> -->
+                    <div v-for="item in all_perms_list.arr" :key="item.id">
+                        <el-checkbox
+                            v-if="item.utype == 'gov'"
+                            :label="item.name"
+                            :true-label="item.id"
+                            :checked="
+                                data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
+                                    ? false
+                                    : true
+                            "
+                            @change="(val) => group_perms_selectFun_gov(val, item.id)"
+                        />
+                    </div>
+                <!-- </el-checkbox-group> -->
+                </el-tab-pane>
+                <el-tab-pane label="物业端权限">
+                    <div v-for="item in all_perms_list.arr" :key="item.id">
+                        <el-checkbox
+                            v-if="item.utype == 'pm'"
+                            :label="item.name"
+                            :true-label="item.id"
+                            :checked="
+                                data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
+                                    ? false
+                                    : true
+                            "
+                            @change="(val) => group_perms_selectFun_pm(val, item.id)"
+                        />
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="业主端权限">
+                    <div v-for="item in all_perms_list.arr" :key="item.id">
+                        <el-checkbox
+                            v-if="item.utype == 'mbr'"
+                            :label="item.name"
+                            :true-label="item.id"
+                            :checked="
+                                data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
+                                    ? false
+                                    : true
+                            "
+                            @change="(val) => group_perms_selectFun_mbr(val, item.id)"
+                        />
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+            <template #footer>
+                <el-button type="primary" @click="post_all_group_perms">确认</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -193,11 +255,10 @@ import {
     APIpostRoles,
     APIputRoles,
     APIDeleteRoles,
-    payRoles_perms,
-    deleteRoles_perms,
+    APIdeleteRoles_perms,
     APIgetRoles_perms,
     APIpostRoles_perms,
-    APIdeleteRoles_perms,
+    APIgetPermsList,
     APIgetGroupList
 } from '@/api/custom/custom.js'
 const page = ref(1)
@@ -222,13 +283,11 @@ const data_tab_roles_perms = reactive({
     arr: []
 })
 const refreshFunc = () => {
-    page.value = 1
-    per_page.value = 10
     switch_add_post.value = false
     getTabListFunc()
 }
 const current_roles_perms = reactive({
-    id: ''
+    item: {}
 })
 // 表单校验
 // const addPutRules=reactive({
@@ -252,7 +311,7 @@ const post_roles_perms = () => {
         ElMessage.error('请输入信息')
         return
     }
-    APIpostRoles_perms(current_roles_perms.id, { perm_ids: [from_post_roles_perms.item.perm_ids[0]] }).then(res => {
+    APIpostRoles_perms(current_roles_perms.item.id, { perm_ids: [from_post_roles_perms.item.perm_ids[0]] }).then(res => {
         if (res.status == 200) {
             ElMessage.success('赋予权限成功')
             from_post_roles_perms.item.perm_ids[0] = ''
@@ -284,7 +343,7 @@ const close_post_put = () => {
 // 获取角色权限
 const getRoles_permsFun = val => {
     switch_roles_perms.value = true
-    current_roles_perms.id = val.id
+    current_roles_perms.item = val
     APIgetRoles_perms(val.id).then(res => {
         console.log(res)
         data_tab_roles_perms.arr = res.data
@@ -374,7 +433,120 @@ const getTabListFunc = () => {
         }
     })
 }
+const switch_group_perms = ref(false)
+const data_tab_group_perms_selected_gov = reactive({
+    arr: []
+})
+const data_tab_group_perms_selected_pm = reactive({
+    arr: []
+})
+const data_tab_group_perms_selected_mbr = reactive({
+    arr: []
+})
+const all_perms_list = reactive({
+    arr: []
+})
+// 获取角色权限弹窗
+const getGroup_perms = () => {
+    APIgetPermsList().then(res => {
+        all_perms_list.arr = res.data
+    })
+    APIgetRoles_perms(current_roles_perms.item.id).then(res => {
+        // tab_group_all_perms.arr=res.data
+        data_tab_group_perms_selected_gov.arr = []
+        data_tab_group_perms_selected_pm.arr = []
+        data_tab_group_perms_selected_mbr.arr = []
+        for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].utype == 'gov') {
+                data_tab_group_perms_selected_gov.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_gov.arr)
+            }
+            if (res.data[i].utype == 'pm') {
+                data_tab_group_perms_selected_pm.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_pm.arr)
+            }
+            if (res.data[i].utype == 'mbr') {
+                data_tab_group_perms_selected_mbr.arr.push(res.data[i].id)
+                console.log(data_tab_group_perms_selected_mbr.arr)
+            }
+        }
+        switch_group_perms.value = true
+    })
+}
+// 三种权限进行判断
+const group_perms_selectFun_gov = (val, id) => {
+    if (
+        data_tab_group_perms_selected_gov.arr.indexOf(id) !== -1 &&
+        val == false
+    ) {
+        let index = data_tab_group_perms_selected_gov.arr.indexOf(id)
+        data_tab_group_perms_selected_gov.arr.splice(index, 1)
+    }
+    if (val != false && data_tab_group_perms_selected_gov.arr.indexOf(id) == -1) {
+        data_tab_group_perms_selected_gov.arr.push(id)
+    }
+    console.log(data_tab_group_perms_selected_gov.arr)
+}
+const group_perms_selectFun_pm = (val, id) => {
+    if (data_tab_group_perms_selected_pm.arr.indexOf(id) !== -1 && val == false) {
+        let index = data_tab_group_perms_selected_pm.arr.indexOf(id)
+        data_tab_group_perms_selected_pm.arr.splice(index, 1)
+    }
+    if (val != false && data_tab_group_perms_selected_gov.arr.indexOf(id) == -1) {
+        data_tab_group_perms_selected_pm.arr.push(id)
+    }
+    console.log(data_tab_group_perms_selected_pm.arr)
+}
+const group_perms_selectFun_mbr = (val, id) => {
+    if (
+        data_tab_group_perms_selected_mbr.arr.indexOf(id) !== -1 &&
+        val == false
+    ) {
+        let index = data_tab_group_perms_selected_mbr.arr.indexOf(id)
+        data_tab_group_perms_selected_mbr.arr.splice(index, 1)
+    }
+    if (val != false && data_tab_group_perms_selected_mbr.arr.indexOf(id) == -1) {
+        data_tab_group_perms_selected_mbr.arr.push(id)
+    }
+    console.log(data_tab_group_perms_selected_mbr.arr)
+}
+// 添加角色权限
+const post_all_group_perms = () => {
+    APIpostRoles_perms(current_roles_perms.item.id, {
+        perm_ids: [
+            ...data_tab_group_perms_selected_gov.arr,
+            ...data_tab_group_perms_selected_pm.arr,
+            ...data_tab_group_perms_selected_mbr.arr
+        ]
+    }).then(res => {
+        if (res.status == 200) {
+            ElMessage.success('添加角色权限成功')
+            getRoles_permsFun(current_roles_perms.item)
+            switch_group_perms.value = false
+
+        }
+    })
+}
+// 删除权限
+const deleteRoles_perms = val => {
+    let perm_ids = []
+    perm_ids.push(val.id)
+    APIdeleteRoles_perms(current_roles_perms.item.id, { data: { perm_ids: perm_ids } }).then(res => {
+        ElMessage.success('删除权限成功')
+        getRoles_permsFun(current_roles_perms.item)
+
+    })
+}
 refreshFunc()
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['rolesSpec', 'put_perms_utype']).then(res => {
+    opts_all.obj = res
+})
 </script>
 <style lang="scss" scoped>
 @import "@/assets/styles/resources/variables.scss";

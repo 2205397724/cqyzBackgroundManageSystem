@@ -20,8 +20,7 @@ export default {
             title: '监管督促',
             sidebar: false,
             breadcrumb: false,
-            activeMenu: '/announce_task',
-            auth: ['announce.task.task', '*']
+            activeMenu: '/announce_task'
         }
     }]
 }
