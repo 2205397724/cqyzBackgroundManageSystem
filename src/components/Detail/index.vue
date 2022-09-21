@@ -1403,6 +1403,7 @@ getOpts(['announce_status_1', 'toushu_pub']).then(res => {
                 position: absolute;
                 right: -9px;
                 top: -8px;
+                z-index: 1;
                 border-radius: 50%;
                 border: 2px solid red;
                 cursor: pointer;

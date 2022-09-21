@@ -602,6 +602,11 @@ const popup2 = reactive({
 })
 const popup2FnAdd = () => {
     popup2.error = {}
+    for (let key in popup2.form) {
+        if (popup2.form[key] == '') {
+            delete popup2.form[key]
+        }
+    }
     if (popup2.title == '添加' || popup2.title == '回复') {
         APIpostComment(route.query.id, popup2.form).then(res => {
             ElMessage.success('添加成功')

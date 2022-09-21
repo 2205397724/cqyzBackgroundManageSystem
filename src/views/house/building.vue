@@ -579,7 +579,7 @@
             width="80%"
         >
             <div style="overflow: auto;">
-                <House :tree_item="tree_item.obj" />
+                <House :tree_item="tree_item.arr" />
             </div>
         </el-dialog>
     </div>
@@ -588,17 +588,17 @@
 import Cascaders from '@/components/Cascaders/index.vue'
 import House from '@/components/House/index.vue'
 const tree_item = reactive({
-    obj: {}
+    arr: []
 })
 const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
-    tree_item.obj = {
+    tree_item.arr = [{
         id: val.id,
         name: val.name,
         next_type: 'units',
         type: 'building'
-    }
+    }]
     edit_house.value = true
 }
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
@@ -645,7 +645,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -685,7 +685,17 @@ const detailsFunc = val => {
 }
 // 监听分页
 watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '单元') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -694,6 +704,11 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             from_examine.item.zone_id = route.query.zone_id
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputBuildHouse(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()

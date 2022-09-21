@@ -362,7 +362,7 @@ import {
 const data_1 = reactive({
     search: {},
     switch_search: false,
-    page: 1,
+    page: Number(sessionStorage.getItem('currentPage')) || 1,
     total: 0,
     per_page: 15,
     list: [],
@@ -420,6 +420,11 @@ const clickFuncAddVote = () => {
         }
     }
     data_1.add_error = {}
+    for (let key in data_1.add_form) {
+        if (data_1.add_form[key] == '') {
+            delete data_1.add_form[key]
+        }
+    }
     if (files.length > 0) {
         getFilesKeys(files, 'repair').then(arr => {
             data_1.add_form.affix = file_key.concat(arr)
@@ -515,8 +520,18 @@ const refreshFunc = () => {
     getFuncVoteList()
 }
 watch(() => data_1.page, new_val => {
+    sessionStorage.setItem('currentPage', new_val)
     refreshFunc()
 }, { immediate: true, deep: true })
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
+})
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // // 配置项
 import {

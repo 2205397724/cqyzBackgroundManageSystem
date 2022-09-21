@@ -487,6 +487,11 @@ const clickFuncAddVote = () => {
         }
     }
     data_1.add_error = {}
+    for (let key in data_1.add_form) {
+        if (data_1.add_form[key] == '') {
+            delete data_1.add_form[key]
+        }
+    }
     if (files.length > 0) {
         getFilesKeys(files, 'illegal').then(arr => {
             data_1.add_form.affix = file_key.concat(arr)

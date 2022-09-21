@@ -422,6 +422,11 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             from_examine.item.building_id = route.query.building_id
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputUnitsHouse(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()

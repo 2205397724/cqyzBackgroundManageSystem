@@ -47,23 +47,21 @@
                 <!-- <el-table-column prop="name" label="归档内容数量" width="180">
                     <span> {{ total2 }} </span>
                 </el-table-column> -->
-                <el-table-column prop="id" label="ID" width="250">
+                <el-table-column prop="id" label="ID">
                     <template #default="scope">
                         <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="created_at" label="创建时间" width="180">
+                <el-table-column prop="created_at" label="创建时间">
                     <template #default="scope">
                         <span>{{ scope.row.created_at }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="updated_at" label="更新时间" width="180">
+                <el-table-column prop="updated_at" label="更新时间">
                     <template #default="scope">
                         <span>{{ scope.row.updated_at }} </span>
                     </template>
                 </el-table-column>
-
-                <el-table-column />
                 <el-table-column fixed="right" label="操作" width="250">
                     <template #default="scope">
                         <el-button
@@ -92,7 +90,6 @@
                         </el-popconfirm>
                     </template>
                 </el-table-column>
-                <el-table-column />
             </el-table>
             <el-pagination
                 v-model:current-page="page"
@@ -349,13 +346,18 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputArchive(from_examine.item.id, from_examine.item).then(() => {
                     refreshFunc()
                     ElMessage.success('修改成功')
                     switch_examine.value = false
                 }).catch(() => {
-                    ElMessage.success('修改成功')
+                    ElMessage.error('修改失败')
                 })
             } else {
                 APIpostArchive(from_examine.item).then(() => {

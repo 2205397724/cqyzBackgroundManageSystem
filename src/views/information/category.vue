@@ -248,6 +248,11 @@ const getFuncCategoryList = () => {
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
     console.log(data_1.add_form)
+    for (let key in data_1.add_form.item) {
+        if (data_1.add_form[key] == '') {
+            delete data_1.add_form[key]
+        }
+    }
     if (data_1.add_title == '添加') {
         APIpostInforCategory(data_1.add_form).then(res => {
             // console.log(res)

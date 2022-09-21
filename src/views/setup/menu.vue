@@ -306,6 +306,11 @@ const dialogExamineCloseFunc = formEl => {
     // formEl.validate(valid => {
     //     if (valid) {
     addMenuForm.item.appid = route.query.appid
+    for (let key in addMenuForm.item) {
+        if (addMenuForm.item[key] == '') {
+            delete addMenuForm.item[key]
+        }
+    }
     if (str_title.value == '修改') {
         APIputAppMenu(addMenuForm.item.id, addMenuForm.item).then(res => {
             console.log(res)

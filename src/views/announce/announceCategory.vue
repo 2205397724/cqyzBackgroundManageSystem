@@ -201,6 +201,11 @@ console.log(main_type)
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
+    for (let key in from_examine.item) {
+        if (from_examine.item[key] == '') {
+            delete from_examine.item[key]
+        }
+    }
     if (str_title.value == '修改') {
         APIputType(main_type.value, from_examine.item.id, from_examine.item).then(res => {
             // if (!res.code) {

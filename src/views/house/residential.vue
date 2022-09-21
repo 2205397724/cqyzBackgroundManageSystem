@@ -714,7 +714,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -821,7 +821,17 @@ const detailsFunc = val => {
 }
 // 监听分页
 watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '楼栋' || to.meta.title == '单元' || to.meta.title == '房屋') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -1059,5 +1069,8 @@ refreshFunc()
     color: #aaa;
     font-size: 14px;
     margin-bottom: 20px;
+}
+:deep .el-tree {
+    --el-tree-node-hover-bg-color: #e9f4ff;
 }
 </style>

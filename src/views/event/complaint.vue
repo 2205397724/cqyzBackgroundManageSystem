@@ -112,7 +112,7 @@
                         <span>{{ scope.row.cc_name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="业务编号" width="150">
+                <el-table-column label="业务编号">
                     <template #default="scope">
                         <span>{{ scope.row.sno }} </span>
                     </template>
@@ -122,7 +122,7 @@
                         <span>{{ scope.row?.zone?.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="100">
+                <el-table-column label="状态">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
@@ -136,12 +136,12 @@
                         <!-- <div style=":background-color"></div> -->
                     </template>
                 </el-table-column>
-                <el-table-column label="是否匿名" width="80">
+                <el-table-column label="是否匿名">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_ano,scope.row.ano) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否公开" width="80">
+                <el-table-column label="是否公开">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
@@ -653,6 +653,11 @@ const clickFuncAddVote = () => {
         }
     }
     data_1.add_error = {}
+    for (let key in data_1.add_form) {
+        if (data_1.add_form[key] == '') {
+            delete data_1.add_form[key]
+        }
+    }
     if (files.length > 0) {
         getFilesKeys(files, 'folder').then(arr => {
             data_1.add_form.affix = file_key.concat(arr)

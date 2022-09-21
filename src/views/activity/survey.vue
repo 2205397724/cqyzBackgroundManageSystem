@@ -240,7 +240,7 @@
                 </template>
             </el-dialog>
             <!-- 详情 -->
-            <el-dialog v-model="switch_details" :title="data_details.item.name" width="90%" destroy-on-close="true">
+            <el-dialog v-model="switch_details" :title="data_details.item.name" width="80%" destroy-on-close="true">
                 <Detail :id="data_details.item.id" />
                 <template #footer>
                     <el-button type="warning" plain @click="switch_details = false">取消</el-button>
@@ -327,8 +327,6 @@ const refreshFunc = () => {
 const tree_item = reactive({
     arr: []
 })
-
-import md5 from 'md5'
 const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
@@ -443,6 +441,11 @@ const dialogExamineCloseFunc = (formEl, id) => {
     formEl.validate(valid => {
         if (valid) {
             from_examine.item.type = 1
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APImodifySurvey(id, from_examine.item).then(res => {

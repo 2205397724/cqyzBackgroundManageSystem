@@ -1347,6 +1347,11 @@ const dialogExamineCloseFunc = () => {
     if (from_examine.item.type != 7) {
         delete from_examine.item.ref
     }
+    for (let key in from_examine.item) {
+        if (from_examine.item[key] == '') {
+            delete from_examine.item[key]
+        }
+    }
     if (str_title.value == '修改用户组') {
 
         APIputGroup(from_examine.item.id, from_examine.item)

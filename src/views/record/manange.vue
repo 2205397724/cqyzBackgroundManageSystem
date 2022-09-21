@@ -797,6 +797,11 @@ const dialogExamineCloseFunc = () => {
     // submit_post_put()
 }
 const submit_post_put = () => {
+    for (let key in from_record.item) {
+        if (from_record.item[key] == '') {
+            delete from_record.item[key]
+        }
+    }
     if (add_put_title.value == '修改备案') {
         APIputRecord(current_record.item.id, from_record.item).then(res => {
             ElMessage.success('修改成功')

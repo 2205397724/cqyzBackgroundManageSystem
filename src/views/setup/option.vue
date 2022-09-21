@@ -523,6 +523,11 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputOpts(from_examine.item.id, from_examine.item).then(res => {
                     console.log(res)

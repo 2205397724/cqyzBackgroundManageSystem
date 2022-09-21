@@ -11,7 +11,7 @@
                 >
                     <el-table-column prop="logo" label="图标" width="100">
                         <template #default="scope">
-                            <el-iamge :src="scope.row.logo" alt="" style="width: 50px; height: 50px;" /></el-iamge>
+                            <el-image :src="VITE_APP_FOLDER_SRC+scope.row.logo" alt="" style="width: 50px; height: 50px;" />
                         </template>
                     </el-table-column>
                     <el-table-column prop="name" label="APP名称">
@@ -29,7 +29,7 @@
                             <span style="margin-left: 10px;">{{ scope.row.id }} </span>
                         </template>
                     </el-table-column> -->
-                    <el-table-column prop="status" label="状态" width="120">
+                    <el-table-column prop="status" label="状态">
                         <template #default="scope">
                             <el-switch
                                 v-model="scope.row.status"
@@ -47,7 +47,7 @@
                             />
                         </template>
                     </el-table-column>
-                    <el-table-column label="APP相关" width="250">
+                    <el-table-column label="APP相关" width="300">
                         <template #default="scope">
                             <el-link :underline="false" type="primary" style="padding-right: 10px;">
                                 <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppMenu',query:{ appid: scope.row.id }}">APP菜单管理</router-link>
@@ -286,7 +286,7 @@ let data_tab = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 let loading_tab = ref(false)
 let switch_examine = ref(false)
 let from_error = ref({})
@@ -321,7 +321,17 @@ let addMenuForm = reactive({
 // 方法
 // 监听类别
 watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
     refreshFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == 'APP菜单管理' || to.meta.title == 'APP版本管理') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
 })
 const statusFunk = row => {
     return statusText.value = row.status === 1 ? '已开启' : '已关闭'
@@ -374,6 +384,11 @@ const dialogExamineCloseFunc = ()  => {
     files.push(obj.raw)
     // }
     console.log(files)
+    for (let key in addMenuForm.item) {
+        if (addMenuForm.item[key] == '') {
+            delete addMenuForm.item[key]
+        }
+    }
     if (files.length > 0) {
         getFilesKeys(files, 'APP').then(arr => {
             // let o = 0
@@ -383,6 +398,7 @@ const dialogExamineCloseFunc = ()  => {
             // }
             console.log(arr)
             addMenuForm.item.logo = arr[0]
+
             if (str_title.value == '修改') {
                 switchFunk(addMenuForm.item.status)
                 APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
@@ -451,10 +467,11 @@ const modifyResidentialFunc = val => {
 }
 const logoName = ref('')
 const fileListFn = val => {
-    if (str_title.value != '修改' && str_title.value != '添加') {
-        logoName.value = VITE_APP_FOLDER_SRC.value + val.name
+    console.log(val)
+    if (str_title.value == '修改' && typeof val == 'string') {
+        logoName.value = VITE_APP_FOLDER_SRC.value + val
     } else {
-        logoName.value = val
+        logoName.value = val.name
     }
     return []
     // }

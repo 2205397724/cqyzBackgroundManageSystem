@@ -640,6 +640,11 @@ const dialogExamineCloseFunc = () => {
         for (let i in files) {
             from_examine.item.affix[i].file = files[i]
         }
+        for (let key in from_examine.item) {
+            if (from_examine.item[key] == '') {
+                delete from_examine.item[key]
+            }
+        }
         if (str_title.value == '修改') {
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
                 refreshFunc()

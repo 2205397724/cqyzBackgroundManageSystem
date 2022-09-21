@@ -362,11 +362,16 @@ const current_recordKind = reactive({
 })
 // 添加修改确认按钮
 const submit_post_put = () => {
+    for (let key in from_record.item) {
+        if (from_record.item[key] == '') {
+            delete from_record.item[key]
+        }
+    }
     if (add_put_title.value == '修改') {
         APIputKind('filing', current_recordKind.item.id, from_record.item).then(
             res => {
                 ElMessage.success('修改成功')
-                switch_add_record.value = false
+                switch_add_recordKind.value = false
                 refreshPage()
             }
         )

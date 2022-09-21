@@ -99,28 +99,26 @@
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     class="tab_1"
                 >
-                    <el-table-column prop="house_id" label="房屋" width="250">
+                    <el-table-column prop="house_id" label="房屋">
                         <template #default="scope">
                             <span class="m-l-10">{{ getHouseNameFunc(allHouse_list.arr,scope.row.house_id) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="code_property" label="产权证号" width="250">
+                    <el-table-column prop="code_property" label="产权证号">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.code_property }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="code_room" label="地房籍号" width="250">
+                    <el-table-column prop="code_room" label="地房籍号">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.code_room }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="time_deal" label="交易时间" width="140">
+                    <el-table-column prop="time_deal" label="交易时间">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.time_deal }} </span>
                         </template>
                     </el-table-column>
-
-                    <el-table-column />
                     <el-table-column fixed="right" label="操作" width="200">
                         <template #default="scope">
                             <el-button
@@ -144,7 +142,6 @@
                             </el-popconfirm>
                         </template>
                     </el-table-column>
-                    <el-table-column />
                 </el-table>
             </div>
             <el-pagination
@@ -463,6 +460,11 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APIputProperty(from_examine.item.id, from_examine.item).then(res => {
@@ -565,7 +567,7 @@ const checkNameFunc = row => {
 }
 // 删除
 const deleteFunc = val => {
-    APIdeleteProperty(val.house_id).then(res => {
+    APIdeleteProperty(val.id).then(res => {
         refreshFunc()
         ElMessage.success('删除成功')
     })

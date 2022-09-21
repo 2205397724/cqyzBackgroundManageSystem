@@ -355,8 +355,8 @@ h2 {
         }
     }
     .portrait {
-        height: 110px;
-        width: 110px;
+        height: 90px;
+        width: 90px;
         border: 1px solid #fe9c7d;
         border-radius: 50%;
 

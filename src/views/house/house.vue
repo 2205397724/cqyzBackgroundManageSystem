@@ -701,11 +701,14 @@
                 <el-table-column prop="desc" label="备注" width="280" />
                 <el-table-column prop="status" label="状态" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </span>
+                        <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="file_err" label="错误信息" width="280" />
-                <el-table-column prop="created_at" label="创建时间" width="180" />
+                <!-- <el-table-column prop="file_err" label="错误信息" width="280" /> -->
+                <el-table-column prop="created_at" label="导入时间" width="180" />
                 <el-table-column prop="updated_at" label="更新时间" width="180" />
             </el-table>
         </el-dialog>
@@ -861,7 +864,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -987,7 +990,17 @@ const detailsFunc = val => {
 }
 // 监听分页
 watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -995,6 +1008,11 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputHouseHouse(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
@@ -1025,7 +1043,7 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value    }
     if (route.query.sync_zone_id) {
-        params.zone_id = route.query.sync_zone_id
+        params.sync_zone_id = route.query.sync_zone_id
     }
     if (route.query.sync_building_id) {
         params.sync_building_id = route.query.sync_building_id
@@ -1176,6 +1194,11 @@ const filesUpFunc = () => {
     if (files_obj.obj.file_src) {
         getFilesKeys(arr, 'addHouse').then(arr => {
             files_obj.obj.file_src = arr[0]
+            for (let key in files_obj.obj) {
+                if (files_obj.obj[key] == '') {
+                    delete files_obj.obj[key]
+                }
+            }
             APIpostFilesList(files_obj.obj).then(res => {
                 ElMessage.success('导入成功')
                 refreshFilesListFunc()
