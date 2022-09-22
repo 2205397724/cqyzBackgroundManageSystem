@@ -139,7 +139,7 @@
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <div class="m-b-10">
-                                <el-button class="m-r-10" @click="addServiceFunc">添加模板字段</el-button>
+                                <el-button class="m-r-10" type="primary" @click="addServiceFunc">添加模板字段</el-button>
                             </div>
                             <div v-for="(item,i) in from_examine.item.fields" :key="i" class="serve-box">
                                 <el-row :gutter="10">
@@ -161,7 +161,7 @@
                                     </el-col>
                                 </el-row>
                                 <div class="m-b-10">
-                                    <el-button class="m-r-10" @click="addServiceOptFunc(i)">添加选项字段</el-button>
+                                    <el-button type="primary" plain class="m-r-10" @click="addServiceOptFunc(i)">添加选项字段</el-button>
                                 </div>
                                 <template v-if="from_examine.item.fields[i].prop&&from_examine.item.fields[i].prop.arr">
                                     <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" :key="j" class="options">

@@ -593,7 +593,7 @@
                         <el-link
                             class="head-btn"
                             :underline="false"
-                            :href="VITE_APP_UPLOAD"
+                            :href="VITE_APP_FOLDER_SRC"
                             target="_blank"
                         >
                             <el-button>

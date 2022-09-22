@@ -82,13 +82,13 @@
                     <el-table-column prop="ticketall" label="总票数" align="center" />
                     <el-table-column label="问卷状态" align="center">
                         <template #default="scope">
-                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column label="是否公开" align="center">
@@ -131,111 +131,146 @@
                 />
             </div>
             <!-- 修改添加 -->
-            <el-dialog v-model="switch_examine" :title="str_title" width="50%" @closed="dialogClosed">
+            <el-dialog v-model="switch_examine" :title="str_title" width="60%" @closed="dialogClosed">
+                <el-steps v-if="str_title== '添加'" :active="active" finish-status="success" space="30%" align-center>
+                    <el-step title="填写问卷信息">
+                    <!-- <div style="width: 300px; height: 300px;"> -->
+                    <!-- </div> -->
+                    <!-- <el-button style="margin-top: 12px;" @click="next">Next step</el-button> -->
+                    </el-step>
+                    <el-step v-if="str_title== '添加'" title="发起审核申请" />
+                    <el-step v-if="str_title== '添加'" title="完成" />
+                </el-steps>
                 <div>
-                    <el-scrollbar>
-                        <div class="details-box p-lr-10">
-                            <el-form ref="ruleFormRef" :model="from_examine.item">
-                                <el-row :gutter="10">
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="标题" label-width="80px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-input
-                                                v-model="from_examine.item.name"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item
-                                            label="所在区域"
-                                            prop="region_val"
-                                            label-width="80px"
-                                            :error="
-                                                from_error.msg && from_error.msg.name? from_error.msg.name[0]: ''"
-                                        >
-                                            <div class="selecZone" @click="click_add_group_zone_id">
-                                                <span v-if="!selectedZone_id" class="selecChina">区域</span>
-                                                <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                    <div class="details-box p-lr-10 m-t-40 m-b-20">
+                        <el-form v-if="active == 0" ref="ruleFormRef" :model="from_examine.item">
+                            <el-row :gutter="10">
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="标题" label-width="80px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.name"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item
+                                        label="所在区域"
+                                        prop="region_val"
+                                        label-width="80px"
+                                        :error="
+                                            from_error.msg && from_error.msg.name? from_error.msg.name[0]: ''"
+                                    >
+                                        <div class="selecZone" @click="click_add_group_zone_id">
+                                            <span v-if="!selectedZone_id" class="selecChina">区域</span>
+                                            <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                        </div>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总票数" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.ticketall"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="总面积" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.areaall"
+                                            placeholder=""
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                    <el-form-item
+                                        label-width="80px"
+                                        label="是否公开"
+                                    >
+                                        <el-select v-model="from_examine.item.pub" class="head-btn" clearable>
+                                            <el-option v-for="item in opts_all.obj.toushu_pub" :key="item.key" :label="item.val" :value="item.key" />
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="状态" label-width="80px" prop="status" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-select v-model="from_examine.item.status" class="head-btn" clearable>
+                                            <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="i" :label="item.val" :value="item.key" />
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="开始时间" label-width="80px" prop="author_tgt" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.startat"
+                                            type="datetime"
+                                            :placeholder="开始时间"
+                                            format="YYYY-MM-DD hh:mm:ss"
+                                            value-format="YYYY-MM-DD hh:mm:ss"
+                                            style="width: 100%;"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="12">
+                                    <el-form-item label="结束时间" label-width="80px" prop="endat" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-date-picker
+                                            v-model="from_examine.item.endat"
+                                            type="datetime"
+                                            :placeholder="结束时间"
+                                            format="YYYY-MM-DD hh:mm:ss"
+                                            value-format="YYYY-MM-DD hh:mm:ss"
+                                            style="width: 100%;"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :md="24" :lg="24">
+                                    <el-form-item label="内容" label-width="80px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-input
+                                            v-model="from_examine.item.content"
+                                            type="textarea"
+                                            :autosize="{ minRows: 4, maxRows: 16 }"
+                                            placeholder=""
+                                            style="width: 100%;"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                        <el-form
+                            v-if="active == 1 && str_title== '添加'"
+                            ref="ruleFormRef"
+                            :model="from_pass.obj"
+                        >
+                            <!-- <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" class="m-b-20">
+                                <el-step v-for="(item,i) in buzhoutiao.arr" :key="i" :title="item.name" />
+                            </el-steps>
+                            <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" class="pass">
+                                当前公示已审核完成
+                            </div> -->
+                            <el-row :gutter="10">
+                                <el-col :xs="12" :sm="12">
+                                    <el-form-item
+                                        label="审核部门" label-width="120px"
+                                        :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
+                                    >
+                                        <div class="wh_100">
+                                            <div class="searchUserGroup">
+                                                <SearchUserGroup ref="V" v-model:name="userGroupName_1" @checkName="checkNameFunc_1" />
                                             </div>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="总票数" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-input
-                                                v-model="from_examine.item.ticketall"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="总面积" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-input
-                                                v-model="from_examine.item.areaall"
-                                                placeholder=""
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                        <el-form-item
-                                            label-width="80px"
-                                            label="是否公开"
-                                        >
-                                            <el-select v-model="from_examine.item.pub" class="head-btn" clearable>
-                                                <el-option v-for="(item,i) in opts_all.obj.toushu_pub" :key="i" :label="item.val" :value="item.key" />
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="状态" label-width="80px" prop="status" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-select v-model="from_examine.item.status" class="head-btn" clearable>
-                                                <el-option v-for="(item,i) in opts_all.obj.announce_status_1" :key="i" :label="item.val" :value="item.key" />
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="开始时间" label-width="80px" prop="author_tgt" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-date-picker
-                                                v-model="from_examine.item.startat"
-                                                type="datetime"
-                                                :placeholder="开始时间"
-                                                format="YYYY-MM-DD hh:mm:ss"
-                                                value-format="YYYY-MM-DD hh:mm:ss"
-                                                style="width: 100%;"
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="结束时间" label-width="80px" prop="endat" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-date-picker
-                                                v-model="from_examine.item.endat"
-                                                type="datetime"
-                                                :placeholder="结束时间"
-                                                format="YYYY-MM-DD hh:mm:ss"
-                                                value-format="YYYY-MM-DD hh:mm:ss"
-                                                style="width: 100%;"
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="24">
-                                        <el-form-item label="内容" label-width="80px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-input
-                                                v-model="from_examine.item.content"
-                                                type="textarea"
-                                                :autosize="{ minRows: 4, maxRows: 16 }"
-                                                placeholder=""
-                                                style="width: 100%;"
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                </el-row>
-                            </el-form>
-                        </div>
-                    </el-scrollbar>
+                                        </div>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </div>
                 </div>
+                <el-button v-if="active !== 2 && str_title== '添加'" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">下一步</el-button>
+                <el-button v-if="active == 2" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">完成</el-button>
                 <template #footer>
-                    <div class="footer">
+                    <div v-if="str_title== '修改'" class="footer">
                         <el-button @click="switch_examine=false">取消</el-button>
-                        <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,id)">确定</el-button>
+                        <el-button type="primary" @click="dialogExamineCloseFunc()">确定</el-button>
                     </div>
                 </template>
             </el-dialog>
@@ -277,6 +312,7 @@ import {
     ElMessage
 } from 'element-plus'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
+import survey from '@/router/modules/activity/survey'
 
 // 搜索
 let switch_search = ref(false)
@@ -429,55 +465,102 @@ const handleClick = tab => {
 watch(page, () => {
     getTabListFunc()
 })
+const surveyId = ref('')
 // 同意拒绝提交
-const dialogExamineCloseFunc = (formEl, id) => {
+const dialogExamineCloseFunc = () => {
     from_error.msg = {}
-    id = from_examine.item.id
     // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
     from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
     from_examine.item.endat = value2.value._value ? value2.value._value : from_examine.item.endat
     from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            from_examine.item.type = 1
-            for (let key in from_examine.item) {
-                if (from_examine.item[key] == '') {
-                    delete from_examine.item[key]
-                }
-            }
-            if (str_title.value == '修改') {
-                console.log(from_examine.item)
-                APImodifySurvey(id, from_examine.item).then(res => {
-                    if (res.status === 200) {
-                        refreshFunc()
-                        // ElMessage.success(res.statusText)
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                    }
-                    // 如果传递了状态码，就修改状态信息
-                    APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
-                        refreshFunc()
-                    })
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
-            } else {
-                APIaddSurvey(from_examine.item).then(res => {
-                    refreshFunc()
-                    // ElMessage.success(res.msg)
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
-            }
-        } else {
-            return false
+    // if (!formEl) return
+    // formEl.validate(valid => {
+    //     if (valid) {
+    from_examine.item.type = 1
+    console.log(from_examine.item)
+    for (let key in from_examine.item) {
+        if (from_examine.item[key] == '') {
+            delete from_examine.item[key]
         }
+    }
+    console.log(from_examine.item)
+    if (str_title.value == '修改') {
+        console.log(from_examine.item)
+        APImodifySurvey(from_examine.item.id, from_examine.item).then(res => {
+            if (res.status === 200) {
+                refreshFunc()
+                // ElMessage.success(res.statusText)
+                ElMessage.success('修改成功')
+                switch_examine.value = false
+            }
+            // 如果传递了状态码，就修改状态信息
+            APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
+                refreshFunc()
+            })
+        }).catch(err => {
+            ElMessage.error('修改失败')
+        })
+    } else {
+        APIaddSurvey(from_examine.item).then(res => {
+            console.log(res.data)
+            surveyId.value = res.data.id
+            refreshFunc()
+            // ElMessage.success(res.msg)
+            // ElMessage.success('添加成功')
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+    }
+    // } else {
+    //     return false
+    // }
+    // })
+}
+import {
+    APIpostArchiveAudit
+} from '@/api/custom/custom.js'
+const active = ref(0)
+const next = () => {
+    if (active.value == 0) {
+        dialogExamineCloseFunc()
+        active.value = 1
+    } else if (active.value == 1) {
+        console.log(str_title.value)
+        if (str_title.value == '添加') {
+            passToAuditFunc()
+        }
+        active.value = 2
+    } else {
+        // ElMessage.success('修改成功')
+        switch_examine.value = false
+    }
+}
+const from_pass = reactive({
+    obj: {}
+})
+const userGroupName_1 = ref('')
+const checkNameFunc_1 = val => {
+    from_pass.obj.group_id = val.id
+    userGroupName_1.value = val.name
+}
+const passToAuditFunc = () => {
+    // let data = {
+    //     'tgt_type': 'announce',
+    //     'tgt_id': gongshixiangqing.obj.id,
+    //     'group_id': gongshixiangqing.obj.groupid
+    // }
+    from_pass.obj.tgt_type = 'survey'
+    from_pass.obj.tgt_id = surveyId
+    console.log(from_pass.obj)
+    APIpostArchiveAudit(from_pass.obj).then(res => {
+        // ElMessage.success('审核成功')
+        refreshFunc()
+        // passAudit(gongshixiangqing.obj)
+        // switch_pass.value = false
+    }).catch(err => {
+        ElMessage.success('申请失败')
     })
 }
-
 import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
@@ -572,7 +655,7 @@ const opts_all = reactive({
         status_all: []
     }
 })
-getOpts(['announce_status_1', 'toushu_pub']).then(res => {
+getOpts(['announce_status', 'toushu_pub']).then(res => {
     opts_all.obj = res
 })
 </script>

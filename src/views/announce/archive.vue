@@ -160,12 +160,12 @@
                         <span>{{ scope.row.toval }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示对象类型">
+                <el-table-column label="公示对象类型" align="center">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态" width="180">
+                <el-table-column label="状态" width="180" align="center">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>

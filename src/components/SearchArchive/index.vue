@@ -89,7 +89,7 @@
                                 <span>{{ scope.row.toval }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="公示对象类型">
+                        <el-table-column label="公示对象类型" align="center">
                             <template #default="scope">
                                 <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
                             </template>
@@ -110,8 +110,6 @@
                                 <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                             </template>
                         </el-table-column>
-
-                        <el-table-column />
                     </el-table>
                 </el-scrollbar>
                 <el-pagination
@@ -158,13 +156,14 @@ const data_search = reactive({
     obj: {}
 })
 const searchFunc = () => {
+    page.value = 1
     switch_search.value = true
-    getTabListFunc()
+    refreshFunc()
 }
 // 打开弹窗
 const openDigFunc = () => {
     switch_list.value = true
-    getTabListFunc()
+    refreshFunc()
 }
 watch(page, () => {
     getTabListFunc()
@@ -189,11 +188,16 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
+        console.log(res.length)
+        console.log(per_page.value)
         let btnNext = document.querySelector('.btn-next')
         if (res.length < per_page.value) {
+            console.log('成功')
+            console.log(btnNext)
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
+            console.log(btnNext)
         } else {
             btnNext.classList.remove('not_allowed')
             btnNext.removeAttribute('disabled')
@@ -213,7 +217,6 @@ const clearFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getTabListFunc()

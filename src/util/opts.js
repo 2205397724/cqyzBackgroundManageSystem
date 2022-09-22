@@ -233,25 +233,6 @@ const opts = {
         key: 7,
         val: '已结束'
     }],
-    announce_status_1: [{
-        key: 1,
-        val: '筹备中'
-    }, {
-        key: 3,
-        val: '未开始'
-    }, {
-        key: 4,
-        val: '进行中'
-    }, {
-        key: 5,
-        val: '暂停'
-    }, {
-        key: 6,
-        val: '终止'
-    }, {
-        key: 7,
-        val: '已结束'
-    }],
     // 报名是否有效
     isvalid_opt: [{
         key: 0,

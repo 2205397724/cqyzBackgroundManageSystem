@@ -70,16 +70,16 @@
                         <span>{{ scope.row.title }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="公示分类">
+                <!-- <el-table-column label="公示分类">
                     <template #default="scope">
                         <span>{{ scope.row.cate.name }}</span>
                     </template>
-                </el-table-column>
-                <el-table-column label="公示区域">
+                </el-table-column> -->
+                <!-- <el-table-column label="公示区域">
                     <template #default="scope">
                         <span>{{ scope.row.toval_name }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="公示区域类型">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.article_lv,scope.row.totype) }} </span>
@@ -92,8 +92,8 @@
                 </el-table-column>
                 <el-table-column label="状态">
                     <template #default="scope">
-                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
-                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" size="small" @click="noExamineFunc(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" size="small" @click="passAudit(scope.row)">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
@@ -158,14 +158,14 @@
             @closed="add_dialog_close"
         >
             <!-- <template> -->
-            <el-steps :active="active" finish-status="success" space="30%" align-center>
-                <el-step title="填写公式信息">
+            <el-steps v-if="str_title== '添加'" :active="active" finish-status="success" space="30%" align-center>
+                <el-step title="填写公示信息">
                     <!-- <div style="width: 300px; height: 300px;"> -->
                     <!-- </div> -->
                     <!-- <el-button style="margin-top: 12px;" @click="next">Next step</el-button> -->
                 </el-step>
-                <el-step title="发起审核申请" />
-                <el-step title="完成" />
+                <el-step v-if="str_title== '添加'" title="发起审核申请" />
+                <el-step v-if="str_title== '添加'" title="完成" />
             </el-steps>
             <div style="width: 100%; margin-top: 40px; margin-bottom: 20px;">
                 <!-- <el-scrollbar max-height="550px"> -->
@@ -366,7 +366,7 @@
                 </el-form>
                 <!-- </el-scrollbar> -->
                 <el-form
-                    v-if="active == 1"
+                    v-if="active == 1 && str_title== '添加'"
                     ref="ruleFormRef"
                     :model="from_pass.obj"
                 >
@@ -377,16 +377,24 @@
                         当前公示已审核完成
                     </div>
                     <el-row v-else :gutter="10">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-col :xs="12" :sm="12">
+                            <el-form-item
+                                label="审核部门" label-width="120px"
+                                :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
+                            >
+                                <div class="wh_100">
+                                    <div class="searchUserGroup">
+                                        <SearchUserGroup ref="V" v-model:name="userGroupName_1" @checkName="checkNameFunc_1" />
+                                    </div>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             <el-form-item
                                 label="审核申请"
                                 label-width="100px"
                                 :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
                             >
-                                <!-- <el-select v-model="from_pass.obj.status" class="head-btn" placeholder="" clearable>
-                                <el-option label="审核通过" value="1" />
-                                <el-option label="不通过" value="0" />
-                            </el-select> -->
                                 <el-switch
                                     v-model="from_pass.obj.status"
 
@@ -401,7 +409,7 @@
                                     :disabled="total1>= 1 ? true: false"
                                 />
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             <el-form-item
                                 label-width="100px"
@@ -420,18 +428,18 @@
                     </el-row>
                 </el-form>
             </div>
-            <el-button v-if="active !== 2" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">下一步</el-button>
+            <el-button v-if="active !== 2 && str_title== '添加'" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">下一步</el-button>
             <el-button v-if="active == 2" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">完成</el-button>
             <!-- </template> -->
-            <!-- <template #footer>
-                <div class="footer">
+            <template #footer>
+                <div v-if="str_title== '修改'" class="footer">
                     <el-button @click="switch_examine=false">取消</el-button>
-                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc()">确定</el-button>
                 </div>
-            </template> -->
+            </template>
         </el-dialog>
         <!-- 审核 -->
-        <el-dialog
+        <!-- <el-dialog
             v-model="switch_pass"
             title="审核"
             width="600px"
@@ -453,10 +461,6 @@
                             label-width="100px"
                             :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
                         >
-                            <!-- <el-select v-model="from_pass.obj.status" class="head-btn" placeholder="" clearable>
-                                <el-option label="审核通过" value="1" />
-                                <el-option label="不通过" value="0" />
-                            </el-select> -->
                             <el-switch
                                 v-model="from_pass.obj.status"
 
@@ -493,7 +497,7 @@
                     <el-button type="primary" @click="passToAuditFunc_1">确定</el-button>
                 </div>
             </template>
-        </el-dialog>
+        </el-dialog> -->
         <!-- 选择公示区域 -->
         <el-dialog v-model="switch_choose_zone" title="选择公示区域">
             <el-scrollbar height="250px">
@@ -620,6 +624,8 @@ const dialogExamineCloseFunc = () => {
     if (files_arr.length <= 0) {
         if (str_title.value == '修改') {
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
+                ElMessage.success('修改成功')
+                switch_examine.value = false
                 refreshFunc()
             }).catch(err => {
                 ElMessage.error('修改失败')
@@ -647,16 +653,19 @@ const dialogExamineCloseFunc = () => {
         }
         if (str_title.value == '修改') {
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
+                ElMessage.success('修改成功')
+                switch_examine.value = false
                 refreshFunc()
-                // ElMessage.success('修改成功')
-                // switch_examine.value = false
-                // from_examine.item.status=
             }).catch(err => {
                 ElMessage.error('修改失败')
             })
         } else {
             APIpostEventArticle(from_examine.item).then(res => {
+                console.log(res)
+                announce_id.value = res.data.id,
                 refreshFunc()
+                //         announce_id.value = getNameFunc(res, from_examine.item.title)
+                // group_id.value = from_examine.item.groupid
                 // ElMessage.success('添加成功')
                 // switch_examine.value = false
             }).catch(err => {
@@ -692,8 +701,6 @@ const getTabListFunc = () => {
         console.log(res)
         loading_tab.value = false
         data_tab.arr = res
-        announce_id.value = getNameFunc(res, from_examine.item.title)
-        group_id.value = from_examine.item.groupid
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
         if (res.length < per_page.value) {
@@ -759,8 +766,6 @@ const modifyResidentialFunc = val => {
         console.log(res)
         from_examine.item = res
         switch_examine.value = true
-        announce_id.value = from_examine.item.id,
-        group_id.value = from_examine.item.groupid9
         userGroupName.value = res.authorgroup?.name
         selectedZone_id.value = res.toval_name
     })
@@ -798,28 +803,7 @@ const total1 = ref(0)
 const next = () => {
     if (active.value == 0) {
         dialogExamineCloseFunc()
-        if (str_title.value == '修改') {
-            console.log(announce_id.value)
-            let params = {
-                page: page.value,
-                per_page: per_page.value,
-                tgt_type: 'announce',
-                tgt_id: announce_id.value
-            }
-            APIgetListArchiveAudit(params).then(res => {
-                console.log(res)
-                if (res.length >= 1) {
-                    from_pass.obj.status = res[0].status,
-                    from_pass.obj.reply = res[0].reply
-                    total1.value = res.length
-                } else {
-                    from_pass.obj.status = 0
-                    total1.value = 0
-                }
-            })
-        } else {
-            total1.value = 0
-        }
+        total1.value = 0
         active.value = 1
     } else if (active.value == 1) {
         console.log(str_title.value)
@@ -828,6 +812,7 @@ const next = () => {
         }
         active.value = 2
     } else {
+        // ElMessage.success('修改成功')
         switch_examine.value = false
     }
 }
@@ -908,15 +893,14 @@ const passToAuditFunc = () => {
     // }
     from_pass.obj.tgt_type = 'announce'
     from_pass.obj.tgt_id = announce_id.value
-    from_pass.obj.group_id = group_id.value
     console.log(from_pass.obj)
     APIpostArchiveAudit(from_pass.obj).then(res => {
         // ElMessage.success('审核成功')
         refreshFunc()
         // passAudit(gongshixiangqing.obj)
-        switch_pass.value = false
+        // switch_pass.value = false
     }).catch(err => {
-        ElMessage.success('审核失败')
+        ElMessage.success('申请失败')
     })
 }
 const fileChange = (val, i) => {
@@ -997,6 +981,11 @@ const getNameFunc = (arr, key) => {
             return arr[i].id
         }
     }
+}
+const userGroupName_1 = ref('')
+const checkNameFunc_1 = val => {
+    from_pass.obj.group_id = val.id
+    userGroupName_1.value = val.name
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行
