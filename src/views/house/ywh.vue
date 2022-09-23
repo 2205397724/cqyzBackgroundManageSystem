@@ -401,6 +401,11 @@ const dialogExamineCloseFunc = formEl => {
             from_examine.item.region_type = 2
             from_examine.item.type = 7
             from_examine.item.region_cc = route.query.china_code
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputGroup(from_examine.item.id, from_examine.item).then(res => {
                     if (res.status == 200) {
@@ -561,6 +566,11 @@ const addflowFunc = () => {
 }
 const flowUpdataFunc = () => {
     from_error2.msg = {}
+    for (let key in from_examine2.item) {
+        if (from_examine2.item[key] == '') {
+            delete from_examine2.item[key]
+        }
+    }
     if (str_title2.value == '修改') {
         APIputGroupUser(flow_id, from_examine2.item.user_id, from_examine2.item).then(res => {
             detailsFunc(flow.item)

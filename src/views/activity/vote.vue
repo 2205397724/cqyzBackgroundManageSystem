@@ -240,7 +240,7 @@
                 </template>
             </el-dialog>
             <!-- 详情 -->
-            <el-dialog v-model="switch_details" :title="data_details.item.name" width="95%" destroy-on-close="true">
+            <el-dialog v-model="switch_details" :title="data_details.item.name" width="80%" destroy-on-close="true">
                 <Detail :id="data_details.item.id" />
                 <template #footer>
                     <el-button type="warning" plain @click="switch_details = false">取消</el-button>
@@ -327,11 +327,17 @@ const refreshFunc = () => {
 const tree_item = reactive({
     arr: []
 })
+
+import md5 from 'md5'
 const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
@@ -438,6 +444,11 @@ const dialogExamineCloseFunc = (formEl, id) => {
     formEl.validate(valid => {
         if (valid) {
             from_examine.item.type = 3
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APImodifySurvey(id, from_examine.item).then(res => {
@@ -477,7 +488,7 @@ const getTabListFunc = () => {
         per_page: per_page.value,
         type: 3
     }
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.author_tgt = sessionStorage.getItem('groupChinaCode')
     }
     console.log(window.location.hash)

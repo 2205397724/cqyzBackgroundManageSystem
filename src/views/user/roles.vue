@@ -379,6 +379,11 @@ const addRolesFun = () => {
 // 添加修改submit
 const add_post_submit = () => {
     if (from_data.item.name && from_data.item.spec && from_data.item.group_id) {
+        for (let key in from_data.item) {
+            if (from_data.item[key] == '') {
+                delete from_data.item[key]
+            }
+        }
         if (add_or_post_text.value == '修改') {
             loading_tab.value = true
             APIputRoles(from_data.item.id, from_data.item).then(res => {

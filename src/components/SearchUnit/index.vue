@@ -66,7 +66,7 @@
                 <el-table-column prop="time_use" label="投用时间" width="140" />
                 <el-table-column />
             </el-table>
-            <div style="padding-top: 20px;">
+            <!-- <div style="padding-top: 20px;">
                 <el-pagination
                     v-model:current-page="page"
                     layout="total,prev,pager,next,jumper,"
@@ -75,7 +75,7 @@
                     background
                     hide-on-single-page
                 />
-            </div>
+            </div> -->
         </el-dialog>
     </div>
 </template>
@@ -118,9 +118,10 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetUnitsListHouse(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res.
-            total.value = res.length
+        console.log(res)
+        data_tab.arr = res
+        total.value = res.length
+        loading_tab.value = false
     })
 }
 

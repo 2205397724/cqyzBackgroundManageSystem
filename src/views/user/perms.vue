@@ -360,6 +360,11 @@ const addPerms = () => {
 }
 // 修改提交
 const put_perms_submit = () => {
+    for (let key in from_add_perms.item) {
+        if (from_add_perms.item[key] == '') {
+            delete from_add_perms.item[key]
+        }
+    }
     APIputPerms(from_add_perms.item.id, from_add_perms.item).then(res => {
         if (res.status === 200) {
             ElMessage.success('修改成功')

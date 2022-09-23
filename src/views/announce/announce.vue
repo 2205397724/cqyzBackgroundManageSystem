@@ -49,23 +49,22 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="name" label="名称" width="180">
+                <el-table-column prop="name" label="名称">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="cid" label="公示分类" width="250">
+                <el-table-column prop="cid" label="公示分类">
                     <template #default="scope">
                         <span class="m-l-10">{{ getNameFunc(data_1.arr,scope.row.cid) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="id" label="ID" width="250">
+                <el-table-column prop="id" label="ID">
                     <template #default="scope">
                         <span class="m-l-10">{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column />
                 <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
@@ -140,7 +139,7 @@
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <div class="m-b-10">
-                                <el-button class="m-r-10" @click="addServiceFunc">添加模板字段</el-button>
+                                <el-button class="m-r-10" type="primary" @click="addServiceFunc">添加模板字段</el-button>
                             </div>
                             <div v-for="(item,i) in from_examine.item.fields" :key="i" class="serve-box">
                                 <el-row :gutter="10">
@@ -162,7 +161,7 @@
                                     </el-col>
                                 </el-row>
                                 <div class="m-b-10">
-                                    <el-button class="m-r-10" @click="addServiceOptFunc(i)">添加选项字段</el-button>
+                                    <el-button type="primary" plain class="m-r-10" @click="addServiceOptFunc(i)">添加选项字段</el-button>
                                 </div>
                                 <template v-if="from_examine.item.fields[i].prop&&from_examine.item.fields[i].prop.arr">
                                     <div v-for="(child,j) in from_examine.item.fields[i].prop.arr" :key="j" class="options">
@@ -381,6 +380,11 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputArticletpl(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()

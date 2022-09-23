@@ -8,12 +8,11 @@
                 :props="tree_props"
                 :load="loadNode"
                 lazy
-                show-checkbox
                 :check-strictly="true"
-                :accordion="true"
                 :default-checked-keys="[tree_item.id]"
                 :filter-node-method="filterNode"
-                @check="handleCheck"
+                :highlight-current="true"
+                @node-click="handleCheck"
             />
         </el-scrollbar>
     </div>
@@ -62,7 +61,7 @@ const loadNode = (node, resolve) => {
     if (node.level == 0) {
         nodeCopy = node
         // resolve([tree_item.value])
-        emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+        // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
         return resolve(tree_item.value)
     }
     switch (node.data.next_type) {
@@ -81,7 +80,7 @@ const loadNode = (node, resolve) => {
                     }
                 }
                 resolve(tree_arr)
-                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
             break
         case 'zone':
@@ -93,7 +92,7 @@ const loadNode = (node, resolve) => {
                     tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'buildings', id: res[i].id })
                 }
                 resolve(tree_arr)
-                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
                 tree_arr = []
             })
             break
@@ -113,7 +112,7 @@ const loadNode = (node, resolve) => {
                     tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })
                 }
                 resolve(tree_arr)
-                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
             break
     }
@@ -126,8 +125,8 @@ watch(tree_item, new_val => {
     }
 }, { immediate: true, deep: true })
 const handleCheck = (data, checked) => {
-    if (checked.checkedKeys.length > 0) {
-        treeRef.value.setCheckedNodes([data])
+    console.log(data)
+    if (data) {
         emit('checkFunc', data)
         return false
     }
@@ -135,12 +134,16 @@ const handleCheck = (data, checked) => {
 }
 </script>
 <style lang="scss">
-    .main-box {
-        height: 100%;
-        // overflow: auto;
-        .el-tree-box {
-            // width: max-content;
-            // min-width: 100%;
-        }
+.main-box {
+    height: 100%;
+    // overflow: auto;
+    .el-tree-box {
+        // width: max-content;
+        // min-width: 100%;
     }
+}
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+    background-color: #409eff;
+    color: white;
+}
 </style>

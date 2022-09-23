@@ -181,17 +181,17 @@ function handleLogin() {
                 }
                 if (data.auth_type === 'pt') {
                     userStore.utype = 'pt'
-                    sessionStorage.setItem('utype', md5('pt'))
-                    sessionStorage.setItem('isChooseCity', false)
+                    console.log(md5('pt'))
+                    localStorage.setItem('utype', md5('pt'))
                 }
                 if (data.auth_type !== 'pt') {
                     userStore.utype = data.auth_type
-                    sessionStorage.setItem('utype', 'none')
+                    localStorage.setItem('utype', 'none')
                     userStore.isChooseCity = true
-                    sessionStorage.setItem('isChooseCity', true)
+                    console.log('成功')
                     userStore.getPermissions()
-                    console.log(sessionStorage.getItem('groupChinaCode'))
                 }
+                sessionStorage.setItem('isChooseCity', true)
                 // console.log(userGroup.arr)
                 // if (userGroup.arr.length > 0) {
                 //     console.log(userGroup.arr)

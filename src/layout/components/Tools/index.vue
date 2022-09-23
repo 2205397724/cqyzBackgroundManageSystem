@@ -1,4 +1,15 @@
 <template>
+    <div v-if="switch_choose_city" ref="chooseCityBigBox" class="chooseCityBox">
+        <div
+
+            class="chooseCity"
+        >
+            <div class="p-t-10 p-l-20 size-ls ">请选择区域</div>
+            <div class="cityBox">
+                <div v-for="(item,index) in city_list.arr" :key="index" :class="{city: isCity,city_1: cityIndex ==index && isCity_1}" @click="choose_city_end(item)">{{ item.name }}</div>
+            </div>
+        </div>
+    </div>
     <div class="tools">
         <div class="buttons">
             <!-- <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">
@@ -39,14 +50,7 @@
             </template>
         </el-dropdown>
         <!-- <page-main> -->
-        <el-dialog
-            v-model="switch_choose_city" title="请选择地区"
-            width="40%" :close-on-click-modal="false" :show-close="false"
-        >
-            <div class="cityBox">
-                <div v-for="item in city_list.arr" :key="item.ip" class="city" @click="choose_city_end(item)">{{ item.name }}</div>
-            </div>
-        </el-dialog>
+
         <!-- </page-main> -->
     </div>
 </template>
@@ -87,8 +91,11 @@ function userCommand(command) {
 function pro() {
     window.open('https://app.cqyezhuapp.com/edatachart/', 'top')
 }
+const abc = ref(window.screen.height + 'px')
 const switch_choose_city = ref(false)
+const chooseCityBigBox = ref(null)
 const switchCity = () => {
+    console.log(localStorage.getItem('china_code'))
     getCityList()
     switch_choose_city.value = true
 }
@@ -101,6 +108,9 @@ const city_list = reactive({
 })
 const page = ref(1)
 const per_page = ref(15)
+const isCity = ref(true)
+const isCity_1 = ref(false)
+const cityIndex = ref(null)
 // 获取城市配置
 const getCityList = () => {
     let params = {
@@ -108,6 +118,12 @@ const getCityList = () => {
         per_page: per_page.value
     }
     APIgetCityNotPm(params).then(res => {
+        res.data.forEach((item, index) => {
+            if (item.china_code == localStorage.getItem('china_code')) {
+                cityIndex.value = index
+                isCity_1.value = true
+            }
+        })
         city_list.arr = res.data
         console.log(res)
     })
@@ -187,6 +203,65 @@ const choose_city_end = val => {
             vertical-align: middle;
             margin-top: -2px;
             margin-right: 4px;
+        }
+    }
+}
+.chooseCityBox {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: v-bind(abc);
+    background-color: rgb(0 0 0 / 50%);
+    overflow: auto;
+    z-index: 2022;
+    .chooseCity {
+        border: 1px solid #ccc;
+        background-color: #fff;
+        width: 30%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        margin-top: 230px;
+        border-radius: 4px;
+        transform: translate(-50%, -50%);
+    }
+    .cityBox {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 30px 0 20px 15px;
+        .city {
+            text-align: center;
+            margin-right: 20px;
+            height: 50px;
+            padding: 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        .city_1 {
+            text-align: center;
+            margin-right: 20px;
+            height: 50px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
+        .city:hover {
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
+        .city:visited {
+            border: none;
+            color: #67c23a;
+            background-color: #f0f9eb;
         }
     }
 }

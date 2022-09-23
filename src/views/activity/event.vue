@@ -73,12 +73,12 @@
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.region_type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="time_deal" label="是否显示" width="100">
+                    <el-table-column prop="time_deal" label="是否显示" width="120">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="created_at" label="创建日期" width="180">
+                    <el-table-column prop="created_at" label="创建日期">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.created_at }} </span>
                         </template>
@@ -391,7 +391,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -527,7 +527,17 @@ const checkActivityFunc = val => {
 }
 // 监听分页
 watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
@@ -535,6 +545,11 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APIputActivityEvent(from_examine.item.id, from_examine.item).then(res => {
@@ -558,13 +573,15 @@ const dialogExamineCloseFunc = formEl => {
         }
     })
 }
+
+import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.region_cc = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {

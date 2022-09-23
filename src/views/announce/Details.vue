@@ -233,12 +233,12 @@
                             :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                             class="tab_1"
                         >
-                            <el-table-column label="评论内容" width="250">
+                            <el-table-column label="评论内容">
                                 <template #default="scope">
                                     <span>{{ scope.row.content }} </span>
                                 </template>
                             </el-table-column>
-                            <el-table-column v-if="data_1.list.uname" label="评论人">
+                            <el-table-column v-if="data_1.list.uname">
                                 <template #default="scope">
                                     <span>{{ scope.row.uname|| 'null' }} </span>
                                 </template>
@@ -248,7 +248,7 @@
                                     <span>{{ scope.row.score }} </span>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="状态" align="center" width="120">
+                            <el-table-column label="状态" align="center">
                                 <template #default="scope">
                                     <!-- <span>{{ getOptVal(opts_all.obj.comment_status,scope.row.status ) }} </span> -->
                                     <el-tag v-if="scope.row.status == 10" type="waring" roung>未审核</el-tag>
@@ -256,7 +256,7 @@
                                     <el-tag v-if="scope.row.status == 30" type="danger" round>审核失败</el-tag>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="评论时间" width="200">
+                            <el-table-column label="评论时间">
                                 <template #default="scope">
                                     <span>{{ scope.row.created_at }} </span>
                                 </template>
@@ -491,6 +491,18 @@ const popup1 = reactive({
     using: false,
     scoreper: 0
 })
+const getListArchiveFunc = () => {
+    let params = {
+        page: data_1.page.value,
+        per_page: data_1.per_page.value,
+        tgt_id: route.query.id,
+        tgt_type: 'announce'
+    }
+    APIgetListArchiveAudit(params).then(res => {
+        console.log(res)
+        article_tab.arr = res
+    })
+}
 import {
     APIgetCommentconfig,
     APIpostCommentconfig,
@@ -602,6 +614,11 @@ const popup2 = reactive({
 })
 const popup2FnAdd = () => {
     popup2.error = {}
+    for (let key in popup2.form) {
+        if (popup2.form[key] == '') {
+            delete popup2.form[key]
+        }
+    }
     if (popup2.title == '添加' || popup2.title == '回复') {
         APIpostComment(route.query.id, popup2.form).then(res => {
             ElMessage.success('添加成功')
@@ -660,8 +677,15 @@ const refreshFunc = () => {
     // getFuncCommentList()
     // APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' })
     getComplaintDetailsFunc()
-    data1FnGetList()
-    getRecordListunc()
+    getListArchiveFunc()
+}
+const handleClick = () => {
+    if (activeName.value == '2') {
+        data1FnGetList()
+    }
+    if (activeName.value == '4') {
+        getRecordListunc()
+    }
 }
 refreshFunc()
 // watch(() => {

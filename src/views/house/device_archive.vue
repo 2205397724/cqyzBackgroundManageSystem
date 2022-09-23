@@ -390,6 +390,11 @@ watch(page, () => {
 })
 // 同意拒绝提交
 const formFnUpload = () => {
+    for (let key in from_examine.item) {
+        if (from_examine.item[key] == '') {
+            delete from_examine.item[key]
+        }
+    }
     if (str_title.value == '修改') {
         APIputDeviceArchive(from_examine.item.id, from_examine.item).then(res => {
             refreshFunc()

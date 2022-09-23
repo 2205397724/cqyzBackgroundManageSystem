@@ -1067,10 +1067,16 @@ const type_change = val => {
         }
     }
 }
+
+import md5 from 'md5'
 // 添加弹出框选择小区
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
@@ -1340,6 +1346,11 @@ const dialogExamineCloseFunc = () => {
     from_error.msg = {}
     if (from_examine.item.type != 7) {
         delete from_examine.item.ref
+    }
+    for (let key in from_examine.item) {
+        if (from_examine.item[key] == '') {
+            delete from_examine.item[key]
+        }
     }
     if (str_title.value == '修改用户组') {
 

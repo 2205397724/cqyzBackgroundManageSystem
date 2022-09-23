@@ -2,9 +2,7 @@
     <div class="vote">
         <page-main>
             <div class="size-lx ">{{ dataForm.item.name }}</div>
-            <p v-if="dataForm.item.desc">
-                {{ dataForm.item.desc }}
-            </p>
+            <p v-if="dataForm.item.desc" v-html="dataForm.item.desc " />
             <div class="m-t-20 m-b-30">
                 <!-- <el-button-group> -->
                 <el-button type="primary" :icon="Plus" size="large" style="width: 150px;" @click="addActiviesFunc">

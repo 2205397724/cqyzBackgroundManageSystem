@@ -102,7 +102,7 @@
                                     <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
                                     <el-button :disabled="choseIDs.arr.length<=0" type="warning" class="head-btn" @click="modifyAllFunc">批量修改</el-button>
                                     <el-button class="head-btn" type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
-                                    <el-button class="head-btn" type="primary" @click="houseBindFunc">房屋绑定申请</el-button>
+                                    <!-- <el-button class="head-btn" type="primary" @click="houseBindFunc">房屋绑定申请</el-button> -->
                                 </el-col>
                             </el-row>
                         </div>
@@ -593,7 +593,7 @@
                         <el-link
                             class="head-btn"
                             :underline="false"
-                            :href="VITE_APP_UPLOAD"
+                            :href="VITE_APP_FOLDER_SRC"
                             target="_blank"
                         >
                             <el-button>
@@ -624,8 +624,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="created_at" label="导入时间" width="170" />
-                <el-table-column prop="updated_at" label="修改时间" width="170" />
-                <el-table-column />
+                <el-table-column prop="updated_at" label="更新时间" width="170" />
             </el-table>
         </el-dialog>
         <!-- 上传表单 -->
@@ -641,7 +640,7 @@
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="任务名称" prop="name"
+                                label="任务名称" prop="name" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.name?err_files.obj.name[0]:''"
                             >
                                 <el-input
@@ -650,31 +649,37 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="14">
                             <el-form-item
-                                label="直属上级类型" prop="loc"
+                                label="直属上级类型" prop="loc" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.loc?err_files.obj.loc[0]:''"
                             >
-                                <el-select v-model="files_obj.obj.loc" style="width: 100%;" placeholder="直属上级类型" clearable>
+                                <el-select v-model="files_obj.obj.loc" style="width: 100%;" placeholder="直属上级类型" clearable @change="from_examine.item.houseable_id = ''">
                                     <el-option label="楼栋" value="buildings" />
                                     <el-option label="单元" value="units" />
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="12">
+                        <el-col v-if="files_obj.obj.loc" :md="24" :lg="14">
                             <el-form-item
-                                label="直属类型ID" prop="loc_id"
+                                label="直属楼栋/单元ID" prop="loc_id" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.loc_id?err_files.obj.loc_id[0]:''"
                             >
-                                <el-input
+                                <!-- <el-input
                                     v-model="files_obj.obj.loc_id"
                                     placeholder=""
-                                />
+                                /> -->
+                                <div v-if="files_obj.obj.loc=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchBuilding v-model:str="files_obj.obj.loc_id" />
+                                </div>
+                                <div v-else-if="files_obj.obj.loc=='units'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchUnit v-model:str="files_obj.obj.loc_id" />
+                                </div>
                             </el-form-item>
-                        </el-col> -->
+                        </el-col>
                         <el-col :md="24">
                             <el-form-item
-                                label="选择文件" prop="file_src"
+                                label="附件" prop="file_src" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.file_src?err_files.obj.file_src[0]:''"
                             >
                                 <el-upload
@@ -1264,8 +1269,8 @@ const files_obj = reactive({
 const err_files = reactive({
     obj: {}
 })
-import { APIpostFiles, APIpostFilesList } from '@/api/custom/custom.js'
-import axios from 'axios'
+import { APIpostFilesList } from '@/api/custom/custom.js'
+import { getFilesKeys } from '@/util/files.js'
 const filesUpFunc = () => {
     err_files.obj = {}
     let error = false
@@ -1289,38 +1294,27 @@ const filesUpFunc = () => {
     if (error) {
         return false
     }
-    APIpostFiles({ 'folder': import.meta.env.VITE_APP_FOLDER_ADDHOUSE, 'number': 1 }).then(res => {
-        // 发送 POST 请求
-        console.log(files_obj.obj.file_src)
-        console.log(typeof files_obj.obj.file_src)
-        const formData = new FormData()
-        const files_keys = `${import.meta.env.VITE_APP_FOLDER_ADDHOUSE}/${res.data.keys[0]}`
-        formData.append('Policy', res.data.inputs.Policy)
-        formData.append('X-Amz-Algorithm', res.data.inputs['X-Amz-Algorithm'])
-        formData.append('X-Amz-Credential', res.data.inputs['X-Amz-Credential'])
-        formData.append('X-Amz-Date', res.data.inputs['X-Amz-Date'])
-        formData.append('X-Amz-Signature', res.data.inputs['X-Amz-Signature'])
-        formData.append('acl', res.data.inputs.acl)
-        formData.append('key', `${import.meta.env.VITE_APP_FOLDER_ADDHOUSE}/${res.data.keys[0]}`)
-        formData.append('Content-Type', files_obj.obj.file_src.type)
-        formData.append('file', files_obj.obj.file_src)
-        const api = axios.create({
-            baseURL: res.data.attrs.action,
-            timeout: 1000,
-            headers: { 'Content-Type': res.data.attrs.enctype }
-        })
-        api[res.data.attrs.method.toLowerCase()]('', formData)
-            .then(res => {
-                files_obj.obj.file_src = files_keys
-                APIpostFilesList(files_obj.obj).then(res => {
-                    console.log(res)
-                    switch_files.value = false
-                    refreshFilesListFunc()
-                })
-            }).catch(err => {
-                ElMessage.error(res.statusText)
+    let arr = []
+    arr.push(files_obj.obj.file_src)
+    if (files_obj.obj.file_src) {
+        getFilesKeys(arr, 'addHouse').then(arr => {
+            files_obj.obj.file_src = arr[0]
+            for (let key in files_obj.obj) {
+                if (files_obj.obj[key] == '') {
+                    delete files_obj.obj[key]
+                }
+            }
+            APIpostFilesList(files_obj.obj).then(res => {
+                ElMessage.success('导入成功')
+                refreshFilesListFunc()
+                switch_files.value = false
+                arr = []
+            }).catch(() => {
+                ElMessage.error('上传失败')
             })
-    })
+
+        })
+    }
 
 }
 const switch_files_list = ref(false)
@@ -1382,6 +1376,11 @@ const dialogExamineCloseFunc = () => {
     for (let i in from_examine.item) {
         if (from_examine.item[i] || from_examine.item[i] === 0) {
             data[i] = from_examine.item[i]
+        }
+    }
+    for (let key in from_examine.item) {
+        if (from_examine.item[key] == '') {
+            delete from_examine.item[key]
         }
     }
     if (str_title.value == '修改') {
@@ -1600,8 +1599,8 @@ const openFileFunc = () => {
     upload_str.value = '请点击此处或拖拽需要上传的文件'
     switch_files.value = true
     files_obj.obj = {
-        loc: active_obj.obj.type,
-        loc_id: active_obj.obj.id
+        // loc: active_obj.obj.type,
+        // loc_id: active_obj.obj.id
     }
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -1656,136 +1655,138 @@ getOpts(['status_all', 'type_id_card', 'houseable_type', 'house_has_house', 'hou
     }
 </style>
 <style lang="scss" scoped>
-    .components-house {
-        background-color: #fff;
-        .tree-box {
-            border-top: 1px solid #efefef;
-            display: flex;
-        }
-        .tree-item {
-            min-width: 300px;
-            width: 300px;
-            border-right: 1px solid #e9e9e9;
-            .tree-title {
-                height: 60px;
-                line-height: 60px;
-                padding-left: 20px;
-                color: #aaa;
-                font-size: 14px;
-                border-bottom: 1px solid #e9e9e9;
-            }
-        }
-        .tree-details {
-            flex-grow: 1;
-            max-width: calc(100% - 300px);
-            .bottom-btn-box-2 {
-                margin-bottom: 10px;
-            }
+.components-house {
+    background-color: #fff;
+    .tree-box {
+        border-top: 1px solid #efefef;
+        display: flex;
+    }
+    .tree-item {
+        min-width: 300px;
+        width: 300px;
+        border-right: 1px solid #e9e9e9;
+        .tree-title {
+            height: 60px;
+            line-height: 60px;
+            padding-left: 20px;
+            color: #aaa;
+            font-size: 14px;
+            border-bottom: 1px solid #e9e9e9;
         }
     }
-    .row-box {
-        border-bottom: 1px solid #f2f2f2;
-        background-color: #fff;
-        display: flex;
-        .row-item-box {
-            display: inline-block;
+    .tree-details {
+        flex-grow: 1;
+        max-width: calc(100% - 300px);
+        .bottom-btn-box-2 {
+            margin-bottom: 10px;
+        }
+    }
+}
+.row-box {
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fff;
+    display: flex;
+    .row-item-box {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 6px;
+        min-width: 84px;
+        height: 44px;
+        .row-item {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #e9e9e9;
+            font-size: 14px;
+            vertical-align: top;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
             box-sizing: border-box;
             padding: 6px;
-            min-width: 84px;
-            height: 44px;
-            .row-item {
-                width: 100%;
-                height: 100%;
-                border: 1px solid #e9e9e9;
-                font-size: 14px;
-                vertical-align: top;
-                display: inline-flex;
-                justify-content: center;
-                align-items: center;
-                box-sizing: border-box;
-                padding: 6px;
-                cursor: pointer;
-                // justify-content: space-between;
-            }
-            .row-item-tit-ceng {
-                border: 0 solid #e9e9e9;
-            }
+            cursor: pointer;
+            // justify-content: space-between;
         }
-        .row-item-tit-box {
-            border-right: 1px solid #e9e9e9;
-            width: 84px;
-            .row-item-tit {
-                border: 0 solid #e9e9e9 !important;
-                font-size: 12px;
-                .tit-fh {
-                    margin-bottom: -18px;
-                }
-                .tit-lc {
-                    margin-top: -18px;
-                }
-            }
-            .row-item-tit-bgline {
-                background-image: linear-gradient(to top right, #fff 49%, #e9e9e9, #fff 51%);
-                justify-content: space-between;
-                cursor: initial;
-            }
+        .row-item-tit-ceng {
+            border: 0 solid #e9e9e9;
         }
     }
-    .row-box-title {
-        .row-item-box {
-            .row-item {
-                border: 1px solid #fff;
+    .row-item-tit-box {
+        border-right: 1px solid #e9e9e9;
+        width: 84px;
+        .row-item-tit {
+            border: 0 solid #e9e9e9 !important;
+            font-size: 12px;
+            .tit-fh {
+                margin-bottom: -18px;
+            }
+            .tit-lc {
+                margin-top: -18px;
             }
         }
-    }
-    .count {
-        display: flex;
-        width: 100%;
-        flex-wrap: wrap;
-        font-size: 14px;
-        color: #666;
-    }
-    .count-item {
-        padding: 0 20px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        font-size: 12px;
-    }
-    .count_item_i1 {
-        background: #900;
-        color: #fff;
-        border: 1px solid #900;
-    }
-    .count_item_i2 {
-        background: #2dc26b;
-        color: #fff;
-        border: 1px solid #2dc26b;
-    }
-    .count_item_i3 {
-        background: #f90;
-        color: #fff;
-        border: 1px solid #f90;
-    }
-    .count_item_i4 {
-        background: #ccc;
-        color: #fff;
-        border: 1px solid #ccc;
-    }
-    .tip-title {
-        font-size: 14px;
-        margin-bottom: 4px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .components-house-units {
-        .tree-item {
-            display: none;
-        }
-        .tree-details {
-            max-width: 100%;
+        .row-item-tit-bgline {
+            background-image: linear-gradient(to top right, #fff 49%, #e9e9e9, #fff 51%);
+            justify-content: space-between;
+            cursor: initial;
         }
     }
-
+}
+.row-box-title {
+    .row-item-box {
+        .row-item {
+            border: 1px solid #fff;
+        }
+    }
+}
+.count {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: #666;
+}
+.count-item {
+    padding: 0 20px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 12px;
+}
+.count_item_i1 {
+    background: #900;
+    color: #fff;
+    border: 1px solid #900;
+}
+.count_item_i2 {
+    background: #2dc26b;
+    color: #fff;
+    border: 1px solid #2dc26b;
+}
+.count_item_i3 {
+    background: #f90;
+    color: #fff;
+    border: 1px solid #f90;
+}
+.count_item_i4 {
+    background: #ccc;
+    color: #fff;
+    border: 1px solid #ccc;
+}
+.tip-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.components-house-units {
+    .tree-item {
+        display: none;
+    }
+    .tree-details {
+        max-width: 100%;
+    }
+}
+:deep .el-tree {
+    --el-tree-node-hover-bg-color: #e9f4ff;
+}
 </style>

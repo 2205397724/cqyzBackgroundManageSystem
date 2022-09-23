@@ -10,8 +10,6 @@
                 lazy
                 show-checkbox
                 :check-strictly="true"
-                accordion
-
                 :filter-node-method="filterNode"
                 @check="handleCheck"
                 @check-change="handleCheckChange"

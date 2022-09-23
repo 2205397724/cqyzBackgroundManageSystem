@@ -632,10 +632,16 @@ const data_1 = reactive({
 const tree_item = reactive({
     arr: []
 })
+
+import md5 from 'md5'
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
@@ -791,6 +797,11 @@ const dialogExamineCloseFunc = () => {
     // submit_post_put()
 }
 const submit_post_put = () => {
+    for (let key in from_record.item) {
+        if (from_record.item[key] == '') {
+            delete from_record.item[key]
+        }
+    }
     if (add_put_title.value == '修改备案') {
         APIputRecord(current_record.item.id, from_record.item).then(res => {
             ElMessage.success('修改成功')

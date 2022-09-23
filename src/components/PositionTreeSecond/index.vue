@@ -1,7 +1,7 @@
 <template>
     <div class="main-box">
         <el-scrollbar max-height="100%">
-            <el-tree
+            <!-- <el-tree
                 ref="treeRef"
                 class="el-tree-box"
                 node-key="id"
@@ -14,6 +14,19 @@
                 :default-checked-keys="tree_item.id"
                 :filter-node-method="filterNode"
                 @check="handleCheck"
+            /> -->
+            <el-tree
+                ref="treeRef"
+                class="el-tree-box"
+                node-key="id"
+                :props="tree_props"
+                :load="loadNode"
+                lazy
+                :check-strictly="true"
+                :default-checked-keys="tree_item.id"
+                :filter-node-method="filterNode"
+                :highlight-current="true"
+                @node-click="handleCheck"
             />
         </el-scrollbar>
     </div>
@@ -63,7 +76,7 @@ const loadNode = (node, resolve) => {
         console.log(node.data)
         console.log(tree_item.value.data)
         console.log(tree_item)
-        emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+        // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
         return resolve(tree_item.value)
     }
 
@@ -99,7 +112,7 @@ const loadNode = (node, resolve) => {
                     }
                 }
                 resolve(tree_arr)
-                emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
+                // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
                 tree_arr = []
             })
             break
@@ -144,8 +157,10 @@ watch(tree_item, new_val => {
     }
 }, { immediate: true, deep: true })
 const handleCheck = (data, checked) => {
-    if (checked.checkedKeys.length > 0) {
-        treeRef.value.setCheckedNodes([data])
+    console.log(data)
+    // if (checked.checkedKeys.length > 0) {
+    if (data) {
+        // treeRef.value.setCheckedNodes([data])
         emit('checkFunc', data)
         return false
     }
@@ -160,5 +175,9 @@ const handleCheck = (data, checked) => {
             // width: max-content;
             // min-width: 100%;
         }
+    }
+    .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+        background-color: #409eff;
+        color: white;
     }
 </style>

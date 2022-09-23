@@ -212,7 +212,7 @@
                                 <BerZone
                                     v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building"
                                     v-model:uid="from_examine.item.unit" v-model:name="chinaName"
-                                    :disabled="[0, 1, 2, 3, 4, 5]" :code="''"
+                                    :disabled="[0, 1, 2, 3, 4]" :code="''"
                                 />
                             </el-form-item>
                         </el-col>
@@ -255,7 +255,7 @@
                             >
                                 <el-select v-model="from_examine.item.type" class="head-btn" placeholder="" clearable>
                                     <el-option
-                                        v-for="(item, i) in opts_all.obj.device_type" :key="i" :label="i"
+                                        v-for="item in opts_all.obj.device_type" :key="item.key" :label="item.val"
                                         :value="item.key"
                                     />
                                 </el-select>
@@ -326,7 +326,7 @@
             </template>
         </el-dialog>
         <!-- 详情 -->
-        <el-dialog v-model="switch_details" title="详情" width="60%" @closed="closeDialog">
+        <el-dialog v-model="switch_details" title="详情" width="60%">
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="设备信息" name="1">
                     <el-scrollbar height="452px">
@@ -339,7 +339,7 @@
                             <div class="item">
                                 <div class="left">所属位置</div>
                                 <div class="right">
-                                    <span>{{ zoneName.name }}</span>
+                                    <span v-if="data_details.item.zone !== '' && data_details.item.zoneinfo !== null">{{ zoneName.name }}</span>
                                     <span
                                         v-if="data_details.item.building !== '' && data_details.item.buildinginfo !== null"
                                         style="margin-right: 15px; margin-left: 15px;"
@@ -429,7 +429,7 @@
                         <div>
                             <el-timeline style="padding: 1px;">
                                 <el-timeline-item
-                                    v-for="(item, index) in data_archive.arr" :key="index"
+                                    v-for="item in data_archive.arr" :key="item.key"
                                     :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''"
                                 >
                                     <div class="put_del">
@@ -473,7 +473,7 @@
                                                 <div class="left">附件</div>
                                                 <div class="right flx">
                                                     <div v-for="(val, i) in item.content" :key="i" class="inline-block">
-                                                        <div v-for="(row, j) in val.key" v-if="val.type == 'file'" class="inline-block image m-r-10" style="text-align: center; background-color: #f0f9eb; vertical-align: center;">
+                                                        <div v-for="(row, j) in val.key" v-if="val.type == 'file'" :key="j" class="inline-block image m-r-10" style="text-align: center; background-color: #f0f9eb; vertical-align: center;">
                                                             <el-link type="success" class="link" :href="VITE_APP_FOLDER_SRC+row" target="_blank">{{ val.name }}</el-link>
                                                         </div>
                                                         <!-- <el-tag
@@ -483,14 +483,14 @@
                                                             {{ val.name }}
                                                         </el-tag> -->
                                                         <el-image
-                                                            v-for="(row, j) in val.key" v-if="val.type == 'image'"
+                                                            v-for="(row, j) in val.key" v-if="val.type == 'image'" :key="j"
                                                             :preview-src-list="val.keys"
                                                             class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + row"
                                                             fit="cover"
                                                         />
                                                         <vue3VideoPlay
-                                                            v-for="(row, j) in val.key"
-                                                            v-if="val.type == 'audio'" v-bind="optionsAll"
+                                                            v-for="(row, j) in val.key" v-if="val.type == 'audio'"
+                                                            :key="j" v-bind="optionsAll"
                                                             :src="VITE_APP_FOLDER_SRC + row" class="image m-r-10"
                                                         />
                                                     </div>
@@ -878,6 +878,8 @@ const btnClickFunc = () => {
     // isSearch3.value = !isSearch3.value
     // isSearch2.value = !isSearch2.value
 }
+
+import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -885,7 +887,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     console.log(sessionStorage.getItem('groupChinaCode'))
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.cc = sessionStorage.getItem('groupChinaCode')
     }
     console.log(params)
@@ -1005,8 +1007,31 @@ const getDetailsFunc = val => {
 
 }
 const detailsFunc = val => {
+    activeName.value = '1'
     getDetailsFunc(val)
 }
+// const handleClick = () => {
+//     console.log('成功')
+//     let params = {
+//         page: page.value,
+//         per_page: per_page.value,
+//         did: data_details.item.id
+
+//     }
+//     APIgetDeviceArchiveList(params).then(res => {
+//         console.log(res)
+//         for (let x in res) {
+//             for (let y in res[x].content) {
+//                 res[x].content[y].keys = []
+//                 for (let z in res[x].content[y].key) {
+//                     res[x].content[y].keys.push(VITE_APP_FOLDER_SRC.value + res[x].content[y].key[z])
+//                 }
+//             }
+//             data_archive.arr = res
+//             switch_details.value = true
+//         }
+//     })
+// }
 // 关闭详情对话框
 const closeDialog = () => {
     activeName.value = '1'
@@ -1039,6 +1064,11 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] == '') {
+                    delete from_examine.item[key]
+                }
+            }
             if (str_title.value == '修改') {
                 APIputDevice(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
@@ -1156,6 +1186,11 @@ const modifyRepairFunc = val => {
 import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const fromFnUpload = () => {
+    for (let key in addRepair.item) {
+        if (addRepair.item[key] == '') {
+            delete addRepair.item[key]
+        }
+    }
     addRepair.item.money = parseInt(addRepair.item.money) * 100
     if (str_title_1.value == '修改') {
         APIputDeviceRepair(addRepair.item.id, addRepair.item).then(res => {
@@ -1273,6 +1308,11 @@ const addServiceFunc_1 = () => {
 const formFnUpload_1 = () => {
     console.log(addArchive.item)
     if (str_title_2.value == '修改') {
+        for (let key in addRepair.item) {
+            if (addRepair.item[key] == '') {
+                delete addRepair.item[key]
+            }
+        }
         APIputDeviceArchive(addArchive.item.id, addArchive.item).then(res => {
             getDetailsFunc(data_details.item)
             ElMessage.success('修改成功')

@@ -14,10 +14,10 @@
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                关键字：
+                                企业名称：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="search_str.obj.keyword" class="search_tb" placeholder="" clearable />
+                                <el-input v-model="search_str.obj.name" class="search_tb" placeholder="" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -349,7 +349,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="企业成员" name="2">
+                <el-tab-pane label="项目部" name="2">
                     <el-scrollbar height="400px">
                         <div>
                             <el-button
@@ -415,7 +415,7 @@
                                 :tree-props="{ children: 'children' }"
                                 style="width: 100%; min-height: 300px;"
                             >
-                                <el-table-column prop="name" label="项目部名称" width="180">
+                                <el-table-column prop="name" label="项目部名称">
                                     <template #default="scope">
                                         <span style="margin-left: 10px;">{{ scope.row.name }} </span>
                                     </template>
@@ -425,7 +425,7 @@
               <span style="margin-left: 10px">{{ scope.row.id }} </span>
             </template>
           </el-table-column> -->
-                                <el-table-column prop="type" label="类型" width="180">
+                                <el-table-column prop="type" label="类型">
                                     <template #default="scope">
                                         <span style="margin-left: 10px;">{{
                                             getOptVal(opts_all.obj.toushu_return_type, scope.row.type)
@@ -433,12 +433,12 @@
                                         </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="type" label="所在区域" width="180">
+                                <el-table-column prop="type" label="所在区域">
                                     <template #default="scope">
                                         <span style="margin-left: 10px;">{{ scope.row.region_cc }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="成员" width="180">
+                                <el-table-column label="成员">
                                     <template #default="scope">
                                         <el-button
                                             type="primary"
@@ -450,7 +450,6 @@
                                         </el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column />
                                 <el-table-column fixed="right" label="操作" width="200" style="z-index: 1;">
                                     <template #default="scope">
                                         <el-button
@@ -1310,6 +1309,7 @@ const click_add_group_zone_id = () => {
 }
 const checkFunc = val => {
     selectedZone_id.value = val.name
+    console.log(selectedZone_id.value)
     if (val.type == 'region') {
         from_examine.item.region_type = 1
         from_examine.item.region_val = val.china_code || val.id
@@ -1330,10 +1330,15 @@ const selectedZone_id = ref('')
 const tree_item = reactive({
     arr: []
 })
+import md5 from 'md5'
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (sessionStorage.getItem('groupChinaCode') && sessionStorage.getItem('utype') != 'pt') {
+    if (localStorage.getItem('utype') == md5('pt')) {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (sessionStorage.getItem('groupChinaCode')) {
         params = {
             p_code: sessionStorage.getItem('groupChinaCode')
         }
@@ -1492,12 +1497,11 @@ const optValDeleteFunc = val => {
 }
 const postFunc_1 = () => {
     err_add.obj = {}
-    // console.log('失败')
-    // console.log(formEl)
-    // if (!formEl) return
-    // console.log('失败')
-    // formEl.validate(valid => {
-    //     if (valid) {
+    for (let key in from_add.obj) {
+        if (from_add.obj[key] == '') {
+            delete from_add.obj[key]
+        }
+    }
     if (str_title.value == '修改') {
         APIputEnterprise(from_add.obj.id, from_add.obj).then(() => {
             refreshFunc()
