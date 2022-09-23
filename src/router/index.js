@@ -85,7 +85,8 @@ import announceTask from './modules/announce/task.js'
 import announcelTasksd from './modules/announce/tasksd.js'
 // 管理
 import superviseHome from './modules/supervise/home.js'
-import superviseWorkbench from './modules/supervise/workbench.js'
+import activityReview from './modules/supervise/review.js'
+import personnelManagement from './modules/supervise/personnels.js'
 // // 统计
 // import statisticsComplaint from './modules/statistics/complaint.js'
 // import statisticsEnterprise from './modules/statistics/enterprise.js'
@@ -133,7 +134,8 @@ const asyncRoutes = [{
     },
     children: [
         superviseHome,
-        superviseWorkbench
+        activityReview,
+        personnelManagement
     ]
 },
 // {

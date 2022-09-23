@@ -1550,3 +1550,23 @@ export function APIpostActivitiesEvent(vein, data) {
 export function APIRecordList(params) {
     return api2.get('/visitlog', { params: params })
 }
+// 人员管理
+export function APIgetPersonnelManageList(params) {
+    return api2.get('/people', { params: params })
+}
+// 详情
+export function APIgetPersonnelManageDetails(id) {
+    return api2.get(`/people/${id}`)
+}
+// 删除
+export function APIdeletePersonnelManage(id) {
+    return api2.delete(`/people/${id}`)
+}
+// 修改
+export function APIputPersonnelManage(id, data) {
+    return api2.put(`/people/${id}`, data)
+}
+// 添加
+export function APIpostPersonnelManage(data) {
+    return api2.post('/people', data)
+}

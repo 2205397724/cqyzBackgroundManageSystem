@@ -1010,32 +1010,6 @@ getOpts(['article_lv', 'article_type', 'terminal', 'article_lv', 'status_all', '
 }
 </style>
 <style lang="scss" scoped>
-.search-tips {
-    color: #aaa;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-.switchStyle ::v-deep .el-switch__label {
-    position: absolute !important;
-    display: none !important;
-    color: #fff !important;
-    width: 80px;
-}
-.switchStyle ::v-deep .el-switch__label--left {
-    z-index: 9 !important;
-    left: 17px !important;
-}
-.switchStyle ::v-deep .el-switch__label--right {
-    z-index: 9 !important;
-    left: -5px !important;
-}
-.switchStyle ::v-deep .el-switch__label.is-active {
-    display: block !important;
-}
-.switchStyle.el-switch ::v-deep .el-switch__core,
-.switchStyle ::v-deep .el-switch__label {
-    width: 60px !important;
-}
 .noDeal {
     margin-left: 6px;
 }

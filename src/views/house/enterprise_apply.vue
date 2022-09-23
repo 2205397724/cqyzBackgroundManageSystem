@@ -289,7 +289,7 @@ const getEnterpriseApplyList = val => {
         data_applyList.arr = res.data
         switch_replay.value = true
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length <= per_page.value) {
+        if (res.data.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)

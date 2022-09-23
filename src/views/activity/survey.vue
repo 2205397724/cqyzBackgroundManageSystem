@@ -468,6 +468,7 @@ watch(page, () => {
 const surveyId = ref('')
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
+    console.log(from_examine.item)
     from_error.msg = {}
     // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
     from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
@@ -477,10 +478,12 @@ const dialogExamineCloseFunc = () => {
     // formEl.validate(valid => {
     //     if (valid) {
     from_examine.item.type = 1
-    console.log(from_examine.item)
+
     for (let key in from_examine.item) {
-        if (from_examine.item[key] == '') {
-            delete from_examine.item[key]
+        if (from_examine.item.obj[key] !== null) {
+            if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                delete from_examine.item[key]
+            }
         }
     }
     console.log(from_examine.item)
@@ -497,8 +500,6 @@ const dialogExamineCloseFunc = () => {
             APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
                 refreshFunc()
             })
-        }).catch(err => {
-            ElMessage.error('修改失败')
         })
     } else {
         APIaddSurvey(from_examine.item).then(res => {
@@ -506,7 +507,7 @@ const dialogExamineCloseFunc = () => {
             surveyId.value = res.data.id
             refreshFunc()
             // ElMessage.success(res.msg)
-            // ElMessage.success('添加成功')
+            //
         }).catch(err => {
             ElMessage.error('添加失败')
         })
@@ -531,7 +532,7 @@ const next = () => {
         }
         active.value = 2
     } else {
-        // ElMessage.success('修改成功')
+        ElMessage.success('添加成功')
         switch_examine.value = false
     }
 }

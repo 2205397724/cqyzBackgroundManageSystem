@@ -636,7 +636,11 @@
                 </div>
                 <div class="item">
                     <div class="left">评论状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.comment_status,popup3.details.status) }}</div>
+                    <div class="right">
+                        <el-tag v-if="popup3.details.status == 10" type="waring" roung>未审核</el-tag>
+                        <el-tag v-if="popup3.details.status == 20" type="success" round>已审核</el-tag>
+                        <el-tag v-if="popup3.details.status == 30" type="danger" round>审核失败</el-tag>
+                    </div>
                 </div>
                 <div class="item">
                     <div class="left">所在地址</div>
@@ -815,7 +819,7 @@ const changePane = (tab, event) => {
     } else {
         // 业主评论
         getListArchiveFunc()
-        ownerComment()
+        data1FnGetList()
     }
 }
 const activeName_1 = ref('')
@@ -1337,6 +1341,7 @@ const popup1 = reactive({
     scoreper: 0
 })
 import {
+    APIpostComment,
     APIpostCommentconfig,
     APIdeleteCommentconfig
 } from '@/api/custom/custom.js'
@@ -1376,7 +1381,7 @@ const popup2FnAdd = () => {
         }
     }
     if (popup2.title == '添加' || popup2.title == '回复') {
-        APIpostComment(route.query.id, popup2.form).then(res => {
+        APIpostComment(props.id, popup2.form).then(res => {
             ElMessage.success('添加成功')
             popup2.switch = false
             data1FnGetList()
@@ -1462,7 +1467,7 @@ const opts_all = reactive({
         status_all: []
     }
 })
-getOpts(['announce_status', 'toushu_pub']).then(res => {
+getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status']).then(res => {
     opts_all.obj = res
 })
 </script>

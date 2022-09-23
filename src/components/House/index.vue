@@ -854,7 +854,7 @@
         >
             <div>
                 <el-button
-                    class="head-btn" type="primary" :icon="Plus"
+                    class="m-b-20 " type="primary" :icon="Plus"
                     @click="addHouseNumberFunc"
                 >
                     添加成员
@@ -880,33 +880,25 @@
                         />
                         <el-table-column prop="name" label="成员姓名">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.user.name }} </span>
+                                <span style="margin-left: 10px;">{{ scope.row.user?.name }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="成员id" width="250">
+                        <el-table-column prop="name" label="身份证号码" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.user.id }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="type" label="性别">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(
-                                    [
-                                        { val: "男", key: "F" },
-                                        { val: "女", key: "M" },
-                                        { val: "未设置", key: "U" },
-                                    ],
-                                    scope.row.user.gender
-                                ) }}
-                                </span>
+                                <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type" label="手机号" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.user.mobile }}</span>
+                                <span style="margin-left: 10px;">{{ scope.row.user?.mobile }}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column />
+                        <el-table-column prop="type" label="性别">
+                            <template #default="scope">
+                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.gender,scope.row.user?.gender) }}
+                                </span>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </el-scollbar>
             </div>
@@ -934,7 +926,20 @@
                     :model="number.item"
                 >
                     <el-row :gutter="10">
-                        <!-- <el-col :md="24" :lg="12">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="身份证号" prop="name"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                                label-width="80px"
+                            >
+                                <el-input
+                                    v-model="number.item.id_card"
+                                    placeholder=""
+                                    @blur="blurIbCard"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="姓名" prop="name"
                                 :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
@@ -949,15 +954,13 @@
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="姓别" prop="gender"
-                                :error="from_error.msg&&from_error.msg.gender?from_error.msg.gender[0]:''"
                                 label-width="80px"
                             >
-                                <el-input
-                                    v-model="number.item.gender"
-                                    placeholder=""
-                                />
+                                <el-select v-model="number.item.gender" class="search_tb" placeholder="请选择" clearable>
+                                    <el-option v-for="item in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
-                        </el-col> -->
+                        </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
                                 label="手机号" prop="mobile"
@@ -966,6 +969,18 @@
                             >
                                 <el-input
                                     v-model="number.item.mobile"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label="备注信息"
+                            >
+                                <el-input
+                                    v-model="number.item.desc"
+                                    :autosize="{ minRows: 4, maxRows: 6 }"
+                                    type="textarea"
                                     placeholder=""
                                 />
                             </el-form-item>
@@ -991,6 +1006,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
+import personnels from '@/router/modules/supervise/personnels'
 const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const activeName = ref('first')
@@ -1044,7 +1060,10 @@ const refreshFunc = () => {
 import {
     APIgetHouseListSort,
     APIgetUnitsDetailsHouse,
-    APIgetBuildDetailsHouse
+    APIgetBuildDetailsHouse,
+    APIgetPersonnelManageList,
+    APIpostPersonnelManage,
+    APIputPersonnelManage
 } from '@/api/custom/custom.js'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
 // 获取楼栋单元
@@ -1379,7 +1398,7 @@ const dialogExamineCloseFunc = () => {
         }
     }
     for (let key in from_examine.item) {
-        if (from_examine.item[key] == '') {
+        if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
             delete from_examine.item[key]
         }
     }
@@ -1490,22 +1509,40 @@ const getHouseNumbersFunc = () => {
     })
 
 }
+const personnelsManage = reactive({
+    item: {}
+})
 // 添加成员
 const addHouseNumberFunc = () => {
+
     switch_houseNumber.value = true
     number.item = {}
 }
 const dialogExamineCloseFunc_1 = () => {
+    if (flag.value == true) {
+        APIputPersonnelManage(number.item.id, number.item).then(res => {
+            getHouseNumbersFunc()
+        })
+    } else {
+        APIpostPersonnelManage(number.item).then(res => {
+            getHouseNumbersFunc()
+        })
+    }
     number.item.hid = house_id.value
     APIpostHouseNumbers(number.item).then(res => {
         ElMessage.success('添加成功')
         getHouseNumbersFunc()
-        switch_houseNumber.value = false
+
+    }).catch(err => {
+        ElMessage.error('添加失败')
     })
+
+    switch_houseNumber.value = false
 }
 const number_ids = reactive({
     arr: []
 })
+const flag = ref(false)
 const handleSelectionChange = val => {
     let number_id = []
     console.log(val)
@@ -1517,6 +1554,31 @@ const handleSelectionChange = val => {
     console.log(number_id)
 
     console.log(number_ids.arr)
+}
+const blurIbCard = () => {
+    // console.log(e)
+    console.log(number.item.id_card)
+    if (number.item.id_card) {
+        let params = {
+            page: 1,
+            per_page: 500
+        }
+        if (number.item.id_card) {
+            params.id_card = number.item.id_card
+        } else {
+            params = {}
+        }
+        APIgetPersonnelManageList(params).then(res => {
+            console.log(res)
+            if (res.length > 0) {
+                flag.value = true
+                number.item = res[0]
+            // number.item=
+            } else {
+                flag.value = false
+            }
+        })
+    }
 }
 // 删除成员
 const deleteFunc_2 = () => {
@@ -1581,7 +1643,6 @@ const postPropertyFunc = () => {
             ElMessage.success('修改成功')
             switch_property.value = false
         }, err => {
-
             console.log(err)
         })
     } else {
@@ -1609,7 +1670,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['status_all', 'type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
     opts_all.obj = res
 })
 
