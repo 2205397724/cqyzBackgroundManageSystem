@@ -112,6 +112,7 @@ const loadNode = (node, resolve) => {
                     tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })
                 }
                 resolve(tree_arr)
+                tree_arr = []
                 // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
             break

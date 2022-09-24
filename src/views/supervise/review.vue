@@ -1,6 +1,20 @@
 <template>
     <div>
         <page-main class="hidden">
+            <el-button-group class="btn m-b-20">
+                <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
+                <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 10 ? total : ''" class="item" :hidden="flag1"> -->
+                <el-button :type="index == 10 ? 'primary' : ''" @click="StatusFunk(10)">未处理</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 20 ? total : ''" class="item" :hidden="flag2"> -->
+                <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">审核成功</el-button>
+                <!-- </el-badge> -->
+                <!-- <el-badge :value="index == 30 ? total : ''" class="item" :hidden="flag3"> -->
+                <el-button :type="index == 30 ? 'primary' : ''" @click="StatusFunk(30)">审核失败</el-button>
+                <!-- </el-badge> -->
+            </el-button-group>
             <el-table
                 v-loading="loading_tab"
                 :data="data.list"
@@ -136,7 +150,7 @@
             <div class="Box">
                 <div class="detailBigBox"> -->
             <div class="details-box">
-                <!-- <div class="item-hd">企业相关信息：</div> -->
+                <div class="item-hd">审核信息</div>
                 <div style="background-color: #fafafa;">
                     <div class="item">
                         <div class="left">审核活动</div>
@@ -171,72 +185,105 @@
                             <span style="font-size: 13px;">时间：{{ data_details.item.updated_at }}</span>
                         </div>
                     </div>
+                </div>
+                <div class="item-hd">审核活动相关信息</div>
+                <div v-if="data_details.item.tgt_type=='announce'" style="background-color: #fafafa;">
+                    <div class="item">
+                        <div class="left">公示文号</div>
+                        <div class="right">{{ data_details.item.auditable?.proof }}</div>
+                    </div>
+                    <div v-if="data_details.item.auditable?.totype" class="item">
+                        <div class="left">公示区域类型</div>
+                        <div class="right">{{ getOptVal(opts_all.obj.article_lv,data_details.item.auditable?.totype) }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">发布人</div>
+                        <div class="right">
+                            <span>{{ data_details.item.auditable?.uinfo?.name?data_details.item.auditable?.uinfo?.name:data_details.item.auditable?.uinfo?.nickname? data_details.item.auditable?.uinfo?.nickname:data_details.item.auditable?.uinfo?.username }}</span>
+                            <span class="m-l-20 size-sm">{{ data_details.item.auditable?.uinfo?.mobile }}</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">状态</div>
+                        <div class="right">
+                            <el-tag v-show="data_details.item.auditable?.status == 1" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 2" class="btnNone noDeal" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                        </div>
+                    </div>
+                    <!-- <div class="item">
+                                <div class="left">附件名称</div>
+                                <div class="right">{{ data_details.item.affix.title }}</div>
+                            </div> -->
+                    <div class="item">
+                        <div class="left">附件</div>
+                        <div class="right">
+                            <div v-for="(item,i) in data_details.item.auditable?.affix" :key="i" class="inline-block m-r-10">
+                                <el-tag type="success">
+                                    <el-link type="success" class="link" :href="data_details.item.auditable?.affixs" target="_blank">{{ item.title }}</el-link>
+                                </el-tag>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">公示内容</div>
+                        <div class="right" v-html="data_details.item.auditable?.content" />
+                    </div>
                     <div v-if="data_details.item.status == 10" class="item">
-                        <div class="left" />
+                        <div class="left_1" />
+                        <div class="right">
+                            <el-button type="primary" class="m-t-10" @click="examineListFunc">审核</el-button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="data_details.item.tgt_type=='survey'" style="background-color: #fafafa;">
+                    <div class="item">
+                        <div class="left">总票数</div>
+                        <div class="right">
+                            <span>{{ data_details.item.auditable?.ticketall }}</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">总面积数</div>
+                        <div class="right">
+                            <span>{{ data_details.item.auditable?.areaall }}</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">发布人</div>
+                        <div class="right">
+                            <span>{{ data_details.item.auditable?.uinfo?.name?data_details.item.auditable?.uinfo?.name:data_details.item.auditable?.uinfo?.nickname? data_details.item.auditable?.uinfo?.nickname:data_details.item.auditable?.uinfo?.username }}</span>
+                            <span class="m-l-20 size-sm">{{ data_details.item.auditable?.uinfo?.mobile }}</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">状态</div>
+                        <div class="right">
+                            <el-tag v-show="data_details.item.auditable?.status == 1" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 2" class="btnNone noDeal" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                            <el-tag v-show="data_details.item.auditable?.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.auditable?.status) }} </el-tag>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">内容</div>
+                        <div class="right" v-html="data_details.item.auditable?.content" />
+                    </div>
+                    <div v-if="data_details.item.status == 10" class="item">
+                        <div class="left_1" />
                         <div class="right">
                             <el-button type="primary" class="m-t-10" @click="examineListFunc">审核</el-button>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- </div> -->
-            <!-- <div class="detailBigBox_1">
-                    <div class="details-box">
-                        <div class="item">
-                            <div class="left">房屋名称</div>
-                            <div class="right">{{ data_details.item.house.name }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">房屋地址</div>
-                            <div class="right">{{ data_details.item.house.addr }}</div>
-                        </div>
-                        <div class="item">
-                            <div class="left">产权证号</div>
-                            <div v-if="data_details_1.item" class="right">{{ data_details_1.item.code_property }}</div>
-                            <div v-if="!data_details_1.item" class="right" />
-                        </div>
-                        <div class="item">
-                            <div class="left">地房籍号</div>
-                            <div v-if="data_details_1.item" class="right">{{ data_details_1.item.code_room }}</div>
-                            <div v-if="!data_details_1.item" class="right" />
-                        </div>
-                        <div class="item">
-                            <div class="left">交易时间</div>
-                            <div v-if="data_details_1.item" class="right">{{ data_details_1.item.time_deal }}</div>
-                            <div v-if="!data_details_1.item" class="right" />
-                        </div>
-                        <div>
-                            <div class="item">
-                                <div class="left">产权人</div>
-                                <div v-if="data_details_1.item && data_details_1.item.owners" class="right">
-                                    <el-scrollbar :height="data_details_1.item.owners.length >= 3 ? '300px' : ''">
-                                        <div
-                                            v-for="(item,i) in data_details_1.item.owners" :key="i"
-                                            class="owners"
-                                        >
-                                            <div>
-                                                <span>姓名：</span>{{ item.name }}
-                                            </div>
-                                            <div>
-                                                <span>证件类型：</span>{{ item.type_id_card }}
-                                            </div>
-                                            <div>
-                                                <span>面积：</span>{{ item.area }} ㎡
-                                            </div>
-                                            <div>
-                                                <span>联系方式：</span>{{ item.mobile }}
-                                            </div>
-                                            <div style="width: 100%;">
-                                                <span>证件号：</span>{{ item.id_card }}
-                                            </div>
-                                        </div>
-                                    </el-scrollbar>
-                                </div>
-                                <div v-if="!data_details_1.item" class="right" />
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
@@ -271,10 +318,30 @@ const loading_tab = ref(false)
 watch(page, () => {
     getActivityViewList()
 })
+
+const flag = ref(true)
+const flag1 = ref(true)
+const flag2 = ref(true)
+const flag3 = ref(true)
+const index = ref(0)
+const StatusFunk = val => {
+    page.value = 1
+    index.value = val
+    getActivityViewList()
+    flag.value = false
+    flag1.value = false
+    flag2.value = false
+    flag3.value = false
+    console.log(flag.value)
+}
 const getActivityViewList = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value
+        per_page: per_page.value,
+        status: index.value
+    }
+    if (index.value == 0) {
+        delete params.status
     }
     if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.group_id = sessionStorage.getItem('groupChinaCode')
@@ -330,11 +397,27 @@ const switch_details = ref(false)
 const detailsFunc = row => {
     APIgetDetailsArchiveAudit(row.id).then(res => {
         console.log(res)
+        if (res.auditable) {
+            for (let i in res.auditable.affix) {
+                res.auditable.affixs = []
+                res.auditable.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.auditable.affix[i].file)
+            }
+        }
         data_details.item = res
         switch_details.value = true
     })
 }
 refreshFunc()
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {
+        status_all: []
+    }
+})
+getOpts(['article_lv', 'announce_status']).then(res => {
+    opts_all.obj = res
+})
 </script>
 
 <style lang="scss" scoped>
@@ -360,5 +443,16 @@ refreshFunc()
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
     width: 60px !important;
+}
+.left_1 {
+    color: #999;
+    box-sizing: border-box;
+    width: 160px;
+    white-space: nowrap;
+    margin-right: 20px;
+    text-align: right;
+}
+.btn button {
+    padding: 20px 40px;
 }
 </style>

@@ -102,6 +102,7 @@
                                     <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
                                     <el-button :disabled="choseIDs.arr.length<=0" type="warning" class="head-btn" @click="modifyAllFunc">批量修改</el-button>
                                     <el-button class="head-btn" type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
+                                    <el-button :icon="Loading" @click="refreshFunc">刷新</el-button>
                                     <!-- <el-button class="head-btn" type="primary" @click="houseBindFunc">房屋绑定申请</el-button> -->
                                 </el-col>
                             </el-row>
@@ -593,7 +594,7 @@
                         <el-link
                             class="head-btn"
                             :underline="false"
-                            :href="VITE_APP_FOLDER_SRC"
+                            :href="VITE_APP_FOLDER_SRC+Record_key"
                             target="_blank"
                         >
                             <el-button>
@@ -1052,7 +1053,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    page.value = 1
     switch_search.value = false
     data_search.obj = {}
     getHouseListFunc()
@@ -1288,7 +1288,9 @@ const files_obj = reactive({
 const err_files = reactive({
     obj: {}
 })
-import { APIpostFilesList } from '@/api/custom/custom.js'
+import {
+    APIpostFilesList,
+    APIgetPersonimptpl } from '@/api/custom/custom.js'
 import { getFilesKeys } from '@/util/files.js'
 const filesUpFunc = () => {
     err_files.obj = {}
@@ -1347,6 +1349,7 @@ const refreshFilesListFunc = () => {
 import {
     APIgetFilesList
 } from '@/api/custom/custom.js'
+const Record_key = ref('')
 const getFilesFunc = () => {
     files_loading.value = true
     APIgetFilesList().then(res => {
@@ -1354,6 +1357,11 @@ const getFilesFunc = () => {
         files_tab.arr = res
         files_loading.value = false
     })
+    APIgetPersonimptpl().then(res => {
+        console.log(res)
+        Record_key.value = res.key
+    })
+
 }
 const fileChangeFunc = (file, fileList) => {
     if (fileList.length > 1) {
@@ -1398,9 +1406,12 @@ const dialogExamineCloseFunc = () => {
         }
     }
     for (let key in from_examine.item) {
-        if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
-            delete from_examine.item[key]
+        if (from_examine.item[key] !== null) {
+            if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                delete from_examine.item[key]
+            }
         }
+
     }
     if (str_title.value == '修改') {
         APIputHouseHouse(data.id, data).then(res => {
@@ -1414,6 +1425,7 @@ const dialogExamineCloseFunc = () => {
         APIpostHouseHouse(data).then(res => {
             refreshFunc()
             ElMessage.success('添加成功')
+            refreshFunc()
             switch_examine.value = false
         }).catch(err => {
             from_error.msg = err.data
@@ -1664,6 +1676,7 @@ const openFileFunc = () => {
         // loc_id: active_obj.obj.id
     }
 }
+// refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'

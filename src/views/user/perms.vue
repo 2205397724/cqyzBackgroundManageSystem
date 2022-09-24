@@ -361,8 +361,10 @@ const addPerms = () => {
 // 修改提交
 const put_perms_submit = () => {
     for (let key in from_add_perms.item) {
-        if (from_add_perms.item[key] == '') {
-            delete from_add_perms.item[key]
+        if (from_add_perms.item[key] !== null) {
+            if (from_add_perms.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_add_perms.item[key] !== 0 || from_add_perms.item[key] !== false)) {
+                delete from_add_perms.item[key]
+            }
         }
     }
     APIputPerms(from_add_perms.item.id, from_add_perms.item).then(res => {

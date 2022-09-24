@@ -385,8 +385,10 @@ const dialogExamineCloseFunc = ()  => {
     // }
     console.log(files)
     for (let key in addMenuForm.item) {
-        if (addMenuForm.item[key] == '') {
-            delete addMenuForm.item[key]
+        if (addMenuForm.item[key] !== null) {
+            if (addMenuForm.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (addMenuForm.item[key] !== 0 || addMenuForm.item[key] !== false)) {
+                delete addMenuForm.item[key]
+            }
         }
     }
     if (files.length > 0) {

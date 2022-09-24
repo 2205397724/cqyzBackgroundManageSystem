@@ -316,13 +316,13 @@ const data_details_1 = reactive({
         owners: []
     }
 })
-const getHouseBindListFunc = val => {
+const getHouseBindListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value,
-        status: val
+        status: index.value
     }
-    if (val == 0) {
+    if (index.value == 0) {
         delete params.status
     }
     loading_tab.value = true
@@ -354,13 +354,14 @@ const getHouseBindListFunc = val => {
 const index = ref(0)
 const noDeal = val => {
     index.value = val
-    getHouseBindListFunc(val)
+    getHouseBindListFunc()
 }
 const flag = ref(true)
 const flag1 = ref(true)
 const flag2 = ref(true)
 const flag3 = ref(true)
 const StatusFunk = val => {
+    page.value = 1
     noDeal(val)
     flag.value = false
     flag1.value = false

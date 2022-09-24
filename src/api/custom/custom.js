@@ -1570,3 +1570,7 @@ export function APIputPersonnelManage(id, data) {
 export function APIpostPersonnelManage(data) {
     return api2.post('/people', data)
 }
+// 人员导入任务
+export function APIgetPersonimptpl() {
+    return api2.get('/personimptpl')
+}

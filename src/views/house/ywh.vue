@@ -402,8 +402,10 @@ const dialogExamineCloseFunc = formEl => {
             from_examine.item.type = 7
             from_examine.item.region_cc = route.query.china_code
             for (let key in from_examine.item) {
-                if (from_examine.item[key] == '') {
-                    delete from_examine.item[key]
+                if (from_examine.item[key] !== null) {
+                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                        delete from_examine.item[key]
+                    }
                 }
             }
             if (str_title.value == '修改') {
@@ -567,8 +569,10 @@ const addflowFunc = () => {
 const flowUpdataFunc = () => {
     from_error2.msg = {}
     for (let key in from_examine2.item) {
-        if (from_examine2.item[key] == '') {
-            delete from_examine2.item[key]
+        if (from_examine.item2[key] !== null) {
+            if (from_examine.item2[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item2[key] !== 0 || from_examine.item2[key] !== false)) {
+                delete from_examine.item2[key]
+            }
         }
     }
     if (str_title2.value == '修改') {

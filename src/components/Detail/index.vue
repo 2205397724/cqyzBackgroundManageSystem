@@ -48,7 +48,7 @@
                             <el-col :span="8">
                                 <div class="item">
                                     <div class="left w-100">内容</div>
-                                    <span>{{ data_details.item.content }}</span>
+                                    <span v-html="data_details.item.content " />
                                 </div>
                             </el-col>
                             <el-col :span="8">
@@ -211,11 +211,11 @@
                                             </el-popconfirm>
                                         </div>
                                     </div>
-                                    <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
+                                    <!-- <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
                                         <div v-if="!house.name&&!house.building?.name" class="region_box_item region_box_item_house">
                                             {{ house.building.zone.name }}
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- 可参与楼栋 -->
                                 <div class="region_box btnNone">
@@ -237,11 +237,13 @@
                                             </el-popconfirm>
                                         </div>
                                     </div>
-                                    <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
-                                        <div v-if="!house.name" class="region_box_item region_box_item_house">
-                                            {{ house.building.name }}
+                                    <template v-if="flag_1">
+                                        <div v-for="house in surverRangeWhenBuildHouse.arr" :key="house.id">
+                                            <div class="region_box_item region_box_item_house" @click="clickUnits_1(house.id)">
+                                                {{ house.name }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </template>
                                 </div>
                                 <!-- 可参与单元 -->
                                 <div class="region_box" btnNone>
@@ -277,14 +279,16 @@
                                             </el-popconfirm>
                                         </div>
                                     </div>
-                                    <div
-                                        v-for="house in surverRangeWhenHouse.arr"
-                                        :key="house.id"
-                                    >
-                                        <div class="region_box_item region_box_item_house" @click="clickUnits(house.id)">
-                                            {{ house.name }}
+                                    <template v-if="flag">
+                                        <div
+                                            v-for="house in surverRangeWhenUnitHouse.arr"
+                                            :key="house.id"
+                                        >
+                                            <div class="region_box_item region_box_item_house" @click="clickUnits(house.id)">
+                                                {{ house.name }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </template>
                                 </div>
                             </el-scrollbar>
                         </div>
@@ -377,8 +381,8 @@
                             <el-card>
                                 <div class="details-box">
                                     <div class="item">
-                                        <div class="left">公示</div>
-                                        <div class="right">{{ item.auditable?.title }}</div>
+                                        <div class="left">审核活动</div>
+                                        <div class="right">{{ item.auditable?.name }}</div>
                                     </div>
                                     <div class="item">
                                         <div class="left">处理人</div>
@@ -676,7 +680,6 @@
 import {
     APImodifySurveyStatus,
     APIgetChinaRegion,
-    APIaddSurveyRange,
     APIgetSurveyDetails,
     // 问卷范围
     APIgetSurveyRange,
@@ -858,7 +861,10 @@ const topicsFunc = () => {
     console.log('topic_details', topic_details)
 }
 // 获取问卷范围
-const surverRangeWhenHouse = reactive({ arr: [] })
+const surverRangeWhenUnitHouse = reactive({ arr: [] })
+const surverRangeWhenBuildHouse = reactive({ arr: [] })
+const flag = ref(false)
+const flag_1 = ref(false)
 const rangeFunc = () => {
     let params = {
         page: 1,
@@ -886,8 +892,19 @@ const rangeFunc = () => {
         })
     APIgetSurverRangeWhenHouse({ sid: props.id, can_type: 2 }).then(res => {
         console.log(res)
-        surverRangeWhenHouse.arr = res.data.units
-        console.log(surverRangeWhenHouse.arr)
+        if (res.data.units) {
+            flag.value = true
+            surverRangeWhenUnitHouse.arr = res.data.units
+        } else {
+            flag.value = false
+        }
+        if (res.data.buildings) {
+            flag_1.value = true
+            surverRangeWhenBuildHouse.arr = res.data.buildings
+        } else {
+            flag_1.value = false
+        }
+        console.log(flag.value)
     })
     showHouses.value = false
 }
@@ -901,7 +918,7 @@ import {
 const getListArchiveFunc = () => {
     let params = {
         tgt_id: props.id,
-        tgt_type: 'announce'
+        tgt_type: 'survey'
     }
     APIgetListArchiveAudit(params).then(res => {
         console.log(res)
@@ -993,6 +1010,28 @@ const clickUnits = val => {
     APIgetHouseListSort({
         houseable_id: val,
         houseable_type: 'units',
+        sid: props.id,
+        can_type: 2
+    }).then(res => {
+        showHouses.value = true
+        floors.arr = res.floors
+        floors.arr.forEach(item => {
+            data_range_selected_houses.arr.push(...item.houses)
+        })
+        data_range_selected_houses.arr = data_range_selected_houses.arr.filter(
+            item => {
+                return item.can_exist == 1
+            }
+        )
+        console.log(data_range_selected_houses.arr)
+        console.log(floors.arr)
+    })
+}
+const clickUnits_1 = val => {
+    console.log(val)
+    APIgetHouseListSort({
+        houseable_id: val,
+        houseable_type: 'buildings',
         sid: props.id,
         can_type: 2
     }).then(res => {
@@ -1180,8 +1219,10 @@ const deleteRange = val => {
 }
 // 删除问卷房屋
 const deleteHouse = houseid => {
-    APIdeleteSurveyRange({ sid: props.id, can_type: 2, type: 1, tgt: [houseid] })
-    rangeFunc()
+    APIdeleteSurveyRange({ sid: props.id, can_type: 2, type: 1, tgt: [houseid] }).then(res => {
+        rangeFunc()
+    })
+
 }
 // 刷新
 const refreshFunc = () => {
@@ -1195,12 +1236,10 @@ const dialogExamineCloseFunc = id => {
     if (str_title.value == '添加') {
         // console.log('qqqqqq',topic_examine.item)
         APIaddSurveyTopic(topic_examine.item).then(res => {
-            if (!res.code) {
-                refreshFunc()
-                // ElMessage.success(res.msg)
-                ElMessage.success('添加成功')
-                switch_examine.value = false
-            }
+            refreshFunc()
+            // ElMessage.success(res.msg)
+            ElMessage.success('添加成功')
+            switch_examine.value = false
         })
     } else {
         id = topic_examine.item.id
@@ -1376,8 +1415,10 @@ const popup2 = reactive({
 const popup2FnAdd = () => {
     popup2.error = {}
     for (let key in popup2.form) {
-        if (popup2.form[key] == '') {
-            delete popup2.form[key]
+        if (popup2.form[key] !== null) {
+            if (popup2.form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (popup2.form[key] !== 0 || popup2.form[key] !== false)) {
+                delete popup2.form[key]
+            }
         }
     }
     if (popup2.title == '添加' || popup2.title == '回复') {

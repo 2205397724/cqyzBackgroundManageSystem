@@ -248,9 +248,11 @@ const getFuncCategoryList = () => {
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
     console.log(data_1.add_form)
-    for (let key in data_1.add_form.item) {
-        if (data_1.add_form[key] == '') {
-            delete data_1.add_form[key]
+    for (let key in data_1.add_form) {
+        if (data_1.add_form[key] !== null) {
+            if (data_1.add_form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (data_1.add_form[key] !== 0 || data_1.add_form[key] !== false)) {
+                delete data_1.add_form[key]
+            }
         }
     }
     if (data_1.add_title == '添加') {

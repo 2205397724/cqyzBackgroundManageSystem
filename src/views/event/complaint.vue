@@ -603,12 +603,15 @@ const data_1 = reactive({
     details_switch: false
 })
 const loading_tab = ref(true)
-const getFuncVoteList = val => {
+const getFuncVoteList = () => {
     let data = {
         page: data_1.page,
         per_page: data_1.per_page,
         kind: 2,
-        status: val
+        status: index.value
+    }
+    if (index.value == 0) {
+        delete data.status
     }
     if (val == 10) {
         delete data.status
@@ -654,8 +657,10 @@ const clickFuncAddVote = () => {
     }
     data_1.add_error = {}
     for (let key in data_1.add_form) {
-        if (data_1.add_form[key] == '') {
-            delete data_1.add_form[key]
+        if (data_1.add_form[key] !== null) {
+            if (data_1.add_form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (data_1.add_form[key] !== 0 || data_1.add_form[key] !== false)) {
+                delete data_1.add_form[key]
+            }
         }
     }
     if (files.length > 0) {
@@ -946,13 +951,14 @@ const popupFuncAdd4 = val => {
 const index = ref(10)
 const noDeal = val => {
     index.value = val
-    getFuncVoteList(val)
+    getFuncVoteList()
 }
 const flag = ref(true)
 const flag1 = ref(true)
 const flag2 = ref(true)
 const flag3 = ref(true)
 const StatusFunk = val => {
+    data_1.page == 1
     noDeal(val)
     console.log(index.value)
     flag.value = false

@@ -380,8 +380,10 @@ const addRolesFun = () => {
 const add_post_submit = () => {
     if (from_data.item.name && from_data.item.spec && from_data.item.group_id) {
         for (let key in from_data.item) {
-            if (from_data.item[key] == '') {
-                delete from_data.item[key]
+            if (from_data.item[key] !== null) {
+                if (from_data.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_data.item[key] !== 0 || from_data.item[key] !== false)) {
+                    delete from_data.item[key]
+                }
             }
         }
         if (add_or_post_text.value == '修改') {

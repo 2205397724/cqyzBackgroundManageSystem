@@ -93,13 +93,13 @@
                         <span>{{ scope.row.job }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="220">
+                <el-table-column fixed="right" label="操作" width="280">
                     <template #default="scope">
                         <el-button
-                            type="primary" size="small"
+                            type="success" size="small"
                             @click="modifyFeatureFunc(scope.row)"
                         >
-                            特征
+                            标签
                         </el-button>
                         <el-button
                             type="primary" size="small"
@@ -312,7 +312,7 @@
         <el-dialog
             v-model="switch_details"
             title="详情"
-            width="70%"
+            width="50%"
         >
             <div class="details-box">
                 <div class="item">
@@ -360,6 +360,27 @@
                 <span class="dialog-footer">
                     <el-button @click="switch_details = false">取消</el-button>
                 </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="switch_feature" title="标签" width="70%" destroy-on-close="true">
+            <div style="height: 500px;">
+                <div style="width: 50%;height: 500px; float: left;">
+                    <div>
+                        <el-button plain type="primary">
+                            残疾人
+                        </el-button>
+                        <el-button plain type="danger">
+                            罪犯
+                        </el-button>
+                        <el-button plain type="success">
+                            群众
+                        </el-button>
+                    </div>
+                </div>
+                <div style="width: 50%;height: 500px; background-color: #eee; float: left;" />
+            </div>
+            <template #footer>
+                <el-button type="warning" plain @click="switch_feature = false">取消</el-button>
             </template>
         </el-dialog>
     </div>
@@ -519,6 +540,11 @@ const deleteFunc = val => {
         refreshFunc()
         ElMessage.success('删除成功')
     })
+}
+// 标签
+const switch_feature = ref(false)
+const modifyFeatureFunc = val => {
+    switch_feature.value = true
 }
 refreshFunc()
 // 配置项

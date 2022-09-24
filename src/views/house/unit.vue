@@ -290,10 +290,10 @@
         <el-dialog
             v-model="edit_house"
             title="房屋"
-            width="70%"
+            width="80%"
         >
             <div style="overflow: auto;">
-                <House :tree_item="tree_item.obj" />
+                <House :tree_item="tree_item.arr" />
             </div>
         </el-dialog>
     </div>
@@ -302,17 +302,18 @@
 import Cascaders from '@/components/Cascaders/index.vue'
 import House from '@/components/House/index.vue'
 const tree_item = reactive({
-    obj: {}
+    arr: []
 })
 const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
-    tree_item.obj = {
+    let params = {
         id: val.id,
         name: val.name,
         leaf: true,
         type: 'units'
     }
+    tree_item.arr.push(params)
     edit_house.value = true
 }
 import SearchBuilding from '@/components/SearchBuilding/index.vue'
@@ -423,8 +424,10 @@ const dialogExamineCloseFunc = formEl => {
         if (valid) {
             from_examine.item.building_id = route.query.building_id
             for (let key in from_examine.item) {
-                if (from_examine.item[key] == '') {
-                    delete from_examine.item[key]
+                if (from_examine.item[key] !== null) {
+                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                        delete from_examine.item[key]
+                    }
                 }
             }
             if (str_title.value == '修改') {
