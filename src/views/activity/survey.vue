@@ -61,14 +61,14 @@
                 </el-row>
             </div>
             <el-radio-group v-model="activeName" size="large" class="m-b-20" @change="handleClick">
-                <el-radio-button label="全部" />>
-                <el-radio-button label="筹备阶段" />>
-                <el-radio-button label="待审" />>
-                <el-radio-button label="未开始" />>
-                <el-radio-button label="进行中" />>
-                <el-radio-button label="暂停" />>
-                <el-radio-button label="终止" />>
-                <el-radio-button label="已结束" />>
+                <el-radio-button label="全部" />
+                <el-radio-button label="筹备阶段" />
+                <el-radio-button label="待审" />
+                <el-radio-button label="未开始" />
+                <el-radio-button label="进行中" />
+                <el-radio-button label="暂停" />
+                <el-radio-button label="终止" />
+                <el-radio-button label="已结束" />
             </el-radio-group>
             <!-- 问卷列表 -->
             <div class="hidden">
@@ -426,40 +426,38 @@ const detailsFunc = val => {
 }
 // Tabs标签页点击切换事件,切换显示不同状态的问卷
 // 切换标签后，根据label的值进行if判断，切换不同状态问卷
+const index = ref(0)
 const handleClick = tab => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        status: ''
-    }
+    page.value = 1
     // tab未label的值
     if (tab === '筹备阶段') {
-        params.status = 1
+        index.value = 1
     } else if (tab === '待审') {
-        params.status = 2
+        index.value = 2
     } else if (tab === '未开始') {
-        params.status = 3
+        index.value = 3
     } else if (tab === '进行中') {
-        params.status = 4
+        index.value = 4
     } else if (tab === '暂停') {
-        params.status = 5
+        index.value = 5
     } else if (tab === '终止') {
-        params.status = 6
+        index.value = 6
     } else if (tab === '已结束') {
-        params.status = 7
+        index.value = 7
     } else {
-        return getTabListFunc()
+        index.value = 0
     }
-    APIgetSurvey(params).then(res => {
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = data_tab.arr.length
-        }
-        // console.log(data_tab.arr)
-    }).catch(err => {
-        from_error.msg = err.data
-    })
+    getTabListFunc()
+    // APIgetSurvey(params).then(res => {
+    //     if (res.status === 200) {
+    //         loading_tab.value = false
+    //         data_tab.arr = res.data
+    //         total.value = data_tab.arr.length
+    //     }
+    //     // console.log(data_tab.arr)
+    // }).catch(err => {
+    //     from_error.msg = err.data
+    // })
 }
 // 监听分页
 watch(page, () => {
@@ -468,6 +466,7 @@ watch(page, () => {
 const surveyId = ref('')
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
+    console.log(from_examine.item)
     from_error.msg = {}
     // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
     from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
@@ -477,10 +476,12 @@ const dialogExamineCloseFunc = () => {
     // formEl.validate(valid => {
     //     if (valid) {
     from_examine.item.type = 1
-    console.log(from_examine.item)
+
     for (let key in from_examine.item) {
-        if (from_examine.item[key] == '') {
-            delete from_examine.item[key]
+        if (from_examine.item.obj[key] !== null) {
+            if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                delete from_examine.item[key]
+            }
         }
     }
     console.log(from_examine.item)
@@ -497,8 +498,6 @@ const dialogExamineCloseFunc = () => {
             APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
                 refreshFunc()
             })
-        }).catch(err => {
-            ElMessage.error('修改失败')
         })
     } else {
         APIaddSurvey(from_examine.item).then(res => {
@@ -506,7 +505,7 @@ const dialogExamineCloseFunc = () => {
             surveyId.value = res.data.id
             refreshFunc()
             // ElMessage.success(res.msg)
-            // ElMessage.success('添加成功')
+            //
         }).catch(err => {
             ElMessage.error('添加失败')
         })
@@ -531,7 +530,7 @@ const next = () => {
         }
         active.value = 2
     } else {
-        // ElMessage.success('修改成功')
+        ElMessage.success('添加成功')
         switch_examine.value = false
     }
 }
@@ -568,7 +567,11 @@ const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value,
-        type: 1
+        type: 1,
+        status: index.value
+    }
+    if (index.value == 0) {
+        delete params.status
     }
     if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.author_tgt = sessionStorage.getItem('groupChinaCode')

@@ -402,8 +402,10 @@ import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const fromFnUpload = () => {
     for (let key in from_examine.item) {
-        if (from_examine.item[key] == '') {
-            delete from_examine.item[key]
+        if (from_examine.item[key] !== null) {
+            if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                delete from_examine.item[key]
+            }
         }
     }
     if (str_title.value == '修改') {

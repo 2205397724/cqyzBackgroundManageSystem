@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-scrollbar height="400px">
-            <div>
+            <div class="m-b-20">
                 <el-button type="primary" @click="addServeyTopic()">添加题目</el-button>
             </div>
             <el-table

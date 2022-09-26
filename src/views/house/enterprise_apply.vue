@@ -250,13 +250,14 @@ const getNameFunc = (arr, key) => {
 const index = ref(0)
 const noDeal = val => {
     index.value = val
-    getEnterpriseApplyList(val)
+    getEnterpriseApplyList()
 }
 const flag = ref(true)
 const flag1 = ref(true)
 const flag2 = ref(true)
 const flag3 = ref(true)
 const StatusFunk = val => {
+    page.value = 1
     noDeal(val)
     flag.value = false
     flag1.value = false
@@ -274,14 +275,14 @@ import {
     APIgetEnterpriseApplyList,
     APIpostEnterpriseExamine
 } from '@/api/custom/custom.js'
-const getEnterpriseApplyList = val => {
+const getEnterpriseApplyList = () => {
     let params = {
         page: page.value,
         per_page: per_page.value,
         tyle: 1,
-        process_status: val
+        process_status: index.value
     }
-    if (val == 0) {
+    if (index.value == 0) {
         delete params.process_status
     }
     APIgetEnterpriseApplyList(params).then(res => {
@@ -289,7 +290,7 @@ const getEnterpriseApplyList = val => {
         data_applyList.arr = res.data
         switch_replay.value = true
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length <= per_page.value) {
+        if (res.data.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)

@@ -82,13 +82,13 @@
                     <el-table-column prop="ticketall" label="总票数" align="center" />
                     <el-table-column label="联名状态" align="center">
                         <template #default="scope">
-                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
-                            <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status_1,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
+                            <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column label="是否公开" align="center">
@@ -188,7 +188,7 @@
                                     <el-col :md="24" :lg="12">
                                         <el-form-item label="状态" label-width="80px" prop="status" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <el-select v-model="from_examine.item.status" class="head-btn" clearable>
-                                                <el-option v-for="(item,i) in opts_all.obj.announce_status_1" :key="i" :label="item.val" :value="item.key" />
+                                                <el-option v-for="(item,i) in opts_all.obj.announce_status" :key="i" :label="item.val" :value="item.key" />
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -393,40 +393,28 @@ const detailsFunc = val => {
 }
 // Tabs标签页点击切换事件,切换显示不同状态的联名
 // 切换标签后，根据label的值进行if判断，切换不同状态联名
+const index = ref(0)
 const handleClick = tab => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value,
-        status: ''
-    }
+    page.value = 1
     // tab未label的值
     if (tab === '筹备中') {
-        params.status = 1
+        index.value = 1
     } else if (tab === '待审') {
-        params.status = 2
+        index.value = 2
     } else if (tab === '未开始') {
-        params.status = 3
+        index.value = 3
     } else if (tab === '进行中') {
-        params.status = 4
+        index.value = 4
     } else if (tab === '暂停') {
-        params.status = 5
+        index.value = 5
     } else if (tab === '终止') {
-        params.status = 6
+        index.value = 6
     } else if (tab === '已结束') {
-        params.status = 7
+        index.value = 7
     } else {
-        return getTabListFunc()
+        index.value = 0
     }
-    APIgetSurvey(params).then(res => {
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = data_tab.arr.length
-        }
-        // console.log(data_tab.arr)
-    }).catch(err => {
-        from_error.msg = err.data
-    })
+    getTabListFunc()
 }
 // 监听分页
 watch(page, () => {
@@ -445,8 +433,10 @@ const dialogExamineCloseFunc = (formEl, id) => {
         if (valid) {
             from_examine.item.type = 4
             for (let key in from_examine.item) {
-                if (from_examine.item[key] == '') {
-                    delete from_examine.item[key]
+                if (from_examine.item[key] !== null) {
+                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                        delete from_examine.item[key]
+                    }
                 }
             }
             if (str_title.value == '修改') {
@@ -487,7 +477,11 @@ const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value,
-        type: 4
+        type: 4,
+        status: index.value
+    }
+    if (index.value == 0) {
+        delete params.status
     }
     if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
         params.author_tgt = sessionStorage.getItem('groupChinaCode')
@@ -574,7 +568,7 @@ const opts_all = reactive({
         status_all: []
     }
 })
-getOpts(['announce_status_1', 'toushu_pub']).then(res => {
+getOpts(['announce_status', 'toushu_pub']).then(res => {
     opts_all.obj = res
 })
 </script>

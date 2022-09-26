@@ -419,7 +419,11 @@
                 </div>
                 <div class="item">
                     <div class="left">评论状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.comment_status,popup3.details.status) }}</div>
+                    <div class="right">
+                        <el-tag v-if="popup3.details.status == 10" type="waring" roung>未审核</el-tag>
+                        <el-tag v-if="popup3.details.status == 20" type="success" round>已审核</el-tag>
+                        <el-tag v-if="popup3.details.status == 30" type="danger" round>审核失败</el-tag>
+                    </div>
                 </div>
                 <div class="item">
                     <div class="left">所在地址</div>
@@ -493,8 +497,6 @@ const popup1 = reactive({
 })
 const getListArchiveFunc = () => {
     let params = {
-        page: data_1.page.value,
-        per_page: data_1.per_page.value,
         tgt_id: route.query.id,
         tgt_type: 'announce'
     }
@@ -615,8 +617,10 @@ const popup2 = reactive({
 const popup2FnAdd = () => {
     popup2.error = {}
     for (let key in popup2.form) {
-        if (popup2.form[key] == '') {
-            delete popup2.form[key]
+        if (popup2.form[key] !== null) {
+            if (popup2.form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (popup2.form[key] !== 0 || popup2.form[key] !== false)) {
+                delete popup2.form[key]
+            }
         }
     }
     if (popup2.title == '添加' || popup2.title == '回复') {

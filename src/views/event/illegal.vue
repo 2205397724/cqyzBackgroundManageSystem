@@ -488,8 +488,10 @@ const clickFuncAddVote = () => {
     }
     data_1.add_error = {}
     for (let key in data_1.add_form) {
-        if (data_1.add_form[key] == '') {
-            delete data_1.add_form[key]
+        if (data_1.add_form[key] !== null) {
+            if (data_1.add_form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (data_1.add_form[key] !== 0 || data_1.add_form[key] !== false)) {
+                delete data_1.add_form[key]
+            }
         }
     }
     if (files.length > 0) {

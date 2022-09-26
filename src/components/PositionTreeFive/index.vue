@@ -230,6 +230,7 @@ const submit = () => {
             })
         )
     }
+
     Promise.all(promiseAll)
         .then(res => {
             // 并发接口
@@ -240,21 +241,20 @@ const submit = () => {
         .catch(e => {
             ElMessage.error('设置失败请重试')
         })
-    APIaddSurveyRange({ sid: props.surveyid, can_type: 2, type: 1, tgt: selected_house.arr })
+    if (selected_house.arr.length > 0) {
+        APIaddSurveyRange({ sid: props.surveyid, can_type: 2, type: 1, tgt: selected_house.arr })
+    }
+
 }
 // 点击节点触发
 const nodeClick = (node, treenode, event) => {
     console.log(node)
-    if (node.type !== 'units') {
-        showFamily.value = false
-        return
-    }
-    if (node.type == 'units') {
+    if (node.type == 'units' || node.type == 'building') {
         let name = node.name
         unitsDetail.item.name = name
         showFamily.value = true
         APIgetHouseListSort({
-            houseable_type: 'units',
+            houseable_type: node.type == 'units' ? 'units' : 'buildings',
             houseable_id: node.id,
             sid: props.surveyid,
             can_type: 2
@@ -271,6 +271,9 @@ const nodeClick = (node, treenode, event) => {
             })
             selected_house.arr = selected
         })
+    } else {
+        showFamily.value = false
+        return
     }
 }
 const loadNode = (node, resolve) => {
@@ -618,6 +621,7 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
                     font-size: 20px;
                     line-height: 40px;
                     text-align: center;
+                    cursor: pointer;
                     &.bg {
                         background-color: #409eff;
                     }

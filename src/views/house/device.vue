@@ -1065,8 +1065,10 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             for (let key in from_examine.item) {
-                if (from_examine.item[key] == '') {
-                    delete from_examine.item[key]
+                if (from_examine.item[key] !== null) {
+                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                        delete from_examine.item[key]
+                    }
                 }
             }
             if (str_title.value == '修改') {
@@ -1187,8 +1189,10 @@ import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const fromFnUpload = () => {
     for (let key in addRepair.item) {
-        if (addRepair.item[key] == '') {
-            delete addRepair.item[key]
+        if (addRepair.item[key] !== null) {
+            if (addRepair.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (addRepair.item[key] !== 0 || addRepair.item[key] !== false)) {
+                delete addRepair.item[key]
+            }
         }
     }
     addRepair.item.money = parseInt(addRepair.item.money) * 100
@@ -1307,12 +1311,14 @@ const addServiceFunc_1 = () => {
 // 同意拒绝提交
 const formFnUpload_1 = () => {
     console.log(addArchive.item)
-    if (str_title_2.value == '修改') {
-        for (let key in addRepair.item) {
-            if (addRepair.item[key] == '') {
-                delete addRepair.item[key]
+    for (let key in addArchive.item) {
+        if (addArchive.item[key] !== null) {
+            if (addArchive.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (addArchive.item[key] !== 0 || addArchive.item[key] !== false)) {
+                delete addArchive.item[key]
             }
         }
+    }
+    if (str_title_2.value == '修改') {
         APIputDeviceArchive(addArchive.item.id, addArchive.item).then(res => {
             getDetailsFunc(data_details.item)
             ElMessage.success('修改成功')

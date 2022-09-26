@@ -798,8 +798,10 @@ const dialogExamineCloseFunc = () => {
 }
 const submit_post_put = () => {
     for (let key in from_record.item) {
-        if (from_record.item[key] == '') {
-            delete from_record.item[key]
+        if (from_record.item[key] !== null) {
+            if (from_record.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_record.item[key] !== 0 || from_record.item[key] !== false)) {
+                delete from_record.item[key]
+            }
         }
     }
     if (add_put_title.value == '修改备案') {

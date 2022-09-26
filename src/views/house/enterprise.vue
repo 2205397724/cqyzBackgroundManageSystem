@@ -1498,8 +1498,10 @@ const optValDeleteFunc = val => {
 const postFunc_1 = () => {
     err_add.obj = {}
     for (let key in from_add.obj) {
-        if (from_add.obj[key] == '') {
-            delete from_add.obj[key]
+        if (from_add.obj[key] !== null) {
+            if (from_add.obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_add.obj[key] !== 0 || from_add.obj[key] !== false)) {
+                delete from_add.obj[key]
+            }
         }
     }
     if (str_title.value == '修改') {

@@ -202,8 +202,10 @@ console.log(main_type)
 const dialogExamineCloseFunc = () => {
     from_error.msg = {}
     for (let key in from_examine.item) {
-        if (from_examine.item[key] == '') {
-            delete from_examine.item[key]
+        if (from_examine.item[key] !== null) {
+            if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                delete from_examine.item[key]
+            }
         }
     }
     if (str_title.value == '修改') {
@@ -214,7 +216,7 @@ const dialogExamineCloseFunc = () => {
             switch_examine.value = false
             // }
         }).catch(err => {
-            ElMessage.success('修改成功')
+            ElMessage.success('修改失败')
         })
     } else {
         APIpostType(main_type.value, from_examine.item).then(res => {
