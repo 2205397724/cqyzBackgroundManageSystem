@@ -84,7 +84,7 @@
                                     inactive-text="禁用"
                                     :active-value="1"
                                     :inactive-value="0"
-                                    @change="switchFunk(scope.row.active)"
+                                    @change="(val) => switchRecordFun(val, scope.row)"
                                 />
                             </template>
                             <!-- <template #default="scope">
@@ -386,6 +386,18 @@ const detailsFunc = val => {
         }
     })
 }
+// switch开关
+const switchRecordFun = (status, val) => {
+    let params = {}
+    for (let key in val) {
+        if (val[key] !== null) {
+            console.log(key)
+            params[key] = val[key]
+        }
+    }
+    params.status = status
+    APIputCity(val.id, params).then()
+}
 const switchFunk = row => {
     // let status = row.active == '1' ? '启用' : '禁用'
     // ElMessage({
@@ -430,11 +442,11 @@ const dialogExamineCloseFunc = formEl => {
                     // console.log(res)
                     if (res.status === 200) {
                         refreshFunc()
-                        ElMessage.success(res.statusText)
+                        ElMessage.success('修改成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('修改失败')
                 })
             } else {
                 switchFunk(from_examine.item.active)
@@ -443,11 +455,11 @@ const dialogExamineCloseFunc = formEl => {
                     // console.log(from_examine.item)
                     if (res.status === 200) {
                         refreshFunc()
-                        ElMessage.success(res.statusText)
+                        ElMessage.success('添加成功')
                         switch_examine.value = false
                     }
                 }).catch(err => {
-                    from_error.msg = err.data
+                    ElMessage.error('添加失败')
                 })
             }
         } else {

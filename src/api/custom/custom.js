@@ -1574,3 +1574,23 @@ export function APIpostPersonnelManage(data) {
 export function APIgetPersonimptpl() {
     return api2.get('/personimptpl')
 }
+// 系统标签库管理
+export function APIgetPersonnelLabels(params) {
+    return api2.get('/systag', { params: params })
+}
+export function APIdeletePersonnelLabels(data) {
+    return api2.delete('/systag', data)
+}
+export function APIpostPersonnelLabels(data) {
+    return api2.post('/systag', data)
+}
+// 对象标签
+export function APIpostPersonnelTag(data) {
+    return api2.post('/tag', data)
+}
+export function APIgetPersonnelTag(params) {
+    return api2.get('/tag', { params: params })
+}
+export function APIgetPersonnelTaglog(params) {
+    return api2.get('/taglog', { params: params })
+}

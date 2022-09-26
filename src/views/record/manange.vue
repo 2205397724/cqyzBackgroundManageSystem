@@ -1,6 +1,6 @@
 <template>
     <div>
-        <page-main>
+        <page-main class="hidden">
             <div class="m-b-20">
                 <el-button
                     type="primary"
@@ -169,15 +169,17 @@
                 </el-table-column>
                 <!-- <el-table-column /> -->
             </el-table>
-            <!--   <el-pagination
-                v-model:current-page="data_1.page"
-                style="padding-top: 20px;"
-                layout="total,prev,pager,next,jumper,"
-                :total="data_1.total"
-                :page-size="data_1.per_page"
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
                 background
+                prev-text="上一页"
+                next-text="下一页"
                 hide-on-single-page
-            /> -->
+            />
         </page-main>
         <el-dialog
             v-model="switch_add_record"
@@ -396,7 +398,7 @@ import { ElMessage } from 'element-plus'
 import { Search, Plus } from '@element-plus/icons-vue'
 import { getFilesKeys } from '@/util/files.js'
 const page = ref(1)
-const per_page = ref(10)
+const per_page = ref(15)
 const recordList = reactive({
     arr: []
 })
@@ -541,8 +543,8 @@ const group_tab_click = item => {
 // 备案列表详情
 const getFunRecordList = () => {
     let data = {
-    // page: data_1.page,
-    // per_page: data_1.per_page
+        page: data_1.page,
+        per_page: data_1.per_page
     }
     for (let key in data_1.search) {
         let item = data_1.search[key]
@@ -556,6 +558,16 @@ const getFunRecordList = () => {
         data_1.total = res.length
         data_1.list = res
         recordList.arr = res
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < data_1.per_page) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 // 关闭修改弹窗dialog事件
@@ -623,7 +635,7 @@ const fileListFn = val => {
 const data_1 = reactive({
     search: {},
     switch_search: false,
-    page: 1,
+    page: Number(sessionStorage.getItem('currentPage')) || 1,
     total: 0,
     per_page: 15,
     add_switch: false
@@ -686,10 +698,20 @@ const refreshFunc = () => {
 watch(
     data_1.page,
     () => {
-        refreshFunc()
+        sessionStorage.setItem('currentPage', data_1.page)
+        getFunRecordList()
     },
     { immediate: true, deep: true }
 )
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
+})
 // 得到备案列表
 const getRecordList = () => {
     APIgetRecordList().then(res => {
@@ -831,6 +853,8 @@ refreshPage()
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 ::v-deep .el-form-item__content {
     align-items: inherit !important;
 }

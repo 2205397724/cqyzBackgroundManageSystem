@@ -48,7 +48,7 @@
                         <div class="details-box">
                             <div class="item">
                                 <div class="left content">内容</div>
-                                <div class="right">{{ dataForm.item.content }}</div>
+                                <div class="right" v-html="dataForm.item.content" />
                             </div>
                             <div v-if="dataForm.item.affix&&dataForm.item.affix.length>0" class="item">
                                 <div class="left content">附件</div>
@@ -90,6 +90,12 @@
                                         <div class="left">投诉对象</div>
                                         <div class="right">{{ newcatob.item.name }}</div>
                                     </div>
+                                </div>
+                            </div>
+                            <div v-if="dataForm.item.kind == 1" class="item">
+                                <div class="left content">设施部位</div>
+                                <div class="right">
+                                    <el-tag v-for="(item,i) in illegalList.arr" :key="i" type="success" class="m-r-10">{{ item.tgt_able?.name }}</el-tag>
                                 </div>
                             </div>
                         </div>
@@ -746,6 +752,7 @@
     </div>
 </template>
 <script setup>
+import illegal from '@/router/modules/event/illegal'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 console.log(route.query.id)
@@ -766,7 +773,8 @@ import {
     // APIpostComment,
     APIgetCommentDetails,
     APIputComplaint,
-    APIRecordList
+    APIRecordList,
+    APIgetIllegalList
 } from '@/api/custom/custom.js'
 const dataForm = reactive({
     item: {
@@ -790,6 +798,9 @@ const replayTotlogs = reactive({
 const replayLogable = reactive({
     item: {}
 })
+const illegalList = reactive({
+    arr: []
+})
 // 投诉详情
 const getComplaintDetailsFunc = () => {
     APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' }).then(res => {
@@ -810,6 +821,12 @@ const getComplaintDetailsFunc = () => {
         replayLogable.item = replayTotlogs.item[0].logable
         console.log(replayTotlogs.item)
         getOptsFunc()
+        if (res.kind == 1) {
+            APIgetIllegalList({ page: 1, per_page: 500, cid: route.query.id }).then(res => {
+                console.log(res)
+                illegalList.arr = res
+            })
+        }
     })
 }
 const data_2 = reactive({

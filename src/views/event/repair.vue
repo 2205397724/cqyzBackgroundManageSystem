@@ -196,15 +196,17 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <!-- <el-form-item
+                        <el-form-item
                             label-width="100px"
-                            label="状态"
-                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
+                            label="所在小区"
+                            :error="data_1.add_error&&data_1.add_error.zid?data_1.add_error.zid[0]:''"
                         >
-                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                                <el-option v-for="(item,i) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item> -->
+                            <div class="m-b-10 w_100">
+                                <div class="searchUserGroup">
+                                    <SearchResidential ref="V" v-model:name="zoneName" @checkName="checkNameFunc" />
+                                </div>
+                            </div>
+                        </el-form-item>
                     </el-col>
                     <template v-if="data_1.add_title=='修改'">
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -293,13 +295,7 @@
                             label="内容"
                             :error="data_1.add_error&&data_1.add_error.content?data_1.add_error.content[0]:''"
                         >
-                            <el-input
-                                v-model="data_1.add_form.content"
-                                class="head-btn"
-                                :autosize="{ minRows: 2, maxRows: 6 }"
-                                type="textarea"
-                                placeholder=""
-                            />
+                            <editor v-model="data_1.add_form.content" class="w-100" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -408,6 +404,7 @@ const flag = ref(false)
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const clickFuncAddVote = () => {
+    data_1.add_form.type = 3
     let files = []
     let file_key = []
     if (file_list.value.length > 0) {
@@ -469,6 +466,15 @@ const clickFuncAddVote = () => {
         })
     }
 }
+const checkNameFunc = row => {
+    data_1.add_form.zid = row.id
+}
+const V = ref(null)
+const zoneName = ref('')
+const dialogClosed = () => {
+    V.value.clearFunc()
+    zoneName.value = ''
+}
 const clickFuncModify = val => {
     data_1.add_error = {}
     data_1.add_title = '修改'
@@ -485,6 +491,7 @@ const clickFuncModify = val => {
             }
         }
         file_list.value = arr
+        zoneName.value = res.zone.name
         data_1.add_switch = true
     })
 }
@@ -563,8 +570,5 @@ getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_p
 @include pageStyle;
 ::v-deep .el-cascader {
     width: 100%;
-}
-:deep .el-button {
-    font-size: 12px;
 }
 </style>
