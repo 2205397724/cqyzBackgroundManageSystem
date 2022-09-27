@@ -3,7 +3,7 @@
         <page-main style="overflow: hidden;">
             <div class="m-b-20">
                 <el-button
-                    type="primary" :icon="Plus" size="large"
+                    type="primary" size="large" :icon="Plus"
                     @click="()=>{
                         data_1.add_form={};
                         data_1.add_error={};
@@ -40,7 +40,7 @@
                             </el-col>
                         </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                    <!-- <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 是否匿名：
@@ -51,7 +51,7 @@
                                 </el-select>
                             </el-col>
                         </el-row>
-                    </el-col>
+                    </el-col> -->
                 </el-row>
                 <el-row>
                     <el-col :xs="0" :sm="4" :md="3" :lg="2" />
@@ -146,7 +146,7 @@
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="200">
+                <el-table-column fixed="right" label="操作" width="150">
                     <template #default="scope">
                         <el-button
                             type="primary" class="btnfix"
@@ -163,12 +163,12 @@
                         >
                             转办
                         </el-button> -->
-                        <el-button
+                        <!-- <el-button
                             class="btnfix"
                             @click="clickFuncAllot4(scope.row.id)"
                         >
                             违建
-                        </el-button>
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -229,17 +229,6 @@
                                 <el-option v-for="(item,i) in opts_all.obj.toushu_ano" :key="item.key" :label="item.val" :value="item.key" />
                             </el-select>
                         </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <!-- <el-form-item
-                            label-width="100px"
-                            label="状态"
-                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                        >
-                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                                <el-option v-for="(item) in opts_all.obj.toushu_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item> -->
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
@@ -355,13 +344,7 @@
                             label="内容"
                             :error="data_1.add_error&&data_1.add_error.content?data_1.add_error.content[0]:''"
                         >
-                            <el-input
-                                v-model="data_1.add_form.content"
-                                class="head-btn"
-                                :autosize="{ minRows: 2, maxRows: 6 }"
-                                type="textarea"
-                                placeholder=""
-                            />
+                            <editor v-model="data_1.add_form.content" class="w-100" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -511,7 +494,7 @@
         <!-- 添加违建 -->
         <el-dialog
             v-model="popup_4.switch"
-            title="为投诉添加违建"
+            title="添加设施部位"
             width="400px"
             @closed="dialogClosed_1"
         >
@@ -610,10 +593,7 @@ const getFuncVoteList = () => {
         kind: 2,
         status: index.value
     }
-    if (index.value == 0) {
-        delete data.status
-    }
-    if (val == 10) {
+    if (index.value == 10) {
         delete data.status
     }
     for (let key in data_1.search) {
@@ -627,6 +607,14 @@ const getFuncVoteList = () => {
         console.log(res)
         data_1.total = res.length
         data_1.list = res
+        // res.forEach((item,index)=>{
+        //     if(item.status ==99){
+
+        //     }else{
+        //         let data1=item.created_at
+        //         let data2=new Data()
+        //     }
+        // })
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
         if (res.length < data_1.per_page) {
@@ -958,7 +946,7 @@ const flag1 = ref(true)
 const flag2 = ref(true)
 const flag3 = ref(true)
 const StatusFunk = val => {
-    data_1.page == 1
+    data_1.page = 1
     noDeal(val)
     console.log(index.value)
     flag.value = false

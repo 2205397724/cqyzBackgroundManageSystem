@@ -45,12 +45,18 @@
                         </el-row> -->
                         <div class="details-tit-sm">基础信息</div>
                         <el-row :gutter="20">
-                            <el-col :span="8">
+                            <div class="item">
+                                <div class="left w-100 m-l-10">内容</div>
+                                <span v-html="data_details.item.content " />
+                            </div>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <!-- <el-col :span="8">
                                 <div class="item">
                                     <div class="left w-100">内容</div>
                                     <span v-html="data_details.item.content " />
                                 </div>
-                            </el-col>
+                            </el-col> -->
                             <el-col :span="8">
                                 <div class="item">
                                     <div class="left w-100">所在区域</div>

@@ -2,10 +2,7 @@
     <div>
         <page-main class="hidden">
             <div class="m-b-20">
-                <el-button
-                    type="primary" :icon="Plus" size="large"
-                    @click="addResidentialFunc"
-                >
+                <el-button type="primary" :icon="Plus" size="large" @click="addResidentialFunc">
                     添加人员
                 </el-button>
             </div>
@@ -17,7 +14,10 @@
                                 姓名：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="search_str.obj.name" class="search_tb" placeholder="请输入姓名" clearable />
+                                <el-input
+                                    v-model="search_str.obj.name" class="search_tb" placeholder="请输入姓名"
+                                    clearable
+                                />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -27,7 +27,10 @@
                                 身份证号码：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="16">
-                                <el-input v-model="search_str.obj.id_card" class="search_tb" placeholder="请输入身份证号码" clearable />
+                                <el-input
+                                    v-model="search_str.obj.id_card" class="search_tb" placeholder="请输入身份证号码"
+                                    clearable
+                                />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -37,7 +40,10 @@
                                 电话：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="search_str.obj.mobile" class="search_tb" placeholder="请输入电话" clearable />
+                                <el-input
+                                    v-model="search_str.obj.mobile" class="search_tb" placeholder="请输入电话"
+                                    clearable
+                                />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -46,7 +52,12 @@
                     <el-col :xs="0" :sm="4" :md="3" :lg="2" />
                     <el-col :xs="24" :sm="20" :md="21" :lg="22">
                         <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
-                        <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                        <el-button
+                            v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading"
+                            @click="refreshFunc"
+                        >
+                            重置
+                        </el-button>
                         <span v-show="switch_search == true" class="size-base">
                             *共搜索到{{ total }}条。
                         </span>
@@ -54,10 +65,8 @@
                 </el-row>
             </div>
             <el-table
-                v-loading="loading_tab"
-                :data="data.list"
-                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                class="tab_1"
+                v-loading="loading_tab" :data="data.list"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
             >
                 <el-table-column prop="id" label="姓名">
                     <template #default="scope">
@@ -95,28 +104,16 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="280">
                     <template #default="scope">
-                        <el-button
-                            type="success" size="small"
-                            @click="modifyFeatureFunc(scope.row)"
-                        >
+                        <el-button type="success" size="small" @click="modifyFeatureFunc(scope.row)">
                             标签
                         </el-button>
-                        <el-button
-                            type="primary" size="small"
-                            @click="modifyFunc(scope.row)"
-                        >
+                        <el-button type="primary" size="small" @click="modifyFunc(scope.row)">
                             修改
                         </el-button>
-                        <el-button
-                            size="small"
-                            @click="detailsFunc(scope.row)"
-                        >
+                        <el-button size="small" @click="detailsFunc(scope.row)">
                             详情
                         </el-button>
-                        <el-popconfirm
-                            title="确定要删除当前项么?" cancel-button-type="info"
-                            @confirm="deleteFunc(scope.row)"
-                        >
+                        <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
                             <template #reference>
                                 <el-button type="danger" size="small">
                                     删除
@@ -127,40 +124,21 @@
                 </el-table-column>
             </el-table>
             <el-pagination
-                v-model:current-page="page"
-                style="float: right;"
-                layout="prev,next,jumper,"
-                :total="50"
-                :page-size="per_page"
-                background
-                prev-text="上一页"
-                next-text="下一页"
-                hide-on-single-page
+                v-model:current-page="page" style="float: right;" layout="prev,next,jumper," :total="50"
+                :page-size="per_page" background prev-text="上一页" next-text="下一页" hide-on-single-page
             />
         </page-main>
         <!-- 修改添加 -->
-        <el-dialog
-            v-model="switch_add"
-            :title="str_title"
-            width="60%"
-            @closed="add_dialog_close"
-        >
+        <el-dialog v-model="switch_add" :title="str_title" width="60%" @closed="add_dialog_close">
             <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_add.obj"
-                >
+                <el-form ref="ruleFormRef" :model="from_add.obj">
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="姓名"
-                                label-width="100px"
+                                label="姓名" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.name"
-                                    placeholder=""
-                                />
+                                <el-input v-model="from_add.obj.name" placeholder="" />
                                 <!-- <el-input
                                     v-model="from_add.obj.logo"
                                     placeholder=""
@@ -169,102 +147,80 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="身份证号码"
-                                label-width="100px"
+                                label="身份证号码" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.id_card"
-                                    placeholder=""
-                                />
+                                <el-input v-model="from_add.obj.id_card" placeholder="" />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="电话"
-                                label-width="100px"
+                                label="电话" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.mobile"
-                                    placeholder=""
-                                />
+                                <el-input v-model="from_add.obj.mobile" placeholder="" />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
-                                label="性别"
-                                label-width="100px"
+                                label="性别" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.user_id?err_add.obj.user_id[0]:''"
                             >
-                                <el-select v-model="from_add.obj.gender" class="head-btn search_tb" placeholder="审核状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
+                                <el-select
+                                    v-model="from_add.obj.gender" class="head-btn search_tb" placeholder="审核状态"
+                                    clearable
+                                >
+                                    <el-option
+                                        v-for="(item,i) in opts_all.obj.gender" :key="item.key" :label="item.val"
+                                        :value="item.key"
+                                    />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="籍贯"
-                                label-width="100px"
+                                label="籍贯" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.contact?err_add.obj.contact[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.cc"
-                                    placeholder=""
-                                />
+                                <el-input v-model="from_add.obj.cc" placeholder="" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="职业"
-                                label-width="100px"
+                                label="职业" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.legal?err_add.obj.legal[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.job"
-                                    placeholder=""
-                                />
+                                <el-input v-model="from_add.obj.job" placeholder="" />
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
-                                label="政治面貌"
-                                label-width="100px"
+                                label="政治面貌" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.legal?err_add.obj.legal[0]:''"
                             >
-                                <el-input
-                                    v-model="from_add.obj.politics"
-                                    placeholder=""
-                                />
+                                <el-input v-model="from_add.obj.politics" placeholder="" />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="出生日期"
-                                label-width="100px"
+                                label="出生日期" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                             >
                                 <el-date-picker
-                                    v-model="from_add.obj.birthday"
-                                    type="datetime"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    class="w-100"
+                                    v-model="from_add.obj.birthday" type="datetime"
+                                    value-format="YYYY-MM-DD" placeholder="" class="w-100"
                                     :default-value="new Date()"
                                 />
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
                             <el-form-item
-                                label="备注信息"
-                                label-width="100px"
+                                label="备注信息" label-width="100px"
                                 :error="err_add.obj&&err_add.obj.desc?err_add.obj.desc[0]:''"
                             >
                                 <el-input
-                                    v-model="from_add.obj.desc"
-                                    :autosize="{ minRows: 4, maxRows: 6 }"
-                                    type="textarea"
-                                    placeholder=""
+                                    v-model="from_add.obj.desc" :autosize="{ minRows: 4, maxRows: 6 }"
+                                    type="textarea" placeholder=""
                                 />
                             </el-form-item>
                         </el-col>
@@ -309,11 +265,7 @@
             </template>
         </el-dialog>
         <!-- 详情 -->
-        <el-dialog
-            v-model="switch_details"
-            title="详情"
-            width="50%"
-        >
+        <el-dialog v-model="switch_details" title="详情" width="50%">
             <div class="details-box">
                 <div class="item">
                     <div class="left">姓名</div>
@@ -363,21 +315,112 @@
             </template>
         </el-dialog>
         <el-dialog v-model="switch_feature" title="标签" width="70%" destroy-on-close="true">
-            <div style="height: 500px;">
-                <div style="width: 50%;height: 500px; float: left;">
-                    <div>
-                        <el-button plain type="primary">
-                            残疾人
-                        </el-button>
-                        <el-button plain type="danger">
-                            罪犯
-                        </el-button>
-                        <el-button plain type="success">
-                            群众
-                        </el-button>
+            <div style="height: 600px;">
+                <div style="width: 50%;height: 600px; float: left;border-right: 1px solid #ccc;">
+                    <div style="height: 20%; border-bottom: 1px solid #ccc;">
+                        <div v-for="item in tags.arr" :key="item.key">
+                            <el-tag type="success" @click="tagClick(item)">
+                                {{ item.tag }}
+                            </el-tag>
+                        </div>
+                    </div>
+                    <div style="height: 80%;">
+                        <!-- <el-scrollbar height="300px"> -->
+                        <el-radio-group
+                            v-for="(item,i) in personnelLabels.list" :key="i"
+                            v-model="from_examine.item.tag"
+                        >
+                            <el-radio :label="item.name" border size="small" style="margin: 10px 20px 0 7px;">{{ item.name }}</el-radio>
+                        </el-radio-group>
+                        <div style="margin-top: 95px;">
+                            <el-form ref="ruleFormRef" :model="from_examine.item">
+                                <el-row :gutter="10">
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                        <el-form-item label="是否有效" label-width="73px">
+                                            <el-switch
+                                                v-model="from_examine.item.active" class="switch" inline-prompt
+                                                style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;" active-text="开启" inactive-text="关闭"
+                                                :active-value="1" :inactive-value="0"
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                        <el-form-item label="备注" label-width="73px">
+                                            <el-input
+                                                v-model="from_examine.item.desc"
+                                                type="textarea"
+                                                :autosize="{ minRows: 2, maxRows: 6 }" placeholder=""
+                                            />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :md="24" :lg="24">
+                                        <el-form-item label="附件" prop="logo" label-width="73px">
+                                            <el-upload
+                                                action="***"
+                                                :auto-upload="false"
+                                                :file-list="file_list" :on-change="(file,files)=>{
+                                                    file_list = files
+                                                }" :on-remove="(file,files)=>{
+                                                    file_list = files
+                                                }"
+                                            >
+                                                <el-button type="primary" class="m-b-10">选择</el-button>
+                                            </el-upload>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                            <el-button type="primary" style="position: absolute;right: 56%; bottom: 80px;" @click="addFeature">添加</el-button>
+                        </div>
+
+                        <!-- </el-scrollbar> -->
                     </div>
                 </div>
-                <div style="width: 50%;height: 500px; background-color: #eee; float: left;" />
+                <div style="width: 50%;height: 600px; float: left;">
+                    <div v-if="taglog.arr.length >0">
+                        <el-scrollbar height="600px" width="400px">
+                            <div class="m-l-10">
+                                <el-timeline style="padding: 1px;">
+                                    <el-timeline-item
+                                        v-for="(item,index) in taglog.arr" :key="item.key"
+                                        :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''"
+                                    >
+                                        <el-card>
+                                            <div class="details-box">
+                                                <div class="item">
+                                                    <div class="left" style="width: 70px;">备注</div>
+                                                    <div class="right">
+                                                        <span>{{ item.desc }}</span>
+                                                    </div>
+                                                </div>
+                                                <div v-if="item.affix && item.affix.length >= 1" class="item">
+                                                    <div class="left" style="width: 70px;">附件</div>
+                                                    <div class="right flx">
+                                                        <div v-for="(val, i) in item.affix" :key="i" class="inline-block">
+                                                            <el-image
+                                                                :preview-src-list="item.affixs"
+                                                                class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + val"
+                                                                fit="cover"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <div class="left" style="width: 70px;">处理人</div>
+                                                    <div class="right">
+                                                        <span>{{ item.op_user?.name ? item.op_user?.name :item.op_user?.nickname ? item.op_user?.nickname :item.op_user?.username }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </el-card>
+                                    </el-timeline-item>
+                                </el-timeline>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                </div>
             </div>
             <template #footer>
                 <el-button type="warning" plain @click="switch_feature = false">取消</el-button>
@@ -397,16 +440,22 @@ import {
     APIputPersonnelManage,
     APIpostPersonnelManage,
     APIdeletePersonnelManage,
-    APIgetPersonnelManageDetails
+    APIgetPersonnelManageDetails,
+    APIgetPersonnelLabels,
+    APIpostPersonnelTag,
+    APIgetPersonnelTag,
+    APIgetPersonnelTaglog
 } from '@/api/custom/custom.js'
 import {
     ElMessage
 } from 'element-plus'
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import { Search, Plus, Loading } from '@element-plus/icons-vue'
 import md5 from 'md5'
 const data = reactive({
     list: []
 })
+const radio = ref('1')
 const page = ref(1)
 const per_page = ref(15)
 const total = ref(50)
@@ -474,12 +523,16 @@ const err_add = reactive({
 const switch_add = ref(false)
 const str_title = ref('')
 const switch_details = ref(false)
+const personnelLabels = reactive({
+    list: []
+})
 const detailsFunc = row => {
     APIgetPersonnelManageDetails(row.id).then(res => {
         console.log(res)
         data_details.item = res
         switch_details.value = true
     })
+
 }
 // 同意拒绝提交
 const postFunc = formEl => {
@@ -542,9 +595,76 @@ const deleteFunc = val => {
     })
 }
 // 标签
+const from_examine = reactive({
+    item: {}
+})
+const tags = reactive({
+    arr: []
+})
+const tag = ref('')
 const switch_feature = ref(false)
 const modifyFeatureFunc = val => {
+    tag.value = val.id
+    from_examine.item = {}
+    file_list.value = []
+    APIgetPersonnelLabels({ type: 1 }).then(res => {
+        console.log(res)
+        personnelLabels.list = res
+    })
+    APIgetPersonnelTag({ tgt_id: tag.value }).then(res => {
+        console.log(res)
+        tags.arr = res
+    })
     switch_feature.value = true
+}
+const file_list = ref([])
+import { getFilesKeys } from '@/util/files.js'
+const addFeature = () => {
+    console.log(from_examine.item)
+    let files = []
+    let file_key = []
+    console.log(file_list.value)
+    if (file_list.value.length > 0) {
+        for (let i in file_list.value) {
+            if (!file_list.value[i].raw) {
+                file_key.push(file_list.value[i].name)
+            } else {
+                files.push(file_list.value[i].raw)
+            }
+        }
+    }
+    // files.push(from_examine.item.affix.raw)
+    if (files.length > 0) {
+        getFilesKeys(files, 'tag').then(arr => {
+            console.log(arr)
+            from_examine.item.affix = arr
+            from_examine.item.tgt_type = 1
+            from_examine.item.tgt_id = tag.value
+            APIpostPersonnelTag(from_examine.item).then(res => {
+                console.log(res)
+                ElMessage.success('添加成功')
+                switch_feature.value = false
+            }).catch(
+                ElMessage.error('添加失败')
+            )
+        })
+    }
+
+}
+const taglog = reactive({
+    arr: []
+})
+const tagClick = val => {
+    APIgetPersonnelTaglog({ page: 1, per_page: 500, tag_id: val.id }).then(res => {
+        console.log(res)
+
+        res.forEach((item, key) => {
+            res[key].affixs = []
+            for (let i in item.affix)
+                res[key].affixs.push(VITE_APP_FOLDER_SRC.value + item.affix[i])
+        })
+        taglog.arr = res
+    })
 }
 refreshFunc()
 // 配置项

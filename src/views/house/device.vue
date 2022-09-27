@@ -927,7 +927,7 @@ const getTabListFunc = () => {
         data_tab.arr = res
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.length <= per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)

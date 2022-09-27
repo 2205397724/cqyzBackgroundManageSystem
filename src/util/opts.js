@@ -820,6 +820,13 @@ const opts = {
     }, {
         key: 'mbr',
         val: '业主端'
+    }],
+    labels_kind: [{
+        key: 1,
+        val: '人员'
+    }, {
+        key: 2,
+        val: '房屋'
     }]
 }
 

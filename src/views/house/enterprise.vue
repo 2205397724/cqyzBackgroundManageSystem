@@ -1088,7 +1088,7 @@ const getTabListFunc = () => {
                 res.data[i].logo_1 = VITE_APP_FOLDER_SRC.value + res.data[i].logo
             }
             let btnNext = document.querySelector('.btn-next')
-            if (res.data.length <= per_page.value) {
+            if (res.data.length < per_page.value) {
                 btnNext.classList.add('not_allowed')
                 btnNext.setAttribute('disabled', true)
                 btnNext.setAttribute('aria-disabled', true)

@@ -368,7 +368,7 @@ const detailsFunc = val => {
         flow_data.arr = res.data
         let btnNext = document.querySelector('.btn-next')
         console.log(btnNext)
-        if (res.data.length <= per_page_1.value) {
+        if (res.data.length < per_page_1.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)

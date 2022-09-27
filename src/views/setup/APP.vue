@@ -43,7 +43,7 @@
                                 inactive-text="关闭"
                                 :active-value="1"
                                 :inactive-value="0"
-                                @change="switchFunk(scope.row.status)"
+                                @change="(val) => switchRecordFun(val, scope.row)"
                             />
                         </template>
                     </el-table-column>
@@ -358,6 +358,18 @@ const getTabListFunc = () => {
 const switchFunk = row => {
     console.log(row)
 
+}
+// switch开关
+const switchRecordFun = (status, val) => {
+    let params = {}
+    for (let key in val) {
+        if (val[key] !== null) {
+            console.log(key)
+            params[key] = val[key]
+        }
+    }
+    params.status = status
+    APIputAPP(val.id, params).then()
 }
 refreshFunc()
 // 添加
