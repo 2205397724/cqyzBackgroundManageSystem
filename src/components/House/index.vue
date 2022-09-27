@@ -14,7 +14,7 @@
                 <div style="height: 100%;">
                     <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
                         <div
-                            v-if="tree_item.type!=='units' &&!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
+                            v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
                             style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
                         />
                         <div style="padding: 20px 20px 0;box-sizing: border-box;">
@@ -150,15 +150,15 @@
                                                         v-model="checkFH.all[child.floor_truth][item.house_num].val"
                                                         @change="(val)=>{checkFH.all[child.floor_truth][item.house_num].val= val;allClickFunc(child.floor_truth,item.house_num,val)}"
                                                     />
-                                                    <el-popover
+                                                    <!-- <el-popover
                                                         :width="250"
                                                         trigger="hover"
 
                                                         placement="top"
                                                     >
-                                                        <template #reference>
-                                                            <div class="row-item-check">{{ item.house_num }}#</div>
-                                                        </template>
+                                                        <template #reference> -->
+                                                    <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
+                                                    <!-- </template>
                                                         <div style="box-sizing: border-box;padding: 4px;">
                                                             <div class="tip-title">房屋：{{ item.name }}</div>
                                                             <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
@@ -171,13 +171,88 @@
                                                                 <el-button type="success" plain @click="showNumbersFunc(item)">成员</el-button>
                                                             </div>
                                                         </div>
-                                                    </el-popover>
+                                                    </el-popover> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </el-scrollbar>
                                 </div>
                             </div>
+                            <el-drawer v-model="drawer" :direction="direction">
+                                <template #title>
+                                    <h4>房屋信息</h4>
+                                </template>
+                                <template #default>
+                                    <div style="box-sizing: border-box;padding: 4px;">
+                                        <div class="details-box">
+                                            <div class="item">
+                                                <div class="left">房屋名称</div>
+                                                <div class="right">{{ data_details.item.name }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">地址</div>
+                                                <div class="right">{{ data_details.item.addr }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">物理楼层</div>
+                                                <div class="right">{{ data_details.item.floor_truth }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">名义层</div>
+                                                <div class="right">{{ data_details.item.floor_alias }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">房号</div>
+                                                <div class="right">{{ data_details.item.house_num }}</div>
+                                            </div>
+                                            <!-- <div class="item">
+                                                                        <div class="left">类型</div>
+                                                                        <div class="right">
+                                                                            {{ getOptVal(opts_all.obj.device_type, data_details.item.type) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="item">
+                                                                        <div class="left">是否显示</div>
+                                                                        <div class="right">
+                                                                            {{ getOptVal(opts_all.obj.device_show, data_details.item.show) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        v-for="(item, i) in data_details.item.extra" v-if="data_details.item.extra" :key="i"
+                                                                        class="item"
+                                                                    >
+                                                                        <div class="left">{{ item.lab }}</div>
+                                                                        <div class="right">{{ item.val }}</div>
+                                                                    </div>
+                                                                    <div class="details-tit-sm">其他信息</div>
+                                                                    <div class="item"> -->
+                                            <div class="item">
+                                                <div class="left">房屋id</div>
+                                                <div class="right">{{ data_details.item.id }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">创建时间</div>
+                                                <div class="right">{{ data_details.item.created_at }}</div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="left">更新时间</div>
+                                                <div class="right">{{ data_details.item.updated_at }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="tip-title">房屋：{{ item.name }}</div>
+                                                                <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
+                                                                <div class="tip-title">安全状态：{{ getOptVal(opts_all.obj.house_status_safe,item.status_safe) }}</div>
+                                                                <div class="tip-title">产权性质：{{ getOptVal(opts_all.obj.house_type_property,item.type_property) }}</div>
+                                                                <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div> -->
+                                    <div class="m-t-10 m-l-20">
+                                        <el-button type="primary" plain @click="modifyResidentialFunc(item)">修改</el-button>
+                                        <!-- <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button> -->
+                                        <el-button type="warning" plain @click="showPropertyFunc(item)">产权</el-button>
+                                        <el-button type="success" plain @click="showNumbersFunc(item)">成员</el-button>
+                                    </div>
+                                </template>
+                            </el-drawer>
                         </div>
                     </div>
                 </div>
@@ -650,7 +725,7 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        <el-col :md="24" :lg="14">
+                        <!-- <el-col :md="24" :lg="14">
                             <el-form-item
                                 label="直属上级类型" prop="loc" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.loc?err_files.obj.loc[0]:''"
@@ -666,10 +741,6 @@
                                 label="直属楼栋/单元ID" prop="loc_id" label-width="120px"
                                 :error="err_files.obj&&err_files.obj.loc_id?err_files.obj.loc_id[0]:''"
                             >
-                                <!-- <el-input
-                                    v-model="files_obj.obj.loc_id"
-                                    placeholder=""
-                                /> -->
                                 <div v-if="files_obj.obj.loc=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
                                     <SearchBuilding v-model:str="files_obj.obj.loc_id" />
                                 </div>
@@ -677,7 +748,7 @@
                                     <SearchUnit v-model:str="files_obj.obj.loc_id" />
                                 </div>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :md="24">
                             <el-form-item
                                 label="附件" prop="file_src" label-width="120px"
@@ -716,7 +787,7 @@
         >
             <div class="m-b-20">
                 <el-button :disabled="!(read_state||!add_state)" type="primary" @click="modifyPropertyFunc(true)">变更产权</el-button>
-                <el-button :disabled="!(read_state||add_state)" type="primary" @click="modifyPropertyFunc(false)">修改错误</el-button>
+                <el-button :disabled="!(read_state||add_state)" type="primary" @click="modifyPropertyFunc(false)">修改产权</el-button>
                 <el-button v-if="!read_state" @click="modifycancel">取消</el-button>
             </div>
             <div :class="{'property-read-state':read_state}" style="height: 60vh;width: 100%;overflow-y: auto; overflow-x: hidden;">
@@ -1028,11 +1099,9 @@ const checkFunc = val => {
     house_list.arr = []
     active_obj.obj = val
     console.log(tree_item.value)
+    console.log(tree_item.value.type)
     if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
-        'buildings')) {
-        refreshFunc()
-    }
-    if (tree_item.value.type == 'units') {
+        'building')) {
         refreshFunc()
     }
 }
@@ -1053,6 +1122,7 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
+    console.log(tree_item.value)
     switch_search.value = false
     data_search.obj = {}
     getHouseListFunc()
@@ -1075,7 +1145,7 @@ const getUnitBuildFunc = () => {
         APIgetUnitsDetailsHouse(active_obj.obj.id).then(res => {
             details_data.obj = res
         })
-    } else if (active_obj.obj.type == 'buildings') {
+    } else {
         APIgetBuildDetailsHouse(active_obj.obj.id).then(res => {
             details_data.obj = res
 
@@ -1120,8 +1190,16 @@ const getHouseListFunc = () => {
     choseIDs.arr = []
     getUnitBuildFunc()
     let params = {
-        houseable_type: tree_item.value.type == 'units' ? 'units' : active_obj.obj.type,
-        houseable_id: tree_item.value.type == 'units' ? tree_item.value.id : active_obj.obj.id
+
+        // houseable_type: tree_item.value.type == 'units' ? 'units' : active_obj.obj.type,
+        // houseable_id: tree_item.value.type == 'units' ? tree_item.value.id : active_obj.obj.id
+        // houseable_type: active_obj.obj.type,
+        houseable_id: active_obj.obj.id
+    }
+    if (active_obj.obj.type == 'building') {
+        params.houseable_type = 'buildings'
+    } else {
+        params.houseable_type = active_obj.obj.type
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
@@ -1290,11 +1368,17 @@ const err_files = reactive({
 })
 import {
     APIpostFilesList,
-    APIgetPersonimptpl } from '@/api/custom/custom.js'
+    APIgetHouseimptpl } from '@/api/custom/custom.js'
 import { getFilesKeys } from '@/util/files.js'
 const filesUpFunc = () => {
     err_files.obj = {}
     let error = false
+    if (active_obj.obj.type == 'building') {
+        files_obj.obj.loc = 'buildings'
+    } else {
+        files_obj.obj.loc = 'units'
+    }
+    files_obj.obj.loc_id = active_obj.obj.id
     console.log(files_obj.obj)
     if (!files_obj.obj.file_src) {
         err_files.obj.file_src = ['请选择需要上传的文件']
@@ -1357,7 +1441,7 @@ const getFilesFunc = () => {
         files_tab.arr = res
         files_loading.value = false
     })
-    APIgetPersonimptpl().then(res => {
+    APIgetHouseimptpl().then(res => {
         console.log(res)
         Record_key.value = res.key
     })
@@ -1472,18 +1556,23 @@ const showPropertyFunc = val => {
     console.log(val)
     from_error_property.msg = {}
     property_obj.obj = JSON.parse(JSON.stringify(val))
-    APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
-        console.log(res)
-        if (property_obj.obj.curr_property) {
+    if (property_obj.obj.curr_property) {
+        APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
+            console.log(res)
+            // if (property_obj.obj.curr_property) {
             property_form.obj = res
             copy_property.obj = JSON.parse(JSON.stringify(res))
-        } else {
-            property_form.obj = { house_id: property_obj.obj.id }
-            copy_property.obj = { house_id: property_obj.obj.id }
-        }
-        read_state.value = true
-        switch_property.value = true
-    })
+            // } else {
+
+            // }
+
+        })
+    } else {
+        property_form.obj = { house_id: property_obj.obj.id }
+        copy_property.obj = { house_id: property_obj.obj.id }
+    }
+    read_state.value = true
+    switch_property.value = true
 }
 // 房屋成员
 import {
@@ -1676,6 +1765,14 @@ const openFileFunc = () => {
         // loc_id: active_obj.obj.id
     }
 }
+const drawer = ref(false)
+const data_details = reactive({
+    item: {}
+})
+const houseDetailsFunc = row => {
+    data_details.item = row
+    drawer.value = true
+}
 // refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
@@ -1736,8 +1833,8 @@ getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_ho
         display: flex;
     }
     .tree-item {
-        min-width: 300px;
-        width: 300px;
+        min-width: 250px;
+        width: 250px;
         border-right: 1px solid #e9e9e9;
         .tree-title {
             height: 60px;
@@ -1862,5 +1959,8 @@ getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_ho
 }
 :deep .el-tree {
     --el-tree-node-hover-bg-color: #e9f4ff;
+}
+:deep .el-overlay {
+    background-color: rgb(0 0 0 / 30%);
 }
 </style>

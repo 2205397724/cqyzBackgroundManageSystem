@@ -49,21 +49,20 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="name" label="单元名称" width="180" />
-                <el-table-column prop="addr" label="地址" width="220" />
-                <el-table-column prop="cnt_floor" label="楼层数" width="140">
+                <el-table-column prop="name" label="单元名称" />
+                <el-table-column prop="addr" label="地址" />
+                <el-table-column prop="cnt_floor" label="楼层数">
                     <template #default="scope">
                         <span>{{ scope.row.cnt_floor }} 层</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="cnt_house" label="户数" width="140">
+                <el-table-column prop="cnt_house" label="户数">
                     <template #default="scope">
                         <el-link class="el-button" :underline="false" style="padding: 0 10px;" type="primary" @click="showHouseFunc(scope.row)">
                             {{ scope.row.cnt_house }} 户
                         </el-link>
                     </template>
                 </el-table-column>
-                <el-table-column />
                 <el-table-column fixed="right" label="操作" width="200">
                     <template #default="scope">
                         <el-button
@@ -170,6 +169,19 @@
                         </el-col>
                         <el-col :md="24" :lg="12">
                             <el-form-item
+                                label="总专有面积" prop="area_exc" label-width="90px"
+                                :error="from_error.msg&&from_error.msg.area_exc?from_error.msg.area_exc[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.area_exc"
+                                    placeholder=""
+                                >
+                                    <template #append>m²</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
                                 label="建成时间" prop="time_build_end"
                                 label-width="90px"
                                 :error="from_error.msg&&from_error.msg.time_build_end?from_error.msg.time_build_end[0]:''"
@@ -228,57 +240,58 @@
             title="详情"
             width="50%"
         >
-            <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="基础信息" name="1">
-                    <el-scrollbar height="400px">
-                        <div class="details-box">
-                            <div class="item">
-                                <div class="left">单元名称</div>
-                                <div class="right">{{ data_details.item.name }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">所属楼栋</div>
-                                <div class="right">{{ data_details.item.building_id }} </div>
-                            </div>
-                            <div class="item">
-                                <div class="left">地址</div>
-                                <div class="right">{{ data_details.item.addr }} </div>
-                            </div>
-                            <div class="item">
-                                <div class="left">楼层数</div>
-                                <div class="right">{{ data_details.item.cnt_floor }} 层</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">户数</div>
-                                <div class="right">{{ data_details.item.cnt_house }} 户</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">总专有面积</div>
-                                <div class="right">{{ data_details.item.area_exc }} m²</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">创建时间</div>
-                                <div class="right">{{ data_details.item.created_at }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">修改时间</div>
-                                <div class="right">{{ data_details.item.updated_at }}</div>
-                            </div>
-                            <div class="item">
-                                <div class="left">备注</div>
-                                <div class="right">{{ data_details.item.remark }}</div>
-                            </div>
-                            <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
-                                <div class="left">简介</div>
-                                <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
-                            </div>
-                        </div>
-                    </el-scrollbar>
-                </el-tab-pane>
+            <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="基础信息" name="1"> -->
+            <el-scrollbar height="400px">
+                <div class="details-box">
+                    <div class="item">
+                        <div class="left">单元名称</div>
+                        <div class="right">{{ data_details.item.name }}</div>
+                    </div>
+
+                    <div class="item">
+                        <div class="left">地址</div>
+                        <div class="right">{{ data_details.item.addr }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">楼层数</div>
+                        <div class="right">{{ data_details.item.cnt_floor }} 层</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">户数</div>
+                        <div class="right">{{ data_details.item.cnt_house }} 户</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">总专有面积</div>
+                        <div class="right">{{ data_details.item.area_exc }} m²</div>
+                    </div>
+                    <div v-if="data_details.item.pos_name" class="item">
+                        <div class="left">所在位置</div>
+                        <div class="right">{{ data_details.item.pos_name }} </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">创建时间</div>
+                        <div class="right">{{ data_details.item.created_at }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">修改时间</div>
+                        <div class="right">{{ data_details.item.updated_at }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">备注</div>
+                        <div class="right">{{ data_details.item.remark }}</div>
+                    </div>
+                    <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
+                        <div class="left">简介</div>
+                        <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
+                    </div>
+                </div>
+            </el-scrollbar>
+            <!-- </el-tab-pane>
                 <el-tab-pane label="档案信息" name="2">
                     <el-scrollbar height="400px" />
                 </el-tab-pane>
-            </el-tabs>
+            </el-tabs> -->
 
             <template #footer>
                 <span class="dialog-footer">
@@ -307,13 +320,14 @@ const tree_item = reactive({
 const activeName = ref('1')
 const edit_house = ref(false)
 const showHouseFunc = val => {
-    let params = {
+    refreshFunc()
+    tree_item.arr = [{
         id: val.id,
         name: val.name,
         leaf: true,
         type: 'units'
-    }
-    tree_item.arr.push(params)
+    }]
+    // tree_item.arr.push(params)
     edit_house.value = true
 }
 import SearchBuilding from '@/components/SearchBuilding/index.vue'

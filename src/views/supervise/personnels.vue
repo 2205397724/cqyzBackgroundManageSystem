@@ -5,6 +5,7 @@
                 <el-button type="primary" :icon="Plus" size="large" @click="addResidentialFunc">
                     添加人员
                 </el-button>
+                <el-button class="m-l-20" :icon="Download" size="large" type="success" @click="getFilesFunc">人员导入</el-button>
             </div>
             <div class="search">
                 <el-row>
@@ -64,6 +65,7 @@
                     </el-col>
                 </el-row>
             </div>
+
             <el-table
                 v-loading="loading_tab" :data="data.list"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
@@ -318,7 +320,7 @@
             <div style="height: 600px;">
                 <div style="width: 50%;height: 600px; float: left;border-right: 1px solid #ccc;">
                     <div style="height: 20%; border-bottom: 1px solid #ccc;">
-                        <div v-for="item in tags.arr" :key="item.key">
+                        <div v-for="item in tags.arr" :key="item.key" class="inline-block m-r-10 pointer">
                             <el-tag type="success" @click="tagClick(item)">
                                 {{ item.tag }}
                             </el-tag>
@@ -426,6 +428,111 @@
                 <el-button type="warning" plain @click="switch_feature = false">取消</el-button>
             </template>
         </el-dialog>
+        <!-- 上传列表 -->
+        <el-dialog
+            v-model="switch_files_list"
+            title="上传"
+            width="70%"
+        >
+            <div style="display: flex; flex-wrap: wrap;">
+                <el-button class="head-btn" @click="getFilesFunc">刷新</el-button>
+                <el-button class="head-btn" type="success" @click="openFileFunc">导入房屋</el-button>
+                <el-popover
+                    :width="220"
+                    trigger="hover"
+                    content="点击下载导入房屋的模板文件"
+                    effect="dark"
+                >
+                    <template #reference>
+                        <el-link
+                            class="head-btn"
+                            :underline="false"
+                            :href="VITE_APP_FOLDER_SRC+Record_key"
+                            target="_blank"
+                        >
+                            <el-button>
+                                <el-icon>
+                                    <el-icon-download />
+                                </el-icon>
+                                下载导入示例
+                            </el-button>
+                        </el-link>
+                    </template>
+                </el-popover>
+            </div>
+            <el-table
+                v-loading="files_loading"
+                :data="files_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
+                max-height="400"
+            >
+                <el-table-column prop="name" label="名称" />
+                <el-table-column prop="desc" label="备注" />
+                <el-table-column prop="status" label="状态" width="100">
+                    <template #default="scope">
+                        <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="导入时间" width="170" />
+                <el-table-column prop="updated_at" label="更新时间" width="170" />
+            </el-table>
+        </el-dialog>
+        <!-- 上传表单 -->
+        <el-dialog
+            v-model="switch_files"
+            title="上传"
+            width="50%"
+        >
+            <div>
+                <el-form
+                    :model="files_obj.obj"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="任务名称" prop="name" label-width="120px"
+                                :error="err_files.obj&&err_files.obj.name?err_files.obj.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="files_obj.obj.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24">
+                            <el-form-item
+                                label="附件" prop="file_src" label-width="120px"
+                                :error="err_files.obj&&err_files.obj.file_src?err_files.obj.file_src[0]:''"
+                            >
+                                <el-upload
+                                    class="upload-demo"
+                                    drag
+                                    :show-file-list="false"
+                                    :auto-upload="false"
+                                    action="Fake Action"
+                                    :on-change="fileChangeFunc"
+                                >
+                                    <el-icon class="el-icon--upload"><el-icon-upload-filled /></el-icon>
+                                    <div class="el-upload__text">
+                                        {{ upload_str }}
+                                    </div>
+                                </el-upload>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_files=false">取消</el-button>
+                    <el-button type="primary" @click="filesUpFunc()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -450,7 +557,7 @@ import {
     ElMessage
 } from 'element-plus'
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
-import { Search, Plus, Loading } from '@element-plus/icons-vue'
+import { Download, Search, Plus, Loading } from '@element-plus/icons-vue'
 import md5 from 'md5'
 const data = reactive({
     list: []
@@ -644,9 +751,9 @@ const addFeature = () => {
                 console.log(res)
                 ElMessage.success('添加成功')
                 switch_feature.value = false
-            }).catch(
+            }).catch(error => {
                 ElMessage.error('添加失败')
-            )
+            })
         })
     }
 
@@ -666,6 +773,92 @@ const tagClick = val => {
         taglog.arr = res
     })
 }
+// 人员导入
+import {
+    APIgetPersonimptask,
+    APIgetPersonimptpl_1,
+    APIpostPersonimptask
+} from '@/api/custom/custom.js'
+const switch_files_list = ref(false)
+const files_loading = ref(false)
+const files_tab = reactive({
+    arr: []
+})
+const Record_key = ref('')
+const getFilesFunc = () => {
+    files_loading.value = true
+    APIgetPersonimptask({ page: 1, per_page: 15 }).then(res => {
+        console.log(res)
+        files_tab.arr = res
+        files_loading.value = false
+        switch_files_list.value = true
+    })
+    APIgetPersonimptpl_1().then(res => {
+        console.log(res)
+        Record_key.value = res.key
+    })
+
+}
+const upload_str = ref('')
+// 打开导入房屋from
+const openFileFunc = () => {
+    upload_str.value = '请点击此处或拖拽需要上传的文件'
+    switch_files.value = true
+    files_obj.obj = {
+        // loc: active_obj.obj.type,
+        // loc_id: active_obj.obj.id
+    }
+}
+const err_files = reactive({
+    obj: {}
+})
+const files_obj = reactive({
+    obj: {}
+})
+const switch_files = ref(false)
+const filesUpFunc = () => {
+    err_files.obj = {}
+    let error = false
+    if (!files_obj.obj.file_src) {
+        err_files.obj.file_src = ['请选择需要上传的文件']
+        error = true
+    }
+    if (!files_obj.obj.name) {
+        err_files.obj.name = ['请输入任务名称']
+        error = true
+    }
+    if (error) {
+        return false
+    }
+    let arr = []
+    arr.push(files_obj.obj.file_src)
+    if (files_obj.obj.file_src) {
+        getFilesKeys(arr, 'addHouse').then(arr => {
+            files_obj.obj.file_src = arr[0]
+            for (let key in files_obj.obj) {
+                if (files_obj.obj[key] == '') {
+                    delete files_obj.obj[key]
+                }
+            }
+            APIpostPersonimptask(files_obj.obj).then(res => {
+                ElMessage.success('导入成功')
+                getFilesFunc()
+                switch_files.value = false
+                arr = []
+            }).catch(() => {
+                ElMessage.error('上传失败')
+            })
+
+        })
+    }
+}
+const fileChangeFunc = (file, fileList) => {
+    if (fileList.length > 1) {
+        fileList.splice(0, 1)
+    }
+    upload_str.value = file.raw.name
+    files_obj.obj.file_src = file.raw
+}
 refreshFunc()
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
@@ -674,7 +867,7 @@ const opts_all = reactive({
         status_all: []
     }
 })
-getOpts(['gender']).then(res => {
+getOpts(['gender', 'status_all']).then(res => {
     opts_all.obj = res
 })
 </script>

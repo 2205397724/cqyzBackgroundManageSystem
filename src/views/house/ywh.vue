@@ -37,7 +37,7 @@
                         <el-tabs model-value="first" @tab-click="handleClick">
                             <el-tab-pane label="业委会成员" name="first">
                                 <el-button
-                                    type="primary"
+                                    type="primary" class="m-b-10"
                                     @click="addflowFunc(data_details.item)"
                                 >
                                     添加成员
@@ -551,6 +551,7 @@ const deleteFunc2 = val => {
 //     })
 // }
 const checkUsersNameFunc = val => {
+    console.log(val)
     from_examine2.item.user_id = val.id
 }
 const V_1 = ref(null)
@@ -567,14 +568,15 @@ const addflowFunc = () => {
     switch_examine2.value = true
 }
 const flowUpdataFunc = () => {
+    console.log(from_examine2.item)
     from_error2.msg = {}
-    for (let key in from_examine2.item) {
-        if (from_examine.item2[key] !== null) {
-            if (from_examine.item2[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item2[key] !== 0 || from_examine.item2[key] !== false)) {
-                delete from_examine.item2[key]
-            }
-        }
-    }
+    // for (let key in from_examine2.item) {
+    //     if (from_examine.item2[key] !== null) {
+    //         if (from_examine.item2[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item2[key] !== 0 || from_examine.item2[key] !== false)) {
+    //             delete from_examine.item2[key]
+    //         }
+    //     }
+    // }
     if (str_title2.value == '修改') {
         APIputGroupUser(flow_id, from_examine2.item.user_id, from_examine2.item).then(res => {
             detailsFunc(flow.item)

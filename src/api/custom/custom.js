@@ -1570,6 +1570,10 @@ export function APIputPersonnelManage(id, data) {
 export function APIpostPersonnelManage(data) {
     return api2.post('/people', data)
 }
+// 房屋导入任务
+export function APIgetHouseimptpl() {
+    return api2.get('/houseimptpl')
+}
 // 人员导入任务
 export function APIgetPersonimptpl() {
     return api2.get('/personimptpl')
@@ -1593,4 +1597,18 @@ export function APIgetPersonnelTag(params) {
 }
 export function APIgetPersonnelTaglog(params) {
     return api2.get('/taglog', { params: params })
+}
+// 人员导入
+export function APIgetPersonimptask(params) {
+    return api2.get('/personimptask', { params: params })
+}
+// 模板
+export function APIgetPersonimptpl_1() {
+    return api2.get('/personimptpl')
+}
+export function APIpostPersonimptask(data) {
+    return api2.post('/personimptask', data)
+}
+export function APIdeletePersonimptask(id) {
+    return api2.delete(`/personimptask/${id}`)
 }

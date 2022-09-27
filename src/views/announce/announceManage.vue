@@ -504,6 +504,39 @@
                 <position-tree-fourth :tree_item="tree_item.arr" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
             </el-scrollbar>
         </el-dialog>
+        <el-dialog v-model="switch_apply" title="公示申请">
+            <el-form
+                ref="ruleFormRef"
+                :model="from_pass.obj"
+            >
+                <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" class="m-b-20">
+                    <el-step v-for="(item,i) in buzhoutiao.arr" :key="i" :title="item.name" />
+                </el-steps>
+                <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" class="pass">
+                    当前公示已申请完成
+                </div>
+                <el-row v-else :gutter="10">
+                    <el-col :xs="12" :sm="12">
+                        <el-form-item
+                            label="审核部门" label-width="120px"
+                            :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
+                        >
+                            <div class="wh_100">
+                                <div class="searchUserGroup">
+                                    <SearchUserGroup ref="V" v-model:name="userGroupName_1" @checkName="checkNameFunc_1" />
+                                </div>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="switch_apply=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc_2()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -636,7 +669,7 @@ const dialogExamineCloseFunc = () => {
                 // ElMessage.success('添加成功')
                 // switch_examine.value = false
             }).catch(err => {
-                ElMessage.error('添加失败')
+                // ElMessage.error('添加失败')
             })
         }
         return false
@@ -664,14 +697,14 @@ const dialogExamineCloseFunc = () => {
         } else {
             APIpostEventArticle(from_examine.item).then(res => {
                 console.log(res)
-                announce_id.value = res.data.id,
+                announce_id.value = res.id,
                 refreshFunc()
                 //         announce_id.value = getNameFunc(res, from_examine.item.title)
                 // group_id.value = from_examine.item.groupid
                 // ElMessage.success('添加成功')
                 // switch_examine.value = false
             }).catch(err => {
-                ElMessage.error('添加失败')
+                // ElMessage.error('添加失败')
             })
         }
     })
@@ -773,13 +806,18 @@ const modifyResidentialFunc = val => {
     })
 
 }
+const switch_apply = ref(false)
+const announce_id_1 = ref('')
 const noExamineFunc = row => {
-    from_pass.obj.reply = ''
-    active.value = 0
+    switch_apply.value = true
+    console.log(row)
+    announce_id_1.value = row.id
+    // from_pass.obj.reply = ''
+    // active.value = 0
     // APIgetDetailsArchiveAudit(row.id).then(res => {
     //     console.log(res)
     // })
-    modifyResidentialFunc(row)
+    // modifyResidentialFunc(row)
 }
 // 删除 附件
 const deleteServiceFunc = index => {
@@ -849,7 +887,7 @@ const examineListFunc = val => {
     APIgetListArchiveAudit(params).then(res => {
         console.log(res)
         Examine_id.value = res[0].id
-        switch_pass.value = true
+        // switch_pass.value = true
     })
 }
 const active_bzt = ref(99)
@@ -894,16 +932,25 @@ const passToAuditFunc = () => {
     //     'group_id': gongshixiangqing.obj.groupid
     // }
     from_pass.obj.tgt_type = 'announce'
-    from_pass.obj.tgt_id = announce_id.value
+    if (announce_id_1.value) {
+        from_pass.obj.tgt_id = announce_id_1.value
+    } else {
+        from_pass.obj.tgt_id = announce_id.value
+    }
     console.log(from_pass.obj)
     APIpostArchiveAudit(from_pass.obj).then(res => {
         // ElMessage.success('审核成功')
+        if (announce_id_1.value) {
+            ElMessage.success('申请成功')
+        }
         refreshFunc()
         // passAudit(gongshixiangqing.obj)
         // switch_pass.value = false
-    }).catch(err => {
-        ElMessage.success('申请失败')
     })
+}
+const dialogExamineCloseFunc_2 = () => {
+    passToAuditFunc()
+    switch_apply.value = false
 }
 const fileChange = (val, i) => {
     from_examine.item.affix[i].file = val.target.files[0].name
@@ -947,12 +994,12 @@ const getChinaName = () => {
 const checkFunc = val => {
     console.log(val)
     if (val.type == 'zone') {
-        from_examine.item.toval = val.china_code
+        from_examine.item.toval = val.id
         data_search.obj.tovalcan = val.china_code
         from_examine.item.totype = 6
     } else {
-        from_examine.item.toval = val.id
-        data_search.obj.tovalcan = val.id
+        from_examine.item.toval = val.china_code
+        data_search.obj.tovalcan = val.china_code
         if (val.id.length <= 6) {
             from_examine.item.totype = 3
         } else if (val.id.length <= 9) {
