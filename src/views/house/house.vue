@@ -108,7 +108,7 @@
                                         effect="dark"
                                     >
                                         <template #reference>
-                                            <el-link :underline="false" href="http://192.168.110.37:10090/excels/house_import_tpl.xlsx" target="_blank"><el-button style="width: 100%;"><el-icon><el-icon-download /></el-icon></el-button></el-link>
+                                            <el-link :underline="false" :href="VITE_APP_FOLDER_SRC+Record_key" target="_blank"><el-button style="width: 100%;"><el-icon><el-icon-download /></el-icon></el-button></el-link>
                                         </template>
                                     </el-popover>
                                 </div>
@@ -899,6 +899,7 @@ const data_alldetails = reactive({
 const error_alldetails = reactive({
     msg: {}
 })
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
 const showForm = () => {
@@ -978,6 +979,7 @@ const refreshFunc = () => {
     data_search.sync_building_id = ''
     data_search.sync_unit_id = ''
     getTabListFunc()
+    downloadFile()
 }
 
 // 详情
@@ -1132,7 +1134,7 @@ const modifyResidentialFunc = val => {
 import axios from 'axios'
 import {
     APIgetFilesList,
-    APIpostFiles
+    APIgetHouseimptpl
 } from '@/api/custom/custom.js'
 const switch_files = ref(false)
 const files_obj = reactive({
@@ -1215,6 +1217,13 @@ const filesUpFunc = () => {
 }
 const refreshFilesListFunc = () => {
     getFilesFunc()
+}
+const Record_key = ref('')
+const downloadFile = () => {
+    APIgetHouseimptpl().then(res => {
+        console.log(res)
+        Record_key.value = res.key
+    })
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行

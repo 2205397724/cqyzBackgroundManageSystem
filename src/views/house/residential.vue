@@ -20,15 +20,15 @@
                         style="box-sizing: border-box;"
                         class="p-20 flex-colmun"
                     >
-                        <div class="m-b-20">
-                            <el-button
-                                type="primary" :icon="Plus" size="large"
-                                @click="addResidentialFunc"
-                            >
-                                添加小区
-                            </el-button>
-                        </div>
                         <div class="search" style="background-color: white;">
+                            <div style="margin-bottom: 25px;">
+                                <el-button
+                                    type="primary" :icon="Plus" size="large"
+                                    @click="addResidentialFunc"
+                                >
+                                    添加小区
+                                </el-button>
+                            </div>
                             <el-row>
                                 <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                                     <el-row>
@@ -156,7 +156,7 @@
             draggable
         >
             <div>
-                <el-scrollbar style="height: 400px;">
+                <el-scrollbar style="height: 500px;">
                     <div class="details-box p-lr-10">
                         <el-form
                             ref="ruleFormRef"
@@ -742,8 +742,9 @@ const click_add_group_zone_id = () => {
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
 const checkFunc_1 = val => {
+    console.log(val)
     selectedZone_id.value = val.name
-    from_examine.item.china_code = val.china_code
+    from_examine.item.china_code = val.id
 
 }
 const checkChangeFunc = val => {
@@ -835,12 +836,13 @@ onBeforeRouteLeave((to, from) => {
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
+    console.log(from_examine.item)
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
             for (let key in from_examine.item) {
-                if (from_examine.item[key] !== null) {
+                if (from_examine.item[key] !== null && from_examine.item[key] !== undefined) {
                     if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
                         delete from_examine.item[key]
                     }
@@ -1031,8 +1033,8 @@ refreshFunc()
         display: flex;
     }
     .tree-item {
-        min-width: 300px;
-        width: 300px;
+        min-width: 250px;
+        width: 250px;
         border-right: 1px solid #e9e9e9;
     }
     .tree-details {

@@ -473,26 +473,32 @@
                                                 <div class="left">附件</div>
                                                 <div class="right flx">
                                                     <div v-for="(val, i) in item.content" :key="i" class="inline-block">
-                                                        <div v-for="(row, j) in val.key" v-if="val.type == 'file'" :key="j" class="inline-block image m-r-10" style="text-align: center; background-color: #f0f9eb; vertical-align: center;">
-                                                            <el-link type="success" class="link" :href="VITE_APP_FOLDER_SRC+row" target="_blank">{{ val.name }}</el-link>
-                                                        </div>
+                                                        <template v-if="val.type == 'file'">
+                                                            <div v-for="(row, j) in val.key" :key="j" class="inline-block image m-r-10" style="text-align: center; background-color: #f0f9eb; vertical-align: center;">
+                                                                <el-link type="success" class="link" :href="VITE_APP_FOLDER_SRC+row" target="_blank">{{ val.name }}</el-link>
+                                                            </div>
+                                                        </template>
                                                         <!-- <el-tag
                                                             v-if="val.type == 'file'" type="success" size="small"
                                                             class="m-r-10"
                                                         >
                                                             {{ val.name }}
                                                         </el-tag> -->
-                                                        <el-image
-                                                            v-for="(row, j) in val.key" v-if="val.type == 'image'" :key="j"
-                                                            :preview-src-list="val.keys"
-                                                            class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + row"
-                                                            fit="cover"
-                                                        />
-                                                        <vue3VideoPlay
-                                                            v-for="(row, j) in val.key" v-if="val.type == 'audio'"
-                                                            :key="j" v-bind="optionsAll"
-                                                            :src="VITE_APP_FOLDER_SRC + row" class="image m-r-10"
-                                                        />
+                                                        <template v-if="val.type == 'image'">
+                                                            <el-image
+                                                                v-for="(row, j) in val.key" :key="j"
+                                                                :preview-src-list="val.keys"
+                                                                class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + row"
+                                                                fit="cover"
+                                                            />
+                                                        </template>
+                                                        <template v-if="val.type == 'audio'">
+                                                            <vue3VideoPlay
+                                                                v-for="(row, j) in val.key"
+                                                                :key="j" v-bind="optionsAll"
+                                                                :src="VITE_APP_FOLDER_SRC + row" class="image m-r-10"
+                                                            />
+                                                        </template>
                                                     </div>
                                                 </div>
                                             </div>
