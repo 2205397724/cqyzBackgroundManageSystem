@@ -238,7 +238,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :md="24" :lg="24">
-                            <div class="m-b-10 m-l-40">
+                            <div class="m-b-10 m-l-30">
                                 <el-button type="primary" plain @click="addServiceFunc">添加自定义字段</el-button>
                             </div>
                             <div v-for="(item,i) in from_add.obj.extra" :key="i" class="serve-box">

@@ -147,7 +147,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="联名" name="1">
-                        <el-scrollbar height="300px">
+                        <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -186,7 +186,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="表决" name="2">
-                        <el-scrollbar height="300px">
+                        <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -225,7 +225,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="选举" name="3">
-                        <el-scrollbar height="300px">
+                        <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -264,7 +264,7 @@
                         </el-scrollbar>
                     </el-tab-pane>
                     <el-tab-pane label="问卷" name="4">
-                        <el-scrollbar height="300px">
+                        <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
@@ -381,8 +381,8 @@ import {
     // APIpostComplaint
 } from '@/api/custom/custom.js'
 const page = ref(1)
-const total = ref(0)
-const per_page = ref(15)
+const total = ref(500)
+const per_page = ref(500)
 const dataForm = reactive({
     item: {}
 })

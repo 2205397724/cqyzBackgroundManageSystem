@@ -144,7 +144,7 @@
                                         <div style="display: flex;">
                                             <div v-for="(item,i) in child.houses" :key="i" class="row-item-box">
                                                 <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
-                                                <div v-show="item.house_num?true:false" class="row-item">
+                                                <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
                                                     <el-checkbox
                                                         v-if="checkFH.all[child.floor_truth]&&checkFH.all[child.floor_truth][item.house_num]"
                                                         v-model="checkFH.all[child.floor_truth][item.house_num].val"
@@ -172,6 +172,15 @@
                                                             </div>
                                                         </div>
                                                     </el-popover> -->
+                                                    <el-popconfirm
+                                                        title="确定要删除当前项么?"
+                                                        cancel-button-type="info"
+                                                        @confirm="deleteHouse(item)"
+                                                    >
+                                                        <template #reference>
+                                                            <div class="del_house">✖</div>
+                                                        </template>
+                                                    </el-popconfirm>
                                                 </div>
                                             </div>
                                         </div>
@@ -1101,7 +1110,7 @@ const checkFunc = val => {
     console.log(tree_item.value)
     console.log(tree_item.value.type)
     if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
-        'building')) {
+        'buildings')) {
         refreshFunc()
     }
 }
@@ -1373,7 +1382,7 @@ import { getFilesKeys } from '@/util/files.js'
 const filesUpFunc = () => {
     err_files.obj = {}
     let error = false
-    if (active_obj.obj.type == 'building') {
+    if (active_obj.obj.type == 'buildings') {
         files_obj.obj.loc = 'buildings'
     } else {
         files_obj.obj.loc = 'units'
@@ -1734,7 +1743,8 @@ const modifycancel = () => {
     property_form.obj =  JSON.parse(JSON.stringify(copy_property.obj))
 }
 // 同意拒绝提交
-import { APIputProperty, APIpostProperty } from '@/api/custom/custom.js'
+import { APIputProperty, APIpostProperty,
+         APIdeleteHouseHouse } from '@/api/custom/custom.js'
 const postPropertyFunc = () => {
     console.log(property_form.obj)
     from_error_property.msg = {}
@@ -1772,6 +1782,14 @@ const data_details = reactive({
 const houseDetailsFunc = row => {
     data_details.item = row
     drawer.value = true
+}
+// 删除房屋
+const deleteHouse = val => {
+    APIdeleteHouseHouse(val.id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
+    })
+
 }
 // refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -1962,5 +1980,12 @@ getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_ho
 }
 :deep .el-overlay {
     background-color: rgb(0 0 0 / 30%);
+}
+.del_house {
+    position: absolute;
+    top: -10px;
+    left: 63px;
+    color: red;
+    font-size: 16px;
 }
 </style>

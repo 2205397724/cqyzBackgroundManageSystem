@@ -36,7 +36,7 @@
                             </el-col>
                         </el-row>
                     </el-col>
-                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                    <!-- <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 状态：
@@ -44,6 +44,18 @@
                             <el-col :sm="20" :xs="18" :md="18">
                                 <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态">
                                     <el-option v-for="item in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col> -->
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                是否公开：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="data_search.obj.pub" class="search_tb" placeholder="是否公开">
+                                    <el-option v-for="item in opts_all.obj.toushu_pub" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -226,13 +238,7 @@
                                 </el-col>
                                 <el-col :md="24" :lg="24">
                                     <el-form-item label="内容" label-width="80px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                        <el-input
-                                            v-model="from_examine.item.content"
-                                            type="textarea"
-                                            :autosize="{ minRows: 4, maxRows: 16 }"
-                                            placeholder=""
-                                            style="width: 100%;"
-                                        />
+                                        <editor v-model="from_examine.item.content" class="w_100" />
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -476,14 +482,6 @@ const dialogExamineCloseFunc = () => {
     // formEl.validate(valid => {
     //     if (valid) {
     from_examine.item.type = 1
-
-    for (let key in from_examine.item) {
-        if (from_examine.item.obj[key] !== null) {
-            if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
-                delete from_examine.item[key]
-            }
-        }
-    }
     console.log(from_examine.item)
     if (str_title.value == '修改') {
         console.log(from_examine.item)
@@ -495,7 +493,7 @@ const dialogExamineCloseFunc = () => {
                 switch_examine.value = false
             }
             // 如果传递了状态码，就修改状态信息
-            APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
+            APImodifySurveyStatus(from_examine.item.id, { 'status': from_examine.item.status }).then(res => {
                 refreshFunc()
             })
         })

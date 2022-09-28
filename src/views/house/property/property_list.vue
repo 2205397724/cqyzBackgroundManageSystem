@@ -216,56 +216,56 @@
                                 <el-button class="m-r-10" type="primary" @click="addServiceFunc">添加产权人</el-button>
                             </div>
                             <div>
-                                <el-scrollbar :height="from_examine.item.owners.length >= 3 ? '400px' : ''">
-                                    <div v-for="(item,i) in from_examine.item.owners" :key="i" class="serve-box">
-                                        <el-row :gutter="10">
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label-width="70px" label="姓名" :error="from_error.msg&&from_error.msg['owners.'+i+'.name']?from_error.msg['owners.'+i+'.name'][0]:''">
-                                                    <el-input
-                                                        v-model="item.name"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label-width="70px" label="证件类型" :error="from_error.msg&&from_error.msg['owners.'+i+'.type_id_card']?from_error.msg['owners.'+i+'.type_id_card'][0]:''">
-                                                    <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
-                                                        <el-option v-for="item in opts_all.obj.type_id_card" :key="item.key" :label="item.val" :value="item.key" />
-                                                    </el-select>
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label-width="70px" label="证件号" :error="from_error.msg&&from_error.msg['owners.'+i+'.id_card']?from_error.msg['owners.'+i+'.id_card'][0]:''">
-                                                    <el-input
-                                                        v-model="item.id_card"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label-width="70px" label="联系方式" :error="from_error.msg&&from_error.msg['owners.'+i+'.mobile']?from_error.msg['owners.'+i+'.mobile'][0]:''">
-                                                    <el-input
-                                                        v-model="item.mobile"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                            <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                                <el-form-item label-width="70px" label="房屋面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
-                                                    <el-input
-                                                        v-model="item.area"
-                                                        placeholder=""
-                                                    />
-                                                </el-form-item>
-                                            </el-col>
-                                        </el-row>
-                                        <div class="delete-service" @click="deleteServiceFunc(i)">
-                                            <el-icon :size="20" color="#F56C6C">
-                                                <el-icon-circle-close />
-                                            </el-icon>
-                                        </div>
+                                <!-- <el-scrollbar :height="from_examine.item.owners.length >= 3 ? '400px' : ''"> -->
+                                <div v-for="(item,i) in from_examine.item.owners" :key="i" class="serve-box">
+                                    <el-row :gutter="10">
+                                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                            <el-form-item label-width="70px" label="姓名" :error="from_error.msg&&from_error.msg['owners.'+i+'.name']?from_error.msg['owners.'+i+'.name'][0]:''">
+                                                <el-input
+                                                    v-model="item.name"
+                                                    placeholder=""
+                                                />
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                            <el-form-item label-width="70px" label="证件类型" :error="from_error.msg&&from_error.msg['owners.'+i+'.type_id_card']?from_error.msg['owners.'+i+'.type_id_card'][0]:''">
+                                                <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
+                                                    <el-option v-for="value in opts_all.obj.type_id_card" :key="value.key" :label="value.val" :value="value.key" />
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                            <el-form-item label-width="70px" label="证件号" :error="from_error.msg&&from_error.msg['owners.'+i+'.id_card']?from_error.msg['owners.'+i+'.id_card'][0]:''">
+                                                <el-input
+                                                    v-model="item.id_card"
+                                                    placeholder=""
+                                                />
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                            <el-form-item label-width="70px" label="联系方式" :error="from_error.msg&&from_error.msg['owners.'+i+'.mobile']?from_error.msg['owners.'+i+'.mobile'][0]:''">
+                                                <el-input
+                                                    v-model="item.mobile"
+                                                    placeholder=""
+                                                />
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                                            <el-form-item label-width="70px" label="房屋面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
+                                                <el-input
+                                                    v-model="item.area"
+                                                    placeholder=""
+                                                />
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                    <div class="delete-service" @click="deleteServiceFunc(i)">
+                                        <el-icon :size="20" color="#F56C6C">
+                                            <el-icon-circle-close />
+                                        </el-icon>
                                     </div>
-                                </el-scrollbar>
+                                </div>
+                                <!-- </el-scrollbar> -->
                             </div>
                         </el-col>
                     </el-row>

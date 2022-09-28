@@ -158,12 +158,12 @@ const data_search = reactive({
 const searchFunc = () => {
     page.value = 1
     switch_search.value = true
-    refreshFunc()
+    getTabListFunc()
 }
 // 打开弹窗
 const openDigFunc = () => {
     switch_list.value = true
-    refreshFunc()
+    getTabListFunc()
 }
 watch(page, () => {
     getTabListFunc()
@@ -173,6 +173,9 @@ const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value
+    }
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+        params.tovalcan = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {

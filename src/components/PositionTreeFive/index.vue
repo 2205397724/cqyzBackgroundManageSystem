@@ -26,7 +26,7 @@
                     />
                 </el-scrollbar>
             </div>
-            <div v-if="showFamily" class="table">
+            <div v-if="showFamily" class="table btnNone">
                 <div class="header">{{ unitsDetail.item.name }}</div>
                 <el-scrollbar style="height: 504px;">
                     <div>
