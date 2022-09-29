@@ -597,7 +597,7 @@ const showHouseFunc = val => {
         id: val.id,
         name: val.name,
         next_type: 'units',
-        type: 'building'
+        type: 'buildings'
     }]
     edit_house.value = true
 }

@@ -395,7 +395,7 @@
                                     <div style="margin-bottom: 10px;">
                                         <el-button type="primary" plain @click="addServiceFunc">添加服务名称和电话</el-button>
                                     </div>
-                                    <div v-if="from_examine.item.addition">
+                                    <div v-if="from_examine.item.addition && from_examine.item.addition.extra">
                                         <div v-for="(item,i) in from_examine.item.addition.extra.convenience" :key="i" class="serve-box">
                                             <el-row :gutter="10">
                                                 <el-col :xs="12" :sm="12">

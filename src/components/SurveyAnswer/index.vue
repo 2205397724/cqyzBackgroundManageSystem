@@ -65,7 +65,7 @@
                     <div v-if="item.type === 1">
                         <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
                         <div v-for="items in item.opts" :key="items.id" class="m-l-40">
-                            <el-radio-group v-model="addticket.answers[index].opt[0]">
+                            <el-radio-group v-model="addticket.answers[index].opt">
                                 <el-radio :label="items.id" @click="emitTickets(item.id,index)">{{ items.content }}</el-radio>
                             </el-radio-group>
                         </div>
@@ -296,6 +296,7 @@ const getAnswerDetail = id => {
 }
 // 打开对话框添加书面票
 const addAnswer = () => {
+    topicsFunc()
     switch_addAnswer.value = true
     // 根据问卷题目数量插入对象到answers中
     // console.log('length',topic_details.item.length)
@@ -332,6 +333,7 @@ const notParticipate = () => {
 const emitTickets = (tid, index) => {
     addticket.answers[index].tid = tid
 }
+import { ElMessage } from 'element-plus'
 const dialogAddSurveyAnswer = () => {
     console.log('addticket', addticket)
     APIaddSurveyAnswer(props.id, addticket).then(res => {
@@ -339,7 +341,7 @@ const dialogAddSurveyAnswer = () => {
         switch_addAnswer.value = false
         ElMessage.success('问卷提交成功')
     }).catch(err => {
-        from_error.msg = err.data
+        ElMessage.success('问卷提交失败')
     })
     // 获取问卷结果新数据
     notParticipate()
