@@ -2,7 +2,7 @@
     <div>
         <el-scrollbar height="400px">
             <div class="m-b-20">
-                <el-button type="primary" @click="addServeyTopic()">添加题目</el-button>
+                <el-button type="primary" style="padding: 19px 18px;position: relative;top: 5px;" @click="addServeyTopic()">添加题目</el-button>
             </div>
             <el-table
                 :data="topic_details.item"

@@ -23,6 +23,16 @@
                                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                                         <el-row>
                                             <el-col :sm="4" :xs="6" :md="11" class="search_th">
+                                                房屋名称：
+                                            </el-col>
+                                            <el-col :sm="20" :xs="18" :md="13">
+                                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="名称" />
+                                            </el-col>
+                                        </el-row>
+                                    </el-col>
+                                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                                        <el-row>
+                                            <el-col :sm="4" :xs="6" :md="11" class="search_th">
                                                 房屋使用状态：
                                             </el-col>
                                             <el-col :sm="20" :xs="18" :md="13">
@@ -33,25 +43,6 @@
                                                 >
                                                     <el-option
                                                         v-for="(item) in opts_all.obj.house_status_use" :key="item.key"
-                                                        :label="item.val" :value="item.key"
-                                                    />
-                                                </el-select>
-                                            </el-col>
-                                        </el-row>
-                                    </el-col>
-                                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                                        <el-row>
-                                            <el-col :sm="4" :xs="6" :md="11" class="search_th">
-                                                房屋安全状态：
-                                            </el-col>
-                                            <el-col :sm="20" :xs="18" :md="13">
-                                                <el-select
-                                                    v-model="data_search.obj.status_safe"
-                                                    class="search_tb" placeholder="*状态"
-                                                    clearable
-                                                >
-                                                    <el-option
-                                                        v-for="(item) in opts_all.obj.house_status_safe" :key="item.key"
                                                         :label="item.val" :value="item.key"
                                                     />
                                                 </el-select>
@@ -90,19 +81,19 @@
                                     </el-col>
                                 </el-row>
                             </div>
-                            <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
+                            <!-- <div v-if="active_obj.obj.type=='units'" class="count p-t-10">
                                 <div class="font-grey size-base">户数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_house }} </strong>户</div>
                             </div>
                             <div v-if="active_obj.obj.type=='buildings'" class="count p-t-10">
                                 <div class="font-grey size-base">住宅总面积：<strong class="font-darkgrey size-lg">{{ details_data.obj.area_live }}</strong>㎡，</div>
                                 <div class="font-grey size-base">住宅总套数：<strong class="font-darkgrey size-lg">{{ details_data.obj.cnt_live }}</strong>套</div>
-                            </div>
-                            <el-row :gutter="10" class="bottom-btn-box-2  p-t-10">
+                            </div> -->
+                            <el-row :gutter="10" class="bottom-btn-box-2">
                                 <el-col :xs="24">
                                     <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
-                                    <el-button :disabled="choseIDs.arr.length<=0" type="warning" class="head-btn" @click="modifyAllFunc">批量修改</el-button>
                                     <el-button class="head-btn" type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
-                                    <el-button :icon="Loading" @click="refreshFunc">刷新</el-button>
+                                    <el-button :disabled="choseIDs.arr.length<=0" type="warning" class="head-btn" @click="modifyAllFunc">批量修改</el-button>
+                                    <el-button @click="refreshFunc">刷新</el-button>
                                     <!-- <el-button class="head-btn" type="primary" @click="houseBindFunc">房屋绑定申请</el-button> -->
                                 </el-col>
                             </el-row>
@@ -144,11 +135,12 @@
                                         <div style="display: flex;">
                                             <div v-for="(item,i) in child.houses" :key="i" class="row-item-box">
                                                 <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
-                                                <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
+                                                <div v-show="item.house_num?true:false" class="row-item" style="position: relative;" @click="houseDetailsFunc(item)">
                                                     <el-checkbox
                                                         v-if="checkFH.all[child.floor_truth]&&checkFH.all[child.floor_truth][item.house_num]"
                                                         v-model="checkFH.all[child.floor_truth][item.house_num].val"
                                                         @change="(val)=>{checkFH.all[child.floor_truth][item.house_num].val= val;allClickFunc(child.floor_truth,item.house_num,val)}"
+                                                        @click.stop=""
                                                     />
                                                     <!-- <el-popover
                                                         :width="250"
@@ -157,7 +149,7 @@
                                                         placement="top"
                                                     >
                                                         <template #reference> -->
-                                                    <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
+                                                    <div class="row-item-check">{{ item.house_num }}#</div>
                                                     <!-- </template>
                                                         <div style="box-sizing: border-box;padding: 4px;">
                                                             <div class="tip-title">房屋：{{ item.name }}</div>
@@ -193,7 +185,7 @@
                                 </template>
                                 <template #default>
                                     <div style="box-sizing: border-box;padding: 4px;">
-                                        <div class="details-box">
+                                        <!-- <div class="details-box">
                                             <div class="item">
                                                 <div class="left">房屋名称</div>
                                                 <div class="right">{{ data_details.item.name }}</div>
@@ -214,27 +206,6 @@
                                                 <div class="left">房号</div>
                                                 <div class="right">{{ data_details.item.house_num }}</div>
                                             </div>
-                                            <!-- <div class="item">
-                                                                        <div class="left">类型</div>
-                                                                        <div class="right">
-                                                                            {{ getOptVal(opts_all.obj.device_type, data_details.item.type) }}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="item">
-                                                                        <div class="left">是否显示</div>
-                                                                        <div class="right">
-                                                                            {{ getOptVal(opts_all.obj.device_show, data_details.item.show) }}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        v-for="(item, i) in data_details.item.extra" v-if="data_details.item.extra" :key="i"
-                                                                        class="item"
-                                                                    >
-                                                                        <div class="left">{{ item.lab }}</div>
-                                                                        <div class="right">{{ item.val }}</div>
-                                                                    </div>
-                                                                    <div class="details-tit-sm">其他信息</div>
-                                                                    <div class="item"> -->
                                             <div class="item">
                                                 <div class="left">房屋id</div>
                                                 <div class="right">{{ data_details.item.id }}</div>
@@ -247,19 +218,90 @@
                                                 <div class="left">更新时间</div>
                                                 <div class="right">{{ data_details.item.updated_at }}</div>
                                             </div>
-                                        </div>
+                                        </div> -->
+                                        <table class="table" border="1">
+                                            <tr>
+                                                <td class="table_td">房屋名称：</td>
+                                                <td colspan="3">{{ data_details.item.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">地址：</td>
+                                                <td colspan="3">{{ data_details.item.addr }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">名义层：</td>
+                                                <td>{{ data_details.item.floor_alias }}</td>
+                                                <td class="table_td">物理楼层：</td>
+                                                <td>{{ data_details.item.floor_truth }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">房号:</td>
+                                                <td>{{ data_details.item.house_num }}</td>
+                                                <td class="table_td">建筑面积：</td>
+                                                <td>{{ data_details.item.area_build }} m²</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">套内面积:</td>
+                                                <td>{{ data_details.item.area_inside }} m²</td>
+                                                <td class="table_td">分摊面积：</td>
+                                                <td>{{ data_details.item.area_share }} m²</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">户型：</td>
+                                                <td colspan="3">{{ getOptVal(opts_all.obj.house_type_model,data_details.item.type_model) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">产权性质：</td>
+                                                <td colspan="3">{{ getOptVal(opts_all.obj.house_type_property,data_details.item.type_property) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">使用状态：</td>
+                                                <td colspan="3">{{ getOptVal(opts_all.obj.house_status_use,data_details.item.status_use) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">安全状态：</td>
+                                                <td colspan="3">{{ getOptVal(opts_all.obj.house_status_safe,data_details.item.status_safe) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">规划用途：</td>
+                                                <td colspan="3">{{ getOptVal(opts_all.obj.house_status_plan_fact,data_details.item.status_plan) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">实际用途：</td>
+                                                <td colspan="3">{{ getOptVal(opts_all.obj.house_status_plan_fact,data_details.item.status_fact) }}</td>
+                                            </tr>
+                                            <tr v-if="data_details.item.addition">
+                                                <td class="table_td">简介：</td>
+                                                <td colspan="3">{{ data_details.item.addition.desc }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">房屋id：</td>
+                                                <td colspan="3">{{ data_details.item.id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">创建时间：</td>
+                                                <td colspan="3">{{ data_details.item.created_at }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_td">更新时间：</td>
+                                                <td colspan="3">{{ data_details.item.updated_at }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <el-button type="primary" @click="modifyResidentialFunc">修改房屋信息</el-button>
+                                                    <!-- <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button> -->
+                                                    <el-button type="warning" @click="showPropertyFunc">产权信息</el-button>
+                                                    <el-button type="success" @click="showNumbersFunc">随住人员</el-button>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                     <!-- <div class="tip-title">房屋：{{ item.name }}</div>
                                                                 <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
                                                                 <div class="tip-title">安全状态：{{ getOptVal(opts_all.obj.house_status_safe,item.status_safe) }}</div>
                                                                 <div class="tip-title">产权性质：{{ getOptVal(opts_all.obj.house_type_property,item.type_property) }}</div>
                                                                 <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div> -->
-                                    <div class="m-t-10 m-l-20">
-                                        <el-button type="primary" plain @click="modifyResidentialFunc(item)">修改</el-button>
-                                        <!-- <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button> -->
-                                        <el-button type="warning" plain @click="showPropertyFunc(item)">产权</el-button>
-                                        <el-button type="success" plain @click="showNumbersFunc(item)">成员</el-button>
-                                    </div>
+                                    <div class="m-t-10 m-l-20" />
                                 </template>
                             </el-drawer>
                         </div>
@@ -1550,10 +1592,10 @@ const addResidentialFunc = () => {
 import {
     APIgetHouseDetailsHouse
 } from '@/api/custom/custom.js'
-const modifyResidentialFunc = val => {
+const modifyResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '修改'
-    APIgetHouseDetailsHouse(val.id).then(res => {
+    APIgetHouseDetailsHouse(data_details.item.id).then(res => {
         console.log(res)
         from_examine.item = res
         switch_examine.value = true
@@ -1571,10 +1613,10 @@ const copy_property = reactive({
     obj: {}
 })
 import { APIgetPropertyDetails } from '@/api/custom/custom.js'
-const showPropertyFunc = val => {
-    console.log(val)
+const showPropertyFunc = () => {
+    // console.log(val)
     from_error_property.msg = {}
-    property_obj.obj = JSON.parse(JSON.stringify(val))
+    property_obj.obj = JSON.parse(JSON.stringify(data_details.item))
     if (property_obj.obj.curr_property) {
         APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
             console.log(res)
@@ -1609,9 +1651,9 @@ const number = reactive({
     item: {}
 })
 const house_id = ref('')
-const showNumbersFunc = item => {
-    console.log(item)
-    house_id.value = item.id
+const showNumbersFunc = () => {
+    // console.log(item)
+    house_id.value = data_details.item.id
     getHouseNumbersFunc()
 }
 const getHouseNumbersFunc = () => {
@@ -1875,7 +1917,7 @@ getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_ho
     }
     .tree-details {
         flex-grow: 1;
-        max-width: calc(100% - 300px);
+        max-width: calc(100% - 200px);
         .bottom-btn-box-2 {
             margin-bottom: 10px;
         }
@@ -1989,7 +2031,7 @@ getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_ho
     --el-tree-node-hover-bg-color: #e9f4ff;
 }
 :deep .el-overlay {
-    background-color: rgb(0 0 0 / 30%);
+    background-color: rgb(0 0 0 / 40%);
 }
 .del_house {
     position: absolute;
@@ -1997,5 +2039,20 @@ getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_ho
     left: 63px;
     color: red;
     font-size: 16px;
+}
+table tr td {
+    padding: 10px;
+}
+.table_td {
+    color: #72767b;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #efefef;
+    font-size: 14px;
+}
+:deep .el-drawer__header {
+    margin-bottom: 0;
 }
 </style>

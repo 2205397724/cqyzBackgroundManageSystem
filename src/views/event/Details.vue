@@ -46,58 +46,78 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="基础信息" name="1">
                         <div class="details-box">
-                            <div class="item">
-                                <div class="left content">内容</div>
-                                <div class="right" v-html="dataForm.item.content" />
-                            </div>
-                            <div v-if="dataForm.item.affix&&dataForm.item.affix.length>0" class="item">
-                                <div class="left content">附件</div>
-                                <div class="right">
-                                    <!-- 两种模式任君选择 -->
-                                    <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
-                                    <!-- <div v-for="(item,i) in data_1.details_data.affixs">
-                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
-                        </div> -->
-                                </div>
-                            </div>
-                            <div class="box">
-                                <div>
-                                    <div class="item">
-                                        <div class="left">是否公开</div>
-                                        <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
-                                    </div>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
                                     <div class="item">
                                         <div class="left">所在小区</div>
                                         <div class="right">{{ dataForm.item?.zone?.name }}</div>
                                     </div>
-                                </div>
-                                <div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left">是否公开</div>
+                                        <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
                                     <div class="item">
                                         <div class="left">是否匿名</div>
                                         <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,dataForm.item.ano) }}</div>
                                     </div>
-                                    <div v-if="dataForm.item.catpro" class="item">
-                                        <div class="left">问题分类</div>
-                                        <div class="right">{{ newcatpro.item.name }}</div>
-                                    </div>
-                                </div>
-                                <div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
                                     <div class="item">
                                         <div class="left">分类</div>
                                         <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,dataForm.item.kind) }}</div>
                                     </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div v-if="dataForm.item.catpro" class="item">
+                                        <div class="left">问题分类</div>
+                                        <div class="right">{{ newcatpro.item.name }}</div>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
                                     <div v-if="dataForm.item.catob" class="item">
                                         <div class="left">投诉对象</div>
                                         <div class="right">{{ newcatob.item.name }}</div>
                                     </div>
-                                </div>
-                            </div>
-                            <div v-if="dataForm.item.kind == 1" class="item">
-                                <div class="left content">设施部位</div>
-                                <div class="right">
-                                    <el-tag v-for="(item,i) in illegalList.arr" :key="i" type="success" class="m-r-10">{{ item.tgt_able?.name }}</el-tag>
-                                </div>
-                            </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
+                                    <div v-if="dataForm.item.kind == 1" class="item">
+                                        <div class="left">涉事位置</div>
+                                        <div class="right">
+                                            <el-tag v-for="(item,i) in illegalList.arr" :key="i" type="success" class="m-r-10">{{ item.tgt_able?.name }}</el-tag>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left">内容</div>
+                                        <div class="right" v-html="dataForm.item.content" />
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
+                                    <div v-if="dataForm.item.affix&&dataForm.item.affix.length>0" class="item">
+                                        <div class="left">附件</div>
+                                        <div class="right">
+                                            <!-- 两种模式任君选择 -->
+                                            <img v-for="(item,i) in dataForm.item.affixs" :key="i" :preview-src-list="dataForm.item.affixs" class="image" :src="item" fit="cover">
+                                            <!-- <div v-for="(item,i) in data_1.details_data.affixs">
+                            <el-link type="success" :href="item" target="_blank">{{ item }}</el-link>
+                        </div> -->
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="处理记录" name="2">
@@ -152,7 +172,8 @@
                                 <el-table
                                     ref="multipleTableRef"
                                     :data="tableData.arr"
-                                    style="width: 100%;"
+                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                                    class="tab_1"
                                     @selection-change="handleSelectionChange"
                                 >
                                     <el-table-column type="selection" width="50" />
@@ -1334,7 +1355,7 @@ import { Delete, Edit } from '@element-plus/icons-vue'
     margin: 0 50px 30px 0;
 }
 .content {
-    margin-left: -59px;
+    margin-left: -65px;
 }
 .btn3 {
     margin-right: 20px;
@@ -1366,6 +1387,8 @@ import { Delete, Edit } from '@element-plus/icons-vue'
     display: flex;
     align-items: center;
     margin: 10px 0 15px;
+    font-size: 14px;
+    background-color: #fafafa;
 }
 .switchStyle ::v-deep .el-switch__label {
     position: absolute !important;

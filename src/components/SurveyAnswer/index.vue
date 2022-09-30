@@ -57,8 +57,19 @@
         </el-scrollbar>
         <!-- 添加书面票 -->
         <el-dialog v-model="switch_addAnswer" title="添加书面票">
-            <el-scrollbar height="600px">
-                <div class="m-b-20">证件号码：<el-input v-model="addticket.idcard" /></div>
+            <div>
+                <el-row style="width: 400px; line-height: 32px;" class="m-b-20">
+                    <el-col :lg="4">
+                        参与人：
+                    </el-col>
+                    <!-- <el-input v-model="addticket.idcard" /> -->
+                    <el-col :lg="20" class="selecZone" @click="click_add_group_zone_id">
+                        <span v-if="!selectedZone_id" class="selecChina">请选择</span>
+                        <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-scrollbar height="500px">
                 <!-- 遍历题目 -->
                 <div v-for="(item,index) in topic_details.item" :key="item.id">
                     <!-- 单选题 -->
@@ -91,13 +102,14 @@
                         <div>(文字描述){{ item.title }}</div>
                     </div>
                 </div>
+                <!-- </el-scrollbar> -->
+                <template #footer>
+                    <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                        <el-button @click="switch_addAnswer=false">取消</el-button>
+                        <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
+                    </div>
+                </template>
             </el-scrollbar>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="switch_addAnswer=false">取消</el-button>
-                    <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
-                </div>
-            </template>
         </el-dialog>
         <!-- 查看答卷详情 -->
         <el-dialog v-model="switch_answer_detail" title="用户答卷详情">
@@ -152,6 +164,101 @@
                 </div>
             </template>
         </el-dialog>
+        <el-dialog v-model="switch_choose_zone" width="60%" title="选择参与人">
+            <div style="width: 30%; height: 600px; display: inline-block;">
+                <el-scrollbar height="600px">
+                    <position-tree
+                        :tree_item="tree_item.arr"
+                        @checkFunc="checkFunc"
+                    />
+                </el-scrollbar>
+            </div>
+
+            <div style="width: 70%; display: inline-block;">
+                <!-- <el-scrollbar height="600px">
+                    <el-radio-group v-model="radio1" class="ml-4">
+                        <div v-for="(item,i) in house_list.arr" :key="i" style="margin-left: 80px;">
+                            <div v-for="(row,j) in item.houses" :key="j" class="m-b-20">
+                                <template v-if="row.curr_property && row.curr_property.owners.length >0">
+                                    <div v-for="(val,index) in row.curr_property.owners" :key="index">
+                                        <el-radio :label="val.id">
+                                            <span>产权人：{{ val.name }} {{ val.id_card }} {{ val.mobile }}</span>
+                                        </el-radio>
+                                    </div>
+                                    <div> 房屋： {{ row.name }}</div>
+                                </template>
+                            </div>
+                        </div>
+                    </el-radio-group>
+                </el-scrollbar> -->
+                <div
+                    style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 400px;"
+                >
+                    <div class="row-box row-box-title">
+                        <div class="row-item-box row-item-tit-box">
+                            <div class="row-item row-item-tit row-item-tit-bgline">
+                                <div class="tit-fh">楼层</div>
+                                <div class="tit-lc">房号</div>
+                            </div>
+                        </div>
+                        <el-scrollbar style="white-space: nowrap;">
+                            <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
+                                <div class="row-item">
+                                    <!-- <el-checkbox
+                                                        v-model="checkFH.row[item].val"
+                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
+                                                    /> -->
+                                    <div class="row-item-check">{{ item }}#</div>
+                                </div>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                    <div style="height: calc(100% - 45px);overflow: auto;">
+                        <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                            <div class="row-item-box row-item-tit-box">
+                                <div class="row-item row-item-tit row-item-tit-ceng">
+                                    <!-- <el-checkbox
+                                                        v-model="checkFH.col[child.floor_truth].val"
+                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
+                                                    /> -->
+                                    <div>{{ child.floor_truth }}层</div>
+                                </div>
+                            </div>
+                            <el-scrollbar style="white-space: nowrap;">
+                                <div style="display: flex;">
+                                    <div v-for="(item,j) in child.houses" :key="j" :class="{item: true,bg: item.can_exist}">
+                                        <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
+                                        <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
+                                            <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="flag" style="background-color: #f0f2f5; padding: 20px; margin-top: 20px;">
+                    <el-row :span="10" class="m-b-10">
+                        <el-col :lg="5" style="line-height: 32px; text-align: right;">
+                            <span>选择的房屋：</span>
+                        </el-col>
+                        <el-col :lg="19">
+                            <el-input v-model="houseName" />
+                        </el-col>
+                    </el-row>
+                    <el-row :lg="5">
+                        <el-col :lg="5" style="line-height: 32px; text-align: right;">
+                            <span>产权人：</span>
+                        </el-col>
+                        <el-col :lg="19">
+                            <template v-if="house_details.item.curr_property&&house_details.item.curr_property.owners">
+                                <el-button v-for="(item,i) in house_details.item.curr_property.owners" :key="i" type="primary" plain @click="selectPropertyPeople(item)">{{ item.name }}</el-button>
+                            </template>
+                        </el-col>
+                    </el-row>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -162,8 +269,11 @@ import {
     APIaddSurveyAnswer,
     APIgetNotParticipate,
     // 获取问卷题目
-    APIgetSurveyTopic
+    APIgetSurveyTopic,
+    APIgetSurveyRange,
+    APIgetHouseListSort
 } from '@/api/custom/custom.js'
+import house from '@/router/modules/statistics/house'
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
 onMounted(() => {
@@ -178,6 +288,7 @@ onMounted(() => {
 const topic_details = reactive({
     item: [[], [], [], []]
 })
+const radio1 = ref('')
 // 参与详情
 const radio = ref('全部')
 // 参与情况
@@ -267,6 +378,7 @@ const answerListFunc = () => {
         answer_list.push(...answer_list_on, ...answer_list_off)
         // console.log(answer_list)
     })
+
 }
 // 获取问卷结果详情
 let answer_detail = reactive({
@@ -294,6 +406,12 @@ const getAnswerDetail = id => {
         console.log('answer_detail.item', answer_detail.item)
     })
 }
+const data_range = reactive({
+    arr: []
+})
+const tree_item = reactive({
+    arr: []
+})
 // 打开对话框添加书面票
 const addAnswer = () => {
     topicsFunc()
@@ -312,6 +430,43 @@ const addAnswer = () => {
             }
         }
     }
+    let params = {
+        page: 1,
+        per_page: 100,
+        sid: props.id,
+        can_type: 2
+        // type_many: [2, 3, 4, 5]
+    }
+    APIgetSurveyRange(params)
+        .then(res => {
+
+            for (let i = 0;i < res.data.length;i++) {
+                for (let j = i + 1; j < res.data.length;j++) {
+                    if (res.data[i].tgt == res.data[j].tgt) {
+                        res.data.splice(j, 1)
+                        j--
+                    }
+                }
+            }
+            console.log(res.data)
+            data_range.arr = res.data
+            res.data.forEach((item, key) => {
+                if (item.type == 5) {
+                    if (item.tgt.length <= 9) {
+                        tree_item.arr.push({ name: item.tgt_obj, type: 'region', next_type: 'region', id: item.tgt })
+                    } else {
+                        tree_item.arr.push({ name: item.tgt_obj, type: 'region', next_type: 'zone', id: item.tgt })
+                    }
+                } else if (item.type == 4) {
+                    tree_item.arr.push({ name: item.tgt_obj.name, type: 'zone', next_type: 'buildings', id: item.tgt })
+                } else if (item.type == 3) {
+                    tree_item.arr.push({ name: item.tgt_obj.name, type: 'buildings', next_type: 'units', id: item.tgt })
+                } else if (item.type == 2) {
+                    tree_item.arr.push({ name: item.tgt_obj.name, type: 'units', next_type: 'house', id: item.tgt })
+                }
+            })
+        })
+
     // console.log('aaaa',addticket)
 }
 // 获取未参与答卷的房屋作为未参与用户的数量
@@ -375,8 +530,231 @@ const topicsFunc = () => {
     })
     console.log('topic_details', topic_details)
 }
+// 选择身份证号
+const switch_choose_zone = ref(false)
+const click_add_group_zone_id = () => {
+    switch_choose_zone.value = true
+}
+const active_obj = reactive({
+    obj: {}
+})
+const checkFunc = val => {
+    console.log(val)
+    active_obj.obj = val
+    // house_num.arr = []
+    // house_list.arr = []
+    // active_obj.obj = val
+    // console.log(tree_item.value)
+    // console.log(tree_item.value.type)
+    // if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
+    //     'buildings')) {
+    //     refreshFunc()
+    // }
+    if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
+        'buildings')) {
+        getHouseList()
+    }
+}
+const house_list = reactive({
+    arr: []
+})
+const house_num = reactive({
+    arr: []
+})
+const checkFH = reactive({
+    row: {},
+    col: {},
+    all: {}
+})
+const total = ref(0)
+const getHouseList = () => {
+    let params = {
+
+        // houseable_type: tree_item.value.type == 'units' ? 'units' : active_obj.obj.type,
+        // houseable_id: tree_item.value.type == 'units' ? tree_item.value.id : active_obj.obj.id
+        // houseable_type: active_obj.obj.type,
+        houseable_id: active_obj.obj.id
+    }
+    if (active_obj.obj.type == 'building') {
+        params.houseable_type = 'buildings'
+    } else {
+        params.houseable_type = active_obj.obj.type
+    }
+    APIgetHouseListSort(params).then(res => {
+        console.log(res)
+        total.value = 0
+        // 处理空白格
+        let nums = res.house_nums
+        let list = res.floors
+        for (let i in list) {
+            if (list[i].houses.length < nums.length) {
+                for (let j in nums) {
+                    if (!list[i].houses[j] || !list[i].houses[j].house_num || (list[i].houses[j]
+                        .house_num != nums[j])) {
+                        list[i].houses.splice(j, 0, {})
+                    }
+                }
+            }
+            house_num.arr = nums
+            house_list.arr = list
+            console.log(house_num.arr)
+            // 处理默认选择项目
+            for (let i in house_num.arr) {
+                checkFH.row[house_num.arr[i]] = {
+                    val: false
+                }
+            }
+            for (let i in house_list.arr) {
+                checkFH.col[house_list.arr[i].floor_truth] = {
+                    val: false
+                }
+                checkFH.all[house_list.arr[i].floor_truth] = {}
+                for (let j in house_list.arr[i].houses) {
+                    if (house_list.arr[i].houses[j].house_num) {
+                        total.value++
+                        checkFH.all[house_list.arr[i].floor_truth][house_list.arr[i].houses[j]
+                            .house_num] = {
+                            val: false,
+                            data: house_list.arr[i].houses[j]
+                        }
+                    }
+                }
+            }
+        }
+        // house_list.arr = res.floors
+    })
+}
+const flag = ref(false)
+const house_details = reactive({
+    item: {}
+})
+const selectedZone_id = ref('')
+const houseName = ref('')
+const houseDetailsFunc = row => {
+    console.log(row)
+    house_details.item = row
+    houseName.value = house_details.item.pos_name + house_details.item.name
+    console.log(houseName.value)
+    flag.value = true
+}
+const selectPropertyPeople = row => {
+    selectedZone_id.value = row.name
+    addticket.idcard = row.id_card
+    switch_choose_zone.value = false
+}
 </script>
 
 <style lang="scss" scoped>
 // scss
+.row-box {
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fff;
+    display: flex;
+    .row-item-box {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 6px;
+        min-width: 84px;
+        height: 44px;
+        .row-item {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #e9e9e9;
+            font-size: 14px;
+            vertical-align: top;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 6px;
+            cursor: pointer;
+
+            // justify-content: space-between;
+        }
+        .row-item-tit-ceng {
+            border: 0 solid #e9e9e9;
+        }
+    }
+    .item {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 6px;
+        min-width: 84px;
+        height: 44px;
+        &.bg {
+            background-color: #409eff;
+        }
+        .row-item {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            vertical-align: top;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 6px;
+            cursor: pointer;
+
+            // justify-content: space-between;
+        }
+        .row-item-tit-ceng {
+            border: 0 solid #e9e9e9;
+        }
+    }
+    .region_box_item_del_1 {
+        width: 22px;
+        height: 24px;
+        line-height: 18px;
+        transform: scale(0.7);
+        position: absolute;
+        right: -9px;
+        top: -9px;
+        border-radius: 50%;
+        border: 2px solid red;
+        cursor: pointer;
+        font-weight: bold;
+        color: red;
+        text-align: center;
+    }
+    .row-item-tit-box {
+        border-right: 1px solid #e9e9e9;
+        width: 84px;
+        .row-item-tit {
+            border: 0 solid #e9e9e9 !important;
+            font-size: 12px;
+            .tit-fh {
+                margin-bottom: -18px;
+            }
+            .tit-lc {
+                margin-top: -18px;
+            }
+        }
+        .row-item-tit-bgline {
+            background-image: linear-gradient(to top right, #fff 49%, #e9e9e9, #fff 51%);
+            justify-content: space-between;
+            cursor: initial;
+        }
+    }
+}
+:deep .el-dialog__body {
+    display: flex;
+}
+.selecZone {
+    width: 100%;
+    height: 32px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    background-color: #fff;
+    .selecChina {
+        margin-left: 11px;
+        color: #aaa;
+    }
+    .selecChina_1 {
+        margin-left: 11px;
+        font-size: 14px;
+        line-height: 29px;
+        color: #c0c4d5;
+    }
+}
 </style>

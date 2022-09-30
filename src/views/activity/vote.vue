@@ -105,8 +105,8 @@
                     </el-table-column>
                     <el-table-column label="是否公开" align="center">
                         <template #default="scope">
-                            <el-tag v-show="scope.row.pub == 0" class="btnNone" type="primary" size="small">关闭</el-tag>
-                            <el-tag v-show="scope.row.pub == 1" class="btnNone noDeal" type="warning" size="small">开放</el-tag>
+                            <el-tag v-show="scope.row.pub == 0" class="btnNone" type="danger" size="small">关闭</el-tag>
+                            <el-tag v-show="scope.row.pub == 1" class="btnNone noDeal" type="success" size="small">开放</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" width="250px" label="操作">
@@ -114,9 +114,9 @@
                             <el-button type="primary" size="small" @click="modifySurvey(scope.row)">
                                 修改
                             </el-button>
-                            <el-button size="small" @click="detailsFunc(scope.row)">
-                                详情
-                            </el-button>
+                            <el-link :underline="false" type="primary">
+                                <router-link class="el-button details" :to="{name: 'voteDetails',query:{ id : scope.row.id }}">详情</router-link>
+                            </el-link>
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
                                 @confirm="deleteFunc(scope.row)"

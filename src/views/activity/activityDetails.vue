@@ -1,19 +1,21 @@
 <template>
     <div class="container">
-        <div style="position: relative; top: -10px;">
-            <span>开始时间：{{ data_details.item.startat }}</span>
-            <span class="m-20">
-                <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                <el-tag v-show="data_details.item.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-                <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
-            </span>
-            <span>结束时间：{{ data_details.item.endat }}</span>
-        </div>
-        <!-- <div class="m-t-10 m-b-20">
+        <page-main>
+            <div class="size-lx m-b-10">{{ data_details.item.name }}</div>
+            <div style="position: relative;margin-bottom: 10px; color: #b7b1b1;">
+                <span>开始时间：{{ data_details.item.startat }}</span>
+                <span class="m-20">
+                    <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    <el-tag v-show="data_details.item.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    <el-tag v-show="data_details.item.status == 3" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    <el-tag v-show="data_details.item.status == 4" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    <el-tag v-show="data_details.item.status == 5" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    <el-tag v-show="data_details.item.status == 6" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                    <el-tag v-show="data_details.item.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
+                </span>
+                <span>结束时间：{{ data_details.item.endat }}</span>
+            </div>
+            <!-- <div class="m-t-10 m-b-20">
             <el-button size="small" @click="exchangeStatus('1')">筹备中</el-button>
             <el-button size="small" type="primary" @click="exchangeStatus('2')">
                 待审
@@ -34,86 +36,107 @@
                 已结束
             </el-button>
         </div> -->
-        <el-tabs v-model="activeName" @tab-click="changePane">
-            <el-tab-pane :label="activeName_1+'主题'" name="1">
-                <div style="height: 400px;">
-                    <div class="details-box">
-                        <!-- <el-row>
+            <el-tabs v-model="activeName" @tab-click="changePane">
+                <el-tab-pane :label="activeName_1+'主题'" name="1">
+                    <div>
+                        <div class="details-box">
+                            <!-- <el-row>
                             <el-col :span="8">
 
                             </el-col>
                         </el-row> -->
-                        <div class="details-tit-sm">基础信息</div>
-                        <el-row :gutter="20">
-                            <div class="item">
-                                <div class="left w-100 m-l-10">内容</div>
-                                <span v-html="data_details.item.content " />
-                            </div>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <!-- <el-col :span="8">
+                            <div class="details-tit-sm">基础信息</div>
+
+                            <el-row :gutter="20">
+                                <!-- <el-col :span="8">
                                 <div class="item">
                                     <div class="left w-100">内容</div>
                                     <span v-html="data_details.item.content " />
                                 </div>
                             </el-col> -->
-                            <el-col :span="8">
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">所在区域</div>
+                                        <span>{{ data_details.item.author_cc_name }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">所在区域类型</div>
+                                        <span>{{ data_details.item.author_cc_name }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">是否开放</div>
+                                        <el-tag v-show="data_details.item.pub == 0" class="btnNone" type="danger" size="small">关闭</el-tag>
+                                        <el-tag v-show="data_details.item.pub== 1" class="btnNone noDeal" type="success" size="small">开放</el-tag>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">总票数</div>
+                                        <span>{{ data_details.item.ticketall }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">总面积数</div>
+                                        <span>{{ data_details.item.areaall }}</span>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
                                 <div class="item">
-                                    <div class="left w-100">所在区域</div>
-                                    <span>{{ data_details.item.author_cc_name }}</span>
+                                    <div class="left_1 w-100 m-l-10">内容</div>
+                                    <span v-html="data_details.item.content " />
                                 </div>
-                            </el-col>
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">是否开放</div>
-                                    <el-tag v-show="data_details.item.pub == 0" class="btnNone" type="primary" size="small">关闭</el-tag>
-                                    <el-tag v-show="data_details.item.pub== 1" class="btnNone noDeal" type="warning" size="small">开放</el-tag>
-                                </div>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">总票数</div>
-                                    <span>{{ data_details.item.ticketall }}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">总面积数</div>
-                                    <span>{{ data_details.item.areaall }}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">活动id</div>
-                                    <span>{{ data_details.item.id }}</span>
-                                </div>
-                            </el-col>
-                        </el-row>
-                        <div class="details-tit-sm">发布人信息</div>
-                        <el-row :gutter="20">
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">发布人</div>
-                                    <span>{{ data_details.item.uinfo?.name ? data_details.item.uinfo?.name:data_details.item.uinfo?.nickname? data_details.item.uinfo?.nickname :data_details.item.uinfo?.username }}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">手机号</div>
-                                    <span>{{ data_details.item.uinfo?.mobile }}</span>
-                                </div>
-                            </el-col>
-                            <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">用户类型</div>
-                                    <span>{{ data_details.item.utype }}</span>
-                                </div>
-                            </el-col>
-                        </el-row>
-                    </div>
-                <!-- <div>
+                            </el-row>
+                            <div class="details-tit-sm">发布人信息</div>
+                            <el-row>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">发布人</div>
+                                        <span>{{ data_details.item.uinfo?.name ? data_details.item.uinfo?.name:data_details.item.uinfo?.nickname? data_details.item.uinfo?.nickname :data_details.item.uinfo?.username }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">手机号</div>
+                                        <span>{{ data_details.item.uinfo?.mobile }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">用户类型</div>
+                                        <span>{{ data_details.item.utype }}</span>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">活动id</div>
+                                        <span>{{ data_details.item.id }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">创建时间</div>
+                                        <span>{{ data_details.item.created_at }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">修改时间</div>
+                                        <span>{{ data_details.item.updated_at }}</span>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <!-- <div>
                         <h3>问卷记录</h3>
                         <div class="steps-column m-l-40 selected">
                             <div class="steps-column-item">
@@ -127,19 +150,18 @@
                             </div>
                         </div>
                     </div> -->
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="设置参与范围" name="2">
-                <el-button
-                    type="primary"
-                    class="m-tb-10"
-                    plain
-                    style="position: relative;"
-                    @click="detail_set_area"
-                >
-                    设置
-                </el-button>
-                <!-- <el-table :data="data_range.arr"
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="参与范围" name="2">
+                    <el-button
+                        type="primary"
+                        style="padding: 19px 18px;position: relative;top: 5px;"
+                        plain
+                        @click="detail_set_area"
+                    >
+                        设置
+                    </el-button>
+                    <!-- <el-table :data="data_range.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     width="100%"
                 >
@@ -169,91 +191,91 @@
                     </el-table-column>
                 </el-table> -->
 
-                <el-row class="m-l-30">
-                    <el-col :sm="3" :md="3" :lg="5">
-                        <div class="set_range_box">
-                            <div>
-                                <div class="m-b-10 m-l-50">已选择区域</div>
-                            </div>
-                            <el-scrollbar height="310px">
-                                <div class="region_box btnNone">
-                                    <div v-for="item in data_range.arr" :key="item.id">
-                                        <div
-                                            v-if="item.type == 5"
-                                            class="region_box_item"
-                                            @click="closeShowHouse"
-                                        >
-                                            {{ item.tgt_obj }}
-                                            <el-popconfirm
-                                                title="确定要删除当前项么?"
-                                                cancel-button-type="info"
-                                                @confirm="deleteRange(item)"
-                                            >
-                                                <template #reference>
-                                                    <div class="region_box_item_del">✖</div>
-                                                </template>
-                                            </el-popconfirm>
-                                        </div>
-                                    </div>
+                    <el-row class="m-l-30">
+                        <el-col :sm="3" :md="3" :lg="5">
+                            <div class="set_range_box">
+                                <div>
+                                    <div class="m-b-10 m-l-50">已选择区域</div>
                                 </div>
-                                <!-- 已选择小区 -->
-                                <div class="region_box btnNone">
-                                    <div v-for="item in data_range.arr" :key="item.id">
-                                        <div
-                                            v-if="item.type == 4"
-                                            class="region_box_item"
-                                            @click="closeShowHouse"
-                                        >
-                                            <!-- {{ item.tgt_obj.pos_name+item.tgt_obj.name }} -->
-                                            {{ item.tgt_obj.name }}
-                                            <el-popconfirm
-                                                title="确定要删除当前项么?"
-                                                cancel-button-type="info"
-                                                @confirm="deleteRange(item)"
+                                <el-scrollbar height="310px">
+                                    <div class="region_box btnNone">
+                                        <div v-for="item in data_range.arr" :key="item.id">
+                                            <div
+                                                v-if="item.type == 5"
+                                                class="region_box_item"
+                                                @click="closeShowHouse"
                                             >
-                                                <template #reference>
-                                                    <div class="region_box_item_del">✖</div>
-                                                </template>
-                                            </el-popconfirm>
+                                                {{ item.tgt_obj }}
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?"
+                                                    cancel-button-type="info"
+                                                    @confirm="deleteRange(item)"
+                                                >
+                                                    <template #reference>
+                                                        <div class="region_box_item_del">✖</div>
+                                                    </template>
+                                                </el-popconfirm>
+                                            </div>
                                         </div>
                                     </div>
+                                    <!-- 已选择小区 -->
+                                    <div class="region_box btnNone">
+                                        <div v-for="item in data_range.arr" :key="item.id">
+                                            <div
+                                                v-if="item.type == 4"
+                                                class="region_box_item"
+                                                @click="closeShowHouse"
+                                            >
+                                                <!-- {{ item.tgt_obj.pos_name+item.tgt_obj.name }} -->
+                                                {{ item.tgt_obj.name }}
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?"
+                                                    cancel-button-type="info"
+                                                    @confirm="deleteRange(item)"
+                                                >
+                                                    <template #reference>
+                                                        <div class="region_box_item_del">✖</div>
+                                                    </template>
+                                                </el-popconfirm>
+                                            </div>
+                                        </div>
                                     <!-- <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
                                         <div v-if="!house.name&&!house.building?.name" class="region_box_item region_box_item_house">
                                             {{ house.building.zone.name }}
                                         </div>
                                     </div> -->
-                                </div>
-                                <!-- 可参与楼栋 -->
-                                <div class="region_box btnNone">
-                                    <div v-for="item in data_range.arr" :key="item.id">
-                                        <div
-                                            v-if="item.type == 3"
-                                            class="region_box_item"
-                                            @click="closeShowHouse"
-                                        >
-                                            {{ item.tgt_obj?.pos_name+item.tgt_obj?.name }}
-                                            <el-popconfirm
-                                                title="确定要删除当前项么?"
-                                                cancel-button-type="info"
-                                                @confirm="deleteRange(item)"
-                                            >
-                                                <template #reference>
-                                                    <div class="region_box_item_del">✖</div>
-                                                </template>
-                                            </el-popconfirm>
-                                        </div>
                                     </div>
-                                    <template v-if="flag_1">
-                                        <div v-for="house in surverRangeWhenBuildHouse.arr" :key="house.id">
-                                            <div class="region_box_item region_box_item_house" @click="clickUnits_1(house.id)">
-                                                {{ house.name }}
+                                    <!-- 可参与楼栋 -->
+                                    <div class="region_box btnNone">
+                                        <div v-for="item in data_range.arr" :key="item.id">
+                                            <div
+                                                v-if="item.type == 3"
+                                                class="region_box_item"
+                                                @click="closeShowHouse"
+                                            >
+                                                {{ item.tgt_obj?.pos_name+item.tgt_obj?.name }}
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?"
+                                                    cancel-button-type="info"
+                                                    @confirm="deleteRange(item)"
+                                                >
+                                                    <template #reference>
+                                                        <div class="region_box_item_del">✖</div>
+                                                    </template>
+                                                </el-popconfirm>
                                             </div>
                                         </div>
-                                    </template>
-                                </div>
-                                <!-- 可参与单元 -->
-                                <div class="region_box" btnNone>
-                                    <!-- <div v-for="item in data_range_units.arr" :key="item.id">
+                                        <template v-if="flag_1">
+                                            <div v-for="house in surverRangeWhenBuildHouse.arr" :key="house.id">
+                                                <div class="region_box_item region_box_item_house" @click="clickUnits_1(house.id)">
+                                                    {{ house.name }}
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <!-- 可参与单元 -->
+                                    <div class="region_box" btnNone>
+                                        <!-- <div v-for="item in data_range_units.arr" :key="item.id">
                     <div class="region_box_item" @click="clickUnits(item)">
                       {{ item.name }}
                       <el-popconfirm
@@ -267,43 +289,43 @@
                       </el-popconfirm>
                     </div>
                   </div> -->
-                                    <div v-for="item in data_range.arr" :key="item.id">
-                                        <div
-                                            v-if="item.type == 2"
-                                            class="region_box_item"
-                                            @click="closeShowHouse"
-                                        >
-                                            {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
-                                            <el-popconfirm
-                                                title="确定要删除当前项么?"
-                                                cancel-button-type="info"
-                                                @confirm="deleteRange(item)"
+                                        <div v-for="item in data_range.arr" :key="item.id">
+                                            <div
+                                                v-if="item.type == 2"
+                                                class="region_box_item"
+                                                @click="closeShowHouse"
                                             >
-                                                <template #reference>
-                                                    <div class="region_box_item_del">✖</div>
-                                                </template>
-                                            </el-popconfirm>
-                                        </div>
-                                    </div>
-                                    <template v-if="flag">
-                                        <div
-                                            v-for="house in surverRangeWhenUnitHouse.arr"
-                                            :key="house.id"
-                                        >
-                                            <div class="region_box_item region_box_item_house" @click="clickUnits(house.id)">
-                                                {{ house.name }}
+                                                {{ item.tgt_obj.pos_name+item.tgt_obj.name }}
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?"
+                                                    cancel-button-type="info"
+                                                    @confirm="deleteRange(item)"
+                                                >
+                                                    <template #reference>
+                                                        <div class="region_box_item_del">✖</div>
+                                                    </template>
+                                                </el-popconfirm>
                                             </div>
                                         </div>
-                                    </template>
-                                </div>
-                            </el-scrollbar>
-                        </div>
-                    </el-col>
-                    <el-col :sm="11" :md="11" :lg="19">
-                        <div v-if="showHouses" class="table btnNone">
-                            <div class="header" />
-                            <el-scrollbar height="300px">
-                                <!-- <div>
+                                        <template v-if="flag">
+                                            <div
+                                                v-for="house in surverRangeWhenUnitHouse.arr"
+                                                :key="house.id"
+                                            >
+                                                <div class="region_box_item region_box_item_house" @click="clickUnits(house.id)">
+                                                    {{ house.name }}
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </el-scrollbar>
+                            </div>
+                        </el-col>
+                        <el-col :sm="11" :md="11" :lg="19">
+                            <div v-if="showHouses" class="table btnNone">
+                                <div class="header" />
+                                <el-scrollbar height="300px">
+                                    <!-- <div>
                                     <div
                                         v-for="(floor, index) in floors.arr"
                                         :key="index"
@@ -333,89 +355,89 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div
-                                    style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);"
-                                >
-                                    <div class="row-box row-box-title">
-                                        <div class="row-item-box row-item-tit-box">
-                                            <div class="row-item row-item-tit row-item-tit-bgline">
-                                                <div class="tit-fh">楼层</div>
-                                                <div class="tit-lc">房号</div>
-                                            </div>
-                                        </div>
-                                        <el-scrollbar style="white-space: nowrap;">
-                                            <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
-                                                <div class="row-item">
-                                                    <!-- <el-checkbox
-                                                        v-model="checkFH.row[item].val"
-                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
-                                                    /> -->
-                                                    <div class="row-item-check">{{ item }}#</div>
-                                                </div>
-                                            </div>
-                                        </el-scrollbar>
-                                    </div>
-                                    <div style="height: calc(100% - 45px);overflow: auto;">
-                                        <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                                    <div
+                                        style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);"
+                                    >
+                                        <div class="row-box row-box-title">
                                             <div class="row-item-box row-item-tit-box">
-                                                <div class="row-item row-item-tit row-item-tit-ceng">
-                                                    <!-- <el-checkbox
-                                                        v-model="checkFH.col[child.floor_truth].val"
-                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
-                                                    /> -->
-                                                    <div>{{ child.floor_truth }}层</div>
+                                                <div class="row-item row-item-tit row-item-tit-bgline">
+                                                    <div class="tit-fh">楼层</div>
+                                                    <div class="tit-lc">房号</div>
                                                 </div>
                                             </div>
                                             <el-scrollbar style="white-space: nowrap;">
-                                                <div style="display: flex;">
-                                                    <div v-for="(item,i) in child.houses" :key="i" :class="{item: true,bg: item.can_exist}">
-                                                        <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
-                                                        <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
-                                                            <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
-
-                                                            <el-popconfirm
-                                                                title="确定要删除当前项么?"
-                                                                cancel-button-type="info"
-                                                                @confirm="deleteHouse(item.id)"
-                                                            >
-                                                                <template #reference>
-                                                                    <div v-if="item.can_exist" class="region_box_item_del_1">✖</div>
-                                                                </template>
-                                                            </el-popconfirm>
-                                                        </div>
+                                                <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
+                                                    <div class="row-item">
+                                                        <!-- <el-checkbox
+                                                        v-model="checkFH.row[item].val"
+                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
+                                                    /> -->
+                                                        <div class="row-item-check">{{ item }}#</div>
                                                     </div>
                                                 </div>
                                             </el-scrollbar>
                                         </div>
-                                    </div>
-                                    <el-drawer v-model="drawer" :direction="direction">
-                                        <template #title>
-                                            <h4>房屋信息</h4>
-                                        </template>
-                                        <template #default>
-                                            <div style="box-sizing: border-box;padding: 4px;">
-                                                <div class="details-box">
-                                                    <div class="item">
-                                                        <div class="left">房屋名称</div>
-                                                        <div class="right">{{ data_details.item.name }}</div>
+                                        <div style="height: calc(100% - 45px);overflow: auto;">
+                                            <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                                                <div class="row-item-box row-item-tit-box">
+                                                    <div class="row-item row-item-tit row-item-tit-ceng">
+                                                        <!-- <el-checkbox
+                                                        v-model="checkFH.col[child.floor_truth].val"
+                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
+                                                    /> -->
+                                                        <div>{{ child.floor_truth }}层</div>
                                                     </div>
-                                                    <div class="item">
-                                                        <div class="left">地址</div>
-                                                        <div class="right">{{ data_details.item.addr }}</div>
+                                                </div>
+                                                <el-scrollbar style="white-space: nowrap;">
+                                                    <div style="display: flex;">
+                                                        <div v-for="(item,i) in child.houses" :key="i" :class="{item: true,bg: item.can_exist}">
+                                                            <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
+                                                            <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
+                                                                <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
+
+                                                                <el-popconfirm
+                                                                    title="确定要删除当前项么?"
+                                                                    cancel-button-type="info"
+                                                                    @confirm="deleteHouse(item.id)"
+                                                                >
+                                                                    <template #reference>
+                                                                        <div v-if="item.can_exist" class="region_box_item_del_1">✖</div>
+                                                                    </template>
+                                                                </el-popconfirm>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="item">
-                                                        <div class="left">物理楼层</div>
-                                                        <div class="right">{{ data_details.item.floor_truth }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">名义层</div>
-                                                        <div class="right">{{ data_details.item.floor_alias }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">房号</div>
-                                                        <div class="right">{{ data_details.item.house_num }}</div>
-                                                    </div>
-                                                    <!-- <div class="item">
+                                                </el-scrollbar>
+                                            </div>
+                                        </div>
+                                        <el-drawer v-model="drawer" :direction="direction">
+                                            <template #title>
+                                                <h4>房屋信息</h4>
+                                            </template>
+                                            <template #default>
+                                                <div style="box-sizing: border-box;padding: 4px;">
+                                                    <div class="details-box">
+                                                        <div class="item">
+                                                            <div class="left">房屋名称</div>
+                                                            <div class="right">{{ data_details.item.name }}</div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="left">地址</div>
+                                                            <div class="right">{{ data_details.item.addr }}</div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="left">物理楼层</div>
+                                                            <div class="right">{{ data_details.item.floor_truth }}</div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="left">名义层</div>
+                                                            <div class="right">{{ data_details.item.floor_alias }}</div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="left">房号</div>
+                                                            <div class="right">{{ data_details.item.house_num }}</div>
+                                                        </div>
+                                                        <!-- <div class="item">
                                                                         <div class="left">类型</div>
                                                                         <div class="right">
                                                                             {{ getOptVal(opts_all.obj.device_type, data_details.item.type) }}
@@ -436,39 +458,39 @@
                                                                     </div>
                                                                     <div class="details-tit-sm">其他信息</div>
                                                                     <div class="item"> -->
-                                                    <div class="item">
-                                                        <div class="left">房屋id</div>
-                                                        <div class="right">{{ data_details.item.id }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">创建时间</div>
-                                                        <div class="right">{{ data_details.item.created_at }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">更新时间</div>
-                                                        <div class="right">{{ data_details.item.updated_at }}</div>
+                                                        <div class="item">
+                                                            <div class="left">房屋id</div>
+                                                            <div class="right">{{ data_details.item.id }}</div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="left">创建时间</div>
+                                                            <div class="right">{{ data_details.item.created_at }}</div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <div class="left">更新时间</div>
+                                                            <div class="right">{{ data_details.item.updated_at }}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- <div class="tip-title">房屋：{{ item.name }}</div>
+                                                <!-- <div class="tip-title">房屋：{{ item.name }}</div>
                                                                 <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
                                                                 <div class="tip-title">安全状态：{{ getOptVal(opts_all.obj.house_status_safe,item.status_safe) }}</div>
                                                                 <div class="tip-title">产权性质：{{ getOptVal(opts_all.obj.house_type_property,item.type_property) }}</div>
                                                                 <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div> -->
-                                            <div class="m-t-10 m-l-20">
-                                                <el-button type="primary" plain @click="modifyResidentialFunc">修改</el-button>
-                                                <!-- <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button> -->
-                                                <el-button type="warning" plain @click="showPropertyFunc">产权</el-button>
-                                                <el-button type="success" plain @click="showNumbersFunc">成员</el-button>
-                                            </div>
-                                        </template>
-                                    </el-drawer>
-                                </div>
-                            </el-scrollbar>
-                        </div>
-                    </el-col>
-                </el-row>
-                <!-- <el-row>
+                                                <div class="m-t-10 m-l-20">
+                                                    <el-button type="primary" plain @click="modifyResidentialFunc">修改</el-button>
+                                                    <!-- <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button> -->
+                                                    <el-button type="warning" plain @click="showPropertyFunc">产权</el-button>
+                                                    <el-button type="success" plain @click="showNumbersFunc">成员</el-button>
+                                                </div>
+                                            </template>
+                                        </el-drawer>
+                                    </div>
+                                </el-scrollbar>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <!-- <el-row>
                     <el-col :sm="3" :md="3" :lg="3">
                         <div class="set_range_box">
                             <div class="m-b-10">
@@ -478,7 +500,7 @@
                         </div>
                     </el-col>
                 </el-row> -->
-                <!-- <el-row>
+                    <!-- <el-row>
                     <el-col :sm="3" :md="3" :lg="3">
                         <div class="set_range_box">
                             <div>
@@ -490,7 +512,7 @@
                         </div>
                     </el-col>
                 </el-row> -->
-                <!-- <el-row>
+                    <!-- <el-row>
                     <el-col :sm="3" :md="3" :lg="3">
                         <div class="set_range_box">
                             <div>
@@ -500,136 +522,137 @@
                         </div>
                     </el-col>
                 </el-row> -->
-                <el-row />
-            </el-tab-pane>
-            <el-tab-pane :label="activeName_1+'题目'" name="3">
-                <SurveyQuestions :id="props.id" />
-            </el-tab-pane>
-            <el-tab-pane :label=" activeName_1 + '调查结果'" name="4">
-                <SurveyAnswer :id="props.id" />
-            </el-tab-pane>
-            <el-tab-pane label="审核记录" name="7">
-                <div>
-                    <el-timeline>
-                        <el-timeline-item
-                            v-for="(item,index) in article_tab.arr" :key="index"
-                            :timestamp="item.created_at" placement="top" :type="index==0? 'primary':''"
-                        >
-                            <el-card>
-                                <div class="details-box">
-                                    <div class="item">
-                                        <div class="left">审核活动</div>
-                                        <div class="right">{{ item.auditable?.name }}</div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="left">处理人</div>
-                                        <div class="right">
-                                            {{ item.auditor?.name?
-                                                item.auditor?.name:item.auditor?.nickname?item.auditor?.nickname:item.auditor?.username
-                                            }}
-                                        </div>
-                                    </div>
-                                    <div v-if="item.reply" class="item">
-                                        <div class="left">回复内容</div>
-                                        <div class="right">{{ item.reply }}</div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="left">状态</div>
-                                        <div class="right">
-                                            <el-tag v-if="item.status== 10" type="warning" size="small">
-                                                未处理
-                                            </el-tag>
-                                            <el-tag v-if="item.status == 20" type="success" size="small">
-                                                审核通过
-                                            </el-tag>
-                                            <el-tag v-if="item.status == 30" type="danger" size="small">
-                                                审核失败
-                                            </el-tag>
-                                        </div>
-                                    </div>
-                                </div>
-                            </el-card>
-                        </el-timeline-item>
-                    </el-timeline>
-                </div>
-                <div v-show="article_tab.arr.length <= 0" class="size-lg">此公式无审核信息</div>
-            </el-tab-pane>
-            <el-tab-pane label="业主评论" name="5" class="hidden">
-                <div style="display: flex;align-items: center;">
-                    <span>是否开启评论：</span>
-                    <el-switch
-                        v-model="popup1.using" inline-prompt active-text="开" inactive-text="关"
-                        @change="switchFnUse"
-                    />
-                    <div style="margin-left: 20px;display: inline-block;">
-                        <el-radio-group
-                            v-model="popup1.scoreper" :disabled="!popup1.using"
-                            @change="switchFnUse(true)"
-                        >
-                            <el-radio
-                                v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key"
-                                :label="item.key" size="large"
+                    <el-row />
+                </el-tab-pane>
+                <el-tab-pane :label="activeName_1+'题目'" name="3">
+                    <SurveyQuestions :id="route.query.id" />
+                </el-tab-pane>
+                <el-tab-pane :label=" activeName_1 + '参与详情'" name="4">
+                    <SurveyAnswer :id="route.query.id" />
+                </el-tab-pane>
+                <el-tab-pane label="审核记录" name="7">
+                    <div style="margin-top: 7px;">
+                        <el-timeline>
+                            <el-timeline-item
+                                v-for="(item,index) in article_tab.arr" :key="index"
+                                :timestamp="item.created_at" placement="top" :type="index==0? 'primary':''"
                             >
-                                {{ item.val }}
-                            </el-radio>
-                        </el-radio-group>
+                                <el-card>
+                                    <div class="details-box">
+                                        <div class="item">
+                                            <div class="left">审核活动</div>
+                                            <div class="right">{{ item.auditable?.name }}</div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="left">处理人</div>
+                                            <div class="right">
+                                                {{ item.auditor?.name?
+                                                    item.auditor?.name:item.auditor?.nickname?item.auditor?.nickname:item.auditor?.username
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div v-if="item.reply" class="item">
+                                            <div class="left">回复内容</div>
+                                            <div class="right">{{ item.reply }}</div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="left">状态</div>
+                                            <div class="right">
+                                                <el-tag v-if="item.status== 10" type="warning" size="small">
+                                                    未处理
+                                                </el-tag>
+                                                <el-tag v-if="item.status == 20" type="success" size="small">
+                                                    审核通过
+                                                </el-tag>
+                                                <el-tag v-if="item.status == 30" type="danger" size="small">
+                                                    审核失败
+                                                </el-tag>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-card>
+                            </el-timeline-item>
+                        </el-timeline>
                     </div>
-                </div>
-                <div>
-                    <el-button
-                        class="m-b-20 m-t-5" type="primary" :icon="Plus"
-                        :disabled="popup1.using ? false:true" @click="()=>{
-                            popup2.form = {};
-                            popup2.error = {};
-                            popup2.title = '添加';
-                            popup2.switch = true;
-                        }"
+                    <div v-show="article_tab.arr.length <= 0" class="size-lg">此活动无审核信息</div>
+                </el-tab-pane>
+                <el-tab-pane label="业主评论" name="5" class="hidden">
+                    <div class="isComment">
+                        <span>是否开启评论：</span>
+                        <el-switch
+                            v-model="popup1.using" inline-prompt active-text="开" inactive-text="关"
+                            @change="switchFnUse"
+                        />
+                        <div style="margin-left: 20px;display: inline-block;">
+                            <el-radio-group
+                                v-model="popup1.scoreper" :disabled="!popup1.using"
+                                @change="switchFnUse(true)"
+                            >
+                                <el-radio
+                                    v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key"
+                                    :label="item.key" size="large"
+                                >
+                                    {{ item.val }}
+                                </el-radio>
+                            </el-radio-group>
+                        </div>
+                    </div>
+                    <div>
+                        <el-button
+                            class="m-b-20 m-t-5" type="primary" :icon="Plus" size="large"
+                            :disabled="popup1.using ? false:true" @click="()=>{
+                                popup2.form = {};
+                                popup2.error = {};
+                                popup2.title = '添加';
+                                popup2.switch = true;
+                            }"
+                        >
+                            添加
+                        </el-button>
+                    </div>
+                    <el-table
+                        :data="data_1.list"
+                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                        class="tab_1"
+                        style="margin-top: 0;"
                     >
-                        添加
-                    </el-button>
-                </div>
-                <el-table
-                    :data="data_1.list"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    class="tab_1"
-                >
-                    <el-table-column label="评论内容">
-                        <template #default="scope">
-                            <span>{{ scope.row.content }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column v-if="data_1.list.uname">
-                        <template #default="scope">
-                            <span>{{ scope.row.uname|| 'null' }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="评分" width="80">
-                        <template #default="scope">
-                            <span>{{ scope.row.score }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="状态" align="center">
-                        <template #default="scope">
-                            <!-- <span>{{ getOptVal(opts_all.obj.comment_status,scope.row.status ) }} </span> -->
-                            <el-tag v-if="scope.row.status == 10" type="waring" roung>未审核</el-tag>
-                            <el-tag v-if="scope.row.status == 20" type="success" round>已审核</el-tag>
-                            <el-tag v-if="scope.row.status == 30" type="danger" round>审核失败</el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="评论时间">
-                        <template #default="scope">
-                            <span>{{ scope.row.created_at }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="260">
-                        <template #default="scope">
-                            <el-button type="primary" size="small" @click="popup2FnModify(scope.row)">
-                                修改
-                            </el-button>
-                            <el-button size="small" @click="popup3FnDetails(scope.row.id)">
-                                详情
-                            </el-button>
-                            <!-- <el-popconfirm
+                        <el-table-column label="评论内容">
+                            <template #default="scope">
+                                <span>{{ scope.row.content }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column v-if="data_1.list.uname">
+                            <template #default="scope">
+                                <span>{{ scope.row.uname|| 'null' }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="评分" width="80">
+                            <template #default="scope">
+                                <span>{{ scope.row.score }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="状态" align="center">
+                            <template #default="scope">
+                                <!-- <span>{{ getOptVal(opts_all.obj.comment_status,scope.row.status ) }} </span> -->
+                                <el-tag v-if="scope.row.status == 10" type="waring" roung>未审核</el-tag>
+                                <el-tag v-if="scope.row.status == 20" type="success" round>已审核</el-tag>
+                                <el-tag v-if="scope.row.status == 30" type="danger" round>审核失败</el-tag>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="评论时间">
+                            <template #default="scope">
+                                <span>{{ scope.row.created_at }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column fixed="right" label="操作" width="260">
+                            <template #default="scope">
+                                <el-button type="primary" size="small" @click="popup2FnModify(scope.row)">
+                                    修改
+                                </el-button>
+                                <el-button size="small" @click="popup3FnDetails(scope.row.id)">
+                                    详情
+                                </el-button>
+                                <!-- <el-popconfirm
                             title="确定要删除当前项么?"
                             cancel-button-type="info"
                             @confirm="data1FnDelete(scope.row.id)"
@@ -643,39 +666,40 @@
                                 </el-button>
                             </template>
                         </el-popconfirm> -->
-                            <el-button type="primary" size="small" @click="popup2FnReply(scope.row)">
-                                回复
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination
-                    v-model:current-page="data_1.page" style="float: right;"
-                    layout="prev,next,jumper," :total="50" :page-size="data_1.per_page" background
-                    prev-text="上一页" next-text="下一页" hide-on-single-page
-                />
-            </el-tab-pane>
-            <el-tab-pane label="访问记录" name="6">
-                <el-table
-                    :data="data_2.list"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    class="tab_1"
-                >
-                    <el-table-column label="访问者">
-                        <template #default="scope">
-                            <span>{{ scope.row.uinfo?.name?scope.row.uinfo?.name:scope.row.uinfo?.nickname?scope.row.uinfo?.nickname:scope.row.uinfo?.username }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="访问时间">
-                        <template #default="scope">
-                            <span>{{ scope.row.created_at }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="ip地址" align="center">
-                        <template #default="scope">
-                            <span>{{ scope.row.ip }} </span>
-                        </template>
-                    </el-table-column>
+                                <el-button type="primary" size="small" @click="popup2FnReply(scope.row)">
+                                    回复
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-pagination
+                        v-model:current-page="data_1.page" style="float: right;"
+                        layout="prev,next,jumper," :total="50" :page-size="data_1.per_page" background
+                        prev-text="上一页" next-text="下一页" hide-on-single-page
+                    />
+                </el-tab-pane>
+                <el-tab-pane label="访问记录" name="6">
+                    <el-table
+                        :data="data_2.list"
+                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                        class="tab_1"
+                        style="margin-top: 12px;"
+                    >
+                        <el-table-column label="访问者">
+                            <template #default="scope">
+                                <span>{{ scope.row.uinfo?.name?scope.row.uinfo?.name:scope.row.uinfo?.nickname?scope.row.uinfo?.nickname:scope.row.uinfo?.username }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="访问时间">
+                            <template #default="scope">
+                                <span>{{ scope.row.created_at }} </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="ip地址" align="center">
+                            <template #default="scope">
+                                <span>{{ scope.row.ip }} </span>
+                            </template>
+                        </el-table-column>
                     <!-- <el-table-column label="评论时间" width="200">
                                 <template #default="scope">
                                     <span>{{ scope.row.created_at }} </span>
@@ -704,21 +728,22 @@
                                     </el-button>
                                 </template>
                             </el-table-column> -->
-                </el-table>
-                <el-pagination
-                    v-model:current-page="data_2.page"
-                    style="float: right;"
-                    class="btnClass"
-                    layout="prev,next,jumper,"
-                    :total="50"
-                    :page-size="data_2.per_page"
-                    background
-                    prev-text="上一页"
-                    next-text="下一页"
-                    hide-on-single-page
-                />
-            </el-tab-pane>
-        </el-tabs>
+                    </el-table>
+                    <el-pagination
+                        v-model:current-page="data_2.page"
+                        style="float: right;"
+                        class="btnClass"
+                        layout="prev,next,jumper,"
+                        :total="50"
+                        :page-size="data_2.per_page"
+                        background
+                        prev-text="上一页"
+                        next-text="下一页"
+                        hide-on-single-page
+                    />
+                </el-tab-pane>
+            </el-tabs>
+        </page-main>
         <!-- 修改添加 -->
         <el-dialog v-model="popup2.switch" :title="popup2.title" width="50%" :append-to-body="true">
             <el-form :model="popup2.form">
@@ -805,7 +830,7 @@
         <PositionTreeFive
             v-model:showabled="switch_set_area"
             :tree_item="tree_item"
-            :surveyid="props.id"
+            :surveyid="route.query.id"
             @onRangeFunc="rangeFunc"
             @checkFunc="checkFunc"
             @checkChangeFunc="checkChangeFunc"
@@ -854,10 +879,10 @@ import {
 } from 'vue'
 // 修改问卷状态
 const exchangeStatus = status => {
-    APImodifySurveyStatus(props.id, { status: status })
+    APImodifySurveyStatus(route.query.id, { status: status })
         .then(res => {
             console.log(res)
-            detailsFunc(props.id)
+            detailsFunc(route.query.id)
         })
         .catch(err => {
             // console.log('err',err.response.data)
@@ -886,7 +911,9 @@ const detail_set_area = () => {
 // 详情
 let switch_details = ref(false)
 // 接收父组件传递过来的id
-const props = defineProps(['id'])
+import { useRoute } from 'vue-router'
+const route = useRoute()
+// const props = defineProps(['id'])
 const activeName = ref('1')
 // 详情
 const data_details = reactive({
@@ -935,7 +962,7 @@ const data_2 = reactive({
     per_page: 15
 })
 onMounted(() => {
-    detailsFunc(props.id)
+    detailsFunc(route.query.id)
 })
 // 切换tab-pane触发请求事件
 const changePane = (tab, event) => {
@@ -986,7 +1013,7 @@ const detailsFunc = id => {
 // 获取问卷题目
 const topicsFunc = () => {
     let params = {
-        sid: props.id
+        sid: route.query.id
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
@@ -1006,7 +1033,7 @@ const rangeFunc = () => {
     let params = {
         page: 1,
         per_page: 100,
-        sid: props.id,
+        sid: route.query.id,
         can_type: 2
         // type_many: [2, 3, 4, 5]
     }
@@ -1027,7 +1054,7 @@ const rangeFunc = () => {
         .catch(err => {
             from_error.msg = err.data
         })
-    APIgetSurverRangeWhenHouse({ sid: props.id, can_type: 2 }).then(res => {
+    APIgetSurverRangeWhenHouse({ sid: route.query.id, can_type: 2 }).then(res => {
         console.log(res)
         if (res.data.units) {
             flag.value = true
@@ -1054,7 +1081,7 @@ import {
 } from '@/api/custom/custom.js'
 const getListArchiveFunc = () => {
     let params = {
-        tgt_id: props.id,
+        tgt_id: route.query.id,
         tgt_type: 'survey'
     }
     APIgetListArchiveAudit(params).then(res => {
@@ -1067,7 +1094,7 @@ const getRecordListunc = () => {
     let params = {
         page: data_2.page,
         per_page: data_2.per_page,
-        tgt_id: props.id
+        tgt_id: route.query.id
     }
     APIRecordList(params).then(res => {
         console.log(res)
@@ -1100,7 +1127,7 @@ const data_range_buildings = reactive({
 const clickZone = val => {
     showHouses.value = false
     data_range_buildings.arr = []
-    APIgetBuildListHouse({ zone_id: val.tgt, sid: props.id, can_type: 2 }).then(
+    APIgetBuildListHouse({ zone_id: val.tgt, sid: route.query.id, can_type: 2 }).then(
         res => {
             res.forEach(item => {
                 if (item.can_exist) {
@@ -1120,7 +1147,7 @@ const clickBuildings = val => {
     showHouses.value = false
     APIgetUnitsListHouse({
         building_id: val.id,
-        sid: props.id,
+        sid: route.query.id,
         can_type: 2
     }).then(res => {
         res.forEach(item => {
@@ -1159,7 +1186,7 @@ const clickUnits = val => {
     APIgetHouseListSort({
         houseable_id: val,
         houseable_type: 'units',
-        sid: props.id,
+        sid: route.query.id,
         can_type: 2
     }).then(res => {
         total.value = 0
@@ -1220,7 +1247,7 @@ const clickUnits_1 = val => {
     APIgetHouseListSort({
         houseable_id: val,
         houseable_type: 'buildings',
-        sid: props.id,
+        sid: route.query.id,
         can_type: 2
     }).then(res => {
         showHouses.value = true
@@ -1278,7 +1305,7 @@ const answerListFunc = () => {
         page: 1,
         per_page: 15
     }
-    APIgetSurveyAnswerList(props.id, params).then(res => {
+    APIgetSurveyAnswerList(route.query.id, params).then(res => {
         // console.log(res.data)
         // answer_list = res.data[0]
         // 清空答卷列表（线上、线下、总列表）
@@ -1348,7 +1375,7 @@ let notParticipateLength = 0
 let notParticipateList = reactive([])
 const notParticipate = () => {
     notParticipateList.length = 0
-    APIgetNotParticipate(props.id).then(res => {
+    APIgetNotParticipate(route.query.id).then(res => {
         // console.log('aaa',res.data)
         participate.notParticipateLength = res.data.length
         res.data.forEach(element => {
@@ -1359,11 +1386,11 @@ const notParticipate = () => {
 }
 // 添加问卷题目
 const addServeyTopic = () => {
-    // console.log(props.id)
+    // console.log(route.query.id)
     str_title.value = '添加'
     switch_examine.value = true
     // 清除问卷的信息
-    topic_examine.item = { sid: props.id, extra: null, sort: 5 }
+    topic_examine.item = { sid: route.query.id, extra: null, sort: 5 }
     opts.length = 0
 }
 // 修改问卷题目
@@ -1407,7 +1434,7 @@ const deleteRange = val => {
 }
 // 删除问卷房屋
 const deleteHouse = houseid => {
-    APIdeleteSurveyRange({ sid: props.id, can_type: 2, type: 1, tgt: [houseid] }).then(res => {
+    APIdeleteSurveyRange({ sid: route.query.id, can_type: 2, type: 1, tgt: [houseid] }).then(res => {
         rangeFunc()
     })
 
@@ -1462,7 +1489,7 @@ const emitTickets = (tid, index) => {
 }
 const dialogAddSurveyAnswer = () => {
     console.log('addticket', addticket)
-    APIaddSurveyAnswer(props.id, addticket)
+    APIaddSurveyAnswer(route.query.id, addticket)
         .then(res => {
             // console.log(res)
             switch_addAnswer.value = false
@@ -1498,7 +1525,7 @@ APIgetChinaRegion().then(res => {
 let comment_list = reactive([])
 const ownerComment = () => {
     let params = {
-        tgtid: props.id
+        tgtid: route.query.id
     }
     APIgetCommentList(params)
         .then(res => {
@@ -1575,17 +1602,17 @@ import {
 const switchFnUse = val => {
     console.log(val)
     if (val) {
-        APIpostCommentconfig(props.id, { scoreper: popup1.scoreper }).then(res => {
+        APIpostCommentconfig(route.query.id, { scoreper: popup1.scoreper }).then(res => {
             // ElMessage.success('已开启')
         })
         return false
     }
-    APIdeleteCommentconfig(props.id).then(res => {
+    APIdeleteCommentconfig(route.query.id).then(res => {
         // ElMessage.success('已开启')
     })
 }
 // const switchFnStatus = () => {
-//     APIgetCommentconfig(props.id).then(res => {
+//     APIgetCommentconfig(route.query.id).then(res => {
 //         console.log(res)
 //         popup1.using = false
 //         if (res) {
@@ -1610,7 +1637,7 @@ const popup2FnAdd = () => {
         }
     }
     if (popup2.title == '添加' || popup2.title == '回复') {
-        APIpostComment(props.id, popup2.form).then(res => {
+        APIpostComment(route.query.id, popup2.form).then(res => {
             ElMessage.success('添加成功')
             popup2.switch = false
             data1FnGetList()
@@ -1672,7 +1699,7 @@ const data1FnGetList = () => {
     let data = {
         page: data_1.page,
         per_page: data_1.per_page,
-        tgtid: props.id
+        tgtid: route.query.id
     }
     APIgetCommentList(data).then(res => {
         data_1.list = res
@@ -1900,6 +1927,7 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
         .row-item {
             width: 100%;
             height: 100%;
+            // border: 1px solid #e9e9e9;
             font-size: 14px;
             vertical-align: top;
             display: inline-flex;
@@ -1956,5 +1984,16 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
             border: 1px solid #fff;
         }
     }
+}
+.isComment {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 15px;
+    font-size: 14px;
+    background-color: #fafafa;
+    padding: 0 20px;
+}
+.el-timeline {
+    margin-left: -38px;
 }
 </style>
