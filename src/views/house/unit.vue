@@ -302,11 +302,13 @@
         <!-- 房屋 -->
         <el-dialog
             v-model="edit_house"
+            v-if="edit_house"
             title="房屋"
             width="80%"
+            @close="house_dialog_close"
         >
             <div style="overflow: auto;">
-                <House :tree_item="tree_item.arr" />
+                <House :tree_item="tree_item.arr" ref="house_component" />
             </div>
         </el-dialog>
     </div>
@@ -426,6 +428,14 @@ const detailsFunc = val => {
         switch_details.value = true
     })
 }
+//关闭dialog时，清楚数据开始
+const house_component=ref(null)
+const house_dialog_close=()=>{
+    console.log('ss')
+    edit_house.value=false
+    house_component.value.clear_house_data()
+}
+//结束
 // 监听分页
 watch(page, () => {
     getTabListFunc()
