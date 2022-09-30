@@ -12,7 +12,7 @@
             </div>
             <div class="tree-details" style="display: flex; flex-direction: column;">
                 <div style="height: 100%;">
-                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;">
+                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'100%':'100%'}" style="position: relative;display: flex; flex-direction: column;overflow: scroll;">
                         <div
                             v-if="!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'"
                             style="position: absolute;left: 0;right: 0;z-index: 9;height: 100%;width: 100%;background-color: rgb(255 255 255 / 50%);cursor: not-allowed;"
@@ -1275,6 +1275,16 @@ const getHouseListFunc = () => {
         }
     })
 }
+//在父组件中清理数据
+const clear_house_data=()=>{
+    house_num.arr=[]
+    house_list.area=[]
+    active_obj.obj.name=''
+}
+import {defineExpose } from 'vue'
+defineExpose({
+    clear_house_data
+})
 // houseable_type=units&houseable_id=62be6497b55f2676b8065601
 // 更新check状态
 // row点击
