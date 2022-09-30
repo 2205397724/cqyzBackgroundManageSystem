@@ -343,9 +343,9 @@
                                     <span
                                         v-if="data_details.item.building !== '' && data_details.item.buildinginfo !== null"
                                         style="margin-right: 15px; margin-left: 15px;"
-                                    >{{ buildingName.name }}</span>
+                                    >{{ buildingName?.name }}</span>
                                     <span v-if="data_details.item.unit !== '' && data_details.item.unitinfo !== null">{{
-                                        unitName.name
+                                        unitName?.name
                                     }}</span>
                                 </div>
                             </div>
@@ -978,6 +978,9 @@ const getDetailsFunc = val => {
     }
     APIgetDeviceArchiveList(params).then(res => {
         console.log(res)
+        if(res.length==0){
+            data_archive.arr =[]
+        }
         for (let x in res) {
             for (let y in res[x].content) {
                 res[x].content[y].keys = []
@@ -1038,10 +1041,6 @@ const detailsFunc = val => {
 //         }
 //     })
 // }
-// 关闭详情对话框
-const closeDialog = () => {
-    activeName.value = '1'
-}
 import {
     APIgetDeviceArchiveList
 } from '@/api/custom/custom.js'
