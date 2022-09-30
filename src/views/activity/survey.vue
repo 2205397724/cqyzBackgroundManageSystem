@@ -105,8 +105,8 @@
                     </el-table-column>
                     <el-table-column label="是否公开" align="center">
                         <template #default="scope">
-                            <el-tag v-show="scope.row.pub == 0" class="btnNone" type="primary" size="small">关闭</el-tag>
-                            <el-tag v-show="scope.row.pub == 1" class="btnNone noDeal" type="warning" size="small">开放</el-tag>
+                            <el-tag v-show="scope.row.pub == 0" class="btnNone" type="danger" size="small">关闭</el-tag>
+                            <el-tag v-show="scope.row.pub == 1" class="btnNone noDeal" type="success" size="small">开放</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" width="250px" label="操作">
@@ -114,9 +114,12 @@
                             <el-button type="primary" size="small" @click="modifySurvey(scope.row)">
                                 修改
                             </el-button>
-                            <el-button size="small" @click="detailsFunc(scope.row)">
+                            <!-- <el-button size="small" @click="detailsFunc(scope.row)">
                                 详情
-                            </el-button>
+                            </el-button> -->
+                            <el-link :underline="false" type="primary">
+                                <router-link class="el-button details" :to="{name: 'surveyDetails',query:{ id : scope.row.id }}">详情</router-link>
+                            </el-link>
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"
                                 @confirm="deleteFunc(scope.row)"
@@ -283,6 +286,7 @@
             <!-- 详情 -->
             <el-dialog v-model="switch_details" :title="data_details.item.name" width="80%" destroy-on-close="true">
                 <Detail :id="data_details.item.id" />
+
                 <template #footer>
                     <el-button type="warning" plain @click="switch_details = false">取消</el-button>
                 </template>
@@ -679,5 +683,12 @@ getOpts(['announce_status', 'toushu_pub']).then(res => {
         line-height: 29px;
         color: #c0c4d5;
     }
+}
+.details {
+    text-decoration: inherit;
+    font-size: 12px;
+    margin: 0 10px;
+    height: 24px;
+    width: 48px;
 }
 </style>

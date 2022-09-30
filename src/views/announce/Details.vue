@@ -195,7 +195,7 @@
                         <div v-show="article_tab.arr.length <= 0" class="size-lg">此公式无审核信息</div>
                     </el-tab-pane>
                     <el-tab-pane label="业主评论" name="3" class="hidden">
-                        <div style="display: flex;align-items: center;">
+                        <div class="isComment">
                             <span>是否开启评论：</span>
                             <el-switch
                                 v-model="popup1.using" inline-prompt active-text="开" inactive-text="关"
@@ -733,5 +733,13 @@ getOpts(['article_lv', 'announce_status', 'comment_scoreper', 'comment_status'])
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
     width: 60px !important;
+}
+.isComment {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 15px;
+    font-size: 14px;
+    background-color: #fafafa;
+    padding: 0 20px;
 }
 </style>

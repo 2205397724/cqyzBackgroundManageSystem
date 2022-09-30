@@ -19,8 +19,7 @@ export default {
                 title: '*控制台首页',
                 sidebar: false,
                 breadcrumb: false,
-                activeMenu: '/supervise_home',
-                auth: ['supervise.home.home', '*']
+                activeMenu: '/supervise_home'
             }
         }
     ]

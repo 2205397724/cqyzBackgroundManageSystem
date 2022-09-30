@@ -21,7 +21,20 @@ export default {
                 // 在面包屑展示
                 breadcrumb: false,
                 activeMenu: '/activity_vote'
-            }
+            },
+            children: [{
+                path: 'details',
+                name: 'voteDetails',
+                sidebar: false,
+                breadcrumb: false,
+                component: () =>
+                    import ('@/views/activity/activityDetails.vue'),
+                meta: {
+                    title: '详情',
+                    sidebar: false,
+                    activeMenu: '/activity_vote'
+                }
+            }]
         }
     ]
 }
