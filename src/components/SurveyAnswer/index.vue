@@ -69,15 +69,15 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-scrollbar height="500px">
+            <el-scrollbar height="300px">
                 <!-- 遍历题目 -->
                 <div v-for="(item,index) in topic_details.item" :key="item.id">
                     <!-- 单选题 -->
                     <div v-if="item.type === 1">
                         <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
-                        <div v-for="items in item.opts" :key="items.id" class="m-l-40">
-                            <el-radio-group v-model="addticket.answers[index].opt">
-                                <el-radio :label="items.id" @click="emitTickets(item.id,index)">{{ items.content }}</el-radio>
+                        <div v-for="(items,i) in item.opts" :key="i" class="m-l-40">
+                            <el-radio-group v-model="radio2">
+                                <el-radio :label="items.id" @change="emitTickets_1(item.id,index)">{{ items.content }}</el-radio>
                             </el-radio-group>
                         </div>
                     </div>
@@ -103,13 +103,13 @@
                     </div>
                 </div>
                 <!-- </el-scrollbar> -->
-                <template #footer>
-                    <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                        <el-button @click="switch_addAnswer=false">取消</el-button>
-                        <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
-                    </div>
-                </template>
             </el-scrollbar>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_addAnswer=false">取消</el-button>
+                    <el-button type="primary" @click="dialogAddSurveyAnswer()">确定</el-button>
+                </div>
+            </template>
         </el-dialog>
         <!-- 查看答卷详情 -->
         <el-dialog v-model="switch_answer_detail" title="用户答卷详情">
@@ -165,17 +165,18 @@
             </template>
         </el-dialog>
         <el-dialog v-model="switch_choose_zone" width="60%" title="选择参与人">
-            <div style="width: 30%; height: 600px; display: inline-block;">
-                <el-scrollbar height="600px">
-                    <position-tree
-                        :tree_item="tree_item.arr"
-                        @checkFunc="checkFunc"
-                    />
-                </el-scrollbar>
-            </div>
+            <div class="flx">
+                <div style="width: 30%; height: 600px; display: inline-block;">
+                    <el-scrollbar height="600px">
+                        <position-tree
+                            :tree_item="tree_item.arr"
+                            @checkFunc="checkFunc"
+                        />
+                    </el-scrollbar>
+                </div>
 
-            <div style="width: 70%; display: inline-block;">
-                <!-- <el-scrollbar height="600px">
+                <div style="width: 70%; display: inline-block;">
+                    <!-- <el-scrollbar height="600px">
                     <el-radio-group v-model="radio1" class="ml-4">
                         <div v-for="(item,i) in house_list.arr" :key="i" style="margin-left: 80px;">
                             <div v-for="(row,j) in item.houses" :key="j" class="m-b-20">
@@ -191,71 +192,72 @@
                         </div>
                     </el-radio-group>
                 </el-scrollbar> -->
-                <div
-                    style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 400px;"
-                >
-                    <div class="row-box row-box-title">
-                        <div class="row-item-box row-item-tit-box">
-                            <div class="row-item row-item-tit row-item-tit-bgline">
-                                <div class="tit-fh">楼层</div>
-                                <div class="tit-lc">房号</div>
-                            </div>
-                        </div>
-                        <el-scrollbar style="white-space: nowrap;">
-                            <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
-                                <div class="row-item">
-                                    <!-- <el-checkbox
-                                                        v-model="checkFH.row[item].val"
-                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
-                                                    /> -->
-                                    <div class="row-item-check">{{ item }}#</div>
-                                </div>
-                            </div>
-                        </el-scrollbar>
-                    </div>
-                    <div style="height: calc(100% - 45px);overflow: auto;">
-                        <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                    <div
+                        style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 400px;"
+                    >
+                        <div class="row-box row-box-title">
                             <div class="row-item-box row-item-tit-box">
-                                <div class="row-item row-item-tit row-item-tit-ceng">
-                                    <!-- <el-checkbox
-                                                        v-model="checkFH.col[child.floor_truth].val"
-                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
-                                                    /> -->
-                                    <div>{{ child.floor_truth }}层</div>
+                                <div class="row-item row-item-tit row-item-tit-bgline">
+                                    <div class="tit-fh">楼层</div>
+                                    <div class="tit-lc">房号</div>
                                 </div>
                             </div>
                             <el-scrollbar style="white-space: nowrap;">
-                                <div style="display: flex;">
-                                    <div v-for="(item,j) in child.houses" :key="j" :class="{item: true,bg: item.can_exist}">
-                                        <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
-                                        <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
-                                            <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
-                                        </div>
+                                <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
+                                    <div class="row-item">
+                                        <!-- <el-checkbox
+                                                        v-model="checkFH.row[item].val"
+                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
+                                                    /> -->
+                                        <div class="row-item-check">{{ item }}#</div>
                                     </div>
                                 </div>
                             </el-scrollbar>
                         </div>
+                        <div style="height: calc(100% - 45px);overflow: auto;">
+                            <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                                <div class="row-item-box row-item-tit-box">
+                                    <div class="row-item row-item-tit row-item-tit-ceng">
+                                        <!-- <el-checkbox
+                                                        v-model="checkFH.col[child.floor_truth].val"
+                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
+                                                    /> -->
+                                        <div>{{ child.floor_truth }}层</div>
+                                    </div>
+                                </div>
+                                <el-scrollbar style="white-space: nowrap;">
+                                    <div style="display: flex;">
+                                        <div v-for="(item,j) in child.houses" :key="j" :class="{item: true,bg: item.can_exist}">
+                                            <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
+                                            <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
+                                                <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-scrollbar>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div v-if="flag" style="background-color: #f0f2f5; padding: 20px; margin-top: 20px;">
-                    <el-row :span="10" class="m-b-10">
-                        <el-col :lg="5" style="line-height: 32px; text-align: right;">
-                            <span>选择的房屋：</span>
-                        </el-col>
-                        <el-col :lg="19">
-                            <el-input v-model="houseName" />
-                        </el-col>
-                    </el-row>
-                    <el-row :lg="5">
-                        <el-col :lg="5" style="line-height: 32px; text-align: right;">
-                            <span>产权人：</span>
-                        </el-col>
-                        <el-col :lg="19">
-                            <template v-if="house_details.item.curr_property&&house_details.item.curr_property.owners">
-                                <el-button v-for="(item,i) in house_details.item.curr_property.owners" :key="i" type="primary" plain @click="selectPropertyPeople(item)">{{ item.name }}</el-button>
-                            </template>
-                        </el-col>
-                    </el-row>
+                    <div v-if="flag" style="background-color: #f0f2f5; padding: 20px; margin-top: 20px;">
+                        <el-row :span="10" class="m-b-10">
+                            <el-col :lg="5" style="line-height: 32px; text-align: right;">
+                                <span>选择的房屋：</span>
+                            </el-col>
+                            <el-col :lg="19">
+                                <el-input v-model="houseName" />
+                            </el-col>
+                        </el-row>
+                        <el-row :lg="5">
+                            <el-col :lg="5" style="line-height: 32px; text-align: right;">
+                                <span>产权人：</span>
+                            </el-col>
+                            <el-col :lg="19">
+                                <template v-if="house_details.item.curr_property&&house_details.item.curr_property.owners">
+                                    <el-button v-for="(item,i) in house_details.item.curr_property.owners" :key="i" type="primary" plain @click="selectPropertyPeople(item)">{{ item.name }}</el-button>
+                                </template>
+                            </el-col>
+                        </el-row>
+                    </div>
                 </div>
             </div>
         </el-dialog>
@@ -384,6 +386,7 @@ const answerListFunc = () => {
 let answer_detail = reactive({
     item: ''
 })
+// 查看
 const getAnswerDetail = id => {
     switch_answer_detail.value = true
     // 根据问卷题目数量插入对象到answers中
@@ -419,17 +422,18 @@ const addAnswer = () => {
     // 根据问卷题目数量插入对象到answers中
     // console.log('length',topic_details.item.length)
     // 先判断数组长度是否相同
-    if (addticket.answers.length != topic_details.item.length) {
-        addticket.answers = []
-        for (let i = 0;i < topic_details.item.length;i++) {
-            // 判断是选择题还是主观题
-            if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
-                addticket.answers.push({ 'tid': '', 'opt': [] })
-            } else if (topic_details.item[i].type == 3) {
-                addticket.answers.push({ 'tid': '', 'content': '' })
-            }
+    // if (addticket.answers.length != topic_details.item.length) {
+    addticket.answers = []
+    for (let i = 0;i < topic_details.item.length;i++) {
+        // 判断是选择题还是主观题
+        if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
+            addticket.answers.push({ 'tid': '', 'opt': [] })
+        } else if (topic_details.item[i].type == 3) {
+            addticket.answers.push({ 'tid': '', 'content': '' })
         }
     }
+    console.log(addticket.answers)
+    // }
     let params = {
         page: 1,
         per_page: 100,
@@ -450,6 +454,7 @@ const addAnswer = () => {
             }
             console.log(res.data)
             data_range.arr = res.data
+            tree_item.arr = []
             res.data.forEach((item, key) => {
                 if (item.type == 5) {
                     if (item.tgt.length <= 9) {
@@ -484,9 +489,16 @@ const notParticipate = () => {
     })
 }
 
+const radio2 = ref('')
 // 点击选框事件
 const emitTickets = (tid, index) => {
     addticket.answers[index].tid = tid
+}
+const emitTickets_1 = (tid, index) => {
+    addticket.answers[index].opt = []
+    addticket.answers[index].tid = tid
+    addticket.answers[index].opt.push(radio2.value)
+    console.log(addticket.answers)
 }
 import { ElMessage } from 'element-plus'
 const dialogAddSurveyAnswer = () => {
@@ -737,9 +749,9 @@ const selectPropertyPeople = row => {
         }
     }
 }
-:deep .el-dialog__body {
-    display: flex;
-}
+// :deep .el-dialog__body {
+//     display: flex;
+// }
 .selecZone {
     width: 100%;
     height: 32px;

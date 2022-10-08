@@ -1512,6 +1512,10 @@ export function APIaddSurveyAnswer(id, params) {
 export function APIgetNotParticipate(id) {
     return api.get('/s/' + id + '/doesnt')
 }
+// 获取活动统计结果
+export function APIgetSurveyStatus(survey) {
+    return api.get(`/s/${survey}/stat`)
+}
 // 事件脉络
 // 事件
 // 列表

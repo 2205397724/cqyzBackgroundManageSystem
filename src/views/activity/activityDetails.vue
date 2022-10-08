@@ -530,6 +530,127 @@
                 <el-tab-pane :label=" activeName_1 + '参与详情'" name="4">
                     <SurveyAnswer :id="route.query.id" />
                 </el-tab-pane>
+                <el-tab-pane label="统计数据" name="8">
+                    <div>
+                        <div class="details-box">
+                            <!-- <el-row>
+                            <el-col :span="8">
+
+                            </el-col>
+                        </el-row> -->
+                            <div class="details-tit-sm">数量</div>
+
+                            <el-row :gutter="20">
+                                <!-- <el-col :span="8">
+                                <div class="item">
+                                    <div class="left w-100">内容</div>
+                                    <span v-html="data_details.item.content " />
+                                </div>
+                            </el-col> -->
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">总票数</div>
+                                        <span>{{ statistics.obj.tot?.ticket }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">总面积数</div>
+                                        <span>{{ statistics.obj.tot?.area }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">总房屋数</div>
+                                        <span>{{ statistics.obj.house_tot_cnt }}</span>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">线上参与</div>
+                                        <span>{{ statistics.obj.answer_cnt?.online }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">线下参与</div>
+                                        <span>{{ statistics.obj.answer_cnt?.offline }}</span>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="item">
+                                        <div class="left_1 w-100">已参与房屋</div>
+                                        <span>{{ statistics.obj.house_has_cnt }}</span>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <!-- <div>
+                        <h3>问卷记录</h3>
+                        <div class="steps-column m-l-40 selected">
+                            <div class="steps-column-item">
+                                <div>
+                                    <text>时间:2022-07-14 12:00:00</text>
+                                </div>
+                                <div>
+                                    操作人员：街道 主任 王先生
+                                    <span class="m-l-40">事件：审核</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    </div>
+                    <div>
+                        <div class="details-box">
+                            <div class="details-tit-sm">总进度</div>
+                            <el-row>
+                                <el-col :lg="12" style="display: inline-block;text-align: center;">
+                                    <el-progress type="circle" :percentage="statistics.obj.ticket_per" />
+                                    <div style="font-size: 14px; color: #aaa; margin: 5px 0;">参与票/总票数</div>
+                                    <div>
+                                        {{ statistics.obj.answer_cnt?.online + statistics.obj.answer_cnt?.offline }}/{{ statistics.obj.tot?.ticket }}
+                                    </div>
+                                </el-col>
+                                <el-col :lg="12" style="display: inline-block;text-align: center;">
+                                    <el-progress type="circle" :percentage="statistics.obj.area_per" />
+                                    <div style="font-size: 14px; color: #aaa; margin: 5px 0;">参与面积/总面积m²</div>
+                                    <div>
+                                        {{ statistics.obj.area_has }}/{{ statistics.obj.tot?.area }}
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="details-box">
+                            <div class="details-tit-sm">选项详情</div>
+                            <div v-for="(item,i) in topic_details.item" :key="i">
+                                <div style="font-weight: 700; margin: 10px 0;">
+                                    <el-icon style="vertical-align: middle;color: #e44822;"><ChatDotRound /></el-icon>
+                                    {{ item.title }}
+                                </div>
+                                <div v-for="(val,j) in item.opts" :key="j">
+                                    <div class="m-t-10">{{ val.content }}</div>
+                                    <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
+                                        <el-col :lg="1"> 票数 </el-col>
+                                        <el-col :lg="23" style="margin-top: 3px;">
+                                            <el-progress :percentage="20" :color="customColor" />
+                                        </el-col>
+                                    </el-row>
+                                    <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
+                                        <el-col :lg="1"> 面积 </el-col>
+                                        <el-col :lg="23" style="margin-top: 3px;">
+                                            <el-progress v-if="statistics.obj.opt_area_map[j].area !== 0" :percentage="(parseInt(statistics.obj.opt_area_map[j].area) / statistics.obj.tot.area * 100).toFixed(2)" :color="customColor" />
+                                            <el-progress v-if="statistics.obj.opt_area_map[j].area == 0" :percentage="0" :color="customColor" />
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-tab-pane>
                 <el-tab-pane label="审核记录" name="7">
                     <div style="margin-top: 7px;">
                         <el-timeline>
@@ -864,10 +985,12 @@ import {
     APIputComment,
     APIgetBuildListHouse,
     // 访问记录
-    APIRecordList
+    APIRecordList,
+    // 统计结果
+    APIgetSurveyStatus
 } from '@/api/custom/custom.js'
 // 导入图标
-import { Edit, Search } from '@element-plus/icons-vue'
+import { ChatDotRound, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 const from_error = reactive({
     msg: {}
@@ -985,8 +1108,10 @@ const changePane = (tab, event) => {
 
     } else {
         // 业主评论
+        topicsFunc()
         getListArchiveFunc()
         data1FnGetList()
+        getSurveyStatus()
     }
 }
 const activeName_1 = ref('')
@@ -1008,7 +1133,23 @@ const detailsFunc = id => {
             switch_details.value = true
         }
     })
+
     console.log(data_details.item)
+}
+const statistics = reactive({
+    obj: {
+        opt_area_map: [{
+            area: ''
+        }]
+    }
+})
+// 获取统计结果
+const getSurveyStatus = () => {
+    APIgetSurveyStatus(route.query.id).then(res => {
+        console.log(res)
+        statistics.obj = res.data
+        console.log(topic_details.item)
+    })
 }
 // 获取问卷题目
 const topicsFunc = () => {
@@ -1290,6 +1431,7 @@ const getAnswerDetail = id => {
         console.log('answer_detail.item', answer_detail.item)
     })
 }
+
 // 参与情况
 let participate = reactive({
     on_line: 0,

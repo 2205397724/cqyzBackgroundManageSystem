@@ -14,7 +14,7 @@
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                房屋id：
+                                房屋：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18" class="search_tb">
                                 <div class="searchUserGroup">
