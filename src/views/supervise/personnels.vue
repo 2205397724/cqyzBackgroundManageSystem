@@ -320,21 +320,23 @@
             <div style="height: 600px;">
                 <div style="width: 50%;height: 600px; float: left;border-right: 1px solid #ccc;">
                     <div style="height: 20%; border-bottom: 1px solid #ccc;">
+                        <div style="font-size: 12px; color: #bbb; margin-bottom: 15px;">已有标签</div>
                         <div v-for="item in tags.arr" :key="item.key" class="inline-block m-r-10 pointer">
-                            <el-tag type="success" @click="tagClick(item)">
+                            <el-tag type="success" size="large" @click="tagClick(item)">
                                 {{ item.tag }}
                             </el-tag>
                         </div>
                     </div>
                     <div style="height: 80%;">
+                        <div style="font-size: 12px; color: #bbb; margin: 14px 0 5px;">添加标签</div>
                         <!-- <el-scrollbar height="300px"> -->
                         <el-radio-group
                             v-for="(item,i) in personnelLabels.list" :key="i"
                             v-model="from_examine.item.tag"
                         >
-                            <el-radio :label="item.name" border size="small" style="margin: 10px 20px 0 7px;">{{ item.name }}</el-radio>
+                            <el-radio :label="item.name" border size="small" style="margin: 5px 10px 0 0;">{{ item.name }}</el-radio>
                         </el-radio-group>
-                        <div style="margin-top: 95px;">
+                        <div style="margin-top: 30px;">
                             <el-form ref="ruleFormRef" :model="from_examine.item">
                                 <el-row :gutter="10">
                                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -348,7 +350,7 @@
                                             />
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                    <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
                                         <el-form-item label="备注" label-width="73px">
                                             <el-input
                                                 v-model="from_examine.item.desc"
@@ -381,6 +383,7 @@
                     </div>
                 </div>
                 <div style="width: 50%;height: 600px; float: left;">
+                    <div style="font-size: 12px; color: #bbb; margin: 0 0 15px 5px;">标签记录</div>
                     <div v-if="taglog.arr.length >0">
                         <el-scrollbar height="600px" width="400px">
                             <div class="m-l-10">
@@ -399,15 +402,17 @@
                                                 </div>
                                                 <div v-if="item.affix && item.affix.length >= 1" class="item">
                                                     <div class="left" style="width: 70px;">附件</div>
-                                                    <div class="right flx">
-                                                        <div v-for="(val, i) in item.affix" :key="i" class="inline-block">
-                                                            <el-image
-                                                                :preview-src-list="item.affixs"
-                                                                class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + val"
-                                                                fit="cover"
-                                                            />
+                                                    <el-scrollbar width="300px">
+                                                        <div class="right flx">
+                                                            <div v-for="(val, i) in item.affix" :key="i" class="inline-block">
+                                                                <el-image
+                                                                    :preview-src-list="item.affixs"
+                                                                    class="image m-r-10 m-l-10" :src="VITE_APP_FOLDER_SRC + val"
+                                                                    fit="cover"
+                                                                />
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </el-scrollbar>
                                                 </div>
                                                 <div class="item">
                                                     <div class="left" style="width: 70px;">处理人</div>
@@ -436,11 +441,11 @@
         >
             <div style="display: flex; flex-wrap: wrap;">
                 <el-button class="head-btn" @click="getFilesFunc">刷新</el-button>
-                <el-button class="head-btn" type="success" @click="openFileFunc">导入房屋</el-button>
+                <el-button class="head-btn" type="success" @click="openFileFunc">导入人员</el-button>
                 <el-popover
                     :width="220"
                     trigger="hover"
-                    content="点击下载导入房屋的模板文件"
+                    content="点击下载导入人员的模板文件"
                     effect="dark"
                 >
                     <template #reference>
@@ -711,6 +716,7 @@ const tags = reactive({
 const tag = ref('')
 const switch_feature = ref(false)
 const modifyFeatureFunc = val => {
+    taglog.arr = []
     tag.value = val.id
     from_examine.item = {}
     file_list.value = []
@@ -800,7 +806,7 @@ const getFilesFunc = () => {
 
 }
 const upload_str = ref('')
-// 打开导入房屋from
+// 打开导入人员from
 const openFileFunc = () => {
     upload_str.value = '请点击此处或拖拽需要上传的文件'
     switch_files.value = true
