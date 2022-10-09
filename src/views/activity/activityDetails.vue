@@ -2,7 +2,7 @@
     <div class="container">
         <page-main>
             <div class="size-lx m-b-10">{{ data_details.item.name }}</div>
-            <div style="position: relative;margin-bottom: 10px; color: #b7b1b1;">
+            <div style="position: relative;margin-bottom: 10px; color: #b7b1b1; font-size: 14px;">
                 <span>开始时间：{{ data_details.item.startat }}</span>
                 <span class="m-20">
                     <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>
@@ -191,13 +191,13 @@
                     </el-table-column>
                 </el-table> -->
 
-                    <el-row class="m-l-30">
+                    <el-row class="m-t-30">
                         <el-col :sm="3" :md="3" :lg="5">
                             <div class="set_range_box">
                                 <div>
-                                    <div class="m-b-10 m-l-50">已选择区域</div>
+                                    <div class="m-b-10" style="text-align: left;">已选择区域</div>
                                 </div>
-                                <el-scrollbar height="310px">
+                                <el-scrollbar height="510px">
                                     <div class="region_box btnNone">
                                         <div v-for="item in data_range.arr" :key="item.id">
                                             <div
@@ -274,7 +274,7 @@
                                         </template>
                                     </div>
                                     <!-- 可参与单元 -->
-                                    <div class="region_box" btnNone>
+                                    <div class="region_box btnNone">
                                         <!-- <div v-for="item in data_range_units.arr" :key="item.id">
                     <div class="region_box_item" @click="clickUnits(item)">
                       {{ item.name }}
@@ -324,7 +324,7 @@
                         <el-col :sm="11" :md="11" :lg="19">
                             <div v-if="showHouses" class="table btnNone">
                                 <div class="header" />
-                                <el-scrollbar height="300px">
+                                <!-- <el-scrollbar height="500px"> -->
                                     <!-- <div>
                                     <div
                                         v-for="(floor, index) in floors.arr"
@@ -355,9 +355,8 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                    <div
-                                        style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);"
-                                    >
+                                    <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);">
+                                    <!-- <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;"> -->
                                         <div class="row-box row-box-title">
                                             <div class="row-item-box row-item-tit-box">
                                                 <div class="row-item row-item-tit row-item-tit-bgline">
@@ -378,6 +377,7 @@
                                             </el-scrollbar>
                                         </div>
                                         <div style="height: calc(100% - 45px);overflow: auto;">
+                                    <!-- <div> -->
                                             <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
                                                 <div class="row-item-box row-item-tit-box">
                                                     <div class="row-item row-item-tit row-item-tit-ceng">
@@ -486,7 +486,7 @@
                                             </template>
                                         </el-drawer>
                                     </div>
-                                </el-scrollbar>
+                                <!-- </el-scrollbar> -->
                             </div>
                         </el-col>
                     </el-row>
@@ -636,14 +636,16 @@
                                     <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
                                         <el-col :lg="1"> 票数 </el-col>
                                         <el-col :lg="23" style="margin-top: 3px;">
-                                            <el-progress :percentage="20" :color="customColor" />
+                                            <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" />
+                                            <el-progress v-if="opt_cnt_map.arr[j] == 0" :percentage="0" :color="customColor" />
+                                            <!-- <el-progress :percentage="20" :color="customColor" /> -->
                                         </el-col>
                                     </el-row>
                                     <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
                                         <el-col :lg="1"> 面积 </el-col>
                                         <el-col :lg="23" style="margin-top: 3px;">
-                                            <el-progress v-if="statistics.obj.opt_area_map[j].area !== 0" :percentage="(parseInt(statistics.obj.opt_area_map[j].area) / statistics.obj.tot.area * 100).toFixed(2)" :color="customColor" />
-                                            <el-progress v-if="statistics.obj.opt_area_map[j].area == 0" :percentage="0" :color="customColor" />
+                                            <el-progress v-if="opt_area_map.arr[j] !== 0"  :percentage="(parseInt(opt_area_map.arr[j]) / areaTot * 100).toFixed(2)" :color="customColor" />
+                                            <el-progress v-if="opt_area_map.arr[j] == 0"  :percentage="0" :color="customColor" />
                                         </el-col>
                                     </el-row>
                                 </div>
@@ -1044,7 +1046,7 @@ const data_details = reactive({
 })
 // 问卷题目
 const topic_details = reactive({
-    item: ''
+    item: []
 })
 const value1 = ref([])
 // 判断答卷选项是否选中
@@ -1137,18 +1139,63 @@ const detailsFunc = id => {
     console.log(data_details.item)
 }
 const statistics = reactive({
-    obj: {
-        opt_area_map: [{
-            area: ''
-        }]
-    }
+    obj: {}
 })
+const opt_cnt_map=reactive({
+    arr:[]
+})
+const opt_area_map=reactive({
+    arr:[]
+})
+const countTot=ref(0)
+const areaTot=ref(0)
 // 获取统计结果
 const getSurveyStatus = () => {
     APIgetSurveyStatus(route.query.id).then(res => {
         console.log(res)
         statistics.obj = res.data
+        countTot.value=statistics.obj.tot.ticket
+        areaTot.value=statistics.obj.tot.area
         console.log(topic_details.item)
+        // topic_details.item.forEach((item,i)=>{
+
+        //         if (item.opts) {
+        //             item.opts.forEach((val,j)=>{
+        //             for (let index = 0; index < statistics.obj.opt_cnt_map.length; index++) {
+        //                 console.log('c')
+        //                 // console.log(item.opts[index]?.id)
+        //                 console.log(statistics.obj.opt_cnt_map[index].oid)
+        //                 if (val.id) {
+        //                     if (val.id == statistics.obj.opt_cnt_map[index].oid) {
+        //                         opt_cnt_map.arr.push({cnt: statistics.obj.opt_cnt_map[index].cnt})
+        //                     }else{
+        //                         opt_cnt_map.arr.push({cnt: 0})
+        //                     }
+        //                     break
+        //                 }
+
+        //             }
+        //             })
+        //         }
+        // })
+        opt_cnt_map.arr=[]
+        opt_area_map.arr=[]
+        let opt_cnt_map_1={}
+        let opt_area_map_1={}
+        statistics.obj.opt_cnt_map.forEach((item,i)=>{
+            opt_cnt_map_1[item.oid] = item.cnt
+        })
+        statistics.obj.opt_area_map.forEach((item,i)=>{
+            opt_area_map_1[item.oid] = item.area
+        })
+        topic_details.item.forEach((item,i)=>{
+            item.opts.forEach((val,j)=>{
+                opt_cnt_map.arr.push(opt_cnt_map_1[val.id] || 0)
+                opt_area_map.arr.push(opt_area_map_1[val.id] || 0)
+            })
+        })
+        console.log(opt_cnt_map.arr)
+        console.log(opt_area_map.arr)
     })
 }
 // 获取问卷题目
@@ -1963,7 +2010,7 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
 .table {
     display: inline-block;
     width: 77%;
-    height: 300px;
+    height: 100%;
     position: absolute;
     .header {
         width: 100%;

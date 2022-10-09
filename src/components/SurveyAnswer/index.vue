@@ -85,7 +85,7 @@
                     <div v-else-if="item.type === 2">
                         <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
                         <div v-for="items in item.opts" :key="items.id" class="m-l-40">
-                            <el-checkbox-group v-model="addticket.answers[index].opt">
+                            <el-checkbox-group v-model="radio4">
                                 <el-checkbox :label="items.id" @click="emitTickets(item.id,index)">{{ items.content }}</el-checkbox>
                             </el-checkbox-group>
                         </div>
@@ -94,7 +94,7 @@
                     <div v-else-if="item.type === 3">
                         <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
                         <div class="m-l-40 m-tb-10">
-                            <el-input v-model="addticket.answers[index].content" placeholder="请输入内容" @click="emitTickets(item.id,index)" />
+                            <el-input v-model="radio3" placeholder="请输入内容" @click="emitTickets_2(item.id,index)" />
                         </div>
                     </div>
                     <!-- 文字描述 -->
@@ -490,15 +490,26 @@ const notParticipate = () => {
 }
 
 const radio2 = ref('')
+const radio3 = ref('')
+const radio4 = ref('')
 // 点击选框事件
 const emitTickets = (tid, index) => {
+    addticket.answers[index].opt = []
     addticket.answers[index].tid = tid
+    console.log(radio4.value)
+    addticket.answers[index].opt.push(radio4.value)
 }
 const emitTickets_1 = (tid, index) => {
     addticket.answers[index].opt = []
     addticket.answers[index].tid = tid
     addticket.answers[index].opt.push(radio2.value)
     console.log(addticket.answers)
+}
+const emitTickets_2 = (tid, index) => {
+    addticket.answers[index].content=''
+    addticket.answers[index].tid = tid
+    console.log(radio3.value)
+    addticket.answers[index].content = radio3.value
 }
 import { ElMessage } from 'element-plus'
 const dialogAddSurveyAnswer = () => {

@@ -13,10 +13,10 @@
                 <el-row>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
                                 房屋：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                            <el-col :sm="20" :xs="18" :md="16" class="search_tb">
                                 <div class="searchUserGroup">
                                     <SearchHouse ref="V_1" @checkFunc="checkNameFunc" />
                                 </div>
@@ -25,20 +25,20 @@
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
                                 产权证号：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="18">
+                            <el-col :sm="20" :xs="18" :md="16">
                                 <el-input v-model="data_search.obj.code_property" class="search_tb" placeholder="产权证号" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
                                 地房籍号：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="18">
+                            <el-col :sm="20" :xs="18" :md="16">
                                 <el-input v-model="data_search.obj.code_room" class="search_tb" placeholder="地房籍号" clearable />
                             </el-col>
                         </el-row>
@@ -47,20 +47,20 @@
                 <el-row v-if="btnClick==true">
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
                                 产权人姓名：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="18">
+                            <el-col :sm="20" :xs="18" :md="16">
                                 <el-input v-model="data_search.obj.owner_name" class="search_tb" placeholder="产权人姓名" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
                                 交易时间：
                             </el-col>
-                            <el-col :sm="20" :xs="18" :md="18">
+                            <el-col :sm="20" :xs="18" :md="16">
                                 <el-date-picker
                                     v-model="data_search.obj.time_deal"
                                     type="daterange"
