@@ -313,7 +313,7 @@
                                                 :key="house.id"
                                             >
                                                 <div class="region_box_item region_box_item_house" @click="clickUnits(house.id)">
-                                                    {{ house.name }}
+                                                    {{ house.pos_name+house.name }}
                                                 </div>
                                             </div>
                                         </template>
@@ -325,7 +325,7 @@
                             <div v-if="showHouses" class="table btnNone">
                                 <div class="header" />
                                 <!-- <el-scrollbar height="500px"> -->
-                                    <!-- <div>
+                                <!-- <div>
                                     <div
                                         v-for="(floor, index) in floors.arr"
                                         :key="index"
@@ -355,137 +355,110 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                    <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);">
+                                <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);">
                                     <!-- <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;"> -->
-                                        <div class="row-box row-box-title">
-                                            <div class="row-item-box row-item-tit-box">
-                                                <div class="row-item row-item-tit row-item-tit-bgline">
-                                                    <div class="tit-fh">楼层</div>
-                                                    <div class="tit-lc">房号</div>
-                                                </div>
+                                    <div class="row-box row-box-title">
+                                        <div class="row-item-box row-item-tit-box">
+                                            <div class="row-item row-item-tit row-item-tit-bgline">
+                                                <div class="tit-fh">楼层</div>
+                                                <div class="tit-lc">房号</div>
                                             </div>
-                                            <el-scrollbar style="white-space: nowrap;">
-                                                <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
-                                                    <div class="row-item">
-                                                        <!-- <el-checkbox
+                                        </div>
+                                        <el-scrollbar style="white-space: nowrap;">
+                                            <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
+                                                <div class="row-item">
+                                                    <!-- <el-checkbox
                                                         v-model="checkFH.row[item].val"
                                                         @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
                                                     /> -->
-                                                        <div class="row-item-check">{{ item }}#</div>
+                                                    <div class="row-item-check">{{ item }}#</div>
+                                                </div>
+                                            </div>
+                                        </el-scrollbar>
+                                    </div>
+                                    <div style="height: calc(100% - 45px);overflow: auto;">
+                                        <!-- <div> -->
+                                        <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                                            <div class="row-item-box row-item-tit-box">
+                                                <div class="row-item row-item-tit row-item-tit-ceng">
+                                                    <!-- <el-checkbox
+                                                        v-model="checkFH.col[child.floor_truth].val"
+                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
+                                                    /> -->
+                                                    <div>{{ child.floor_truth }}层</div>
+                                                </div>
+                                            </div>
+                                            <el-scrollbar style="white-space: nowrap;">
+                                                <div style="display: flex;">
+                                                    <div v-for="(item,i) in child.houses" :key="i" :class="{item: true,bg: item.can_exist}">
+                                                        <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
+                                                        <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
+                                                            <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
+
+                                                            <el-popconfirm
+                                                                title="确定要删除当前项么?"
+                                                                cancel-button-type="info"
+                                                                @confirm="deleteHouse(item.id)"
+                                                            >
+                                                                <template #reference>
+                                                                    <div v-if="item.can_exist" class="region_box_item_del_1">✖</div>
+                                                                </template>
+                                                            </el-popconfirm>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </el-scrollbar>
                                         </div>
-                                        <div style="height: calc(100% - 45px);overflow: auto;">
-                                    <!-- <div> -->
-                                            <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
-                                                <div class="row-item-box row-item-tit-box">
-                                                    <div class="row-item row-item-tit row-item-tit-ceng">
-                                                        <!-- <el-checkbox
-                                                        v-model="checkFH.col[child.floor_truth].val"
-                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
-                                                    /> -->
-                                                        <div>{{ child.floor_truth }}层</div>
-                                                    </div>
-                                                </div>
-                                                <el-scrollbar style="white-space: nowrap;">
-                                                    <div style="display: flex;">
-                                                        <div v-for="(item,i) in child.houses" :key="i" :class="{item: true,bg: item.can_exist}">
-                                                            <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
-                                                            <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
-                                                                <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
-
-                                                                <el-popconfirm
-                                                                    title="确定要删除当前项么?"
-                                                                    cancel-button-type="info"
-                                                                    @confirm="deleteHouse(item.id)"
-                                                                >
-                                                                    <template #reference>
-                                                                        <div v-if="item.can_exist" class="region_box_item_del_1">✖</div>
-                                                                    </template>
-                                                                </el-popconfirm>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </el-scrollbar>
-                                            </div>
-                                        </div>
-                                        <el-drawer v-model="drawer" :direction="direction">
-                                            <template #title>
-                                                <h4>房屋信息</h4>
-                                            </template>
-                                            <template #default>
-                                                <div style="box-sizing: border-box;padding: 4px;">
-                                                    <div class="details-box">
-                                                        <div class="item">
-                                                            <div class="left">房屋名称</div>
-                                                            <div class="right">{{ data_details.item.name }}</div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="left">地址</div>
-                                                            <div class="right">{{ data_details.item.addr }}</div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="left">物理楼层</div>
-                                                            <div class="right">{{ data_details.item.floor_truth }}</div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="left">名义层</div>
-                                                            <div class="right">{{ data_details.item.floor_alias }}</div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="left">房号</div>
-                                                            <div class="right">{{ data_details.item.house_num }}</div>
-                                                        </div>
-                                                        <!-- <div class="item">
-                                                                        <div class="left">类型</div>
-                                                                        <div class="right">
-                                                                            {{ getOptVal(opts_all.obj.device_type, data_details.item.type) }}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="item">
-                                                                        <div class="left">是否显示</div>
-                                                                        <div class="right">
-                                                                            {{ getOptVal(opts_all.obj.device_show, data_details.item.show) }}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        v-for="(item, i) in data_details.item.extra" v-if="data_details.item.extra" :key="i"
-                                                                        class="item"
-                                                                    >
-                                                                        <div class="left">{{ item.lab }}</div>
-                                                                        <div class="right">{{ item.val }}</div>
-                                                                    </div>
-                                                                    <div class="details-tit-sm">其他信息</div>
-                                                                    <div class="item"> -->
-                                                        <div class="item">
-                                                            <div class="left">房屋id</div>
-                                                            <div class="right">{{ data_details.item.id }}</div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="left">创建时间</div>
-                                                            <div class="right">{{ data_details.item.created_at }}</div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="left">更新时间</div>
-                                                            <div class="right">{{ data_details.item.updated_at }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- <div class="tip-title">房屋：{{ item.name }}</div>
-                                                                <div class="tip-title">使用状态：{{ getOptVal(opts_all.obj.house_status_use,item.status_use) }}</div>
-                                                                <div class="tip-title">安全状态：{{ getOptVal(opts_all.obj.house_status_safe,item.status_safe) }}</div>
-                                                                <div class="tip-title">产权性质：{{ getOptVal(opts_all.obj.house_type_property,item.type_property) }}</div>
-                                                                <div class="tip-title">户型：{{ getOptVal(opts_all.obj.house_type_model,item.type_model) }}</div> -->
-                                                <div class="m-t-10 m-l-20">
-                                                    <el-button type="primary" plain @click="modifyResidentialFunc">修改</el-button>
-                                                    <!-- <el-button v-if="item.curr_property" type="warning" plain @click="showPropertyFunc(item)">产权</el-button> -->
-                                                    <el-button type="warning" plain @click="showPropertyFunc">产权</el-button>
-                                                    <el-button type="success" plain @click="showNumbersFunc">成员</el-button>
-                                                </div>
-                                            </template>
-                                        </el-drawer>
                                     </div>
+                                    <!-- <el-drawer v-model="drawer" :direction="direction">
+                                        <template #title>
+                                            <h4>房屋信息</h4>
+                                        </template>
+                                        <template #default>
+                                            <div style="box-sizing: border-box;padding: 4px;">
+                                                <div class="details-box">
+                                                    <div class="item">
+                                                        <div class="left">房屋名称</div>
+                                                        <div class="right">{{ data_details.item.name }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">地址</div>
+                                                        <div class="right">{{ data_details.item.addr }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">物理楼层</div>
+                                                        <div class="right">{{ data_details.item.floor_truth }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">名义层</div>
+                                                        <div class="right">{{ data_details.item.floor_alias }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">房号</div>
+                                                        <div class="right">{{ data_details.item.house_num }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">房屋id</div>
+                                                        <div class="right">{{ data_details.item.id }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">创建时间</div>
+                                                        <div class="right">{{ data_details.item.created_at }}</div>
+                                                    </div>
+                                                    <div class="item">
+                                                        <div class="left">更新时间</div>
+                                                        <div class="right">{{ data_details.item.updated_at }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-t-10 m-l-20">
+                                                <el-button type="primary" plain @click="modifyResidentialFunc">修改</el-button>
+                                                <el-button type="warning" plain @click="showPropertyFunc">产权</el-button>
+                                                <el-button type="success" plain @click="showNumbersFunc">成员</el-button>
+                                            </div>
+                                        </template>
+                                    </el-drawer> -->
+                                </div>
                                 <!-- </el-scrollbar> -->
                             </div>
                         </el-col>
@@ -627,28 +600,31 @@
                         <div class="details-box">
                             <div class="details-tit-sm">选项详情</div>
                             <div v-for="(item,i) in topic_details.item" :key="i">
-                                <div style="font-weight: 700; margin: 10px 0;">
-                                    <el-icon style="vertical-align: middle;color: #e44822;"><ChatDotRound /></el-icon>
-                                    {{ item.title }}
-                                </div>
-                                <div v-for="(val,j) in item.opts" :key="j">
-                                    <div class="m-t-10">{{ val.content }}</div>
-                                    <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
-                                        <el-col :lg="1"> 票数 </el-col>
-                                        <el-col :lg="23" style="margin-top: 3px;">
-                                            <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" />
-                                            <el-progress v-if="opt_cnt_map.arr[j] == 0" :percentage="0" :color="customColor" />
+                                <template v-if="item.type == 1 || item.type == 2">
+                                    <div style="font-weight: 700; margin: 10px 0;">
+                                        <el-icon style="vertical-align: middle;color: #e44822;"><ChatDotRound /></el-icon>
+                                        {{ item.title }}
+                                    </div>
+                                    <div v-for="(val,j) in item.opts" :key="j">
+                                        <div class="m-t-10">{{ val.content }}</div>
+                                        <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
+                                            <el-col :lg="1"> 票数 </el-col>
+                                            <el-col :lg="23" style="margin-top: 3px;">
+                                                <!-- <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" /> -->
+                                                <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
+                                                <el-progress v-else :percentage="(val.opt_cnt_map / countTot *100) .toFixed(2)" :color="customColor" />
                                             <!-- <el-progress :percentage="20" :color="customColor" /> -->
-                                        </el-col>
-                                    </el-row>
-                                    <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
-                                        <el-col :lg="1"> 面积 </el-col>
-                                        <el-col :lg="23" style="margin-top: 3px;">
-                                            <el-progress v-if="opt_area_map.arr[j] !== 0"  :percentage="(parseInt(opt_area_map.arr[j]) / areaTot * 100).toFixed(2)" :color="customColor" />
-                                            <el-progress v-if="opt_area_map.arr[j] == 0"  :percentage="0" :color="customColor" />
-                                        </el-col>
-                                    </el-row>
-                                </div>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
+                                            <el-col :lg="1"> 面积 </el-col>
+                                            <el-col :lg="23" style="margin-top: 3px;">
+                                                <el-progress v-if="val.opt_area_map !== 0" :percentage="(parseInt(val.opt_area_map) / areaTot * 100).toFixed(2)" :color="customColor" />
+                                                <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -700,106 +676,7 @@
                     <div v-show="article_tab.arr.length <= 0" class="size-lg">此活动无审核信息</div>
                 </el-tab-pane>
                 <el-tab-pane label="业主评论" name="5" class="hidden">
-                    <div class="isComment">
-                        <span>是否开启评论：</span>
-                        <el-switch
-                            v-model="popup1.using" inline-prompt active-text="开" inactive-text="关"
-                            @change="switchFnUse"
-                        />
-                        <div style="margin-left: 20px;display: inline-block;">
-                            <el-radio-group
-                                v-model="popup1.scoreper" :disabled="!popup1.using"
-                                @change="switchFnUse(true)"
-                            >
-                                <el-radio
-                                    v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key"
-                                    :label="item.key" size="large"
-                                >
-                                    {{ item.val }}
-                                </el-radio>
-                            </el-radio-group>
-                        </div>
-                    </div>
-                    <div>
-                        <el-button
-                            class="m-b-20 m-t-5" type="primary" :icon="Plus" size="large"
-                            :disabled="popup1.using ? false:true" @click="()=>{
-                                popup2.form = {};
-                                popup2.error = {};
-                                popup2.title = '添加';
-                                popup2.switch = true;
-                            }"
-                        >
-                            添加
-                        </el-button>
-                    </div>
-                    <el-table
-                        :data="data_1.list"
-                        :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                        class="tab_1"
-                        style="margin-top: 0;"
-                    >
-                        <el-table-column label="评论内容">
-                            <template #default="scope">
-                                <span>{{ scope.row.content }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column v-if="data_1.list.uname">
-                            <template #default="scope">
-                                <span>{{ scope.row.uname|| 'null' }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="评分" width="80">
-                            <template #default="scope">
-                                <span>{{ scope.row.score }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="状态" align="center">
-                            <template #default="scope">
-                                <!-- <span>{{ getOptVal(opts_all.obj.comment_status,scope.row.status ) }} </span> -->
-                                <el-tag v-if="scope.row.status == 10" type="waring" roung>未审核</el-tag>
-                                <el-tag v-if="scope.row.status == 20" type="success" round>已审核</el-tag>
-                                <el-tag v-if="scope.row.status == 30" type="danger" round>审核失败</el-tag>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="评论时间">
-                            <template #default="scope">
-                                <span>{{ scope.row.created_at }} </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="260">
-                            <template #default="scope">
-                                <el-button type="primary" size="small" @click="popup2FnModify(scope.row)">
-                                    修改
-                                </el-button>
-                                <el-button size="small" @click="popup3FnDetails(scope.row.id)">
-                                    详情
-                                </el-button>
-                                <!-- <el-popconfirm
-                            title="确定要删除当前项么?"
-                            cancel-button-type="info"
-                            @confirm="data1FnDelete(scope.row.id)"
-                        >
-                            <template #reference>
-                                <el-button
-                                    type="danger"
-                                    size="small"
-                                >
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-popconfirm> -->
-                                <el-button type="primary" size="small" @click="popup2FnReply(scope.row)">
-                                    回复
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-pagination
-                        v-model:current-page="data_1.page" style="float: right;"
-                        layout="prev,next,jumper," :total="50" :page-size="data_1.per_page" background
-                        prev-text="上一页" next-text="下一页" hide-on-single-page
-                    />
+                    <Comment :id="route.query.id" />
                 </el-tab-pane>
                 <el-tab-pane label="访问记录" name="6">
                     <el-table
@@ -867,89 +744,6 @@
                 </el-tab-pane>
             </el-tabs>
         </page-main>
-        <!-- 修改添加 -->
-        <el-dialog v-model="popup2.switch" :title="popup2.title" width="50%" :append-to-body="true">
-            <el-form :model="popup2.form">
-                <el-row :gutter="10">
-                    <el-col v-if="popup2.title == '修改'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px" label="状态"
-                            :error="popup2.error&&popup2.error.status?popup2.error.status[0]:''"
-                        >
-                            <el-select v-model="popup2.form.status" class="head-btn" placeholder="" clearable>
-                                <el-option
-                                    v-for="(item,i) in opts_all.obj.comment_status" :key="item.key"
-                                    :label="item.val" :value="item.key"
-                                />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col v-if="popup2.title == '回复'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px" label="打分"
-                            :error="popup2.error&&popup2.error.score?popup2.error.score[0]:''"
-                        >
-                            <el-input-number v-model="popup2.form.score" :step="1" :max="popup1.scoreper" :min="0" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="70px" label="内容"
-                            :error="popup2.error&&popup2.error.content?popup2.error.content[0]:''"
-                        >
-                            <el-input
-                                v-model="popup2.form.content" :autosize="{ minRows: 2, maxRows: 6 }"
-                                type="textarea" placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
-                    <el-button @click="popup2.switch=false">取消</el-button>
-                    <el-button type="primary" @click="popup2FnAdd">确定</el-button>
-                </div>
-            </template>
-        </el-dialog>
-        <!-- 详情 -->
-        <el-dialog v-model="popup3.switch" title="详情" width="50%" :append-to-body="true">
-            <div class="details-box">
-                <div v-if="popup3.details.uname" class="item">
-                    <div class="left">评论人</div>
-                    <div class="right">{{ popup3.details.uname }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论内容</div>
-                    <div class="right">{{ popup3.details.content }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论状态</div>
-                    <div class="right">
-                        <el-tag v-if="popup3.details.status == 10" type="waring" roung>未审核</el-tag>
-                        <el-tag v-if="popup3.details.status == 20" type="success" round>已审核</el-tag>
-                        <el-tag v-if="popup3.details.status == 30" type="danger" round>审核失败</el-tag>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">所在地址</div>
-                    <div class="right">{{ popup3.details.loc }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论人IP</div>
-                    <div class="right">{{ popup3.details.ip }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论时间</div>
-                    <div class="right">{{ popup3.details.created_at }}</div>
-                </div>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="popup3.switch = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
         <PositionTreeFive
             v-model:showabled="switch_set_area"
             :tree_item="tree_item"
@@ -1112,7 +906,6 @@ const changePane = (tab, event) => {
         // 业主评论
         topicsFunc()
         getListArchiveFunc()
-        data1FnGetList()
         getSurveyStatus()
     }
 }
@@ -1141,21 +934,21 @@ const detailsFunc = id => {
 const statistics = reactive({
     obj: {}
 })
-const opt_cnt_map=reactive({
-    arr:[]
+const opt_cnt_map = reactive({
+    arr: []
 })
-const opt_area_map=reactive({
-    arr:[]
+const opt_area_map = reactive({
+    arr: []
 })
-const countTot=ref(0)
-const areaTot=ref(0)
+const countTot = ref(0)
+const areaTot = ref(0)
 // 获取统计结果
 const getSurveyStatus = () => {
     APIgetSurveyStatus(route.query.id).then(res => {
         console.log(res)
         statistics.obj = res.data
-        countTot.value=statistics.obj.tot.ticket
-        areaTot.value=statistics.obj.tot.area
+        countTot.value = statistics.obj.tot.ticket
+        areaTot.value = statistics.obj.tot.area
         console.log(topic_details.item)
         // topic_details.item.forEach((item,i)=>{
 
@@ -1178,24 +971,26 @@ const getSurveyStatus = () => {
         //             })
         //         }
         // })
-        opt_cnt_map.arr=[]
-        opt_area_map.arr=[]
-        let opt_cnt_map_1={}
-        let opt_area_map_1={}
-        statistics.obj.opt_cnt_map.forEach((item,i)=>{
+        opt_cnt_map.arr = []
+        opt_area_map.arr = []
+        let opt_cnt_map_1 = {}
+        let opt_area_map_1 = {}
+        statistics.obj.opt_cnt_map.forEach((item, i) => {
             opt_cnt_map_1[item.oid] = item.cnt
         })
-        statistics.obj.opt_area_map.forEach((item,i)=>{
+        statistics.obj.opt_area_map.forEach((item, i) => {
             opt_area_map_1[item.oid] = item.area
         })
-        topic_details.item.forEach((item,i)=>{
-            item.opts.forEach((val,j)=>{
-                opt_cnt_map.arr.push(opt_cnt_map_1[val.id] || 0)
-                opt_area_map.arr.push(opt_area_map_1[val.id] || 0)
+        topic_details.item.forEach((item, i) => {
+            item.opts.forEach((val, j) => {
+                val.opt_cnt_map = 0
+                val.opt_area_map = ''
+                val.opt_cnt_map = opt_cnt_map_1[val.id] || 0
+                val.opt_area_map = opt_area_map_1[val.id] || 0
             })
         })
-        console.log(opt_cnt_map.arr)
-        console.log(opt_area_map.arr)
+        console.log(topic_details.item)
+        // console.log(opt_area_map.arr)
     })
 }
 // 获取问卷题目
@@ -1288,19 +1083,19 @@ const getRecordListunc = () => {
         console.log(res)
         data_2.list = res
         data_2.total = res.length
-        let btnNext1 = document.querySelector('.btnClass')
-        let btnNext2 = btnNext1.children[1]
-        console.log(btnNext1.children[1])
-        if (res.length < data_2.per_page) {
-            console.log('gouqi')
-            btnNext2.classList.add('not_allowed')
-            btnNext2.setAttribute('disabled', true)
-            btnNext2.setAttribute('aria-disabled', true)
-        } else {
-            btnNext2.classList.remove('not_allowed')
-            btnNext2.removeAttribute('disabled')
-            btnNext2.setAttribute('aria-disabled', false)
-        }
+        // let btnNext1 = document.querySelector('.btnClass')
+        // let btnNext2 = btnNext1.children[1]
+        // console.log(btnNext1.children[1])
+        // if (res.length < data_2.per_page) {
+        //     console.log('gouqi')
+        //     btnNext2.classList.add('not_allowed')
+        //     btnNext2.setAttribute('disabled', true)
+        //     btnNext2.setAttribute('aria-disabled', true)
+        // } else {
+        //     btnNext2.classList.remove('not_allowed')
+        //     btnNext2.removeAttribute('disabled')
+        //     btnNext2.setAttribute('aria-disabled', false)
+        // }
     })
 }
 watch(() => data_2.page, new_val => {
@@ -1710,201 +1505,6 @@ APIgetChinaRegion().then(res => {
     tree_item.value.next_type = 'region'
 })
 
-// 业主评论
-let comment_list = reactive([])
-const ownerComment = () => {
-    let params = {
-        tgtid: route.query.id
-    }
-    APIgetCommentList(params)
-        .then(res => {
-            // console.log(res)
-            comment_list.length = 0
-            res.forEach(element => {
-                comment_list.push(element)
-            })
-            console.log(comment_list)
-        })
-        .catch(err => {
-            from_error.msg = err.data
-        })
-}
-// 修改评论
-const modify = reactive({
-    Id: ''
-})
-const comment_details = reactive({
-    item: ''
-})
-const modifyComment = id => {
-    modify.Id = id
-    switch_comment.value = true
-    APIgetCommentDetails(id)
-        .then(res => {
-            console.log(res)
-            comment_details.item = res
-            comment_details.item.status += ''
-        })
-        .catch(err => {
-            from_error.msg = err.data
-        })
-}
-// 评论详情
-const getCommentDetail = id => {
-    switch_comment_detail.value = true
-    comment_details.length = 0
-    APIgetCommentDetails(id)
-        .then(res => {
-            console.log(res)
-            comment_details.item = res
-        })
-        .catch(err => {
-            from_error.msg = err.data
-        })
-}
-// 提交评论修改
-const dialogModifyComment = (content, status) => {
-    console.log(modify.Id)
-    APIputComment(modify.Id, { content: content, status: status })
-        .then(res => {
-            console.log(res)
-            ElMessage.success('修改成功')
-        })
-        .catch(err => {
-            ElMessage.error('提交失败')
-        })
-    switch_comment.value = false
-    ownerComment()
-}
-import { Plus } from '@element-plus/icons-vue'
-/* ---------------------------------------------------------------------------------------------------------------------------------------- */
-const popup1 = reactive({
-    switch: false,
-    using: false,
-    scoreper: 0
-})
-import {
-    APIpostComment,
-    APIpostCommentconfig,
-    APIdeleteCommentconfig
-} from '@/api/custom/custom.js'
-const switchFnUse = val => {
-    console.log(val)
-    if (val) {
-        APIpostCommentconfig(route.query.id, { scoreper: popup1.scoreper }).then(res => {
-            // ElMessage.success('已开启')
-        })
-        return false
-    }
-    APIdeleteCommentconfig(route.query.id).then(res => {
-        // ElMessage.success('已开启')
-    })
-}
-// const switchFnStatus = () => {
-//     APIgetCommentconfig(route.query.id).then(res => {
-//         console.log(res)
-//         popup1.using = false
-//         if (res) {
-//             popup1.using = true
-//             popup1.scoreper = res.scoreper
-//         }
-//     })
-// }
-const popup2 = reactive({
-    switch: false,
-    title: '添加',
-    error: {},
-    form: {}
-})
-const popup2FnAdd = () => {
-    popup2.error = {}
-    for (let key in popup2.form) {
-        if (popup2.form[key] !== null) {
-            if (popup2.form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (popup2.form[key] !== 0 || popup2.form[key] !== false)) {
-                delete popup2.form[key]
-            }
-        }
-    }
-    if (popup2.title == '添加' || popup2.title == '回复') {
-        APIpostComment(route.query.id, popup2.form).then(res => {
-            ElMessage.success('添加成功')
-            popup2.switch = false
-            data1FnGetList()
-        }).catch(err => {
-            ElMessage.error('添加失败')
-        })
-    } else if (popup2.title == '修改') {
-        APIputComment(popup2.form.id, popup2.form).then(res => {
-            ElMessage.success('修改成功')
-            popup2.switch = false
-            data1FnGetList()
-        }).catch(err => {
-            ElMessage.error('添加失败')
-        })
-    }
-}
-const popup2FnModify = val => {
-    popup2.error = {}
-    popup2.title = '修改'
-    APIgetCommentDetails(val.id).then(res => {
-        popup2.form = {
-            id: res.id,
-            content: res.content,
-            status: res.status
-        }
-        popup2.switch = true
-    })
-}
-const popup2FnReply = val => {
-    popup2.error = {}
-    popup2.title = '回复'
-    popup2.form = {
-        content: '',
-        atuid: val.uid,
-        atutype: val.utype,
-        score: 0,
-        tagid: val.id
-
-    }
-    popup2.switch = true
-}
-const popup3 = reactive({
-    switch: false,
-    details: {}
-})
-const popup3FnDetails = id => {
-    APIgetCommentDetails(id).then(res => {
-        popup3.details = res
-        popup3.switch = true
-    })
-}
-const data_1 = reactive({
-    list: [],
-    page: 1,
-    total: 50,
-    per_page: 15
-})
-const data1FnGetList = () => {
-    let data = {
-        page: data_1.page,
-        per_page: data_1.per_page,
-        tgtid: route.query.id
-    }
-    APIgetCommentList(data).then(res => {
-        data_1.list = res
-        data_1.total = res.length
-        let btnNext = document.querySelector('.btn-next')
-        if (res.length < data_1.per_page) {
-            btnNext.classList.add('not_allowed')
-            btnNext.setAttribute('disabled', true)
-            btnNext.setAttribute('aria-disabled', true)
-        } else {
-            btnNext.classList.remove('not_allowed')
-            btnNext.removeAttribute('disabled')
-            btnNext.setAttribute('aria-disabled', false)
-        }
-    })
-}
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
@@ -2125,7 +1725,6 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
             box-sizing: border-box;
             padding: 6px;
             cursor: pointer;
-
             // justify-content: space-between;
         }
         .row-item-tit-ceng {
