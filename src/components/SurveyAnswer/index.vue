@@ -9,37 +9,59 @@
                 添加书面票
             </el-button>
             <el-radio-group v-model="radio" size="large" @change="handleClick">
-                <el-radio-button label="全部">全部</el-radio-button>>
-                <el-radio-button label="线上参与">线上参与({{ participate.on_line }})</el-radio-button>>
-                <el-radio-button label="线下参与">线下参与({{ participate.off_line }})</el-radio-button>>
-                <el-radio-button label="未参与">未参与({{ participate.notParticipateLength }})</el-radio-button>>
+                <el-radio-button label="全部">全部</el-radio-button>
+                <el-radio-button label="线上参与">线上参与({{ participate.on_line }})</el-radio-button>
+                <el-radio-button label="线下参与">线下参与({{ participate.off_line }})</el-radio-button>
+                <el-radio-button label="未参与">未参与答卷的房屋({{ participate.notParticipateLength }})</el-radio-button>
             </el-radio-group>
         </div>
         <!-- 未参与情况 -->
-        <el-scrollbar v-if="radio == '未参与'" height="400px">
-            <el-table :data="notParticipateList" style="width: 100%;">
+        <div v-if="radio == '未参与'">
+            <el-table v-if="radio == '未参与'" :data="notParticipateList" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
                 <el-table-column prop="name" label="房屋" />
                 <el-table-column prop="addr" label="地址" />
-                <el-table-column prop="houseable_type" label="类型" />
+                <el-table-column prop="houseable_type" label="类型">
+                    <template #default="scope">
+                        <span v-if="scope.row.houseable_type == 'buildings'">楼栋</span>
+                        <span v-if="scope.row.houseable_type == 'units'">单元</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="updated_at" label="更新时间" />
             </el-table>
-        </el-scrollbar>
+            <el-pagination
+                v-model:current-page="page" style="float: right;"
+                layout="prev,next,jumper," :total="50" :page-size="per_page" background
+                prev-text="上一页" next-text="下一页" hide-on-single-page
+            />
+        </div>
         <!-- 参与情况 -->
-        <el-scrollbar v-else height="400px">
-            <el-table :data="answer_list" style="width: 100%;">
+        <div v-else>
+            <el-table :data="answer_list" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
                 <el-table-column label="用户端类型">
                     <template #default="scope">
-                        <span v-if="scope.row.uinfo.auth_type === 'pt'">总平台端</span>
-                        <span v-else-if="scope.row.uinfo.auth_type === 'ptr'">区域平台端</span>
-                        <span v-else-if="scope.row.uinfo.auth_type === 'gov'">管理端</span>
-                        <span v-else-if="scope.row.uinfo.auth_type === 'pm'">物业端</span>
+                        <span v-if="scope.row.uinfo?.auth_type === 'pt'">总平台端</span>
+                        <span v-else-if="scope.row.uinfo?.auth_type === 'ptr'">区域平台端</span>
+                        <span v-else-if="scope.row.uinfo?.auth_type === 'gov'">管理端</span>
+                        <span v-else-if="scope.row.uinfo?.auth_type === 'pm'">物业端</span>
                         <span v-else>业主端</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="uinfo.name" label="答题人" />
-                <el-table-column prop="uinfo.mobile" label="电话" />
-                <el-table-column prop="idcard" label="idcard" />
-                <el-table-column prop="updated_at" label="参与时间" />
+                <el-table-column label="答题人">
+                    <template #default="scope">
+                        <span>{{ scope.row.uinfo?.name || scope.row.uinfo?.nickname || scope.row.uinfo?.username }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="电话">
+                    <template #default="scope">
+                        <span>{{ scope.row.uinfo?. mobile }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="身份证号" width="190px">
+                    <template #default="scope">
+                        <span>{{ scope.row.idcard }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="updated_at" label="参与时间" width="180px" />
                 <el-table-column label="参与途径">
                     <template #default="scope">
                         <span v-if="scope.row.source === 1">线上参与</span>
@@ -48,13 +70,13 @@
                         <span v-else>未参与</span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" width="180px" label="操作">
+                <el-table-column fixed="right" width="100px" label="操作">
                     <template #default="scope">
                         <el-button type="primary" :icon="Search" size="small" @click="getAnswerDetail(scope.row.id)">查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-        </el-scrollbar>
+        </div>
         <!-- 添加书面票 -->
         <el-dialog v-model="switch_addAnswer" title="添加书面票">
             <div>
@@ -85,7 +107,7 @@
                     <div v-else-if="item.type === 2">
                         <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
                         <div v-for="items in item.opts" :key="items.id" class="m-l-40">
-                            <el-checkbox-group v-model="radio4">
+                            <el-checkbox-group v-model="addticket.answers[index].opt">
                                 <el-checkbox :label="items.id" @click="emitTickets(item.id,index)">{{ items.content }}</el-checkbox>
                             </el-checkbox-group>
                         </div>
@@ -94,7 +116,7 @@
                     <div v-else-if="item.type === 3">
                         <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
                         <div class="m-l-40 m-tb-10">
-                            <el-input v-model="radio3" placeholder="请输入内容" @click="emitTickets_2(item.id,index)" />
+                            <el-input v-model="item.answer" placeholder="请输入内容" @blur="emitTickets_2(item,index)" />
                         </div>
                     </div>
                     <!-- 文字描述 -->
@@ -114,47 +136,85 @@
         <!-- 查看答卷详情 -->
         <el-dialog v-model="switch_answer_detail" title="用户答卷详情">
             <el-scrollbar height="600px">
-                <div>证件号码：{{ answer_detail.item.idcard }}</div>
+                <div class="details-box">
+                    <div class="details-tit-sm">基础信息</div>
+                    <div class="item">
+                        <div class="left">用户端类型</div>
+                        <div class="right">
+                            <span v-if="answer_detail.item.uinfo?.auth_type === 'pt'">总平台端</span>
+                            <span v-else-if="answer_detail.item.uinfo?.auth_type === 'ptr'">区域平台端</span>
+                            <span v-else-if="answer_detail.item.uinfo?.auth_type === 'gov'">管理端</span>
+                            <span v-else-if="answer_detail.item.uinfo?.auth_type === 'pm'">物业端</span>
+                            <span v-else>业主端</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">答题人</div>
+                        <div class="right">{{ answer_detail.item.uinfo?.name || answer_detail.item.uinfo?.nickname || answer_detail.item.uinfo?.username }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">证件号码</div>
+                        <div class="right">{{ answer_detail.item.idcard }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">电话</div>
+                        <div class="right">{{ answer_detail.item.uinfo?.mobile }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">参与途径</div>
+                        <div class="right">
+                            <span v-if="answer_detail.item.source == 1">线上参与</span>
+                            <span v-if="answer_detail.item.source == 2">线下参与</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="left">参与时间</div>
+                        <div class="right">{{ answer_detail.item.updated_at }}</div>
+                    </div>
+
+                    <!-- <div>证件号码：{{ answer_detail.item.idcard }}</div>
                 <div v-if="answer_detail.item.uinfo">电话：{{ answer_detail.item.uinfo.mobile }}</div>
                 <div>
                     参与途径：
                     <span v-if="answer_detail.item.source == 1">线上参与</span>
                     <span v-if="answer_detail.item.source == 2">线下参与</span>
-                </div>
-                <!-- 遍历题目 -->
-                <div v-for="(item,index) in topic_details.item" :key="item.id">
-                    <!-- 单选题 -->
-                    <div v-if="item.type === 1">
-                        <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
-                        <div v-for="items in item.opts" :key="items.id" class="m-l-40">
-                            <el-radio-group v-if="answer_detail.item" v-model="ischecked">
-                                <!-- <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio> -->
-                                <el-radio :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-radio>
-                            </el-radio-group>
+                </div> -->
+                    <!-- 遍历题目 -->
+                    <div class="details-tit-sm">题目信息</div>
+                    <div v-for="(item,index) in topic_details.item" :key="item.id" class="m-t-10" style="margin-left: 60px;">
+                        <!-- 单选题 -->
+                        <div v-if="item.type === 1">
+                            <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
+                            <div v-for="items in item.opts" :key="items.id" class="m-l-40">
+                                <el-radio-group v-if="answer_detail.item" v-model="ischecked">
+                                    <!-- <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio> -->
+                                    <el-radio :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-radio>
+                                </el-radio-group>
+                            </div>
                         </div>
-                    </div>
-                    <!-- 多选题 -->
-                    <div v-else-if="item.type === 2">
-                        <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
-                        <div v-for="items in item.opts" :key="items.id" class="m-l-40">
-                            <el-checkbox-group v-model="checkList">
-                                <!-- <el-checkbox v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-checkbox> -->
-                                <el-checkbox v-if="answer_detail.item" :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-checkbox>
-                            </el-checkbox-group>
+                        <!-- 多选题 -->
+                        <div v-else-if="item.type === 2">
+                            <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
+                            <div v-for="items in item.opts" :key="items.id" class="m-l-40">
+                                <el-checkbox-group v-model="checkList">
+                                    <!-- <el-checkbox v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-checkbox> -->
+                                    <el-checkbox v-if="answer_detail.item" :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-checkbox>
+                                </el-checkbox-group>
+                            </div>
                         </div>
-                    </div>
-                    <!-- 主观填空 -->
-                    <div v-else-if="item.type === 3">
-                        <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
-                        <div v-if="answer_detail.item" class="m-l-40 m-tb-10">
-                            <!-- 问卷提交后，若新增填空题，此处会报错，content为空 -->
-                            <!-- <el-input v-if="answer_detail.item.answertopics[index]" :placeholder="answer_detail.item.answertopics[index].content"/> -->
-                            <el-input v-if="answer_detail.item.answertopics" :placeholder="showTopic(item.id,null,answer_detail.item.answertopics)" />
+                        <!-- 主观填空 -->
+                        <div v-else-if="item.type === 3">
+                            <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
+                            <div v-if="answer_detail.item" class="m-l-40 m-tb-10">
+                                <!-- 问卷提交后，若新增填空题，此处会报错，content为空 -->
+                                <!-- <el-input v-if="answer_detail.item.answertopics[index]" :placeholder="answer_detail.item.answertopics[index].content"/> -->
+                                <el-input v-if="answer_detail.item.answertopics" :placeholder="showTopic(item.id,null,answer_detail.item.answertopics)" />
+                            </div>
                         </div>
-                    </div>
-                    <!-- 文字描述 -->
-                    <div v-else>
-                        <div>{{ item.title }}</div>
+                        <!-- 文字描述 -->
+                        <div v-else>
+                            <div>{{ item.title }}</div>
+                        </div>
                     </div>
                 </div>
             </el-scrollbar>
@@ -417,6 +477,8 @@ const tree_item = reactive({
 })
 // 打开对话框添加书面票
 const addAnswer = () => {
+    radio2.value = ''
+    radio4.arr = []
     topicsFunc()
     switch_addAnswer.value = true
     // 根据问卷题目数量插入对象到answers中
@@ -474,30 +536,54 @@ const addAnswer = () => {
 
     // console.log('aaaa',addticket)
 }
+const page = ref(1)
+const per_page = ref(15)
 // 获取未参与答卷的房屋作为未参与用户的数量
 let notParticipateLength = 0
 let notParticipateList = reactive([])
 const notParticipate = () => {
     notParticipateList.length = 0
-    APIgetNotParticipate(props.id).then(res => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetNotParticipate(props.id, params).then(res => {
         // console.log('aaa',res.data)
         participate.notParticipateLength = res.data.length
         res.data.forEach(element => {
             notParticipateList.push(element)
         })
+        let btnNext = document.querySelector('.btn-next')
+        if (res.data.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
         // console.log("notParticipateList",notParticipateList)
     })
 }
-
+watch(page, () => {
+    // console.log(data_2.page)
+    // data1FnGetList()
+    notParticipate()
+})
 const radio2 = ref('')
 const radio3 = ref('')
-const radio4 = ref('')
+const radio4 = reactive({
+    arr: []
+})
+const radio5 = ref([])
 // 点击选框事件
 const emitTickets = (tid, index) => {
-    addticket.answers[index].opt = []
+    // addticket.answers[index].opt = []
     addticket.answers[index].tid = tid
-    console.log(radio4.value)
-    addticket.answers[index].opt.push(radio4.value)
+    // console.log(radio4.arr)
+    // addticket.answers[index].opt.push(radio4.arr)
+    console.log(addticket.answers)
 }
 const emitTickets_1 = (tid, index) => {
     addticket.answers[index].opt = []
@@ -505,11 +591,12 @@ const emitTickets_1 = (tid, index) => {
     addticket.answers[index].opt.push(radio2.value)
     console.log(addticket.answers)
 }
-const emitTickets_2 = (tid, index) => {
-    addticket.answers[index].content=''
-    addticket.answers[index].tid = tid
-    console.log(radio3.value)
-    addticket.answers[index].content = radio3.value
+const emitTickets_2 = (val, index) => {
+    addticket.answers[index].content = ''
+    addticket.answers[index].tid = val.id
+    // console.log(radio3.value)
+    addticket.answers[index].content = val.answer
+    console.log(addticket.answers)
 }
 import { ElMessage } from 'element-plus'
 const dialogAddSurveyAnswer = () => {
@@ -668,6 +755,8 @@ const selectPropertyPeople = row => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 // scss
 .row-box {
     border-bottom: 1px solid #f2f2f2;

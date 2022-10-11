@@ -978,8 +978,8 @@ const getDetailsFunc = val => {
     }
     APIgetDeviceArchiveList(params).then(res => {
         console.log(res)
-        if(res.length==0){
-            data_archive.arr =[]
+        if (res.length == 0) {
+            data_archive.arr = []
         }
         for (let x in res) {
             for (let y in res[x].content) {

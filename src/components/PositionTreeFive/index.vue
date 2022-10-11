@@ -28,8 +28,9 @@
             </div>
             <div v-if="showFamily" class="table btnNone">
                 <div class="header">{{ unitsDetail.item.name }}</div>
-                <el-scrollbar style="height: 504px;">
-                    <div>
+                <!-- <el-scrollbar height="504px"> -->
+
+                <!-- <div>
                         <div
                             v-for="(floor, index) in floors.arr"
                             :key="index"
@@ -50,8 +51,64 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+                <!-- </el-scrollbar> -->
+                <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 400px;">
+                    <!-- <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;"> -->
+                    <div class="row-box row-box-title">
+                        <div class="row-item-box row-item-tit-box">
+                            <div class="row-item row-item-tit row-item-tit-bgline">
+                                <div class="tit-fh">楼层</div>
+                                <div class="tit-lc">房号</div>
+                            </div>
+                        </div>
+                        <el-scrollbar style="white-space: nowrap;">
+                            <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
+                                <div class="row-item">
+                                    <!-- <el-checkbox
+                                                        v-model="checkFH.row[item].val"
+                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
+                                                    /> -->
+                                    <div class="row-item-check">{{ item }}#</div>
+                                </div>
+                            </div>
+                        </el-scrollbar>
                     </div>
-                </el-scrollbar>
+                    <div style="height: calc(100% - 45px);overflow: auto;">
+                        <!-- <div> -->
+                        <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
+                            <div class="row-item-box row-item-tit-box">
+                                <div class="row-item row-item-tit row-item-tit-ceng">
+                                    <!-- <el-checkbox
+                                                        v-model="checkFH.col[child.floor_truth].val"
+                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
+                                                    /> -->
+                                    <div>{{ child.floor_truth }}层</div>
+                                </div>
+                            </div>
+                            <el-scrollbar style="white-space: nowrap;">
+                                <div style="display: flex;">
+                                    <div v-for="(item,i) in child.houses" :key="i" :class="{item: true,bg: selected_house.arr.includes(item.id)}" @click="selectedHouseFun(item.id)">
+                                        <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
+                                        <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
+                                            <div class="row-item-check">{{ item.house_num }}#</div>
+
+                                            <!-- <el-popconfirm
+                                                title="确定要删除当前项么?"
+                                                cancel-button-type="info"
+                                                @confirm="deleteHouse(item.id)"
+                                            >
+                                                <template #reference>
+                                                    <div v-if="item.can_exist" class="region_box_item_del_1">✖</div>
+                                                </template>
+                                            </el-popconfirm> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-scrollbar>
+                        </div>
+                    </div>
+                </div>
             </div>
             <template #footer>
                 <!-- <el-select v-model="selected_do_type" placeholder="请选择可操作类型" style="width: 200px;margin-right: 20px;" effect="dark">
@@ -246,6 +303,18 @@ const submit = () => {
     }
 
 }
+const house_list = reactive({
+    arr: []
+})
+const house_num = reactive({
+    arr: []
+})
+const checkFH = reactive({
+    row: {},
+    col: {},
+    all: {}
+})
+const total = ref(0)
 // 点击节点触发
 const nodeClick = (node, treenode, event) => {
     console.log(node)
@@ -260,6 +329,43 @@ const nodeClick = (node, treenode, event) => {
             can_type: 2
         }).then(res => {
             console.log(res)
+            let nums = res.house_nums
+            let list = res.floors
+            for (let i in list) {
+                if (list[i].houses.length < nums.length) {
+                    for (let j in nums) {
+                        if (!list[i].houses[j] || !list[i].houses[j].house_num || (list[i].houses[j]
+                            .house_num != nums[j])) {
+                            list[i].houses.splice(j, 0, {})
+                        }
+                    }
+                }
+                house_num.arr = nums
+                house_list.arr = list
+                console.log(house_num.arr)
+                // 处理默认选择项目
+                for (let i in house_num.arr) {
+                    checkFH.row[house_num.arr[i]] = {
+                        val: false
+                    }
+                }
+                for (let i in house_list.arr) {
+                    checkFH.col[house_list.arr[i].floor_truth] = {
+                        val: false
+                    }
+                    checkFH.all[house_list.arr[i].floor_truth] = {}
+                    for (let j in house_list.arr[i].houses) {
+                        if (house_list.arr[i].houses[j].house_num) {
+                            total.value++
+                            checkFH.all[house_list.arr[i].floor_truth][house_list.arr[i].houses[j]
+                                .house_num] = {
+                                val: false,
+                                data: house_list.arr[i].houses[j]
+                            }
+                        }
+                    }
+                }
+            }
             floors.arr = res.floors
             let selected = []
             floors.arr.forEach(item => {
@@ -581,7 +687,7 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
     }
     .table {
         display: inline-block;
-        width: 65%;
+        width: 60%;
         height: 500px;
         position: absolute;
         .header {
@@ -627,6 +733,97 @@ const handleCheckChange = (data, selfSelected, childrenSelected) => {
                     }
                 }
             }
+        }
+    }
+}
+.row-box {
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fff;
+    display: flex;
+    .row-item-box {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 6px;
+        min-width: 84px;
+        height: 44px;
+        .row-item {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            vertical-align: top;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 6px;
+            cursor: pointer;
+
+            // justify-content: space-between;
+        }
+        .row-item-tit-ceng {
+            border: 0 solid #e9e9e9;
+        }
+    }
+    .item {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 6px;
+        min-width: 84px;
+        height: 44px;
+        &.bg {
+            background-color: #409eff;
+        }
+        .row-item {
+            width: 100%;
+            height: 100%;
+            // border: 1px solid #e9e9e9;
+            font-size: 14px;
+            vertical-align: top;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 6px;
+            cursor: pointer;
+
+            // justify-content: space-between;
+        }
+    }
+    .row-item-tit-ceng {
+        border: 0 solid #e9e9e9;
+    }
+    .region_box_item_del_1 {
+        width: 22px;
+        height: 24px;
+        line-height: 18px;
+        transform: scale(0.7);
+        position: absolute;
+        right: -9px;
+        top: -9px;
+        border-radius: 50%;
+        border: 2px solid red;
+        cursor: pointer;
+        font-weight: bold;
+        color: red;
+        text-align: center;
+    }
+    .row-item-tit-box {
+        border-right: 1px solid #e9e9e9;
+        width: 84px;
+        .row-item-tit {
+            border: 0 solid #e9e9e9 !important;
+            font-size: 12px;
+            .tit-fh {
+                margin-bottom: -18px;
+            }
+            .tit-lc {
+                margin-top: -18px;
+            }
+        }
+        .row-item-tit-bgline {
+            background-image: linear-gradient(to top right, #fff 49%, #e9e9e9, #fff 51%);
+            justify-content: space-between;
+            cursor: initial;
         }
     }
 }

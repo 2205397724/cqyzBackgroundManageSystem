@@ -52,7 +52,7 @@
                                 <div class="item">
                                     <div class="left w-100">内容</div>
                                     <span v-html="data_details.item.content " />
-                                </div>
+                            m     </div>
                             </el-col> -->
                                 <el-col :span="8">
                                     <div class="item">
@@ -902,10 +902,11 @@ const changePane = (tab, event) => {
         answerListFunc()
         topicsFunc()
 
-    } else {
-        // 业主评论
-        topicsFunc()
+    } else if (tab.props.name == 7) {
+        // 审核记录
         getListArchiveFunc()
+    } else if (tab.props.name == 8) {
+        // 统计结果
         getSurveyStatus()
     }
 }
@@ -1772,14 +1773,6 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
             border: 1px solid #fff;
         }
     }
-}
-.isComment {
-    display: flex;
-    align-items: center;
-    margin: 10px 0 15px;
-    font-size: 14px;
-    background-color: #fafafa;
-    padding: 0 20px;
 }
 .el-timeline {
     margin-left: -38px;

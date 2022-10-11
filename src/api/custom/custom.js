@@ -38,6 +38,23 @@ export function APIputComment(id, data) {
 export function APIpostComment(tgtid, data) {
     return api2.post(`target/${tgtid}/comment`, data)
 }
+// 评论观点
+// 添加
+export function APIpostCommentOpinions(tgt, data) {
+    return api2.post(`/comment-tag/tgt/${tgt}`, data)
+}
+// 列表
+export function APIgetCommentOpinions(tgt) {
+    return api2.get(`/comment-tag/tgt/${tgt}`)
+}
+// 修改
+export function APIputCommentOpinions(id, data) {
+    return api2.put(`comment-tag/${id}`, data)
+}
+// 评论观点统计
+export function APIpostCommentStatistic(data) {
+    return api2.post('/comment-tag-stat', data)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设备维修
 // 列表
@@ -1509,8 +1526,8 @@ export function APIaddSurveyAnswer(id, params) {
     return api.post('/s/' + id + '/answer', params)
 }
 // 获取未参与答卷的房屋
-export function APIgetNotParticipate(id) {
-    return api.get('/s/' + id + '/doesnt')
+export function APIgetNotParticipate(id, params) {
+    return api.get('/s/' + id + '/doesnt', { params: params })
 }
 // 获取活动统计结果
 export function APIgetSurveyStatus(survey) {

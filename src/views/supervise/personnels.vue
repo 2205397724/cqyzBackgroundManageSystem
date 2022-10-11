@@ -316,13 +316,13 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="switch_feature" title="标签" width="70%" destroy-on-close="true">
+        <el-dialog v-model="switch_feature" :title="peopleName + '所属标签'" width="70%" destroy-on-close="true">
             <div style="height: 600px;">
                 <div style="width: 50%;height: 600px; float: left;border-right: 1px solid #ccc;">
                     <div style="height: 20%; border-bottom: 1px solid #ccc;">
                         <div style="font-size: 12px; color: #bbb; margin-bottom: 15px;">已有标签</div>
                         <div v-for="item in tags.arr" :key="item.key" class="inline-block m-r-10 pointer">
-                            <el-tag type="success" size="large" @click="tagClick(item)">
+                            <el-tag :type=" item.active == 1 ? 'success' : 'info'" size="large" @click="tagClick(item)">
                                 {{ item.tag }}
                             </el-tag>
                         </div>
@@ -714,9 +714,11 @@ const tags = reactive({
     arr: []
 })
 const tag = ref('')
+const peopleName = ref('')
 const switch_feature = ref(false)
 const modifyFeatureFunc = val => {
     taglog.arr = []
+    peopleName.value = val.name
     tag.value = val.id
     from_examine.item = {}
     file_list.value = []
@@ -760,6 +762,16 @@ const addFeature = () => {
             }).catch(error => {
                 ElMessage.error('添加失败')
             })
+        })
+    } else {
+        from_examine.item.tgt_type = 1
+        from_examine.item.tgt_id = tag.value
+        APIpostPersonnelTag(from_examine.item).then(res => {
+            console.log(res)
+            ElMessage.success('添加成功')
+            switch_feature.value = false
+        }).catch(error => {
+            ElMessage.error('添加失败')
         })
     }
 
