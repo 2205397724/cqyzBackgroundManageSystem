@@ -88,6 +88,8 @@ import superviseHome from './modules/supervise/home.js'
 import activityReview from './modules/supervise/review.js'
 import personnelManagement from './modules/supervise/personnels.js'
 import personnelLabels from './modules/supervise/labels.js'
+import shareServices from './modules/supervise/shareServices.js'
+import shareServicesManage from './modules/supervise/shareServicesManage.js'
 // // 统计
 // import statisticsComplaint from './modules/statistics/complaint.js'
 // import statisticsEnterprise from './modules/statistics/enterprise.js'
@@ -137,7 +139,9 @@ const asyncRoutes = [{
         superviseHome,
         activityReview,
         personnelManagement,
-        personnelLabels
+        personnelLabels,
+        shareServices,
+        shareServicesManage
     ]
 },
 // {
