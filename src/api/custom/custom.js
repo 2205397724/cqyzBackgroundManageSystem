@@ -1401,8 +1401,8 @@ export function APIputUserinfo(data) {
     // return api.get('/user/me', { params: params })
 }
 // 统计
-export function APIgetTipsnum(params) {
-    return api.get('/member/home/tipsnum', { baseURL: '/mock/', params: params })
+export function APIgetAggregate(data) {
+    return api.post('/aggregate', data)
 }
 // 投诉报修违建
 export function APIgetEventnum(params) {
