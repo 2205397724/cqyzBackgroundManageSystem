@@ -311,7 +311,6 @@ import {
     APIgetCityNotPm
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
-import md5 from 'md5'
 import area from '@/util/area'
 const choose_city_props = reactive({
     item: {
@@ -376,7 +375,6 @@ const choose_city_end = val => {
 import { auth, authAll } from '../util/index'
 const choose_city = () => {
     console.log(localStorage.getItem('utype'))
-    // console.log(md5('pt'))
 
     console.log(sessionStorage.getItem('isChooseCity'))
     if (sessionStorage.getItem('isChooseCity') != 'true') {
@@ -431,7 +429,7 @@ APIgetUserinfo().then(res => {
 })
 const getAggregate = () => {
     let data = {}
-    if (localStorage.getItem('utype') == md5('pt')) {
+    if (localStorage.getItem('utype') == 'pt') {
         data.module = 'all'
     } else if (sessionStorage.getItem('groupChinaCode')) {
         data.gid = sessionStorage.getItem('groupChinaCode')

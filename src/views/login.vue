@@ -90,7 +90,6 @@
 </template>
 
 <script setup name="Login">
-import md5 from 'md5'
 import { APIgetLoginUserGroup, APIgetLoginUserGroupPerms, APIgetGroupPerms } from '@/api/custom/custom'
 const { proxy } = getCurrentInstance()
 const route = useRoute(), router = useRouter()
@@ -181,8 +180,7 @@ function handleLogin() {
                 }
                 if (data.auth_type === 'pt') {
                     userStore.utype = 'pt'
-                    console.log(md5('pt'))
-                    localStorage.setItem('utype', md5('pt'))
+                    localStorage.setItem('utype', 'pt')
                 }
                 if (data.auth_type !== 'pt') {
                     userStore.utype = data.auth_type

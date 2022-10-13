@@ -404,7 +404,7 @@ const tree_item = reactive({
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (localStorage.getItem('utype') == md5('pt')) {
+    if (localStorage.getItem('utype') == 'pt') {
         params = {
             p_code: localStorage.getItem('china_code')
         }
@@ -588,15 +588,13 @@ const dialogExamineCloseFunc = formEl => {
         }
     })
 }
-
-import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.region_cc = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {

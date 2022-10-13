@@ -587,7 +587,6 @@ import {
 } from 'element-plus'
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import { Download, Search, Plus, Loading } from '@element-plus/icons-vue'
-import md5 from 'md5'
 const data = reactive({
     list: []
 })
@@ -627,7 +626,7 @@ const getPersonnelManageList = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.group_id = sessionStorage.getItem('groupChinaCode')
     }
 

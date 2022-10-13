@@ -145,7 +145,6 @@
 </template>
 
 <script setup name="PersonalSetting">
-import md5 from 'md5'
 import {
     ElMessage
 } from 'element-plus'
@@ -235,7 +234,7 @@ APIgetUserinfo().then(res => {
 })
 APIgetLoginUserGroup().then(res => {
     console.log(res)
-    if (localStorage.getItem('utype') == md5('pt')) {
+    if (localStorage.getItem('utype') == 'pt') {
         flag_1.value = false
     } else {
         flag_1.value = true
