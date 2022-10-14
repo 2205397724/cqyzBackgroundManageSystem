@@ -125,7 +125,7 @@
                                 type="primary" size="small"
                                 @click="modifyResidentialFunc(scope.row)"
                             >
-                                修改
+                                变更
                             </el-button>
                             <el-button
                                 size="small"
@@ -204,6 +204,28 @@
                                 />
                             </el-form-item>
                         </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            <el-form-item
+                                label-width="70px"
+                                label="附件"
+                                :error="from_error.msg&&from_error.msg.affix?from_error.msg.affix[0]:''"
+                            >
+                                <el-upload
+                                    ref="uploadRef"
+                                    action="***"
+                                    :auto-upload="false"
+                                    :file-list="file_list"
+                                    :on-change="(file,files)=>{
+                                        file_list = files
+                                    }"
+                                    :on-remove="(file,files)=>{
+                                        file_list = files
+                                    }"
+                                >
+                                    <el-button type="primary" plain>选择</el-button>
+                                </el-upload>
+                            </el-form-item>
+                        </el-col>
                         <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label-width="70px" label="绑定房屋" prop="should_bind_house" :error="from_error.msg&&from_error.msg.should_bind_house?from_error.msg.should_bind_house[0]:''">
                                 <el-select v-model="from_examine.item.should_bind_house" class="head-btn" placeholder="是否绑定房屋" clearable>
@@ -220,7 +242,7 @@
                                 <div v-for="(item,i) in from_examine.item.owners" :key="i" class="serve-box">
                                     <el-row :gutter="10">
                                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                            <el-form-item label-width="70px" label="姓名" :error="from_error.msg&&from_error.msg['owners.'+i+'.name']?from_error.msg['owners.'+i+'.name'][0]:''">
+                                            <el-form-item label-width="70px" label="名称" :error="from_error.msg&&from_error.msg['owners.'+i+'.name']?from_error.msg['owners.'+i+'.name'][0]:''">
                                                 <el-input
                                                     v-model="item.name"
                                                     placeholder=""
@@ -230,7 +252,7 @@
                                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                                             <el-form-item label-width="70px" label="证件类型" :error="from_error.msg&&from_error.msg['owners.'+i+'.type_id_card']?from_error.msg['owners.'+i+'.type_id_card'][0]:''">
                                                 <el-select v-model="item.type_id_card" class="head-btn" placeholder="" clearable>
-                                                    <el-option v-for="value in opts_all.obj.type_id_card" :key="value.key" :label="value.val" :value="value.key" />
+                                                    <el-option v-for="value in opts_all.obj.card_type" :key="value.key" :label="value.val" :value="value.key" />
                                                 </el-select>
                                             </el-form-item>
                                         </el-col>
@@ -251,11 +273,33 @@
                                             </el-form-item>
                                         </el-col>
                                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                                            <el-form-item label-width="70px" label="房屋面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
+                                            <el-form-item label-width="70px" label="拥有面积" :error="from_error.msg&&from_error.msg['owners.'+i+'.area']?from_error.msg['owners.'+i+'.area'][0]:''">
                                                 <el-input
                                                     v-model="item.area"
                                                     placeholder=""
                                                 />
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                            <el-form-item
+                                                label-width="70px"
+                                                label="附件"
+                                                :error="from_error.msg&&from_error.msg.affix?from_error.msg.affix[0]:''"
+                                            >
+                                                <el-upload
+                                                    ref="uploadRef"
+                                                    action="***"
+                                                    :auto-upload="false"
+                                                    :file-list="file_list_1"
+                                                    :on-change="(file,files)=>{
+                                                        file_list_1 = files
+                                                    }"
+                                                    :on-remove="(file,files)=>{
+                                                        file_list_1 = files
+                                                    }"
+                                                >
+                                                    <el-button type="primary" plain>选择</el-button>
+                                                </el-upload>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -404,7 +448,16 @@ let page = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
-    item: { }
+    item: {
+        affix: {
+            bdcz: []
+        },
+        owners: [{
+            affix: {
+                sfz: []
+            }
+        }]
+    }
 })
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
@@ -454,12 +507,28 @@ const detailsFunc = val => {
 watch(page, () => {
     getTabListFunc()
 })
+const file_list = ref([])
+const file_list_1 = ref([])
+import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
+            from_examine.item.affix.bdcz = []
+            let files = []
+            let file_key = []
+            if (file_list.value.length > 0) {
+                for (let i in file_list.value) {
+                    if (!file_list.value[i].raw) {
+                        file_key.push(file_list.value[i].name)
+                    } else {
+                        files.push(file_list.value[i].raw)
+                    }
+                }
+            }
+            from_error.msg = {}
             for (let key in from_examine.item) {
                 if (from_examine.item[key] !== null) {
                     if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
@@ -467,6 +536,29 @@ const dialogExamineCloseFunc = formEl => {
                     }
                 }
             }
+            if (files.length > 0) {
+                getFilesKeys(files, 'property').then(arr => {
+                    from_examine.item.affix.bdcz = file_key.concat(arr)
+                })
+            }
+            let files_1 = []
+            let file_key_1 = []
+            if (file_list_1.value.length > 0) {
+                for (let i in file_list_1.value) {
+                    if (!file_list_1.value[i].raw) {
+                        file_key_1.push(file_list_1.value[i].name)
+                    } else {
+                        files_1.push(file_list_1.value[i].raw)
+                    }
+                }
+            }
+            from_error.msg = {}
+            if (files_1.length > 0) {
+                getFilesKeys(files_1, 'propertyOwners').then(arr => {
+                    from_examine.item.owners.affix.sfz = file_key.concat(arr)
+                })
+            }
+            console.log(from_examine.item)
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APIputProperty(from_examine.item.id, from_examine.item).then(res => {
@@ -632,7 +724,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['house_has_house', 'type_id_card']).then(res => {
+getOpts(['house_has_house', 'card_type']).then(res => {
     opts_all.obj = res
 })
 

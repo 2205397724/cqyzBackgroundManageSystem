@@ -181,6 +181,7 @@ function handleLogin() {
                 if (data.auth_type === 'pt') {
                     userStore.utype = 'pt'
                     localStorage.setItem('utype', 'pt')
+                    userStore.getPermissions()
                 }
                 if (data.auth_type !== 'pt') {
                     userStore.utype = data.auth_type

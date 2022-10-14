@@ -1633,3 +1633,48 @@ export function APIpostPersonimptask(data) {
 export function APIdeletePersonimptask(id) {
     return api2.delete(`/personimptask/${id}`)
 }
+// 共享
+// 共享种类
+export function APIgetShareCategoryList(params) {
+    return api2.get('/share/kind', { params: params })
+}
+// 删除
+export function APIdeleteShareCategory(id) {
+    return api2.delete(`/share/kind/${id}`)
+}
+// 修改
+export function APIputShareCategory(id, data) {
+    return api2.put(`/share/kind/${id}`, data)
+}
+// 添加
+export function APIpostShareCategory(data) {
+    return api2.post('/share/kind', data)
+}
+// 为种类划分部门
+// 添加
+export function APIgetShareCategoryUserGroupList(params) {
+    return api2.get('/share/kind-group', { params: params })
+}
+export function APIpostShareCategoryUserGroup(data) {
+    return api2.post('/share/kind-group', data)
+}
+// 删除
+export function APIdeleteShareCategoryUserGroup(params) {
+    return api2.delete('/share/kind-group', { params: params })
+}
+// 业务
+export function APIgetShareServicesList(params) {
+    return api2.get('/share/biz', { params: params })
+}
+// 删除
+export function APIdeleteShareServices(id) {
+    return api2.delete(`/share/biz/${id}`)
+}
+// 修改
+export function APIputShareServices(id, data) {
+    return api2.put(`/share/biz/${id}`, data)
+}
+// 添加
+export function APIpostShareServices(data) {
+    return api2.post('/share/biz', data)
+}

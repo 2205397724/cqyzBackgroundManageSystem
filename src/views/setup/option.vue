@@ -293,12 +293,13 @@
             <el-table
                 v-loading="opt_loading"
                 :data="opt_tab.arr"
+                :default-sort="{ prop: 'key', order: 'ascending' }"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
                 max-height="400"
             >
                 <el-table-column prop="val" label="选项名称" />
-                <el-table-column prop="key" label="选项键值" />
+                <el-table-column prop="key" label="选项键值" sortable />
                 <el-table-column prop="is_sys" label="是否系统级别">
                     <template #default="scope">
                         <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
@@ -408,7 +409,7 @@
                             >
                                 <el-input
                                     v-model="from_opt_val.obj.sort"
-                                    placeholder=""
+                                    placeholder="(数值越大，等级越高)"
                                 />
                             </el-form-item>
                         </el-col>
@@ -670,26 +671,34 @@ const switch_opt_val_search = ref(false)
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 提交
 const dialogOptValFunc = () => {
+    from_opt_val.obj.opt_id = item_opt.obj.id
+    for (let key in from_opt_val.obj) {
+        if (from_opt_val.obj[key] !== null) {
+            if (from_opt_val.obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_opt_val.obj[key] !== 0 || from_opt_val.obj[key] !== false)) {
+                delete from_opt_val.obj[key]
+            }
+        }
+    }
     if (str_opt_val_title.value == '修改') {
         APIputOptsVal(from_opt_val.obj.id, from_opt_val.obj).then(res => {
             console.log(res)
             // if (!res.code) {
             optValRefreshFunc()
-            // ElMessage.success(res.msg)
+            ElMessage.success('修改成功')
             switch_opt_val_add.value = false
             // }
         }).catch(err => {
-            err_opt.msg = err.data
+            ElMessage.error('修改失败')
         })
     } else {
         APIpostOptsVal(from_opt_val.obj).then(res => {
             // if (!res.code) {
             optValRefreshFunc()
-            // ElMessage.success(res.msg)
+            ElMessage.success('添加成功')
             switch_opt_val_add.value = false
             // }
         }).catch(err => {
-            err_opt.msg = err.data
+            ElMessage.error('添加失败')
         })
     }
 }

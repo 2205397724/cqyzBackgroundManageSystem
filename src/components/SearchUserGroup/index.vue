@@ -6,7 +6,7 @@
             @click="openDigFunc"
             @mouseenter="icon_hover=true" @mouseleave="icon_hover=false"
         >
-            <span v-if="!props.name" class="head_tb">{{ userName?userName:'请点击选择用户组' }}</span>
+            <span v-if="!props.name" class="head_tb">{{ userName?userName:'请点击选择' }}</span>
             <span v-if="props.name" class="head_tb" style="color: #626466;">{{ props.name }}</span>
             <el-icon class="tit-icon" :class="{'tit-icon-on':!icon_hover}" :size="20" color="#aaaaaa" @click.stop="clearFunc"><el-icon-circle-close /></el-icon>
         </div>

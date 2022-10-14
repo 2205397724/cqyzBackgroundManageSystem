@@ -312,6 +312,7 @@ import {
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import area from '@/util/area'
+// import router from '@/router';
 const choose_city_props = reactive({
     item: {
         value: 'code',
@@ -370,7 +371,10 @@ const choose_city_end = val => {
     switch_choose_city.value = false
     sessionStorage.setItem('isChooseCity', false)
     console.log(sessionStorage.getItem('isChooseCity'))
+    // router.replace('/supervise_home/home')
 }
+// import { useRoute, useRouter } from 'vue-router'
+// const router = useRouter()
 // 进入首页进行判断
 import { auth, authAll } from '../util/index'
 const choose_city = () => {
@@ -386,6 +390,7 @@ const choose_city = () => {
         userStore.isChooseCity = true
         switch_choose_city.value = true
     }
+
 }
 choose_city()
 import { reactive } from 'vue'

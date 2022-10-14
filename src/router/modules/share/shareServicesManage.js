@@ -15,7 +15,7 @@ export default {
         {
             path: 'manage',
             name: 'shareServicesManage',
-            component: () => import('@/views/supervise/shareServicesManage.vue'),
+            component: () => import('@/views/share/shareServicesManage.vue'),
             meta: {
                 copyright: false,
                 title: '共享业务管理',

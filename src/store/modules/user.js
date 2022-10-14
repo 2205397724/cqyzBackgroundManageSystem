@@ -76,6 +76,7 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
+                    console.log(localStorage.getItem('utype'))
                     if (localStorage.getItem('utype') == 'pt') {
                         this.permissions = ['*']
                         resolve(this.permissions)
@@ -96,7 +97,8 @@ export const useUserStore = defineStore(
                         // })
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
-                            let currentGId = res.data[0].id
+                            if (res.data.length > 0) {
+                                let currentGId = res.data[0].id
                             sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
                             APIgetGroupPerms(currentGId).then(res => {
                                 console.log(res)
@@ -111,6 +113,10 @@ export const useUserStore = defineStore(
                                 this.permissions = allPermisson
                                 resolve(this.permissions)
                             })
+                            } else {
+                                resolve('')
+                            }
+
                         })
                     }
                 })

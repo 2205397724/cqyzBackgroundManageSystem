@@ -84,7 +84,7 @@
                             >
                                 <!-- <el-button type="primary" class="m-b-10">选择</el-button> -->
                                 <div class="portrait">
-                                    <span v-if="!form.item.avatar" style="position: absolute; top: 43%; left: 35%; color: #fe9c7d;">头像</span>
+                                    <span v-if="!form.item.avatar" style="position: absolute; top: 39%; left: 32%; color: #fe9c7d;">头像</span>
                                     <el-image v-if="form.item.avatar&&!portrait.item.image" :src="VITE_APP_FOLDER_SRC+form.item.avatar" alt="" class="portrait" style="top: 80% ;left: 45%;" />
                                     <el-image v-if="portrait.item.image" :src="portrait.item.image" alt="" class="portrait" style="top: 81% ;left: 46%;" />
                                 </div>
