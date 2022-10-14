@@ -8,7 +8,6 @@ import {
     APIgetGroupPerms
 } from '@/api/custom/custom.js'
 import { useMenuStore } from './menu'
-import * as md5 from 'md5'
 // import { resolve } from 'path-browserify'
 
 export const useUserStore = defineStore(
@@ -77,7 +76,7 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    if (localStorage.getItem('utype') == md5('pt')) {
+                    if (localStorage.getItem('utype') == 'pt') {
                         this.permissions = ['*']
                         resolve(this.permissions)
                     } else {

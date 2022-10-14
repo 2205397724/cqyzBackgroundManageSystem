@@ -7,7 +7,7 @@
             <el-table
                 :data="topic_details.item"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                width="100%"
+                class="tab_1"
             >
                 <el-table-column type="index" width="50" />
                 <el-table-column prop="title" label="题目" />
@@ -29,7 +29,7 @@
                         <span>{{ scope.row.sort }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" width="250px" label="操作">
+                <el-table-column fixed="right" width="180px" label="操作">
                     <template #default="scope">
                         <el-button border type="primary" size="small" @click="modifyServeyTopic(scope.row)">
                             修改

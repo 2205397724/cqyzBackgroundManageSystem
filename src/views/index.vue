@@ -41,7 +41,7 @@
             </el-row>
         </page-main>
         <el-row :gutter="20" style="margin: -10px 10px;" class="icontitbox">
-            <el-col v-for="(item,i) in data.tipsnum" :key="'tipsnum'+i" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+            <!-- <el-col v-if="data.tipsnum.announce_stat" :key="'tipsnum'+i" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
                 <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
@@ -51,20 +51,228 @@
                             <svg-icon v-if="i==3" class="svg" name="u736" />
                             <svg-icon v-if="i==4" class="svg" name="u741" />
                         </div>
-                        <div>{{ item.tit }}</div>
+                        <div>公示</div>
+                    </div>
+                    <div>
+                        <div>公示状态</div>
+                        <div v-for >
+
+                        </div>
+                    </div>
+                </page-main>
+            </el-col> -->
+            <!-- 小区 -->
+            <el-col v-if="data_1.obj.zone_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+                <page-main style="margin: 10px 0;">
+                    <div class="icontit">
+                        <div class="img">
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                            <svg-icon v-if="i==1" class="svg" name="u726" />
+                            <svg-icon v-if="i==2" class="svg" name="u731" />
+                            <svg-icon v-if="i==3" class="svg" name="u736" />
+                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>小区</div>
                     </div>
                     <div class="item-bottom">
                         <div>
-                            总数：<span class="tit">{{ item.total }}</span>
+                            总数：<span class="tit">{{ data_1.obj.zone_stat?.z_tot }}</span>
                         </div>
                         <div>
-                            今日：<span class="num">{{ item.today }}</span>
+                            今日：<span class="num">{{ data_1.obj.zone_stat?.z_today_cnt }}</span>
+                        </div>
+                    </div>
+                </page-main>
+            </el-col>
+            <!-- 楼栋 -->
+            <el-col v-if="data_1.obj.building_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+                <page-main style="margin: 10px 0;">
+                    <div class="icontit">
+                        <div class="img">
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                            <svg-icon v-if="i==1" class="svg" name="u726" />
+                            <svg-icon v-if="i==2" class="svg" name="u731" />
+                            <svg-icon v-if="i==3" class="svg" name="u736" />
+                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>楼栋</div>
+                    </div>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ data_1.obj.building_stat?.b_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ data_1.obj.building_stat?.b_today_cnt }}</span>
+                        </div>
+                    </div>
+                </page-main>
+            </el-col>
+            <!-- 单元 -->
+            <el-col v-if="data_1.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+                <page-main style="margin: 10px 0;">
+                    <div class="icontit">
+                        <div class="img">
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                            <svg-icon v-if="i==1" class="svg" name="u726" />
+                            <svg-icon v-if="i==2" class="svg" name="u731" />
+                            <svg-icon v-if="i==3" class="svg" name="u736" />
+                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>单元</div>
+                    </div>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ data_1.obj.unit_stat?.u_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ data_1.obj.unit_stat?.u_today_cnt }}</span>
+                        </div>
+                    </div>
+                </page-main>
+            </el-col>
+            <!-- 房屋 -->
+            <el-col v-if="data_1.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+                <page-main style="margin: 10px 0;">
+                    <div class="icontit">
+                        <div class="img">
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                            <svg-icon v-if="i==1" class="svg" name="u726" />
+                            <svg-icon v-if="i==2" class="svg" name="u731" />
+                            <svg-icon v-if="i==3" class="svg" name="u736" />
+                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>房屋</div>
+                    </div>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ data_1.obj.house_stat?.h_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ data_1.obj.house_stat?.h_today_cnt }}</span>
                         </div>
                     </div>
                 </page-main>
             </el-col>
         </el-row>
         <el-row :gutter="20" style="margin: 10px 10px -10px;">
+            <el-col v-for="(item,i) in data_1.obj.complaint_stat" :key="'eventnum'+i" :sm="12" :md="12" :lg="8" :xl="8">
+                <div v-if="item.kind == 1" class="comStatus" style="margin: 10px 0;">
+                    <div v-if="item.kind == 1" class="title-container">违建</div>
+                    <div class="title-container-1 size-base">状态({{ item.stat.c_tot }})</div>
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未处理</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                            <div v-if="child.status == 2" class="name">已确认</div>
+                            <div v-if="child.status == 3" class="name">已受理</div>
+                            <div v-if="child.status == 5" class="name">已转办</div>
+                            <div v-if="child.status == 6" class="name">已回复</div>
+                            <div v-if="child.status == 7" class="name">已办完</div>
+                            <div v-if="child.status == 8" class="name">已追问</div>
+                            <div v-if="child.status == 99" class="name">已结案</div>
+                        </div>
+                    </div>
+                    <div class="title-container-1 size-base" style="margin-top: 10px;">审核状态({{ item.stat.c_allot_tot }})</div>
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_allot_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未审核</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="item.kind == 2" class="comStatus" style="margin: 10px 0;" title="投诉">
+                    <div v-if="item.kind == 2" class="title-container">投诉</div>
+                    <div class="title-container-1 size-base">状态({{ item.stat.c_tot }})</div>
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未处理</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                            <div v-if="child.status == 2" class="name">已确认</div>
+                            <div v-if="child.status == 3" class="name">已受理</div>
+                            <div v-if="child.status == 5" class="name">已转办</div>
+                            <div v-if="child.status == 6" class="name">已回复</div>
+                            <div v-if="child.status == 7" class="name">已办完</div>
+                            <div v-if="child.status == 8" class="name">已追问</div>
+                            <div v-if="child.status == 99" class="name">已结案</div>
+                        </div>
+                    </div>
+                    <div class="title-container-1 size-base" style="margin-top: 10px;">审核状态({{ item.stat.c_allot_tot }})</div>
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_allot_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未审核</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="item.kind == 3" class="comStatus" style="margin: 10px 0;">
+                    <div v-if="item.kind == 3" class="title-container">报修</div>
+                    <div class="title-container-1 size-base">状态({{ item.stat.c_tot }})</div>
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未处理</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                            <div v-if="child.status == 2" class="name">已确认</div>
+                            <div v-if="child.status == 3" class="name">已受理</div>
+                            <div v-if="child.status == 5" class="name">已转办</div>
+                            <div v-if="child.status == 6" class="name">已回复</div>
+                            <div v-if="child.status == 7" class="name">已办完</div>
+                            <div v-if="child.status == 8" class="name">已追问</div>
+                            <div v-if="child.status == 99" class="name">已结案</div>
+                        </div>
+                    </div>
+                    <div class="title-container-1 size-base" style="margin-top: 10px;">审核状态({{ item.stat.c_allot_tot }})</div>
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_allot_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未审核</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                        </div>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+        <!-- <el-row :gutter="20" style="margin: 10px 10px -10px;">
+            <el-col v-for="(item,i) in data_1.obj.complaint_stat" :key="'eventnum'+i" :xs="24" :sm="12" :md="12" :lg="8">
+                <page-main v-if="item.kind == 2" class="main m-t-10 m-b-10 m-r-10" title="投诉">
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未处理</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                            <div v-if="child.status == 2" class="name">已确认</div>
+                            <div v-if="child.status == 3" class="name">已受理</div>
+                            <div v-if="child.status == 5" class="name">已转办</div>
+                            <div v-if="child.status == 6" class="name">已回复</div>
+                            <div v-if="child.status == 7" class="name">已办完</div>
+                            <div v-if="child.status == 8" class="name">已追问</div>
+                            <div v-if="child.status == 99" class="name">已结案</div>
+                        </div>
+                    </div>
+                </page-main>
+                <page-main v-if="item.kind == 1" class="main m-t-10 m-b-10 m-r-10" style="margin: 10px 0;" title="违建">
+                    <div class="numname">
+                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
+                            <div class="num">{{ child.cnt }}</div>
+                            <div v-if="child.status == 0" class="name">未处理</div>
+                            <div v-if="child.status == 1" class="name">已审核</div>
+                            <div v-if="child.status == 2" class="name">已确认</div>
+                            <div v-if="child.status == 3" class="name">已受理</div>
+                            <div v-if="child.status == 5" class="name">已转办</div>
+                            <div v-if="child.status == 6" class="name">已回复</div>
+                            <div v-if="child.status == 7" class="name">已办完</div>
+                            <div v-if="child.status == 8" class="name">已追问</div>
+                            <div v-if="child.status == 99" class="name">已结案</div>
+                        </div>
+                    </div>
+                </page-main>
+            </el-col>
+        </el-row> -->
+        <!-- <el-row :gutter="20" style="margin: 10px 10px -10px;">
             <el-col v-for="(item,i) in data.eventnum" :key="'eventnum'+i" :xs="24" :sm="12" :md="12" :lg="8">
                 <page-main style="margin: 10px 0;" :title="item.name">
                     <div class="numname">
@@ -75,7 +283,7 @@
                     </div>
                 </page-main>
             </el-col>
-        </el-row>
+        </el-row> -->
         <page-main v-if="data.echarts.length>0" class="picbox">
             <el-row :gutter="20">
                 <el-col v-for="(item,i) in data.echarts" :key="'echarts'+i" :sm="24" :md="data.echarts.length==1?24:12" :lg="data.echarts.length==1?24:data.echarts.length==2?12:8">
@@ -97,13 +305,12 @@
 import { useUserOutsideStore } from '@/store/modules/user'
 import {
     APIgetUserinfo,
-    APIgetTipsnum,
+    APIgetAggregate,
     APIgetEventnum,
     APIgetLoginUserGroup,
     APIgetCityNotPm
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
-import md5 from 'md5'
 import area from '@/util/area'
 const choose_city_props = reactive({
     item: {
@@ -168,7 +375,6 @@ const choose_city_end = val => {
 import { auth, authAll } from '../util/index'
 const choose_city = () => {
     console.log(localStorage.getItem('utype'))
-    // console.log(md5('pt'))
 
     console.log(sessionStorage.getItem('isChooseCity'))
     if (sessionStorage.getItem('isChooseCity') != 'true') {
@@ -187,20 +393,57 @@ import { reactive } from 'vue'
 //     location.reload()
 // }
 // 数据
-
-const data = reactive({ userinfo: '', tipsnum: '', eventnum: '', echarts: '' })
+const data = reactive({
+    userinfo: '',
+    tipsnum: {
+        announce_stat: {},
+        building_stat: {},
+        complaint_stat: [{
+            kind: '',
+            stat: {
+                c_status_cnt: []
+            }
+        }],
+        device_stat: {},
+        house_stat: {
+            h_tot: 0,
+            h_today_cnt: 0
+        },
+        survey_stat: [],
+        unit_stat: {},
+        vein_stat: {},
+        zone_stat: {}
+    },
+    eventnum: '',
+    echarts: ''
+})
+const data_1 = reactive({
+    obj: {},
+    arr: []
+})
 APIgetUserinfo().then(res => {
     console.log(res)
     data.userinfo = res.data
 }).catch(error => {
     console.log(error)
 })
-APIgetTipsnum().then(res => {
-    // console.log(res)
-    data.tipsnum = res.data.data
-}).catch(error => {
-    console.log(error)
-})
+const getAggregate = () => {
+    let data = {}
+    if (localStorage.getItem('utype') == 'pt') {
+        data.module = 'all'
+    } else if (sessionStorage.getItem('groupChinaCode')) {
+        data.gid = sessionStorage.getItem('groupChinaCode')
+    }
+    APIgetAggregate(data).then(res => {
+        console.log(res)
+        data_1.obj = res.data
+        data_1.arr = res.data.complaint_stat
+        // console.log(data.tipsnum)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+getAggregate()
 APIgetEventnum().then(res => {
     // console.log(res)
     data.eventnum = res.data.data
@@ -212,6 +455,7 @@ APIgetEventnum().then(res => {
 import {
     APIgetEchartsHome
 } from '@/api/custom/custom.js'
+import PageMain from '@/components/PageMain/index.vue'
 APIgetEchartsHome().then(res => {
     // console.log(res)
     data.echarts = res.data
@@ -250,6 +494,7 @@ const aaa = ref()
         display: flex;
         color: #999;
         font-size: 14px;
+        text-align: center;
         >div {
             flex: 1;
             white-space: nowrap;
@@ -316,7 +561,7 @@ const aaa = ref()
             font-size: 22px;
         }
         .name {
-            font-size: 14px;
+            font-size: 12px;
             color: #666;
         }
     }
@@ -356,5 +601,28 @@ const aaa = ref()
             background-color: #f0f9eb;
         }
     }
-
+    .comStatus {
+        // width: 450px;
+        position: relative;
+        padding: 20px;
+        background-color: #fff;
+    }
+    .title-container {
+        width: calc(100% + 40px);
+        padding: 14px 20px;
+        margin-left: -20px;
+        margin-top: -20px;
+        margin-bottom: 20px;
+        // border-bottom: 1px solid #eee;
+        font-weight: 700;
+    }
+    .title-container-1 {
+        color: #aaa;
+        width: calc(100% + 40px);
+        padding: 6px 20px;
+        margin-left: -20px;
+        margin-top: -20px;
+        margin-bottom: 10px;
+        // border-bottom: 1px solid #eee;
+    }
 </style>

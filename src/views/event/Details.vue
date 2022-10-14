@@ -148,102 +148,7 @@
                         <!-- <div v-show="data_archive.arr.length <= 0" class="size-lx">此设备无档案信息</div> -->
                     </el-tab-pane>
                     <el-tab-pane label="业主评论" name="3">
-                        <el-scrollbar height="800px">
-                            <!-- <comment-switch :id="route.query.id" /> -->
-                            <div class="isComment">
-                                <span>是否开启评论：</span>
-                                <el-switch
-                                    v-model="popup1.using"
-                                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                    inline-prompt
-                                    active-text="开"
-                                    inactive-text="关"
-                                    @change="switchFnUse"
-                                />
-                                <div class="radioGroup">
-                                    <el-radio-group v-model="popup1.scoreper" :disabled="!popup1.using" @change="switchFnUse(true)">
-                                        <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="item.key" size="large">{{ item.val }}</el-radio>
-                                    </el-radio-group>
-                                </div>
-                            </div>
-                            <div>
-                                <el-table
-                                    ref="multipleTableRef"
-                                    :data="tableData.arr"
-                                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                    class="tab_1"
-                                    @selection-change="handleSelectionChange"
-                                >
-                                    <el-table-column type="selection" width="50" />
-                                    <el-table-column label="评论内容" width="200" show-overflow-tooltip="true">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.content }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column v-if="tableData.arr.uname" label="评论人" width="110">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.uname|| 'null' }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="状态" width="150">
-                                        <template #default="scope">
-                                            <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
-                                            <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
-                                            <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" effect="dark" size="large">{{ getOptVal(opts_all.obj.comment_status,scope.row.status) }} </el-tag>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="评分" width="100">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.score }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column label="评论时间">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.created_at }} </span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column fixed="right" label="操作" with="200">
-                                        <template #default="scope">
-                                            <el-button
-                                                v-show="scope.row.status == 10"
-                                                type="primary" size="small"
-                                                @click="toggleSelection(scope.row)"
-                                            >
-                                                审核
-                                            </el-button>
-                                            <el-button
-                                                v-if="scope.row.status == 20 || scope.row.status == 30"
-                                                type="success" size="small"
-                                                @click="toggleSelection(scope.row)"
-                                            >
-                                                修改
-                                            </el-button>
-                                            <el-button
-                                                size="small"
-                                                @click="clickFuncDetail(scope.row)"
-                                            >
-                                                详情
-                                            </el-button>
-                                            <el-button
-                                                type="primary"
-                                                size="small"
-                                                @click="popup2FnReply(scope.row)"
-                                            >
-                                                回复
-                                            </el-button>
-                                            <!-- <el-button
-                                                type="danger" size="small"
-                                                @click="toggleDelete(scope.row)"
-                                            >
-                                                删除
-                                            </el-button> -->
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </div>
-                        </el-scrollbar>
+                        <Comment :id="route.query.id" />
                     </el-tab-pane>
                     <el-tab-pane label="访问记录" name="4">
                         <el-table
@@ -311,49 +216,6 @@
                 </el-tabs>
             </div>
         </page-main>
-        <!-- 修改添加 -->
-        <el-dialog
-            v-model="popup2.switch"
-            title="回复"
-            width="50%"
-            :append-to-body="true"
-        >
-            <el-form
-                :model="popup2.form"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="打分"
-                            :error="popup2.error&&popup2.error.score?popup2.error.score[0]:''"
-                        >
-                            <el-input-number v-model="popup2.form.score" :step="1" :max="popup1.scoreper" :min="0" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="70px"
-                            label="内容"
-                            :error="popup2.error&&popup2.error.content?popup2.error.content[0]:''"
-                        >
-                            <el-input
-                                v-model="popup2.form.content"
-                                :autosize="{ minRows: 2, maxRows: 6 }"
-                                type="textarea"
-                                placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div class="closed">
-                    <el-button @click="popup2.switch=false">取消</el-button>
-                    <el-button type="primary" @click="popup2FnAdd">确定</el-button>
-                </div>
-            </template>
-        </el-dialog>
         <!-- 回复 -->
         <el-dialog
             v-model="popup_3.switch"
@@ -460,53 +322,6 @@
                 </div>
             </template>
         </el-dialog>
-        <!--审核 /修改 -->
-        <el-dialog
-            v-model="data_1.add_switch"
-            :title="data_1.add_title"
-            width="50%"
-        >
-            <el-form
-                :model="tableData.arr"
-            >
-                <el-row :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="状态"
-                            :error="data_1.add_error&&data_1.add_error.status?data_1.add_error.status[0]:''"
-                        >
-                            <el-select v-model="data_1.add_form.status" class="head-btn" clearable>
-                                <el-option v-for="(item) in opts_all.obj.comment_status" :key="item.key" :label="item.val" :value="item.key" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
-                        <el-form-item
-                            label-width="70px"
-                            label="投诉内容"
-                            :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
-                        >
-                            <el-input
-                                v-model="data_1.add_form.content"
-                                class="head-btn"
-                                :autosize="{ minRows: 4, maxRows: 8 }"
-                                type="textarea"
-                                placeholder=""
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div class="closed">
-                    <el-button @click="data1_switch=false">取消</el-button>
-                    <el-button type="primary" @click="clickFuncAddVote">确定</el-button>
-                </div>
-            </template>
-        </el-dialog>
         <!-- 追问 -->
         <el-dialog
             v-model="questioning_switch"
@@ -593,40 +408,6 @@
                 <span class="dialog-footer">
                     <el-button @click="questioning_examineSwitch = false">取消</el-button>
                     <el-button @click="examineSure_2">确定</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <!-- 详情 -->
-        <el-dialog
-            v-model="comment.switch_details"
-            title="详情"
-            width="50%"
-        >
-            <div class="details-box">
-                <div class="item">
-                    <div class="left">评分</div>
-                    <div class="right">{{ data_1.add_form.score }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论状态</div>
-                    <div class="right">{{ getOptVal(opts_all.obj.comment_status,data_1.add_form.status) }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论时间</div>
-                    <div class="right">{{ data_1.add_form.created_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">修改时间</div>
-                    <div class="right">{{ data_1.add_form.updated_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论内容</div>
-                    <div class="right">{{ data_1.add_form.content }}</div>
-                </div>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="comment.switch_details = false">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -931,10 +712,10 @@ const examineSure = () => {
     }
     examine_switch.value = false
 }
-const handleClick = row => {
-    console.log(row)
-    console.log(activeName.value)
-}
+// const handleClick = row => {
+//     console.log(row)
+//     console.log(activeName.value)
+// }
 // 确认
 const sureFunk = () => {
     examine_switch_1.value = true
@@ -1116,9 +897,6 @@ const popupFuncAdd3 = () => {
     return false
     // dealFuncAddPut(data)
 }
-const tableData = reactive({
-    arr: []
-})
 // 删除评论
 // const toggleDelete = () => {
 //     console.log(selectArray.arr[0].tgtid)
@@ -1127,60 +905,7 @@ const tableData = reactive({
 //         getFuncCommentList()
 //     })
 // }
-// 审核
-// 是否开启评论
-const popup1 = reactive({
-    switch: false,
-    using: false,
-    scoreper: 0
-})
-import {
-    // APIgetCommentconfig,
-    APIpostCommentconfig,
-    APIdeleteCommentconfig,
-    APIpostComment
-} from '@/api/custom/custom.js'
-const switchFnUse = val => {
-    if (val) {
-        APIpostCommentconfig(route.query.id, { scoreper: popup1.scoreper }).then(res => {
-            // ElMessage.success('已开启')
-        })
-        return false
-    }
-    APIdeleteCommentconfig(route.query.id).then(res => {
-        // ElMessage.success('已开启')
-    })
-}
-const popup2 = reactive({
-    switch: false,
-    error: {},
-    form: {}
-})
-const popup2FnReply = val => {
-    popup2.error = {}
-    popup2.form = {
-        content: '',
-        atuid: val.uid,
-        atutype: val.utype,
-        score: 0,
-        tagid: val.id
-
-    }
-    popup2.switch = true
-}
-const popup2FnAdd = () => {
-    popup2.error = {}
-    APIpostComment(route.query.id, popup2.form).then(res => {
-        ElMessage.success('回复成功')
-        popup2.switch = false
-        getFuncCommentList()
-        refreshFunc()
-    }).catch(err => {
-        ElMessage.error('回复失败')
-    })
-}
 // 评论审核
-const status = ref(0)
 const data_1 = reactive({
     search: {},
     switch_search: false,
@@ -1195,103 +920,8 @@ const data_1 = reactive({
     details_data: {},
     details_switch: false
 })
-const toggleSelection = val => {
-    // console.log(selectArray.arr[0].status)
-    // status.value = selectArray.arr[0].status
-    // status.value = 20
-    // APIputComment(selectArray.arr[0].id, { status: status.value }).then(res => {
-    //     console.log(res)
-    //     getFuncCommentList()
-    //     data_1.add_switch = true
-    // })
-    data_1.add_error = {}
-    data_1.add_title = '修改'
-    // data_1.add_switch
-
-    APIgetCommentDetails(val.id).then(res => {
-        console.log(res)
-        data_1.add_form = res
-        let arr = []
-        for (let i in res.affix) {
-            if (res.affix[i]) {
-                arr.push({
-                    name: res.affix[i]
-                })
-            }
-        }
-        // file_list.value = arr
-        // data_1.add_switch = true
-    })
-    data_1.add_switch = true
-}
-// 审核确认
-const clickFuncAddVote = () => {
-    parseInt(data_1.add_form.score)
-    console.log(data_1.add_form.score)
-    APIputComment(data_1.add_form.id, data_1.add_form).then(res => {
-        console.log(res)
-        getFuncCommentList()
-        refreshFunc()
-        data_1.add_switch = false
-        if (data_1.add_form == 30) {
-            ElMessage.error('审核失败')
-        } else {
-            ElMessage.success('审核成功 ')
-        }
-    }).catch(err => {
-        ElMessage.error('审核失败 ')
-    })
-}
-// 详情
-const comment = reactive({
-    switch_details: false
-})
-const clickFuncDetail = val => {
-    APIgetCommentDetails(val.id).then(res => {
-        console.log(res)
-        data_1.add_form = res
-        let arr = []
-        for (let i in res.affix) {
-            if (res.affix[i]) {
-                arr.push({
-                    name: res.affix[i]
-                })
-            }
-        }
-        comment.switch_details = true
-    })
-}
-// const clickFuncDetail = val => {}
-const selectArray = reactive({
-    arr: []
-})
-const handleSelectionChange = select => {
-    console.log(select)
-    selectArray.arr = select
-}
-const score = ref(3)
-// 添加评论
-// APIpostComment(route.query.id, data).then(res => {
-//     console.log(tableData.arr)
-// })
-// 获取评论列表
-const getFuncCommentList = () => {
-    let params = {
-        tgtid: route.query.id
-    }
-    APIgetCommentList(params).then(res => {
-        console.log(res)
-        tableData.arr = res
-    })
-}
-// APIgetCommentDetails('62d65e613c8a28343964288c').then(res => {
-//     console.log(res)
-//     // score.value = res.score
-//     // console.log(score.value)
-// })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
-    getFuncCommentList()
     // APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' })
     getComplaintDetailsFunc()
 }

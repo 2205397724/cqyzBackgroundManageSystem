@@ -885,7 +885,6 @@ const btnClickFunc = () => {
     // isSearch2.value = !isSearch2.value
 }
 
-import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     let params = {
@@ -893,7 +892,7 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     console.log(sessionStorage.getItem('groupChinaCode'))
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.cc = sessionStorage.getItem('groupChinaCode')
     }
     console.log(params)
@@ -978,8 +977,8 @@ const getDetailsFunc = val => {
     }
     APIgetDeviceArchiveList(params).then(res => {
         console.log(res)
-        if(res.length==0){
-            data_archive.arr =[]
+        if (res.length == 0) {
+            data_archive.arr = []
         }
         for (let x in res) {
             for (let y in res[x].content) {

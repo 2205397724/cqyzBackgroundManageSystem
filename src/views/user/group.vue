@@ -1068,11 +1068,10 @@ const type_change = val => {
     }
 }
 
-import md5 from 'md5'
 // 添加弹出框选择小区
 const getChinaName = () => {
     let params = {}
-    if (localStorage.getItem('utype') == md5('pt')) {
+    if (localStorage.getItem('utype') == 'pt') {
         params = {
             p_code: localStorage.getItem('china_code')
         }

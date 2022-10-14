@@ -12,6 +12,30 @@
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                标签：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-select v-model="person_tag_or" multiple class="search_tb" placeholder="请选择" clearable>
+                                    <el-option v-for="(item,i) in personnelLabels.list" :key="item.id" :label="item.name" :value="item.name" />
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20 m-l-20">
+                        <el-row>
+                            <el-button-group>
+                                <el-button :type="!flag ? 'primary':''" @click="clickFeature_1">
+                                    部分满足
+                                </el-button>
+                                <el-button :type="flag ? 'primary':''" @click="clickFeature">全部满足</el-button>
+                            </el-button-group>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 姓名：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
@@ -316,13 +340,13 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="switch_feature" title="标签" width="70%" destroy-on-close="true">
+        <el-dialog v-model="switch_feature" :title="peopleName + '所属标签'" width="70%" destroy-on-close="true">
             <div style="height: 600px;">
                 <div style="width: 50%;height: 600px; float: left;border-right: 1px solid #ccc;">
                     <div style="height: 20%; border-bottom: 1px solid #ccc;">
                         <div style="font-size: 12px; color: #bbb; margin-bottom: 15px;">已有标签</div>
                         <div v-for="item in tags.arr" :key="item.key" class="inline-block m-r-10 pointer">
-                            <el-tag type="success" size="large" @click="tagClick(item)">
+                            <el-tag :type=" item.active == 1 ? 'success' : 'info'" size="large" @click="tagClick(item)">
                                 {{ item.tag }}
                             </el-tag>
                         </div>
@@ -563,7 +587,6 @@ import {
 } from 'element-plus'
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import { Download, Search, Plus, Loading } from '@element-plus/icons-vue'
-import md5 from 'md5'
 const data = reactive({
     list: []
 })
@@ -585,18 +608,34 @@ const searchFunc = () => {
     getPersonnelManageList()
 }
 const refreshFunc = () => {
+    person_tag_or.value = []
+    flag.value = false
+    flag_1.value = true
     search_str.obj = {}
     switch_search.value = false
     getPersonnelManageList()
 }
+const person_tag_or = ref([])
 const getPersonnelManageList = () => {
+    console.log(document.getElementsByClassName('el-select-dropdown__list'))
+    let val = document.getElementsByClassName('el-select-dropdown__list')[0]
+    console.log(val)
+    // val.style.diaplay = 'flex'
+    // val.style.diaplay = 'flex'
     let params = {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.group_id = sessionStorage.getItem('groupChinaCode')
     }
+
+    if (flag.value == true && flag_1.value == false) {
+        search_str.obj.person_tag_and = person_tag_or.value.join(',')
+    } else {
+        search_str.obj.person_tag_or = person_tag_or.value.join(',')
+    }
+    console.log(person_tag_or.value.join(','))
     for (let key in search_str.obj) {
         if (search_str.obj[key] || search_str.obj[key] === 0) {
             if (search_str.obj[key] instanceof Array && search_str.obj[key].length <= 0) {
@@ -622,6 +661,20 @@ const getPersonnelManageList = () => {
         }
         loading_tab.value = false
     })
+    APIgetPersonnelLabels({ type: 1 }).then(res => {
+        console.log(res)
+        personnelLabels.list = res
+    })
+}
+const flag = ref(false)
+const flag_1 = ref(true)
+const clickFeature = () => {
+    flag.value = true
+    flag_1.value = false
+}
+const clickFeature_1 = () => {
+    flag.value = false
+    flag_1.value = true
 }
 const data_details = reactive({
     item: {}
@@ -714,9 +767,11 @@ const tags = reactive({
     arr: []
 })
 const tag = ref('')
+const peopleName = ref('')
 const switch_feature = ref(false)
 const modifyFeatureFunc = val => {
     taglog.arr = []
+    peopleName.value = val.name
     tag.value = val.id
     from_examine.item = {}
     file_list.value = []
@@ -760,6 +815,16 @@ const addFeature = () => {
             }).catch(error => {
                 ElMessage.error('添加失败')
             })
+        })
+    } else {
+        from_examine.item.tgt_type = 1
+        from_examine.item.tgt_id = tag.value
+        APIpostPersonnelTag(from_examine.item).then(res => {
+            console.log(res)
+            ElMessage.success('添加成功')
+            switch_feature.value = false
+        }).catch(error => {
+            ElMessage.error('添加失败')
         })
     }
 
@@ -901,5 +966,13 @@ getOpts(['gender', 'status_all']).then(res => {
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
     width: 60px !important;
+}
+:deep(.el-select-dropdown__list) {
+    display: flex;
+    width: 300px;
+    flex-wrap: wrap;
+}
+.el-select-dropdown__item {
+    flex: 50%;
 }
 </style>

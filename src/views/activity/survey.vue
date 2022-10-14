@@ -377,7 +377,7 @@ const selectedZone_id = ref('')
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (localStorage.getItem('utype') == md5('pt')) {
+    if (localStorage.getItem('utype') == 'pt') {
         params = {
             p_code: localStorage.getItem('china_code')
         }
@@ -562,7 +562,6 @@ const passToAuditFunc = () => {
         ElMessage.success('申请失败')
     })
 }
-import md5 from 'md5'
 // 获取列表api请求
 const getTabListFunc = () => {
     // 请求信息
@@ -575,7 +574,7 @@ const getTabListFunc = () => {
     if (index.value == 0) {
         delete params.status
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.author_tgt = sessionStorage.getItem('groupChinaCode')
     }
     console.log(window.location.hash)

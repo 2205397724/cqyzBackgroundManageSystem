@@ -174,7 +174,7 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.tovalcan = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in data_search.obj) {

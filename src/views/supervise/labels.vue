@@ -203,7 +203,6 @@ import {
     ElMessage
 } from 'element-plus'
 import { Search, Plus, Loading } from '@element-plus/icons-vue'
-import md5 from 'md5'
 const data = reactive({
     list: []
 })
@@ -230,7 +229,7 @@ const getPersonnelManageList = () => {
     let params = {
         type: parseInt(main_type.value)
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.group_id = sessionStorage.getItem('groupChinaCode')
     }
     for (let key in search_str.obj) {

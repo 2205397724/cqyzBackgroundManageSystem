@@ -52,7 +52,7 @@
                                 <div class="item">
                                     <div class="left w-100">内容</div>
                                     <span v-html="data_details.item.content " />
-                                </div>
+                            m     </div>
                             </el-col> -->
                                 <el-col :span="8">
                                     <div class="item">
@@ -598,33 +598,56 @@
                     </div>
                     <div>
                         <div class="details-box">
-                            <div class="details-tit-sm">选项详情</div>
-                            <div v-for="(item,i) in topic_details.item" :key="i">
-                                <template v-if="item.type == 1 || item.type == 2">
-                                    <div style="font-weight: 700; margin: 10px 0;">
-                                        <el-icon style="vertical-align: middle;color: #e44822;"><ChatDotRound /></el-icon>
-                                        {{ item.title }}
-                                    </div>
-                                    <div v-for="(val,j) in item.opts" :key="j">
-                                        <div class="m-t-10">{{ val.content }}</div>
-                                        <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
-                                            <el-col :lg="1"> 票数 </el-col>
-                                            <el-col :lg="23" style="margin-top: 3px;">
-                                                <!-- <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" /> -->
-                                                <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
-                                                <el-progress v-else :percentage="(val.opt_cnt_map / countTot *100) .toFixed(2)" :color="customColor" />
-                                            <!-- <el-progress :percentage="20" :color="customColor" /> -->
-                                            </el-col>
-                                        </el-row>
-                                        <el-row style="color: #aaa; margin-top: 10px; font-size: 14px;">
-                                            <el-col :lg="1"> 面积 </el-col>
-                                            <el-col :lg="23" style="margin-top: 3px;">
-                                                <el-progress v-if="val.opt_area_map !== 0" :percentage="(parseInt(val.opt_area_map) / areaTot * 100).toFixed(2)" :color="customColor" />
-                                                <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
-                                            </el-col>
-                                        </el-row>
-                                    </div>
-                                </template>
+                            <div class="details-tit-sm hidden">
+                                <div style="float: left;"> 选项详情 </div>
+                                <div style="float: right;">
+                                    <el-button-group>
+                                        <el-button :type=" flag_2 ? '' : 'primary'" @click="getProportion">总占比</el-button>
+                                        <el-button :type=" flag_3 ? '' : 'primary'" @click="getProportion_1">按参与占比</el-button>
+                                    </el-button-group>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div v-for="(item,i) in topic_details.item" :key="i">
+                                    <template v-if="item.type == 1 || item.type == 2">
+                                        <div style="font-weight: 700; margin: 10px 0;">
+                                            <el-icon style="vertical-align: middle;color: #e44822;"><ChatDotRound /></el-icon>
+                                            {{ item.title }}
+                                        </div>
+                                        <div v-for="(val,j) in item.opts" :key="j">
+                                            <div class="m-t-10">{{ val.content }}</div>
+                                            <el-row :gutter="20">
+                                                <el-col :lg="12" style="color: #aaa; margin-top: 10px; font-size: 14px;">
+                                                    <el-row>
+                                                        <el-col :lg="2"> 票数 </el-col>
+                                                        <el-col v-if="!flag_2&&flag_3" :lg="22" style="margin-top: 3px;">
+                                                            <!-- <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" /> -->
+                                                            <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
+                                                            <el-progress v-else :percentage="(val.opt_cnt_map / countTot *100) .toFixed(2)+'('+val.opt_cnt_map +'/'+countTot+')'" :color="customColor" />
+                                                            <!-- <el-progress :percentage="20" :color="customColor" /> -->
+                                                        </el-col>
+                                                        <el-col v-if="flag_2&&!flag_3" :lg="22" style="margin-top: 3px;">
+                                                            <!-- <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" /> -->
+                                                            <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
+                                                            <el-progress v-else :percentage="(val.opt_cnt_map / answerCnt *100) .toFixed(2)+'('+val.opt_cnt_map +'/'+answerCnt+')'" :color="customColor" />
+                                                            <!-- <el-progress :percentage="20" :color="customColor" /> -->
+                                                        </el-col>
+                                                    </el-row>
+                                                </el-col>
+                                                <el-col :lg="12" style="color: #aaa; margin-top: 10px; font-size: 14px;">
+                                                    <el-row>
+                                                        <el-col :lg="2"> 面积 </el-col>
+                                                        <el-col :lg="22" style="margin-top: 3px;">
+                                                            <el-progress v-if="val.opt_area_map !== 0" :percentage="(parseInt(val.opt_area_map) / areaTot * 100).toFixed(2)+'('+val.opt_area_map +'/'+areaTot+')'" :color="customColor" />
+                                                            <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
+                                                        </el-col>
+                                                    </el-row>
+                                                </el-col>
+                                            </el-row>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -902,10 +925,12 @@ const changePane = (tab, event) => {
         answerListFunc()
         topicsFunc()
 
-    } else {
-        // 业主评论
-        topicsFunc()
+    } else if (tab.props.name == 7) {
+        // 审核记录
         getListArchiveFunc()
+    } else if (tab.props.name == 8) {
+        // 统计结果
+        topicsFunc()
         getSurveyStatus()
     }
 }
@@ -942,12 +967,14 @@ const opt_area_map = reactive({
 })
 const countTot = ref(0)
 const areaTot = ref(0)
+const answerCnt = ref(0)
 // 获取统计结果
 const getSurveyStatus = () => {
     APIgetSurveyStatus(route.query.id).then(res => {
         console.log(res)
         statistics.obj = res.data
         countTot.value = statistics.obj.tot.ticket
+        answerCnt.value = statistics.obj.answer_cnt.offline + statistics.obj.answer_cnt.online
         areaTot.value = statistics.obj.tot.area
         console.log(topic_details.item)
         // topic_details.item.forEach((item,i)=>{
@@ -975,6 +1002,7 @@ const getSurveyStatus = () => {
         opt_area_map.arr = []
         let opt_cnt_map_1 = {}
         let opt_area_map_1 = {}
+        console.log(topic_details.item)
         statistics.obj.opt_cnt_map.forEach((item, i) => {
             opt_cnt_map_1[item.oid] = item.cnt
         })
@@ -1504,7 +1532,16 @@ APIgetChinaRegion().then(res => {
     tree_item.value.type = 'region'
     tree_item.value.next_type = 'region'
 })
-
+const flag_2 = ref(false)
+const flag_3 = ref(true)
+const getProportion = () => {
+    flag_2.value = false
+    flag_3.value = true
+}
+const getProportion_1 = () => {
+    flag_2.value = true
+    flag_3.value = false
+}
 // 配置项
 import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
@@ -1772,14 +1809,6 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
             border: 1px solid #fff;
         }
     }
-}
-.isComment {
-    display: flex;
-    align-items: center;
-    margin: 10px 0 15px;
-    font-size: 14px;
-    background-color: #fafafa;
-    padding: 0 20px;
 }
 .el-timeline {
     margin-left: -38px;

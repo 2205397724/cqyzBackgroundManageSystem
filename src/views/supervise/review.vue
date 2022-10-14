@@ -308,7 +308,6 @@ import {
     ElMessage
 } from 'element-plus'
 import { Search, Plus, Loading } from '@element-plus/icons-vue'
-import md5 from 'md5'
 const data = reactive({
     list: []
 })
@@ -343,7 +342,7 @@ const getActivityViewList = () => {
     if (index.value == 0) {
         delete params.status
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != md5('pt')) {
+    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
         params.group_id = sessionStorage.getItem('groupChinaCode')
     }
     loading_tab.value = true
