@@ -40,6 +40,7 @@ api.interceptors.request.use(
              * 全局拦截请求发送前提交的参数
              * 以下代码为示例，在请求头里带上 token 信息
              */
+        console.log(userOutsideStore.isLogin)
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
             // request.headers['X-Cc'] = localStorage.getItem('china_code')

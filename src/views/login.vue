@@ -169,9 +169,9 @@ function handleLogin() {
                 'password': loginForm.value.password
             }
             userStore.login(data).then(() => {
+                loading.value = false
                 localStorage.removeItem('utype')
                 userStore.utype = data.auth_type
-                loading.value = false
                 localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
                 if (loginForm.value.remember) {
                     localStorage.setItem('login_account', loginForm.value.account)
@@ -191,17 +191,8 @@ function handleLogin() {
                     userStore.getPermissions()
                 }
                 sessionStorage.setItem('isChooseCity', true)
-                // console.log(userGroup.arr)
-                // if (userGroup.arr.length > 0) {
-                //     console.log(userGroup.arr)
-                //     APIgetLoginUserGroupPerms(userGroup.arr[0].id).then(res => {
-                //         console.log(res)
-                //     })
-                // }
-
                 router.push(redirect.value)
             }).catch(() => {
-
                 loading.value = false
             })
         }

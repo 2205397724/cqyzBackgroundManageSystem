@@ -3,6 +3,7 @@ import { piniaStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import {
     APIlogin,
+    APIgetUserinfo,
     APIeditPassword,
     APIgetLoginUserGroup,
     APIgetGroupPerms
@@ -39,19 +40,17 @@ export const useUserStore = defineStore(
             login(data) {
                 return new Promise((resolve, reject) => {
                     APIlogin(data).then(res => {
-                        console.log(res)
-                        let utype = data.utype
-                        let name = data.username
-                        let time = res.data.expires_in + Date.now() / 1000
-                        let token = res.data.access_token
-                        localStorage.setItem('account', name)
-                        localStorage.setItem('token', token)
-                        localStorage.setItem('failure_time', time)
-                        this.account = name
-                        this.token = token
-                        this.failure_time = time
-                        this.utype = utype
+                        this.utype = res.data.auth_type
+                        this.name = res.data.username
+                        this.time = res.data.expires_in + Date.now() / 1000
+                        this.token = res.data.access_token
+                        localStorage.setItem('account', this.name)
+                        localStorage.setItem('token', this.token)
+                        localStorage.setItem('failure_time', this.time)
+                        this.account = this.name
+                        this.failure_time = this.time
                         ElMessage.success('登录成功')
+                        this.getInfo()
                         resolve()
                     }).catch(error => {
                         reject(error)
@@ -71,6 +70,20 @@ export const useUserStore = defineStore(
                     menuStore.invalidRoutes()
                     menuStore.removeRoutes()
                     resolve()
+                })
+            },
+            //获取用户信息。
+            getInfo(){
+                return new Promise((resolve, reject) => {
+                    APIgetUserinfo().then(res => {
+                        let data = {
+                            info:res.data
+                        }
+                        localStorage.setItem('user_info',JSON.stringify({[res.data.id]:data}))
+                        resolve()
+                    }).catch(error => {
+                        console.log(error)
+                    })
                 })
             },
             // 获取我的权限
