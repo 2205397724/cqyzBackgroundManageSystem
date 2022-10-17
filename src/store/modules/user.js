@@ -40,11 +40,12 @@ export const useUserStore = defineStore(
             login(data) {
                 return new Promise((resolve, reject) => {
                     APIlogin(data).then(res => {
+                        console.log(res)
                         this.utype = res.data.auth_type
                         this.name = res.data.username
                         this.time = res.data.expires_in + Date.now() / 1000
                         this.token = res.data.access_token
-                        localStorage.setItem('account', this.name)
+                        localStorage.setItem('account', this.name || this.nickname || this.username)
                         localStorage.setItem('token', this.token)
                         localStorage.setItem('failure_time', this.time)
                         this.account = this.name
@@ -72,14 +73,14 @@ export const useUserStore = defineStore(
                     resolve()
                 })
             },
-            //获取用户信息。
-            getInfo(){
+            // 获取用户信息。
+            getInfo() {
                 return new Promise((resolve, reject) => {
                     APIgetUserinfo().then(res => {
                         let data = {
-                            info:res.data
+                            info: res.data
                         }
-                        localStorage.setItem('user_info',JSON.stringify({[res.data.id]:data}))
+                        localStorage.setItem('user_info', JSON.stringify({ [res.data.id]: data }))
                         resolve()
                     }).catch(error => {
                         console.log(error)
@@ -112,20 +113,20 @@ export const useUserStore = defineStore(
                         APIgetLoginUserGroup().then(res => {
                             if (res.data.length > 0) {
                                 let currentGId = res.data[0].id
-                            sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
-                            APIgetGroupPerms(currentGId).then(res => {
-                                console.log(res)
-                                res.data.forEach(item => {
-                                    for (let key in item) {
-                                        if (key == 'name') {
-                                            allPermisson.push(item[key])
+                                sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
+                                APIgetGroupPerms(currentGId).then(res => {
+                                    console.log(res)
+                                    res.data.forEach(item => {
+                                        for (let key in item) {
+                                            if (key == 'name') {
+                                                allPermisson.push(item[key])
+                                            }
                                         }
-                                    }
+                                    })
+                                    console.log(allPermisson)
+                                    this.permissions = allPermisson
+                                    resolve(this.permissions)
                                 })
-                                console.log(allPermisson)
-                                this.permissions = allPermisson
-                                resolve(this.permissions)
-                            })
                             } else {
                                 resolve('')
                             }

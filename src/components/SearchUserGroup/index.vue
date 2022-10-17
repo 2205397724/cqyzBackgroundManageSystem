@@ -17,7 +17,49 @@
             width="70%"
             style="z-index: 999999;"
         >
-            <Cascaders v-model="code" style="max-width: 200px;margin-bottom: 10px;" />
+            <div class="search">
+                <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                用户组名称：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <el-input
+                                    v-model="data_search.obj.name" class="search_tb" placeholder="用户名"
+                                    clearable
+                                />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
+                                区域：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="16">
+                                <Cascaders v-model="data_search.obj.region_cc" style="max-width: 200px;margin-bottom: 10px;" />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                        <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                        <el-button
+                            v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading"
+                            @click="refreshFunc"
+                        >
+                            重置
+                        </el-button>
+                        <span v-show="switch_search == true" class="size-base">
+                            *共搜索到{{ total }}条。
+                        </span>
+                    </el-col>
+                </el-row>
+            </div>
+
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;">*点击列表选择用户组</div>
             <el-table
                 v-loading="loading_tab"
@@ -33,32 +75,32 @@
                 <el-table-column v-if="props.checkbox" type="selection" width="55" />
                 <el-table-column prop="name" label="名称" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span>{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="上级ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.pid }} </span>
+                        <span>{{ scope.row.pid }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="等级" width="90">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.level }} </span>
+                        <span>{{ scope.row.level }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="created_at" label="创建时间" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
+                        <span>{{ scope.row.created_at }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="updated_at" label="更新时间" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
+                        <span>{{ scope.row.updated_at }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -79,10 +121,14 @@ const icon_hover = ref(false)
 import {
     reactive,
     ref,
+    watch,
     defineProps,
     defineExpose,
     defineEmits
 } from 'vue'
+const data_search = reactive({
+    obj: {}
+})
 import {
     APIgetGroupList
 } from '@/api/custom/custom.js'
@@ -101,19 +147,35 @@ const openDigFunc = () => {
     switch_list.value = true
     getTabListFunc()
 }
-watch(code, () => {
-    getTabListFunc()
-})
+// watch(page, () => {
+//     getTabListFunc()
+// })
+let per_page = ref(500)
+let page = ref(1)
+let total = ref(100)
 // const UserGroupClosed = () => {
 //     userName.value = ''
 // }
 // 获取列表
 const getTabListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
     loading_tab.value = true
-    APIgetGroupList().then(res => {
+    for (let key in data_search.obj) {
+        if (data_search.obj[key] || data_search.obj[key] === 0) {
+            if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
+                continue
+            }
+            params[key] = data_search.obj[key]
+        }
+    }
+    APIgetGroupList(params).then(res => {
         if (res.status == 200) {
             console.log(res)
             loading_tab.value = false
+            total.value = res.data.length
             data_tab.arr = res.data
         }
     })
@@ -130,7 +192,6 @@ const rowClickFunc = row => {
         switch_list.value = false
     }
 }
-//
 const users = reactive({
     arr: []
 })

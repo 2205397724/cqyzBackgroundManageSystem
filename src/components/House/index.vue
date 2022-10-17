@@ -1003,22 +1003,22 @@
                         />
                         <el-table-column prop="name" label="成员姓名">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.user?.name }} </span>
+                                <span>{{ scope.row.user?.name }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="name" label="身份证号码" width="250">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
+                                <span>{{ scope.row.id_card }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type" label="手机号" width="180">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.user?.mobile }}</span>
+                                <span>{{ scope.row.user?.mobile }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="type" label="性别">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.gender,scope.row.user?.gender) }}
+                                <span>{{ getOptVal(opts_all.obj.gender,scope.row.user?.gender) }}
                                 </span>
                             </template>
                         </el-table-column>
@@ -1317,13 +1317,13 @@ const getHouseListFunc = () => {
         }
     })
 }
-//在父组件中清理数据
-const clear_house_data=()=>{
-    house_num.arr=[]
-    house_list.area=[]
-    active_obj.obj.name=''
+// 在父组件中清理数据
+const clear_house_data = () => {
+    house_num.arr = []
+    house_list.area = []
+    active_obj.obj.name = ''
 }
-import {defineExpose } from 'vue'
+import { defineExpose } from 'vue'
 defineExpose({
     clear_house_data
 })
@@ -1796,7 +1796,7 @@ const modifycancel = () => {
 }
 // 同意拒绝提交
 import { APIputProperty, APIpostProperty,
-         APIdeleteHouseHouse } from '@/api/custom/custom.js'
+    APIdeleteHouseHouse } from '@/api/custom/custom.js'
 const postPropertyFunc = () => {
     console.log(property_form.obj)
     from_error_property.msg = {}

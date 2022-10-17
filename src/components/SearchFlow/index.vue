@@ -38,22 +38,22 @@
             >
                 <el-table-column prop="name" label="流程名称" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span>{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="流程ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="created_at" label="创建时间" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
+                        <span>{{ scope.row.created_at }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="updated_at" label="更新时间" width="180">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
+                        <span>{{ scope.row.updated_at }} </span>
                     </template>
                 </el-table-column>
 
@@ -127,9 +127,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetFlowList(params).then(res => {
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
     })
 }
 

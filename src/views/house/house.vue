@@ -130,57 +130,57 @@
                     <el-table-column prop="addr" label="地址" width="220" />
                     <el-table-column prop="floor_truth" label="物理层" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.floor_truth }} 层</span>
+                            <span>{{ scope.row.floor_truth }} 层</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="floor_alias" label="名义层" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.floor_alias }} 层</span>
+                            <span>{{ scope.row.floor_alias }} 层</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="house_num" label="房号" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.house_num }} </span>
+                            <span>{{ scope.row.house_num }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="area_build" label="建筑面积" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                            <span>{{ scope.row.area_build }} m²</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="type_model" label="户型" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="type_property" label="产权性质" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="type_building" label="楼栋性质" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_use" label="房屋使用状态" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_safe" label="房屋安全状态" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_plan" label="规划用途" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_plan) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_plan) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_fact" label="实际用途" width="140">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_fact) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_fact) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">

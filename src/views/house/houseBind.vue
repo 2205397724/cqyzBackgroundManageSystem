@@ -28,22 +28,22 @@
             >
                 <el-table-column prop="name" label="申请人姓名">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span>{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="申请人身份证号" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
+                        <span>{{ scope.row.id_card }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="申请绑定的房屋">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getHouseNameFunc(allHouse_list.arr,scope.row.hid) }} </span>
+                        <span>{{ getHouseNameFunc(allHouse_list.arr,scope.row.hid) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="type" label="类型">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.house_bind,scope.row.type) }}
+                        <span>{{ getOptVal(opts_all.obj.house_bind,scope.row.type) }}
                         </span>
                     </template>
                 </el-table-column>

@@ -428,6 +428,7 @@ const data_1 = reactive({
 })
 APIgetUserinfo().then(res => {
     console.log(res)
+    localStorage.setItem('account', res.data.name || res.data.nickname || res.data.username)
     data.userinfo = res.data
 }).catch(error => {
     console.log(error)

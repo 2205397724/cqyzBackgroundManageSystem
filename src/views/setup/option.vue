@@ -79,12 +79,12 @@
                     <el-table-column prop="label" label="配置标签" />
                     <el-table-column prop="is_sys" label="是否系统级别">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="is_active" label="启用状态">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">
+                            <span>
                                 <el-tag v-if="scope.row.is_active == 1" type="success" size="small" round>开启</el-tag>
                                 <el-tag v-if="scope.row.is_active == 0" type="danger" size="small" round>关闭</el-tag>
                             </span>
@@ -302,12 +302,12 @@
                 <el-table-column prop="key" label="选项键值" sortable />
                 <el-table-column prop="is_sys" label="是否系统级别">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
+                        <span>{{ getOptVal(opts_all.obj.app_show,scope.row.is_sys) }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="is_active" label="启用状态" width="100">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">
+                        <span>
                             <el-tag v-if="scope.row.is_active == 1" type="success" size="small" round>开启</el-tag>
                             <el-tag v-if="scope.row.is_active == 0" type="danger" size="small" round>关闭</el-tag>
                         </span>

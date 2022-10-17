@@ -34,12 +34,12 @@
                         <el-table-column prop="reply" label="理由" width="180" />
                         <el-table-column prop="type" label="类型" width="120">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }} </span>
+                                <span>{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="process_status" label="状态" width="90">
                             <template #default="scope">
-                                <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }} </span>
+                                <span>{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }} </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="content.biz_lic" label="商业编码" width="180" />
@@ -50,8 +50,8 @@
                             <template #default="scope">
                                 <el-button
                                     type="primary" size="small"
-                                    @click="examineFunc(scope.row)"
                                     :disabled="scope.row.process_status<200?false:true"
+                                    @click="examineFunc(scope.row)"
                                 >
                                     审批
                                 </el-button>
