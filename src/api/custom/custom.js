@@ -1,675 +1,673 @@
-import api from '@/api/index.js'
-import api2 from '@/api/index2.js'
-import api9 from '@/api/index9.js'
+import api from '@/api/request.js'
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 查看
 export function APIgetCommentconfig(tgtid) {
-    return api9.get(`commentcfg/${tgtid}`)
+    return api.get(`commentcfg/${tgtid}`)
 }
 // 修改
 export function APIpostCommentconfig(tgtid, data) {
-    return api2.post(`commentcfg/${tgtid}`, data)
+    return api.post(`commentcfg/${tgtid}`, data)
 }
 // 删除
 export function APIdeleteCommentconfig(tgtid) {
-    return api2.delete(`commentcfg/${tgtid}`)
+    return api.delete(`commentcfg/${tgtid}`)
 }
 // 评论
 // 列表
 // export function APIgetCommentList(params) {
-//     return api2.get('/comment', params)
+//     return api.get('/comment', params)
 // }
 export function APIgetCommentList(params) {
-    return api2.get('/comment', { params: params })
+    return api.get('/comment', { params: params })
 }
 // 详情
 export function APIgetCommentDetails(id) {
-    return api2.get(`comment/${id}`)
+    return api.get(`comment/${id}`)
 }
 // // 删除
 // export function APIdeleteAdComment(id) {
-//     return api2.delete(`comment/${id}`)
+//     return api.delete(`comment/${id}`)
 // }
 // 修改
 export function APIputComment(id, data) {
-    return api2.put(`comment/${id}`, data)
+    return api.put(`comment/${id}`, data)
 }
 // 添加
 export function APIpostComment(tgtid, data) {
-    return api2.post(`target/${tgtid}/comment`, data)
+    return api.post(`target/${tgtid}/comment`, data)
 }
 // 评论观点
 // 添加
 export function APIpostCommentOpinions(tgt, data) {
-    return api2.post(`/comment-tag/tgt/${tgt}`, data)
+    return api.post(`/comment-tag/tgt/${tgt}`, data)
 }
 // 列表
 export function APIgetCommentOpinions(tgt) {
-    return api2.get(`/comment-tag/tgt/${tgt}`)
+    return api.get(`/comment-tag/tgt/${tgt}`)
 }
 // 修改
 export function APIputCommentOpinions(id, data) {
-    return api2.put(`comment-tag/${id}`, data)
+    return api.put(`comment-tag/${id}`, data)
 }
 // 评论观点统计
 export function APIpostCommentStatistic(data) {
-    return api2.post('/comment-tag-stat', data)
+    return api.post('/comment-tag-stat', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设备维修
 // 列表
 export function APIgetDeviceRepairList(params) {
-    return api2.get('d/repair', { params: params })
+    return api.get('d/repair', { params: params })
 }
 // 详情
 export function APIgetDeviceRepairDetails(repair) {
-    return api2.get(`d/repair/${repair}`)
+    return api.get(`d/repair/${repair}`)
 }
 // 删除
 export function APIdeleteDeviceRepair(repair) {
-    return api2.delete(`d/repair/${repair}`)
+    return api.delete(`d/repair/${repair}`)
 }
 // 修改
 export function APIputDeviceRepair(repair, data) {
-    return api2.put(`d/repair/${repair}`, data)
+    return api.put(`d/repair/${repair}`, data)
 }
 // 添加
 export function APIpostDeviceRepair(data) {
-    return api2.post('d/repair', data)
+    return api.post('d/repair', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设备档案
 // 列表
 export function APIgetDeviceArchiveList(params) {
-    return api2.get('d/archive', { params: params })
+    return api.get('d/archive', { params: params })
 }
 // 详情
 export function APIgetDeviceArchiveDetails(archive) {
-    return api2.get(`d/archive/${archive}`)
+    return api.get(`d/archive/${archive}`)
 }
 // 删除
 export function APIdeleteDeviceArchive(archive) {
-    return api2.delete(`d/archive/${archive}`)
+    return api.delete(`d/archive/${archive}`)
 }
 // 修改
 export function APIputDeviceArchive(archive, data) {
-    return api2.put(`d/archive/${archive}`, data)
+    return api.put(`d/archive/${archive}`, data)
 }
 // 添加
 export function APIpostDeviceArchive(data) {
-    return api2.post('d/archive', data)
+    return api.post('d/archive', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设备
 // 列表
 export function APIgetDeviceList(params) {
-    return api2.get('device', { params: params })
+    return api.get('device', { params: params })
 }
 // 详情
 export function APIgetDeviceDetails(device) {
-    return api2.get(`device/${device}`)
+    return api.get(`device/${device}`)
 }
 // 删除
 export function APIdeleteDevice(device) {
-    return api2.delete(`device/${device}`)
+    return api.delete(`device/${device}`)
 }
 // 修改
 export function APIputDevice(device, data) {
-    return api2.put(`device/${device}`, data)
+    return api.put(`device/${device}`, data)
 }
 // 添加
 export function APIpostDevice(data) {
-    return api2.post('device', data)
+    return api.post('device', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 线下票
 export function APIpostOfflineAdd(vote, data) {
-    return api2.post(`vote/${vote}/offlineticket`, data)
+    return api.post(`vote/${vote}/offlineticket`, data)
 }
 // 列表 Illegal
 export function APIgetTicketList(vote, params) {
-    return api2.get(`vote/${vote}/ticket`, { params: params })
+    return api.get(`vote/${vote}/ticket`, { params: params })
 }
 // 详情
 export function APIgetTicketDetails(ticket) {
-    return api2.get(`ticket/${ticket}`)
+    return api.get(`ticket/${ticket}`)
 }
 // 删除
 export function APIdeleteTicket(ticket) {
-    return api2.delete(`ticket/${ticket}`)
+    return api.delete(`ticket/${ticket}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设置违建
 // 列表 Illegal
 export function APIgetIllegalList(params) {
-    return api2.get('complaint-illegal', { params: params })
+    return api.get('complaint-illegal', { params: params })
 }
 // 详情
 export function APIgetIllegalDetails(illegal) {
-    return api2.get(`complaint-illegal/${illegal}`)
+    return api.get(`complaint-illegal/${illegal}`)
 }
 // 删除
 export function APIdeleteIllegal(illegal) {
-    return api2.delete(`complaint-illegal/${illegal}`)
+    return api.delete(`complaint-illegal/${illegal}`)
 }
 // 修改
 export function APIputIllegal(illegal, data) {
-    return api2.put(`complaint-illegal/${illegal}`, data)
+    return api.put(`complaint-illegal/${illegal}`, data)
 }
 // 添加
 export function APIpostIllegal(complaint, data) {
-    return api2.post(`complaint/${complaint}/illegal`, data)
+    return api.post(`complaint/${complaint}/illegal`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 处理
 export function APIpostDealAdd(complaint, data) {
-    return api2.post(`complaint/${complaint}/deal`, data)
+    return api.post(`complaint/${complaint}/deal`, data)
 }
 // 追问
 // 列表
 export function APIgetComplaintPlusList(params) {
-    return api2.get('/complaint-plus', { params: params })
+    return api.get('/complaint-plus', { params: params })
 }
 // 审核
 export function APIputComplaintPlus(id, data) {
-    return api2.put(`/complaint-plus/${id}`, data)
+    return api.put(`/complaint-plus/${id}`, data)
 }
 // 删除
 export function APIdeleteComplaintPlus(id) {
-    return api2.delete(`/complaint-plus/${id}`)
+    return api.delete(`/complaint-plus/${id}`)
 }
 // 添加
 export function APIpostComplaintPlus(complaint, data) {
-    return api2.post(`/complaint/${complaint}/plus`, data)
+    return api.post(`/complaint/${complaint}/plus`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 修改内容
 export function APIputDeal(deal, data) {
-    return api2.put(`complaint-deal/${deal}`, data)
+    return api.put(`complaint-deal/${deal}`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 修改状态
 export function APIputAllot(allot, data) {
-    return api2.put(`complaint-allot/${allot}`, data)
+    return api.put(`complaint-allot/${allot}`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 转办
 export function APIpostAllot(complaint, data) {
-    return api2.post(`complaint/${complaint}/allot`, data)
+    return api.post(`complaint/${complaint}/allot`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 投诉
 // 列表
 export function APIgetComplaintList(params) {
-    return api2.get('complaint', { params: params })
+    return api.get('complaint', { params: params })
 }
 // 详情
 export function APIgetComplaintDetails(complaint, data) {
-    return api2.get(`complaint/${complaint}`, data)
+    return api.get(`complaint/${complaint}`, data)
 }
 // 修改
 export function APIputComplaint(complaint, data) {
-    return api2.put(`complaint/${complaint}`, data)
+    return api.put(`complaint/${complaint}`, data)
 }
 // 添加
 export function APIpostComplaint(data) {
-    return api2.post('complaint', data)
+    return api.post('complaint', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 点赞
 // 列表
 export function APIgetEntryMbrZanList(params) {
-    return api2.get('entrymbrzan', { params: params })
+    return api.get('entrymbrzan', { params: params })
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 报名成员
 // 列表
 export function APIgetEntryMbrList(params) {
-    return api2.get('entrymbr', { params: params })
+    return api.get('entrymbr', { params: params })
 }
 // 详情
 export function APIgetEntryMbrDetails(entrymbr) {
-    return api2.get(`entrymbr/${entrymbr}`)
+    return api.get(`entrymbr/${entrymbr}`)
 }
 // 删除
 export function APIdeleteEntryMbr(entrymbr) {
-    return api2.delete(`entrymbr/${entrymbr}`)
+    return api.delete(`entrymbr/${entrymbr}`)
 }
 // 修改
 export function APIputEntryMbr(entrymbr, data) {
-    return api2.put(`entrymbr/${entrymbr}`, data)
+    return api.put(`entrymbr/${entrymbr}`, data)
 }
 // 添加
 export function APIpostEntryMbr(data) {
-    return api2.post('entrymbr', data)
+    return api.post('entrymbr', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设置报名
 // 列表
 export function APIgetEntryList(params) {
-    return api2.get('entry', { params: params })
+    return api.get('entry', { params: params })
 }
 // 详情
 export function APIgetEntryDetails(entry) {
-    return api2.get(`entry/${entry}`)
+    return api.get(`entry/${entry}`)
 }
 // 删除
 export function APIdeleteEntry(entry) {
-    return api2.delete(`entry/${entry}`)
+    return api.delete(`entry/${entry}`)
 }
 // 修改
 export function APIputEntry(entry, data) {
-    return api2.put(`entry/${entry}`, data)
+    return api.put(`entry/${entry}`, data)
 }
 // 添加
 export function APIpostEntry(data) {
-    return api2.post('entry', data)
+    return api.post('entry', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 // 设置投票房屋
 // 获取参与投票的房屋所属的楼栋单元
 export function APIgetVoteHouseUnit(vote, params) {
-    return api2.get(`vote/${vote}/bu`, { params: params })
+    return api.get(`vote/${vote}/bu`, { params: params })
 }
 // 获取投票事项下参与的房屋
 export function APIgetVoteHouse(vote, params) {
-    return api2.get(`vote/${vote}/house`, { params: params })
+    return api.get(`vote/${vote}/house`, { params: params })
 }
 // 删除
 export function APIdeleteVoteHouse(vote) {
-    return api2.delete(`vote/${vote}/ticket`)
+    return api.delete(`vote/${vote}/ticket`)
 }
 // 添加
 export function APIpostVoteHouse(vote, data) {
-    return api2.post(`vote/${vote}/house`, data)
+    return api.post(`vote/${vote}/house`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 // 设置投票选项
 // 列表
 export function APIgetVoteoptsList(params) {
-    return api2.get('voteopt', { params: params })
+    return api.get('voteopt', { params: params })
 }
 // 详情
 export function APIgetVoteoptsDetails(voteopt) {
-    return api2.get(`voteopt/${voteopt}`)
+    return api.get(`voteopt/${voteopt}`)
 }
 // 删除
 export function APIdeleteVoteopts(voteopt) {
-    return api2.delete(`voteopt/${voteopt}`)
+    return api.delete(`voteopt/${voteopt}`)
 }
 // 修改
 export function APIputVoteopts(voteopt, data) {
-    return api2.put(`voteopt/${voteopt}`, data)
+    return api.put(`voteopt/${voteopt}`, data)
 }
 // 添加
 export function APIpostVoteopts(data) {
-    return api2.post('voteopt', data)
+    return api.post('voteopt', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 // 设置投票
 // 列表
 export function APIgetVoteList(params) {
-    return api2.get('vote', { params: params })
+    return api.get('vote', { params: params })
 }
 // 详情
 export function APIgetVoteDetails(vote) {
-    return api2.get(`vote/${vote}`)
+    return api.get(`vote/${vote}`)
 }
 // 删除
 export function APIdeleteVote(vote) {
-    return api2.delete(`vote/${vote}`)
+    return api.delete(`vote/${vote}`)
 }
 // 修改
 export function APIputVote(vote, data) {
-    return api2.put(`vote/${vote}`, data)
+    return api.put(`vote/${vote}`, data)
 }
 // 添加
 export function APIpostVote(data) {
-    return api2.post('vote', data)
+    return api.post('vote', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 // 设置步骤组
 export function APIpostFlowstepgroup(data) {
-    return api2.post('flowstepgroup', data)
+    return api.post('flowstepgroup', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 流程事件
 // 列表
 export function APIgetFlowworkEventList(flowwork, params) {
-    return api2.get(`flowwork/${flowwork}/item`, { params: params })
+    return api.get(`flowwork/${flowwork}/item`, { params: params })
 }
 // 保存
 export function APIpostFlowworkEventSave(flowwork, data) {
-    return api2.post(`flowwork/${flowwork}/item`, data)
+    return api.post(`flowwork/${flowwork}/item`, data)
 }
 // 提交
 export function APIpostFlowworkEventUpdate(flowwork, data) {
-    return api2.post(`flowwork/${flowwork}/next`, data)
+    return api.post(`flowwork/${flowwork}/next`, data)
 }
 // 返回事项进度
 export function APIpostFlowworkEventSpeed(flowwork, data) {
-    return api2.post(`flowwork/${flowwork}/back`, data)
+    return api.post(`flowwork/${flowwork}/back`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 制定流程
 // 列表
 export function APIgetFlowworkList(params) {
-    return api2.get('flowwork', { params: params })
+    return api.get('flowwork', { params: params })
 }
 // 详情
 export function APIgetFlowworkDetails(id) {
-    return api2.get(`flowwork/${id}`)
+    return api.get(`flowwork/${id}`)
 }
 // 删除
 export function APIdeleteFlowwork(id) {
-    return api2.delete(`flowwork/${id}`)
+    return api.delete(`flowwork/${id}`)
 }
 // 添加
 export function APIpostFlowwork(flow, data) {
-    return api2.post(`flow/${flow}/work`, data)
+    return api.post(`flow/${flow}/work`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 流程的步骤
 // 列表
 export function APIgetStepList(flow, params) {
-    return api2.get(`v2/flow/${flow}/step`, { params: params })
+    return api.get(`v2/flow/${flow}/step`, { params: params })
 }
 // 详情
 export function APIgetStepDetails(step) {
-    return api2.get(`flowstep/${step}`)
+    return api.get(`flowstep/${step}`)
 }
 // 删除
 export function APIdeleteStep(flow, id) {
-    return api2.delete(`v2/flow/${flow}/step/${id}`)
+    return api.delete(`v2/flow/${flow}/step/${id}`)
 }
 // 修改
 export function APIputStep(flow, id, data) {
-    return api2.put(`v2/flow/${flow}/step/${id}`, data)
+    return api.put(`v2/flow/${flow}/step/${id}`, data)
 }
 // 添加
 export function APIpostStep(flow, data) {
-    return api2.post(`v2/flow/${flow}/step`, data)
+    return api.post(`v2/flow/${flow}/step`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 制定流程
 // 列表
 export function APIgetFlowList(params) {
-    return api2.get('v2/flow', { params: params })
+    return api.get('v2/flow', { params: params })
 }
 // 详情
 export function APIgetFlowDetails(id) {
-    return api2.get(`v2/flow/${id}`)
+    return api.get(`v2/flow/${id}`)
 }
 // 删除
 export function APIdeleteFlow(id) {
-    return api2.delete(`v2/flow/${id}`)
+    return api.delete(`v2/flow/${id}`)
 }
 // 修改
 export function APIputFlow(id, data) {
-    return api2.put(`v2/flow/${id}`, data)
+    return api.put(`v2/flow/${id}`, data)
 }
 // 添加
 export function APIpostFlow(data) {
-    return api2.post('v2/flow', data)
+    return api.post('v2/flow', data)
 }
 
 // 业委会成员
 // 列表
 export function APIgetListYwhUser(ywh, params) {
-    return api2.get(`/ywh/${ywh}/user`, { params: params })
+    return api.get(`/ywh/${ywh}/user`, { params: params })
 }
 // 删除
 export function APIdeleteYwhUser(ywh, id) {
-    return api2.delete(`/ywh/${ywh}/user/${id}`)
+    return api.delete(`/ywh/${ywh}/user/${id}`)
 }
 // 修改
 export function APIputYwhUser(ywh, id, data) {
-    return api2.put(`/ywh/${ywh}/user/${id}`, data)
+    return api.put(`/ywh/${ywh}/user/${id}`, data)
 }
 // 添加
 export function APIpostYwhUser(ywh, data) {
-    return api2.post(`/ywh/${ywh}/user`, data)
+    return api.post(`/ywh/${ywh}/user`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 业委会
 // 列表
 export function APIgetListYwh(params) {
-    return api2.get('/ywh', { params: params })
+    return api.get('/ywh', { params: params })
 }
 // 详情
 export function APIgetDetailsYwh(id) {
-    return api2.get('/ywh/' + id)
+    return api.get('/ywh/' + id)
 }
 // 删除
 export function APIdeleteYwh(id) {
-    return api2.delete('/ywh/' + id)
+    return api.delete('/ywh/' + id)
 }
 // 修改
 export function APIputYwh(id, data) {
-    return api2.put('/ywh/' + id, data)
+    return api.put('/ywh/' + id, data)
 }
 // 添加
 export function APIpostYwh(data) {
-    return api2.post('/ywh', data)
+    return api.post('/ywh', data)
 }
 // 激活
 export function APIputYwhActive(ywh, data) {
-    return api2.put(`/ywh/${ywh}/active`, data)
+    return api.put(`/ywh/${ywh}/active`, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示审核  /api/a/article/{article}/audit
 // 列表
 export function APIgetListArchiveAudit(params) {
-    return api2.get('/a-audit', { params: params })
+    return api.get('/a-audit', { params: params })
 }
 // 详情
 export function APIgetDetailsArchiveAudit(id) {
-    return api2.get(`/a-audit/${id}`)
+    return api.get(`/a-audit/${id}`)
 }
 // 发起审核
 export function APIpostArchiveAudit(data) {
-    return api2.post('/a-audit', data)
+    return api.post('/a-audit', data)
 }
 // 审核操作
 export function APIputArchiveAudit(id, data) {
-    return api2.put(`/a-audit/${id}`, data)
+    return api.put(`/a-audit/${id}`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示归档
 // 列表
 export function APIgetListArchiveArticle(params) {
-    return api2.get('/a/archive/', { params: params })
+    return api.get('/a/archive/', { params: params })
 }
 // 详情
 export function APIgetDetailsArchiveArticle(archive, article) {
-    return api2.get(`/a/archive/${archive}/article/${article}`)
+    return api.get(`/a/archive/${archive}/article/${article}`)
 }
 // 添加
 export function APIpostArchiveArticle(archive, data) {
-    return api2.post(`/a/archive/${archive}/article`, data)
+    return api.post(`/a/archive/${archive}/article`, data)
 }
 // 删除
 export function APIdeleteArchiveArticle(archive, article) {
-    return api2.delete(`/a/archive/${archive}/article/${article}`)
+    return api.delete(`/a/archive/${archive}/article/${article}`)
 }
 // 所属档案的公示的列表
 export function APIgetListArticleArchive(archive, params) {
-    return api2.get(`/a/archive/${archive}/announce`, { params: params })
+    return api.get(`/a/archive/${archive}/announce`, { params: params })
 }
 export function APIpostArticleArchive(archive, data) {
-    return api2.post(`/a/archive/${archive}/announce`, data)
+    return api.post(`/a/archive/${archive}/announce`, data)
 }
 export function APIdeleteArticleArchive(archive, aid) {
-    return api2.delete(`a/archive/${archive}/announce/${aid}`)
+    return api.delete(`a/archive/${archive}/announce/${aid}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示阅读 /api/a/ Articleread
 // 列表
 export function APIgetArticlereadList(params) {
-    return api2.get('/a/articleread', { params: params })
+    return api.get('/a/articleread', { params: params })
 }
 // 添加
 export function APIpostArticleread(data) {
-    return api2.post('/a/articleread', data)
+    return api.post('/a/articleread', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示任务
 // 列表
 export function APIgetTaskList(params) {
-    return api2.get('/a/task', { params: params })
+    return api.get('/a/task', { params: params })
 }
 // 详情
 export function APIgetTaskDetails(id) {
-    return api2.get('/a/task/' + id)
+    return api.get('/a/task/' + id)
 }
 // 删除
 export function APIdeleteTask(id) {
-    return api2.delete('/a/task/' + id)
+    return api.delete('/a/task/' + id)
 }
 // 修改
 export function APIputTask(id, data) {
-    return api2.put('/a/task/' + id, data)
+    return api.put('/a/task/' + id, data)
 }
 // 添加
 export function APIpostTask(data) {
-    return api2.post('/a/task', data)
+    return api.post('/a/task', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 任务派发 /api/a/tasksd
 // 列表
 export function APIgetTasksdList(params) {
-    return api2.get('/a/task-fac', { params: params })
+    return api.get('/a/task-fac', { params: params })
 }
 // 详情
 export function APIgetTasksdDetails(id) {
-    return api2.get(`/a/task-fac/${id}`)
+    return api.get(`/a/task-fac/${id}`)
 }
 // 删除
 export function APIdeleteTasksd(id) {
-    return api2.delete(`/a/task-fac/${id}`)
+    return api.delete(`/a/task-fac/${id}`)
 }
 // 修改
 export function APIputTasksd(id, data) {
-    return api2.put(`/a/task-fac/${id}`, data)
+    return api.put(`/a/task-fac/${id}`, data)
 }
 // 添加
 export function APIpostTasksd(data) {
-    return api2.post('/a/task-fac', data)
+    return api.post('/a/task-fac', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示
 // 列表
 export function APIgetEventArticleList(params) {
-    return api2.get('/announce', { params: params })
+    return api.get('/announce', { params: params })
 }
 // 详情
 export function APIgetEventArticleDetails(id) {
-    return api2.get(`/announce/${id}`)
+    return api.get(`/announce/${id}`)
 }
 // 删除
 export function APIdeleteEventArticle(id) {
-    return api2.delete(`/announce/${id}`)
+    return api.delete(`/announce/${id}`)
 }
 // 修改
 export function APIputEventArticle(id, data) {
-    return api2.put(`/announce/${id}`, data)
+    return api.put(`/announce/${id}`, data)
 }
 // 添加
 export function APIpostEventArticle(data) {
-    return api2.post('/announce', data)
+    return api.post('/announce', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 资源 Step APIpostFiles
 // 列表
 export function APIgetFileList(params) {
-    return api2.get('/file', { params: params })
+    return api.get('/file', { params: params })
 }
 // 删除
 export function APIdeleteFile(id) {
-    return api2.delete(`/file/${id}`)
+    return api.delete(`/file/${id}`)
 }
 // 添加
 export function APIpostFileList(data) {
-    return api2.post('/file', data)
+    return api.post('/file', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示 模板 Articletpl /api/a/
 // 列表
 export function APIgetArticletplList(params) {
-    return api2.get('/a/tpl', { params: params })
+    return api.get('/a/tpl', { params: params })
 }
 // 详情
 export function APIgetArticletplDetails(id) {
-    return api2.get('/a/tpl/' + id)
+    return api.get('/a/tpl/' + id)
 }
 // 删除
 export function APIdeleteArticletpl(id) {
-    return api2.delete('/a/tpl/' + id)
+    return api.delete('/a/tpl/' + id)
 }
 // 修改
 export function APIputArticletpl(id, data) {
-    return api2.put('/a/tpl/' + id, data)
+    return api.put('/a/tpl/' + id, data)
 }
 // 添加
 export function APIpostArticletpl(data) {
-    return api2.post('/a/tpl', data)
+    return api.post('/a/tpl', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 公示
 // 列表
 export function APIgetArticleList(params) {
-    return api2.get('/a/article', { params: params })
+    return api.get('/a/article', { params: params })
 }
 // 详情
 export function APIgetArticleDetails(id) {
-    return api2.get('/a/article' + id)
+    return api.get('/a/article' + id)
 }
 // 删除
 export function APIdeleteArticle(id) {
-    return api2.delete('/a/article' + id)
+    return api.delete('/a/article' + id)
 }
 // 修改
 export function APIputArticle(id, data) {
-    return api2.put('/a/article' + id, data)
+    return api.put('/a/article' + id, data)
 }
 // 添加
 export function APIpostArticle(data) {
-    return api2.post('/a/article', data)
+    return api.post('/a/article', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 档案
 // 列表
 export function APIgetArchiveList(params) {
-    return api2.get('/a/archive', { params: params })
+    return api.get('/a/archive', { params: params })
 }
 // 删除
 export function APIdeleteArchive(id) {
-    return api2.delete(`/a/archive/${id}`)
+    return api.delete(`/a/archive/${id}`)
 }
 // 修改
 export function APIputArchive(id, data) {
-    return api2.put(`/a/archive/${id}`, data)
+    return api.put(`/a/archive/${id}`, data)
 }
 // 添加
 export function APIpostArchive(data) {
-    return api2.post('/a/archive', data)
+    return api.post('/a/archive', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -681,15 +679,15 @@ export function APIgetChinaRegion(params) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 导入房屋任务列表
 export function APIgetFilesList(params) {
-    return api2.get('/houseimptask', { params: params })
+    return api.get('/houseimptask', { params: params })
 }
 export function APIpostFilesList(data) {
-    return api2.post('/houseimptask', data)
+    return api.post('/houseimptask', data)
 }
 // 资讯
 // 资讯类别管理列表
 export function APIgetInforCategoryList(params) {
-    return api2.get('/newscate', { params: params })
+    return api.get('/newscate', { params: params })
 }
 // 资讯类别管理添加
 
@@ -702,45 +700,45 @@ export function APIputInforCategory(id, data) {
 }
 // 资讯类别管理删除
 export function APIdeleteInforCategory(id) {
-    return api2.delete(`/newscate/${id}`)
+    return api.delete(`/newscate/${id}`)
 }
 
 // 资讯管理列表
 export function APIgetInforManageList(params) {
-    return api2.get('/news', { params: params })
+    return api.get('/news', { params: params })
 }
 // 资讯管理详情
 export function APIgetInforManageDetails(id) {
-    return api2.get(`/news/${id}`)
+    return api.get(`/news/${id}`)
 }
 // 资讯管理添加
 export function APIpostInforManage(data) {
-    return api2.post('/news', data)
+    return api.post('/news', data)
 }
 // 资讯管理修改
 export function APIputInforManage(id, data) {
-    return api2.put(`/news/${id}`, data)
+    return api.put(`/news/${id}`, data)
 }
 // 资讯管理删除
 export function APIdeleteInforManage(id) {
-    return api2.delete(`/news/${id}`)
+    return api.delete(`/news/${id}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 备案
 export function APIgetRecordList(params) {
-    return api2.get('/filing', { params: params })
+    return api.get('/filing', { params: params })
 }
 export function APIpostRecord(data) {
-    return api2.post('/filing', data)
+    return api.post('/filing', data)
 }
 export function APIputRecord(id, data) {
-    return api2.put(`/filing/${id}`, data)
+    return api.put(`/filing/${id}`, data)
 }
 export function APIdeleteRecord(id) {
-    return api2.delete(`/filing/${id}`)
+    return api.delete(`/filing/${id}`)
 }
 export function APIgetRecordDetail(id) {
-    return api2.get(`/filing/${id}`)
+    return api.get(`/filing/${id}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -913,75 +911,75 @@ export function APIdeleteGroupPerms(gid) {
 // 类别
 // 列表
 export function APIgetTypeList(kind, params) {
-    return api2.get(`/kind/${kind}/cat`, { params: params })
+    return api.get(`/kind/${kind}/cat`, { params: params })
 }
 // 删除
 export function APIdeleteType(kind, id) {
-    return api2.delete(`/kind/${kind}/cat/${id}`)
+    return api.delete(`/kind/${kind}/cat/${id}`)
 }
 // 修改
 export function APIputType(kind, id, data) {
-    return api2.put(`/kind/${kind}/cat/${id}`, data)
+    return api.put(`/kind/${kind}/cat/${id}`, data)
 }
 // 添加
 export function APIpostType(kind, data) {
-    return api2.post(`/kind/${kind}/cat`, data)
+    return api.post(`/kind/${kind}/cat`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // APP 管理
 // 列表
 export function APIgetAPPList(params) {
-    return api2.get('/apps', { params: params })
+    return api.get('/apps', { params: params })
 }
 // 详情
 export function APIgetAPPListDetails(id) {
-    return api2.get(`/apps/${id}`)
+    return api.get(`/apps/${id}`)
 }
 // 删除
 export function APIdeleteAPP(id) {
-    return api2.delete(`/apps/${id}`)
+    return api.delete(`/apps/${id}`)
 }
 // 修改
 export function APIputAPP(id, data) {
-    return api2.put(`/apps/${id}`, data)
+    return api.put(`/apps/${id}`, data)
 }
 // 添加
 export function APIpostAPP(data) {
-    return api2.post('/apps', data)
+    return api.post('/apps', data)
 }
 // APP 菜单管理
 // 列表
 export function APIgetAppMenuList(params) {
-    return api2.get('/appmenu', { params: params })
+    return api.get('/appmenu', { params: params })
 }
 // 删除
 export function APIdeleteAppMenu(id) {
-    return api2.delete(`/appmenu/${id}`)
+    return api.delete(`/appmenu/${id}`)
 }
 // 修改
 export function APIputAppMenu(id, data) {
-    return api2.put(`/appmenu/${id}`, data)
+    return api.put(`/appmenu/${id}`, data)
 }
 // 添加
 export function APIpostAppMenu(data) {
-    return api2.post('/appmenu', data)
+    return api.post('/appmenu', data)
 }
 // APP 版本管理
 // 列表
 export function APIgetAppVersionList(params) {
-    return api2.get('/appversion', { params: params })
+    return api.get('/appversion', { params: params })
 }
 // 删除
 export function APIdeleteAppVersion(id) {
-    return api2.delete(`/appversion/${id}`)
+    return api.delete(`/appversion/${id}`)
 }
 // 修改
 export function APIputAppVersion(id, data) {
-    return api2.put(`/appversion/${id}`, data)
+    return api.put(`/appversion/${id}`, data)
 }
 // 添加
 export function APIpostAppVersion(data) {
-    return api2.post('/appversion', data)
+    return api.post('/appversion', data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 企业
@@ -1067,23 +1065,23 @@ export function APIgetLoginUserGroupPerms(params) {
 // 产权
 // 列表
 export function APIgetPropertyList(params) {
-    return api2.get('/house-property', { params: params })
+    return api.get('/house-property', { params: params })
 }
 // 详情
 export function APIgetPropertyDetails(log) {
-    return api2.get(`/house-property/${log}`)
+    return api.get(`/house-property/${log}`)
 }
 // 删除
 export function APIdeleteProperty(log) {
-    return api2.delete(`/house-property/${log}`)
+    return api.delete(`/house-property/${log}`)
 }
 // 修改
 export function APIputProperty(id, data) {
-    return api2.put(`/house-property/${id}`, data)
+    return api.put(`/house-property/${id}`, data)
 }
 // 添加
 export function APIpostProperty(data) {
-    return api2.post('/house-property', data)
+    return api.post('/house-property', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -1146,186 +1144,186 @@ export function APIpostGetOpts(data) {
 // 配置选项
 // 列表
 export function APIgetOptsValList(params) {
-    return api2.get('/sysoptitem', { params: params })
+    return api.get('/sysoptitem', { params: params })
 }
 // 删除
 export function APIdeleteOptsVal(id) {
-    return api2.delete('/sysoptitem/' + id)
+    return api.delete('/sysoptitem/' + id)
 }
 // 修改
 export function APIputOptsVal(id, data) {
-    return api2.put('/sysoptitem/' + id, data)
+    return api.put('/sysoptitem/' + id, data)
 }
 // 添加
 export function APIpostOptsVal(data) {
-    return api2.post('/sysoptitem', data)
+    return api.post('/sysoptitem', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 配置
 // 列表
 export function APIgetOptsList(params) {
-    return api2.get('/sysopt', { params: params })
+    return api.get('/sysopt', { params: params })
 }
 // 删除
 export function APIdeleteOpts(id) {
-    return api2.delete('/sysopt/' + id)
+    return api.delete('/sysopt/' + id)
 }
 // 修改
 export function APIputOpts(id, data) {
-    return api2.put('/sysopt/' + id, data)
+    return api.put('/sysopt/' + id, data)
 }
 // 添加
 export function APIpostOpts(data) {
-    return api2.post('/sysopt', data)
+    return api.post('/sysopt', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 房屋
 // 列表
 export function APIgetHouseListSort(params) {
-    return api2.get('/houses-able', { params: params })
+    return api.get('/houses-able', { params: params })
 }
 // 列表
 export function APIgetHouseListHouse(params) {
-    return api2.get('/houses', { params: params })
+    return api.get('/houses', { params: params })
 }
 // 详情
 export function APIgetHouseDetailsHouse(id) {
-    return api2.get('/houses/' + id)
+    return api.get('/houses/' + id)
 }
 // 删除
 export function APIdeleteHouseHouse(id) {
-    return api2.delete('/houses/' + id)
+    return api.delete('/houses/' + id)
 }
 // 修改
 export function APIputHouseHouse(id, data) {
-    return api2.put('/houses/' + id, data)
+    return api.put('/houses/' + id, data)
 }
 // 添加
 export function APIpostHouseHouse(data) {
-    return api2.post('/houses', data)
+    return api.post('/houses', data)
 }
 // 批量修改
 export function APIputAllHouseHouse(data) {
-    return api2.put('/houses-batch', data)
+    return api.put('/houses-batch', data)
 }
 // 房屋成员
 // 列表
 export function APIgetHouseNumbersSort(params) {
-    return api2.get('/house-user', { params: params })
+    return api.get('/house-user', { params: params })
 }
 // 添加
 export function APIpostHouseNumbers(data) {
-    return api2.post('/house-user', data)
+    return api.post('/house-user', data)
 }
 // 删除
 export function APIdeleteHouseNumbers(data) {
-    return api2.delete('/house-user', data)
+    return api.delete('/house-user', data)
 }
 // 房屋绑定申请
 // 列表
 export function APIgetHouseBind(params) {
-    return api2.get('/house-bind', { params: params })
+    return api.get('/house-bind', { params: params })
 }
 // 详情
 export function APIgetHouseBindDetails(id) {
-    return api2.get(`/house-bind/${id}`)
+    return api.get(`/house-bind/${id}`)
 }
 // 修改
 export function APIputHouseBind(id, data) {
-    return api2.put(`/house-bind/${id}`, data)
+    return api.put(`/house-bind/${id}`, data)
 }
 // 添加
 export function APIpostHouseBind(data) {
-    return api2.post('/house-bind', data)
+    return api.post('/house-bind', data)
 }
 // 删除
 export function APIdeleteHouseBind(id, data) {
-    return api2.delete(`/house-bind/${id}`, data)
+    return api.delete(`/house-bind/${id}`, data)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 单元
 // 列表
 export function APIgetUnitsListHouse(params) {
-    return api2.get('/units', { params: params })
+    return api.get('/units', { params: params })
 }
 // 详情
 export function APIgetUnitsDetailsHouse(id) {
-    return api2.get('/units/' + id)
+    return api.get('/units/' + id)
 }
 // 删除
 export function APIdeleteUnitsHouse(id) {
-    return api2.delete('/units/' + id)
+    return api.delete('/units/' + id)
 }
 // 修改
 export function APIputUnitsHouse(id, data) {
-    return api2.put('/units/' + id, data)
+    return api.put('/units/' + id, data)
 }
 // 添加
 export function APIpostUnitsHouse(data) {
-    return api2.post('/units', data)
+    return api.post('/units', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 楼栋
 // 列表
 export function APIgetBuildListHouse(params) {
-    return api2.get('/buildings', { params: params })
+    return api.get('/buildings', { params: params })
 }
 // 详情
 export function APIgetBuildDetailsHouse(id) {
-    return api2.get('/buildings/' + id)
+    return api.get('/buildings/' + id)
 }
 // 删除
 export function APIdeleteBuildHouse(id) {
-    return api2.delete('/buildings/' + id)
+    return api.delete('/buildings/' + id)
 }
 // 修改
 export function APIputBuildHouse(id, data) {
-    return api2.put('/buildings/' + id, data)
+    return api.put('/buildings/' + id, data)
 }
 // 添加
 export function APIpostBuildHouse(data) {
-    return api2.post('/buildings', data)
+    return api.post('/buildings', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 小区
 // 列表
 export function APIgetResidentialListHouse(params) {
-    return api2.get('/zones', { params: params })
+    return api.get('/zones', { params: params })
 }
 // 详情
 export function APIgetResidentialDetailsHouse(id) {
-    return api2.get('/zones/' + id)
+    return api.get('/zones/' + id)
 }
 // 删除
 export function APIdeleteResidentialHouse(id) {
-    return api2.delete('/zones/' + id)
+    return api.delete('/zones/' + id)
 }
 // 修改
 export function APIputResidentialHouse(id, data) {
-    return api2.put('/zones/' + id, data)
+    return api.put('/zones/' + id, data)
 }
 // 添加
 export function APIpostResidentialHouse(data) {
-    return api2.post('/zones', data)
+    return api.post('/zones', data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 申请 小区
 // 列表
 export function APIgetResidentialList(params) {
-    return api2.get('/zone-com-apply', { params: params })
+    return api.get('/zone-com-apply', { params: params })
 }
 // 详情
 export function APIgetResidentialDetails(id) {
-    return api2.get('/zone-com-apply/' + id)
+    return api.get('/zone-com-apply/' + id)
 }
 // 审批
 export function APIputResidential(id, data) {
-    return api2.put('/zone-com-apply/' + id, data)
+    return api.put('/zone-com-apply/' + id, data)
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -1357,16 +1355,16 @@ export function APIeditPassword(data) {
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 分类
 export function APIpostkind(kind, data) {
-    return api2.post(`/kind/${kind}/cat`, data)
+    return api.post(`/kind/${kind}/cat`, data)
 }
 export function APIgetKindList(kind, params) {
-    return api2.get(`/kind/${kind}/cat`, { params: params })
+    return api.get(`/kind/${kind}/cat`, { params: params })
 }
 export function APIputKind(kind, cat, data) {
-    return api2.put(`/kind/${kind}/cat/${cat}`, data)
+    return api.put(`/kind/${kind}/cat/${cat}`, data)
 }
 export function APIdeleteKind(kind, cat) {
-    return api2.delete(`/kind/${kind}/cat/${cat}`)
+    return api.delete(`/kind/${kind}/cat/${cat}`)
 }
 /* --------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------------------------------------- */
@@ -1537,144 +1535,144 @@ export function APIgetSurveyStatus(survey) {
 // 事件
 // 列表
 export function APIgetActivityEventList(params) {
-    return api2.get('/vein', { params: params })
+    return api.get('/vein', { params: params })
 }
 // 详情
 export function APIgetActivityEventDetails(id) {
-    return api2.get(`/vein/${id}`)
+    return api.get(`/vein/${id}`)
 }
 // 删除
 export function APIdeleteActivityEvent(id) {
-    return api2.delete(`/vein/${id}`)
+    return api.delete(`/vein/${id}`)
 }
 // 修改
 export function APIputActivityEvent(id, data) {
-    return api2.put(`/vein/${id}`, data)
+    return api.put(`/vein/${id}`, data)
 }
 // 添加
 export function APIpostActivityEvent(data) {
-    return api2.post('/vein', data)
+    return api.post('/vein', data)
 }
 // 事件活动
 export function APIgetActivitiesEventList(vein, params) {
-    return api2.get(`/vein/${vein}/docs`, { params: params })
+    return api.get(`/vein/${vein}/docs`, { params: params })
 }
 // 删除
 export function APIdeleteActivitiesEvent(vein, data) {
-    return api2.delete(`/vein/${vein}/docs`, data)
+    return api.delete(`/vein/${vein}/docs`, data)
 }
 // 添加
 export function APIpostActivitiesEvent(vein, data) {
-    return api2.post(`/vein/${vein}/docs`, data)
+    return api.post(`/vein/${vein}/docs`, data)
 }
 // 访问记录
 export function APIRecordList(params) {
-    return api2.get('/visitlog', { params: params })
+    return api.get('/visitlog', { params: params })
 }
 // 人员管理
 export function APIgetPersonnelManageList(params) {
-    return api2.get('/people', { params: params })
+    return api.get('/people', { params: params })
 }
 // 详情
 export function APIgetPersonnelManageDetails(id) {
-    return api2.get(`/people/${id}`)
+    return api.get(`/people/${id}`)
 }
 // 删除
 export function APIdeletePersonnelManage(id) {
-    return api2.delete(`/people/${id}`)
+    return api.delete(`/people/${id}`)
 }
 // 修改
 export function APIputPersonnelManage(id, data) {
-    return api2.put(`/people/${id}`, data)
+    return api.put(`/people/${id}`, data)
 }
 // 添加
 export function APIpostPersonnelManage(data) {
-    return api2.post('/people', data)
+    return api.post('/people', data)
 }
 // 房屋导入任务
 export function APIgetHouseimptpl() {
-    return api2.get('/houseimptpl')
+    return api.get('/houseimptpl')
 }
 // 人员导入任务
 export function APIgetPersonimptpl() {
-    return api2.get('/personimptpl')
+    return api.get('/personimptpl')
 }
 // 系统标签库管理
 export function APIgetPersonnelLabels(params) {
-    return api2.get('/systag', { params: params })
+    return api.get('/systag', { params: params })
 }
 export function APIdeletePersonnelLabels(data) {
-    return api2.delete('/systag', data)
+    return api.delete('/systag', data)
 }
 export function APIpostPersonnelLabels(data) {
-    return api2.post('/systag', data)
+    return api.post('/systag', data)
 }
 // 对象标签
 export function APIpostPersonnelTag(data) {
-    return api2.post('/tag', data)
+    return api.post('/tag', data)
 }
 export function APIgetPersonnelTag(params) {
-    return api2.get('/tag', { params: params })
+    return api.get('/tag', { params: params })
 }
 export function APIgetPersonnelTaglog(params) {
-    return api2.get('/taglog', { params: params })
+    return api.get('/taglog', { params: params })
 }
 // 人员导入
 export function APIgetPersonimptask(params) {
-    return api2.get('/personimptask', { params: params })
+    return api.get('/personimptask', { params: params })
 }
 // 模板
 export function APIgetPersonimptpl_1() {
-    return api2.get('/personimptpl')
+    return api.get('/personimptpl')
 }
 export function APIpostPersonimptask(data) {
-    return api2.post('/personimptask', data)
+    return api.post('/personimptask', data)
 }
 export function APIdeletePersonimptask(id) {
-    return api2.delete(`/personimptask/${id}`)
+    return api.delete(`/personimptask/${id}`)
 }
 // 共享
 // 共享种类
 export function APIgetShareCategoryList(params) {
-    return api2.get('/share/kind', { params: params })
+    return api.get('/share/kind', { params: params })
 }
 // 删除
 export function APIdeleteShareCategory(id) {
-    return api2.delete(`/share/kind/${id}`)
+    return api.delete(`/share/kind/${id}`)
 }
 // 修改
 export function APIputShareCategory(id, data) {
-    return api2.put(`/share/kind/${id}`, data)
+    return api.put(`/share/kind/${id}`, data)
 }
 // 添加
 export function APIpostShareCategory(data) {
-    return api2.post('/share/kind', data)
+    return api.post('/share/kind', data)
 }
 // 为种类划分部门
 // 添加
 export function APIgetShareCategoryUserGroupList(params) {
-    return api2.get('/share/kind-group', { params: params })
+    return api.get('/share/kind-group', { params: params })
 }
 export function APIpostShareCategoryUserGroup(data) {
-    return api2.post('/share/kind-group', data)
+    return api.post('/share/kind-group', data)
 }
 // 删除
 export function APIdeleteShareCategoryUserGroup(params) {
-    return api2.delete('/share/kind-group', { params: params })
+    return api.delete('/share/kind-group', { params: params })
 }
 // 业务
 export function APIgetShareServicesList(params) {
-    return api2.get('/share/biz', { params: params })
+    return api.get('/share/biz', { params: params })
 }
 // 删除
 export function APIdeleteShareServices(id) {
-    return api2.delete(`/share/biz/${id}`)
+    return api.delete(`/share/biz/${id}`)
 }
 // 修改
 export function APIputShareServices(id, data) {
-    return api2.put(`/share/biz/${id}`, data)
+    return api.put(`/share/biz/${id}`, data)
 }
 // 添加
 export function APIpostShareServices(data) {
-    return api2.post('/share/biz', data)
+    return api.post('/share/biz', data)
 }

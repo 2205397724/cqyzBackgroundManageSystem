@@ -9,7 +9,7 @@
 // ---------------------------------------------------------------------------------------
 // 只能在数组后面追加值，不能在数组前面插入值
 // ---------------------------------------------------------------------------------------
-import api2 from '@/api/index2.js'
+import api from '@/api/request'
 const opts = {
     // 评论状态
     comment_status: [{
@@ -831,7 +831,7 @@ const opts = {
 }
 
 export async function getOpts(arr) {
-    const res = await api2.post('/optitem', {
+    const res = await api.post('/optitem', {
         lab: arr
     })
     // console.log(res)

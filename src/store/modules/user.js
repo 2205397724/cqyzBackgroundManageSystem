@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { piniaStore } from '@/store'
-import { ElMessage } from 'element-plus'
 import {
     APIlogin,
     APIgetUserinfo,
@@ -23,7 +22,9 @@ export const useUserStore = defineStore(
             china_code: '',
             gid: '',
             isChooseCity: false,
-            groupChinaCode: ''
+            groupChinaCode: '',
+            //后加的
+            uid:localStorage.uid || '',
         }),
         getters: {
             isLogin: state => {
@@ -44,16 +45,14 @@ export const useUserStore = defineStore(
                         this.name = res.data.username
                         this.time = res.data.expires_in + Date.now() / 1000
                         this.token = res.data.access_token
+                        this.account = this.name
+                        this.failure_time = this.time
                         localStorage.setItem('account', this.name)
                         localStorage.setItem('token', this.token)
                         localStorage.setItem('failure_time', this.time)
-                        this.account = this.name
-                        this.failure_time = this.time
-                        ElMessage.success('登录成功')
-                        this.getInfo()
-                        resolve()
+                        resolve(res.data)
                     }).catch(error => {
-                        reject(error)
+                        reject({})
                     })
                 })
             },
@@ -63,7 +62,6 @@ export const useUserStore = defineStore(
                     localStorage.removeItem('account')
                     localStorage.removeItem('token')
                     localStorage.removeItem('failure_time')
-                    sessionStorage.removeItem('isChooseCity')
                     this.account = ''
                     this.token = ''
                     this.failure_time = ''
@@ -79,10 +77,29 @@ export const useUserStore = defineStore(
                         let data = {
                             info:res.data
                         }
+                        localStorage.setItem('uid',res.data.id)
                         localStorage.setItem('user_info',JSON.stringify({[res.data.id]:data}))
-                        resolve()
+                        resolve(res.data)
                     }).catch(error => {
-                        console.log(error)
+                        reject({})
+                    })
+                })
+            },
+            //获取用户组
+            getGroups(){
+                return new Promise((resolve, reject) => {
+                    APIgetLoginUserGroup().then(res => {
+                        if (res.data.length > 0) {
+                            let data = {
+                                groups:res.data[0]
+                            }
+                            localStorage.setItem('user_info',JSON.stringify({[this.uid]:data}))
+                            resolve(res.data)
+                        } else {
+                            reject({})
+                        }
+                    }).catch(error => {
+                        reject({})
                     })
                 })
             },
@@ -134,18 +151,9 @@ export const useUserStore = defineStore(
                     }
                 })
             },
-            // setPermissions(data){
-            //    return new Promise(resolve=>{
-            //     for(let i=0;i<data.length;i++){
-            //         this.permissions.push(data[0])
-            //     }
-            //     resolve()
-            //    })
-            // },
             editPassword(data) {
                 return new Promise(resolve => {
                     APIeditPassword({ password: data.password }).then(res => {
-                        ElMessage.success(res.msg)
                         resolve(res)
                     })
                 })
