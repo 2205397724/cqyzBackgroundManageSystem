@@ -24,11 +24,6 @@
                             <span>{{ getOptVal(opts_all.obj.sys_is_force,scope.row.force) }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="url" label="下载地址">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.url }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="status" label="状态" width="160">
                         <template #default="scope">
                             <el-switch

@@ -34,67 +34,67 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="area_live" label="住宅总面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_live }} m²</span>
+                        <span>{{ scope.row.area_live }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="总建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                        <span>{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_live_not" label="非住宅面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_live_not }} m²</span>
+                        <span>{{ scope.row.area_live_not }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_floor" label="楼层数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_floor }} 层</span>
+                        <span>{{ scope.row.cnt_floor }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_unit" label="单元数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_unit }} 个</span>
+                        <span>{{ scope.row.cnt_unit }} 个</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_live" label="住宅总套数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_live }} 套</span>
+                        <span>{{ scope.row.cnt_live }} 套</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="by_build_owner" label="建设业主单位" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.by_build_owner }} </span>
+                        <span>{{ scope.row.by_build_owner }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_build_end" label="建成时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.time_build_end }} </span>
+                        <span>{{ scope.row.time_build_end }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_turn" label="移交时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.time_turn }} </span>
+                        <span>{{ scope.row.time_turn }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_use" label="投用时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.time_use }} </span>
+                        <span>{{ scope.row.time_use }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_lift" label="电梯数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_lift }} 台</span>
+                        <span>{{ scope.row.cnt_lift }} 台</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_live_not" label="非住宅面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_live_not }} m²</span>
+                        <span>{{ scope.row.cnt_live_not }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="by_build" label="建设单位" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.by_build }} </span>
+                        <span>{{ scope.row.by_build }} </span>
                     </template>
                 </el-table-column>
             </el-table>

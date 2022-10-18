@@ -55,6 +55,17 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </page-main>
         <el-dialog v-model="switch_examine" :title="str_title" width="50%">
             <div>
@@ -211,8 +222,22 @@ const getShareCategory = () => {
         console.log(res)
         data.list = res
         loading_tab.value = false
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
+// 监听分页
+watch(page, () => {
+    getShareCategory()
+})
 const refreshFunc = () => {
     getShareCategory()
 }
@@ -319,6 +344,8 @@ getOpts(['flow_active', 'card_type', 'toushu_return_type']).then(res => {
 })
 </script>
 <style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 .btn button {
     padding: 20px 40px;
 }

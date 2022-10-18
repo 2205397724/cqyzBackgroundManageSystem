@@ -85,33 +85,33 @@
                 >
                     <el-table-column prop="username" label="用户名" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.username }} </span>
+                            <span>{{ scope.row.username }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="mobile" label="手机号" width="180">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.mobile }} </span>
+                            <span>{{ scope.row.mobile }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column label="用户ID" width="250">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                            <span>{{ scope.row.id }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="id_card" label="身份证号" width="220">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.id_card }} </span>
+                            <span>{{ scope.row.id_card }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="gender" label="性别" width="90">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.gender, scope.row.gender) }}
+                            <span>{{ getOptVal(opts_all.obj.gender, scope.row.gender) }}
                             </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_cert" label="认证状态" width="120">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.status_all, scope.row.status_cert)
+                            <span>{{ getOptVal(opts_all.obj.status_all, scope.row.status_cert)
                             }} </span>
                         </template>
                     </el-table-column>

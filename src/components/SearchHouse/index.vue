@@ -122,22 +122,22 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="floor_truth" label="物理层" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.floor_truth }} 层</span>
+                        <span>{{ scope.row.floor_truth }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="floor_alias" label="名义层" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.floor_alias }} 层</span>
+                        <span>{{ scope.row.floor_alias }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="house_num" label="房号" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.house_num }} </span>
+                        <span>{{ scope.row.house_num }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                        <span>{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column />

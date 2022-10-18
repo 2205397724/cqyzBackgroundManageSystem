@@ -14,31 +14,16 @@
                             <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="appid" label="APPID" width="240">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.appid }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="china_code" label="区域代码">
                         <template #default="scope">
                             <span>{{ scope.row.china_code }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="url" label="跳转地址">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.url }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="place" label="菜单位置">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.sele_menu,scope.row.place) }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="type" label="跳转方式">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.type }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="sort" label="排序" width="80">
                         <template #default="scope">
                             <span>{{ scope.row.sort }} </span>
@@ -52,17 +37,6 @@
                             </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="id" label="APP 相关" width="250">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ addMenuForm. }} </span>
-                        </template>
-                    </el-table-column> -->
-                    <!-- <el-table-column prop="kind" label="状态
-                    " width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.type_type,scope.row.kind) }} </span>
-                        </template>
-                    </el-table-column> -->
 
                     <el-table-column fixed="right" label="操作" width="180">
                         <template #default="scope">

@@ -44,17 +44,13 @@
                         <el-table-column prop="reply" label="理由" width="180" />
                         <el-table-column prop="type" label="类型" width="120">
                             <template #default="scope">
-                                <span
-                                    style="margin-left: 10px;"
-                                >{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
+                                <span>{{ getOptVal(opts_all.obj.enterprise_type,scope.row.type) }}
                                 </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="process_status" label="状态" width="90">
                             <template #default="scope">
-                                <span
-                                    style="margin-left: 10px;"
-                                >{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }}
+                                <span>{{ getOptVal(opts_all.obj.status_all,scope.row.process_status) }}
                                 </span>
                             </template>
                         </el-table-column>

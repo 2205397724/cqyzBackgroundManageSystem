@@ -34,32 +34,32 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="area_floor" label="总占地面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_floor }} m²</span>
+                        <span>{{ scope.row.area_floor }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="总建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                        <span>{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_support" label="配套用房总面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_support }} m²</span>
+                        <span>{{ scope.row.area_support }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_building" label="楼栋数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_building }} 栋</span>
+                        <span>{{ scope.row.cnt_building }} 栋</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_live" label="住房总套数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_live }} 套</span>
+                        <span>{{ scope.row.cnt_live }} 套</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_support" label="配套用房总套数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_support }} 套</span>
+                        <span>{{ scope.row.cnt_support }} 套</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="company_build" label="建设单位名称" width="140" />

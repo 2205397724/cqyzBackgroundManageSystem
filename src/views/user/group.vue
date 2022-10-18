@@ -106,7 +106,7 @@
                 >
                     <el-table-column prop="name" label="用户组名称">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                            <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="id" label="用户组ID" width="300">
@@ -116,7 +116,7 @@
           </el-table-column> -->
                     <el-table-column prop="type" label="类型">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{
+                            <span>{{
                                 getOptVal(opts_all.obj.toushu_return_type, scope.row.type)
                             }}
                             </span>
@@ -479,24 +479,19 @@
             <el-table v-loading="loading_tab" :data="data_tab_roles.arr" class="tab_1">
                 <el-table-column label="角色名称" prop="name">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span>{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="标识" prop="spec">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.spec }} </span>
+                        <span>{{ scope.row.spec }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="角色ID" prop="id" width="250px">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="角色所属" prop="group_id" width="250px">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
-                    </template>
-                </el-table-column> -->
 
                 <el-table-column fixed="right" label="操作" width="80">
                     <template #default="scope">
@@ -568,24 +563,19 @@
             <el-table v-loading="loading_tab" :data="data_tab_user_roles.arr" class="tab_1">
                 <el-table-column label="角色名称" prop="name">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span>{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="标识" prop="spec">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.spec }} </span>
+                        <span>{{ scope.row.spec }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="角色ID" prop="id" width="250px">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="角色所属" prop="group_id" width="250px">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.group_id }} </span>
-                    </template>
-                </el-table-column> -->
 
                 <el-table-column fixed="right" label="操作" width="80">
                     <template #default="scope">

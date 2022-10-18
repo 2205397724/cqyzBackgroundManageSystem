@@ -107,27 +107,27 @@
             >
                 <el-table-column prop="id" label="产权ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="house_id" label="房屋ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.house_id }} </span>
+                        <span>{{ scope.row.house_id }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="code_property" label="产权证号" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.code_property }} </span>
+                        <span>{{ scope.row.code_property }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="code_room" label="地房籍号" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.code_room }} </span>
+                        <span>{{ scope.row.code_room }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="time_deal" label="交易时间" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.time_deal }} </span>
+                        <span>{{ scope.row.time_deal }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column />
@@ -229,9 +229,9 @@ const getTabListFunc = () => {
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
         console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res
-            total.value = res.length
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
 
     })
 }

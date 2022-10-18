@@ -7,17 +7,17 @@
             fdsafdsafdsafdsafdsafdsfafdsa
             </div>
         </el-dialog> -->
-        <div v-if="switch_choose_city" ref="chooseCityBigBox" class="chooseCityBox">
-            <div
+    <!-- <div v-if="switch_choose_city" ref="chooseCityBigBox" class="chooseCityBox">
+        <div
 
-                class="chooseCity"
-            >
-                <div class="p-t-10 p-l-20 size-ls ">请选择区域</div>
-                <div class="cityBox">
-                    <div v-for="(item,index) in city_list.arr" :key="index" :class="{city: isCity,city_1: cityIndex ==index && isCity_1}" @click="choose_city_end(item)">{{ item.name }}</div>
-                </div>
+            class="chooseCity"
+        >
+            <div class="p-t-10 p-l-20 size-ls ">请选择区域</div>
+            <div class="cityBox">
+                <div v-for="(item,index) in city_list.arr" :key="index" :class="{city: isCity,city_1: cityIndex ==index && isCity_1}" @click="choose_city_end(item)">{{ item.name }}</div>
             </div>
         </div>
+    </div> -->
     <div class="tools">
         <div class="buttons">
             <!-- <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">

@@ -20,39 +20,24 @@
             >
                 <el-table-column prop="name" label="分类名称">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                        <span>{{ scope.row.name }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="level" label="级别">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.level }} </span>
+                        <span>{{ scope.row.level }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="id" label="ID" width="250">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                        <span>{{ scope.row.id }} </span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="pid" label="上级ID" width="250">
-                    <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.pid }} </span>
-                    </template>
-                </el-table-column> -->
                 <el-table-column prop="sort" label="排序" sortable>
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.sort }} </span>
+                        <span>{{ scope.row.sort }} </span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="created_at" label="创建时间" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="updated_at" label="更新时间" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
-                        </template>
-                    </el-table-column> -->
                 <el-table-column fixed="right" label="操作" width="240">
                     <template #default="scope">
                         <el-button

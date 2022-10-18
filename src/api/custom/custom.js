@@ -1676,3 +1676,63 @@ export function APIputShareServices(id, data) {
 export function APIpostShareServices(data) {
     return api.post('/share/biz', data)
 }
+// 业务材料
+export function APIgetShareMaterialList(params) {
+    return api2.get('/share/biz-material', { params: params })
+}
+// 删除
+export function APIdeleteShareMaterial(id) {
+    return api2.delete(`/share/biz-material/${id}`)
+}
+// 修改
+export function APIputShareMaterial(id, data) {
+    return api2.put(`/share/biz-material/${id}`, data)
+}
+// 添加
+export function APIpostShareMaterial(data) {
+    return api2.post('/share/biz-material', data)
+}
+// 业务要件
+export function APIgetShareElementsList(params) {
+    return api2.get('/share/file', { params: params })
+}
+// 删除
+export function APIdeleteShareElements(id) {
+    return api2.delete(`/share/file/${id}`)
+}
+// 修改
+export function APIputShareElements(id, data) {
+    return api2.put(`/share/file/${id}`, data)
+}
+// 添加
+export function APIpostShareElements(data) {
+    return api2.post('/share/file', data)
+}
+// 共享记录
+export function APIgetShareDataList(params) {
+    return api2.get('/share/record', { params: params })
+}
+// 详情
+export function APIgetShareDataDetails(id) {
+    return api2.get(`/share/record/${id}`)
+}
+// 共享记录下的所有材料
+export function APIgetShareDataMaterialList(params) {
+    return api2.get('/share/record-material', { params: params })
+}
+// 补充
+export function APIputShareDataMaterial(id, data) {
+    return api2.put(`/share/record-material/${id}`, data)
+}
+// // 删除
+// export function APIdeleteShareData(id) {
+//     return api2.delete(`/share/record/${id}`)
+// }
+// // 修改
+// export function APIputShareData(id, data) {
+//     return api2.put(`/share/record/${id}`, data)
+// }
+// // 添加
+// export function APIpostShareData(data) {
+//     return api2.post('/share/record', data)
+// }

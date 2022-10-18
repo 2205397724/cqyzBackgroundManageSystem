@@ -120,6 +120,7 @@ import informationCategory from './modules/information/category.js'
 import shareData from './modules/share/shareData.js'
 import shareServicesManage from './modules/share/shareServicesManage.js'
 import shareCategory from './modules/share/shareCategory.js'
+import shareElements from './modules/share/shareElements.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
 import setupOption from './modules/setup/option.js'
@@ -248,8 +249,8 @@ const asyncRoutes = [{
     children: [
         shareCategory,
         shareData,
-        shareServicesManage
-
+        shareServicesManage,
+        shareElements
     ]
 },
 {
