@@ -139,20 +139,6 @@
                         </div>
                         <div v-show="article_tab.arr.length <= 0" class="size-lg">此公式无审核信息</div>
                     </el-scrollbar>
-                    <!-- </el-tab-pane>
-                <el-tab-pane label="附件" name="3">
-                    <el-scrollbar height="400px">
-                        <div class="details-box">
-                            <div v-for="(item,i) in data_details.item.affix" :key="item.file" class="item">
-                                <div class="left">附件{{ i }}</div>
-                                <div class="right">{{ VITE_APP_FOLDER_SRC + item.file }}</div>
-                                <div class="right">
-                                    <el-link :href="`${VITE_APP_FOLDER_SRC+item.file}`" target="_blank" type="danger" style="margin-left: 10px;">{{ item.title }} </el-link>
-                                </div>
-                            </div>
-                        </div>
-                    </el-scrollbar>
-                </el-tab-pane> -->
                 </el-tab-pane>
             </el-tabs>
             <template #footer>

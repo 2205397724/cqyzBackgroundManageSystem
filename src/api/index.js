@@ -40,6 +40,7 @@ api.interceptors.request.use(
              * 全局拦截请求发送前提交的参数
              * 以下代码为示例，在请求头里带上 token 信息
              */
+        console.log(userOutsideStore.isLogin)
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
             // request.headers['X-Cc'] = localStorage.getItem('china_code')
@@ -51,8 +52,8 @@ api.interceptors.request.use(
         var secret = 'secret'
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
-        // request.headers['X-Cc'] = localStorage.getItem('china_code')
-        request.headers['X-Cc'] = '500101'
+        request.headers['X-Cc'] = localStorage.getItem('china_code')
+        // request.headers['X-Cc'] = '500101'
         // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {
             // request.data = qs.stringify(request.data, {

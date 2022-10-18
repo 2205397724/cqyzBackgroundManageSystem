@@ -1,5 +1,13 @@
 <template>
-    <div v-if="switch_choose_city" ref="chooseCityBigBox" class="chooseCityBox">
+    <!-- <el-dialog
+            v-model="switch_choose_city" title="请选择地区fdsafdsa"
+            width="30%" :close-on-click-modal="false" :show-close="false"
+        >
+            <div class="cityBox">
+            fdsafdsafdsafdsafdsafdsfafdsa
+            </div>
+        </el-dialog> -->
+    <!-- <div v-if="switch_choose_city" ref="chooseCityBigBox" class="chooseCityBox">
         <div
 
             class="chooseCity"
@@ -9,14 +17,14 @@
                 <div v-for="(item,index) in city_list.arr" :key="index" :class="{city: isCity,city_1: cityIndex ==index && isCity_1}" @click="choose_city_end(item)">{{ item.name }}</div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="tools">
         <div class="buttons">
             <!-- <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">
                 <svg-icon name="pro" />
                 <span class="title">智慧物业</span>
             </span> -->
-            <span class="item" @click="switchCity">
+            <span class="item" @click="$eventBus.emit('global-choose-city')">
                 <el-icon><Switch /></el-icon>
                 <!-- <svg-icon name="switch" /> -->
             </span>

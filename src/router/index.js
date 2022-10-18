@@ -88,8 +88,7 @@ import superviseHome from './modules/supervise/home.js'
 import activityReview from './modules/supervise/review.js'
 import personnelManagement from './modules/supervise/personnels.js'
 import personnelLabels from './modules/supervise/labels.js'
-import shareServices from './modules/supervise/shareServices.js'
-import shareServicesManage from './modules/supervise/shareServicesManage.js'
+
 // // 统计
 // import statisticsComplaint from './modules/statistics/complaint.js'
 // import statisticsEnterprise from './modules/statistics/enterprise.js'
@@ -117,6 +116,11 @@ import eventRepair from './modules/event/repair.js'
 // 资讯
 import informationManage from './modules/information/manage.js'
 import informationCategory from './modules/information/category.js'
+// 共享
+import shareData from './modules/share/shareData.js'
+import shareServicesManage from './modules/share/shareServicesManage.js'
+import shareCategory from './modules/share/shareCategory.js'
+import shareElements from './modules/share/shareElements.js'
 // 设置
 import setupRegion from './modules/setup/region.js'
 import setupOption from './modules/setup/option.js'
@@ -139,9 +143,7 @@ const asyncRoutes = [{
         superviseHome,
         activityReview,
         personnelManagement,
-        personnelLabels,
-        shareServices,
-        shareServicesManage
+        personnelLabels
     ]
 },
 // {
@@ -236,6 +238,19 @@ const asyncRoutes = [{
     children: [
         informationManage,
         informationCategory
+    ]
+},
+{
+    meta: {
+        title: '共享',
+        icon: 'news',
+        auth: [' share', '*']
+    },
+    children: [
+        shareCategory,
+        shareData,
+        shareServicesManage,
+        shareElements
     ]
 },
 {

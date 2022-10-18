@@ -3,6 +3,7 @@ import { piniaStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import {
     APIlogin,
+    APIgetUserinfo,
     APIeditPassword,
     APIgetLoginUserGroup,
     APIgetGroupPerms
@@ -40,18 +41,17 @@ export const useUserStore = defineStore(
                 return new Promise((resolve, reject) => {
                     APIlogin(data).then(res => {
                         console.log(res)
-                        let utype = data.utype
-                        let name = data.username
-                        let time = res.data.expires_in + Date.now() / 1000
-                        let token = res.data.access_token
-                        localStorage.setItem('account', name)
-                        localStorage.setItem('token', token)
-                        localStorage.setItem('failure_time', time)
-                        this.account = name
-                        this.token = token
-                        this.failure_time = time
-                        this.utype = utype
+                        this.utype = res.data.auth_type
+                        this.name = res.data.username
+                        this.time = res.data.expires_in + Date.now() / 1000
+                        this.token = res.data.access_token
+                        localStorage.setItem('account', this.name || this.nickname || this.username)
+                        localStorage.setItem('token', this.token)
+                        localStorage.setItem('failure_time', this.time)
+                        this.account = this.name
+                        this.failure_time = this.time
                         ElMessage.success('登录成功')
+                        this.getInfo()
                         resolve()
                     }).catch(error => {
                         reject(error)
@@ -73,9 +73,24 @@ export const useUserStore = defineStore(
                     resolve()
                 })
             },
+            // 获取用户信息。
+            getInfo() {
+                return new Promise((resolve, reject) => {
+                    APIgetUserinfo().then(res => {
+                        let data = {
+                            info: res.data
+                        }
+                        localStorage.setItem('user_info', JSON.stringify({ [res.data.id]: data }))
+                        resolve()
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                })
+            },
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
+                    console.log(localStorage.getItem('utype'))
                     if (localStorage.getItem('utype') == 'pt') {
                         this.permissions = ['*']
                         resolve(this.permissions)
@@ -96,21 +111,26 @@ export const useUserStore = defineStore(
                         // })
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
-                            let currentGId = res.data[0].id
-                            sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
-                            APIgetGroupPerms(currentGId).then(res => {
-                                console.log(res)
-                                res.data.forEach(item => {
-                                    for (let key in item) {
-                                        if (key == 'name') {
-                                            allPermisson.push(item[key])
+                            if (res.data.length > 0) {
+                                let currentGId = res.data[0].id
+                                sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
+                                APIgetGroupPerms(currentGId).then(res => {
+                                    console.log(res)
+                                    res.data.forEach(item => {
+                                        for (let key in item) {
+                                            if (key == 'name') {
+                                                allPermisson.push(item[key])
+                                            }
                                         }
-                                    }
+                                    })
+                                    console.log(allPermisson)
+                                    this.permissions = allPermisson
+                                    resolve(this.permissions)
                                 })
-                                console.log(allPermisson)
-                                this.permissions = allPermisson
-                                resolve(this.permissions)
-                            })
+                            } else {
+                                resolve('')
+                            }
+
                         })
                     }
                 })

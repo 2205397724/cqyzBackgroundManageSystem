@@ -21,45 +21,24 @@
                 >
                     <el-table-column prop="name" label="名称">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                            <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="level" label="级别">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.level }} </span>
+                            <span>{{ scope.row.level }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="id" label="ID" width="250">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.id }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="kind" label="分类种类">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ getOptVal(opts_all.obj.kind,scope.row.kind) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.kind,scope.row.kind) }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="pid" label="上级ID" width="250">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.pid }} </span>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="sort" label="排序">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.sort }} </span>
+                            <span>{{ scope.row.sort }} </span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="created_at" label="创建时间" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.created_at }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="updated_at" label="更新时间" width="180">
-                        <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.updated_at }} </span>
-                        </template>
-                    </el-table-column> -->
-
                     <el-table-column fixed="right" label="操作" width="250">
                         <template #default="scope">
                             <el-button
@@ -200,21 +179,21 @@ const dialogExamineCloseFunc = () => {
         APIputType(main_type.value, from_examine.item.id, from_examine.item).then(res => {
             // if (!res.code) {
             refreshFunc()
-            ElMessage.success(res.msg)
+            ElMessage.success('修改成功')
             switch_examine.value = false
             // }
         }).catch(err => {
-            from_error.msg = err.data
+            ElMessage.error('修改失败')
         })
     } else {
         APIpostType(main_type.value, from_examine.item).then(res => {
             // if (!res.code) {
             refreshFunc()
-            ElMessage.success(res.msg)
+            ElMessage.success('添加成功')
             switch_examine.value = false
             // }-
         }).catch(err => {
-            from_error.msg = err.data
+            ElMessage.error('添加失败')
         })
     }
 }
@@ -231,7 +210,7 @@ const getTabListFunc = () => {
 const deleteFunc = val => {
     APIdeleteType(main_type.value, val.id).then(res => {
         refreshFunc()
-        ElMessage.success(res.msg)
+        ElMessage.success('删除成功')
     })
 }
 // 添加

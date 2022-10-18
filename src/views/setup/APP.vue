@@ -16,17 +16,17 @@
                     </el-table-column>
                     <el-table-column prop="name" label="APP名称">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                            <span>{{ scope.row.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="china_code" label="区域代码">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.china_code }} </span>
+                            <span>{{ scope.row.china_code }} </span>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="id" label="appid" width="260">
                         <template #default="scope">
-                            <span style="margin-left: 10px;">{{ scope.row.id }} </span>
+                            <span>{{ scope.row.id }} </span>
                         </template>
                     </el-table-column> -->
                     <el-table-column prop="status" label="状态">

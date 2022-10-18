@@ -27,6 +27,7 @@
         </div>
         <Search />
         <AppSetting />
+        <ChooseCity></ChooseCity>
     </div>
 </template>
 
@@ -36,6 +37,7 @@ import MainSidebar from './components/MainSidebar/index.vue'
 import SubSidebar from './components/SubSidebar/index.vue'
 import Topbar from './components/Topbar/index.vue'
 import Search from './components/Search/index.vue'
+import ChooseCity from './components/ChooseCity/index.vue'
 import AppSetting from './components/AppSetting/index.vue'
 import { isExternalLink } from '@/util'
 

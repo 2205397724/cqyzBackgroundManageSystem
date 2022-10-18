@@ -417,7 +417,7 @@
                             >
                                 <el-table-column prop="name" label="项目部名称">
                                     <template #default="scope">
-                                        <span style="margin-left: 10px;">{{ scope.row.name }} </span>
+                                        <span>{{ scope.row.name }} </span>
                                     </template>
                                 </el-table-column>
                                 <!-- <el-table-column prop="id" label="项目部ID" width="300">
@@ -427,7 +427,7 @@
           </el-table-column> -->
                                 <el-table-column prop="type" label="类型">
                                     <template #default="scope">
-                                        <span style="margin-left: 10px;">{{
+                                        <span>{{
                                             getOptVal(opts_all.obj.toushu_return_type, scope.row.type)
                                         }}
                                         </span>
@@ -435,7 +435,7 @@
                                 </el-table-column>
                                 <el-table-column prop="type" label="所在区域">
                                     <template #default="scope">
-                                        <span style="margin-left: 10px;">{{ scope.row.region_cc }}</span>
+                                        <span>{{ scope.row.region_cc }}</span>
                                     </template>
                                 </el-table-column>
                                 <el-table-column label="成员">

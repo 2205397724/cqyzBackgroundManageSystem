@@ -80,22 +80,17 @@
                 <el-table-column prop="addr" label="地址" width="220" />
                 <el-table-column prop="area_live" label="住宅总面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_live }} m²</span>
+                        <span>{{ scope.row.area_live }} m²</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="area_build" label="总建筑面积" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.area_build }} m²</span>
+                        <span>{{ scope.row.area_build }} m²</span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="area_live_not" label="非住宅面积" width="140">
-                            <template #default="scope">
-                                <span style="margin-left: 10px;">{{ scope.row.area_live_not }} m²</span>
-                            </template>
-                        </el-table-column> -->
                 <el-table-column prop="cnt_floor" label="楼层数" width="140">
                     <template #default="scope">
-                        <span style="margin-left: 10px;">{{ scope.row.cnt_floor }} 层</span>
+                        <span>{{ scope.row.cnt_floor }} 层</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="cnt_unit" label="单元数" width="140">
