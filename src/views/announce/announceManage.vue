@@ -546,25 +546,29 @@
 import SearchUserGroup from '@/components/SearchUserGroup/index.vue'
 // import SearchUser from '@/components/SearchUser/index.vue'
 // import SearchFlowStep from '@/components/SearchFlowStep/index.vue'
-
+import { Loading, Search, Plus } from '@element-plus/icons-vue'
 // const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import {
     APIgetEventArticleList,
     APIgetEventArticleDetails,
     APIdeleteEventArticle,
     APIputEventArticle,
-    APIpostEventArticle
+    APIpostEventArticle,
+    APIpostArchiveAudit,
+    APIgetListArchiveAudit,
+    APIputArchiveAudit
 } from '@/api/custom/custom.js'
+import { onBeforeRouteLeave } from 'vue-router'
 import {
     reactive,
     ref,
     watch,
     nextTick
 } from 'vue'
-import {
-    ElMessage
-} from 'element-plus'
-import { Loading, Search, Plus } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { APIgetChinaRegion } from '@/api/custom/custom.js'
+import { getFilesKeys } from '@/util/files.js'
+import { getOpts, getOptVal } from '@/util/opts.js'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 数据
 // 搜索
@@ -624,7 +628,6 @@ watch(page, () => {
     sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
 })
-import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
     console.log(to)
     if (to.meta.title == '详情') {
@@ -634,7 +637,6 @@ onBeforeRouteLeave((to, from) => {
     }
 })
 // 同意拒绝提交
-import { getFilesKeys } from '@/util/files.js'
 const V = ref(null)
 const add_dialog_close = () => {
     if (active.value == 0) {
@@ -749,7 +751,6 @@ const getTabListFunc = () => {
         }
     })
 }
-const flag = ref(false)
 // 删除
 const deleteFunc = val => {
     APIdeleteEventArticle(val.id).then(res => {
@@ -838,7 +839,6 @@ const addServiceFunc = index => {
 // 步骤条
 const active = ref(0)
 const announce_id = ref('')
-const group_id = ref('')
 const total1 = ref(0)
 const next = () => {
     if (active.value == 0) {
@@ -857,11 +857,6 @@ const next = () => {
     }
 }
 // 审核
-import {
-    APIpostArchiveAudit,
-    APIgetListArchiveAudit,
-    APIputArchiveAudit
-} from '@/api/custom/custom.js'
 
 const switch_pass = ref(false)
 const from_pass = reactive({
@@ -966,7 +961,6 @@ const tree_item = reactive({
 
 const switch_choose_zone = ref(false)
 const selectedZone_id = ref('')
-import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
@@ -1040,7 +1034,7 @@ const checkNameFunc_1 = val => {
 refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import { getOpts, getOptVal } from '@/util/opts.js'
+
 const opts_all = reactive({
     obj: {
         status_all: []

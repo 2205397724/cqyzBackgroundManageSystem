@@ -231,7 +231,7 @@ const postFunc = () => {
             }
         }
     }
-    if (str_title.value == '修改业务') {
+    if (str_title.value == '修改要件') {
         console.log(data.obj)
         APIputShareElements(data.obj.id, data.obj).then(res => {
             refreshFunc()

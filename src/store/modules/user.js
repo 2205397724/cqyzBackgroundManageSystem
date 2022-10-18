@@ -41,14 +41,10 @@ export const useUserStore = defineStore(
                 return new Promise((resolve, reject) => {
                     APIlogin(data).then(res => {
                         console.log(res)
-                        this.utype = res.data.auth_type
-                        this.name = res.data.username
                         this.time = res.data.expires_in + Date.now() / 1000
                         this.token = res.data.access_token
-                        localStorage.setItem('account', this.name || this.nickname || this.username)
                         localStorage.setItem('token', this.token)
                         localStorage.setItem('failure_time', this.time)
-                        this.account = this.name
                         this.failure_time = this.time
                         ElMessage.success('登录成功')
                         this.getInfo()

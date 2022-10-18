@@ -92,7 +92,7 @@
                                     :error="err_add.obj&&err_add.obj.logo?err_add.obj.logo[0]:''"
                                 >
                                     <div class="searchUserGroup">
-                                        <SearchUserGroup ref="V" @checkName="checkNameFunc" />
+                                        <SearchUserGroup ref="V" v-model:name="userGroupName" @checkName="checkNameFunc" />
                                     </div>
                                 </el-form-item>
                             </el-col>
@@ -290,7 +290,8 @@ import {
     APIgetShareServicesList,
     APIdeleteShareServices,
     APIputShareServices,
-    APIpostShareServices
+    APIpostShareServices,
+    APIgetGroupList
 } from '@/api/custom/custom.js'
 import {
     ElMessage
@@ -341,6 +342,7 @@ watch(page, () => {
 })
 const V = ref(null)
 const dialogClosed = () => {
+    userGroupName.value = ''
     V.value.clearFunc()
 }
 const checkNameFunc = val => {
@@ -394,11 +396,30 @@ const postFunc = () => {
     //     }
     // })
 }
+const userGroupName = ref('')
 const examineListFunc = val => {
     str_title.value = '修改业务'
     data.switch = true
     data.obj = val
+    APIgetGroupList({ page: 1, per_page: 500 }).then(res => {
+        if (res.status == 200) {
+            console.log(res)
+            userGroupName.value = getUserGroupName(res.data, val.gid)
+        }
+    })
 }
+const getUserGroupName = (arr, key) => {
+    for (let i in arr) {
+        if (arr[i].id == key) {
+            return arr[i].name
+        }
+    }
+    return ''
+}
+const data_tab = reactive({
+    arr: []
+})
+
 const deleteFunc = val => {
     APIdeleteShareServices(val.id).then(res => {
         refreshFunc()

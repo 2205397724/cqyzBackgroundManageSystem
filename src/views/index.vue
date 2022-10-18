@@ -342,22 +342,6 @@ const getCityList = () => {
         console.log(res)
     })
 }
-// 选择地区弹出框
-const tree_item = ref({
-    id: '50',
-    name: '重庆市',
-    next_type: 'region',
-    type: 'region'
-})
-const checkFunc = val => {
-    choosed_city.value = val.china_code
-    console.log(val)
-    userStore.china_code = val.china_code
-    localStorage.setItem('china_code', val.china_code)
-}
-const show = reactive({
-    name: ''
-})
 // 选择 后确认按钮
 const choose_city_end = val => {
     if (!val.china_code) {
@@ -376,7 +360,6 @@ const choose_city_end = val => {
 // import { useRoute, useRouter } from 'vue-router'
 // const router = useRouter()
 // 进入首页进行判断
-import { auth, authAll } from '../util/index'
 const choose_city = () => {
     console.log(localStorage.getItem('utype'))
 
@@ -468,7 +451,6 @@ APIgetEchartsHome().then(res => {
 }).catch(error => {
     console.log(error)
 })
-const aaa = ref()
 </script>
 
 <style lang="scss" scoped>
