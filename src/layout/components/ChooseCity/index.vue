@@ -7,7 +7,7 @@
                 </div>
                 <div ref="search" class="result" :class="{'mobile': settingsStore.mode === 'mobile'}">
                     <div class="citylist">
-                        <div class="item" v-for="(item,index) in cityList.arr" :key="index" @click="click_city(item)">
+                        <div v-for="(item,index) in cityList.arr" :key="index" :class="{item: true,seleItem: item.flag}" @click="click_city(item)">
                             {{ item.name }}
                         </div>
                     </div>
@@ -35,7 +35,7 @@ watch(() => isShow.value, val => {
     } else {
         document.querySelector('body').classList.remove('hidden')
     }
-}) 
+})
 onMounted(() => {
     proxy.$eventBus.on('global-choose-city', () => {
         isShow.value = !isShow.value
@@ -44,12 +44,16 @@ onMounted(() => {
 // 获取城市配置
 const getCityList = () => {
     let params = {
-        page:1,
-        per_page:500
+        page: 1,
+        per_page: 500
     }
     APIgetCityNotPm(params).then(res => {
         res.data.forEach((item, index) => {
-            if (item.china_code == localStorage.getItem('china_code')) {
+            let uid = localStorage.getItem('uid')
+            if (item.china_code == localStorage.getItem(uid + '_city')) {
+                item.flag = true
+            } else {
+                item.flag = false
             }
         })
         cityList.arr = res.data
@@ -62,7 +66,9 @@ const click_city = val => {
         return
     }
     console.log(val)
-    localStorage.setItem('china_code', val.china_code)
+    // val.flag = true
+    let uid = localStorage.getItem('uid')
+    localStorage.setItem(uid + '_city', val.china_code)
     ElMessage.success('选择成功')
 }
 </script>
@@ -89,16 +95,21 @@ const click_city = val => {
             filter: initial;
         }
     }
-    .citylist{
+    .citylist {
         display: flex;
         flex-direction: row;
-        padding:10px 20px 10px;
-        .item{
+        padding: 10px 20px;
+        .item {
             padding: 20px;
-            border:2px solid #dedede;
+            border: 2px solid #dedede;
             margin: 10px;
-            font-size:14px;
+            font-size: 14px;
             cursor: pointer;
+        }
+        .seleItem {
+            border: 2px solid #94dfb6;
+            color: #6c987f;
+            background-color: #94dfb6;
         }
     }
     .container {
@@ -111,11 +122,11 @@ const click_city = val => {
         transform: scale(1.1);
         filter: blur(10px);
         .head-box {
-            margin:100px 20px 0px;
-            .title{
+            margin: 100px 20px 0;
+            .title {
                 background-color: #fff;
                 padding: 30px 30px 10px;
-                border-radius:5px 5px 0 0 ;
+                border-radius: 5px 5px 0 0;
                 color: #999;
                 font-size: 14px;
             }
@@ -124,7 +135,7 @@ const click_city = val => {
             position: relative;
             margin: 0 20px;
             max-height: calc(100% - 250px);
-            border-radius:0 0 5px 5px;
+            border-radius: 0 0 5px 5px;
             overflow: auto;
             background-color: #fff;
             &.mobile {

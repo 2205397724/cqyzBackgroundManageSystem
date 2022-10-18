@@ -19,20 +19,17 @@ const toLogin = () => {
 }
 
 const api = axios.create({
-    // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL_2,
+    // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
     baseURL: import.meta.env.DEV &&
-        import.meta.env.VITE_OPEN_PROXY === 'true'
-        ? '/proxy/'
-        : import.meta.env.VITE_APP_API_BASEURL,
-    timeout: 3000,
+        import.meta.env.VITE_OPEN_PROXY === 'true' ?
+        '/proxy/' :
+        import.meta.env.VITE_APP_API_BASEURL,
+    timeout: 6000,
     responseType: 'json'
 })
+
 api.interceptors.request.use(
     request => {
-        if (!request.baseURL) {
-            request.baseURL =
-                import.meta.env.VITE_APP_API_BASEURL
-        }
         loading = ElLoading.service({
             lock: true,
             text: 'Loading',
@@ -40,23 +37,18 @@ api.interceptors.request.use(
         })
         const userOutsideStore = useUserOutsideStore()
         /**
-             * 全局拦截请求发送前提交的参数
-             * 以下代码为示例，在请求头里带上 token 信息
-             */
+         * 全局拦截请求发送前提交的参数
+         * 以下代码为示例，在请求头里带上 token 信息
+         */
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
-            // request.headers['Token'] = userOutsideStore.token
+            request.headers['X-Cc'] = localStorage.getItem('china_code')
         }
         var time = new Date().getTime().toString()
         var eqtype = '2'
         var secret = 'secret'
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
-        // let uid = localStorage.getItem('uid')
-        // console.log(localStorage.getItem(uid + '_city'))
-        // request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
-        // request.headers['X-Cc'] = localStorage.getItem("china_code")
-        request.headers['X-Cc'] = ('500101')
         // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {
             // request.data = qs.stringify(request.data, {
@@ -77,32 +69,32 @@ api.interceptors.response.use(
              * 请求出错时 error 会返回错误信息
              */
         if (response.status === 200) {
-            // if (!response.data.code) {
-            return Promise.resolve(response.data)
+            // if (!response.code) {
+            return Promise.resolve(response)
             // } else {
-            //     ElMessage.error(response.data.msg)
-            //     return Promise.reject(response.data)
+            ElMessage.error(response.message)
+            // return Promise.reject(response)
             // }
         } else {
+            console.log(response.message)
             toLogin()
         }
     },
     error => {
-        loading.close()
         let message = error.message
         if (message == 'Network Error') {
             message = '后端网络故障'
         } else if (message.includes('timeout')) {
             message = '接口请求超时'
-        } else if (message.includes('Request failed with status code')) {
-            message = '接口' + message.substr(message.length - 3) + '异常'
+        } else if (error.response) {
+            message = error.response.data.message
         }
         ElMessage({
             message,
             type: 'error'
         })
+        loading.close()
         return Promise.reject(error)
     }
 )
-
 export default api

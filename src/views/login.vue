@@ -170,8 +170,10 @@ function handleLogin() {
             }
             userStore.login(data).then(() => {
                 loading.value = false
+                ElMessage.success('登录成功')
                 localStorage.removeItem('utype')
                 userStore.utype = data.auth_type
+                userStore.getInfo()
                 localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
                 if (loginForm.value.remember) {
                     localStorage.setItem('login_account', loginForm.value.account)
@@ -192,6 +194,13 @@ function handleLogin() {
                 }
                 sessionStorage.setItem('isChooseCity', true)
                 router.push(redirect.value)
+                let uid = localStorage.getItem('uid')
+                console.log(localStorage.getItem(uid + '_city'))
+                if (!localStorage.getItem(uid + '_city')) {
+                    console.log('a')
+                    proxy.$eventBus.emit('global-choose-city', true)
+                    console.log('b')
+                }
             }).catch(() => {
                 loading.value = false
             })

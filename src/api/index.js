@@ -43,6 +43,9 @@ api.interceptors.request.use(
         console.log(userOutsideStore.isLogin)
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
+            // let uid = localStorage.getItem('uid')
+            // console.log(localStorage.getItem(uid + '_city'))
+            // request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
             // request.headers['X-Cc'] = localStorage.getItem('china_code')
             request.headers['X-Cc'] = '500101'
             // request.headers['Token'] = userOutsideStore.token
@@ -52,7 +55,9 @@ api.interceptors.request.use(
         var secret = 'secret'
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
-        request.headers['X-Cc'] = localStorage.getItem('china_code')
+        let uid = localStorage.getItem('uid')
+        request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
+        // request.headers['X-Cc'] = localStorage.getItem('china_code')
         // request.headers['X-Cc'] = '500101'
         // 是否将 POST 请求参数进行字符串化处理
         if (request.method === 'post') {
