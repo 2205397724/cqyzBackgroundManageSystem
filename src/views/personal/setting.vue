@@ -164,7 +164,7 @@ const form = reactive({
 
 function handleSuccess(res) {
     if (res.error == '') {
-        form.item.headimg = res.data.path
+        form.item.headimg = res.path
     } else {
         proxy.$message.warning(res.error)
     }
@@ -225,9 +225,9 @@ const userGroup = reactive({
 const defaultUserGroup = ref('=')
 APIgetUserinfo().then(res => {
     console.log(res)
-    form.item = res.data
-    console.log(res.data.username)
-    form.item.username = res.data.username
+    form.item = res
+    console.log(res.username)
+    form.item.username = res.username
     console.log(form.item.username)
 }).catch(error => {
     console.log(error)
@@ -239,22 +239,22 @@ APIgetLoginUserGroup().then(res => {
     } else {
         flag_1.value = true
     }
-    console.log(localStorage.getItem('groupChinaCode'))
+    console.log(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))
     // defaultUserGroup.value = sessionStorage.getItem('groupChinaCode')
-    // for (let i in res.data) {
-    //     if (res.data[i].region_cc == sessionStorage.getItem('groupChinaCode')) {
+    // for (let i in res) {
+    //     if (res[i].region_cc == sessionStorage.getItem('groupChinaCode')) {
     //         flag.value = true
     //     }
     // }
-    res.data.forEach((item, index) => {
-        if (item.region_cc == localStorage.getItem('groupChinaCode')) {
-            res.data[index].flag = true
+    res.forEach((item, index) => {
+        if (item.region_cc == JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc) {
+            res[index].flag = true
         } else {
-            res.data[index].flag = false
+            res[index].flag = false
         }
     })
-    console.log(res.data)
-    userGroup.arr = res.data
+    console.log(res)
+    userGroup.arr = res
 })
 const ChangeUserGroupFunc = (val, i) => {
     console.log(i)
@@ -266,8 +266,7 @@ const ChangeUserGroupFunc = (val, i) => {
                 item.flag = false
             }
         })
-        localStorage.setItem('groupChinaCode', val.region_cc)
-        console.log(localStorage.getItem('groupChinaCode'))
+        localStorage.setItem(localStorage.getItem('uid') + '_groupChinaCode', JSON.stringify(val))
         // APIgetLoginUserGroup()
         // userGroup.arr[i]
     }
@@ -300,10 +299,8 @@ const modifyUserInfo = () => {
                 delete form.item.name
             }
             APIputUserinfo(form.item).then(res => {
-                if (res.status === 200) {
-                    APIgetUserinfo()
-                    ElMessage.success('保存成功')
-                }
+                APIgetUserinfo()
+                ElMessage.success('保存成功')
             }).catch(err => {
                 ElMessage.success('保存失败')
             })
@@ -311,10 +308,8 @@ const modifyUserInfo = () => {
         return false
     }
     APIputUserinfo(form.item).then(res => {
-        if (res.status === 200) {
-            // refreshFunc()
-            ElMessage.success('保存成功')
-        }
+        // refreshFunc()
+        ElMessage.success('保存成功')
     }).catch(err => {
         ElMessage.success('保存失败')
     })

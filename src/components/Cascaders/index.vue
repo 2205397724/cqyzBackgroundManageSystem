@@ -45,16 +45,16 @@ const cascader_props = {
             data
         } = node
         // console.log(node)
-        if(data.level==5){
-                APIgetResidentialListHouse({'china_code':data.code}).then(res=>{
-                    console.log(res)
-                    resolve(res.data)
-                })
-            }
+        if (data.level == 5) {
+            APIgetResidentialListHouse({ 'china_code': data.code }).then(res => {
+                console.log(res)
+                resolve(res)
+            })
+        }
         APIgetChinaRegion({ 'p_code': data.code }).then(res => {
             console.log(res)
 
-            resolve(res.data)
+            resolve(res)
         })
 
     }

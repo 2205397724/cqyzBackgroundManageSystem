@@ -63,9 +63,7 @@ import {
 } from '@/api/custom/custom.js'
 const getEchartsFunc = params => {
     APIgetEchartsStatistics(params).then(res => {
-        if (res.code == 0) {
-            data.echarts_arr = res.data
-        }
+        data.echarts_arr = res
     }).catch(error => {
         console.log(error)
     })
@@ -77,9 +75,7 @@ import {
 } from '@/api/custom/custom.js'
 const getNumsFunc = params => {
     APIgetHouseNums(params).then(res => {
-        if (res.code == 0) {
-            data.nums_arr = res.data
-        }
+        data.nums_arr = res
     }).catch(error => {
         console.log(error)
     })
@@ -91,17 +87,13 @@ import {
     APIgetHouseHouse
 } from '@/api/custom/custom.js'
 APIgetHousePlace().then(res => {
-    if (res.code == 0) {
-        data.place_list = res.data
-    }
+    data.place_list = res
 }).catch(error => {
     console.log(error)
 })
 const getHouseFunc = params => {
     APIgetHouseHouse(params).then(res => {
-        if (res.code == 0) {
-            data.house_list = res.data
-        }
+        data.house_list = res
     }).catch(error => {
         console.log(error)
     })
@@ -143,90 +135,73 @@ const houseNullClick = () => {
 <style lang="scss" scoped>
     .tree-box {
         display: flex;
-
         .tree-item {
             min-width: 200px;
             width: 200px;
         }
-
         .tree-details {
             flex-grow: 1;
-
             .tit {
                 height: 60px;
                 box-sizing: border-box;
-                border-bottom: 1px solid rgba(233, 233, 233, 1);
+                border-bottom: 1px solid rgb(233 233 233 / 100%);
                 font-size: 13px;
-                color: #999999;
+                color: #999;
                 padding-left: 20px;
                 padding-right: 20px;
-                box-sizing: border-box;
                 display: flex;
                 justify-content: left;
                 align-items: center;
-
                 span {
-                    color: #333333;
+                    color: #333;
                     font-size: 14px;
                 }
-
                 span::after {
-                    content: '>';
+                    content: ">";
                     display: inline-block;
                     margin: 0 6px;
                 }
-
                 span:last-child::after {
                     display: none;
                 }
             }
-
             .num-box {
                 padding: 20px;
                 box-sizing: border-box;
-
                 .num-box-item {
-                    border-bottom: 1px solid rgba(233, 233, 233, 1);
+                    border-bottom: 1px solid rgb(233 233 233 / 100%);
                     box-sizing: border-box;
                     padding-top: 20px;
                     padding-bottom: 20px;
-
                     .box-tit {
                         box-sizing: border-box;
                         padding-bottom: 40px;
-                        color: #999999;
+                        color: #999;
                         font-size: 12px;
                     }
-
                     .flexs {
                         display: flex;
-
                         .flex-item {
                             flex: 1;
                             display: flex;
                             flex-direction: column;
                             align-items: center;
-
                             .item-num {
-                                color: #333333;
+                                color: #333;
                                 font-size: 24px;
                             }
-
                             .item-tit {
-                                color: #999999;
+                                color: #999;
                                 font-size: 14px;
                             }
                         }
                     }
                 }
             }
-
             .houseechart {
                 box-sizing: border-box;
                 padding: 20px;
             }
         }
     }
-
-    .num-box {}
 </style>

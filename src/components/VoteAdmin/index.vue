@@ -160,7 +160,7 @@
                                 重选
                             </el-button>
                             <div style="width: 100%;">
-                                <div v-for="(opt,o) in data_1.vote_opts" style="display: flex;justify-content: space-between;border-bottom: 1px solid #eeeeee;margin-bottom: 10px;padding-bottom: 4px;">
+                                <div v-for="(opt,o) in data_1.vote_opts" style="display: flex;justify-content: space-between;border-bottom: 1px solid #eee;margin-bottom: 10px;padding-bottom: 4px;">
                                     <div style="margin-right: 30px;">{{ opt.name }}</div>
                                     <div style="margin-left: auto;">
                                         <el-radio-group
@@ -242,8 +242,8 @@ const getFuncVoteoptsList = () => {
         page: data_1.page,
         per_page: data_1.per_page
     }).then(res => {
-        data_1.list = res.data.items
-        data_1.total = res.data.aggregation.total_cnt
+        data_1.list = res.items
+        data_1.total = res.aggregation.total_cnt
     })
 }
 const clickFuncDelete = val => {
@@ -254,7 +254,7 @@ const clickFuncDelete = val => {
 }
 const clickFuncDetails = val => {
     APIgetTicketDetails(val.id).then(res => {
-        data_1.details_data = res.data
+        data_1.details_data = res
         data_1.details_switch = true
     })
 }
@@ -264,7 +264,7 @@ const getFnOpts = () => {
     data_1.offline_form.optid = []
     data_1.offline_form.optval = []
     APIgetVoteoptsList({ vid: id.value }).then(res => {
-        data_1.vote_opts = res.data
+        data_1.vote_opts = res
         data_1.offline_switch = true
     })
 }
@@ -297,6 +297,3 @@ getOpts([ 'vote_toupiao']).then(res => {
 })
 
 </script>
-<style lang="scss" scoped>
-
-</style>

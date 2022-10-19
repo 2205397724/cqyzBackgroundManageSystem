@@ -380,10 +380,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetCityDetails(val.id).then(res => {
-        if (res.status === 200) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // switch开关
@@ -440,11 +438,9 @@ const dialogExamineCloseFunc = formEl => {
                 switchFunk(from_examine.item.active)
                 APIputCity(from_examine.item.id, from_examine.item).then(res => {
                     // console.log(res)
-                    if (res.status === 200) {
-                        refreshFunc()
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     ElMessage.error('修改失败')
                 })
@@ -453,11 +449,9 @@ const dialogExamineCloseFunc = formEl => {
                 console.log(from_examine.item)
                 APIpostCity(from_examine.item).then(res => {
                     // console.log(from_examine.item)
-                    if (res.status === 200) {
-                        refreshFunc()
-                        ElMessage.success('添加成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     ElMessage.error('添加失败')
                 })
@@ -485,10 +479,10 @@ const getTabListFunc = () => {
     APIgetCityList(params).then(res => {
         // console.log(res)
         loading_tab.value = false
-        data_tab.arr = res.data
-        total.value = res.data.length
+        data_tab.arr = res
+        total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -520,7 +514,7 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改'
     APIgetCityDetails(val.id).then(res => {
         console.log(res)
-        from_examine.item = res.data
+        from_examine.item = res
         console.log(from_examine.item.addition)
         if (!from_examine.item.addition) {
             from_examine.item.addition = {

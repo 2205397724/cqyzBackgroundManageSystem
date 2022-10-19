@@ -1078,25 +1078,23 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetEnterpriseList(params).then(res => {
-        if (res.status === 200) {
-            console.log(res)
-            loading_tab.value = false
-            from_tab.arr = res.data
-            total.value = res.data.length
-            for (let i in res.data) {
-                res.data[i].logo_1 = ''
-                res.data[i].logo_1 = VITE_APP_FOLDER_SRC.value + res.data[i].logo
-            }
-            let btnNext = document.querySelector('.btn-next')
-            if (res.data.length < per_page.value) {
-                btnNext.classList.add('not_allowed')
-                btnNext.setAttribute('disabled', true)
-                btnNext.setAttribute('aria-disabled', true)
-            } else {
-                btnNext.classList.remove('not_allowed')
-                btnNext.removeAttribute('disabled')
-                btnNext.setAttribute('aria-disabled', false)
-            }
+        console.log(res)
+        loading_tab.value = false
+        from_tab.arr = res
+        total.value = res.length
+        for (let i in res) {
+            res[i].logo_1 = ''
+            res[i].logo_1 = VITE_APP_FOLDER_SRC.value + res[i].logo
+        }
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
         }
     })
 }
@@ -1156,10 +1154,10 @@ const logo = reactive({
 const modifyFunc = val => {
     logo.arr = []
     APIgetEnterpriseDetails(val.id).then(res => {
-        from_add.obj = res.data
-        // file_list.value = res.data.logo
+        from_add.obj = res
+        // file_list.value = res.logo
         userNames.value = getNameFunc(userData.arr, from_add.obj.user_id)
-        logo.arr.push(res.data.logo)
+        logo.arr.push(res.logo)
         let arr = []
         for (let i in logo.arr) {
             if (logo.arr[i]) {
@@ -1203,11 +1201,11 @@ const logo_1 = reactive({
 const detailsFunc = val => {
     logo_1.arr = []
     APIgetEnterpriseDetails(val.id).then(res => {
-        // res.data.logo = import.meta.env.VITE_APP_FOLDER_SRC + res.data.lofo
-        details_item.obj = res.data
-        logo_1.arr.push(VITE_APP_FOLDER_SRC.value + res.data.logo)
+        // res.logo = import.meta.env.VITE_APP_FOLDER_SRC + res.lofo
+        details_item.obj = res
+        logo_1.arr.push(VITE_APP_FOLDER_SRC.value + res.logo)
         switch_details.value = true
-        console.log(res.data)
+        console.log(res)
         getUsergroupList()
     })
 
@@ -1228,8 +1226,8 @@ const getUsergroupList = () => {
     APIgetGroupList(params).then(res => {
         loading_tab.value = false
         console.log(res)
-        data_tab.arr = res.data
-        total_1.value = res.data.length
+        data_tab.arr = res
+        total_1.value = res.length
     })
 }
 const getUserGroupNameFunc = (arr, key) => {
@@ -1250,10 +1248,8 @@ const deleteFunc = val => {
 const deleteFunc_1 = val => {
     console.log(val)
     APIdeleteGroup(val.id).then(res => {
-        if (res.status === 200) {
-            getUsergroupList()
-            ElMessage.success('删除成功')
-        }
+        getUsergroupList()
+        ElMessage.success('删除成功')
     })
 }
 // 企业成员添加
@@ -1280,11 +1276,9 @@ const dialogExamineCloseFunc = () => {
     if (str_title.value == '修改项目部') {
         APIputGroup(from_examine.item.id, from_examine.item)
             .then(res => {
-                if (res.status === 200) {
-                    getUsergroupList()
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                }
+                getUsergroupList()
+                ElMessage.success('修改成功')
+                switch_examine.value = false
             })
             .catch(err => {
                 ElMessage.error('修改失败')
@@ -1292,11 +1286,9 @@ const dialogExamineCloseFunc = () => {
     } else {
         APIpostGroup(from_examine.item)
             .then(res => {
-                if (res.status === 200) {
-                    getUsergroupList()
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }
+                getUsergroupList()
+                ElMessage.success('添加成功')
+                switch_examine.value = false
             })
             .catch(err => {
                 ElMessage.error('添加失败')
@@ -1337,19 +1329,19 @@ const getChinaName = () => {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (sessionStorage.getItem('groupChinaCode')) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
         params = {
-            p_code: sessionStorage.getItem('groupChinaCode')
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
         }
     } else {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
-        for (let i in res.data) {
-            if (res.data[i].level < 5) {
-                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+        for (let i in res) {
+            if (res[i].level < 5) {
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
             } else {
-                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
     })
@@ -1375,10 +1367,8 @@ const data_group_details = reactive({
 // 项目部详情
 const getGroupDetail = val => {
     APIgetGroupDetails(val.id).then(res => {
-        if (res.status == 200) {
-            data_group_details.item = res.data
-            switch_group_details.value = true
-        }
+        data_group_details.item = res
+        switch_group_details.value = true
     })
 }
 // 成员
@@ -1410,10 +1400,8 @@ const optValFunc = val => {
 const getOptValListFunc = () => {
     APIgetGroupUserList(item_opt.obj.id)
         .then(res => {
-            if (res.status === 200) {
-                console.log(res)
-                opt_tab.arr = res.data
-            }
+            console.log(res)
+            opt_tab.arr = res
         })
 }
 // dialog关闭回调
@@ -1445,20 +1433,16 @@ const dialogOptValFunc = () => {
             from_opt_val.obj
         )
             .then(res => {
-                if (res.status === 200) {
-                    getOptValListFunc()
-                    ElMessage.success('修改成功')
-                    switch_opt_val_add.value = false
-                }
+                getOptValListFunc()
+                ElMessage.success('修改成功')
+                switch_opt_val_add.value = false
             })
     } else {
         APIpostGroupUser(item_opt.obj.id, from_opt_val.obj)
             .then(res => {
-                if (res.status === 200) {
-                    getOptValListFunc()
-                    ElMessage.success('添加成功')
-                    switch_opt_val_add.value = false
-                }
+                getOptValListFunc()
+                ElMessage.success('添加成功')
+                switch_opt_val_add.value = false
             })
     }
 }
@@ -1472,11 +1456,9 @@ const data_user_detail = reactive({
 const switch_user_details = ref(false)
 const getUserDetail = val => {
     // APIgetUserDetails(val.user_id).then(res => {
-    //     if (res.status === 200) {
-    //         console.log(res.data)
-    //         data_user_detail.item = res.data
+    //         console.log(res)
+    //         data_user_detail.item = res
     //         switch_user_details.value = true
-    //     }
     // })
     console.log(val)
     data_user_detail.item = val
@@ -1486,12 +1468,8 @@ const getUserDetail = val => {
 const optValDeleteFunc = val => {
     console.log(val)
     APIdeleteGroupUser(val.group_id, val.user_id).then(res => {
-        if (res.status === 200) {
-            getOptValListFunc()
-            ElMessage.success('删除成功')
-        } else {
-            ElMessage.error('删除失败请重试')
-        }
+        getOptValListFunc()
+        ElMessage.success('删除成功')
     })
 }
 const postFunc_1 = () => {

@@ -84,7 +84,7 @@ const tab_group_list = reactive({
 })
 const getGroupList = () => {
     APIgetGroupList().then(res => {
-        tab_group_list.arr = res.data
+        tab_group_list.arr = res
         groupType_3.arr = tab_group_list.arr.filter(item => {
             return item.type == 3
         })

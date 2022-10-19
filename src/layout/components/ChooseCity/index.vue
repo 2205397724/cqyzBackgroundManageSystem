@@ -40,6 +40,7 @@ onMounted(() => {
     proxy.$eventBus.on('global-choose-city', () => {
         isShow.value = !isShow.value
     })
+    proxy.$eventBus.emit('choose-city-isReady')
 })
 // 获取城市配置
 const getCityList = () => {
@@ -48,7 +49,7 @@ const getCityList = () => {
         per_page: 500
     }
     APIgetCityNotPm(params).then(res => {
-        res.data.forEach((item, index) => {
+        res.forEach((item, index) => {
             let uid = localStorage.getItem('uid')
             if (item.china_code == localStorage.getItem(uid + '_city')) {
                 item.flag = true
@@ -56,7 +57,7 @@ const getCityList = () => {
                 item.flag = false
             }
         })
-        cityList.arr = res.data
+        cityList.arr = res
     })
 }
 // 选择 后确认按钮
@@ -68,7 +69,9 @@ const click_city = val => {
     console.log(val)
     // val.flag = true
     let uid = localStorage.getItem('uid')
-    localStorage.setItem(uid + '_city', val.china_code)
+    // localStorage.setItem(uid + '_city', val.china_code)
+    localStorage.setItem(uid + '_city', JSON.stringify({ china_code: val.china_code, name: val.name }))
+    console.log(JSON.parse(localStorage.getItem(uid + '_city')))
     ElMessage.success('选择成功')
 }
 </script>

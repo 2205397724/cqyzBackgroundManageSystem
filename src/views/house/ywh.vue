@@ -365,10 +365,10 @@ const detailsFunc = val => {
     }
     APIgetGroupUserList(val.id, params).then(res => {
         console.log(res)
-        flow_data.arr = res.data
+        flow_data.arr = res
         let btnNext = document.querySelector('.btn-next')
         console.log(btnNext)
-        if (res.data.length < per_page_1.value) {
+        if (res.length < per_page_1.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -410,21 +410,17 @@ const dialogExamineCloseFunc = formEl => {
             }
             if (str_title.value == '修改') {
                 APIputGroup(from_examine.item.id, from_examine.item).then(res => {
-                    if (res.status == 200) {
-                        refreshFunc()
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 APIpostGroup(from_examine.item).then(res => {
-                    if (res.status == 200) {
-                        refreshFunc()
-                        ElMessage.success('添加成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -457,14 +453,14 @@ const getTabListFunc = () => {
     APIgetGroupList(params).then(res => {
         console.log(res)
         loading_tab.value = false
-        data_tab.arr = res.data
+        data_tab.arr = res
         if (data_tab.arr.length > 0) {
             rowClickFunc(data_tab.arr[0])
         }
         let btnNext1 = document.querySelector('.btnClass')
         let btnNext2 = btnNext1.children[1]
         console.log(btnNext1.children[1])
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             btnNext2.classList.add('not_allowed')
             btnNext2.setAttribute('disabled', true)
             btnNext2.setAttribute('aria-disabled', true)
@@ -498,7 +494,7 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetGroupDetails(val.id).then(res => {
-        from_examine.item = res.data
+        from_examine.item = res
         delete from_examine.item.ref
         switch_examine.value = true
     })
@@ -546,7 +542,7 @@ const deleteFunc2 = val => {
 // const refreshFunc2 = () => {
 //     tabloading.value = true
 //     APIgetListYwhUser(flow_id).then(res => {
-//         flow_data.arr = res.data
+//         flow_data.arr = res
 //         tabloading.value = false
 //     })
 // }

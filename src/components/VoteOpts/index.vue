@@ -233,7 +233,7 @@ const data_1 = reactive({
 })
 const getFuncVoteoptsList = () => {
     APIgetVoteoptsList({ vid: id.value }).then(res => {
-        data_1.list = res.data
+        data_1.list = res
     })
 }
 const clickFuncAddVoteopt = () => {
@@ -267,10 +267,10 @@ const clickFuncAddVoteopt = () => {
 }
 const clickFuncModify = val => {
     APIgetVoteoptsDetails(val.id).then(res => {
-        if (!res.data.extra) {
-            res.data.extra = {}
+        if (!res.extra) {
+            res.extra = {}
         }
-        data_1.add_form = res.data
+        data_1.add_form = res
         data_1.add_title = '修改'
         data_1.add_switch = true
     })
@@ -283,7 +283,7 @@ const clickFuncDelete = val => {
 }
 const clickFuncDetails = val => {
     APIgetVoteoptsDetails(val.id).then(res => {
-        data_1.details_data = res.data
+        data_1.details_data = res
         data_1.details_switch = true
     })
 }
@@ -292,6 +292,3 @@ const refreshFunc = () => {
     getFuncVoteoptsList()
 }
 </script>
-<style lang="scss" scoped>
-
-</style>

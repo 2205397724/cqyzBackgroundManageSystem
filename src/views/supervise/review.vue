@@ -342,8 +342,8 @@ const getActivityViewList = () => {
     if (index.value == 0) {
         delete params.status
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
-        params.group_id = sessionStorage.getItem('groupChinaCode')
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
+        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
     }
     loading_tab.value = true
     APIgetListArchiveAudit(params).then(res => {
@@ -359,7 +359,10 @@ const getActivityViewList = () => {
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
+        console.log('aaaaa')
         loading_tab.value = false
+        console.log('bbbbb')
+
     })
 }
 const from_pass = reactive({

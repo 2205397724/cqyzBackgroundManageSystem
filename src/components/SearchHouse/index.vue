@@ -192,9 +192,6 @@ const searchFunc = () => {
     switch_search.value = true
     getTabListFunc()
 }
-const searchMore = () => {
-    searchVisible.value = !searchVisible.value
-}
 // 打开弹窗
 const openDigFunc = () => {
     switch_list.value = true

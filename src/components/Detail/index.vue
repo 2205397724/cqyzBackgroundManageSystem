@@ -967,19 +967,17 @@ const activeName_1 = ref('')
 const detailsFunc = id => {
     data_details.item = ''
     APIgetSurveyDetails(id).then(res => {
-        if (res.status === 200) {
-            data_details.item = res.data
-            if (res.data.type == 1) {
-                activeName_1.value = '问卷'
-            } else if (res.data.type == 2) {
-                activeName_1.value = '选举'
-            } else if (res.data.type == 3) {
-                activeName_1.value = '表决'
-            } else {
-                activeName_1.value = '联名'
-            }
-            switch_details.value = true
+        data_details.item = res
+        if (res.type == 1) {
+            activeName_1.value = '问卷'
+        } else if (res.type == 2) {
+            activeName_1.value = '选举'
+        } else if (res.type == 3) {
+            activeName_1.value = '表决'
+        } else {
+            activeName_1.value = '联名'
         }
+        switch_details.value = true
     })
     console.log(data_details.item)
 }
@@ -990,10 +988,8 @@ const topicsFunc = () => {
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
-        console.log(res.data)
-        if (res.status === 200) {
-            topic_details.item = res.data
-        }
+        console.log(res)
+        topic_details.item = res
     })
     console.log('topic_details', topic_details)
 }
@@ -1013,31 +1009,31 @@ const rangeFunc = () => {
     APIgetSurveyRange(params)
         .then(res => {
 
-            for (let i = 0;i < res.data.length;i++) {
-                for (let j = i + 1; j < res.data.length;j++) {
-                    if (res.data[i].tgt == res.data[j].tgt) {
-                        res.data.splice(j, 1)
+            for (let i = 0;i < res.length;i++) {
+                for (let j = i + 1; j < res.length;j++) {
+                    if (res[i].tgt == res[j].tgt) {
+                        res.splice(j, 1)
                         j--
                     }
                 }
             }
-            console.log(res.data)
-            data_range.arr = res.data
+            console.log(res)
+            data_range.arr = res
         })
         .catch(err => {
             from_error.msg = err.data
         })
     APIgetSurverRangeWhenHouse({ sid: props.id, can_type: 2 }).then(res => {
         console.log(res)
-        if (res.data.units) {
+        if (res.units) {
             flag.value = true
-            surverRangeWhenUnitHouse.arr = res.data.units
+            surverRangeWhenUnitHouse.arr = res.units
         } else {
             flag.value = false
         }
-        if (res.data.buildings) {
+        if (res.buildings) {
             flag_1.value = true
-            surverRangeWhenBuildHouse.arr = res.data.buildings
+            surverRangeWhenBuildHouse.arr = res.buildings
         } else {
             flag_1.value = false
         }
@@ -1258,8 +1254,8 @@ const getAnswerDetail = id => {
     }
     // console.log(id)
     APIgetSurveyAnswerDetail(id).then(res => {
-        // console.log(res.data)
-        answer_detail.item = res.data
+        // console.log(res)
+        answer_detail.item = res
         console.log('answer_detail.item', answer_detail.item)
     })
 }
@@ -1279,8 +1275,8 @@ const answerListFunc = () => {
         per_page: 15
     }
     APIgetSurveyAnswerList(props.id, params).then(res => {
-        // console.log(res.data)
-        // answer_list = res.data[0]
+        // console.log(res)
+        // answer_list = res[0]
         // 清空答卷列表（线上、线下、总列表）
         answer_list.length = 0
         answer_list_on.length = 0
@@ -1288,7 +1284,7 @@ const answerListFunc = () => {
         // 线上线下参与数量
         participate.on_line = 0
         participate.off_line = 0
-        res.data.forEach(element => {
+        res.forEach(element => {
             if (element.source === 1) {
                 participate.on_line++
                 answer_list_on.push(element)
@@ -1349,9 +1345,9 @@ let notParticipateList = reactive([])
 const notParticipate = () => {
     notParticipateList.length = 0
     APIgetNotParticipate(props.id).then(res => {
-        // console.log('aaa',res.data)
-        participate.notParticipateLength = res.data.length
-        res.data.forEach(element => {
+        // console.log('aaa',res)
+        participate.notParticipateLength = res.length
+        res.forEach(element => {
             notParticipateList.push(element)
         })
     // console.log("notParticipateList",notParticipateList)
@@ -1372,20 +1368,18 @@ const modifyServeyTopic = val => {
     str_title.value = '修改'
     // 获取问卷题目详情
     APIgetSurveyTopicDetail(val.id).then(res => {
-        if (res.status == 200) {
-            topic_examine.item = res.data
-            // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
-            topic_examine.item.type += ''
-            topic_examine.item.score_calc += ''
-            // 清除选项缓存数据
-            opts.length = 0
-            // 将选项数据遍历插入数组对象
-            res.data.opts.forEach(element => {
-                opts.push(element)
-            })
-            console.log(opts)
-            switch_examine.value = true
-        }
+        topic_examine.item = res
+        // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
+        topic_examine.item.type += ''
+        topic_examine.item.score_calc += ''
+        // 清除选项缓存数据
+        opts.length = 0
+        // 将选项数据遍历插入数组对象
+        res.opts.forEach(element => {
+            opts.push(element)
+        })
+        console.log(opts)
+        switch_examine.value = true
     })
 }
 // 删除问卷题目
@@ -1433,12 +1427,10 @@ const dialogExamineCloseFunc = id => {
         id = topic_examine.item.id
         // console.log(id)
         APImodifySurveyTopic(id, topic_examine.item).then(res => {
-            if (res.status == 200) {
-                refreshFunc()
-                // ElMessage.success(res.msg)
-                ElMessage.success('修改成功')
-                switch_examine.value = false
-            }
+            refreshFunc()
+            // ElMessage.success(res.msg)
+            ElMessage.success('修改成功')
+            switch_examine.value = false
         })
     }
 }
@@ -1488,8 +1480,8 @@ const dialogAddSurveyAnswer = () => {
 // }
 // 调用tree树形组件初始的请求
 APIgetChinaRegion().then(res => {
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
+    tree_item.value.id = res[0].code
+    tree_item.value.name = res[0].name
     tree_item.value.type = 'region'
     tree_item.value.next_type = 'region'
 })

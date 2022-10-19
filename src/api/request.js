@@ -42,7 +42,12 @@ api.interceptors.request.use(
          */
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
-            request.headers['X-Cc'] = localStorage.getItem('china_code')
+            let uid = localStorage.getItem('uid')
+            request.headers['X-Cc'] = '500101'
+            // request.headers['X-Cc'] = JSON.parse(localStorage.getItem(uid + '_city')).china_code
+            // request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
+            // console.log(JSON.parse(localStorage.getItem(uid + '_city')))
+            // request.headers['X-Cc'] = localStorage.getItem('china_code')
         }
         var time = new Date().getTime().toString()
         var eqtype = '2'
@@ -69,14 +74,13 @@ api.interceptors.response.use(
              * 请求出错时 error 会返回错误信息
              */
         if (response.status === 200) {
-            // if (!response.code) {
-            return Promise.resolve(response)
-            // } else {
-            ElMessage.error(response.message)
-            // return Promise.reject(response)
-            // }
+            if (!response.data.code) {
+                return Promise.resolve(response.data)
+            } else {
+                ElMessage.error(response.data.msg)
+                return Promise.reject(response.data)
+            }
         } else {
-            console.log(response.message)
             toLogin()
         }
     },

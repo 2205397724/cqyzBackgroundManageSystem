@@ -9,7 +9,7 @@
                             style="display: flex;justify-content: center;align-items: center;box-sizing: border-box;padding-right: 20px;min-width: 135px;"
                         >
                             <image-preview
-                                :src="VITE_APP_FOLDER_SRC+data.userinfo.avatar" width="90px" height="90px"
+                                :src="VITE_APP_FOLDER_SRC+user_info.avatar" width="90px" height="90px"
                                 style="border-radius: 50%;height: 90px;width: 90px;"
                             />
                         </el-col>
@@ -17,11 +17,11 @@
                             :xs="24" :sm="24" :lg="18"
                             style="display: flex;flex-direction: column;justify-content: space-between;"
                         >
-                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ data.userinfo.name? data.userinfo.name:data.userinfo.nickname?data.userinfo.nickname:data.userinfo.username }}</div>
+                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ user_info.name || user_info.nickname || user_info.username }}</div>
                             <div style="color: #666;font-weight: 400;">
-                                <div style="font-size: 14px;">{{ data.userinfo.address }} {{ data.userinfo.department }} {{ data.userinfo.job }}</div>
+                                <div style="font-size: 14px;">{{ user_info.address }} {{ user_info.department }} {{ user_info.job }}</div>
                                 <div style="font-size: 12px;">
-                                    手机号码：{{ data.userinfo.mobile }} &nbsp;&nbsp;&nbsp; 最后登录：{{ data.userinfo.updated_at }}
+                                    手机号码：{{ user_info.mobile }} &nbsp;&nbsp;&nbsp; 最后登录：{{ user_info.updated_at }}
                                 </div>
                             </div>
                         </el-col>
@@ -226,18 +226,28 @@
     </div>
 </template>
 <script setup>
-import { useUserOutsideStore } from '@/store/modules/user'
 import {
-    APIgetUserinfo,
     APIgetAggregate,
     APIgetEventnum,
-    APIgetLoginUserGroup,
-    APIgetCityNotPm
+    APIgetEchartsHome
 } from '@/api/custom/custom.js'
-import { ElMessage } from 'element-plus'
-import { reactive, watch } from 'vue'
+import { reactive, onMounted } from 'vue'
+import PageMain from '@/components/PageMain/index.vue'
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
-const userStore = useUserOutsideStore()
+const { proxy } = getCurrentInstance()
+const user_info = ref(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')))
+onMounted(() => {
+    let uid = localStorage.getItem('uid')
+    console.log(localStorage.getItem(uid + '_city'))
+    proxy.$eventBus.on('choose-city-isReady', () => {
+        if (!localStorage.getItem(uid + '_city')) {
+            console.log('a')
+            proxy.$eventBus.emit('global-choose-city', true)
+            console.log('b')
+        }
+    })
+
+})
 
 // 数据
 const data = reactive({
@@ -268,18 +278,15 @@ const count_data = reactive({
     obj: {},
     arr: []
 })
-
 const getAggregate = () => {
-    let data = {}
-    if (localStorage.getItem('utype') == 'pt') {
-        data.module = 'all'
-    } else if (sessionStorage.getItem('groupChinaCode')) {
-        data.gid = sessionStorage.getItem('groupChinaCode')
+    let data = { module: 'all' }
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
+        data.gid = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).id
     }
     APIgetAggregate(data).then(res => {
         console.log(res)
-        count_data.obj = res.data
-        count_data.arr = res.data.complaint_stat
+        count_data.obj = res
+        count_data.arr = res.complaint_stat
         // console.log(data.tipsnum)
     }).catch(error => {
         console.log(error)
@@ -288,19 +295,14 @@ const getAggregate = () => {
 getAggregate()
 APIgetEventnum().then(res => {
     // console.log(res)
-    data.eventnum = res.data.data
+    data.eventnum = res
 }).catch(error => {
     console.log(error)
 })
-
 // 图表
-import {
-    APIgetEchartsHome
-} from '@/api/custom/custom.js'
-import PageMain from '@/components/PageMain/index.vue'
 APIgetEchartsHome().then(res => {
     // console.log(res)
-    data.echarts = res.data
+    data.echarts = res
 }).catch(error => {
     console.log(error)
 })

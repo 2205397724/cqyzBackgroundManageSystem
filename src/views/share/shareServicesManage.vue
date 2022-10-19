@@ -122,6 +122,11 @@
                                     </el-select>
                                 </el-form-item>
                             </el-col>
+                            <el-col :md="24" :lg="24">
+                                <el-form-item label="服务协议" label-width="80px" prop="content" :error="err_add.obj&&err_add.obj.desc?err_add.obj.desc[0]:''">
+                                    <editor v-model="data.obj.desc" class="w_100" />
+                                </el-form-item>
+                            </el-col>
                         </el-row>
                     </el-form>
                 </div>
@@ -291,7 +296,7 @@ import {
     APIdeleteShareServices,
     APIputShareServices,
     APIpostShareServices,
-    APIgetGroupList
+    APIgetGroupDetails
 } from '@/api/custom/custom.js'
 import {
     ElMessage
@@ -401,24 +406,15 @@ const examineListFunc = val => {
     str_title.value = '修改业务'
     data.switch = true
     data.obj = val
-    APIgetGroupList({ page: 1, per_page: 500 }).then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            userGroupName.value = getUserGroupName(res.data, val.gid)
-        }
+    if (val.desc == null) {
+        val.desc = ''
+    }
+    console.log(data.obj)
+    APIgetGroupDetails(val.gid).then(res => {
+        console.log(res)
+        userGroupName.value = res.name
     })
 }
-const getUserGroupName = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-    return ''
-}
-const data_tab = reactive({
-    arr: []
-})
 
 const deleteFunc = val => {
     APIdeleteShareServices(val.id).then(res => {

@@ -67,15 +67,15 @@ const loadNode = (node, resolve) => {
     switch (node.data.next_type) {
         case 'region':
             APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
-                treeDetail.arr = res.data
+                treeDetail.arr = res
                 console.log(res)
                 let tree_arr = []
-                if (res.status == 200) {
-                    for (let i in res.data) {
-                        if (res.data[i].level < 5) {
-                            tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+                if (res.length > 0) {
+                    for (let i in res) {
+                        if (res[i].level < 5) {
+                            tree_arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
                         } else {
-                            tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+                            tree_arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
                         }
                     }
                 }
@@ -85,7 +85,7 @@ const loadNode = (node, resolve) => {
             break
         case 'zone':
             APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
-                // treeDetail.arr = res.data
+                // treeDetail.arr = res
                 console.log(res)
                 let tree_arr = []
                 for (let i in res) {

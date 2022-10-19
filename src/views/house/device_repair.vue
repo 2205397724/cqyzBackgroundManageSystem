@@ -354,7 +354,7 @@ import {
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
     if (!res.code) {
-        options.arr = res.data
+        options.arr = res
     }
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */

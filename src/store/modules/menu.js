@@ -7,7 +7,7 @@ import { APIgenerateRoutesAtBack } from '@/api/custom/custom.js'
 import { useSettingsStore } from './settings'
 import { useUserStore } from './user'
 
-function hasPermission(permissions=[], route) {
+function hasPermission(permissions = [], route) {
     let isAuth = false
     if (route.meta && route.meta.auth) {
         isAuth = permissions.some(auth => {
@@ -226,7 +226,7 @@ export const useMenuStore = defineStore(
                     APIgenerateRoutesAtBack().then(async res => {
                         const settingsStore = useSettingsStore()
                         const userStore = useUserStore()
-                        let asyncRoutes = formatBackRoutes(res.data)
+                        let asyncRoutes = formatBackRoutes(res)
                         let accessedRoutes
                         // 如果权限功能开启，则需要对路由数据进行筛选过滤
                         if (settingsStore.app.enablePermission) {

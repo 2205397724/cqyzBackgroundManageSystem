@@ -113,7 +113,7 @@ const data_1 = reactive({
 })
 const getFuncVoteoptsList = () => {
     APIgetVoteHouse(id.value).then(res => {
-        data_1.list = res.data
+        data_1.list = res
     })
 }
 const clickFuncAddVoteopt = () => {
@@ -149,6 +149,3 @@ const refreshFunc = () => {
     getFuncVoteoptsList()
 }
 </script>
-<style lang="scss" scoped>
-
-</style>

@@ -211,7 +211,7 @@ import {
 const refreshFunc2 = id => {
     tabloading.value = true
     APIgetStepList(id).then(res => {
-        flow_data.arr = res.data
+        flow_data.arr = res
         tabloading.value = false
     })
 }

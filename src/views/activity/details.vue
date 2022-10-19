@@ -496,11 +496,9 @@ const getSurveyListFunc = val => {
         loading_tab.value = true
         APIgetSurvey(params_1).then(res => {
             console.log(res)
-            if (res.status === 200) {
-                loading_tab.value = false
-                data_tab.arr = res.data
-                total.value = res.data.length
-            }
+            loading_tab.value = false
+            data_tab.arr = res
+            total.value = res.length
         })
     }
 }
@@ -558,11 +556,9 @@ import {
 } from '@/api/custom/custom.js'
 const getUserGroupList = () => {
     APIgetGroupList().then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            loading_tab.value = false
-            userData.arr = res.data
-        }
+        console.log(res)
+        loading_tab.value = false
+        userData.arr = res
     })
 }
 // 确认添加

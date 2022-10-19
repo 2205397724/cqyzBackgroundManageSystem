@@ -419,8 +419,8 @@ const answerListFunc = () => {
         per_page: 15
     }
     APIgetSurveyAnswerList(props.id, params).then(res => {
-        // console.log(res.data)
-        // answer_list = res.data[0]
+        // console.log(res)
+        // answer_list = res[0]
         // 清空答卷列表（线上、线下、总列表）
         answer_list.length = 0
         answer_list_on.length = 0
@@ -428,7 +428,7 @@ const answerListFunc = () => {
         // 线上线下参与数量
         participate.on_line = 0
         participate.off_line = 0
-        res.data.forEach(element => {
+        res.forEach(element => {
             if (element.source === 1) {
                 participate.on_line++
                 answer_list_on.push(element)
@@ -464,8 +464,8 @@ const getAnswerDetail = id => {
     }
     // console.log(id)
     APIgetSurveyAnswerDetail(id).then(res => {
-        // console.log(res.data)
-        answer_detail.item = res.data
+        // console.log(res)
+        answer_detail.item = res
         console.log('answer_detail.item', answer_detail.item)
     })
 }
@@ -506,18 +506,18 @@ const addAnswer = () => {
     APIgetSurveyRange(params)
         .then(res => {
 
-            for (let i = 0;i < res.data.length;i++) {
-                for (let j = i + 1; j < res.data.length;j++) {
-                    if (res.data[i].tgt == res.data[j].tgt) {
-                        res.data.splice(j, 1)
+            for (let i = 0;i < res.length;i++) {
+                for (let j = i + 1; j < res.length;j++) {
+                    if (res[i].tgt == res[j].tgt) {
+                        res.splice(j, 1)
                         j--
                     }
                 }
             }
-            console.log(res.data)
-            data_range.arr = res.data
+            console.log(res)
+            data_range.arr = res
             tree_item.arr = []
-            res.data.forEach((item, key) => {
+            res.forEach((item, key) => {
                 if (item.type == 5) {
                     if (item.tgt.length <= 9) {
                         tree_item.arr.push({ name: item.tgt_obj, type: 'region', next_type: 'region', id: item.tgt })
@@ -548,13 +548,13 @@ const notParticipate = () => {
         per_page: per_page.value
     }
     APIgetNotParticipate(props.id, params).then(res => {
-        // console.log('aaa',res.data)
-        participate.notParticipateLength = res.data.length
-        res.data.forEach(element => {
+        // console.log('aaa',res)
+        participate.notParticipateLength = res.length
+        res.forEach(element => {
             notParticipateList.push(element)
         })
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -620,12 +620,9 @@ const topicsFunc = () => {
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
         topic_details.item = [[], [], [], []]
-        console.log(res.data)
-        if (res.status === 200) {
-            // topic_details.item = res.data
-        }
+        console.log(res)
         // 对题目进行排序
-        res.data.forEach(element => {
+        res.forEach(element => {
             if (element.type === 0) {
                 topic_details.item[0].push(element)
             } else if (element.type === 1) {

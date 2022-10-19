@@ -237,7 +237,7 @@ const detailsFunc = val => {
     data_dialog.obj = val
     APIgetPlatformDetails(val.id).then(res => {
         if (!res.code) {
-            data_details.item = res.data
+            data_details.item = res
             switch_details.value = true
         }
     })
@@ -280,11 +280,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetPlatformList(params).then(res => {
-        if (res.code === 0) {
-            loading_tab.value = false
-            data_tab.arr = res.data.items
-            total.value = res.data.aggregation.total_cnt
-        }
+        loading_tab.value = false
+        data_tab.arr = res.items
+        total.value = res.aggregation.total_cnt
     })
 }
 

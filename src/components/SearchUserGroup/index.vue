@@ -194,24 +194,22 @@ const getTabListFunc = () => {
         }
     }
     APIgetGroupList(params).then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            loading_tab.value = false
-            total.value = res.data.length
-            data_tab.arr = res.data
-            let btnNext1 = document.querySelector('.btnClass')
-            let btnNext2 = btnNext1.children[1]
-            console.log(btnNext2)
-            if (res.data.length < data.per_page) {
-                console.log('a')
-                btnNext2.classList.add('not_allowed')
-                btnNext2.setAttribute('disabled', true)
-                btnNext2.setAttribute('aria-disabled', true)
-            } else {
-                btnNext2.classList.remove('not_allowed')
-                btnNext2.removeAttribute('disabled')
-                btnNext2.setAttribute('aria-disabled', false)
-            }
+        console.log(res)
+        loading_tab.value = false
+        total.value = res.length
+        data_tab.arr = res
+        let btnNext1 = document.querySelector('.btnClass')
+        let btnNext2 = btnNext1.children[1]
+        console.log(btnNext2)
+        if (res.length < data.per_page) {
+            console.log('a')
+            btnNext2.classList.add('not_allowed')
+            btnNext2.setAttribute('disabled', true)
+            btnNext2.setAttribute('aria-disabled', true)
+        } else {
+            btnNext2.classList.remove('not_allowed')
+            btnNext2.removeAttribute('disabled')
+            btnNext2.setAttribute('aria-disabled', false)
         }
     })
 }

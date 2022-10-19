@@ -229,8 +229,8 @@ const getPersonnelManageList = () => {
     let params = {
         type: parseInt(main_type.value)
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
-        params.group_id = sessionStorage.getItem('groupChinaCode')
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
+        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
     }
     for (let key in search_str.obj) {
         if (search_str.obj[key] || search_str.obj[key] === 0) {

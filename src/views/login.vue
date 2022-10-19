@@ -192,15 +192,10 @@ function handleLogin() {
                     console.log('成功')
                     userStore.getPermissions()
                 }
+                console.log('aaaa')
                 sessionStorage.setItem('isChooseCity', true)
                 router.push(redirect.value)
-                let uid = localStorage.getItem('uid')
-                console.log(localStorage.getItem(uid + '_city'))
-                if (!localStorage.getItem(uid + '_city')) {
-                    console.log('a')
-                    proxy.$eventBus.emit('global-choose-city', true)
-                    console.log('b')
-                }
+                console.log('bbb')
             }).catch(() => {
                 loading.value = false
             })

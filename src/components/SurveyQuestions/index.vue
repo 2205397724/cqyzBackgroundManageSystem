@@ -214,20 +214,18 @@ const modifyServeyTopic = val => {
     str_title.value = '修改'
     // 获取问卷题目详情
     APIgetSurveyTopicDetail(val.id).then(res => {
-        if (res.status == 200) {
-            topic_examine.item = res.data
-            // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
-            topic_examine.item.type += ''
-            topic_examine.item.score_calc += ''
-            // 清除选项缓存数据
-            opts.length = 0
-            // 将选项数据遍历插入数组对象
-            res.data.opts.forEach(element => {
-                opts.push(element)
-            })
-            console.log(opts)
-            switch_examine.value = true
-        }
+        topic_examine.item = res
+        // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
+        topic_examine.item.type += ''
+        topic_examine.item.score_calc += ''
+        // 清除选项缓存数据
+        opts.length = 0
+        // 将选项数据遍历插入数组对象
+        res.opts.forEach(element => {
+            opts.push(element)
+        })
+        console.log(opts)
+        switch_examine.value = true
     })
 }
 // 删除问卷题目
@@ -256,12 +254,10 @@ const dialogExamineCloseFunc = id => {
         id = topic_examine.item.id
         // console.log(id)
         APImodifySurveyTopic(id, topic_examine.item).then(res => {
-            if (res.status == 200) {
-                refreshFunc()
-                // ElMessage.success(res.msg)
-                ElMessage.success('修改成功')
-                switch_examine.value = false
-            }
+            refreshFunc()
+            // ElMessage.success(res.msg)
+            ElMessage.success('修改成功')
+            switch_examine.value = false
         })
     }
 
@@ -274,12 +270,9 @@ const topicsFunc = () => {
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
         topic_details.item = [[], [], [], []]
-        console.log(res.data)
-        if (res.status === 200) {
-            // topic_details.item = res.data
-        }
+        console.log(res)
         // 对题目进行排序
-        res.data.forEach(element => {
+        res.forEach(element => {
             if (element.type === 0) {
                 topic_details.item[0].push(element)
             } else if (element.type === 1) {

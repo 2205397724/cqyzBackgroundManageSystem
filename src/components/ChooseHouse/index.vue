@@ -2,11 +2,11 @@
     <div style="display: flex; max-height: calc(85vh - 50px - 54px - 62px - 40px);">
         <position-tree
             :tree_item="tree_item.obj"
-            style="width:400px;border: 1px solid #eeeeee;height: auto;"
+            style="width: 400px;border: 1px solid #eee;height: auto;"
             @checkFunc="checkFunc"
         />
-        <div style="width: 100%;margin-left: 20px;overflow: auto;border: 1px solid #eeeeee;position: relative;">
-            <div v-if="!(tree_item.active_unit.type=='units'||tree_item.active_unit.type=='building')" style="position: absolute;left:0;top:0;width:100%;height:100%;background-color: rgba(255,255,255,0.6);z-index: 9;cursor: no-drop;" />
+        <div style="width: 100%;margin-left: 20px;overflow: auto;border: 1px solid #eee;position: relative;">
+            <div v-if="!(tree_item.active_unit.type=='units'||tree_item.active_unit.type=='building')" style="position: absolute;left: 0;top: 0;width: 100%;height: 100%;background-color: rgb(255 255 255 / 60%);z-index: 9;cursor: no-drop;" />
             <div>
                 <div class="row-box row-box-title">
                     <div class="row-item-box row-item-tit-box">
@@ -27,7 +27,7 @@
                         </div>
                     </el-scrollbar>
                 </div>
-                <div style="height: calc(100% - 45px );overflow: auto;">
+                <div style="height: calc(100% - 45px);overflow: auto;">
                     <div v-for="(child,j) in house_list.arr" class="row-box">
                         <div class="row-item-box row-item-tit-box">
                             <div class="row-item row-item-tit row-item-tit-ceng">
@@ -111,8 +111,8 @@ import {
 } from '@/api/custom/custom.js'
 APIgetChinaRegion().then(res => {
     tree_item.obj = {
-        id: res.data[0].code,
-        name: res.data[0].name,
+        id: res[0].code,
+        name: res[0].name,
         next_type: 'region',
         type: 'region'
     }
@@ -157,8 +157,8 @@ const getHouseListFunc = () => {
     APIgetHouseListSort(params).then(res => {
         total.value = 0
         // 处理空白格
-        let nums = res.data.house_nums
-        let list = res.data.houses
+        let nums = res.house_nums
+        let list = res.houses
         for (let i in list) {
             if (list[i].houses.length < nums.length) {
                 for (let j in nums) {
@@ -292,15 +292,14 @@ getOpts([  'house_type_model', 'house_type_property',  'house_status_use', 'hous
 <style lang="scss" scoped>
     .row-box {
         border-bottom: 1px solid #f2f2f2;
-        background-color: #ffffff;
+        background-color: #fff;
         display: flex;
         .row-item-box {
             display: inline-block;
             box-sizing: border-box;
-            padding:6px;
-            min-width:84px;
+            padding: 6px;
+            min-width: 84px;
             height: 44px;
-
             .row-item {
                 width: 100%;
                 height: 100%;
@@ -313,43 +312,35 @@ getOpts([  'house_type_model', 'house_type_property',  'house_status_use', 'hous
                 box-sizing: border-box;
                 padding: 6px;
                 cursor: pointer;
-                justify-content: space-between;
-
-                .row-item-check {}
             }
-
             .row-item-tit-ceng {
                 border: 0 solid #e9e9e9;
             }
         }
-
         .row-item-tit-box {
             border-right: 1px solid #e9e9e9;
             width: 84px;
             .row-item-tit {
                 border: 0 solid #e9e9e9 !important;
                 font-size: 12px;
-
                 .tit-fh {
                     margin-bottom: -18px;
                 }
-
                 .tit-lc {
                     margin-top: -18px;
                 }
             }
-
             .row-item-tit-bgline {
-                background-image: linear-gradient(to top right, #ffffff 49%, #e9e9e9, #ffffff 51%);
+                background-image: linear-gradient(to top right, #fff 49%, #e9e9e9, #fff 51%);
                 justify-content: space-between;
                 cursor: initial;
             }
         }
     }
-    .row-box-title{
-        .row-item-box{
+    .row-box-title {
+        .row-item-box {
             .row-item {
-                border: 1px solid #ffffff;
+                border: 1px solid #fff;
             }
         }
     }

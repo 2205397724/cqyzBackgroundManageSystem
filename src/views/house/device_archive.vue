@@ -351,7 +351,7 @@ import {
 } from '@/api/custom/custom.js'
 const options = reactive({ arr: [] })
 APIgetTypeList('announce').then(res => {
-    options.arr = res.data
+    options.arr = res
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 方法
