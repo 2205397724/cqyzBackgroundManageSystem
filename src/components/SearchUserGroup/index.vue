@@ -61,50 +61,56 @@
             </div>
 
             <div style="font-size: 14px;color: #aaa;margin-bottom: 8px;">*点击列表选择用户组</div>
-            <el-table
-                v-loading="loading_tab"
-                :data="data_tab.arr"
-                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;border-bottom: 0 solid #fff !important;"
-                :tree-props="{ children: 'children' }"
-                row-key="id"
-                default-expand-all
-                @row-click="rowClickFunc"
-                @selection-change="selectionChangeFunc"
-            >
-                <el-table-column v-if="props.checkbox" type="selection" width="55" />
-                <el-table-column prop="name" label="名称" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="id" label="ID" width="250">
-                    <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="id" label="上级ID" width="250">
-                    <template #default="scope">
-                        <span>{{ scope.row.pid }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="id" label="等级" width="90">
-                    <template #default="scope">
-                        <span>{{ scope.row.level }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="created_at" label="创建时间" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.created_at }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="updated_at" label="更新时间" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.updated_at }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column />
-            </el-table>
+            <div class="hidden">
+                <el-table
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    style="width: 100%;min-height: 300px;border: 1px solid rgb(235 238 245); border-radius: 6px;border-bottom: 0 solid #fff !important;"
+                    :tree-props="{ children: 'children' }"
+                    row-key="id"
+                    default-expand-all
+                    @row-click="rowClickFunc"
+                    @selection-change="selectionChangeFunc"
+                >
+                    <el-table-column v-if="props.checkbox" type="selection" width="55" />
+                    <el-table-column prop="name" label="名称" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.name }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="ID" width="250">
+                        <template #default="scope">
+                            <span>{{ scope.row.id }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="上级ID" width="250">
+                        <template #default="scope">
+                            <span>{{ scope.row.pid }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="id" label="等级" width="90">
+                        <template #default="scope">
+                            <span>{{ scope.row.level }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="created_at" label="创建时间" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.created_at }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="updated_at" label="更新时间" width="180">
+                        <template #default="scope">
+                            <span>{{ scope.row.updated_at }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+                <el-pagination
+                    v-model:current-page="data.page" class="btnClass" style="float: right;" layout="prev,next,jumper," :total="50"
+                    :page-size="data.per_page" background prev-text="上一页" next-text="下一页" hide-on-single-page
+                />
+            </div>
             <template #footer>
                 <span v-if="props.checkbox" style="width: 100%;text-align: right;">
                     <el-button type="primary" @click="getUsers">提交</el-button>
@@ -121,7 +127,6 @@ const icon_hover = ref(false)
 import {
     reactive,
     ref,
-    watch,
     defineProps,
     defineExpose,
     defineEmits
@@ -141,17 +146,34 @@ const loading_tab = ref(false)
 const data_tab = reactive({
     arr: []
 })
+const switch_search = ref(false)
 // 打开弹窗
 const openDigFunc = () => {
     emit('update:name', '')
     switch_list.value = true
     getTabListFunc()
 }
-// watch(page, () => {
-//     getTabListFunc()
-// })
-let per_page = ref(500)
-let page = ref(1)
+const searchFunc = () => {
+    switch_search.value = true
+    getTabListFunc()
+}
+const data = reactive({
+    page: 1,
+    per_page: 15
+})
+// 刷新
+const refreshFunc = () => {
+    data.page = 1
+    switch_search.value = false
+    data_search.obj = {}
+    getTabListFunc()
+}
+watch(() => data.page, new_val => {
+    console.log(data.page)
+    getTabListFunc()
+}, { deep: true })
+// let per_page = ref(500)
+// let page = ref(1)
 let total = ref(100)
 // const UserGroupClosed = () => {
 //     userName.value = ''
@@ -159,8 +181,8 @@ let total = ref(100)
 // 获取列表
 const getTabListFunc = () => {
     let params = {
-        page: page.value,
-        per_page: per_page.value
+        page: data.page,
+        per_page: data.per_page
     }
     loading_tab.value = true
     for (let key in data_search.obj) {
@@ -177,6 +199,19 @@ const getTabListFunc = () => {
             loading_tab.value = false
             total.value = res.data.length
             data_tab.arr = res.data
+            let btnNext1 = document.querySelector('.btnClass')
+            let btnNext2 = btnNext1.children[1]
+            console.log(btnNext2)
+            if (res.data.length < data.per_page) {
+                console.log('a')
+                btnNext2.classList.add('not_allowed')
+                btnNext2.setAttribute('disabled', true)
+                btnNext2.setAttribute('aria-disabled', true)
+            } else {
+                btnNext2.classList.remove('not_allowed')
+                btnNext2.removeAttribute('disabled')
+                btnNext2.setAttribute('aria-disabled', false)
+            }
         }
     })
 }
@@ -216,40 +251,42 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
-    .tit-box {
-        position: relative;
-        .tit-icon {
-            position: absolute;
-            right: 10px;
-            top: calc(50% - 10px);
-            background-color: #fff;
-            z-index: 1;
-        }
-        .tit-icon-on {
-            display: none;
-        }
-    }
-    .nostr {
-        color: #aaa;
-    }
-    .head {
-        box-sizing: border-box;
-        border-radius: 4px;
-        width: 100%;
-        height: 100%;
-        font-size: 14px;
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.tit-box {
+    position: relative;
+    .tit-icon {
+        position: absolute;
+        right: 10px;
+        top: calc(50% - 10px);
         background-color: #fff;
-        .head_th {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding-left: 11px;
-            .head_tb {
-                line-height: 1rem;
-                white-space: nowrap;
-            }
+        z-index: 1;
+    }
+    .tit-icon-on {
+        display: none;
+    }
+}
+.nostr {
+    color: #aaa;
+}
+.head {
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    background-color: #fff;
+    .head_th {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding-left: 11px;
+        .head_tb {
+            line-height: 1rem;
+            white-space: nowrap;
         }
     }
+}
 </style>

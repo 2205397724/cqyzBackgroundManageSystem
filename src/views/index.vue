@@ -41,28 +41,8 @@
             </el-row>
         </page-main>
         <el-row :gutter="20" style="margin: -10px 10px;" class="icontitbox">
-            <!-- <el-col v-if="data.tipsnum.announce_stat" :key="'tipsnum'+i" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
-                <page-main style="margin: 10px 0;">
-                    <div class="icontit">
-                        <div class="img">
-                            <svg-icon v-if="i==0" class="svg" name="u719" />
-                            <svg-icon v-if="i==1" class="svg" name="u726" />
-                            <svg-icon v-if="i==2" class="svg" name="u731" />
-                            <svg-icon v-if="i==3" class="svg" name="u736" />
-                            <svg-icon v-if="i==4" class="svg" name="u741" />
-                        </div>
-                        <div>公示</div>
-                    </div>
-                    <div>
-                        <div>公示状态</div>
-                        <div v-for >
-
-                        </div>
-                    </div>
-                </page-main>
-            </el-col> -->
             <!-- 小区 -->
-            <el-col v-if="data_1.obj.zone_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+            <el-col v-if="count_data.obj.zone_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
                 <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
@@ -76,16 +56,16 @@
                     </div>
                     <div class="item-bottom">
                         <div>
-                            总数：<span class="tit">{{ data_1.obj.zone_stat?.z_tot }}</span>
+                            总数：<span class="tit">{{ count_data.obj.zone_stat?.z_tot }}</span>
                         </div>
                         <div>
-                            今日：<span class="num">{{ data_1.obj.zone_stat?.z_today_cnt }}</span>
+                            今日：<span class="num">{{ count_data.obj.zone_stat?.z_today_cnt }}</span>
                         </div>
                     </div>
                 </page-main>
             </el-col>
             <!-- 楼栋 -->
-            <el-col v-if="data_1.obj.building_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+            <el-col v-if="count_data.obj.building_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
                 <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
@@ -99,16 +79,16 @@
                     </div>
                     <div class="item-bottom">
                         <div>
-                            总数：<span class="tit">{{ data_1.obj.building_stat?.b_tot }}</span>
+                            总数：<span class="tit">{{ count_data.obj.building_stat?.b_tot }}</span>
                         </div>
                         <div>
-                            今日：<span class="num">{{ data_1.obj.building_stat?.b_today_cnt }}</span>
+                            今日：<span class="num">{{ count_data.obj.building_stat?.b_today_cnt }}</span>
                         </div>
                     </div>
                 </page-main>
             </el-col>
             <!-- 单元 -->
-            <el-col v-if="data_1.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+            <el-col v-if="count_data.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
                 <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
@@ -122,16 +102,16 @@
                     </div>
                     <div class="item-bottom">
                         <div>
-                            总数：<span class="tit">{{ data_1.obj.unit_stat?.u_tot }}</span>
+                            总数：<span class="tit">{{ count_data.obj.unit_stat?.u_tot }}</span>
                         </div>
                         <div>
-                            今日：<span class="num">{{ data_1.obj.unit_stat?.u_today_cnt }}</span>
+                            今日：<span class="num">{{ count_data.obj.unit_stat?.u_today_cnt }}</span>
                         </div>
                     </div>
                 </page-main>
             </el-col>
             <!-- 房屋 -->
-            <el-col v-if="data_1.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
+            <el-col v-if="count_data.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
                 <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
@@ -145,17 +125,17 @@
                     </div>
                     <div class="item-bottom">
                         <div>
-                            总数：<span class="tit">{{ data_1.obj.house_stat?.h_tot }}</span>
+                            总数：<span class="tit">{{ count_data.obj.house_stat?.h_tot }}</span>
                         </div>
                         <div>
-                            今日：<span class="num">{{ data_1.obj.house_stat?.h_today_cnt }}</span>
+                            今日：<span class="num">{{ count_data.obj.house_stat?.h_today_cnt }}</span>
                         </div>
                     </div>
                 </page-main>
             </el-col>
         </el-row>
         <el-row :gutter="20" style="margin: 10px 10px -10px;">
-            <el-col v-for="(item,i) in data_1.obj.complaint_stat" :key="'eventnum'+i" :sm="12" :md="12" :lg="8" :xl="8">
+            <el-col v-for="(item,i) in count_data.obj.complaint_stat" :key="'eventnum'+i" :sm="12" :md="12" :lg="8" :xl="8">
                 <div v-if="item.kind == 1" class="comStatus" style="margin: 10px 0;">
                     <div v-if="item.kind == 1" class="title-container">违建</div>
                     <div class="title-container-1 size-base">状态({{ item.stat.c_tot }})</div>
@@ -236,54 +216,6 @@
                 </div>
             </el-col>
         </el-row>
-        <!-- <el-row :gutter="20" style="margin: 10px 10px -10px;">
-            <el-col v-for="(item,i) in data_1.obj.complaint_stat" :key="'eventnum'+i" :xs="24" :sm="12" :md="12" :lg="8">
-                <page-main v-if="item.kind == 2" class="main m-t-10 m-b-10 m-r-10" title="投诉">
-                    <div class="numname">
-                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
-                            <div class="num">{{ child.cnt }}</div>
-                            <div v-if="child.status == 0" class="name">未处理</div>
-                            <div v-if="child.status == 1" class="name">已审核</div>
-                            <div v-if="child.status == 2" class="name">已确认</div>
-                            <div v-if="child.status == 3" class="name">已受理</div>
-                            <div v-if="child.status == 5" class="name">已转办</div>
-                            <div v-if="child.status == 6" class="name">已回复</div>
-                            <div v-if="child.status == 7" class="name">已办完</div>
-                            <div v-if="child.status == 8" class="name">已追问</div>
-                            <div v-if="child.status == 99" class="name">已结案</div>
-                        </div>
-                    </div>
-                </page-main>
-                <page-main v-if="item.kind == 1" class="main m-t-10 m-b-10 m-r-10" style="margin: 10px 0;" title="违建">
-                    <div class="numname">
-                        <div v-for="(child,j) in item.stat.c_status_cnt" :key="j">
-                            <div class="num">{{ child.cnt }}</div>
-                            <div v-if="child.status == 0" class="name">未处理</div>
-                            <div v-if="child.status == 1" class="name">已审核</div>
-                            <div v-if="child.status == 2" class="name">已确认</div>
-                            <div v-if="child.status == 3" class="name">已受理</div>
-                            <div v-if="child.status == 5" class="name">已转办</div>
-                            <div v-if="child.status == 6" class="name">已回复</div>
-                            <div v-if="child.status == 7" class="name">已办完</div>
-                            <div v-if="child.status == 8" class="name">已追问</div>
-                            <div v-if="child.status == 99" class="name">已结案</div>
-                        </div>
-                    </div>
-                </page-main>
-            </el-col>
-        </el-row> -->
-        <!-- <el-row :gutter="20" style="margin: 10px 10px -10px;">
-            <el-col v-for="(item,i) in data.eventnum" :key="'eventnum'+i" :xs="24" :sm="12" :md="12" :lg="8">
-                <page-main style="margin: 10px 0;" :title="item.name">
-                    <div class="numname">
-                        <div v-for="(child,j) in item.nums" :key="'titnum'+j">
-                            <div class="num">{{ child.num }}</div>
-                            <div class="name">{{ child.tit }}</div>
-                        </div>
-                    </div>
-                </page-main>
-            </el-col>
-        </el-row> -->
         <page-main v-if="data.echarts.length>0" class="picbox">
             <el-row :gutter="20">
                 <el-col v-for="(item,i) in data.echarts" :key="'echarts'+i" :sm="24" :md="data.echarts.length==1?24:12" :lg="data.echarts.length==1?24:data.echarts.length==2?12:8">
@@ -291,14 +223,6 @@
                 </el-col>
             </el-row>
         </page-main>
-        <el-dialog
-            v-model="switch_choose_city" title="请选择地区"
-            width="30%" :close-on-click-modal="false" :show-close="false"
-        >
-            <div class="cityBox">
-                <div v-for="item in city_list.arr" :key="item.ip" class="city" @click="choose_city_end(item)">{{ item.name }}</div>
-            </div>
-        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -311,92 +235,10 @@ import {
     APIgetCityNotPm
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
-import area from '@/util/area'
-// import router from '@/router';
-const choose_city_props = reactive({
-    item: {
-        value: 'code',
-        label: 'name',
-        children: 'children'
-    }
-})
+import { reactive, watch } from 'vue'
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const userStore = useUserOutsideStore()
-// 公共导入 cscs
-const switch_choose_city = ref(false)
-const choosed_city = ref('')
 
-const city_list = reactive({
-    arr: []
-})
-const page = ref(1)
-const per_page = ref(15)
-// 获取城市配置
-const getCityList = () => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    APIgetCityNotPm(params).then(res => {
-        city_list.arr = res.data
-        console.log(res)
-    })
-}
-// 选择地区弹出框
-const tree_item = ref({
-    id: '50',
-    name: '重庆市',
-    next_type: 'region',
-    type: 'region'
-})
-const checkFunc = val => {
-    choosed_city.value = val.china_code
-    console.log(val)
-    userStore.china_code = val.china_code
-    localStorage.setItem('china_code', val.china_code)
-}
-const show = reactive({
-    name: ''
-})
-// 选择 后确认按钮
-const choose_city_end = val => {
-    if (!val.china_code) {
-        ElMessage.error('请选择城市')
-        return
-    }
-    console.log(val.china_code)
-    userStore.china_code  = val.china_code
-    localStorage.setItem('china_code', val.china_code)
-    ElMessage.success('选择成功')
-    switch_choose_city.value = false
-    sessionStorage.setItem('isChooseCity', false)
-    console.log(sessionStorage.getItem('isChooseCity'))
-    // router.replace('/supervise_home/home')
-}
-// import { useRoute, useRouter } from 'vue-router'
-// const router = useRouter()
-// 进入首页进行判断
-import { auth, authAll } from '../util/index'
-const choose_city = () => {
-    console.log(localStorage.getItem('utype'))
-
-    console.log(sessionStorage.getItem('isChooseCity'))
-    if (sessionStorage.getItem('isChooseCity') != 'true') {
-        userStore.isChooseCity = false
-        switch_choose_city.value = false
-    } else {
-        console.log(sessionStorage.getItem('isChooseCity'))
-        getCityList()
-        userStore.isChooseCity = true
-        switch_choose_city.value = true
-    }
-
-}
-choose_city()
-import { reactive } from 'vue'
-// const refreshCurPage=()=>{
-//     location.reload()
-// }
 // 数据
 const data = reactive({
     userinfo: '',
@@ -422,17 +264,11 @@ const data = reactive({
     eventnum: '',
     echarts: ''
 })
-const data_1 = reactive({
+const count_data = reactive({
     obj: {},
     arr: []
 })
-APIgetUserinfo().then(res => {
-    console.log(res)
-    localStorage.setItem('account', res.data.name || res.data.nickname || res.data.username)
-    data.userinfo = res.data
-}).catch(error => {
-    console.log(error)
-})
+
 const getAggregate = () => {
     let data = {}
     if (localStorage.getItem('utype') == 'pt') {
@@ -442,8 +278,8 @@ const getAggregate = () => {
     }
     APIgetAggregate(data).then(res => {
         console.log(res)
-        data_1.obj = res.data
-        data_1.arr = res.data.complaint_stat
+        count_data.obj = res.data
+        count_data.arr = res.data.complaint_stat
         // console.log(data.tipsnum)
     }).catch(error => {
         console.log(error)
@@ -468,7 +304,6 @@ APIgetEchartsHome().then(res => {
 }).catch(error => {
     console.log(error)
 })
-const aaa = ref()
 </script>
 
 <style lang="scss" scoped>

@@ -293,7 +293,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(1)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
 // 详情
 let switch_details = ref(false)
 // 添加 修改
@@ -410,7 +410,17 @@ const handleClick = tab => {
 }
 // 监听分页
 watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = (formEl, id) => {
