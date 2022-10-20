@@ -138,11 +138,11 @@ const loadNode = (node, resolve) => {
                     break
                 }
             }
-            for (let i in res.data) {
-                if (res.data?.[i]?.level < 5) {
-                    tree_arr.push({ name: res.data?.[i]?.name, type: 'region', next_type: 'region', id: res.data?.[i]?.code, disabled: dis })
+            for (let i in res) {
+                if (res?.[i]?.level < 5) {
+                    tree_arr.push({ name: res?.[i]?.name, type: 'region', next_type: 'region', id: res?.[i]?.code, disabled: dis })
                 } else {
-                    tree_arr.push({ name: res.data?.[i]?.name, type: 'region', next_type: 'zone', id: res.data?.[i]?.code, disabled: dis })
+                    tree_arr.push({ name: res?.[i]?.name, type: 'region', next_type: 'zone', id: res?.[i]?.code, disabled: dis })
                 }
             }
             resolve(tree_arr)
@@ -160,11 +160,11 @@ const loadNode = (node, resolve) => {
                         break
                     }
                 }
-                for (let i in res.data) {
-                    if (res.data[i].level < 5) {
-                        tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code, disabled: dis })
+                for (let i in res) {
+                    if (res[i].level < 5) {
+                        tree_arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code, disabled: dis })
                     } else {
-                        tree_arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code, disabled: dis })
+                        tree_arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code, disabled: dis })
                     }
                 }
                 resolve(tree_arr)

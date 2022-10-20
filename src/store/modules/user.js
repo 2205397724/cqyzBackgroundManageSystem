@@ -41,16 +41,16 @@ export const useUserStore = defineStore(
             login(data) {
                 return new Promise((resolve, reject) => {
                     APIlogin(data).then(res => {
-                        this.utype = res.data.auth_type
-                        this.name = res.data.username
-                        this.time = res.data.expires_in + Date.now() / 1000
-                        this.token = res.data.access_token
+                        this.utype = res.auth_type
+                        this.name = res.username
+                        this.time = res.expires_in + Date.now() / 1000
+                        this.token = res.access_token
                         this.account = this.name
                         this.failure_time = this.time
                         localStorage.setItem('account', this.name)
                         localStorage.setItem('token', this.token)
                         localStorage.setItem('failure_time', this.time)
-                        resolve(res.data)
+                        resolve(res)
                     }).catch(error => {
                         reject({})
                     })
@@ -76,12 +76,16 @@ export const useUserStore = defineStore(
                     APIgetUserinfo().then(res => {
                         console.log(res)
                         let data = {
-                            info: res.data
+                            info: res
                         }
-                        localStorage.setItem('uid', res.data.id)
-                        // localStorage.setItem('user_info', JSON.stringify({ [res.data.id]: data }))
-                        localStorage.setItem(res.data.id + '_user_info', JSON.stringify(res.data))
-                        resolve(res.data)
+                        if (!localStorage.getItem('uid')) {
+                            localStorage.setItem('uid', res.id)
+                        }
+                        if (!localStorage.getItem(res.id + '_user_info')) {
+                            localStorage.setItem(res.id + '_user_info', JSON.stringify(res))
+                        }
+                        // localStorage.setItem('user_info', JSON.stringify({ [res.id]: data }))
+                        resolve(res)
                     }).catch(error => {
                         reject({})
                     })
@@ -91,12 +95,12 @@ export const useUserStore = defineStore(
             getGroups() {
                 return new Promise((resolve, reject) => {
                     APIgetLoginUserGroup().then(res => {
-                        if (res.data.length > 0) {
+                        if (res.length > 0) {
                             let data = {
-                                groups: res.data[0]
+                                groups: res[0]
                             }
-                            localStorage.setItem('user_info', JSON.stringify({ [this.uid]: data }))
-                            resolve(res.data)
+                            // localStorage.setItem('user_info', JSON.stringify({ [this.uid]: data }))
+                            resolve(res)
                         } else {
                             reject({})
                         }
@@ -115,7 +119,7 @@ export const useUserStore = defineStore(
                     } else {
                         // APIgetPermsList().then(res => {
                         //     console.log(res)
-                        //     res.data.forEach(item => {
+                        //     res.forEach(item => {
                         //         for (let key in item) {
                         //             if (key == 'name') {
                         //                 perms.push(item[key])
@@ -129,12 +133,14 @@ export const useUserStore = defineStore(
                         // })
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
-                            if (res.data.length > 0) {
-                                let currentGId = res.data[0].id
-                                sessionStorage.setItem('groupChinaCode', res.data[0].region_cc)
-                                APIgetGroupPerms(currentGId).then(res => {
+                            if (res.length > 0) {
+                                let uid = localStorage.getItem('uid')
+                                if (!JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
+                                    localStorage.setItem(uid + '_groupChinaCode', JSON.stringify(res[0]))
+                                }
+                                APIgetGroupPerms(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).id).then(res => {
                                     console.log(res)
-                                    res.data.forEach(item => {
+                                    res.forEach(item => {
                                         for (let key in item) {
                                             if (key == 'name') {
                                                 allPermisson.push(item[key])

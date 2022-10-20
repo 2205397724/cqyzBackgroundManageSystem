@@ -164,11 +164,9 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetSurvey(params).then(res => {
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = data_tab.arr.length
-        }
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = data_tab.arr.length
     })
 }
 const activityName = ref('')
@@ -202,11 +200,9 @@ import {
     APIgetGroupList
 } from '@/api/custom/custom.js'
 APIgetGroupList().then(res => {
-    if (res.status == 200) {
-        console.log(res)
-        loading_tab.value = false
-        userData.arr = res.data
-    }
+    console.log(res)
+    loading_tab.value = false
+    userData.arr = res
 })
 const getNameFunc = (arr, key) => {
     for (let i in arr) {

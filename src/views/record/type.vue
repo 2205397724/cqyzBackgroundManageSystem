@@ -293,9 +293,7 @@ const add_record_type = val => {
 }
 const submit_post_put_children = () => {
     APIpostkind('filing', from_record_children.item).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('添加子备案类型成功')
-        }
+        ElMessage.success('添加子备案类型成功')
     })
 }
 // 筛选按钮

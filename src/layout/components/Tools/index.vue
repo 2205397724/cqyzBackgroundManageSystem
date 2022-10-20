@@ -46,7 +46,7 @@
                 <el-avatar size="small">
                     <el-icon><el-icon-user-filled /></el-icon>
                 </el-avatar>
-                {{ userStore.account }}
+                {{ useName }}
                 <el-icon><el-icon-caret-bottom /></el-icon>
             </div>
             <template #dropdown>
@@ -119,6 +119,7 @@ const per_page = ref(15)
 const isCity = ref(true)
 const isCity_1 = ref(false)
 const cityIndex = ref(null)
+const useName = ref(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')).name || JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')).nickname || JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')).username)
 // 获取城市配置
 const getCityList = () => {
     let params = {
@@ -126,13 +127,13 @@ const getCityList = () => {
         per_page: per_page.value
     }
     APIgetCityNotPm(params).then(res => {
-        res.data.forEach((item, index) => {
+        res.forEach((item, index) => {
             if (item.china_code == localStorage.getItem('china_code')) {
                 cityIndex.value = index
                 isCity_1.value = true
             }
         })
-        city_list.arr = res.data
+        city_list.arr = res
         console.log(res)
     })
 }
@@ -144,7 +145,7 @@ const choose_city_end = val => {
     }
     console.log(val.china_code)
     userStore.china_code  = val.china_code
-    localStorage.setItem('china_code', val.china_code)
+    sessionStorage.setItem('china_code', val.china_code)
     ElMessage.success('选择成功')
     switch_choose_city.value = false
     sessionStorage.setItem('isChooseCity', true)

@@ -43,11 +43,10 @@ api.interceptors.request.use(
         console.log(userOutsideStore.isLogin)
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
-            // let uid = localStorage.getItem('uid')
-            // console.log(localStorage.getItem(uid + '_city'))
-            // request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
+            let uid = localStorage.getItem('uid')
+            request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
             // request.headers['X-Cc'] = localStorage.getItem('china_code')
-            request.headers['X-Cc'] = '500101'
+            // request.headers['X-Cc'] = '500101'
             // request.headers['Token'] = userOutsideStore.token
         }
         var time = new Date().getTime().toString()

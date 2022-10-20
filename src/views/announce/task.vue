@@ -657,23 +657,23 @@ const tree_item = reactive({
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
-    if (localStorage.getItem('utype') =='pt') {
+    if (localStorage.getItem('utype') == 'pt') {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (sessionStorage.getItem('groupChinaCode')) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
         params = {
-            p_code: sessionStorage.getItem('groupChinaCode')
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
         }
     } else {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
-        for (let i in res.data) {
-            if (res.data[i].level < 5) {
-                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+        for (let i in res) {
+            if (res[i].level < 5) {
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
             } else {
-                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
     })

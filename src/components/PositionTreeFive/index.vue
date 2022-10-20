@@ -396,39 +396,39 @@ const loadNode = (node, resolve) => {
                 sid: props.surveyid,
                 can_type: 2
             }).then(res => {
-                treeDetail.arr = res.data
+                treeDetail.arr = res
                 console.log(res)
                 let tree_arr = []
-                if (res.status == 200) {
-                    for (let i in res.data) {
-                        if (res.data[i].level < 5) {
-                            if (res.data[i].can_exist) {
-                                console.log(res.data[i])
-                                defaultChecked.arr.push(res.data[i].code)
-                                selected_all.arr.push(res.data[i].code)
+                if (res.length > 0) {
+                    for (let i in res) {
+                        if (res[i].level < 5) {
+                            if (res[i].can_exist) {
+                                console.log(res[i])
+                                defaultChecked.arr.push(res[i].code)
+                                selected_all.arr.push(res[i].code)
                                 treeRef.value.setCheckedKeys(selected_all.arr)
                             }
                             tree_arr.push({
-                                name: res.data[i].name,
+                                name: res[i].name,
                                 type: 'region',
                                 next_type: 'region',
-                                id: res.data[i].code,
-                                code: res.data[i].code,
-                                can_exist: res.data[i].can_exist,
+                                id: res[i].code,
+                                code: res[i].code,
+                                can_exist: res[i].can_exist,
                                 isDisabled: true
                             })
                         } else {
-                            if (res.data[i].can_exist) {
-                                defaultChecked.arr.push(res.data[i].code)
-                                selected_all.arr.push(res.data[i].code)
+                            if (res[i].can_exist) {
+                                defaultChecked.arr.push(res[i].code)
+                                selected_all.arr.push(res[i].code)
                                 treeRef.value.setCheckedKeys(selected_all.arr)
                             }
                             tree_arr.push({
-                                name: res.data[i].name,
+                                name: res[i].name,
                                 type: 'region',
                                 next_type: 'zone',
-                                id: res.data[i].code,
-                                code: res.data[i].code,
+                                id: res[i].code,
+                                code: res[i].code,
                                 isDisabled: true
                             })
                         }
@@ -562,7 +562,7 @@ const handleCheck = (data, checked) => {
     //       console.log(res);
     //       let can_exist_true = [];
     //       let delarr = [];
-    //       res.data.forEach((item) => {
+    //       res.forEach((item) => {
     //         can_exist_true.push(item.code);
     //       });
     //       can_exist_true.forEach((item) => {

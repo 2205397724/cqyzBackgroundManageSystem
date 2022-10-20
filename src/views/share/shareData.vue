@@ -1,11 +1,11 @@
 <template>
     <div>
         <page-main class="hidden">
-            <div class="m-b-20">
+            <!-- <div class="m-b-20">
                 <el-button type="primary" :icon="Plus" size="large" @click="addResidentialFunc">
                     添加共享数据
                 </el-button>
-            </div>
+            </div> -->
             <el-button-group class="btn m-b-20">
                 <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
                 <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
@@ -26,45 +26,43 @@
             >
                 <el-table-column prop="id" label="业务编号">
                     <template #default="scope">
-                        <span>{{ scope.row.auditable?.title ? scope.row.auditable?.title:scope.row.auditable?.name }} </span>
+                        <span>{{ scope.row.sno }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" width="180">
+                <!-- <el-table-column prop="name" label="姓名" width="180">
                     <template #default="scope">
                         <span>{{ scope.row.tgt_type }} </span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <!-- <el-table-column prop="name" label="归档内容数量" width="180">
                     <span> {{ total2 }} </span>
                 </el-table-column> -->
 
-                <el-table-column prop="created_at" label="相关单位">
+                <el-table-column prop="created_at" label="房屋id">
                     <template #default="scope">
-                        <span>{{ scope.row.reply }} </span>
+                        <span>{{ scope.row.hid }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="updated_at" label="状态" align="center">
                     <template #default="scope">
-                        <el-tag v-if="scope.row.status== 10" type="warning" effect="dark" size="small" @click="examineListFunc(scope.row)">
-                            未处理
-                        </el-tag>
-                        <el-tag v-if="scope.row.status == 20" type="success" size="small">
-                            审核通过
-                        </el-tag>
-                        <el-tag v-if="scope.row.status == 30" type="danger" size="small">
-                            审核失败
-                        </el-tag>
+                        <span v-if="scope.row.status == 10">待补充材料</span>
+                        <span v-if="scope.row.status == 11">待公众补充材料</span>
+                        <span v-if="scope.row.status == 12">待不动产中心补充材料</span>
+                        <span v-if="scope.row.status == 20">已共享</span>
+                        <span v-if="scope.row.status == 40">共享已结束</span>
+                        <span v-if="scope.row.status == 41">公众主动放弃共享</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="created_at" label="结束时间">
+                <el-table-column prop="created_at" label="共享结束时间">
                     <template #default="scope">
-                        <span>{{ scope.row.reply }} </span>
+                        <span>{{ scope.row.end_at }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="180">
                     <template #default="scope">
                         <el-button
-                            size="small"
+                            :disabled="scope.row.status !== 10 && scope.row.status !== 11"
+                            size="small" type="success"
                             @click="dataMaterialFunc(scope.row)"
                         >
                             相关材料
@@ -103,7 +101,7 @@
                     </el-table-column>
                     <el-table-column prop="name" label="关联要件id">
                         <template #default="scope">
-                            <span>{{ scope.row.bid }}</span>
+                            <span>{{ scope.row.fid }}</span>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="name" label="归档内容数量" width="180">
@@ -115,10 +113,10 @@
                             <span>{{ scope.row.created_at }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="150">
+                    <el-table-column fixed="right" label="操作" width="100">
                         <template #default="scope">
-                            <el-button type="primary" size="small" @click="examineListFunc_1(scope.row)">
-                                修改
+                            <el-button type="primary" size="small" @click="addMaterialFunc(scope.row)">
+                                补充材料
                             </el-button>
                         </template>
                     </el-table-column>
@@ -170,14 +168,14 @@
 
                     <div class="right">{{ data.obj.created_at }}</div>
                 </div>
-                <div v-if="user.item" class="item-hd">其他信息：</div>
+                <div class="item-hd">其他信息：</div>
                 <div v-if="data.obj.uinfo" class="item">
                     <div class="left">发起人</div>
                     <div class="right">{{ data.obj.uinfo.name || data.obj.uinfo.nickname || data.obj.uinfo.username }}</div>
                 </div>
-                <div class="item">
+                <div v-if="data.obj.uinfo" class="item">
                     <div class="left">电话</div>
-                    <div class="right">{{ data.obj.uinfo.name }}</div>
+                    <div class="right">{{ data.obj.uinfo.mobile }}</div>
                 </div>
                 <div class="item">
                     <div class="left">共享记录id</div>
@@ -186,7 +184,7 @@
             </div>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="popup3.switch = false">取消</el-button>
+                    <el-button @click="data.switch = false">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -271,53 +269,39 @@
                     <el-button type="primary" @click="postFunc">确定</el-button>
                 </div>
             </template>
-        </el-dialog>
-        <el-dialog v-model="data.switch_1" width="60%" title="选择要件">
-            <el-table
-                v-loading="loading_tab" :data="data.list" :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                class="tab_1" @row-click="rowClickFunc"
-            >
-                <el-table-column prop="id" label="要件名称">
-                    <template #default="scope">
-                        <span>{{ scope.row.title }} </span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="type" label="要件类型">
-                    <template #default="scope">
-                        <span v-if="scope.row.type == 1">文本</span>
-                        <span v-if="scope.row.type == 2">图片</span>
-                        <span v-if="scope.row.type == 3">文件</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="src" label="要件来源">
-                    <template #default="scope">
-                        <span v-if="scope.row.src == 1">用户上传 </span>
-                        <span v-if="scope.row.src == 2">不动产登记中心</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="src_sys" label="来源类型">
-                    <template #default="scope">
-                        <span v-if="scope.row.src_sys == 1">身份证 </span>
-                        <span v-if="scope.row.src_sys == 2">不动产权证</span>
-                    </template>
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="150">
-                    <template #default="scope">
-                        <el-button type="primary" size="small" @click="examineListFunc(scope.row)">
-                            修改
-                        </el-button>
-                        <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
-                            <template #reference>
-                                <el-button type="danger" size="small">
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-popconfirm>
-                    </template>
-                </el-table-column>
-            </el-table>
         </el-dialog> -->
+        <el-dialog v-model="data.switch_2" :title="str_title" width="50%">
+            <div>
+                <el-form ref="ruleFormRef" :model="data.item">
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label-width="100px" label="材料内容"
+                            >
+                                <el-upload
+                                    v-if="type == 2 || type == 3 || type == 4"
+                                    multiple action="***" :auto-upload="false"
+                                    :file-list="file_list" :on-change="(file, files) => {
+                                        file_list = files
+                                    }" :on-remove="(file, files) => {
+                                        file_list = files
+                                    }"
+                                >
+                                    <el-button type="primary">选择</el-button>
+                                </el-upload>
+                                <el-input v-if="type == 1" v-model="data.item.content" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="data.switch_2 = false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup >
@@ -330,12 +314,14 @@ import {
     APIgetShareDataList,
     APIgetShareDataDetails,
     APIgetShareDataMaterialList,
-    APIputShareDataMaterial
+    APIputShareDataMaterial,
+    APIgetShareElementsList
 } from '@/api/custom/custom.js'
 import {
     ElMessage
 } from 'element-plus'
 import { Search, Plus, Loading } from '@element-plus/icons-vue'
+import { getFilesKeys } from '@/util/files.js'
 const loading_tab = ref(false)
 const data = reactive({
     list: [],
@@ -344,10 +330,9 @@ const data = reactive({
     obj: {
         material: []
     },
-    arr: []
-})
-const data_1 = reactive({
-    obj: {}
+    arr: [],
+    switch_2: false,
+    item: {}
 })
 const index = ref(0)
 const flag = ref(true)
@@ -356,7 +341,7 @@ const flag2 = ref(true)
 const StatusFunk = val => {
     page.value = 1
     index.value = val
-    getShareServicesList()
+    getShareDataList()
     flag.value = false
     flag1.value = false
     flag2.value = false
@@ -396,7 +381,7 @@ const refreshFunc = () => {
 refreshFunc()
 const detailsFunc = row => {
     APIgetShareDataDetails(row.id).then(res => {
-        data.item = res
+        data.obj = res
         data.switch = true
     })
 }
@@ -480,12 +465,76 @@ const detailsFunc = row => {
 //     //     }
 //     // })
 // }
+const type = ref(0)
 const dataMaterialFunc = row => {
+    materialId_1.value = row.id
     data.switch_1 = true
     APIgetShareDataMaterialList({ rid: row.id }).then(res => {
         console.log(res)
         data.arr = res
     })
+
+}
+const materialId = ref('')
+const materialId_1 = ref('')
+const addMaterialFunc = row => {
+    materialId.value = row.id
+    data.item = {}
+    data.switch_2 = true
+    APIgetShareElementsList({ page: 1, per_page: 500 }).then(res => {
+        type.value = getType(res, row.fid)
+        console.log(getType(res, row.fid))
+    })
+
+}
+const getType = (data, key) => {
+    for (let i in data) {
+        if (data[i].id == key) {
+            return data[i].type
+        }
+    }
+    return ''
+}
+const file_list = ref([])
+const dialogExamineCloseFunc = () => {
+    console.log(data.item)
+    if (type.value == 2 || type.value == 3 || type.value == 4) {
+        let files = []
+        let file_key = []
+        if (file_list.value.length > 0) {
+            for (let i in file_list.value) {
+                if (!file_list.value[i].raw) {
+                    file_key.push(file_list.value[i].name)
+                } else {
+                    files.push(file_list.value[i].raw)
+                }
+            }
+        }
+        if (files.length > 0) {
+            getFilesKeys(files, 'material').then(arr => {
+                data.item.content = file_key.concat(arr).join(',')
+                console.log(data.item)
+                APIputShareDataMaterial(materialId.value, data.item).then(res => {
+                    ElMessage.success('补充成功')
+                    data.switch_2 = false
+                    data.switch_1 = false
+                    refreshFunc()
+                }).catch(() => {
+                    ElMessage.error('补充失败')
+                })
+            })
+        } else {
+            APIputShareDataMaterial(materialId.value, data.item).then(res => {
+                ElMessage.success('补充成功')
+                data.switch_2 = false
+                data.switch_1 = false
+                refreshFunc()
+            }).catch(() => {
+                ElMessage.error('补充失败')
+            })
+        }
+    }
+
 }
 </script>
 <style lang="scss" scoped>

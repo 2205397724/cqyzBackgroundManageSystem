@@ -442,8 +442,8 @@ const changePane = (tab, event) => {
     // console.log(tab.props.name)
     if (tab.props.name == 6) {
         APIgetSurveyRange().then(res => {
-            console.log('xxx', res.data)
-            data_range.arr = res.data
+            console.log('xxx', res)
+            data_range.arr = res
             console.log(data_range.arr.length)
             // getCities()
         })
@@ -457,10 +457,8 @@ const changePane = (tab, event) => {
 // 获取问卷详情
 const detailsFunc = id => {
     APIgetSurveyDetails(id).then(res => {
-        if (res.status === 200) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
     console.log(data_details.item)
 }
@@ -471,10 +469,8 @@ const topicsFunc = () => {
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
-        console.log(res.data)
-        if (res.status === 200) {
-            topic_details.item = res.data
-        }
+        console.log(res)
+        topic_details.item = res
     })
 }
 // 添加问卷题目
@@ -492,20 +488,18 @@ const modifyServeyTopic = val => {
     str_title.value = '修改'
     // 获取问卷题目详情
     APIgetSurveyTopicDetail(val.id).then(res => {
-        if (res.status == 200) {
-            topic_examine.item = res.data
-            // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
-            topic_examine.item.type += ''
-            topic_examine.item.score_calc += ''
-            // 清除选项缓存数据
-            opts.length = 0
-            // 将选项数据遍历插入数组对象
-            res.data.opts.forEach(element => {
-                opts.push(element)
-            })
-            console.log(opts)
-            switch_examine.value = true
-        }
+        topic_examine.item = res
+        // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
+        topic_examine.item.type += ''
+        topic_examine.item.score_calc += ''
+        // 清除选项缓存数据
+        opts.length = 0
+        // 将选项数据遍历插入数组对象
+        res.opts.forEach(element => {
+            opts.push(element)
+        })
+        console.log(opts)
+        switch_examine.value = true
     })
 }
 // 删除
@@ -538,12 +532,10 @@ const dialogExamineCloseFunc = id => {
         id = topic_examine.item.id
         // console.log(id)
         APImodifySurveyTopic(id, topic_examine.item).then(res => {
-            if (res.status == 200) {
-                refreshFunc()
-                // ElMessage.success(res.msg)
-                ElMessage.success('修改成功')
-                switch_examine.value = false
-            }
+            refreshFunc()
+            // ElMessage.success(res.msg)
+            ElMessage.success('修改成功')
+            switch_examine.value = false
         })
     }
 
@@ -552,9 +544,9 @@ const dialogExamineCloseFunc = id => {
 // const getCities = () => {
 //     // 区域代码
 //     APIgetChinaRegion().then(res => {
-//         // console.log(res.data)
+//         // console.log(res)
 //         city.length = 0
-//         res.data.forEach(element => {
+//         res.forEach(element => {
 //             city.push({'label':element.name,'value':element.code,'children':[]})
 //         })
 //         // console.log(city)
@@ -640,8 +632,8 @@ const tree_item = ref({
 })
 // tree树形组件初始的请求
 APIgetChinaRegion().then(res => {
-    tree_item.value.id = res.data[0].code
-    tree_item.value.name = res.data[0].name
+    tree_item.value.id = res[0].code
+    tree_item.value.name = res[0].name
     tree_item.value.type = 'region'
     tree_item.value.next_type = 'zone'
 })

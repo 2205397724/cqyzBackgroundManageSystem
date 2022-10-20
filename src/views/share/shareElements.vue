@@ -29,6 +29,7 @@
                         <span v-if="scope.row.type == 1">文本</span>
                         <span v-if="scope.row.type == 2">图片</span>
                         <span v-if="scope.row.type == 3">文件</span>
+                        <span v-if="scope.row.type == 4">签字</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="src" label="要件来源">
@@ -94,6 +95,7 @@
                                         <el-radio label="1">文本</el-radio>
                                         <el-radio label="2">图片</el-radio>
                                         <el-radio label="3">文件</el-radio>
+                                        <el-radio label="4">签字</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </el-col>

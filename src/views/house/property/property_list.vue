@@ -445,6 +445,8 @@ const data_details = reactive({
 let total = ref(100)
 let per_page = ref(15)
 let page = ref(1)
+let per_page_1 = ref(15)
+let page_1 = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -516,7 +518,6 @@ const dialogExamineCloseFunc = formEl => {
     if (!formEl) return
     formEl.validate(valid => {
         if (valid) {
-            from_examine.item.affix.bdcz = []
             let files = []
             let file_key = []
             if (file_list.value.length > 0) {
@@ -538,7 +539,9 @@ const dialogExamineCloseFunc = formEl => {
             }
             if (files.length > 0) {
                 getFilesKeys(files, 'property').then(arr => {
+                    console.log(arr)
                     from_examine.item.affix.bdcz = file_key.concat(arr)
+                    console.log(from_examine.item.affix.bdcz)
                 })
             }
             let files_1 = []
@@ -559,24 +562,27 @@ const dialogExamineCloseFunc = formEl => {
                 })
             }
             console.log(from_examine.item)
-            if (str_title.value == '修改') {
-                console.log(from_examine.item)
-                APIputProperty(from_examine.item.id, from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('修改失败')
-                })
-            } else {
-                APIpostProperty(from_examine.item).then(res => {
-                    refreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    ElMessage.error('添加失败')
-                })
-            }
+            setTimeout(() => {
+                if (str_title.value == '修改') {
+                    console.log(from_examine.item)
+                    APIputProperty(from_examine.item.id, from_examine.item).then(res => {
+                        refreshFunc()
+                        ElMessage.success('修改成功')
+                        switch_examine.value = false
+                    }).catch(err => {
+                        ElMessage.error('修改失败')
+                    })
+                } else {
+                    console.log(from_examine.item)
+                    APIpostProperty(from_examine.item).then(res => {
+                        refreshFunc()
+                        ElMessage.success('添加成功')
+                        switch_examine.value = false
+                    }).catch(err => {
+                        ElMessage.error('添加失败')
+                    })
+                }
+            }, 300)
         } else {
             return false
         }
@@ -634,20 +640,10 @@ const getTabListFunc = () => {
             btnNext.setAttribute('aria-disabled', false)
         }
     })
-    getHouseListFunc()
 }
 const allHouse_list = reactive({
     arr: []
 })
-const getHouseListFunc = () => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    APIgetHouseListHouse(params).then(res => {
-        allHouse_list.arr = res
-    })
-}
 const getHouseNameFunc = (arr, key) => {
     for (let i in arr) {
         if (arr[i].id == key) {
@@ -671,12 +667,19 @@ const addResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '添加'
     from_examine.item = {
-        owners: [],
         house_id: '',
         time_deal: '',
         code_property: '',
         code_room: '',
-        should_bind_house: ''
+        should_bind_house: '',
+        affix: {
+            bdcz: []
+        },
+        owners: [{
+            affix: {
+                sfz: []
+            }
+        }]
     }
     switch_examine.value = true
 }

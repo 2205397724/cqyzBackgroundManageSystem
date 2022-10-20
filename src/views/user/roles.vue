@@ -312,17 +312,15 @@ const post_roles_perms = () => {
         return
     }
     APIpostRoles_perms(current_roles_perms.item.id, { perm_ids: [from_post_roles_perms.item.perm_ids[0]] }).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('赋予权限成功')
-            from_post_roles_perms.item.perm_ids[0] = ''
-        }
+        ElMessage.success('赋予权限成功')
+        from_post_roles_perms.item.perm_ids[0] = ''
     })
 }
 // 根据用户组ID找到对应name
 const groupList = reactive({ arr: [] })
 const getGroupList = () => {
     APIgetGroupList().then(res => {
-        groupList.arr = res.data
+        groupList.arr = res
     })
 }
 getGroupList()
@@ -346,18 +344,14 @@ const getRoles_permsFun = val => {
     current_roles_perms.item = val
     APIgetRoles_perms(val.id).then(res => {
         console.log(res)
-        data_tab_roles_perms.arr = res.data
+        data_tab_roles_perms.arr = res
     })
 }
 // 删除角色
 const deleteRoles = val => {
     APIDeleteRoles(val.id).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('删除角色成功')
-            refreshFunc()
-        } else {
-            ElMessage.error('删除失败')
-        }
+        ElMessage.success('删除角色成功')
+        refreshFunc()
     })
 }
 // 修改角色
@@ -365,10 +359,8 @@ const postRolesFun = val => {
     switch_add_post.value = true
     add_or_post_text.value = '修改'
     APIgetRolesDetail(val.id).then(res => {
-        if (res.status === 200) {
-            console.log(res)
-            from_data.item = res.data
-        }
+        console.log(res)
+        from_data.item = res
     })
 }
 // 添加角色
@@ -389,12 +381,10 @@ const add_post_submit = () => {
         if (add_or_post_text.value == '修改') {
             loading_tab.value = true
             APIputRoles(from_data.item.id, from_data.item).then(res => {
-                if (res.status === 200) {
-                    loading_tab.value = false
-                    refreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_add_post.value = false
-                }
+                loading_tab.value = false
+                refreshFunc()
+                ElMessage.success('修改成功')
+                switch_add_post.value = false
             }).catch(err => {
                 loading_tab.value = false
             })
@@ -402,12 +392,10 @@ const add_post_submit = () => {
             console.log(from_data.item)
             loading_tab.value = true
             APIpostRoles(from_data.item).then(res => {
-                if (res.status === 200) {
-                    loading_tab.value = false
-                    refreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_add_post.value = false
-                }
+                loading_tab.value = false
+                refreshFunc()
+                ElMessage.success('添加成功')
+                switch_add_post.value = false
             }).catch(err => {
                 loading_tab.value = false
             })
@@ -424,10 +412,10 @@ const getTabListFunc = () => {
         per_page: per_page.value
     }
     APIgetRolesList(params).then(res => {
-        data_tab.arr = res.data
+        data_tab.arr = res
         console.log(res)
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
@@ -456,24 +444,24 @@ const all_perms_list = reactive({
 // 获取角色权限弹窗
 const getGroup_perms = () => {
     APIgetPermsList().then(res => {
-        all_perms_list.arr = res.data
+        all_perms_list.arr = res
     })
     APIgetRoles_perms(current_roles_perms.item.id).then(res => {
-        // tab_group_all_perms.arr=res.data
+        // tab_group_all_perms.arr=res
         data_tab_group_perms_selected_gov.arr = []
         data_tab_group_perms_selected_pm.arr = []
         data_tab_group_perms_selected_mbr.arr = []
-        for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].utype == 'gov') {
-                data_tab_group_perms_selected_gov.arr.push(res.data[i].id)
+        for (let i = 0; i < res.length; i++) {
+            if (res[i].utype == 'gov') {
+                data_tab_group_perms_selected_gov.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_gov.arr)
             }
-            if (res.data[i].utype == 'pm') {
-                data_tab_group_perms_selected_pm.arr.push(res.data[i].id)
+            if (res[i].utype == 'pm') {
+                data_tab_group_perms_selected_pm.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_pm.arr)
             }
-            if (res.data[i].utype == 'mbr') {
-                data_tab_group_perms_selected_mbr.arr.push(res.data[i].id)
+            if (res[i].utype == 'mbr') {
+                data_tab_group_perms_selected_mbr.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_mbr.arr)
             }
         }
@@ -526,12 +514,9 @@ const post_all_group_perms = () => {
             ...data_tab_group_perms_selected_mbr.arr
         ]
     }).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('添加角色权限成功')
-            getRoles_permsFun(current_roles_perms.item)
-            switch_group_perms.value = false
-
-        }
+        ElMessage.success('添加角色权限成功')
+        getRoles_permsFun(current_roles_perms.item)
+        switch_group_perms.value = false
     })
 }
 // 删除权限

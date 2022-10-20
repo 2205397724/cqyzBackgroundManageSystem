@@ -898,7 +898,7 @@ const refreshSearch = () => {
     data_search.item = {}
     data_search.switch = false
     APIgetGroupList().then(res => {
-        data_tab.arr = res.data
+        data_tab.arr = res
     })
 }
 const data_search = reactive({
@@ -919,8 +919,8 @@ const data_searchFun = () => {
     console.log(params)
     APIgetGroupList(params).then(res => {
         console.log(res)
-        data_tab.arr = res.data
-        data_search.total =  res.data.length
+        data_tab.arr = res
+        data_search.total =  res.length
     })
 }
 let from_addRoles = reactive({
@@ -977,10 +977,8 @@ const post_all_group_perms = () => {
             ...data_tab_group_perms_selected_mbr.arr
         ]
     }).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('添加用户组权限成功')
-            switch_group_perms.value = false
-        }
+        ElMessage.success('添加用户组权限成功')
+        switch_group_perms.value = false
     })
 }
 // 添加用户组成员弹框选择成员
@@ -1007,10 +1005,8 @@ const post_all_group_user_perms = () => {
             ]
         }
     ).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('修改成员权限成功')
-            switch_group_user_perms.value = false
-        }
+        ElMessage.success('修改成员权限成功')
+        switch_group_user_perms.value = false
     })
 }
 // 三种权限进行判断
@@ -1065,19 +1061,19 @@ const getChinaName = () => {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (sessionStorage.getItem('groupChinaCode')) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
         params = {
-            p_code: sessionStorage.getItem('groupChinaCode')
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
         }
     } else {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
-        for (let i in res.data) {
-            if (res.data[i].level < 5) {
-                tree_item.value.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+        for (let i in res) {
+            if (res[i].level < 5) {
+                tree_item.value.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
             } else {
-                tree_item.value.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+                tree_item.value.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
     })
@@ -1118,27 +1114,25 @@ const cascader_props = {
     lazyLoad(node, resolve) {
         const { data } = node
         APIgetChinaRegion({ p_code: data.code }).then(res => {
-            resolve(res.data)
+            resolve(res)
         })
     }
 }
 // 用户组详情
 const getGroupDetail = val => {
     APIgetGroupDetails(val.id).then(res => {
-        if (res.status == 200) {
-            if (res.data.type != 7) {
-                delete res.data.ref
-            }
-            data_group_details.item = res.data
-            switch_group_details.value = true
+        if (res.type != 7) {
+            delete res.ref
         }
+        data_group_details.item = res
+        switch_group_details.value = true
     })
 }
 // 用户组成员详细
 // const getUserDetail = val => {
 //     APIgetUserDetails(val.user_id).then(res => {
 //         if (res.status === 200) {
-//             data_user_detail.item = res.data
+//             data_user_detail.item = res
 //             switch_user_details.value = true
 //         }
 //     })
@@ -1166,12 +1160,8 @@ const addGroup_permsFun = () => {
     APIpostGroupPerms(current_group_perms.item.id, {
         perm_ids: [from_addGroup_perms.item.perm_ids[0]]
     }).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('添加角色成功')
-            switch_group_perms.value = false
-        } else {
-            ElMessage.error('添加失败')
-        }
+        ElMessage.success('添加角色成功')
+        switch_group_perms.value = false
     })
 }
 const all_perms_list_userIngroup = reactive({
@@ -1187,22 +1177,22 @@ const getGroupUser_perms = val => {
     current_user_perms.item.user_id = val.user_id
     switch_group_user_perms.value = true
     APIgetGroupPerms(val.group_id).then(res => {
-        all_perms_list_userIngroup.arr = res.data
+        all_perms_list_userIngroup.arr = res
     })
     APIgetGroupUser_perms(val.group_id, val.user_id).then(res => {
-        tab_group_all_perms.arr = res.data
+        tab_group_all_perms.arr = res
 
-        for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].utype == 'gov') {
-                data_tab_group_perms_selected_gov.arr.push(res.data[i].id)
+        for (let i = 0; i < res.length; i++) {
+            if (res[i].utype == 'gov') {
+                data_tab_group_perms_selected_gov.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_gov.arr)
             }
-            if (res.data[i].utype == 'pm') {
-                data_tab_group_perms_selected_pm.arr.push(res.data[i].id)
+            if (res[i].utype == 'pm') {
+                data_tab_group_perms_selected_pm.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_pm.arr)
             }
-            if (res.data[i].utype == 'mbr') {
-                data_tab_group_perms_selected_mbr.arr.push(res.data[i].id)
+            if (res[i].utype == 'mbr') {
+                data_tab_group_perms_selected_mbr.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_mbr.arr)
             }
         }
@@ -1212,24 +1202,24 @@ const getGroupUser_perms = val => {
 const getGroup_perms = val => {
     current_group_perms.item = val
     APIgetPermsList().then(res => {
-        all_perms_list.arr = res.data
+        all_perms_list.arr = res
     })
     APIgetGroupPerms(val.id).then(res => {
-        // tab_group_all_perms.arr=res.data
+        // tab_group_all_perms.arr=res
         data_tab_group_perms_selected_gov.arr = []
         data_tab_group_perms_selected_pm.arr = []
         data_tab_group_perms_selected_mbr.arr = []
-        for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].utype == 'gov') {
-                data_tab_group_perms_selected_gov.arr.push(res.data[i].id)
+        for (let i = 0; i < res.length; i++) {
+            if (res[i].utype == 'gov') {
+                data_tab_group_perms_selected_gov.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_gov.arr)
             }
-            if (res.data[i].utype == 'pm') {
-                data_tab_group_perms_selected_pm.arr.push(res.data[i].id)
+            if (res[i].utype == 'pm') {
+                data_tab_group_perms_selected_pm.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_pm.arr)
             }
-            if (res.data[i].utype == 'mbr') {
-                data_tab_group_perms_selected_mbr.arr.push(res.data[i].id)
+            if (res[i].utype == 'mbr') {
+                data_tab_group_perms_selected_mbr.arr.push(res[i].id)
                 console.log(data_tab_group_perms_selected_mbr.arr)
             }
         }
@@ -1258,10 +1248,8 @@ const deleteGroupUser_perms = val => {
         current_user_perms.item.user_id,
         { data: { perm_ids: [val.id] } }
     ).then(res => {
-        if (res.status == 200) {
-            switch_group_user_perms.value = false
-            ElMessage.success('删除成功')
-        }
+        switch_group_user_perms.value = false
+        ElMessage.success('删除成功')
     })
 }
 // 获取组成员权限
@@ -1270,7 +1258,7 @@ const getGroupUser_permsFun = val => {
     switch_group_user_perms.value = true
     APIgetGroupUser_perms(val.group_id, val.user_id).then(res => {
         console.log(res)
-        data_tab_user_perms.arr = res.data
+        data_tab_user_perms.arr = res
     })
 }
 // 删除用户组成员角色
@@ -1280,13 +1268,8 @@ const deleteGroupUser_roles = val => {
         from_addGroupUser_Roles.item.user_id,
         { data: { role_ids: [val.id] } }
     ).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('删除角色成功')
-            switch_group_roles.value = false
-        } else {
-            ElMessage.success('删除角色失败')
-            switch_group_roles.value = false
-        }
+        ElMessage.success('删除角色成功')
+        switch_group_roles.value = false
     })
 }
 // 用户组成员角色
@@ -1295,11 +1278,11 @@ const groupUserRolesFun = val => {
     from_addGroupUser_Roles.item.group_id = val.group_id
     from_addGroupUser_Roles.item.user_id = val.user_id
     APIgetGroupRolesList(val.group_id).then(res => {
-        data_tab_roles.arr = res.data
+        data_tab_roles.arr = res
     })
     APIgetGroupUser_Roles(val.group_id, val.user_id).then(res => {
         console.log(res)
-        data_tab_user_roles.arr = res.data
+        data_tab_user_roles.arr = res
     })
 }
 const addGroupUser_rolesFun = () => {
@@ -1312,14 +1295,9 @@ const addGroupUser_rolesFun = () => {
         from_addGroupUser_Roles.item.user_id,
         { role_ids: [from_addGroupUser_Roles.item.role_ids[0]] }
     ).then(res => {
-        if (res.status === 200) {
-            switch_group_roles.value = false
-            ElMessage.success('添加角色成功')
-            from_addGroupUser_Roles.item.role_ids[0] = ''
-        } else {
-            switch_group_roles.value = false
-            ElMessage.error('添加角色失败')
-        }
+        switch_group_roles.value = false
+        ElMessage.success('添加角色成功')
+        from_addGroupUser_Roles.item.role_ids[0] = ''
     })
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
@@ -1347,11 +1325,9 @@ const dialogExamineCloseFunc = () => {
 
         APIputGroup(from_examine.item.id, from_examine.item)
             .then(res => {
-                if (res.status === 200) {
-                    refreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                }
+                refreshFunc()
+                ElMessage.success('修改成功')
+                switch_examine.value = false
             })
             .catch(err => {
                 from_error.msg = err.data
@@ -1360,11 +1336,9 @@ const dialogExamineCloseFunc = () => {
         // from_examine.item.ref = '62ea126a6940af756a3075a1'
         APIpostGroup(from_examine.item)
             .then(res => {
-                if (res.status === 200) {
-                    refreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }
+                refreshFunc()
+                ElMessage.success('添加成功')
+                switch_examine.value = false
             })
             .catch(err => {
                 from_error.msg = err.data
@@ -1388,9 +1362,9 @@ const getTabListFunc = () => {
     APIgetGroupList(params).then(res => {
         console.log(res)
         loading_tab.value = false
-        data_tab.arr = res.data
+        data_tab.arr = res
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
@@ -1407,10 +1381,8 @@ const getTabListFunc = () => {
 const deleteFunc = val => {
     console.log(val)
     APIdeleteGroup(val.id).then(res => {
-        if (res.status === 200) {
-            refreshFunc()
-            ElMessage.success('删除成功')
-        }
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 用户组角色列表
@@ -1420,7 +1392,7 @@ const getGroupRolesFun = val => {
     loading_tab.value = true
     APIgetGroupRolesList(val.id).then(res => {
         loading_tab.value = false
-        data_tab_roles.arr = res.data
+        data_tab_roles.arr = res
     })
 }
 // 删除用户组角色
@@ -1428,10 +1400,8 @@ const deleteGroup_roles = val => {
     let params = { data: { role_ids: [val.id] } }
     console.log(params)
     APIdeleteGroupRoles(val.group_id, params).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('删除成功')
-            switch_roles.value = false
-        }
+        ElMessage.success('删除成功')
+        switch_roles.value = false
     })
 }
 // 添加用户组角色
@@ -1445,14 +1415,12 @@ const post_group_role = reactive({
 })
 const post_group_role_submit = async() => {
     let res = await APIpostRoles(post_group_role.item)
-    APIpostGroupRoles(from_addRoles.item.group, { role_ids: [res.data.id] }).then(res => {
-        if (res.status == 200) {
-            ElMessage.success('添加成功')
-            switch_post_group_role.value = false
-            switch_roles.value = false
-            post_group_role.item.name = ''
-            post_group_role.item.spec = ''
-        }
+    APIpostGroupRoles(from_addRoles.item.group, { role_ids: [res.id] }).then(res => {
+        ElMessage.success('添加成功')
+        switch_post_group_role.value = false
+        switch_roles.value = false
+        post_group_role.item.name = ''
+        post_group_role.item.spec = ''
     })
 }
 const addGroupRoles = () => {
@@ -1535,11 +1503,9 @@ const dialogOptValFunc = () => {
             from_opt_val.obj
         )
             .then(res => {
-                if (res.status === 200) {
-                    optValRefreshFunc()
-                    ElMessage.success('修改成功')
-                    switch_opt_val_add.value = false
-                }
+                optValRefreshFunc()
+                ElMessage.success('修改成功')
+                switch_opt_val_add.value = false
             })
             .catch(err => {
                 err_opt.msg = err.data
@@ -1547,11 +1513,9 @@ const dialogOptValFunc = () => {
     } else {
         APIpostGroupUser(item_opt.obj.id, from_opt_val.obj)
             .then(res => {
-                if (res.status === 200) {
-                    optValRefreshFunc()
-                    ElMessage.success('添加成功')
-                    switch_opt_val_add.value = false
-                }
+                optValRefreshFunc()
+                ElMessage.success('添加成功')
+                switch_opt_val_add.value = false
             })
             .catch(err => {
                 err_opt.msg = err.data
@@ -1588,12 +1552,9 @@ const optValModifyFunc = val => {
 const optValDeleteFunc = val => {
     console.log(val)
     APIdeleteGroupUser(val.group_id, val.user_id).then(res => {
-        if (res.status === 200) {
-            optValRefreshFunc()
-            ElMessage.success('删除成功')
-        } else {
-            ElMessage.error('删除失败请重试')
-        }
+        optValRefreshFunc()
+        ElMessage.success('删除成功')
+
     })
 }
 // 重置
@@ -1606,10 +1567,8 @@ const getOptValListFunc = () => {
     opt_loading.value = true
     APIgetGroupUserList(item_opt.obj.id)
         .then(res => {
-            if (res.status === 200) {
-                opt_loading.value = false
-                opt_tab.arr = res.data
-            }
+            opt_loading.value = false
+            opt_tab.arr = res
         })
         .catch(err => {
             opt_loading.value = false

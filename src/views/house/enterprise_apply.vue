@@ -287,10 +287,10 @@ const getEnterpriseApplyList = () => {
     }
     APIgetEnterpriseApplyList(params).then(res => {
         console.log(res)
-        data_applyList.arr = res.data
+        data_applyList.arr = res
         switch_replay.value = true
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -315,7 +315,7 @@ const switch_examine_1 = ref(false)
 const detailsFunc_1 = row => {
     APIgetEnterpriseApplyDetails(row.id).then(res => {
         console.log(res)
-        apply_details.obj = res.data
+        apply_details.obj = res
         switch_details_1.value = true
         apply_details.obj.content.biz_lic = import.meta.env.VITE_APP_FOLDER_SRC + apply_details.obj.content.biz_lic
         list.arr.push(apply_details.obj.content.biz_lic)

@@ -252,7 +252,7 @@ const showPermsRolesFun = val => {
     switch_perms_roles.value = true
     APIgetPerms_Roles(val.id).then(res => {
         console.log(res)
-        data_tab_perms_roles.arr = res.data
+        data_tab_perms_roles.arr = res
     })
 }
 const data_tab_list = reactive({
@@ -305,11 +305,9 @@ const addPerms_submit = () => {
         utype: from_add_perms.item.utype
     }
     APIpostPerms(params).then(res => {
-        if (res.status == 200) {
-            refreshFunc()
-            ElMessage.success('添加权限成功')
-            switch_add_perms.value = false
-        }
+        refreshFunc()
+        ElMessage.success('添加权限成功')
+        switch_add_perms.value = false
     })
 }
 // 赋予角色权限1
@@ -324,13 +322,9 @@ const postPerms_roles = () => {
         return
     }
     APIpostPerms_Roles(current_perms_id, { role_ids: [from_post_perms_roles.item.role_ids[0]] }).then(res => {
-        if (res.status === 200) {
-            switch_post_perms_roles.value = false
-            ElMessage.success('授权成功')
-            from_post_perms_roles.item.role_ids[0] = ''
-        } else {
-            ElMessage.error('授权失败')
-        }
+        switch_post_perms_roles.value = false
+        ElMessage.success('授权成功')
+        from_post_perms_roles.item.role_ids[0] = ''
     })
 }
 // 修改权限
@@ -338,19 +332,15 @@ const postPermsFun = val => {
     from_add_perms.item.id = val.id
     switch_put_perms.value = true
     APIgetPermsDetail(val.id).then(res => {
-        from_add_perms.item = res.data
+        from_add_perms.item = res
     })
 }
 
 // 删除角色拥有的角色
 const deletePerms_roles = val => {
     APIdeletePerms_Roles(current_perms_id.value, { data: { role_ids: [val.id] } }).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('删除角色成功')
-            switch_perms_roles.value = false
-        } else {
-            ElMessage.error('删除失败')
-        }
+        ElMessage.success('删除角色成功')
+        switch_perms_roles.value = false
     })
 }
 // 添加权限
@@ -368,22 +358,16 @@ const put_perms_submit = () => {
         }
     }
     APIputPerms(from_add_perms.item.id, from_add_perms.item).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('修改成功')
-            switch_put_perms.value = false
-            refreshFunc()
-        }
+        ElMessage.success('修改成功')
+        switch_put_perms.value = false
+        refreshFunc()
     })
 }
 // 删除权限
 const deletePermsFun = val => {
     APIdeletePerms(val.id).then(res => {
-        if (res.status === 200) {
-            ElMessage.success('删除成功')
-            refreshFunc()
-        } else {
-            ElMessage.error('删除失败!')
-        }
+        ElMessage.success('删除成功')
+        refreshFunc()
     })
 }
 const flag = ref(false)
@@ -393,12 +377,12 @@ const getTabListFun = () => {
         per_page: per_page.value
     }
     /*     APIgetPermsList().then(res=>{
-        total.value=res.data
+        total.value=res
     }) */
     APIgetPermsList(params).then(res => {
-        data_tab_list.arr = res.data
+        data_tab_list.arr = res
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)

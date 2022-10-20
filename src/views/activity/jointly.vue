@@ -330,19 +330,19 @@ const getChinaName = () => {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (sessionStorage.getItem('groupChinaCode')) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
         params = {
-            p_code: sessionStorage.getItem('groupChinaCode')
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
         }
     } else {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
-        for (let i in res.data) {
-            if (res.data[i].level < 5) {
-                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+        for (let i in res) {
+            if (res[i].level < 5) {
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
             } else {
-                tree_item.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
     })
@@ -377,10 +377,8 @@ const detailsFunc = val => {
     data_details.item = ''
     console.log(val.id)
     APIgetSurveyDetails(val.id).then(res => {
-        if (res.status === 200) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
     // switch_details.value = true
 }
@@ -445,12 +443,10 @@ const dialogExamineCloseFunc = (formEl, id) => {
             if (str_title.value == '修改') {
                 console.log(from_examine.item)
                 APImodifySurvey(id, from_examine.item).then(res => {
-                    if (res.status === 200) {
-                        refreshFunc()
-                        // ElMessage.success(res.statusText)
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    // ElMessage.success(res.statusText)
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                     // 如果传递了状态码，就修改状态信息
                     APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
                         refreshFunc()
@@ -486,8 +482,8 @@ const getTabListFunc = () => {
     if (index.value == 0) {
         delete params.status
     }
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
-        params.author_tgt = sessionStorage.getItem('groupChinaCode')
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
+        params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
     }
     console.log(window.location.hash)
     for (let key in data_search.obj) {
@@ -500,20 +496,18 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetSurvey(params).then(res => {
-        if (res.status === 200) {
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = res.data.length
-            let btnNext = document.querySelector('.btn-next')
-            if (res.data.length < per_page.value) {
-                btnNext.classList.add('not_allowed')
-                btnNext.setAttribute('disabled', true)
-                btnNext.setAttribute('aria-disabled', true)
-            } else {
-                btnNext.classList.remove('not_allowed')
-                btnNext.removeAttribute('disabled')
-                btnNext.setAttribute('aria-disabled', false)
-            }
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
         }
         console.log(data_tab.arr)
     }).catch(err => {
@@ -544,12 +538,10 @@ const modifySurvey = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetSurveyDetails(val.id).then(res => {
-        if (res.status == 200) {
-            console.log(res.data)
-            from_examine.item = res.data
-            selectedZone_id.value = res.data.author_cc_name
-            switch_examine.value = true
-        }
+        console.log(res)
+        from_examine.item = res
+        selectedZone_id.value = res.author_cc_name
+        switch_examine.value = true
     }).catch(err => {
         from_error.msg = err.data
     })

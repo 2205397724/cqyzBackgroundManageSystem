@@ -61,18 +61,18 @@ const cascader_props = {
         if (level <= 4) {
             APIgetChinaRegion({ 'p_code': data.code }).then(res => {
                 if (props.disableds.indexOf(level) >= 0) {
-                    for (let i in res.data) {
-                        res.data[i].disabled = true
+                    for (let i in res) {
+                        res[i].disabled = true
                     }
                 }
-                resolve(res.data)
+                resolve(res)
             })
         } else {
             if (props.zone) {
                 APIgetResidentialListHouse({ page: 1, per_page: 500, china_code: data.code }).then(res => {
                     let arr = []
-                    for (let i in res.data.items) {
-                        arr.push({ code: res.data.items[i].id, name: res.data.items[i].name, leaf: true })
+                    for (let i in res.items) {
+                        arr.push({ code: res.items[i].id, name: res.items[i].name, leaf: true })
                     }
                     if (props.disableds.indexOf(level) >= 0) {
                         for (let i in arr) {

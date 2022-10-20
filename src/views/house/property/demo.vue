@@ -137,16 +137,14 @@ import {
 } from '@/api/custom/custom.js'
 APIgetHousePlace().then(res => {
     if (res.code == 0) {
-        data.place_list = res.data
+        data.place_list = res
     }
 }).catch(error => {
     console.log(error)
 })
 const getHouseFunc = params => {
     APIgetHouseHouse(params).then(res => {
-        if (res.code == 0) {
-            data.house_list = res.data
-        }
+        data.house_list = res
     }).catch(error => {
         console.log(error)
     })
@@ -177,60 +175,49 @@ const houseNullClick = () => {
 
 // 表格
 data.table_list = [{
-    id: 564124561231,
-    unit: '吞吞吐吐',
-    level: 6,
-    room_number: 1001,
-    name: '鸿鸥·未来城A栋6层1# ',
-    area: 110.26,
-    type: '住宅',
-    owner: '张三',
-    user: '李四'
-},
-{
-    id: 564124561231,
-    unit: 1,
-    level: 6,
-    room_number: 1001,
-    name: '鸿鸥·未来城A栋6层1# ',
-    area: 110.26,
-    type: '住宅',
-    owner: '张三',
-    user: '李四'
-},
-{
-    id: 564124561231,
-    unit: 1,
-    level: 6,
-    room_number: 1001,
-    name: '鸿鸥·未来城A栋6层1# ',
-    area: 110.26,
-    type: '住宅',
-    owner: '张三',
-    user: '李四'
-},
-{
-    id: 564124561231,
-    unit: 1,
-    level: 6,
-    room_number: 1001,
-    name: '鸿鸥·未来城A栋6层1# ',
-    area: 110.26,
-    type: '住宅',
-    owner: '张三',
-    user: '李四'
-},
-{
-    id: 564124561231,
-    unit: 1,
-    level: 6,
-    room_number: 1001,
-    name: '鸿鸥·未来城A栋6层1# ',
-    area: 110.26,
-    type: '住宅',
-    owner: '张三',
-    user: '李四'
-}, ,
+                       id: 564124561231,
+                       unit: '吞吞吐吐',
+                       level: 6,
+                       room_number: 1001,
+                       name: '鸿鸥·未来城A栋6层1# ',
+                       area: 110.26,
+                       type: '住宅',
+                       owner: '张三',
+                       user: '李四'
+                   },
+                   {
+                       id: 564124561231,
+                       unit: 1,
+                       level: 6,
+                       room_number: 1001,
+                       name: '鸿鸥·未来城A栋6层1# ',
+                       area: 110.26,
+                       type: '住宅',
+                       owner: '张三',
+                       user: '李四'
+                   },
+                   {
+                       id: 564124561231,
+                       unit: 1,
+                       level: 6,
+                       room_number: 1001,
+                       name: '鸿鸥·未来城A栋6层1# ',
+                       area: 110.26,
+                       type: '住宅',
+                       owner: '张三',
+                       user: '李四'
+                   },
+                   {
+                       id: 564124561231,
+                       unit: 1,
+                       level: 6,
+                       room_number: 1001,
+                       name: '鸿鸥·未来城A栋6层1# ',
+                       area: 110.26,
+                       type: '住宅',
+                       owner: '张三',
+                       user: '李四'
+                   },
                    {
                        id: 564124561231,
                        unit: 1,
@@ -242,105 +229,116 @@ data.table_list = [{
                        owner: '张三',
                        user: '李四'
                    }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }, ,
-                   {
-                       id: 564124561231,
-                       unit: 1,
-                       level: 6,
-                       room_number: 1001,
-                       name: '鸿鸥·未来城A栋6层1# ',
-                       area: 110.26,
-                       type: '住宅',
-                       owner: '张三',
-                       user: '李四'
-                   }
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }, ,
+    {
+        id: 564124561231,
+        unit: 1,
+        level: 6,
+        room_number: 1001,
+        name: '鸿鸥·未来城A栋6层1# ',
+        area: 110.26,
+        type: '住宅',
+        owner: '张三',
+        user: '李四'
+    }
 ]
 </script>
 <style lang="scss" scoped>

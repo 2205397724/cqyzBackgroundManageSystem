@@ -317,8 +317,8 @@ const getFuncVoteoptsList = () => {
         eid: id.value
     }
     APIgetEntryMbrList(data).then(res => {
-        data_1.list = res.data.items
-        data_1.total = res.data.aggregation.total_cnt
+        data_1.list = res.items
+        data_1.total = res.aggregation.total_cnt
     })
 }
 watch(() => data_1.page, new_val => {
@@ -350,10 +350,10 @@ const clickFuncAddVoteopt = () => {
 }
 const clickFuncModify = val => {
     APIgetEntryMbrDetails(val.id).then(res => {
-        if (!res.data.extra) {
-            res.data.extra = {}
+        if (!res.extra) {
+            res.extra = {}
         }
-        data_1.add_form = res.data
+        data_1.add_form = res
         data_1.add_title = '修改'
         data_1.add_switch = true
     })
@@ -366,7 +366,7 @@ const clickFuncDelete = val => {
 }
 const clickFuncDetails = val => {
     APIgetEntryMbrDetails(val.id).then(res => {
-        data_1.details_data = res.data
+        data_1.details_data = res
         data_1.details_switch = true
     })
 }
@@ -378,8 +378,8 @@ const getFuncZanList = () => {
         iszan: data_1.zan_iszan
     }
     APIgetEntryMbrZanList(data).then(res => {
-        data_1.zan_total = res.data.aggregation.total_cnt
-        data_1.zan_list = res.data.items
+        data_1.zan_total = res.aggregation.total_cnt
+        data_1.zan_list = res.items
     })
 }
 watch(() => data_1.zan_page, new_val => {
@@ -405,6 +405,3 @@ getOpts(['isvalid_opt']).then(res => {
     opts_all.obj = res
 })
 </script>
-<style lang="scss" scoped>
-
-</style>

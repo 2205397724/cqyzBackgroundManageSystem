@@ -891,9 +891,8 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    console.log(sessionStorage.getItem('groupChinaCode'))
-    if (sessionStorage.getItem('groupChinaCode') && localStorage.getItem('utype') != 'pt') {
-        params.cc = sessionStorage.getItem('groupChinaCode')
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
+        params.cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
     }
     console.log(params)
     for (let key in data_search.obj) {

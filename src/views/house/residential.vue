@@ -765,24 +765,24 @@ const getChinaRegionunc = () => {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (sessionStorage.getItem('groupChinaCode')) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
         params = {
-            p_code: sessionStorage.getItem('groupChinaCode')
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
         }
     } else {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
         console.log(res)
-        for (let i in res.data) {
-            if (res.data[i].level < 5) {
-                tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'region', id: res.data[i].code })
+        for (let i in res) {
+            if (res[i].level < 5) {
+                tree_item_1.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
             } else {
-                tree_item_1.arr.push({ name: res.data[i].name, type: 'region', next_type: 'zone', id: res.data[i].code })
+                tree_item_1.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
-    // tree_item.value.id = res.data[0].code
-    // tree_item.value.name = res.data[0].name
+    // tree_item.value.id = res[0].code
+    // tree_item.value.name = res[0].name
     // tree_item.value.next_type = 'region'
     // tree_item.value.type = 'region'
     // tree_item_1.arr = res
@@ -841,11 +841,12 @@ const dialogExamineCloseFunc = formEl => {
     formEl.validate(valid => {
         if (valid) {
             for (let key in from_examine.item) {
-                if (from_examine.item[key] !== null && from_examine.item[key] !== undefined) {
-                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
-                        delete from_examine.item[key]
-                    }
+                if (from_examine.item[key] == undefined || from_examine.item[key] == null || from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                    delete from_examine.item[key]
                 }
+            }
+            if (!from_examine.item.addition.desc || from_examine.item.addition.desc == 'undefined') {
+                delete from_examine.item.addition.desc
             }
             if (str_title.value == '修改') {
                 APIputResidentialHouse(from_examine.item.id, from_examine.item).then(res => {

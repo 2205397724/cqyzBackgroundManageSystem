@@ -190,21 +190,19 @@ const getTabListFunc = () => {
     //         total.value = res.length
     // })
     APIgetUserList(params).then(res => {
-        if (res.status == 200) {
-            console.log(res)
-            loading_tab.value = false
-            data_tab.arr = res.data
-            total.value = res.data.length
-            let btnNext = document.querySelector('.btn-next')
-            if (res.length < per_page.value) {
-                btnNext.classList.add('not_allowed')
-                btnNext.setAttribute('disabled', true)
-                btnNext.setAttribute('aria-disabled', true)
-            } else {
-                btnNext.classList.remove('not_allowed')
-                btnNext.removeAttribute('disabled')
-                btnNext.setAttribute('aria-disabled', false)
-            }
+        console.log(res)
+        loading_tab.value = false
+        data_tab.arr = res
+        total.value = res.length
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
         }
     })
 }

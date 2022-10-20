@@ -434,10 +434,8 @@ const refreshFunc = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetUserDetails(val.id).then(res => {
-        if (!res.code) {
-            data_details.item = res.data
-            switch_details.value = true
-        }
+        data_details.item = res
+        switch_details.value = true
     })
 }
 // 监听分页
@@ -462,22 +460,18 @@ const dialogExamineCloseFunc = formEl => {
             }
             if (str_title.value == '修改') {
                 APIputUser(from_examine.item.id, from_examine.item).then(res => {
-                    if (res.status === 200) {
-                        refreshFunc()
-                        ElMessage.success('修改成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
             } else {
                 console.log(from_examine.item)
                 APIpostUser(from_examine.item.authType, from_examine.item).then(res => {
-                    if (res.status === 200) {
-                        refreshFunc()
-                        ElMessage.success('添加成功')
-                        switch_examine.value = false
-                    }
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
                 }).catch(err => {
                     from_error.msg = err.data
                 })
@@ -528,10 +522,10 @@ const getTabListFunc = () => {
     APIgetUserList(params).then(res => {
         console.log(res)
         loading_tab.value = false
-        data_tab.arr = res.data
-        total.value = res.data.length
+        data_tab.arr = res
+        total.value = res.length
         let btnNext = document.querySelector('.btn-next')
-        if (res.data.length < per_page.value) {
+        if (res.length < per_page.value) {
             flag.value = true
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
@@ -547,10 +541,8 @@ const getTabListFunc = () => {
 // 删除
 const deleteFunc = val => {
     APIdeleteUser(main_type.value, val.id).then(res => {
-        if (res.status === 200) {
-            refreshFunc()
-            ElMessage.success('删除成功')
-        }
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 // 添加用户
@@ -565,7 +557,7 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetUserDetails(val.id).then(res => {
-        from_examine.item = res.data
+        from_examine.item = res
         switch_examine.value = true
     })
 }
