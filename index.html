@@ -84,7 +84,6 @@
                 color: #1890ff;
             }
         </style>
-        <%- copyrightScript %>
     </head>
     <body>
         <div id="app">
@@ -111,13 +110,5 @@
             </script>
         </div>
         <script type="module" src="/src/main.js"></script>
-        <% if (debugTool == 'eruda') { %>
-            <script src="//cdn.jsdelivr.net/npm/eruda/eruda.min.js"></script>
-            <script>eruda.init();</script>
-        <% } %>
-        <% if (debugTool == 'vconsole') { %>
-            <script src="//cdn.jsdelivr.net/npm/vconsole/dist/vconsole.min.js"></script>
-            <script>new VConsole();</script>
-        <% } %>
     </body>
 </html>

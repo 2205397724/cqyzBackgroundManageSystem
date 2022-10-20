@@ -235,15 +235,14 @@ import { reactive, onMounted } from 'vue'
 import PageMain from '@/components/PageMain/index.vue'
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const { proxy } = getCurrentInstance()
+
 const user_info = ref(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')))
+
 onMounted(() => {
     let uid = localStorage.getItem('uid')
-    console.log(localStorage.getItem(uid + '_city'))
     proxy.$eventBus.on('choose-city-isReady', () => {
         if (!localStorage.getItem(uid + '_city')) {
-            console.log('a')
             proxy.$eventBus.emit('global-choose-city', true)
-            console.log('b')
         }
     })
 
@@ -292,7 +291,6 @@ const getAggregate = () => {
         console.log(error)
     })
 }
-getAggregate()
 APIgetEventnum().then(res => {
     // console.log(res)
     data.eventnum = res

@@ -13,14 +13,12 @@
                     <div class="main">
                         <router-view v-slot="{ Component, route }">
                             <transition name="main" mode="out-in" appear>
-                                <!-- BUG https://github.com/vuejs/vue-next/issues/4984 -->
                                 <keep-alive :include="[...keepAliveStore.list]">
                                     <component :is="Component" :key="route.fullPath" />
                                 </keep-alive>
                             </transition>
                         </router-view>
                     </div>
-                    <Copyright v-if="showCopyright" />
                 </div>
             </div>
             <el-backtop :right="20" :bottom="20" title="回到顶部" />

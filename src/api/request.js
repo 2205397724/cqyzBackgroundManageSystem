@@ -17,7 +17,32 @@ const toLogin = () => {
         })
     })
 }
-
+const cleanEmptyData = (data)=> {
+    if (Array.isArray(data)) {
+        let newArr = []
+        data.forEach(item => {
+            let tmp = cleanEmptyData(item)
+            if (tmp !== undefined) {
+                newArr.push(tmp)
+            }
+        })
+        return newArr
+    } else if (data instanceof Object) {
+        let newObj = {}
+        Object.entries(data).forEach(item => {
+            let [k, v] = item
+            let tmp = cleanEmptyData(v)
+            if (tmp !== undefined) {
+                newObj[k] = tmp
+            }
+        })
+        return newObj
+    } else if (data === undefined || data === null || (data + '').trim() === '') {
+        return undefined
+    } else {
+        return data
+    }
+}
 const api = axios.create({
     // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_API_BASEURL,
     baseURL: import.meta.env.DEV &&
@@ -43,11 +68,8 @@ api.interceptors.request.use(
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
             let uid = localStorage.getItem('uid')
-            request.headers['X-Cc'] = '500101'
-            // request.headers['X-Cc'] = JSON.parse(localStorage.getItem(uid + '_city')).china_code
-            // request.headers['X-Cc'] = localStorage.getItem(uid + '_city')
-            // console.log(JSON.parse(localStorage.getItem(uid + '_city')))
-            // request.headers['X-Cc'] = localStorage.getItem('china_code')
+            let cc = JSON.parse(localStorage.getItem(uid + '_city'))
+            request.headers['X-Cc'] = ( cc !=null && Object.keys(cc).length!=0 )? cc.china_code:''
         }
         var time = new Date().getTime().toString()
         var eqtype = '2'
@@ -55,10 +77,8 @@ api.interceptors.request.use(
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
         // 是否将 POST 请求参数进行字符串化处理
-        if (request.method === 'post') {
-            // request.data = qs.stringify(request.data, {
-            //     arrayFormat: 'brackets'
-            // })
+        if (request.method === 'post' || request.method === 'put') {
+            request.data = cleanEmptyData(request.data)
         }
         return request
     }

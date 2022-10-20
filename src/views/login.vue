@@ -85,7 +85,6 @@
                 </el-row>
             </el-form>
         </div>
-        <Copyright v-if="settingsStore.copyright.enable" />
     </div>
 </template>
 
@@ -156,9 +155,8 @@ function showPassword() {
         proxy.$refs.password.focus()
     })
 }
-const userGroup = reactive({
-    arr: []
-})
+
+//登录方法
 function handleLogin() {
     proxy.$refs.loginFormRef.validate(valid => {
         if (valid) {
@@ -170,32 +168,11 @@ function handleLogin() {
             }
             userStore.login(data).then(() => {
                 loading.value = false
+                console.log(11111)
                 ElMessage.success('登录成功')
-                localStorage.removeItem('utype')
-                userStore.utype = data.auth_type
-                userStore.getInfo()
-                localStorage.setItem('domain', import.meta.env.VITE_APP_DOMAIN)
-                if (loginForm.value.remember) {
-                    localStorage.setItem('login_account', loginForm.value.account)
-                } else {
-                    localStorage.removeItem('login_account')
-                }
-                if (data.auth_type === 'pt') {
-                    userStore.utype = 'pt'
-                    localStorage.setItem('utype', 'pt')
-                    userStore.getPermissions()
-                }
-                if (data.auth_type !== 'pt') {
-                    userStore.utype = data.auth_type
-                    localStorage.setItem('utype', 'none')
-                    userStore.isChooseCity = true
-                    console.log('成功')
-                    userStore.getPermissions()
-                }
-                console.log('aaaa')
-                sessionStorage.setItem('isChooseCity', true)
+                userStore.getInfo()//拉取用户信息
+                console.log(22222)
                 router.push(redirect.value)
-                console.log('bbb')
             }).catch(() => {
                 loading.value = false
             })
@@ -215,11 +192,6 @@ function handleFind() {
     })
 }
 
-// function testAccount(account) {
-//     loginForm.value.account = account
-//     loginForm.value.password = '123456'
-//     handleLogin()
-// }
 </script>
 
 <style lang="scss" scoped>
