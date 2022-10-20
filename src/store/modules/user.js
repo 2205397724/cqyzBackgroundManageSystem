@@ -19,9 +19,7 @@ export const useUserStore = defineStore(
             failure_time: localStorage.failure_time || '',
             permissions: [],
             utype: '',
-            china_code: '',
             gid: '',
-            isChooseCity: false,
             groupChinaCode: '',
             // 后加的
             uid: localStorage.uid || ''
@@ -35,6 +33,14 @@ export const useUserStore = defineStore(
                     }
                 }
                 return retn
+            },
+            isChooseCity: state => {
+                let city = JSON.parse(localStorage.getItem(state.uid+'_user_city'))
+                if (city != null && Object.keys(city).length>0){
+                    return true
+                }else{
+                    return false
+                }
             }
         },
         actions: {
@@ -79,6 +85,8 @@ export const useUserStore = defineStore(
                         }
                         localStorage.setItem('uid', res.id)
                         localStorage.setItem(res.id + '_user_info', JSON.stringify(res))
+                        localStorage.setItem(res.id+'_user_city', JSON.stringify({}))
+                        localStorage.setItem(res.id+'_user_group', JSON.stringify({}))
                         resolve(res)
                     }).catch(error => {
                         reject({})
