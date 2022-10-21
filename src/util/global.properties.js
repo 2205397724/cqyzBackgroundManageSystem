@@ -1,4 +1,3 @@
-import api from '@/api'
 import { auth, authAll } from '@/util'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
@@ -7,8 +6,6 @@ import hotkeys from 'hotkeys-js'
 import mitt from 'mitt'
 
 export default function globalProperties(app) {
-    // 请求
-    app.config.globalProperties.$api = api
     // 鉴权
     app.config.globalProperties.$auth = auth
     app.config.globalProperties.$authAll = authAll

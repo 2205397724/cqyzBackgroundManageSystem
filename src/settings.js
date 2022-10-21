@@ -70,7 +70,7 @@ let globalSettings = {
         // 版权信息配置，格式为：Copyright © [dates] <company>, All Rights Reserved
         dates: '2020-2022',
         company: '智慧物业',
-        website: 'http://720.wzok.cn/'
+        website: 'https://smart.cqyezhuapp.com/'
     }
 }
 

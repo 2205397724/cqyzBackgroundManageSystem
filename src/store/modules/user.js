@@ -19,9 +19,7 @@ export const useUserStore = defineStore(
             failure_time: localStorage.failure_time || '',
             permissions: [],
             utype: '',
-            china_code: '',
             gid: '',
-            isChooseCity: false,
             groupChinaCode: '',
             // 后加的
             uid: localStorage.uid || ''
@@ -35,6 +33,14 @@ export const useUserStore = defineStore(
                     }
                 }
                 return retn
+            },
+            isChooseCity: state => {
+                let city = JSON.parse(localStorage.getItem(state.uid+'_user_city'))
+                if (city != null && Object.keys(city).length>0){
+                    return true
+                }else{
+                    return false
+                }
             }
         },
         actions: {
@@ -74,17 +80,13 @@ export const useUserStore = defineStore(
             getInfo() {
                 return new Promise((resolve, reject) => {
                     APIgetUserinfo().then(res => {
-                        console.log(res)
                         let data = {
                             info: res
                         }
-                        if (!localStorage.getItem('uid')) {
-                            localStorage.setItem('uid', res.id)
-                        }
-                        if (!localStorage.getItem(res.id + '_user_info')) {
-                            localStorage.setItem(res.id + '_user_info', JSON.stringify(res))
-                        }
-                        // localStorage.setItem('user_info', JSON.stringify({ [res.id]: data }))
+                        localStorage.setItem('uid', res.id)
+                        localStorage.setItem(res.id + '_user_info', JSON.stringify(res))
+                        localStorage.setItem(res.id+'_user_city', JSON.stringify({}))
+                        localStorage.setItem(res.id+'_user_group', JSON.stringify({}))
                         resolve(res)
                     }).catch(error => {
                         reject({})
@@ -96,10 +98,7 @@ export const useUserStore = defineStore(
                 return new Promise((resolve, reject) => {
                     APIgetLoginUserGroup().then(res => {
                         if (res.length > 0) {
-                            let data = {
-                                groups: res[0]
-                            }
-                            // localStorage.setItem('user_info', JSON.stringify({ [this.uid]: data }))
+                            localStorage.setItem(this.uid + '_user_group', JSON.stringify(res[0]))
                             resolve(res)
                         } else {
                             reject({})
@@ -112,25 +111,11 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    console.log(localStorage.getItem('utype'))
-                    if (localStorage.getItem('utype') == 'pt') {
+                    let user_info =JSON.parse(localStorage.getItem(this.uid+'_user_info'))
+                    if (user_info.auth_type == 'pt') {
                         this.permissions = ['*']
                         resolve(this.permissions)
                     } else {
-                        // APIgetPermsList().then(res => {
-                        //     console.log(res)
-                        //     res.forEach(item => {
-                        //         for (let key in item) {
-                        //             if (key == 'name') {
-                        //                 perms.push(item[key])
-                        //             }
-                        //         }
-                        //     })
-                        //     this.permissions = perms
-                        //     console.log(perms)
-                        //     console.log('获取权限')
-                        //     resolve(perms)
-                        // })
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
                             if (res.length > 0) {

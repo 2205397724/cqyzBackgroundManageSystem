@@ -1,23 +1,4 @@
 <template>
-    <!-- <el-dialog
-            v-model="switch_choose_city" title="请选择地区fdsafdsa"
-            width="30%" :close-on-click-modal="false" :show-close="false"
-        >
-            <div class="cityBox">
-            fdsafdsafdsafdsafdsafdsfafdsa
-            </div>
-        </el-dialog> -->
-    <!-- <div v-if="switch_choose_city" ref="chooseCityBigBox" class="chooseCityBox">
-        <div
-
-            class="chooseCity"
-        >
-            <div class="p-t-10 p-l-20 size-ls ">请选择区域</div>
-            <div class="cityBox">
-                <div v-for="(item,index) in city_list.arr" :key="index" :class="{city: isCity,city_1: cityIndex ==index && isCity_1}" @click="choose_city_end(item)">{{ item.name }}</div>
-            </div>
-        </div>
-    </div> -->
     <div class="tools">
         <div class="buttons">
             <!-- <span v-if="settingsStore.mode == 'pc'" class="item item-pro" @click="pro">
@@ -26,7 +7,6 @@
             </span> -->
             <span class="item" @click="$eventBus.emit('global-choose-city')">
                 <el-icon><Switch /></el-icon>
-                <!-- <svg-icon name="switch" /> -->
             </span>
             <span v-if="settingsStore.topbar.enableNavSearch" class="item" @click="$eventBus.emit('global-search-toggle')">
                 <svg-icon name="search" />
@@ -57,9 +37,6 @@
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
-        <!-- <page-main> -->
-
-        <!-- </page-main> -->
     </div>
 </template>
 
@@ -97,7 +74,7 @@ function userCommand(command) {
     }
 }
 function pro() {
-    window.open('https://app.cqyezhuapp.com/edatachart/', 'top')
+    window.open('', 'top')
 }
 const abc = ref(window.screen.height + 'px')
 const switch_choose_city = ref(false)
