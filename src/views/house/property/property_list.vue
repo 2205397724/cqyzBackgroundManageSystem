@@ -290,12 +290,12 @@
                                                     ref="uploadRef"
                                                     action="***"
                                                     :auto-upload="false"
-                                                    :file-list="file_list_1"
+                                                    :file-list="file_list_1[i]"
                                                     :on-change="(file,files)=>{
-                                                        file_list_1 = files
+                                                        file_list_1[i] = files
                                                     }"
                                                     :on-remove="(file,files)=>{
-                                                        file_list_1 = files
+                                                        file_list_1[i] = files
                                                     }"
                                                 >
                                                     <el-button type="primary" plain>选择</el-button>
@@ -539,32 +539,38 @@ const dialogExamineCloseFunc = formEl => {
             }
             if (files.length > 0) {
                 getFilesKeys(files, 'property').then(arr => {
-                    console.log(arr)
+                    // affix为null
+                    from_examine.item.affix = {bdcz:[]}
                     from_examine.item.affix.bdcz = file_key.concat(arr)
-                    console.log(from_examine.item.affix.bdcz)
                 })
             }
-            let files_1 = []
-            let file_key_1 = []
-            if (file_list_1.value.length > 0) {
-                for (let i in file_list_1.value) {
-                    if (!file_list_1.value[i].raw) {
-                        file_key_1.push(file_list_1.value[i].name)
-                    } else {
-                        files_1.push(file_list_1.value[i].raw)
+            // 遍历处理不同产权人的身份证附件信息
+            for(let j in file_list_1.value) {
+                let files_1 = []
+                files_1[j] =[]
+                let file_key_1 = []
+                file_key_1[j] = []
+                if (file_list_1.value[j].length > 0) {
+                    for (let i in file_list_1.value[j]) {
+                        if (!file_list_1.value[j][i].raw) {
+                            file_key_1[j].push(file_list_1.value[j][i].name)
+                        } else {
+                            files_1[j].push(file_list_1.value[j][i].raw)
+                        }
                     }
                 }
-            }
-            from_error.msg = {}
-            if (files_1.length > 0) {
-                getFilesKeys(files_1, 'propertyOwners').then(arr => {
-                    from_examine.item.owners.affix.sfz = file_key.concat(arr)
-                })
+                from_error.msg = {}
+                if (files_1[j].length > 0) {
+                    getFilesKeys(files_1, 'propertyOwners').then(arr => {
+                        from_examine.item.owners[j].affix = {sfz:[]}
+                        from_examine.item.owners[j].affix.sfz = file_key.concat(arr)
+                    })
+                }
             }
             console.log(from_examine.item)
             setTimeout(() => {
                 if (str_title.value == '修改') {
-                    console.log(from_examine.item)
+                    // console.log(from_examine.item)
                     APIputProperty(from_examine.item.id, from_examine.item).then(res => {
                         refreshFunc()
                         ElMessage.success('修改成功')
@@ -573,7 +579,7 @@ const dialogExamineCloseFunc = formEl => {
                         ElMessage.error('修改失败')
                     })
                 } else {
-                    console.log(from_examine.item)
+                    // console.log(from_examine.item)
                     APIpostProperty(from_examine.item).then(res => {
                         refreshFunc()
                         ElMessage.success('添加成功')
@@ -582,7 +588,7 @@ const dialogExamineCloseFunc = formEl => {
                         ElMessage.error('添加失败')
                     })
                 }
-            }, 300)
+            }, 700)
         } else {
             return false
         }
@@ -713,7 +719,8 @@ const addServiceFunc = index => {
         type_id_card: '',
         id_card: '',
         mobile: '',
-        area: ''
+        area: '',
+        affix:{siz:[]}
     }
     from_examine.item.owners.push(data)
 }
