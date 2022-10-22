@@ -1032,7 +1032,7 @@ refreshFunc()
     }
     .tree-details {
         flex-grow: 1;
-        max-width: calc(100% - 300px);
+        max-width: calc(100% - 250px);
     }
     .el-cascader {
         width: 100% !important;

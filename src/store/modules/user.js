@@ -100,7 +100,8 @@ export const useUserStore = defineStore(
             // 获取我的权限
             getPermissions() {
                 return new Promise(resolve => {
-                    let user_info =JSON.parse(localStorage.getItem(this.uid+'_user_info'))
+                    let uid = localStorage.getItem('uid')
+                    let user_info =JSON.parse(localStorage.getItem(uid+'_user_info'))
                     if (user_info.auth_type == 'pt') {
                         this.permissions = ['*']
                         resolve(this.permissions)
@@ -108,11 +109,10 @@ export const useUserStore = defineStore(
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
                             if (res.length > 0) {
-                                if (!JSON.parse(localStorage.getItem(this.uid + '_user_group'))) {
-                                    localStorage.setItem(this.uid + '_user_group', JSON.stringify(res[0]))
+                                if (!JSON.parse(localStorage.getItem(uid + '_user_group'))) {
+                                    localStorage.setItem(uid + '_user_group', JSON.stringify(res[0]))
                                 }
-                                APIgetGroupPerms(JSON.parse(localStorage.getItem(this.uid + '_user_group')).id).then(res => {
-                                    console.log(res)
+                                APIgetGroupPerms(JSON.parse(localStorage.getItem(uid + '_user_group')).id).then(res => {
                                     res.forEach(item => {
                                         for (let key in item) {
                                             if (key == 'name') {
@@ -127,7 +127,6 @@ export const useUserStore = defineStore(
                             } else {
                                 resolve('')
                             }
-
                         })
                     }
                 })
