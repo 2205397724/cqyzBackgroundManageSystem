@@ -26,7 +26,7 @@
                 <el-avatar size="small">
                     <el-icon><el-icon-user-filled /></el-icon>
                 </el-avatar>
-                {{ useName }}
+                {{ user_info.name || user_info.nickname }}
                 <el-icon><el-icon-caret-bottom /></el-icon>
             </div>
             <template #dropdown>
@@ -51,6 +51,8 @@ const userStore = useUserStore()
 
 import { useFullscreen } from '@vueuse/core'
 const { isFullscreen, toggle } = useFullscreen()
+const abc = ref(window.screen.height + 'px')
+const user_info = reactive(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')))
 
 function userCommand(command) {
     switch (command) {
@@ -76,58 +78,7 @@ function userCommand(command) {
 function pro() {
     window.open('', 'top')
 }
-const abc = ref(window.screen.height + 'px')
-const switch_choose_city = ref(false)
-const chooseCityBigBox = ref(null)
-const switchCity = () => {
-    console.log(localStorage.getItem('china_code'))
-    getCityList()
-    switch_choose_city.value = true
-}
-import {
-    APIgetCityNotPm
-} from '@/api/custom/custom.js'
-import { ElMessage } from 'element-plus'
-const city_list = reactive({
-    arr: []
-})
-const page = ref(1)
-const per_page = ref(15)
-const isCity = ref(true)
-const isCity_1 = ref(false)
-const cityIndex = ref(null)
-const useName = ref(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')).name || JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')).nickname || JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')).username)
-// 获取城市配置
-const getCityList = () => {
-    let params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    APIgetCityNotPm(params).then(res => {
-        res.forEach((item, index) => {
-            if (item.china_code == localStorage.getItem('china_code')) {
-                cityIndex.value = index
-                isCity_1.value = true
-            }
-        })
-        city_list.arr = res
-        console.log(res)
-    })
-}
-// 选择 后确认按钮
-const choose_city_end = val => {
-    if (!val.china_code) {
-        ElMessage.error('请选择城市')
-        return
-    }
-    console.log(val.china_code)
-    userStore.china_code  = val.china_code
-    sessionStorage.setItem('china_code', val.china_code)
-    ElMessage.success('选择成功')
-    switch_choose_city.value = false
-    sessionStorage.setItem('isChooseCity', true)
-    console.log(sessionStorage.getItem('isChooseCity'))
-}
+
 </script>
 
 <style lang="scss" scoped>

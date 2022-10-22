@@ -239,12 +239,6 @@ const { proxy } = getCurrentInstance()
 const user_info = ref(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')))
 
 onMounted(() => {
-    let uid = localStorage.getItem('uid')
-    proxy.$eventBus.on('choose-city-isReady', () => {
-        if (!localStorage.getItem(uid + '_city')) {
-            proxy.$eventBus.emit('global-choose-city', true)
-        }
-    })
 
 })
 

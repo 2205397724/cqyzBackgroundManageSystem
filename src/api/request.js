@@ -68,7 +68,7 @@ api.interceptors.request.use(
         if (userOutsideStore.isLogin) {
             request.headers['Authorization'] = 'Bearer ' + localStorage.token
             let uid = localStorage.getItem('uid')
-            let cc = JSON.parse(localStorage.getItem(uid + '_city'))
+            let cc = JSON.parse(localStorage.getItem(uid + '_user_city'))
             request.headers['X-Cc'] = ( cc !=null && Object.keys(cc).length!=0 )? cc.china_code:''
         }
         var time = new Date().getTime().toString()

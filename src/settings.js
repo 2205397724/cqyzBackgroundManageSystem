@@ -59,7 +59,7 @@ let globalSettings = {
         // 是否开启全屏
         enableFullscreen: true,
         // 是否开启页面刷新
-        enablePageReload: false,
+        enablePageReload: true,
         // 是否开启应用配置（建议在生产环境关闭）
         enableAppSetting: false
     },

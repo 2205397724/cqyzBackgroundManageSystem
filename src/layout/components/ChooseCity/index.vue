@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+const reload = inject('reload')
 import { APIgetCityNotPm } from '@/api/custom/custom.js'
 const { proxy } = getCurrentInstance()
 import { useSettingsStore } from '@/store/modules/settings'
@@ -40,7 +41,6 @@ onMounted(() => {
     proxy.$eventBus.on('global-choose-city', () => {
         isShow.value = !isShow.value
     })
-    proxy.$eventBus.emit('choose-city-isReady')
 })
 // 获取城市配置
 const getCityList = () => {
@@ -51,7 +51,8 @@ const getCityList = () => {
     APIgetCityNotPm(params).then(res => {
         res.forEach((item, index) => {
             let uid = localStorage.getItem('uid')
-            if (item.china_code == localStorage.getItem(uid + '_city')) {
+            let city =JSON.parse(localStorage.getItem(uid + '_user_city'))
+            if (item.china_code == city.china_code) {
                 item.flag = true
             } else {
                 item.flag = false
@@ -66,13 +67,10 @@ const click_city = val => {
         ElMessage.error('请选择城市')
         return
     }
-    console.log(val)
-    // val.flag = true
     let uid = localStorage.getItem('uid')
-    // localStorage.setItem(uid + '_city', val.china_code)
-    localStorage.setItem(uid + '_city', JSON.stringify({ china_code: val.china_code, name: val.name }))
-    console.log(JSON.parse(localStorage.getItem(uid + '_city')))
+    localStorage.setItem(uid + '_user_city', JSON.stringify({ china_code: val.china_code, name: val.name }))
     ElMessage.success('选择成功')
+    reload()//重新加载页面
 }
 </script>
 
@@ -110,9 +108,9 @@ const click_city = val => {
             cursor: pointer;
         }
         .seleItem {
-            border: 2px solid #94dfb6;
-            color: #6c987f;
-            background-color: #94dfb6;
+            border: 2px solid #95cfaf;
+            color: #289659;
+            background-color: #f3fff4;
         }
     }
     .container {

@@ -168,10 +168,8 @@ function handleLogin() {
             }
             userStore.login(data).then(() => {
                 loading.value = false
-                console.log(11111)
                 ElMessage.success('登录成功')
                 userStore.getInfo()//拉取用户信息
-                console.log(22222)
                 router.push(redirect.value)
             }).catch(() => {
                 loading.value = false

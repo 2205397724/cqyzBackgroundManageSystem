@@ -19,9 +19,7 @@ export const useUserStore = defineStore(
             failure_time: localStorage.failure_time || '',
             permissions: [],
             utype: '',
-            china_code: '',
             gid: '',
-            isChooseCity: false,
             groupChinaCode: '',
             // 后加的
             uid: localStorage.uid || ''
@@ -74,11 +72,10 @@ export const useUserStore = defineStore(
             getInfo() {
                 return new Promise((resolve, reject) => {
                     APIgetUserinfo().then(res => {
-                        let data = {
-                            info: res
-                        }
                         localStorage.setItem('uid', res.id)
                         localStorage.setItem(res.id + '_user_info', JSON.stringify(res))
+                        localStorage.setItem(res.id+'_user_city', JSON.stringify({}))
+                        localStorage.setItem(res.id+'_user_group', JSON.stringify({}))
                         resolve(res)
                     }).catch(error => {
                         reject({})
@@ -111,11 +108,10 @@ export const useUserStore = defineStore(
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
                             if (res.length > 0) {
-                                let uid = localStorage.getItem('uid')
-                                if (!JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
-                                    localStorage.setItem(uid + '_groupChinaCode', JSON.stringify(res[0]))
+                                if (!JSON.parse(localStorage.getItem(this.uid + '_user_group'))) {
+                                    localStorage.setItem(this.uid + '_user_group', JSON.stringify(res[0]))
                                 }
-                                APIgetGroupPerms(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).id).then(res => {
+                                APIgetGroupPerms(JSON.parse(localStorage.getItem(this.uid + '_user_group')).id).then(res => {
                                     console.log(res)
                                     res.forEach(item => {
                                         for (let key in item) {
