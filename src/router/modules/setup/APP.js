@@ -48,7 +48,7 @@ export default {
     }
     // {
     //     path: 'house',
-    //     name: 'houseResidentialHouse',
+    //     name: 'zonesHouse',
     //     component: () =>
     //         import ('@/views/house/house.vue'),
     //     meta: {

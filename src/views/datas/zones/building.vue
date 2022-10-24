@@ -96,7 +96,7 @@
                 <el-table-column prop="cnt_unit" label="单元数" width="140">
                     <template #default="scope">
                         <el-link :underline="false" type="primary">
-                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'houseResidentialBuildingUnit',query:{ building_id: scope.row.id }}">{{ scope.row.cnt_unit }} 个</router-link>
+                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;" :to="{name: 'zonesBuildingUnit',query:{ building_id: scope.row.id }}">{{ scope.row.cnt_unit }} 个</router-link>
                         </el-link>
                     </template>
                 </el-table-column>

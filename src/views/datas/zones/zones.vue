@@ -2,7 +2,7 @@
     <div class="routineresidentialhouse">
         <div class="tree-box" style="height: 100%;">
             <div class="tree-item" style="background-color: white;">
-                <div style="height: calc(100% - 60px);">
+                <div style="height: calc(100%);">
                     <position-tree-second
                         :tree_item="tree_item_1.arr"
                         :type="no_zone"
@@ -10,16 +10,10 @@
                     />
                 </div>
             </div>
-            <!-- <div class="tree-details" style="display: flex; flex-direction: column;">
-                <div style="height: 100%;">
-                    <div :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}" style="position: relative;display: flex; flex-direction: column;  }"> -->
+
             <div class="tree-details" style="display: flex; flex-direction: column;">
-                <div style="height: 100%;">
-                    <div
-                        :style="{'height':!active_obj.obj.name||active_obj.obj.type=='region'||active_obj.obj.type=='zone'?'calc(100% - 60px)':'100%'}"
-                        style="box-sizing: border-box;"
-                        class="p-20 flex-colmun"
-                    >
+                <el-scrollbar max-height="100%">
+                    <div class="p-20 flex-colmun">
                         <div class="search" style="background-color: white;">
                             <div style="margin-bottom: 25px;">
                                 <el-button
@@ -62,50 +56,33 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <div style="background-color: white;" class="hidden">
+                        <div style="background-color: white;padding-bottom: 15px;" class="hidden">
                             <el-table
                                 v-loading="loading_tab"
                                 :data="data_tab.arr"
                                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                                class="tab_1"
                             >
                                 <el-table-column prop="name" label="名称" />
                                 <el-table-column prop="addr" label="地址" />
-                                <!-- <el-table-column prop="china_code" label="所在区域" width="180" /> -->
-                                <!-- <el-table-column prop="area_floor" label="总占地面积" width="140">
-                                    <template #default="scope">
-                                        <span>{{ scope.row.area_floor }} m²</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="area_build" label="总建筑面积" width="140">
-                                    <template #default="scope">
-                                        <span>{{ scope.row.area_build }} m²</span>
-                                    </template>
-                                </el-table-column> -->
-                                <!-- <el-table-column prop="area_support" label="配套用房总面积" width="140">
-                            <template #default="scope">
-                                <span>{{ scope.row.area_support }} m²</span>
-                            </template>
-                        </el-table-column> -->
                                 <el-table-column prop="cnt_building" label="楼栋数">
                                     <template #default="scope">
-                                        <el-link :underline="false" type="primary">
-                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
-                                        </el-link>
+                                        <el-tag type="" effect="plain">
+                                            <router-link class="el-link el-link--primary size-sm" :to="{name: 'zonesBuilding',query:{ zone_id: scope.row.id }}">{{ scope.row.cnt_building }} 栋</router-link>
+                                        </el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="cnt_live" label="住房总套数">
                                     <template #default="scope">
-                                        <el-link :underline="false" type="primary">
-                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialBuildingHouse',query:{ sync_zone_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
-                                        </el-link>
+                                        <el-tag type="" effect="plain">
+                                            <router-link class="el-link el-link--primary size-sm" :to="{name: 'zonesBuildingHouse',query:{ sync_zone_id: scope.row.id }}">{{ scope.row.cnt_live }} 套</router-link>
+                                        </el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="cnt_live" label="业委会">
                                     <template #default="scope">
-                                        <el-link :underline="false" type="primary">
-                                            <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'houseResidentialYwh',query:{ zid: scope.row.id,china_code: scope.row.china_code }}">业委会</router-link>
-                                        </el-link>
+                                        <el-tag type="" effect="plain">
+                                            <router-link class="el-link el-link--primary size-sm" :to="{name: 'zonesCommittee',query:{ zid: scope.row.id,china_code: scope.row.china_code }}">业委会</router-link>
+                                        </el-tag>
                                     </template>
                                 </el-table-column>
                                 <el-table-column fixed="right" label="操作" width="200">
@@ -145,7 +122,7 @@
                             />
                         </div>
                     </div>
-                </div>
+                </el-scrollbar>
             </div>
         </div>
         <!-- 修改添加 -->
@@ -183,15 +160,7 @@
                                 <el-col v-if="!china_code" :md="24" :lg="12">
                                     <el-form-item label="所在区域" label-width="120px" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
                                         <!-- <Cascaders v-model="from_examine.item.china_code" /> -->
-                                        <div
-                                            style="
-                                                                                                                                                                width: 100%;
-                                                                                                                                                                height: 32px;
-                                                                                                                                                                border: 1px solid #dcdfe6;
-                                                                                                                                                                border-radius: 4px;
-"
-                                            @click="click_add_group_zone_id"
-                                        >
+                                        <div style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;" @click="click_add_group_zone_id">
                                             <span v-if="!selectedZone_id" style="margin-left: 11px; color: #ccc;">请选择区域</span>
                                             <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
                                         </div>

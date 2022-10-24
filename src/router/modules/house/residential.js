@@ -24,7 +24,7 @@ export default {
             children: [
                 {
                     path: 'building',
-                    name: 'houseResidentialBuilding',
+                    name: 'zonesBuilding',
                     component: () => import('@/views/house/Building.vue'),
                     meta: {
                         title: '楼栋',
@@ -34,7 +34,7 @@ export default {
                     children: [
                         {
                             path: 'unit',
-                            name: 'houseResidentialBuildingUnit',
+                            name: 'zonesBuildingUnit',
                             component: () => import('@/views/house/unit.vue'),
                             meta: {
                                 title: '单元',
@@ -44,7 +44,7 @@ export default {
                             children: [
                                 {
                                     path: 'house',
-                                    name: 'houseResidentialBuildingUnitHouse',
+                                    name: 'zonesBuildingUnitHouse',
                                     component: () => import('@/views/house/house.vue'),
                                     meta: {
                                         title: '房屋',
@@ -56,7 +56,7 @@ export default {
                         },
                         {
                             path: 'house',
-                            name: 'houseResidentialBuildingHouse',
+                            name: 'zonesBuildingHouse',
                             component: () => import('@/views/house/house.vue'),
                             meta: {
                                 title: '房屋',
@@ -68,7 +68,7 @@ export default {
                 },
                 {
                     path: 'house',
-                    name: 'houseResidentialHouse',
+                    name: 'zonesHouse',
                     component: () => import('@/views/house/house.vue'),
                     meta: {
                         title: '房屋',
@@ -78,7 +78,7 @@ export default {
                 },
                 {
                     path: 'ywh',
-                    name: 'houseResidentialYwh',
+                    name: 'zonesCommittee',
                     component: () => import('@/views/house/ywh.vue'),
                     meta: {
                         title: '业委会',
@@ -90,7 +90,7 @@ export default {
         }
         // {
         //     path: 'building',
-        //     name: 'houseResidentialBuilding',
+        //     name: 'zonesBuilding',
         //     component: () => import('@/views/house/building.vue'),
         //     meta: {
         //         title: '楼栋',
@@ -100,7 +100,7 @@ export default {
         //     children: [
         //         {
         //             path: 'unit',
-        //             name: 'houseResidentialBuildingUnit',
+        //             name: 'zonesBuildingUnit',
         //             component: () => import('@/views/house/unit.vue'),
         //             meta: {
         //                 title: '单元',

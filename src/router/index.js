@@ -86,26 +86,10 @@ import announceAnnounce from './modules/announce/announce.js'
 import announceTask from './modules/announce/task.js'
 import announcelTasksd from './modules/announce/tasksd.js'
 // 管理
-import superviseHome from './modules/supervise/home.js'
-import activityReview from './modules/supervise/review.js'
-import personnelManagement from './modules/supervise/personnels.js'
-import personnelLabels from './modules/supervise/labels.js'
-
-// // 统计
-// import statisticsComplaint from './modules/statistics/complaint.js'
-// import statisticsEnterprise from './modules/statistics/enterprise.js'
-// import statisticsEquipment from './modules/statistics/equipment.js'
-// import statisticsEvent from './modules/statistics/event.js'
-// import statisticsHouse from './modules/statistics/house.js'
-// import statisticsRepair from './modules/statistics/repair.js'
-// 房源
-import houseHousingManagement from './modules/house/housing_management.js'
-import houseEnterprise from './modules/house/enterprise.js'
-import houseEnterpriseApply from './modules/house/enterprise_apply.js'
-import houseProperty from './modules/house/property.js'
-import houseResidential from './modules/house/residential.js'
-import houseBind from './modules/house/house_bind.js'
-import eventDevice from './modules/house/device.js'
+import manageMenu from './modules/menu/manage.js'
+// 数据
+import datasMenu from './modules/menu/datas.js'
+import setupMenu from './modules/menu/setup.js'
 // 用户
 import userRegister from './modules/user/register.js'
 import userGroup from './modules/user/group.js'
@@ -132,36 +116,24 @@ import setupAPP from './modules/setup/APP.js'
 // 备案
 import recordManage from './modules/record/manange.js'
 import recordType from './modules/record/type'
+import manage from './modules/information/manage.js'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [
     {
         meta: {
             title: '管理',
             icon: 'manage',
-            auth: ['supervise', '*']
+            auth: ['manage', '*']
         },
-        children: [
-            superviseHome,
-            activityReview,
-            personnelManagement,
-            personnelLabels
-        ]
+        children:manageMenu.list
     },
     {
         meta: {
-            title: '小区',
+            title: '数据',
             icon: 'house',
-            auth: ['house', '*']
+            auth: ['datas', '*']
         },
-        children: [
-            houseResidential,
-            houseHousingManagement,
-            houseBind,
-            houseProperty,
-            houseEnterprise,
-            houseEnterpriseApply,
-            eventDevice
-        ]
+        children: datasMenu.list
     },
     {
         meta: {
@@ -258,12 +230,7 @@ const asyncRoutes = [
             icon: 'setting',
             auth: ['setup', '*']
         },
-        children: [
-            setupRegion,
-            setupOption,
-            setupType,
-            setupAPP
-        ]
+        children:setupMenu.list
     }
 ]
 
