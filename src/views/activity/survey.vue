@@ -90,9 +90,9 @@
                     style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
                 >
                     <el-table-column prop="name" label="问卷标题" />
-                    <el-table-column prop="author_cc_name" label="所在区域" />
-                    <el-table-column prop="ticketall" label="总票数" align="center" />
-                    <el-table-column label="问卷状态" align="center">
+                    <el-table-column prop="author_cc_name" label="所在区域" width="120" />
+                    <el-table-column prop="ticketall" label="总票数" align="center" width="100" />
+                    <el-table-column label="问卷状态" align="center" width="80">
                         <template #default="scope">
                             <el-tag v-show="scope.row.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                             <el-tag v-show="scope.row.status == 2" class="btnNone noDeal" type="warning" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
@@ -103,7 +103,7 @@
                             <el-tag v-show="scope.row.status == 7" class="btnNone" type="info" size="small">{{ getOptVal(opts_all.obj.announce_status,scope.row.status) }} </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column label="是否公开" align="center">
+                    <el-table-column label="是否公开" align="center" width="80">
                         <template #default="scope">
                             <el-tag v-show="scope.row.pub == 0" class="btnNone" type="danger" size="small">关闭</el-tag>
                             <el-tag v-show="scope.row.pub == 1" class="btnNone noDeal" type="success" size="small">开放</el-tag>
@@ -118,7 +118,7 @@
                                 详情
                             </el-button> -->
                             <el-link :underline="false" type="primary">
-                                <router-link class="el-button details" :to="{name: 'surveyDetails',query:{ id : scope.row.id }}">详情</router-link>
+                                <router-link class="el-button details" :to="{name: 'surveyDetail',query:{ id : scope.row.id }}">详情</router-link>
                             </el-link>
                             <el-popconfirm
                                 title="确定要删除当前项么?" cancel-button-type="info"

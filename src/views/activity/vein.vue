@@ -63,17 +63,17 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="code_room" label="所在区域">
+                    <el-table-column prop="code_room" label="所在区域" width="120">
                         <template #default="scope">
                             <span class="m-l-10">{{ scope.row.region_cc }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="code_room" label="区域类型">
+                    <el-table-column prop="code_room" label="区域类型" width="80">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.group_user_region_type,scope.row.region_type) }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="time_deal" label="是否显示" width="120">
+                    <el-table-column prop="time_deal" label="是否显示" width="80">
                         <template #default="scope">
                             <span class="m-l-10">{{ getOptVal(opts_all.obj.device_show,scope.row.show) }} </span>
                         </template>
@@ -104,7 +104,7 @@
                                 详情
                             </el-button> -->
                             <el-link :underline="false" type="primary">
-                                <router-link class="el-button details" :to="{name: 'eventDetails',query:{ id : scope.row.id }}" style="width: 53px;height: 25px;">详情</router-link>
+                                <router-link class="el-button details" :to="{name: 'veinDetail',query:{ id : scope.row.id }}" style="width: 53px;height: 25px;">详情</router-link>
                             </el-link>
                             <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info" @confirm="deleteFunc(scope.row)">
                                 <template #reference>

@@ -8,24 +8,17 @@ import '@/assets/styles/nprogress.scss'
 import { useNProgress } from '@vueuse/integrations/useNProgress'
 const { isLoading } = useNProgress()
 
-// 活动
-import activityJointly from './modules/activity/jointly.js'
-import activityEvent from './modules/activity/event.js'
-import activitySurvey from './modules/activity/survey.js'
-import activityElect from './modules/activity/elect.js'
-import activityVote from './modules/activity/vote.js'
-
-// 管理
-import manageMenu from './modules/menu/manage.js'
-// 数据
-import datasMenu from './modules/menu/datas.js'
-import setupMenu from './modules/menu/setup.js'
-import userMenu from './modules/menu/user.js'
-import shareMenu from './modules/menu/share.js'
-import newsMenu from './modules/menu/news.js'
-import filingMenu from './modules/menu/filing.js'
-import complaintMenu from './modules/menu/complaint.js'
-import announceMenu from './modules/menu/announce.js'
+// 引入菜单配置
+import manageMenu from './modules/manage.js'
+import datasMenu from './modules/datas.js'
+import setupMenu from './modules/setup.js'
+import userMenu from './modules/user.js'
+import shareMenu from './modules/share.js'
+import newsMenu from './modules/news.js'
+import filingMenu from './modules/filing.js'
+import complaintMenu from './modules/complaint.js'
+import announceMenu from './modules/announce.js'
+import activityMenu from './modules/activity.js'
 // 固定路由
 const constantRoutes = [
     {
@@ -119,13 +112,7 @@ const asyncRoutes = [
             title: '议事',
             icon: 'survey',
         },
-        children: [
-            activityEvent,
-            activitySurvey,
-            activityElect,
-            activityVote,
-            activityJointly
-        ]
+        children: activityMenu.list
     },
     {
         meta: {
