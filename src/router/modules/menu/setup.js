@@ -10,7 +10,7 @@ export default {
             meta: {
                 title: '城市配置',
                 icon: 'el-icon-guide',
-                auth: ['setup', '*']
+                auth: ['setup.region', '*']
             },
             children: [
                 {
@@ -22,7 +22,6 @@ export default {
                         sidebar: false,
                         breadcrumb: false,
                         activeMenu: '/setup/region',
-                        auth: ['setup.region', '*']
                     }
                 }
             ]

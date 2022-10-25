@@ -128,7 +128,7 @@
                             修改
                         </el-button>
                         <el-link :underline="false" type="primary">
-                            <router-link class="el-button details" :to="{name: 'complaintDetails_2',query:{ id : scope.row.id }}">详情</router-link>
+                            <router-link class="el-button details" :to="{name: 'repairDetail',query:{ id : scope.row.id }}">详情</router-link>
                         </el-link>
                         <!-- <el-button
                             @click="clickFuncAllot(scope.row)"
@@ -351,7 +351,7 @@ import { Loading, Search, Plus, StarFilled } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetComplaintList,
-    APIgetComplaintDetails,
+    APIgetcomplaintDetail,
     APIputComplaint,
     APIpostComplaint
 } from '@/api/custom/custom.js'
@@ -479,7 +479,7 @@ const clickFuncModify = val => {
     data_1.add_error = {}
     data_1.add_title = '修改'
     data_1.add_switch
-    APIgetComplaintDetails(val.id).then(res => {
+    APIgetcomplaintDetail(val.id).then(res => {
         console.log(res)
         data_1.add_form = res
         let arr = []

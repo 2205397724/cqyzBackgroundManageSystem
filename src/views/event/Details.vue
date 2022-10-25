@@ -570,7 +570,7 @@ import {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     // APIgetComplaintList
-    APIgetComplaintDetails,
+    APIgetcomplaintDetail,
     APIgetCommentList,
     // APIpostComment,
     APIgetCommentDetails,
@@ -604,8 +604,8 @@ const illegalList = reactive({
     arr: []
 })
 // 投诉详情
-const getComplaintDetailsFunc = () => {
-    APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' }).then(res => {
+const getcomplaintDetailFunc = () => {
+    APIgetcomplaintDetail(route.query.id || dataForm.item.id, { log: 'all' }).then(res => {
         console.log(res)
         dataForm.item = res
         res.affixs = []
@@ -890,7 +890,7 @@ const popupFuncAdd3 = () => {
             }
             console.log(dataForm.item.status)
             popup_3.switch = false
-            // APIgetComplaintDetails(route.query.id).then()
+            // APIgetcomplaintDetail(route.query.id).then()
         })
     })
 
@@ -922,8 +922,8 @@ const data_1 = reactive({
 })
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
-    // APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' })
-    getComplaintDetailsFunc()
+    // APIgetcomplaintDetail(route.query.id || dataForm.item.id, { log: 'all' })
+    getcomplaintDetailFunc()
 }
 watch(() => {
     refreshFunc()

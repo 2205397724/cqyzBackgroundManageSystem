@@ -76,33 +76,17 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column label="标题">
+                <el-table-column label="标题" prop="title"></el-table-column>
+                <el-table-column label="资讯类别" width="120">
                     <template #default="scope">
-                        <span>{{ scope.row.title }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="资讯类别">
-                    <template #default="scope">
-                        <!-- <span>{{ getCategoryName(data_tab.arr,scope.row.cate_id) }} </span> -->
                         <span>{{ scope.row?.cate?.name }} </span>
-                        <!-- <span>{{ scope.row.cate_id }} </span> -->
                     </template>
                 </el-table-column>
-                <el-table-column label="所在区域">
-                    <template #default="scope">
-                        <span>{{ scope.row.china_name }} </span>
-                    </template>
-                </el-table-column>
-                <!-- <el-table-column label="所在小区">
-                    <template #default="scope">
-                        <span>{{ getZoneName(zone_list.arr,scope.row.zone_id) }} </span>
-                    </template>
-                </el-table-column> -->
-                <el-table-column label="状态">
+                <el-table-column label="所在区域" prop="china_name" width="120"></el-table-column>
+                <el-table-column label="状态" width="100">
                     <template #default="scope">
                         <el-switch
                             v-model="scope.row.status"
-
                             style="
 
     --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
@@ -144,15 +128,17 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- <el-pagination
-                v-model:current-page="data_1.page"
-                style="padding-top: 20px;"
-                layout="total,prev,pager,next,jumper,"
-                :total="data_1.total"
-                :page-size="data_1.per_page"
+            <el-pagination
+                v-model:current-page="page"
+                style="float: right;"
+                layout="prev,next,jumper,"
+                :total="50"
+                :page-size="per_page"
                 background
+                prev-text="上一页"
+                next-text="下一页"
                 hide-on-single-page
-            /> -->
+            />
         </page-main>
         <!-- 修改添加 -->
         <el-dialog

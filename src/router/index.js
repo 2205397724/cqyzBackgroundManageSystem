@@ -8,6 +8,24 @@ import '@/assets/styles/nprogress.scss'
 import { useNProgress } from '@vueuse/integrations/useNProgress'
 const { isLoading } = useNProgress()
 
+// 活动
+import activityJointly from './modules/activity/jointly.js'
+import activityEvent from './modules/activity/event.js'
+import activitySurvey from './modules/activity/survey.js'
+import activityElect from './modules/activity/elect.js'
+import activityVote from './modules/activity/vote.js'
+
+// 管理
+import manageMenu from './modules/menu/manage.js'
+// 数据
+import datasMenu from './modules/menu/datas.js'
+import setupMenu from './modules/menu/setup.js'
+import userMenu from './modules/menu/user.js'
+import shareMenu from './modules/menu/share.js'
+import newsMenu from './modules/menu/news.js'
+import filingMenu from './modules/menu/filing.js'
+import complaintMenu from './modules/menu/complaint.js'
+import announceMenu from './modules/menu/announce.js'
 // 固定路由
 const constantRoutes = [
     {
@@ -72,32 +90,6 @@ const constantRoutes = [
         }]
     }
 ]
-// 活动
-import activityJointly from './modules/activity/jointly.js'
-import activityEvent from './modules/activity/event.js'
-import activitySurvey from './modules/activity/survey.js'
-import activityElect from './modules/activity/elect.js'
-import activityVote from './modules/activity/vote.js'
-// 公示
-import announceArchive from './modules/announce/archive.js'
-import announceManage from './modules/announce/announceManage.js'
-import announceCategory from './modules/announce/announceCategory.js'
-import announceAnnounce from './modules/announce/announce.js'
-import announceTask from './modules/announce/task.js'
-import announcelTasksd from './modules/announce/tasksd.js'
-// 管理
-import manageMenu from './modules/menu/manage.js'
-// 数据
-import datasMenu from './modules/menu/datas.js'
-import setupMenu from './modules/menu/setup.js'
-import userMenu from './modules/menu/user.js'
-import shareMenu from './modules/menu/share.js'
-import newsMenu from './modules/menu/news.js'
-import filingMenu from './modules/menu/filing.js'
-// 事件
-import eventComplaint from './modules/event/complaint.js'
-import eventIllegal from './modules/event/illegal.js'
-import eventRepair from './modules/event/repair.js'
 
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [
@@ -105,7 +97,6 @@ const asyncRoutes = [
         meta: {
             title: '管理',
             icon: 'manage',
-            auth: ['manage', '*']
         },
         children:manageMenu.list
     },
@@ -113,7 +104,6 @@ const asyncRoutes = [
         meta: {
             title: '数据',
             icon: 'house',
-            auth: ['datas', '*']
         },
         children: datasMenu.list
     },
@@ -121,22 +111,13 @@ const asyncRoutes = [
         meta: {
             title: '公示',
             icon: 'announce',
-            auth: ['announce', '*']
         },
-        children: [
-            announceManage,
-            announceArchive,
-            announceCategory,
-            announceAnnounce,
-            announceTask,
-            announcelTasksd
-        ]
+        children: announceMenu.list
     },
     {
         meta: {
             title: '议事',
             icon: 'survey',
-            auth: ['activity', '*']
         },
         children: [
             activityEvent,
@@ -150,19 +131,13 @@ const asyncRoutes = [
         meta: {
             title: '民生',
             icon: 'service',
-            auth: ['event', '*']
         },
-        children: [
-            eventComplaint,
-            eventIllegal,
-            eventRepair
-        ]
+        children: complaintMenu.list
     },
     {
         meta: {
             title: '备案',
             icon: 'filing',
-            auth: ['record', '*']
         },
         children: filingMenu.list
     },
@@ -170,7 +145,6 @@ const asyncRoutes = [
         meta: {
             title: '资讯',
             icon: 'news',
-            auth: [' information', '*']
         },
         children:newsMenu.list
     },
@@ -178,7 +152,6 @@ const asyncRoutes = [
         meta: {
             title: '共享',
             icon: 'news',
-            auth: [' share', '*']
         },
         children: shareMenu.list
     },
@@ -186,7 +159,6 @@ const asyncRoutes = [
         meta: {
             title: '用户',
             icon: 'users',
-            auth: ['users', '*']
         },
         children: userMenu.list
     },
@@ -194,7 +166,6 @@ const asyncRoutes = [
         meta: {
             title: '设置',
             icon: 'setting',
-            auth: ['setup', '*']
         },
         children:setupMenu.list
     }

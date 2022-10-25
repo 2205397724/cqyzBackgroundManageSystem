@@ -10,7 +10,7 @@ export default {
             meta: {
                 title: '备案管理',
                 icon: 'el-icon-document',
-                auth: ['filing.index', '*']
+                auth: ['filing.index','*']
             },
             children: [{
                 path: 'index',
@@ -20,7 +20,7 @@ export default {
                     title: '备案管理',
                     sidebar: false,
                     breadcrumb: false,
-                    activeMenu: '/filing'
+                    activeMenu: '/filing',
                 },
                 children: [{
                     path: 'add',
@@ -40,8 +40,7 @@ export default {
             name: 'filingCategoryBox',
             meta: {
                 title: '备案类别',
-                icon: 'el-icon-Notebook',
-                auth: ['filing.category', '*']
+                icon: 'el-icon-Notebook'
             },
             children: [{
                 path: 'index',
@@ -51,7 +50,8 @@ export default {
                     title: '备案类别',
                     sidebar: false,
                     breadcrumb: false,
-                    activeMenu: '/filing/category'
+                    activeMenu: '/filing/category',
+                    auth: ['filing.category', '*']
                 }
             }]
         }

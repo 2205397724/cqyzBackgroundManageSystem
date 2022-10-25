@@ -24,7 +24,7 @@ export default {
         },
         children: [{
             path: 'details',
-            name: 'complaintDetails_2',
+            name: 'complaintDetail_2',
             sidebar: false,
             breadcrumb: false,
             component: () =>
