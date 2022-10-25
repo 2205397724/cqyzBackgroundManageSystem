@@ -157,7 +157,7 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                                <el-col v-if="!china_code" :md="24" :lg="12">
+                                <el-col :md="24" :lg="12">
                                     <el-form-item label="所在区域" label-width="120px" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
                                         <!-- <Cascaders v-model="from_examine.item.china_code" /> -->
                                         <div style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;" @click="click_add_group_zone_id">

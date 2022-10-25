@@ -11,7 +11,6 @@ export default {
             meta: {
                 title: '小区管理',
                 icon: 'el-icon-office-building',
-                auth: ['zones', '*']
             },
             children: [
                 {
@@ -56,7 +55,6 @@ export default {
                                                 title: '房屋',
                                                 sidebar: false,
                                                 activeMenu: '/datas/zones',
-                                                auth: ['zones.building.unit.house', '*']
                                             }
                                         }
                                     ]
@@ -69,7 +67,6 @@ export default {
                                         title: '房屋',
                                         sidebar: false,
                                         activeMenu: '/datas/zones',
-                                        auth: ['zones.building.house', '*']
                                     }
                                 }
                             ]
@@ -119,7 +116,6 @@ export default {
             meta: {
                 title: '房屋管理',
                 icon: 'el-icon-message-box',
-                auth: ['house', '*']
             },
             children: [{
                 path: 'index',
@@ -143,7 +139,6 @@ export default {
             meta: {
                 title: '产权管理',
                 icon: 'el-icon-postcard',
-                auth: ['property', '*']
             },
             children: [{
                 path: 'index',
@@ -167,7 +162,6 @@ export default {
             meta: {
                 title: '企业管理',
                 icon: 'el-icon-postcard',
-                auth: ['company', '*']
             },
             children: [{
                 path: 'index',
@@ -191,7 +185,6 @@ export default {
             meta: {
                 title: '业委会管理',
                 icon: 'el-icon-postcard',
-                auth: ['committee', '*']
             },
             children: [{
                 path: 'index',
@@ -215,7 +208,6 @@ export default {
             meta: {
                 title: '设施设备',
                 icon: 'el-icon-document',
-                auth: ['device', '*']
             },
             children: [{
                 path: 'index',
@@ -239,7 +231,6 @@ export default {
             meta: {
                 title: '居民数据',
                 icon: 'el-icon-document',
-                auth: ['people', '*']
             },
             children: [{
                 path: 'index',

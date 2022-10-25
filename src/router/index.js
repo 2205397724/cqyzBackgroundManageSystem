@@ -105,7 +105,6 @@ const asyncRoutes = [
         meta: {
             title: '管理',
             icon: 'manage',
-            auth: ['manage', '*']
         },
         children:manageMenu.list
     },
@@ -113,7 +112,6 @@ const asyncRoutes = [
         meta: {
             title: '数据',
             icon: 'house',
-            auth: ['datas', '*']
         },
         children: datasMenu.list
     },
@@ -121,7 +119,6 @@ const asyncRoutes = [
         meta: {
             title: '公示',
             icon: 'announce',
-            auth: ['announce', '*']
         },
         children: [
             announceManage,
@@ -136,7 +133,6 @@ const asyncRoutes = [
         meta: {
             title: '议事',
             icon: 'survey',
-            auth: ['activity', '*']
         },
         children: [
             activityEvent,
@@ -150,7 +146,6 @@ const asyncRoutes = [
         meta: {
             title: '民生',
             icon: 'service',
-            auth: ['event', '*']
         },
         children: [
             eventComplaint,
@@ -162,7 +157,6 @@ const asyncRoutes = [
         meta: {
             title: '备案',
             icon: 'filing',
-            auth: ['record', '*']
         },
         children: filingMenu.list
     },
@@ -170,7 +164,6 @@ const asyncRoutes = [
         meta: {
             title: '资讯',
             icon: 'news',
-            auth: [' information', '*']
         },
         children:newsMenu.list
     },
@@ -178,7 +171,6 @@ const asyncRoutes = [
         meta: {
             title: '共享',
             icon: 'news',
-            auth: [' share', '*']
         },
         children: shareMenu.list
     },
@@ -186,7 +178,6 @@ const asyncRoutes = [
         meta: {
             title: '用户',
             icon: 'users',
-            auth: ['users', '*']
         },
         children: userMenu.list
     },
@@ -194,7 +185,6 @@ const asyncRoutes = [
         meta: {
             title: '设置',
             icon: 'setting',
-            auth: ['setup', '*']
         },
         children:setupMenu.list
     }

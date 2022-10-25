@@ -7,7 +7,7 @@
                 </div>
                 <div ref="search" class="result" :class="{'mobile': settingsStore.mode === 'mobile'}">
                     <div class="citylist">
-                        <div v-for="(item,index) in cityList.arr" :key="index" :class="{item: true,seleItem: item.flag}" @click="click_city(item)">
+                        <div v-for="(item,index) in cityList.arr" :key="index" :class="{item:true,seleItem:(choose.city.china_code==item.china_code)}" @click="click_city(item)">
                             {{ item.name }}
                         </div>
                     </div>
@@ -25,6 +25,11 @@ import { useSettingsStore } from '@/store/modules/settings'
 import { ElMessage } from 'element-plus'
 const settingsStore = useSettingsStore()
 const isShow = ref(false)
+//已选择
+const choose = reactive({
+    city : {}
+})
+//城市列表
 const cityList = reactive({
     arr: []
 })
@@ -49,15 +54,8 @@ const getCityList = () => {
         per_page: 500
     }
     APIgetCityNotPm(params).then(res => {
-        res.forEach((item, index) => {
-            let uid = localStorage.getItem('uid')
-            let city =JSON.parse(localStorage.getItem(uid + '_user_city'))
-            if (item.china_code == city.china_code) {
-                item.flag = true
-            } else {
-                item.flag = false
-            }
-        })
+        let uid = localStorage.getItem('uid')
+        choose.city = JSON.parse(localStorage.getItem(uid + '_user_city'))
         cityList.arr = res
     })
 }

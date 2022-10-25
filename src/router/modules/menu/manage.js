@@ -10,7 +10,6 @@ export default {
             meta: {
                 title: '控制台',
                 icon: 'el-icon-set-up',
-                auth: ['manage', '*']
             },
             children: [
                 {
@@ -35,7 +34,6 @@ export default {
             meta: {
                 title: '活动审核',
                 icon: 'el-icon-set-up',
-                auth: ['review', '*']
             },
             children: [
                 {
@@ -60,7 +58,6 @@ export default {
             meta: {
                 title: '绑定申请',
                 icon: 'el-icon-message-box',
-                auth: ['applyhouse', '*']
             },
             children: [
                 {
@@ -85,7 +82,6 @@ export default {
             meta: {
                 title: '企业入住',
                 icon: 'el-icon-message-box',
-                auth: ['applycompany', '*']
             },
             children: [
                 {

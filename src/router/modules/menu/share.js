@@ -66,7 +66,6 @@ export default {
                     name: 'shareServicesIndex',
                     component: () => import('@/views/share/services.vue'),
                     meta: {
-                        copyright: false,
                         title: '业务管理',
                         sidebar: false,
                         breadcrumb: false,
