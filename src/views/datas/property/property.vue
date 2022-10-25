@@ -101,7 +101,7 @@
                 >
                     <el-table-column prop="house_id" label="房屋">
                         <template #default="scope">
-                            <span class="m-l-10">{{ getHouseNameFunc(allHouse_list.arr,scope.row.house_id) }} </span>
+                            <span>{{ scope.row?.house?.name }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="code_property" label="产权证号">
@@ -172,7 +172,7 @@
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item label-width="70px" label="房屋" prop="house_id" :error="from_error.msg&&from_error.msg.house_id?from_error.msg.house_id[0]:''">
                                 <div class="searchUserGroup">
-                                    <SearchHouse ref="V" v-model:name="houseName" @checkFunc="checkNameFunc_1" />
+                                    <SearchHouse ref="V" :name="houseName" @checkFunc="checkNameFunc_1" />
                                 </div>
                             </el-form-item>
                         </el-col>
@@ -331,7 +331,7 @@
             <div class="details-box">
                 <div class="item">
                     <div class="left">房屋</div>
-                    <div class="right">{{ getHouseNameFunc(allHouse_list.arr, data_details.item.house_id) }}</div>
+                    <div class="right">{{ data_details.item.house.name }}</div>
                 </div>
                 <div class="item">
                     <div class="left">产权证号</div>
@@ -650,14 +650,7 @@ const getTabListFunc = () => {
 const allHouse_list = reactive({
     arr: []
 })
-const getHouseNameFunc = (arr, key) => {
-    for (let i in arr) {
-        if (arr[i].id == key) {
-            return arr[i].name
-        }
-    }
-    return ''
-}
+
 const checkNameFunc = row => {
     data_search.obj.house_id = row
 }
@@ -705,7 +698,6 @@ const modifyResidentialFunc = val => {
     APIgetPropertyDetails(val.id).then(res => {
         from_examine.item = res
         switch_examine.value = true
-        houseName.value = getHouseNameFunc(allHouse_list.arr, from_examine.item.house_id)
     })
 }
 // 删除 服务名称和联系方式
