@@ -101,7 +101,9 @@
                 >
                     <el-table-column prop="house_id" label="房屋">
                         <template #default="scope">
-                            <span class="m-l-10">{{ getHouseNameFunc(allHouse_list.arr,scope.row.house_id) }} </span>
+                            <!-- <span class="m-l-10">{{ getHouseNameFunc(allHouse_list.arr,scope.row.house_id) }} </span> -->
+                            <span class="m-l-10">{{ scope.row.house.name }} </span>
+
                         </template>
                     </el-table-column>
                     <el-table-column prop="code_property" label="产权证号">
@@ -331,7 +333,9 @@
             <div class="details-box">
                 <div class="item">
                     <div class="left">房屋</div>
-                    <div class="right">{{ getHouseNameFunc(allHouse_list.arr, data_details.item.house_id) }}</div>
+                    <!-- <div class="right">{{ getHouseNameFunc(allHouse_list.arr, data_details.item.house_id) }}</div> -->
+                    <div class="right">{{ data_details.item.house.name }}</div>
+
                 </div>
                 <div class="item">
                     <div class="left">产权证号</div>
@@ -635,6 +639,11 @@ const getTabListFunc = () => {
         loading_tab.value = false
         data_tab.arr = res
         total.value = data_tab.arr.length
+        // 将获取的产权信息列表的房屋信息提取出来遍历
+        allHouse_list.arr = []
+        for(let i in res) {
+            allHouse_list.arr.push(res[i].house)
+        }
         let btnNext = document.querySelector('.btn-next')
         if (res.length < per_page.value) {
             btnNext.classList.add('not_allowed')
