@@ -51,7 +51,7 @@ export default {
                                         {
                                             path: 'house',
                                             name: 'zonesBuildingUnitHouse',
-                                            component: () => import('@/views/datas/house.vue'),
+                                            component: () => import('@/views/datas/zones/house.vue'),
                                             meta: {
                                                 title: '房屋',
                                                 sidebar: false,
@@ -64,7 +64,7 @@ export default {
                                 {
                                     path: 'house',
                                     name: 'zonesBuildingHouse',
-                                    component: () => import('@/views/datas/house.vue'),
+                                    component: () => import('@/views/datas/zones/house.vue'),
                                     meta: {
                                         title: '房屋',
                                         sidebar: false,
@@ -77,7 +77,7 @@ export default {
                         {
                             path: 'house',
                             name: 'zonesHouse',
-                            component: () => import('@/views/datas/house.vue'),
+                            component: () => import('@/views/datas/zones/house.vue'),
                             meta: {
                                 title: '房屋',
                                 sidebar: false,

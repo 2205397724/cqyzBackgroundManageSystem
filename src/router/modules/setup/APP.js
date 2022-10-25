@@ -24,7 +24,7 @@ export default {
         },
         children: [{
             path: 'menu',
-            name: 'SetupAppMenu',
+            name: 'setupAppMenu',
             component: () =>
                 import ('@/views/setup/menu.vue'),
             meta: {
@@ -35,7 +35,7 @@ export default {
         },
         {
             path: 'version',
-            name: 'SetupAppVersion',
+            name: 'setupAppVersion',
             component: () =>
                 import ('@/views/setup/version.vue'),
             meta: {

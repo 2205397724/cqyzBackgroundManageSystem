@@ -50,10 +50,10 @@
                     <el-table-column label="APP相关" width="300">
                         <template #default="scope">
                             <el-link :underline="false" type="primary" style="padding-right: 10px;">
-                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppMenu',query:{ appid: scope.row.id }}">APP菜单管理</router-link>
+                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'setupAppMenu',query:{ appid: scope.row.id }}">APP菜单管理</router-link>
                             </el-link>
                             <el-link :underline="false" type="primary">
-                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'SetupAppVersion',query:{ id: scope.row.id }}">APP版本管理</router-link>
+                                <router-link class="el-button" style="text-decoration: inherit; color: inherit;padding: 0 10px;" :to="{name: 'setupAppVersion',query:{ id: scope.row.id }}">APP版本管理</router-link>
                             </el-link>
                         </template>
                     </el-table-column>

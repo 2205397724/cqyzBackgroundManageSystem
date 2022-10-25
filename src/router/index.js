@@ -90,33 +90,15 @@ import manageMenu from './modules/menu/manage.js'
 // 数据
 import datasMenu from './modules/menu/datas.js'
 import setupMenu from './modules/menu/setup.js'
-// 用户
-import userRegister from './modules/user/register.js'
-import userGroup from './modules/user/group.js'
-import userRoles from './modules/user/roles'
-import userPerms from './modules/user/perms'
+import userMenu from './modules/menu/user.js'
+import shareMenu from './modules/menu/share.js'
+import newsMenu from './modules/menu/news.js'
+import filingMenu from './modules/menu/filing.js'
 // 事件
 import eventComplaint from './modules/event/complaint.js'
 import eventIllegal from './modules/event/illegal.js'
 import eventRepair from './modules/event/repair.js'
-// 资讯
-import informationManage from './modules/information/manage.js'
-import informationCategory from './modules/information/category.js'
-// 共享
-import shareData from './modules/share/shareData.js'
-import shareServicesManage from './modules/share/shareServicesManage.js'
-import shareCategory from './modules/share/shareCategory.js'
-import shareElements from './modules/share/shareElements.js'
-// 设置
-import setupRegion from './modules/setup/region.js'
-import setupOption from './modules/setup/option.js'
-import setupType from './modules/setup/type.js'
-import setupAPP from './modules/setup/APP.js'
 
-// 备案
-import recordManage from './modules/record/manange.js'
-import recordType from './modules/record/type'
-import manage from './modules/information/manage.js'
 // 动态路由（异步路由、导航栏路由）
 const asyncRoutes = [
     {
@@ -182,10 +164,7 @@ const asyncRoutes = [
             icon: 'filing',
             auth: ['record', '*']
         },
-        children: [
-            recordManage,
-            recordType
-        ]
+        children: filingMenu.list
     },
     {
         meta: {
@@ -193,10 +172,7 @@ const asyncRoutes = [
             icon: 'news',
             auth: [' information', '*']
         },
-        children: [
-            informationManage,
-            informationCategory
-        ]
+        children:newsMenu.list
     },
     {
         meta: {
@@ -204,12 +180,7 @@ const asyncRoutes = [
             icon: 'news',
             auth: [' share', '*']
         },
-        children: [
-            shareCategory,
-            shareData,
-            shareServicesManage,
-            shareElements
-        ]
+        children: shareMenu.list
     },
     {
         meta: {
@@ -217,12 +188,7 @@ const asyncRoutes = [
             icon: 'users',
             auth: ['users', '*']
         },
-        children: [
-            userRegister,
-            userGroup,
-            userRoles,
-            userPerms
-        ]
+        children: userMenu.list
     },
     {
         meta: {

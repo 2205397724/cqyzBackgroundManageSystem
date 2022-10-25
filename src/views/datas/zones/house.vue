@@ -1,0 +1,1278 @@
+<template>
+    <div class="routine-house">
+        <page-main class="hidden">
+            <div>
+                <div class="search">
+                    <el-row>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    房屋名称：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
+                                    <el-input v-model="data_search.name" class="search_tb" placeholder="房屋名称" clearable />
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    地址：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
+                                    <el-input v-model="data_search.addr" class="search_tb" placeholder="地址" clearable />
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    物理楼层：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
+                                    <el-input v-model="data_search.floor_truth" class="search_tb" placeholder="*物理楼层" clearable />
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="btnClick==true">
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    名义层：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
+                                    <el-input v-model="data_search.floor_alias" class="search_tb" placeholder="*名义层" clearable />
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    户型：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
+                                    <el-select v-model="data_search.type_model" class="search_tb" placeholder="*户型" clearable>
+                                        <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                        <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                            <el-row>
+                                <el-col :sm="4" :xs="6" :md="10" class="search_th">
+                                    是否绑定产权：
+                                </el-col>
+                                <el-col :sm="20" :xs="18" :md="14">
+                                    <el-select v-model="data_search.is_bind_property" class="search_tb" placeholder="是否绑定产权" clearable>
+                                        <el-option v-for="(item,i) in opts_all.obj.house_has_property" :key="item.key" :label="item.val" :value="item.key" />
+                                    </el-select>
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                        <el-col :xs="24" :sm="20" :md="21" :lg="22">
+                            <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
+                            <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading" @click="refreshFunc">重置</el-button>
+                            <span v-show="switch_search == true" class="size-base">
+                                *共搜索到{{ total }}条。
+                            </span>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <div class="searchPlay" @click="btnClickFunc">
+                            <!-- <el-icon :size="20"><ArrowUpBold /></el-icon> -->
+                            <el-button v-if="btnClick==false" :icon="CaretBottom" class="searchDeal" size="small">展开</el-button>
+                            <el-button v-if="btnClick==true" :icon="CaretTop" class="searchDeal" size="small">收起</el-button>
+                        </div>
+                    </el-row>
+                </div>
+                <div>
+                    <el-row :gutter="10" class="bottom-btn-box-2">
+                        <el-col :xs="12" :sm="6" :md="4" :lg="3" :xl="2">
+                            <el-button class="head-btn" type="primary" @click="addResidentialFunc">添加房屋</el-button>
+                        </el-col>
+                        <el-col :xs="12" :sm="6" :md="4" :lg="3" :xl="2">
+                            <el-button :disabled="arr_selection.arr.length<=0" class="head-btn" type="warning" @click="modifyAllFunc">批量修改</el-button>
+                        </el-col>
+                        <el-col :xs="12" :sm="{span: 7, offset: 5}" :md="{span: 5, offset: 11}" :lg="{span: 4, offset: 14}" :xl="{span: 3, offset: 17}">
+                            <div style="display: flex;align-items: center;height: 100%; box-sizing: border-box; padding-bottom: 10px;">
+                                <el-button style="width: 100%;" type="success" @click="()=>{switch_files_list=true;refreshFilesListFunc()}">导入房屋</el-button>
+                                <div style="margin-left: 10px;cursor: pointer;">
+                                    <el-popover
+                                        :width="220"
+                                        trigger="hover"
+                                        content="点击下载导入房屋的模板文件"
+                                        effect="dark"
+                                    >
+                                        <template #reference>
+                                            <el-link :underline="false" :href="VITE_APP_FOLDER_SRC+Record_key" target="_blank"><el-button style="width: 100%;"><el-icon><el-icon-download /></el-icon></el-button></el-link>
+                                        </template>
+                                    </el-popover>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+                <!-- <div v-if="data_tab.arr.length>0"> -->
+                <el-table
+                    ref="multipleTableRef"
+                    v-loading="loading_tab"
+                    :data="data_tab.arr"
+                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                    class="tab_1"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column type="selection" width="55" />
+                    <el-table-column prop="name" label="房屋名称" width="180" />
+                    <el-table-column prop="addr" label="地址" width="220" />
+                    <el-table-column prop="floor_truth" label="物理层" width="140">
+                        <template #default="scope">
+                            <span>{{ scope.row.floor_truth }} 层</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="floor_alias" label="名义层" width="140">
+                        <template #default="scope">
+                            <span>{{ scope.row.floor_alias }} 层</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="house_num" label="房号" width="140">
+                        <template #default="scope">
+                            <span>{{ scope.row.house_num }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="area_build" label="建筑面积" width="140">
+                        <template #default="scope">
+                            <span>{{ scope.row.area_build }} m²</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type_model" label="户型" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_type_model,scope.row.type_model) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type_property" label="产权性质" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_type_property,scope.row.type_property) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type_building" label="楼栋性质" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_type_building,scope.row.type_building) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_use" label="房屋使用状态" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_status_use,scope.row.status_use) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_safe" label="房屋安全状态" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_status_safe,scope.row.status_safe) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_plan" label="规划用途" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_plan) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status_fact" label="实际用途" width="140">
+                        <template #default="scope">
+                            <span>{{ getOptVal(opts_all.obj.house_status_plan_fact,scope.row.status_fact) }} </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="200">
+                        <template #default="scope">
+                            <el-button
+                                :disabled="arr_selection.arr.length>0"
+                                type="primary" size="small"
+                                @click="modifyResidentialFunc(scope.row)"
+                            >
+                                修改
+                            </el-button>
+                            <el-button
+                                size="small"
+                                @click="detailsFunc(scope.row)"
+                            >
+                                详情
+                            </el-button>
+                            <el-popconfirm
+                                title="确定要删除当前项么?" cancel-button-type="info"
+                                @confirm="deleteFunc(scope.row)"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" size="small">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                    <el-table-column />
+                </el-table>
+                <el-pagination
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper,"
+                    :total="50"
+                    :page-size="per_page"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
+                <!-- </div> -->
+                <!-- <div v-else class="flex-row flex-center p-tb-30 font-grey">~无房屋信息~</div> -->
+            </div>
+        </page-main>
+        <!-- 修改添加 -->
+        <el-dialog
+            v-model="switch_examine"
+            :title="str_title"
+            width="50%"
+            @closed="dialogClosed"
+        >
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="from_examine.item"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="17">
+                            <el-form-item
+                                label="直属上级类型" prop="houseable_type" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.houseable_type?from_error.msg.houseable_type[0]:''"
+                            >
+                                <el-select
+                                    v-model="from_examine.item.houseable_type" class="head-btn" placeholder="直属上级类型" clearable
+                                    @change="from_examine.item.houseable_id = ''"
+                                >
+                                    <el-option label="楼栋" value="buildings" />
+                                    <el-option label="单元" value="units" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col v-if="from_examine.item.houseable_type" :md="24" :lg="17">
+                            <el-form-item
+                                label="直属楼栋/单元ID" prop="houseable_id" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.houseable_id?from_error.msg.houseable_id[0]:''"
+                            >
+                                <!-- <el-input
+                                    v-model="from_examine.item.houseable_id"
+                                    placeholder=""
+                                /> -->
+                                <div v-if="from_examine.item.houseable_type=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchBuilding v-model:str="from_examine.item.houseable_id" />
+                                </div>
+                                <div v-else-if="from_examine.item.houseable_type=='units'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchUnit v-model:str="from_examine.item.houseable_id" />
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="物理楼层" prop="floor_truth" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.floor_truth?from_error.msg.floor_truth[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.floor_truth"
+                                    placeholder=""
+                                >
+                                    <template #append>层</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="名义层" prop="floor_alias" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.floor_alias?from_error.msg.floor_alias[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.floor_alias"
+                                    placeholder=""
+                                >
+                                    <template #append>层</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋名称" prop="name" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="地址" prop="addr" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.addr?from_error.msg.addr[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.addr"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房号" prop="house_num" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.house_num?from_error.msg.house_num[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.house_num"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="建筑面积" prop="area_build" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.area_build?from_error.msg.area_build[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.area_build"
+                                    placeholder=""
+                                >
+                                    <template #append>m²</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="户型" prop="type_model" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.type_model?from_error.msg.type_model[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.type_model" class="head-btn" placeholder="户型" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="产权性质" prop="type_property" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.type_property?from_error.msg.type_property[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.type_property" class="head-btn" placeholder="产权性质" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="楼栋性质" prop="type_building" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.type_building?from_error.msg.type_building[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.type_building" class="head-btn" placeholder="楼栋性质" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋使用状态" prop="status_use" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.status_use?from_error.msg.status_use[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.status_use" class="head-btn" placeholder="房屋使用状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋安全状态" prop="status_safe" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.status_safe?from_error.msg.status_safe[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.status_safe" class="head-btn" placeholder="房屋安全状态" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="规划用途" prop="status_plan" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.status_plan?from_error.msg.status_plan[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.status_plan" class="head-btn" placeholder="规划用途" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="实际用途" prop="status_fact" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.status_fact?from_error.msg.status_fact[0]:''"
+                            >
+                                <el-select v-model="from_examine.item.status_fact" class="head-btn" placeholder="实际用途" clearable>
+                                    <el-option v-for="(item,i) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="当前产权ID" prop="curr_property_id" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.curr_property_id?from_error.msg.curr_property_id[0]:''"
+                            >
+                                <!-- <el-input
+                                    v-model=""
+                                    placeholder=""
+                                /> -->
+                                <div style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchProperty v-model:str="from_examine.item.curr_property_id" />
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label="备注" prop="remark" label-width="120px"
+                                :error="from_error.msg&&from_error.msg.remark?from_error.msg.remark[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.remark"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col v-if="from_examine.item&&from_examine.item.addition" :md="24" :lg="24">
+                            <el-form-item
+                                label="简介" prop="addition.desc" label-width="120px"
+                                :error="from_error.msg&&from_error.msg['addition.desc']?from_error.msg['addition.desc'][0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.addition.desc"
+                                    :autosize="{ minRows: 2, maxRows: 6 }"
+                                    type="textarea"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_examine=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 详情 -->
+        <el-dialog
+            v-model="switch_details"
+            title="详情"
+            width="50%"
+        >
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">直属楼栋/单元ID</div>
+                    <div class="right">{{ data_details.item.houseable_id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">直属楼栋/单元类型</div>
+                    <div class="right">{{ getOptVal([{key:'buildings',val:'楼栋'},{key:'units',val:'单元'}],data_details.item.houseable_type) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">物理楼层</div>
+                    <div class="right">{{ data_details.item.floor_truth }} 层</div>
+                </div>
+                <div class="item">
+                    <div class="left">名义层</div>
+                    <div class="right">{{ data_details.item.floor_alias }} 层</div>
+                </div>
+                <div class="item">
+                    <div class="left">房屋名称</div>
+                    <div class="right">{{ data_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">地址</div>
+                    <div class="right">{{ data_details.item.addr }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">房号</div>
+                    <div class="right">{{ data_details.item.house_num }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">建筑面积</div>
+                    <div class="right">{{ data_details.item.area_build }} m²</div>
+                </div>
+                <div class="item">
+                    <div class="left">户型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_type_model,data_details.item.type_model) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">产权性质</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_type_property,data_details.item.type_property) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">楼栋性质</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_type_building,data_details.item.type_building) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">房屋使用状态</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_use,data_details.item.status_use) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">房屋安全状态</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_safe,data_details.item.status_safe) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">规划用途</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_plan_fact,data_details.item.status_plan) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">实际用途</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.house_status_plan_fact,data_details.item.status_fact) }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">当前产权ID</div>
+                    <div class="right">{{ data_details.item.curr_property_id }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">修改时间</div>
+                    <div class="right">{{ data_details.item.updated_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">备注</div>
+                    <div class="right">{{ data_details.item.remark }}</div>
+                </div>
+                <div v-if="data_details.item.addition&&data_details.item.addition.desc" class="item">
+                    <div class="left">简介</div>
+                    <div class="right">{{ data_details.item.addition?data_details.item.addition.desc:'' }}</div>
+                </div>
+            </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="switch_details = false">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <!-- 批量修改 -->
+        <el-dialog
+            v-model="switch_alldetails"
+            title="批量修改"
+            width="50%"
+        >
+            <div>
+                <div style="margin-bottom: 10px;font-size: 16px;font-weight: 600;">已选房屋：</div>
+                <div style="margin-bottom: 10px;">
+                    <span v-for="(item,i) in data_alldetails.list" style="display: inline-block;margin-right: 10px;box-sizing: border-box;padding: 8px 16px; font-size: 14px;border-radius: 6px;border: 1px solid #dcdfe6;color: #a8b3cd;">{{ item.name }}</span>
+                </div>
+                <el-form
+                    :model="data_alldetails.item"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房号" prop="house_num" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.house_num?error_alldetails.msg.house_num[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.house_num"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="建筑面积" prop="area_build" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.area_build?error_alldetails.msg.area_build[0]:''"
+                            >
+                                <el-input
+                                    v-model="data_alldetails.item.area_build"
+                                    placeholder=""
+                                >
+                                    <template #append>m²</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="户型" prop="type_model" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.type_model?error_alldetails.msg.type_model[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.type_model" class="head-btn" placeholder="户型" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_type_model" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="产权性质" prop="type_property" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.type_property?error_alldetails.msg.type_property[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.type_property" class="head-btn" placeholder="产权性质" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_type_property" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="楼栋性质" prop="type_building" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.type_building?error_alldetails.msg.type_building[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.type_building" class="head-btn" placeholder="楼栋性质" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_type_building" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋使用状态" prop="status_use" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_use?error_alldetails.msg.status_use[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.status_use" class="head-btn" placeholder="房屋使用状态" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_status_use" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="房屋安全状态" prop="status_safe" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_safe?error_alldetails.msg.status_safe[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.status_safe" class="head-btn" placeholder="房屋安全状态" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_status_safe" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="规划用途" prop="status_plan" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_plan?error_alldetails.msg.status_plan[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.status_plan" class="head-btn" placeholder="规划用途" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="实际用途" prop="status_fact" label-width="120px"
+                                :error="error_alldetails.msg&&error_alldetails.msg.status_fact?error_alldetails.msg.status_fact[0]:''"
+                            >
+                                <el-select v-model="data_alldetails.item.status_fact" class="head-btn" placeholder="实际用途" clearable>
+                                    <el-option v-for="(item) in opts_all.obj.house_status_plan_fact" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_alldetails=false">取消</el-button>
+                    <el-button type="primary" @click="alldetailsFunc()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 上传列表 -->
+        <el-dialog
+            v-model="switch_files_list"
+            title="上传"
+            width="70%"
+        >
+            <el-row :gutter="20" class="bottom-btn-box-2 m-b-10">
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button class="head-btn" @click="refreshFilesListFunc">刷新</el-button>
+                </el-col>
+                <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="2">
+                    <el-button type="success" @click="()=>{upload_str='请点击此处或拖拽需要上传的文件';switch_files=true;files_obj.obj={};}">导入房屋</el-button>
+                </el-col>
+            </el-row>
+            <el-table
+                v-loading="files_loading"
+                :data="files_tab.arr"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
+                style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
+                max-height="400"
+            >
+                <el-table-column prop="name" label="名称" width="180" />
+                <el-table-column prop="desc" label="备注" width="280" />
+                <el-table-column prop="status" label="状态" width="90">
+                    <template #default="scope">
+                        <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status) }} </el-tag>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column prop="file_err" label="错误信息" width="280" /> -->
+                <el-table-column prop="created_at" label="导入时间" width="180" />
+                <el-table-column prop="updated_at" label="更新时间" width="180" />
+            </el-table>
+        </el-dialog>
+        <!-- 上传表单 -->
+        <el-dialog
+            v-model="switch_files"
+            title="上传"
+            width="50%"
+        >
+            <div>
+                <el-form
+                    :model="files_obj.obj"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item
+                                label="任务名称" prop="name" label-width="120px"
+                                :error="err_files.obj&&err_files.obj.name?err_files.obj.name[0]:''"
+                            >
+                                <el-input
+                                    v-model="files_obj.obj.name"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24" :lg="14">
+                            <el-form-item
+                                label="直属上级类型" prop="loc" label-width="120px"
+                                :error="err_files.obj&&err_files.obj.loc?err_files.obj.loc[0]:''"
+                            >
+                                <el-select v-model="files_obj.obj.loc" style="width: 100%;" placeholder="直属上级类型" clearable @change="from_examine.item.houseable_id = ''">
+                                    <el-option label="楼栋" value="buildings" />
+                                    <el-option label="单元" value="units" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col v-if="files_obj.obj.loc" :md="24" :lg="14">
+                            <el-form-item
+                                label="直属楼栋/单元ID" prop="loc_id" label-width="120px"
+                                :error="err_files.obj&&err_files.obj.loc_id?err_files.obj.loc_id[0]:''"
+                            >
+                                <!-- <el-input
+                                    v-model="files_obj.obj.loc_id"
+                                    placeholder=""
+                                /> -->
+                                <div v-if="files_obj.obj.loc=='buildings'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchBuilding v-model:str="files_obj.obj.loc_id" />
+                                </div>
+                                <div v-else-if="files_obj.obj.loc=='units'" style="box-sizing: border-box;border-radius: 4px;border: 1px solid #dcdfe6;width: 100%;height: 100%;">
+                                    <SearchUnit v-model:str="files_obj.obj.loc_id" />
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :md="24">
+                            <el-form-item
+                                label="附件" prop="file_src" label-width="120px"
+                                :error="err_files.obj&&err_files.obj.file_src?err_files.obj.file_src[0]:''"
+                            >
+                                <el-upload
+                                    class="upload-demo"
+                                    drag
+                                    :show-file-list="false"
+                                    :auto-upload="false"
+                                    action="Fake Action"
+                                    :on-change="fileChangeFunc"
+                                >
+                                    <el-icon class="el-icon--upload"><el-icon-upload-filled /></el-icon>
+                                    <div class="el-upload__text">
+                                        {{ upload_str }}
+                                    </div>
+                                </el-upload>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_files=false">取消</el-button>
+                    <el-button type="primary" @click="filesUpFunc()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+    </div>
+</template>
+<script setup>
+import SearchBuilding from '@/components/SearchBuilding/index.vue'
+import SearchUnit from '@/components/SearchUnit/index.vue'
+import SearchResidential from '@/components/SearchResidential/index.vue'
+import SearchProperty from '@/components/SearchProperty/index.vue'
+import {
+    APIgetHouseListHouse,
+    APIgetHouseDetailsHouse,
+    APIdeleteHouseHouse,
+    APIputHouseHouse,
+    APIpostHouseHouse,
+    APIputAllHouseHouse,
+    APIpostFilesList
+} from '@/api/custom/custom.js'
+import {
+    reactive,
+    ref,
+    watch
+} from 'vue'
+import {
+    ElMessage
+} from 'element-plus'
+import { Loading, Search, CaretTop, CaretBottom } from '@element-plus/icons-vue'
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 数据
+// 搜索
+let switch_search = ref(false)
+let data_search = reactive({
+    houseable_id: '',
+    houseable_type: '',
+    floor_truth: '',
+    floor_alias: '',
+    house_num: '',
+    type_property: '',
+    type_building: '',
+    name: '',
+    addr: '',
+    type_model: '',
+    status_use: '',
+    status_safe: '',
+    status_plan: '',
+    status_fact: '',
+    created_at: '',
+    updated_at: '',
+    is_bind_property: '',
+    sync_china_code: '',
+    sync_zone_id: '',
+    sync_building_id: '',
+    sync_unit_id: ''
+})
+const searchVisible = ref(false)
+// 详情
+let switch_details = ref(false)
+// 列表
+let ruleFormRef = ref('')
+let loading_tab = ref(false)
+let data_tab = reactive({
+    arr: []
+})
+// 操作事件 列表单个行数据
+let data_dialog = reactive({
+    obj: {}
+})
+// 详情
+const data_details = reactive({
+    item: ''
+})
+// 分页
+let total = ref(100)
+let per_page = ref(15)
+let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
+// 添加，修改
+let switch_examine = ref(false)
+let from_examine = reactive({
+    item: {
+        'addition': { }
+    }
+})
+const str_title = ref('添加')
+// 添加修改表单错误信息
+const from_error = reactive({
+    msg: {}
+})
+// 批量修改多选项
+const multipleTableRef = ref('')
+const arr_selection = reactive({ arr: [] })
+const switch_alldetails = ref(false)
+const data_alldetails = reactive({
+    list: [],
+    item: {
+        'house_ids': [],
+        'type_model': 0,
+        'area_build': '',
+        'house_num': '',
+        'status_safe': 0,
+        'status_use': 0,
+        'type_building': 0,
+        'type_property': 0,
+        'status_fact': 0,
+        'status_plan': 0
+    }
+})
+const error_alldetails = reactive({
+    msg: {}
+})
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 方法
+const showForm = () => {
+    searchVisible.value = !searchVisible.value
+}
+// 方法
+let btnClick = ref(false)
+const isSearch3 = ref(false)
+const isSearch2 = ref(true)
+const btnClickFunc = () => {
+    btnClick.value = !btnClick.value
+    isSearch3.value = !isSearch3.value
+    isSearch2.value = !isSearch2.value
+}
+// const V = ref(null)
+// const dialogClosed = () => {
+//     V.value.clearFunc()
+// }
+// const checkNameFunc = row => {
+//     from_examine.item.houseable_id = row.id
+// }
+const buildingName = ref('')
+// 确认批量修改
+const alldetailsFunc = () => {
+    error_alldetails.msg = {}
+    data_alldetails.item.house_ids = []
+    for (let i in data_alldetails.list) {
+        data_alldetails.item.house_ids.push(data_alldetails.list[i].id)
+    }
+    APIputAllHouseHouse(data_alldetails.item).then(res => {
+        switch_alldetails.value = false
+        ElMessage.success('修改成功')
+        refreshFunc()
+    }).catch(err => {
+        ElMessage.error('修改失败')
+    })
+}
+// 打开批量修改弹窗
+const modifyAllFunc = () => {
+    data_alldetails.item = {}
+    data_alldetails.list = arr_selection.arr
+    multipleTableRef.value?.clearSelection()
+    switch_alldetails.value = true
+}
+// 批量修改多选后
+const handleSelectionChange = res => {
+    arr_selection.arr = res
+}
+// 搜索
+const searchFunc = () => {
+    page.value = 1
+    switch_search.value = true
+    getTabListFunc()
+}
+// 刷新
+const refreshFunc = () => {
+    switch_search.value = false
+    data_search.houseable_type = ''
+    data_search.houseable_id = ''
+    data_search.floor_truth = ''
+    data_search.floor_alias = ''
+    data_search.house_num = ''
+    data_search.type_property = ''
+    data_search.type_building = ''
+    data_search.name = ''
+    data_search.addr = ''
+    data_search.type_model = ''
+    data_search.status_use = ''
+    data_search.status_safe = ''
+    data_search.status_plan = ''
+    data_search.status_fact = ''
+    data_search.created_at = ''
+    data_search.updated_at = ''
+    data_search.is_bind_property = ''
+    data_search.sync_china_code = ''
+    data_search.sync_zone_id = ''
+    data_search.sync_building_id = ''
+    data_search.sync_unit_id = ''
+    getTabListFunc()
+    downloadFile()
+}
+
+// 详情
+const detailsFunc = val => {
+    data_dialog.obj = val
+    APIgetHouseDetailsHouse(val.id).then(res => {
+        data_details.item = res
+        switch_details.value = true
+    })
+}
+// 监听分页
+watch(page, () => {
+    sessionStorage.setItem('currentPage', page.value)
+    getTabListFunc()
+})
+import { onBeforeRouteLeave } from 'vue-router'
+onBeforeRouteLeave((to, from) => {
+    console.log(to)
+    if (to.meta.title == '详情') {
+        return true
+    } else {
+        sessionStorage.removeItem('currentPage')
+    }
+})
+// 同意拒绝提交
+const dialogExamineCloseFunc = formEl => {
+    from_error.msg = {}
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            for (let key in from_examine.item) {
+                if (from_examine.item[key] !== null) {
+                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
+                        delete from_examine.item[key]
+                    }
+                }
+            }
+            if (str_title.value == '修改') {
+                APIputHouseHouse(from_examine.item.id, from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('修改成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('修改失败')
+                })
+            } else {
+                APIpostHouseHouse(from_examine.item).then(res => {
+                    refreshFunc()
+                    ElMessage.success('添加成功')
+                    switch_examine.value = false
+                }).catch(err => {
+                    ElMessage.error('添加失败')
+                })
+            }
+        } else {
+            return false
+        }
+    })
+}
+import { useRoute } from 'vue-router'
+const route = useRoute()
+// 获取列表api请求
+const getTabListFunc = () => {
+    let params = {
+        page: page.value,
+        per_page: per_page.value    }
+    if (route.query.sync_zone_id) {
+        params.sync_zone_id = route.query.sync_zone_id
+    }
+    if (route.query.sync_building_id) {
+        params.sync_building_id = route.query.sync_building_id
+    }
+    if (route.query.sync_unit_id) {
+        params.sync_unit_id = route.query.sync_unit_id
+    }
+    for (let key in data_search) {
+        if (data_search[key] || data_search[key] === 0) {
+            if (data_search[key] instanceof Array && data_search[key].length <= 0) {
+                continue
+            }
+            params[key] = data_search[key]
+        }
+    }
+    loading_tab.value = true
+    if (params.created_at) {
+        let created_str = ''
+        for (let i in params.created_at) {
+            created_str += ',' + params.created_at[i]
+        }
+        params.created_at = created_str.substring(1)
+    }
+    if (params.updated_at) {
+        let updated_str = ''
+        for (let i in params.updated_at) {
+            updated_str += ',' + params.updated_at[i]
+        }
+        params.updated_at = updated_str.substring(1)
+    }
+    console.log(route.query)
+    APIgetHouseListHouse(params).then(res => {
+        console.log(res)
+        data_tab.arr = res
+        total.value = res.length
+        loading_tab.value = false
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
+    })
+}
+// 删除
+const deleteFunc = val => {
+    APIdeleteHouseHouse(val.id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
+    })
+}
+// 添加楼栋
+const addResidentialFunc = () => {
+    from_error.msg = {}
+    str_title.value = '添加'
+    from_examine.item = {
+        'building_id': '',
+        'addr': '',
+        'cnt_floor': 0,
+        'cnt_house': 0,
+        'time_build_end': '',
+        'name': '',
+        'remark': '',
+        'addition': {
+            'desc': ''
+        }
+    }
+    switch_examine.value = true
+}
+// 修改
+const modifyResidentialFunc = val => {
+    from_error.msg = {}
+    str_title.value = '修改'
+    APIgetHouseDetailsHouse(val.id).then(res => {
+        from_examine.item = res
+        switch_examine.value = true
+    })
+}
+// 上传
+import axios from 'axios'
+import {
+    APIgetFilesList,
+    APIgetHouseimptpl
+} from '@/api/custom/custom.js'
+const switch_files = ref(false)
+const files_obj = reactive({
+    obj: {
+        'loc': '',
+        'loc_id': '',
+        'file_src': '',
+        'name': ''
+    }
+})
+const err_files = reactive({
+    obj: {}
+})
+const switch_files_list = ref(false)
+const files_loading = ref(true)
+const files_tab = reactive({
+    arr: []
+})
+const upload_str = ref('请点击此处或拖拽需要上传的文件')
+const fileChangeFunc = (file, fileList) => {
+    if (fileList.length > 1) {
+        fileList.splice(0, 1)
+    }
+    upload_str.value = file.raw.name
+    files_obj.obj.file_src = file.raw
+}
+
+const getFilesFunc = () => {
+    files_loading.value = true
+    APIgetFilesList().then(res => {
+        files_tab.arr = res
+        files_loading.value = false
+    })
+}
+import { getFilesKeys } from '@/util/files.js'
+const filesUpFunc = () => {
+    err_files.obj = {}
+    let error = false
+    if (!files_obj.obj.file_src) {
+        err_files.obj.file_src = ['请选择需要上传的文件']
+        error = true
+    }
+    if (!files_obj.obj.loc) {
+        err_files.obj.loc = ['请选择直属上级类型']
+        error = true
+    }
+    if (!files_obj.obj.loc_id) {
+        err_files.obj.loc_id = ['请选择直属类型ID']
+        error = true
+    }
+    if (!files_obj.obj.name) {
+        err_files.obj.name = ['请输入任务名称']
+        error = true
+    }
+    if (error) {
+        return false
+    }
+    console.log(files_obj.obj.file_src)
+    let arr = []
+    arr.push(files_obj.obj.file_src)
+    if (files_obj.obj.file_src) {
+        getFilesKeys(arr, 'addHouse').then(arr => {
+            files_obj.obj.file_src = arr[0]
+            for (let key in files_obj.obj) {
+                if (files_obj.obj[key] == '') {
+                    delete files_obj.obj[key]
+                }
+            }
+            APIpostFilesList(files_obj.obj).then(res => {
+                ElMessage.success('导入成功')
+                refreshFilesListFunc()
+                switch_files.value = false
+                arr = []
+            }).catch(() => {
+                ElMessage.error('上传失败')
+            })
+
+        })
+    }
+}
+const refreshFilesListFunc = () => {
+    getFilesFunc()
+}
+const Record_key = ref('')
+const downloadFile = () => {
+    APIgetHouseimptpl().then(res => {
+        console.log(res)
+        Record_key.value = res.key
+    })
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 执行
+refreshFunc()
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['status_all', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+    opts_all.obj = res
+})
+
+</script>
+<style lang="scss" scoped>
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
+.routine-house {
+    .el-cascader-box-my {
+        .el-cascader {
+            width: 100% !important;
+            margin-bottom: 10px;
+        }
+    }
+    .serve-box {
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        position: relative;
+        .el-form-item {
+            margin: 0;
+        }
+        .delete-service {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 999999;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    }
+}
+.search-tips {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+</style>
