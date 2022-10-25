@@ -497,8 +497,14 @@
                 </el-row> -->
                     <el-row />
                 </el-tab-pane>
-                <el-tab-pane :label="activeName_1+'题目'" name="3">
-                    <SurveyQuestions :id="route.query.id" />
+                <el-tab-pane :label="activeName_1 == '选举' ? activeName_1+'候选人' : activeName_1+'题目'" name="3">
+                    <div v-if="activeName_1 == '选举'">
+                        <!-- <SurveyQuestions :id="route.query.id" /> -->
+                        <SurveyElection :id="route.query.id" />
+                    </div>
+                    <div v-else>
+                        <SurveyQuestions :id="route.query.id" />
+                    </div>
                 </el-tab-pane>
                 <el-tab-pane :label=" activeName_1 + '参与详情'" name="4">
                     <SurveyAnswer :id="route.query.id" />

@@ -12,7 +12,7 @@
                 <el-radio-button label="全部">全部</el-radio-button>
                 <el-radio-button label="线上参与">线上参与({{ participate.on_line }})</el-radio-button>
                 <el-radio-button label="线下参与">线下参与({{ participate.off_line }})</el-radio-button>
-                <el-radio-button label="未参与">未参与答卷的房屋({{ participate.notParticipateLength }})</el-radio-button>
+                <el-radio-button label="未参与">未参与的房屋({{ participate.notParticipateLength }})</el-radio-button>
             </el-radio-group>
         </div>
         <!-- 未参与情况 -->
@@ -171,14 +171,6 @@
                         <div class="left">参与时间</div>
                         <div class="right">{{ answer_detail.item.updated_at }}</div>
                     </div>
-
-                    <!-- <div>证件号码：{{ answer_detail.item.idcard }}</div>
-                <div v-if="answer_detail.item.uinfo">电话：{{ answer_detail.item.uinfo.mobile }}</div>
-                <div>
-                    参与途径：
-                    <span v-if="answer_detail.item.source == 1">线上参与</span>
-                    <span v-if="answer_detail.item.source == 2">线下参与</span>
-                </div> -->
                     <!-- 遍历题目 -->
                     <div class="details-tit-sm">题目信息</div>
                     <div v-for="(item,index) in topic_details.item" :key="item.id" class="m-t-10" style="margin-left: 60px;">
@@ -187,7 +179,6 @@
                             <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
                             <div v-for="items in item.opts" :key="items.id" class="m-l-40">
                                 <el-radio-group v-if="answer_detail.item" v-model="ischecked">
-                                    <!-- <el-radio :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-radio> -->
                                     <el-radio :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-radio>
                                 </el-radio-group>
                             </div>
@@ -197,7 +188,6 @@
                             <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
                             <div v-for="items in item.opts" :key="items.id" class="m-l-40">
                                 <el-checkbox-group v-model="checkList">
-                                    <!-- <el-checkbox v-if="answer_detail.item" :label="showTopic(items.id,answer_detail.item.answertopics[index].answeropts) ? '1' : '0'" disabled>{{items.content}}</el-checkbox> -->
                                     <el-checkbox v-if="answer_detail.item" :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-checkbox>
                                 </el-checkbox-group>
                             </div>
@@ -207,7 +197,6 @@
                             <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
                             <div v-if="answer_detail.item" class="m-l-40 m-tb-10">
                                 <!-- 问卷提交后，若新增填空题，此处会报错，content为空 -->
-                                <!-- <el-input v-if="answer_detail.item.answertopics[index]" :placeholder="answer_detail.item.answertopics[index].content"/> -->
                                 <el-input v-if="answer_detail.item.answertopics" :placeholder="showTopic(item.id,null,answer_detail.item.answertopics)" />
                             </div>
                         </div>

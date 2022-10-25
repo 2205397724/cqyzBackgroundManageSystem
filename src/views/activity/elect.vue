@@ -216,6 +216,15 @@
                                             />
                                         </el-form-item>
                                     </el-col>
+                                    <el-col :md="24" :lg="12">
+                                        <el-form-item label="可投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                            <el-input
+                                                v-model="from_examine.item.vmax"
+                                                placeholder=""
+                                            />
+                                            <text>（0代表全投）</text>
+                                        </el-form-item>
+                                    </el-col>
                                     <el-col :md="24" :lg="24">
                                         <el-form-item label="内容" label-width="80px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <editor v-model="from_examine.item.content" class="w_100" />
@@ -271,6 +280,9 @@ import {
     ElMessage
 } from 'element-plus'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
+import { getOpts, getOptVal } from '@/util/opts.js'
+import { onBeforeRouteLeave } from 'vue-router'
+import { APIgetChinaRegion } from '@/api/custom/custom.js'
 
 // 搜索
 let switch_search = ref(false)
@@ -322,7 +334,6 @@ const tree_item = reactive({
     arr: []
 })
 const selectedZone_id = ref('')
-import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
@@ -411,7 +422,6 @@ watch(page, () => {
     sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
 })
-import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
     console.log(to)
     if (to.meta.title == '详情') {
@@ -554,7 +564,6 @@ const searchFunc = () => {
 }
 refreshFunc()
 // 配置项
-import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {
         status_all: []
