@@ -203,7 +203,7 @@ export function APIgetComplaintList(params) {
     return api.get('complaint', { params: params })
 }
 // 详情
-export function APIgetComplaintDetails(complaint, data) {
+export function APIgetcomplaintDetail(complaint, data) {
     return api.get(`complaint/${complaint}`, data)
 }
 // 修改

@@ -134,7 +134,7 @@
                             详情
                         </el-button> -->
                         <el-link :underline="false" type="primary">
-                            <router-link class="el-button details" :to="{name: 'complaintDetails_1',query:{ id : scope.row.id }}">详情</router-link>
+                            <router-link class="el-button details" :to="{name: 'illegalDetail',query:{ id : scope.row.id }}">详情</router-link>
                         </el-link>
                         <!-- <el-button
                             @click="clickFuncAllot(scope.row)"
@@ -417,7 +417,7 @@ import { Loading, Search, Plus, StarFilled } from '@element-plus/icons-vue'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 import {
     APIgetComplaintList,
-    APIgetComplaintDetails,
+    APIgetcomplaintDetail,
     APIputComplaint,
     APIpostComplaint
 } from '@/api/custom/custom.js'
@@ -546,7 +546,7 @@ const clickFuncModify = val => {
     data_1.add_error = {}
     data_1.add_title = '修改'
     data_1.add_switch
-    APIgetComplaintDetails(val.id).then(res => {
+    APIgetcomplaintDetail(val.id).then(res => {
         console.log(res)
         data_1.add_form = res
         let arr = []
@@ -563,7 +563,7 @@ const clickFuncModify = val => {
     })
 }
 const clickFuncDeteails = val => {
-    APIgetComplaintDetails(val.id).then(res => {
+    APIgetcomplaintDetail(val.id).then(res => {
         res.affixs = []
         for (let i in res.affix) {
             res.affixs.push(import.meta.env.VITE_APP_FOLDER_SRC + res.affix[i])

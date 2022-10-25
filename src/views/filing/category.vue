@@ -103,7 +103,7 @@
                             修改
                         </el-button>
                         <!-- <el-link :underline="false" type="primary">
-                            <router-link class="el-button details" :to="{name: 'complaintDetails',query:{ id : scope.row.id }}">详情</router-link>
+                            <router-link class="el-button details" :to="{name: 'complaintDetail',query:{ id : scope.row.id }}">详情</router-link>
                         </el-link> -->
 
                         <el-popconfirm

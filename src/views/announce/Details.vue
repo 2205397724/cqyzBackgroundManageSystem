@@ -296,7 +296,7 @@ const article_tab = reactive({
     arr: []
 })
 // 详情
-const getComplaintDetailsFunc = () => {
+const getcomplaintDetailFunc = () => {
     APIgetEventArticleDetails(route.query.id).then(res => {
         console.log(res)
         res.affixs = []
@@ -361,8 +361,8 @@ watch(() => data_2.page, new_val => {
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
     // getFuncCommentList()
-    // APIgetComplaintDetails(route.query.id || dataForm.item.id, { log: 'all' })
-    getComplaintDetailsFunc()
+    // APIgetcomplaintDetail(route.query.id || dataForm.item.id, { log: 'all' })
+    getcomplaintDetailFunc()
 
 }
 const handleClick = () => {
@@ -375,7 +375,7 @@ const handleClick = () => {
 }
 refreshFunc()
 // watch(() => {
-//     getComplaintDetailsFunc()
+//     getcomplaintDetailFunc()
 // }, { immediate: true, deep: true })
 // const score = ref(10)
 // 配置项
