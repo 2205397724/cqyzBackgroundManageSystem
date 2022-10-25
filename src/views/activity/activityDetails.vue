@@ -811,14 +811,24 @@ import {
 // 导入图标
 import { ChatDotRound, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-const from_error = reactive({
-    msg: {}
-})
 import {
     reactive,
     ref,
     watch
 } from 'vue'
+import { useRoute } from 'vue-router'
+
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+// 审核记录
+import {
+    APIgetListArchiveAudit
+} from '@/api/custom/custom.js'
+import { APIgetUnitsListHouse } from '@/api/custom/custom'
+
+const from_error = reactive({
+    msg: {}
+})
 // 修改问卷状态
 const exchangeStatus = status => {
     APImodifySurveyStatus(route.query.id, { status: status })
@@ -853,7 +863,6 @@ const detail_set_area = () => {
 // 详情
 let switch_details = ref(false)
 // 接收父组件传递过来的id
-import { useRoute } from 'vue-router'
 const route = useRoute()
 // const props = defineProps(['id'])
 const activeName = ref('1')
@@ -1083,9 +1092,6 @@ const rangeFunc = () => {
 const article_tab = reactive({
     arr: []
 })
-import {
-    APIgetListArchiveAudit
-} from '@/api/custom/custom.js'
 const getListArchiveFunc = () => {
     let params = {
         tgt_id: route.query.id,
@@ -1148,7 +1154,6 @@ const clickZone = val => {
 const data_range_units = reactive({
     arr: []
 })
-import { APIgetUnitsListHouse } from '@/api/custom/custom'
 const clickBuildings = val => {
     data_range_units.arr = []
     showHouses.value = false
@@ -1535,7 +1540,6 @@ const getProportion_1 = () => {
     flag_3.value = false
 }
 // 配置项
-import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {
         status_all: []
