@@ -667,6 +667,7 @@ const dialogExamineCloseFunc = () => {
             })
         } else {
             APIpostEventArticle(from_examine.item).then(res => {
+                announce_id.value = res.id
                 refreshFunc()
                 // ElMessage.success('添加成功')
                 // switch_examine.value = false
@@ -699,7 +700,7 @@ const dialogExamineCloseFunc = () => {
         } else {
             APIpostEventArticle(from_examine.item).then(res => {
                 console.log(res)
-                announce_id.value = res.id,
+                announce_id.value = res.id
                 refreshFunc()
                 //         announce_id.value = getNameFunc(res, from_examine.item.title)
                 // group_id.value = from_examine.item.groupid
@@ -921,11 +922,6 @@ const passToAuditFunc_1 = () => {
     })
 }
 const passToAuditFunc = () => {
-    // let data = {
-    //     'tgt_type': 'announce',
-    //     'tgt_id': gongshixiangqing.obj.id,
-    //     'group_id': gongshixiangqing.obj.groupid
-    // }
     from_pass.obj.tgt_type = 'announce'
     if (announce_id_1.value) {
         from_pass.obj.tgt_id = announce_id_1.value
@@ -991,8 +987,8 @@ const checkFunc = val => {
         data_search.obj.tovalcan = val.china_code
         from_examine.item.totype = 6
     } else {
-        from_examine.item.toval = val.china_code
-        data_search.obj.tovalcan = val.china_code
+        from_examine.item.toval = val.id
+        data_search.obj.tovalcan = val.id
         if (val.id.length <= 6) {
             from_examine.item.totype = 3
         } else if (val.id.length <= 9) {
@@ -1011,7 +1007,7 @@ const userData = reactive({
     arr: []
 })
 const checkNameFunc = val => {
-    console.log(val)
+    // console.log(val)
     from_examine.item.groupid = val.id
     userGroupName.value = ''
     from_examine.item.groupcc = val.region_cc

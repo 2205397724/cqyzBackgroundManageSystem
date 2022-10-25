@@ -113,11 +113,11 @@
                                 </el-col>
                                 <el-col :span="4" class="flex">
                                     <span style="width: 60px;line-height: 32px;">排序</span>
-                                    <el-input v-model="item.score" />
-                                </el-col>
-                                <el-col :span="4" class="flex">
-                                    <span style="width: 60px;line-height: 32px;">分值</span>
                                     <el-input v-model="item.sort" />
+                                </el-col>
+                                <el-col :span="4" class="flex" v-if="topic_examine.item.score_calc != 0">
+                                    <span style="width: 60px;line-height: 32px;">分值</span>
+                                    <el-input v-model="item.score" />
                                 </el-col>
                                 <el-col :span="4">
                                     <el-popconfirm
@@ -205,7 +205,7 @@ const addServeyTopic = () => {
     str_title.value = '添加'
     switch_examine.value = true
     // 清除问卷的信息
-    topic_examine.item = { 'sid': props.id, 'extra': null, 'sort': 5 }
+    topic_examine.item = { 'sid': props.id, 'extra': null, 'sort': 5, 'score': 0 }
     opts.length = 0
 }
 // 修改问卷题目
@@ -292,8 +292,8 @@ const addopts = () => {
     opts.push(
         {
             'content': '',
-            'score': '',
-            'sort': ''
+            'score': 0,
+            'sort': 1
         }
     )
 }
