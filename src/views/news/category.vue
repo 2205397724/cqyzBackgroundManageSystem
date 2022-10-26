@@ -211,7 +211,6 @@ import {
     APIputInforCategory,
     APIdeleteInforCategory
 } from '@/api/custom/custom.js'
-import category from '@/router/modules/information/category'
 const data_1 = reactive({
     search: {},
     switch_search: false,

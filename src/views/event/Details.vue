@@ -554,7 +554,6 @@
     </div>
 </template>
 <script setup>
-import illegal from '@/router/modules/event/illegal'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 console.log(route.query.id)

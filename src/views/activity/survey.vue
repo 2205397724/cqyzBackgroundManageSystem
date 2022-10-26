@@ -322,7 +322,6 @@ import {
     ElMessage
 } from 'element-plus'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
-import survey from '@/router/modules/activity/survey'
 
 // 搜索
 let switch_search = ref(false)

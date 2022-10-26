@@ -94,19 +94,19 @@
                     :data="data.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
                 >
-                    <el-table-column prop="id" label="共享记录id">
+                    <el-table-column prop="id" label="材料名称">
                         <template #default="scope">
-                            <span>{{ scope.row.id }} </span>
+                            <span>{{ scope.row.sharefile.title }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="关联要件id">
+                    <el-table-column label="材料说明">
                         <template #default="scope">
-                            <span>{{ scope.row.fid }}</span>
+                            <span>{{ scope.row.sharefile.desc }} </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="created_at" label="创建时间" >
+                    <el-table-column prop="content" label="材料">
                         <template #default="scope">
-                            <span>{{ scope.row.created_at }}</span>
+                            <span>{{ scope.row.content}} </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">

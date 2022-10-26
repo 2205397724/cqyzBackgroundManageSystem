@@ -1129,7 +1129,7 @@ import {
 import {
     ElMessage
 } from 'element-plus'
-import personnels from '@/router/modules/supervise/personnels'
+
 const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const activeName = ref('first')

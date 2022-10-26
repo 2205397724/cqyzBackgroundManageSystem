@@ -324,7 +324,7 @@ import {
     APIgetSurveyRange,
     APIgetHouseListSort
 } from '@/api/custom/custom.js'
-import house from '@/router/modules/statistics/house'
+
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
 onMounted(() => {
