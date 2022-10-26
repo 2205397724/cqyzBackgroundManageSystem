@@ -104,18 +104,19 @@
                             <span>{{ scope.row.fid }}</span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="name" label="归档内容数量" width="180">
-                    <span> {{ total2 }} </span>
-                </el-table-column> -->
-
-                    <el-table-column prop="created_at" label="创建时间" width="100">
+                    <el-table-column prop="created_at" label="创建时间" >
                         <template #default="scope">
                             <span>{{ scope.row.created_at }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">
                         <template #default="scope">
-                            <el-button type="primary" size="small" @click="addMaterialFunc(scope.row)">
+                            <el-button
+                                :disabled="scope.row.content !== ''"
+                                type="primary"
+                                size="small"
+                                @click="addMaterialFunc(scope.row)"
+                            >
                                 补充材料
                             </el-button>
                         </template>
@@ -181,6 +182,21 @@
                     <div class="left">共享记录id</div>
                     <div class="right">{{ data.obj.id }}</div>
                 </div>
+                <div class="item-hd">业务材料：</div>
+                <block v-for="item in data.obj.materials" :key="item.id">
+                    <div v-if="item.sharefile.type === 1" class="item">
+                        <div class="left">{{ item.sharefile.title }}</div>
+                        <div class="right">{{ item.content }}</div>
+                    </div>
+                    <div v-if="item.sharefile.type === 2 || item.sharefile.type === 4" class="item">
+                        <div class="left">{{ item.sharefile.title }}</div>
+                        <div class="right">
+                            <div v-for="picture in item.picture" :key="picture">
+                                <el-image :preview-src-list="item.picture" :src="picture" lazy style="width: 100px;"></el-image>
+                            </div>
+                        </div>
+                    </div>
+                </block>
             </div>
             <template #footer>
                 <span class="dialog-footer">
@@ -275,6 +291,11 @@
                 <el-form ref="ruleFormRef" :model="data.item">
                     <el-row :gutter="10">
                         <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label-width="100px" label="材料标题"
+                            >
+                            {{material_title}}
+                            </el-form-item>
                             <el-form-item
                                 label-width="100px" label="材料内容"
                             >
@@ -381,6 +402,16 @@ const refreshFunc = () => {
 refreshFunc()
 const detailsFunc = row => {
     APIgetShareDataDetails(row.id).then(res => {
+        console.log(res)
+        res.materials.map(share_detail=>{
+            if(share_detail.sharefile.type === 2 || share_detail.sharefile.type === 4) {
+                share_detail.picture = []
+                share_detail.picture = share_detail.content.split(",")
+                for(let i in share_detail.picture) {
+                    share_detail.picture[i] =(import.meta.env.VITE_APP_FOLDER_SRC + share_detail.picture[i])
+                }
+            }
+        })
         data.obj = res
         data.switch = true
     })
@@ -477,27 +508,31 @@ const dataMaterialFunc = row => {
 }
 const materialId = ref('')
 const materialId_1 = ref('')
+const material_title = ref('')
+// 补充材料
 const addMaterialFunc = row => {
     materialId.value = row.id
+    material_title.value = row.sharefile.title
+    type.value = row.sharefile.type
     data.item = {}
     data.switch_2 = true
-    APIgetShareElementsList({ page: 1, per_page: 500 }).then(res => {
-        type.value = getType(res, row.fid)
-        console.log(getType(res, row.fid))
-    })
+    // APIgetShareElementsList({ page: 1, per_page: 500 }).then(res => {
+    //     type.value = getType(res, row.fid)
+    //     console.log(getType(res, row.fid))
+    // })
 
 }
-const getType = (data, key) => {
-    for (let i in data) {
-        if (data[i].id == key) {
-            return data[i].type
-        }
-    }
-    return ''
-}
+// const getType = (data, key) => {
+//     for (let i in data) {
+//         if (data[i].id == key) {
+//             return data[i].type
+//         }
+//     }
+//     return ''
+// }
 const file_list = ref([])
 const dialogExamineCloseFunc = () => {
-    console.log(data.item)
+    console.log(data.item,type.value)
     if (type.value == 2 || type.value == 3 || type.value == 4) {
         let files = []
         let file_key = []
@@ -533,6 +568,15 @@ const dialogExamineCloseFunc = () => {
                 ElMessage.error('补充失败')
             })
         }
+    }else if(type.value == 1) {
+        APIputShareDataMaterial(materialId.value, data.item).then(res => {
+                ElMessage.success('补充成功')
+                data.switch_2 = false
+                data.switch_1 = false
+                refreshFunc()
+            }).catch(() => {
+                ElMessage.error('补充失败')
+            })
     }
 
 }
