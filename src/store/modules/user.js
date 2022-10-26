@@ -60,6 +60,8 @@ export const useUserStore = defineStore(
                     localStorage.removeItem('account')
                     localStorage.removeItem('token')
                     localStorage.removeItem('failure_time')
+                    localStorage.removeItem(this.uid+'_user_city')
+                    localStorage.removeItem('uid')
                     this.account = ''
                     this.token = ''
                     this.failure_time = ''
@@ -102,6 +104,7 @@ export const useUserStore = defineStore(
                 return new Promise(resolve => {
                     let uid = localStorage.getItem('uid')
                     let user_info =JSON.parse(localStorage.getItem(uid+'_user_info'))
+                    let user_group =JSON.parse(localStorage.getItem(uid+'_user_group'))
                     if (user_info.auth_type == 'pt') {
                         this.permissions = ['*']
                         resolve(this.permissions)
@@ -109,10 +112,10 @@ export const useUserStore = defineStore(
                         let allPermisson = []
                         APIgetLoginUserGroup().then(res => {
                             if (res.length > 0) {
-                                if (!JSON.parse(localStorage.getItem(uid + '_user_group'))) {
+                                if ( Object.keys(user_group).length==0) {
                                     localStorage.setItem(uid + '_user_group', JSON.stringify(res[0]))
                                 }
-                                APIgetGroupPerms(JSON.parse(localStorage.getItem(uid + '_user_group')).id).then(res => {
+                                APIgetGroupPerms(res[0].id).then(res => {
                                     res.forEach(item => {
                                         for (let key in item) {
                                             if (key == 'name') {
@@ -121,8 +124,7 @@ export const useUserStore = defineStore(
                                         }
                                     })
                                     console.log(allPermisson)
-                                    this.permissions = allPermisson
-                                    resolve(this.permissions)
+                                    resolve(allPermisson)
                                 })
                             } else {
                                 resolve('')
