@@ -36,10 +36,10 @@
                                 <div class="size-lg" else>{{ item.docable.name }}</div>
                                 <div class="m-t-10 m-b-10">
                                     <el-tag v-if="item.tgt_type == 'announce'" round size="large">公示</el-tag>
-                                    <el-tag v-if="item.docable.type == 1" round size="large">联名活动</el-tag>
-                                    <el-tag v-if="item.docable.type == 2" round size="large">表决活动</el-tag>
-                                    <el-tag v-if="item.docable.type == 3" round size="large">选举活动</el-tag>
-                                    <el-tag v-if="item.docable.type == 4" round size="large">问卷活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 4" round size="large">联名活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 3" round size="large">表决活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 2" round size="large">选举活动</el-tag>
+                                    <el-tag v-if="item.docable.type == 1" round size="large">问卷活动</el-tag>
                                 </div>
                                 <div v-if="item.docable.hasOwnProperty('uinfo') && item.docable.uinfo">
                                     <span style="color: #b7b1b1;">操作人员: {{ item.docable.uinfo.name ? item.docable.uinfo.name: item.docable.uinfo.nickname ? item.docable.uinfo.nickname : item.docable.uinfo.username }}</span>
@@ -382,7 +382,7 @@ import {
 } from '@/api/custom/custom.js'
 const page = ref(1)
 const total = ref(500)
-const per_page = ref(500)
+const per_page = ref(15)
 const dataForm = reactive({
     item: {}
 })

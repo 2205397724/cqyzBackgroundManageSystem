@@ -430,7 +430,7 @@ const click_add_group_zone_id = () => {
 }
 const switch_choose_zone = ref(false)
 const checkFunc = val => {
-    console.log(val)
+    // console.log(val)
     selectedZone_id.value = val.name
     if (val.type == 'region') {
         from_examine.item.region_type = 1
@@ -442,7 +442,7 @@ const checkFunc = val => {
         from_examine.item.region_val = val.id
         from_examine.item.region_cc = val.china_code
     }
-    console.log(val)
+    // console.log(val)
 }
 const checkChangeFunc = val => {
     // console.log(val)
@@ -472,7 +472,7 @@ const dialogClosed = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetActivityEventDetails(val.id).then(res => {
-        console.log(res)
+        // console.log(res)
         data_details.item = res
         switch_details.value = true
         if (res.status === 404) {
@@ -497,7 +497,7 @@ import {
     APIdeleteActivitiesEvent } from '@/api/custom/custom.js'
 const getActivitiesEventList = () => {
     APIgetActivitiesEventList(activities_item.obj.id).then(res => {
-        console.log(res)
+        // console.log(res)
         activity_tab.arr = res
         switch_activity.value = true
     })
@@ -525,7 +525,7 @@ const addPostFunc = () => {
     })
 }
 const deleteFuncDialog = val => {
-    console.log(val)
+    // console.log(val)
     APIdeleteActivitiesEvent(val.vid, { data: { tgt_id: val.tgt_id, tgt_type: val.tgt_type } }).then(res => {
         refreshFunc()
         ElMessage.success('删除成功')
@@ -545,7 +545,7 @@ watch(page, () => {
 })
 import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
+    // console.log(to)
     if (to.meta.title == '详情') {
         return true
     } else {
@@ -566,7 +566,7 @@ const dialogExamineCloseFunc = formEl => {
                 }
             }
             if (str_title.value == '修改') {
-                console.log(from_examine.item)
+                // console.log(from_examine.item)
                 APIputActivityEvent(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
                     ElMessage.success('修改成功')
@@ -621,7 +621,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetActivityEventList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
