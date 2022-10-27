@@ -21,26 +21,19 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="id" label="审核活动">
+                <el-table-column prop="name" label="审核活动" width="180">
                     <template #default="scope">
-                        <span>{{ scope.row.auditable?.title ? scope.row.auditable?.title:scope.row.auditable?.name }} </span>
+                        <div v-if="scope.row.tgt_type=='announce'">
+                            公示信息
+                            <router-link class="el-tag" style="text-decoration: none;" :to="{name: 'announceDetail',query:{ id : scope.row.tgt_id }}">
+                                查看详情
+                            </router-link>
+                        </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="审核活动类型" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.tgt_type }} </span>
-                    </template>
-                </el-table-column>
-                <!-- <el-table-column prop="name" label="归档内容数量" width="180">
-                    <span> {{ total2 }} </span>
-                </el-table-column> -->
-
-                <el-table-column prop="created_at" label="审核回执内容">
-                    <template #default="scope">
-                        <span>{{ scope.row.reply }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="updated_at" label="状态" align="center">
+                <el-table-column prop="reply" label="审核回执内容"></el-table-column>
+                <el-table-column prop="updated_at" label="发布时间" width="180"></el-table-column>
+                <el-table-column label="状态" align="center" width="120">
                     <template #default="scope">
                         <el-tag v-if="scope.row.status== 10" type="warning" effect="dark" size="small" @click="examineListFunc(scope.row)">
                             未处理
@@ -55,18 +48,8 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="180">
                     <template #default="scope">
-                        <!-- <el-button
-                        type="primary" size="small"
-                        @click="examineListFunc(scope.row)"
-                    >
-                        审核
-                    </el-button> -->
-                        <el-button
-                            type="primary" size="small"
-                            @click="detailsFunc(scope.row)"
-                        >
-                            详情
-                        </el-button>
+                        <el-button type="primary" size="small" @click="examineListFunc(scope.row)">审核</el-button>
+                        <el-button  size="small" @click="detailsFunc(scope.row)">详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -143,50 +126,36 @@
             title="详情"
             width="70%"
         >
-            <!-- <div class="detail_hd">
-                <div class="left">审核活动信息</div>
-                <div class="right">其他信息</div>
-            </div>
-            <div class="Box">
-                <div class="detailBigBox"> -->
             <div class="details-box">
-                <div class="item-hd">审核信息</div>
+                <div class="size-lg">
+                    {{ data_details.item.auditable?.title ? data_details.item.auditable?.title :data_details.item.auditable?.name }}
+                </div>
+                <div class="p-t-10 font-grey size-sm">发起时间：{{ data_details.item.created_at }}</div>
+                <div class="item">
+                    <el-tag v-show="data_details.item.status == 10" type="warning" @click="modifyHouseBindFunc">未处理 </el-tag>
+                    <el-tag v-show="data_details.item.status == 20" type="success">审核成功</el-tag>
+                    <el-tag v-show="data_details.item.status == 30" type="danger">审核失败</el-tag>
+                </div>
                 <div style="background-color: #fafafa;">
-                    <div class="item">
-                        <div class="left">审核活动</div>
-                        <div class="right">{{ data_details.item.auditable?.title ? data_details.item.auditable?.title :data_details.item.auditable?.name }}</div>
+                    <div v-if="data_details.item.group" class="item">
+                        <div class="left">审核单位</div>
+                        <div class="right">{{ data_details.item.group.name }}</div>
                     </div>
-                    <div class="item">
-                        <div class="left">审核活动类型</div>
-                        <div class="right">{{ data_details.item.tgt_type }}</div>
+                    <div v-if="data_details.item.auditor" class="item">
+                        <div class="left">审核人</div>
+                        <div class="right">
+                            <span>姓名：{{ data_details.item.auditor?.name ? data_details.item.auditor?.name: data_details.item.auditor?.nickname ? data_details.item.auditor?.nickname : data_details.item.auditor?.username ? data_details.item.auditor?.username:'' }}</span>
+                            <span class="inline-block m-l-30 m-r-30">电话：{{ data_details.item.auditor?.mobile }}
+                            </span>
+                            <span>时间：{{ data_details.item.updated_at }}</span>
+                        </div>
                     </div>
                     <div v-if="data_details.item.reply" class="item">
                         <div class="left">审核回执内容</div>
                         <div class="right">{{ data_details.item.reply }}</div>
                     </div>
-                    <div class="item">
-                        <div class="left">审核状态</div>
-                        <div class="right">
-                            <el-tag v-show="data_details.item.status == 10" class="btnNone" type="warning" effect="dark" @click="modifyHouseBindFunc">未处理 </el-tag>
-                            <el-tag v-show="data_details.item.status == 20" class="btnNone " type="success">审核成功</el-tag>
-                            <el-tag v-show="data_details.item.status == 30" class="btnNone" type="danger">审核失败</el-tag>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">创建时间</div>
-                        <div class="right">{{ data_details.item.created_at }}</div>
-                    </div>
-                    <div v-if="data_details.item.auditor" class="item">
-                        <div class="left">审核单位</div>
-                        <div class="right">
-                            <span>姓名：{{ data_details.item.auditor?.name ? data_details.item.auditor?.name: data_details.item.auditor?.nickname ? data_details.item.auditor?.nickname : data_details.item.auditor?.username ? data_details.item.auditor?.username:'' }}</span>
-                            <span class="inline-block m-l-30 m-r-30">电话：{{ data_details.item.auditor?.mobile }}
-                            </span>
-                            <span style="font-size: 13px;">时间：{{ data_details.item.updated_at }}</span>
-                        </div>
-                    </div>
                 </div>
-                <div class="item-hd">审核活动相关信息</div>
+                <div class="item-hd p-t-20 p-b-10">详细信息</div>
                 <div v-if="data_details.item.tgt_type=='announce'" style="background-color: #fafafa;">
                     <div class="item">
                         <div class="left">公示文号</div>

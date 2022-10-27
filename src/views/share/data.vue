@@ -67,12 +67,16 @@
                         >
                             相关材料
                         </el-button>
-                        <el-button
-                            size="small"
-                            @click="detailsFunc(scope.row)"
+                        <router-link class="el-tag m-l-10" style="text-decoration: inherit;"
+                            :to="{
+                                name: 'shareDataDetail',
+                                query: {
+                                    id: scope.row.id,
+                                },
+                            }"
                         >
                             详情
-                        </el-button>
+                        </router-link>
                     </template>
                 </el-table-column>
             </el-table>

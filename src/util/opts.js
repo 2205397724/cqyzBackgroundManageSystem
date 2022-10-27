@@ -176,8 +176,11 @@ const opts = {
         val: '业委会'
     }, {
         key: 7,
-        val: '物业'
-    }, {
+        val: '物业企业'
+    },{
+        key: 8,
+        val: '事业单位'
+    },{
         key: 99,
         val: '其他'
     }],
@@ -405,10 +408,10 @@ const opts = {
     // 用户端类型
     terminal: [{
         key: 'pt',
-        val: '总平台管理端'
+        val: '总平台'
     }, {
         key: 'ptr',
-        val: '区域平台管理端'
+        val: '区域平台'
     }, {
         key: 'mbr',
         val: '业主端'
@@ -417,7 +420,7 @@ const opts = {
         val: '物业端'
     }, {
         key: 'gov',
-        val: '行政管理端'
+        val: '部门端'
     }],
     terminal_perms: [{
         key: 'gov',
@@ -432,13 +435,13 @@ const opts = {
     // 用户端类型
     terminal_num: [{
         key: 1,
-        val: '总平台管理端'
+        val: '总平台'
     }, {
         key: 2,
-        val: '区域平台管理端'
+        val: '区域平台'
     }, {
         key: 3,
-        val: '行政管理端'
+        val: '部门端'
     }, {
         key: 4,
         val: '物业端'

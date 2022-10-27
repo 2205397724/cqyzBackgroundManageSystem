@@ -22,7 +22,20 @@ export default {
                         sidebar: false,
                         breadcrumb: false,
                         activeMenu: '/share/data'
-                    }
+                    },
+                    children: [
+                        {
+                            path: 'detail',
+                            name: 'shareDataDetail',
+                            component: () => import('@/views/share/detail.vue'),
+                            meta: {
+                                title: '数据详情',
+                                sidebar: false,
+                                breadcrumb: false,
+                                activeMenu: '/share/data'
+                            }
+                        }
+                    ]
                 }
             ]
         },
