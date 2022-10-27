@@ -357,10 +357,10 @@ const opts = {
         key: 'U',
         val: '未设置'
     }, {
-        key: 'F',
+        key: 'M',
         val: '男'
     }, {
-        key: 'M',
+        key: 'F',
         val: '女'
     }],
     // 短信验证码发送场景

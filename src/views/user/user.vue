@@ -123,7 +123,7 @@
                     </el-table-column>
                     <el-table-column prop="gender" label="性别">
                         <template #default="scope">
-                            <span>{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],scope.row.gender) }} </span>
+                            <span>{{ getOptVal(opts_all.obj.gender,scope.row.gender) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_cert" label="认证状态">
@@ -242,10 +242,9 @@
                                 label-width="70px"
                                 :error="from_error.msg&&from_error.msg.username?from_error.msg.username[0]:''"
                             >
-                                <el-input
-                                    v-model="from_examine.item.gender"
-                                    placeholder=""
-                                />
+                                <el-select v-model="from_examine.item.gender" placeholder="性别" clearable>
+                                    <el-option v-for="item in opts_all.obj.gender" :key="item.key" :label="item.val" :value="item.key" />
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -307,7 +306,7 @@
                 </div>
                 <div class="item">
                     <div class="left">性别</div>
-                    <div class="right">{{ getOptVal([{val:'男',key:'F'},{val:'女',key:'M'},{val:'未设置',key:'U'}],data_details.item.gender) }}</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.gender,data_details.item.gender) }}</div>
                 </div>
                 <div class="item">
                     <div class="left">认证状态</div>
@@ -467,7 +466,7 @@ const dialogExamineCloseFunc = formEl => {
                     from_error.msg = err.data
                 })
             } else {
-                console.log(from_examine.item)
+                // console.log(from_examine.item)
                 APIpostUser(from_examine.item.authType, from_examine.item).then(res => {
                     refreshFunc()
                     ElMessage.success('添加成功')
@@ -520,7 +519,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetUserList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
