@@ -182,7 +182,10 @@
                     <div class="left">共享记录id</div>
                     <div class="right">{{ data.obj.id }}</div>
                 </div>
-                <div class="item-hd">业务材料：</div>
+                <div class="item-hd">
+                    业务材料：
+                    <el-button type="primary" @click="downLoadMaterials">下载业务材料</el-button>
+                </div>
                 <block v-for="item in data.obj.materials" :key="item.id">
                     <div v-if="item.sharefile.type === 1" class="item">
                         <div class="left">{{ item.sharefile.title }}</div>
@@ -343,6 +346,8 @@ import {
 } from 'element-plus'
 import { Search, Plus, Loading } from '@element-plus/icons-vue'
 import { getFilesKeys } from '@/util/files.js'
+// 多文件打包下载：参考（https://www.npmjs.com/package/fetch-file-j）
+import { instance } from 'fetch-file-j'
 const loading_tab = ref(false)
 const data = reactive({
     list: [],
@@ -579,6 +584,19 @@ const dialogExamineCloseFunc = () => {
             })
     }
 
+}
+// 下载业务材料
+let urls = reactive([])
+const downLoadMaterials = ()=>{
+    // 遍历判断材料是否有图片
+    urls = []
+    for(let i in data.obj.materials) {
+        if(data.obj.materials[i].picture) {
+            urls.push(...data.obj.materials[i].picture)
+            console.log("123",urls)
+        }
+    }
+    instance.download(urls);
 }
 </script>
 <style lang="scss" scoped>
