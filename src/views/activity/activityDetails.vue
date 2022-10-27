@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <page-main>
-            <div class="size-lx m-b-10">{{ data_details.item.name }}</div>
-            <div style="position: relative;margin-bottom: 10px; color: #b7b1b1; font-size: 14px;">
+            <div class="size-lg m-b-10">{{ data_details.item.name }}</div>
+            <div class="size-sm font-grey p-t-10 p-b-20">
                 <span>开始时间：{{ data_details.item.startat }}</span>
                 <span class="m-20">
                     <el-tag v-show="data_details.item.status == 1" class="btnNone" type="primary" effect="dark" size="small">{{ getOptVal(opts_all.obj.announce_status,data_details.item.status) }} </el-tag>

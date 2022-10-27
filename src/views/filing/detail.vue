@@ -126,7 +126,7 @@ const getRecordKindList = () => {
     APIgetRecordDetail(route.query.id).then(res => {
         current_record_detail.item = res
         current_record_detail.item.affix.forEach(item => {
-            preImg.arr.push('http://192.168.110.37:10090/zgj/' + item.key)
+            preImg.arr.push( import.meta.env.VITE_APP_FOLDER_SRC + item.key)
         })
         console.log(current_record_detail.item)
     })

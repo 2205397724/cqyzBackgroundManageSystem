@@ -2,7 +2,7 @@
     <div style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;" @click="click">
         <span v-if="!selectGroup_name.item" style="margin-left: 11px;color: #c0c4cc;">{{ placeholder }}</span>
         <span v-else style="margin-left: 11px;">{{ selectGroup_name.item }}</span>
-        <el-dialog v-model="switchTabs" title="选择备案主体">
+        <el-dialog v-model="switchTabs" title="选择主体">
             <el-tabs>
                 <el-tab-pane label="住建">
                     <div v-if="groupType_3.arr.length!=0">
