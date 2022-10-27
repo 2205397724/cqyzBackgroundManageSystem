@@ -133,14 +133,9 @@
                         <el-link :underline="false" type="primary">
                             <router-link
                                 class="el-button m-lr-10"
-                                style="
-                                                                                                                                                                                                                                                                                                text-decoration: inherit;
-                                                                                                                                                                                                                                                                                                color: inherit;
-                                                                                                                                                                                                                                                                                                width: 52px;
-                                                                                                                                                                                                                                                                                                height: 26px;
-"
+                                style="text-decoration: inherit;color: inherit;width: 52px;height: 26px;"
                                 :to="{
-                                    name: 'recordManangeDetail',
+                                    name: 'filingDetail',
                                     query: {
                                         type: scope.row.type,
                                         title: scope.row.title,

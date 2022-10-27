@@ -23,9 +23,9 @@ export default {
                     activeMenu: '/filing',
                 },
                 children: [{
-                    path: 'add',
-                    name: 'filingAdd',
-                    component: () => import('@/views/filing/add.vue'),
+                    path: 'detail',
+                    name: 'filingDetail',
+                    component: () => import('@/views/filing/detail.vue'),
                     meta: {
                         title: '详情',
                         activeMenu: '/filing'
