@@ -217,7 +217,7 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :md="24" :lg="12">
-                                        <el-form-item label="可投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                        <el-form-item label="至少投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <el-input
                                                 v-model="from_examine.item.vmax"
                                                 placeholder=""
@@ -504,6 +504,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetSurvey(params).then(res => {
+        // console.log("res",res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
