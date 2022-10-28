@@ -1145,12 +1145,9 @@ const active_obj = reactive({
     obj: {}
 })
 const checkFunc = val => {
-    console.log(val)
     house_num.arr = []
     house_list.arr = []
     active_obj.obj = val
-    console.log(tree_item.value)
-    console.log(tree_item.value.type)
     if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
         'buildings')) {
         refreshFunc()
@@ -1173,7 +1170,6 @@ const searchFunc = () => {
 }
 // 刷新
 const refreshFunc = () => {
-    console.log(tree_item.value)
     switch_search.value = false
     data_search.obj = {}
     getHouseListFunc()
@@ -1234,7 +1230,6 @@ const getStateFunc = () => {
             }
         }
     }
-    console.log(choseIDs.arr)
 }
 
 const getHouseListFunc = () => {
@@ -1275,7 +1270,6 @@ const getHouseListFunc = () => {
         params.updated_at = updated_str.substring(1)
     }
     APIgetHouseListSort(params).then(res => {
-        console.log(res)
         total.value = 0
         // 处理空白格
         let nums = res.house_nums
@@ -1291,7 +1285,6 @@ const getHouseListFunc = () => {
             }
             house_num.arr = nums
             house_list.arr = list
-            console.log(house_num.arr)
             // 处理默认选择项目
             for (let i in house_num.arr) {
                 checkFH.row[house_num.arr[i]] = {
@@ -1412,7 +1405,6 @@ const modifyAllFunc = () => {
     }
     error_alldetails.msg = {}
     switch_alldetails.value = true
-    console.log(piliangxiugai.obj)
 }
 const upload_str = ref('请点击此处或拖拽需要上传的文件')
 const switch_files = ref(false)
@@ -1440,7 +1432,6 @@ const filesUpFunc = () => {
         files_obj.obj.loc = 'units'
     }
     files_obj.obj.loc_id = active_obj.obj.id
-    console.log(files_obj.obj)
     if (!files_obj.obj.file_src) {
         err_files.obj.file_src = ['请选择需要上传的文件']
         error = true
@@ -1498,12 +1489,10 @@ const Record_key = ref('')
 const getFilesFunc = () => {
     files_loading.value = true
     APIgetFilesList().then(res => {
-        console.log(res)
         files_tab.arr = res
         files_loading.value = false
     })
     APIgetHouseimptpl().then(res => {
-        console.log(res)
         Record_key.value = res.key
     })
 
@@ -1539,7 +1528,7 @@ const dialogExamineCloseFunc = () => {
     from_error.msg = {}
     from_examine.item.houseable_type = active_obj.obj.type
     from_examine.item.houseable_id = active_obj.obj.id
-    console.log(tree_item.value)
+
     if (tree_item.value.type == 'units') {
         from_examine.item.houseable_type = 'units',
         from_examine.item.houseable_id = tree_item.value.id
@@ -1596,7 +1585,6 @@ const modifyResidentialFunc = () => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetHouseDetailsHouse(data_details.item.id).then(res => {
-        console.log(res)
         from_examine.item = res
         switch_examine.value = true
     })
@@ -1614,12 +1602,10 @@ const copy_property = reactive({
 })
 import { APIgetPropertyDetails } from '@/api/custom/custom.js'
 const showPropertyFunc = () => {
-    // console.log(val)
     from_error_property.msg = {}
     property_obj.obj = JSON.parse(JSON.stringify(data_details.item))
     if (property_obj.obj.curr_property) {
         APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
-            console.log(res)
             // if (property_obj.obj.curr_property) {
             property_form.obj = res
             copy_property.obj = JSON.parse(JSON.stringify(res))
@@ -1652,7 +1638,6 @@ const number = reactive({
 })
 const house_id = ref('')
 const showNumbersFunc = () => {
-    // console.log(item)
     house_id.value = data_details.item.id
     getHouseNumbersFunc()
 }
@@ -1664,7 +1649,6 @@ const getHouseNumbersFunc = () => {
     }
     loading_tab.value = true
     APIgetHouseNumbersSort(params).then(res => {
-        console.log(res)
         houseNumbers_list.arr = res
         loading_tab.value = false
         switch_numbers.value = true
@@ -1707,19 +1691,12 @@ const number_ids = reactive({
 const flag = ref(false)
 const handleSelectionChange = val => {
     let number_id = []
-    console.log(val)
     val.forEach(function(value, index, array) {
-        // console.log(value)
         number_id.push(value.id)
         number_ids.arr = number_id
     })
-    console.log(number_id)
-
-    console.log(number_ids.arr)
 }
 const blurIbCard = () => {
-    // console.log(e)
-    console.log(number.item.id_card)
     if (number.item.id_card) {
         let params = {
             page: 1,
@@ -1731,7 +1708,6 @@ const blurIbCard = () => {
             params = {}
         }
         APIgetPersonnelManageList(params).then(res => {
-            console.log(res)
             if (res.length > 0) {
                 flag.value = true
                 number.item = res[0]
@@ -1798,7 +1774,6 @@ const modifycancel = () => {
 import { APIputProperty, APIpostProperty,
     APIdeleteHouseHouse } from '@/api/custom/custom.js'
 const postPropertyFunc = () => {
-    console.log(property_form.obj)
     from_error_property.msg = {}
     if (!add_state.value) {
         APIputProperty(property_form.obj.id, property_form.obj).then(res => {

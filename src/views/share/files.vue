@@ -110,9 +110,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :xs="24" :sm="24">
-                                <el-form-item
-                                    label-width="140px" label="要件来源"
-                                >
+                                <el-form-item label-width="140px" label="要件来源">
                                     <el-radio-group v-model="data.obj.src" class="ml-4">
                                         <el-radio label="1">用户上传</el-radio>
                                         <el-radio label="2">不动产登记中心提供</el-radio>
@@ -120,12 +118,10 @@
                                 </el-form-item>
                             </el-col>
                             <el-col v-if="data.obj.src == '2'" :xs="24" :sm="24">
-                                <el-form-item
-                                    label-width="140px" label="来源类型"
-                                >
+                                <el-form-item label-width="140px" label="来源类型">
                                     <el-radio-group v-model="data.obj.src_sys" class="ml-4">
                                         <el-radio label="1">身份证</el-radio>
-                                        <el-radio label="0">不动产权证</el-radio>
+                                        <el-radio label="2">不动产权证</el-radio>
                                     </el-radio-group>
                                 </el-form-item>
                             </el-col>
