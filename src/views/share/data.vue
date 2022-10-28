@@ -107,7 +107,12 @@
                     </el-table-column>
                     <el-table-column prop="content" label="材料">
                         <template #default="scope">
-                            <span>{{ scope.row.content}} </span>
+                            <span v-if="scope.row.sharefile.type === 1">{{ scope.row.content}} </span>
+                            <span v-else>
+                                <block v-for="item in scope.row.file" :key="item">
+                                    <el-image :preview-src-list="scope.row.file" :src="item" lazy style="height: 60px;"></el-image>
+                                </block>
+                            </span>
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">
@@ -253,10 +258,20 @@ const dataMaterialFunc = row => {
     materialId_1.value = row.id
     data.switch_1 = true
     APIgetShareDataMaterialList({ rid: row.id }).then(res => {
-        // console.log(res)
+        // console.log("111",res)
+        res.map(item=>{
+            if(item.sharefile.type != 1 && item.content != "") {
+                // console.log("aaaa")
+                item.file = []
+                item.file = item.content.split(",")
+                for(let i in item.file) {
+                    item.file[i] = (import.meta.env.VITE_APP_FOLDER_SRC + item.file[i])
+                }
+            }
+        })
         data.arr = res
+        // console.log("123",data.arr)
     })
-
 }
 const materialId = ref('')
 const materialId_1 = ref('')
