@@ -417,6 +417,8 @@ import {
 } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Search, Plus, CaretTop, CaretBottom, Loading } from '@element-plus/icons-vue'
+import { getOpts, getOptVal } from '@/util/opts.js'
+import { getFilesKeys } from '@/util/files.js'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const searchVisible = ref(false)
 // 数据
@@ -511,7 +513,6 @@ watch(page, () => {
 })
 const file_list = ref([])
 const file_list_1 = ref([])
-import { getFilesKeys } from '@/util/files.js'
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
@@ -722,7 +723,6 @@ refreshFunc()
 
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 配置项
-import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
