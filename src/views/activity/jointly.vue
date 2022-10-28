@@ -122,7 +122,7 @@
                     v-model:current-page="page"
                     style="float: right;"
                     layout="prev,next,jumper,"
-                    :total="50"
+                    :total="500"
                     :page-size="per_page"
                     background
                     prev-text="上一页"
@@ -214,6 +214,15 @@
                                                 value-format="YYYY-MM-DD hh:mm:ss"
                                                 style="width: 100%;"
                                             />
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :md="24" :lg="12">
+                                        <el-form-item label="至少投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                            <el-input
+                                                v-model="from_examine.item.vmax"
+                                                placeholder=""
+                                            />
+                                            <text>（0代表全投）</text>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :md="24" :lg="24">

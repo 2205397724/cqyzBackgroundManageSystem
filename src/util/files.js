@@ -6,7 +6,7 @@ import axios from 'axios'
 import {
     ElMessage
 } from 'element-plus'
-export function getFilesKeys(files, folder) {
+export function getFilesKeys(files, folder, type) {
     return new Promise((resolve, reject) => {
         APIpostFiles({
             'folder': folder,
@@ -22,6 +22,11 @@ export function getFilesKeys(files, folder) {
                 formData.append('X-Amz-Date', res.inputs['X-Amz-Date'])
                 formData.append('X-Amz-Signature', res.inputs['X-Amz-Signature'])
                 formData.append('acl', res.inputs.acl)
+                if(type) {
+                    formData.append('key', `${folder}/${res.keys[i]}.${type[i]}`)
+                }else {
+                    formData.append('key', `${folder}/${res.keys[i]}`)
+                }
                 formData.append('key', `${folder}/${res.keys[i]}`)
                 formData.append('Content-Type', files[i].type)
                 formData.append('file', files[i])
@@ -36,7 +41,11 @@ export function getFilesKeys(files, folder) {
                 atemp.push(
                     new Promise((resolve2, reject) => {
                         api[res.attrs.method.toLowerCase()]('', formData).then(res2 => {
-                            resolve2(`${folder}/${res.keys[i]}`)
+                            if(type) {
+                                resolve2(`${folder}/${res.keys[i]}.${type[i]}`)
+                            }else {
+                                resolve2(`${folder}/${res.keys[i]}`)
+                            }
                         }).catch(err => {
                             reject('err')
                         })

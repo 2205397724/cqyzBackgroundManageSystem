@@ -62,7 +62,10 @@
                     <span class="size-base" v-if="item.sharebiz.group">{{ item.sharebiz.group.name }}：</span>
                     <span class="size-base" v-if="item.sharebiz">{{ item.sharebiz.title }}</span>
                 </div>
-                <div class="p-t-20 p-b-10 size-base font-grey">业务材料：</div>
+                <div class="p-t-20 p-b-10 size-base font-grey">
+                    业务材料：
+                    <el-button type="primary" @click="downLoadMaterials">下载业务材料</el-button>
+                </div>
                 <table class="table m-b-10" border="1" v-for="item in details.obj.materials" :key="item.id">
                     <tr v-if="item.sharefile.type === 1">
                         <td style="width: 120px;">{{ item.sharefile.title }}</td>
@@ -86,6 +89,8 @@ import { ref, reactive} from 'vue'
 import { APIgetShareDataDetails} from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
+// 多文件打包下载：参考（https://www.npmjs.com/package/fetch-file-j）
+import { instance } from 'fetch-file-j'
 const route = useRoute()
 const details = reactive({
     obj: {
@@ -96,18 +101,33 @@ const getShareDataDetail = ()=>{
     APIgetShareDataDetails(route.query.id).then(res => {
         res.materials.map(share_detail=>{
             if(share_detail.sharefile.type === 2 || share_detail.sharefile.type === 4) {
-                share_detail.picture = []
-                share_detail.picture = share_detail.content.split(",")
-                for(let i in share_detail.picture) {
-                    share_detail.picture[i] =(import.meta.env.VITE_APP_FOLDER_SRC + share_detail.picture[i])
+                if(share_detail.content != "") {
+                    share_detail.picture = []
+                    share_detail.picture = share_detail.content.split(",")
+                    for(let i in share_detail.picture) {
+                        share_detail.picture[i] =(import.meta.env.VITE_APP_FOLDER_SRC + share_detail.picture[i])
+                    }
                 }
             }
         })
         details.obj = res
-        console.log(details.obj)
+        // console.log("123",details.obj)
     })
 }
-
+// 下载业务材料
+let urls = reactive([])
+const downLoadMaterials = ()=>{
+    // 遍历判断材料是否有图片
+    urls = []
+    console
+    for(let i in details.obj.materials) {
+        if(details.obj.materials[i].picture) {
+            urls.push(...details.obj.materials[i].picture)
+            // console.log("123",urls)
+        }
+    }
+    instance.download(urls);
+}
 onMounted(() => {
     getShareDataDetail()
 })

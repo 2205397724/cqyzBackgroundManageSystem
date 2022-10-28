@@ -228,6 +228,15 @@
                                             />
                                         </el-form-item>
                                     </el-col>
+                                    <el-col :md="24" :lg="12">
+                                        <el-form-item label="至少投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
+                                            <el-input
+                                                v-model="from_examine.item.vmax"
+                                                placeholder=""
+                                            />
+                                            <text>（0代表全投）</text>
+                                        </el-form-item>
+                                    </el-col>
                                     <el-col :md="24" :lg="24">
                                         <el-form-item label="内容" label-width="80px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <editor v-model="from_examine.item.content" class="w_100" />
