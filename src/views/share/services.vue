@@ -148,21 +148,18 @@
                         v-loading="loading_tab" :data="data_1.arr"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
                     >
-                        <el-table-column prop="id" label="业务材料名称id">
+                        <el-table-column label="所需要件名称">
                             <template #default="scope">
-                                <span>{{ scope.row.id }} </span>
+                                <span>{{ scope.row.sharefile.title }} </span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="业务id">
+                        <el-table-column label="要件说明">
                             <template #default="scope">
-                                <span>{{ scope.row.bid }}</span>
+                                <span>{{ scope.row.sharefile.desc }}</span>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column prop="name" label="归档内容数量" width="180">
-                    <span> {{ total2 }} </span>
-                </el-table-column> -->
-
-                        <el-table-column prop="created_at" label="状态" width="100">
+                        <el-table-column prop="created_at" label="添加时间"></el-table-column>
+                        <el-table-column label="状态" width="100">
                             <template #default="scope">
                                 <el-tag v-if="scope.row.active == 1" size="small" type="success">启用</el-tag>
                                 <el-tag v-if="scope.row.active == 0" size="small" type="info">禁用</el-tag>
