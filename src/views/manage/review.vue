@@ -21,12 +21,18 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 class="tab_1"
             >
-                <el-table-column prop="name" label="审核活动" width="180">
+                <el-table-column prop="name" label="审核活动">
                     <template #default="scope">
                         <div v-if="scope.row.tgt_type=='announce'">
-                            公示信息
-                            <router-link class="el-tag" style="text-decoration: none;" :to="{name: 'announceDetail',query:{ id : scope.row.tgt_id }}">
-                                查看详情
+                            <span class="el-tag m-r-10" size="small">公示</span>
+                            <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'announceDetail',query:{ id : scope.row.tgt_id }}">
+                               <el-link :underline="false" type="primary">{{ scope.row.auditable.title }}</el-link>
+                            </router-link>
+                        </div>
+                        <div v-if="scope.row.tgt_type=='survey'">
+                            <span class="el-tag m-r-10" size="small">活动</span>
+                            <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'announceDetail',query:{ id : scope.row.tgt_id }}">
+                                <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
                             </router-link>
                         </div>
                     </template>
