@@ -1,11 +1,6 @@
 <template>
     <div>
         <page-main class="hidden">
-            <!-- <div class="m-b-20">
-                <el-button type="primary" :icon="Plus" size="large" @click="addResidentialFunc">
-                    添加共享数据
-                </el-button>
-            </div> -->
             <el-button-group class="btn m-b-20">
                 <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
                 <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
@@ -17,7 +12,6 @@
                 <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">共享结束</el-button>
                 <!-- </el-badge> -->
             </el-button-group>
-
             <el-table
                 v-loading="loading_tab"
                 :data="data.list"
@@ -37,7 +31,6 @@
                 <!-- <el-table-column prop="name" label="归档内容数量" width="180">
                     <span> {{ total2 }} </span>
                 </el-table-column> -->
-
                 <el-table-column prop="created_at" label="房屋id">
                     <template #default="scope">
                         <span>{{ scope.row.hid }} </span>
@@ -80,11 +73,12 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 翻页 -->
             <el-pagination
                 v-model:current-page="page"
                 style="float: right;"
                 layout="prev,next,jumper,"
-                :total="50"
+                :total="500"
                 :page-size="per_page"
                 background
                 prev-text="上一页"
@@ -93,11 +87,14 @@
             />
         </page-main>
         <el-dialog v-model="data.switch_1" title="相关材料" width="60%">
+            <el-button type="primary" @click="downLoadMaterials">下载选中业务材料</el-button>
             <el-scrollbar height="300px">
                 <el-table
                     :data="data.arr"
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
+                    @selection-change="selectionChange"
                 >
+                    <el-table-column type="selection" width="55" />
                     <el-table-column prop="id" label="材料名称">
                         <template #default="scope">
                             <span>{{ scope.row.sharefile.title }} </span>
@@ -134,165 +131,7 @@
                 </div>
             </template> -->
         </el-dialog>
-        <!-- 详情 -->
-        <el-dialog
-            v-model="data.switch"
-            title="详情"
-            width="50%"
-            :append-to-body="true"
-        >
-            <div class="details-box">
-                <div class="item-hd">相关信息</div>
-                <div class="item">
-                    <div class="left">业务编号</div>
-                    <div class="right">{{ data.obj.sno }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">房屋id</div>
-                    <div class="right">{{ data.obj.hid }}</div>
-                </div>
-
-                <div class="item">
-                    <div class="left">状态</div>
-                    <div class="right">
-                        <span v-if="data.obj.status == 10">待补充材料</span>
-                        <span v-if="data.obj.status == 11">待公众补充材料</span>
-                        <span v-if="data.obj.status == 12">待不动产中心补充材料</span>
-                        <span v-if="data.obj.status == 20">已共享</span>
-                        <span v-if="data.obj.status == 40">共享已结束</span>
-                        <span v-if="data.obj.status == 41">公众主动放弃共享</span>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="left">共享结束时间</div>
-
-                    <div class="right">{{ data.obj.end_at }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">创建时间</div>
-
-                    <div class="right">{{ data.obj.created_at }}</div>
-                </div>
-                <div class="item-hd">其他信息：</div>
-                <div v-if="data.obj.uinfo" class="item">
-                    <div class="left">发起人</div>
-                    <div class="right">{{ data.obj.uinfo.name || data.obj.uinfo.nickname || data.obj.uinfo.username }}</div>
-                </div>
-                <div v-if="data.obj.uinfo" class="item">
-                    <div class="left">电话</div>
-                    <div class="right">{{ data.obj.uinfo.mobile }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">共享记录id</div>
-                    <div class="right">{{ data.obj.id }}</div>
-                </div>
-                <div class="item-hd">
-                    业务材料：
-                    <el-button type="primary" @click="downLoadMaterials">下载业务材料</el-button>
-                </div>
-                <block v-for="item in data.obj.materials" :key="item.id">
-                    <div v-if="item.sharefile.type === 1" class="item">
-                        <div class="left">{{ item.sharefile.title }}</div>
-                        <div class="right">{{ item.content }}</div>
-                    </div>
-                    <div v-if="item.sharefile.type === 2 || item.sharefile.type === 4" class="item">
-                        <div class="left">{{ item.sharefile.title }}</div>
-                        <div class="right">
-                            <div v-for="picture in item.picture" :key="picture">
-                                <el-image :preview-src-list="item.picture" :src="picture" lazy style="width: 100px;"></el-image>
-                            </div>
-                        </div>
-                    </div>
-                </block>
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="data.switch = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <!-- 修改添加 -->
-        <!-- <el-dialog v-model="data.switch" :title="str_title" width="60%" @closed="dialogClosed">
-            <div>
-                <el-form ref="ruleFormRef" :model="data.obj">
-                    <el-row :gutter="10">
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="房屋" label-width="100px"
-                            >
-                                <div class="searchUserGroup">
-                                    <SearchHouse ref="V" @checkName="checkNameFunc" />
-                                </div>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="12">
-                            <el-form-item
-                                label="共享截止时间" label-width="100px"
-                            >
-                                <el-date-picker
-                                    v-model="data.obj.end_at"
-                                    type="date"
-                                    value-format="YYYY-MM-DD"
-                                    placeholder=""
-                                    style="width: 100%;"
-                                    :default-value="new Date()"
-                                />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :md="24" :lg="24">
-                            <div class="m-b-10">
-                                <el-button type="primary" plain @click="addServiceFunc">添加材料</el-button>
-                            </div>
-                            <div>
-                                <div v-for="(item, i) in data.obj.material" :key="i" class="serve-box">
-                                    <el-row :gutter="10">
-                                        <el-col :md="24" :lg="24">
-                                            <el-form-item
-                                                label="要件" label-width="100px"
-                                            >
-                                                <div class="selecZone" @click="selElements">
-                                                    <span v-if="!selectedElement" class="selecChina">请选择</span>
-                                                    <span style="margin-left: 11px;">{{ selectedElement }}</span>
-                                                </div>
-                                            </el-form-item>
-                                        </el-col>
-                                        <el-col :md="24" :lg="24">
-                                            <el-form-item
-                                                label-width="100px" label="要件内容"
-                                            >
-                                                <el-upload
-                                                    v-if="file.obj&& file.obj.type !== 1"
-                                                    multiple action="***" :auto-upload="false"
-                                                    :file-list="item.content" :on-change="(file, files) => {
-                                                        item.content = files
-                                                    }" :on-remove="(file, files) => {
-                                                        item.content = files
-                                                    }"
-                                                >
-                                                    <el-button type="primary">选择</el-button>
-                                                </el-upload>
-                                                <el-input v-if="file.obj&& file.obj.type == 1" v-model="data.obj.content" placeholder="" />
-                                            </el-form-item>
-                                        </el-col>
-                                    </el-row>
-                                    <div class="delete-service" @click="deleteServiceFunc_1(i)">
-                                        <el-icon :size="20" color="#F56C6C">
-                                            <el-icon-circle-close />
-                                        </el-icon>
-                                    </div>
-                                </div>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
-            <template #footer>
-                <div class="footer">
-                    <el-button @click="data.switch=false">取消</el-button>
-                    <el-button type="primary" @click="postFunc">确定</el-button>
-                </div>
-            </template>
-        </el-dialog> -->
+        <!-- 补充材料弹窗 -->
         <el-dialog v-model="data.switch_2" :title="str_title" width="50%">
             <div>
                 <el-form ref="ruleFormRef" :model="data.item">
@@ -375,7 +214,7 @@ const StatusFunk = val => {
     flag.value = false
     flag1.value = false
     flag2.value = false
-    console.log(flag.value)
+    // console.log(flag.value)
 }
 const page = ref(1)
 const per_page = ref(15)
@@ -386,7 +225,7 @@ const getShareDataList = () => {
     }
     loading_tab.value = true
     APIgetShareDataList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         data.list = res
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
@@ -409,108 +248,12 @@ const refreshFunc = () => {
     getShareDataList()
 }
 refreshFunc()
-const detailsFunc = row => {
-    APIgetShareDataDetails(row.id).then(res => {
-        console.log(res)
-        res.materials.map(share_detail=>{
-            if(share_detail.sharefile.type === 2 || share_detail.sharefile.type === 4) {
-                share_detail.picture = []
-                share_detail.picture = share_detail.content.split(",")
-                for(let i in share_detail.picture) {
-                    share_detail.picture[i] =(import.meta.env.VITE_APP_FOLDER_SRC + share_detail.picture[i])
-                }
-            }
-        })
-        data.obj = res
-        data.switch = true
-    })
-}
-// const str_title = ref('添加数据')
-// const addResidentialFunc = () => {
-//     selectedElement.value = ''
-//     data.obj = {}
-//     data.obj.material = [{
-//         fid: '',
-//         content: []
-//     }]
-//     str_title.value = '添加数据'
-//     data.switch = true
-// }
-// // 添加
-// const addServiceFunc = () => {
-//     console.log(data.obj)
-//     let data_1 = {
-//         'fid': '',
-//         'content': []
-//     }
-//     // console.log(typeof (from_examine.item.extra))
-//     // data.obj.material.push(data)
-// }
-// const selElements = () => {
-//     data.switch_1 = true
-//     let params = {
-//         page: page.value,
-//         per_page: per_page.value
-//     }
-//     loading_tab.value = true
-//     APIgetShareElementsList(params).then(res => {
-//         console.log(res)
-//         data.list = res
-//         loading_tab.value = false
-//     })
-// }
-// const file = reactive({
-//     obj: {}
-// })
-// const selectedElement = ref('')
-// const rowClickFunc = row => {
-//     selectedElement.value = row.title
-//     file.obj = row
-//     data.switch_1 = false
-// }
-// const postFunc = () => {
-//     // console.log(formEl)
-//     // from_error.msg = {}
-//     // if (!formEl) return
-//     // formEl.validate(valid => {
-//     //     if (valid) {
-//     console.log(data.obj)
-//     for (let key in data.obj) {
-//         if (data.obj[key] !== null) {
-//             if (data.obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (data.obj[key] !== 0 || data.obj[key] !== false)) {
-//                 delete data.obj[key]
-//             }
-//         }
-//     }
-//     if (str_title.value == '修改数据') {
-//         console.log(data.obj)
-//         APIputShareData(data.obj.id, data.obj).then(res => {
-//             refreshFunc()
-//             ElMessage.success('修改成功')
-//             data.switch = false
-//         }).catch(err => {
-//             ElMessage.error('修改失败')
-//         })
-//     } else {
-//         APIpostShareData(data.obj).then(res => {
-//             refreshFunc()
-//             ElMessage.success('添加成功')
-//             data.switch = false
-//         }).catch(() => {
-//             ElMessage.error('添加失败')
-//         })
-//     }
-//     //     } else {
-//     //         return false
-//     //     }
-//     // })
-// }
 const type = ref(0)
 const dataMaterialFunc = row => {
     materialId_1.value = row.id
     data.switch_1 = true
     APIgetShareDataMaterialList({ rid: row.id }).then(res => {
-        console.log(res)
+        // console.log(res)
         data.arr = res
     })
 
@@ -525,39 +268,31 @@ const addMaterialFunc = row => {
     type.value = row.sharefile.type
     data.item = {}
     data.switch_2 = true
-    // APIgetShareElementsList({ page: 1, per_page: 500 }).then(res => {
-    //     type.value = getType(res, row.fid)
-    //     console.log(getType(res, row.fid))
-    // })
 
 }
-// const getType = (data, key) => {
-//     for (let i in data) {
-//         if (data[i].id == key) {
-//             return data[i].type
-//         }
-//     }
-//     return ''
-// }
 const file_list = ref([])
 const dialogExamineCloseFunc = () => {
-    console.log(data.item,type.value)
+    // console.log(data.item,type.value)
     if (type.value == 2 || type.value == 3 || type.value == 4) {
         let files = []
+        let type = []
         let file_key = []
         if (file_list.value.length > 0) {
+            console.log("file_list.value",file_list.value)
             for (let i in file_list.value) {
                 if (!file_list.value[i].raw) {
                     file_key.push(file_list.value[i].name)
                 } else {
                     files.push(file_list.value[i].raw)
                 }
+                type.push(file_list.value[i].name.split(".")[1])
+                // console.log("type",type)
             }
         }
         if (files.length > 0) {
-            getFilesKeys(files, 'material').then(arr => {
+            getFilesKeys(files, 'material',type).then(arr => {
                 data.item.content = file_key.concat(arr).join(',')
-                console.log(data.item)
+                // console.log(data.item)
                 APIputShareDataMaterial(materialId.value, data.item).then(res => {
                     ElMessage.success('补充成功')
                     data.switch_2 = false
@@ -587,19 +322,30 @@ const dialogExamineCloseFunc = () => {
                 ElMessage.error('补充失败')
             })
     }
-
+}
+// 选择项变化时触发的事件
+const selectionChange = (selection) => {
+    // console.log("aaa",selection)
+    urls = []
+    // 遍历提取出图片材料的urls地址
+    selection.map(item=>{
+        if(item.sharefile.type === 2 || item.sharefile.type === 4) {
+            if(item.content != "") {
+                let arr = []
+                arr = item.content.split(",")
+                // console.log("arr",arr)
+                for(let i in arr) {
+                    urls.push(import.meta.env.VITE_APP_FOLDER_SRC + arr[i])
+                }
+            }
+        }
+        // console.log("urls",urls)
+    })
 }
 // 下载业务材料
 let urls = reactive([])
 const downLoadMaterials = ()=>{
-    // 遍历判断材料是否有图片
-    urls = []
-    for(let i in data.obj.materials) {
-        if(data.obj.materials[i].picture) {
-            urls.push(...data.obj.materials[i].picture)
-            console.log("123",urls)
-        }
-    }
+    // console.log("123",urls)
     instance.download(urls);
 }
 </script>
