@@ -54,7 +54,6 @@
                 <el-table-column fixed="right" label="操作" width="180">
                     <template #default="scope">
                         <el-button
-                            :disabled="scope.row.status !== 10 && scope.row.status !== 11"
                             size="small" type="success"
                             @click="dataMaterialFunc(scope.row)"
                         >
@@ -113,6 +112,22 @@
                                     <el-image :preview-src-list="scope.row.file" :src="item" lazy style="height: 60px;"></el-image>
                                 </block>
                             </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="content" label="材料状态">
+                        <template #default="scope">
+                            <el-switch
+                            v-model="scope.row.status"
+                            style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            active-text="有效"
+                            inactive-text="失效"
+                            :active-value="20"
+                            :inactive-value="30"
+                            class="switchStyle"
+                            @change="SwitchFunc(scope.row)"
+                        />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">
@@ -363,6 +378,17 @@ const downLoadMaterials = ()=>{
     // console.log("123",urls)
     instance.download(urls);
 }
+// switch 状态改变事件
+const SwitchFunc = (e) => {
+    let status = e.status === 20 ? 20 : 30
+    let content = e.content
+    // console.log("111",e,status)
+    APIputShareDataMaterial(e.id,{content,status}).then(res => {
+        ElMessage.success('修改成功')
+    }).catch(() => {
+        ElMessage.error('修改失败')
+    })
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/styles/resources/variables.scss";
@@ -386,5 +412,26 @@ const downLoadMaterials = ()=>{
         line-height: 29px;
         color: #c0c4d5;
     }
+}
+.switchStyle ::v-deep .el-switch__label {
+    position: absolute !important;
+    display: none !important;
+    color: #fff !important;
+    width: 80px;
+}
+.switchStyle ::v-deep .el-switch__label--left {
+    z-index: 9 !important;
+    left: 17px !important;
+}
+.switchStyle ::v-deep .el-switch__label--right {
+    z-index: 9 !important;
+    left: -5px !important;
+}
+.switchStyle ::v-deep .el-switch__label.is-active {
+    display: block !important;
+}
+.switchStyle.el-switch ::v-deep .el-switch__core,
+.switchStyle ::v-deep .el-switch__label {
+    width: 60px !important;
 }
 </style>
