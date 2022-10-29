@@ -542,7 +542,7 @@ const dialogExamineCloseFunc = formEl => {
                 getFilesKeys(files, 'property').then(arr => {
                     // affix为null
                     from_examine.item.affix = {bdcz:[]}
-                    from_examine.item.affix.bdcz = file_key.concat(arr)
+                    from_examine.item.affix.bdcz = arr
                 })
             }
             // 遍历处理不同产权人的身份证附件信息
@@ -562,13 +562,12 @@ const dialogExamineCloseFunc = formEl => {
                 }
                 from_error.msg = {}
                 if (files_1[j].length > 0) {
-                    getFilesKeys(files_1, 'propertyOwners').then(arr => {
+                    getFilesKeys(files_1[j], 'propertyOwners').then(arr => {
                         from_examine.item.owners[j].affix = {sfz:[]}
-                        from_examine.item.owners[j].affix.sfz = file_key.concat(arr)
+                        from_examine.item.owners[j].affix.sfz = arr
                     })
                 }
             }
-            console.log(from_examine.item)
             setTimeout(() => {
                 if (str_title.value == '修改') {
                     // console.log(from_examine.item)
