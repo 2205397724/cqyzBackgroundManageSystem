@@ -187,7 +187,7 @@
                     style="float: right;"
                     layout="prev,next,jumper"
                     :page-size="per_page"
-                    :total="50"
+                    :total="Infinity"
                     background
                     prev-text="上一页"
                     next-text="下一页"

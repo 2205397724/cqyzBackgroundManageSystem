@@ -651,7 +651,7 @@
                 </el-table>
                 <el-pagination
                     v-model:current-page="data_1.page" style="float: right;"
-                    layout="prev,next,jumper," :total="50" :page-size="data_1.per_page" background
+                    layout="prev,next,jumper," :total="Infinity" :page-size="data_1.per_page" background
                     prev-text="上一页" next-text="下一页" hide-on-single-page
                 />
             </el-tab-pane>
@@ -710,7 +710,7 @@
                     style="float: right;"
                     class="btnClass"
                     layout="prev,next,jumper,"
-                    :total="50"
+                    :total="Infinity"
                     :page-size="data_2.per_page"
                     background
                     prev-text="上一页"

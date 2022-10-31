@@ -69,7 +69,7 @@
                     style="float: right;"
                     background
                     layout="prev,next,jumper"
-                    :total="50"
+                    :total="Infinity"
                     prev-text="上一页"
                     next-text="下一页"
                     hide-on-single-page

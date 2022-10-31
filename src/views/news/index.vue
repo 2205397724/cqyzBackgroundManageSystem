@@ -132,7 +132,7 @@
                 v-model:current-page="page"
                 style="float: right;"
                 layout="prev,next,jumper,"
-                :total="50"
+                :total="Infinity"
                 :page-size="per_page"
                 background
                 prev-text="上一页"
@@ -183,7 +183,7 @@
                                 clearable
                             >
                                 <template #default="{ node, data }">
-                                    <span>{{ data.name }}</span>
+                                    <span>{{ data?.name }}</span>
                                 </template>
                             </el-cascader>
                         </el-form-item>
@@ -400,12 +400,14 @@ const data_1 = reactive({
     details_data: {},
     details_switch: false
 })
+let per_page = ref(15)
+let page = ref(1)
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const getFuncManageList = () => {
     let params = {
-        // page: data_1.page,
-        // per_page: data_1.per_page
+        page: page.value,
+        per_page: per_page.value
     }
     for (let key in data_1.search) {
         let item = data_1.search[key]
@@ -419,7 +421,7 @@ const getFuncManageList = () => {
         data_1.total = res.length
         nextTick(() => {
             data_1.list = res
-            console.log(data_1.list[0].cate.name)
+            // console.log(data_1.list[0].cate.name)
         })
 
     })
@@ -510,8 +512,8 @@ const NewArr = reactive({
     arr: []
 })
 let params = {
-    // page: page.value,
-    // per_page: per_page.value
+    page: page.value,
+    per_page: per_page.value
 }
 const getCategoryList = () => {
     APIgetInforCategoryList(params).then(res => {
@@ -537,8 +539,8 @@ const zone_list = reactive({
 })
 const getZoneListFunc = () => {
     let params = {
-        page: data_1.page.value,
-        per_page: data_1.per_page.value
+        page: page.value,
+        per_page: per_page.value
     }
     loading_tab.value = true
     APIgetResidentialListHouse(params).then(res => {
@@ -660,11 +662,13 @@ const SwitchFunc = row => {
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const refreshFunc = () => {
+    console.log("222")
     data_1.search = {}
     data_1.switch_search = false
     getFuncManageList()
 }
-watch(data_1.page, () => {
+watch(page, () => {
+    console.log("111")
     refreshFunc()
 }, { immediate: true, deep: true })
 // // 配置项

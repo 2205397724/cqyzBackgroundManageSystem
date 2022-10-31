@@ -205,7 +205,7 @@
                             style="float: right;"
                             class="btnClass"
                             layout="prev,next,jumper,"
-                            :total="50"
+                            :total="Infinity"
                             :page-size="data_2.per_page"
                             background
                             prev-text="上一页"

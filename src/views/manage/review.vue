@@ -30,10 +30,30 @@
                             </router-link>
                         </div>
                         <div v-if="scope.row.tgt_type=='survey'">
-                            <span class="el-tag m-r-10" size="small">活动</span>
-                            <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'announceDetail',query:{ id : scope.row.tgt_id }}">
-                                <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
-                            </router-link>
+                            <div v-if="scope.row.auditable.type===1">
+                                <span class="el-tag m-r-10" size="small">问卷</span>
+                                <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'surveyIndex',query:{ id : scope.row.tgt_id }}">
+                                    <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
+                                </router-link>
+                            </div>
+                            <div v-else-if="scope.row.auditable.type===2">
+                                <span class="el-tag m-r-10" size="small">选举</span>
+                                <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'electDetail',query:{ id : scope.row.tgt_id }}">
+                                    <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
+                                </router-link>
+                            </div>
+                            <div v-else-if="scope.row.auditable.type===3">
+                                <span class="el-tag m-r-10" size="small">表决</span>
+                                <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'voteDetail',query:{ id : scope.row.tgt_id }}">
+                                    <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
+                                </router-link>
+                            </div>
+                            <div v-else-if="scope.row.auditable.type===4">
+                                <span class="el-tag m-r-10" size="small">联名</span>
+                                <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'jointlyIndex',query:{ id : scope.row.tgt_id }}">
+                                    <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
+                                </router-link>
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -63,7 +83,7 @@
                 v-model:current-page="page"
                 style="float: right;"
                 layout="prev,next,jumper,"
-                :total="50"
+                :total="Infinity"
                 :page-size="per_page"
                 background
                 prev-text="上一页"
@@ -334,9 +354,9 @@ const getActivityViewList = () => {
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
-        console.log('aaaaa')
+        // console.log('aaaaa')
         loading_tab.value = false
-        console.log('bbbbb')
+        // console.log('bbbbb')
 
     })
 }

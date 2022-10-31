@@ -93,7 +93,7 @@
                                     v-model:current-page="page_1"
                                     style="float: right;"
                                     layout="prev,next,jumper,"
-                                    :total="50"
+                                    :total="Infinity"
                                     :page-size="per_page_1"
                                     background
                                     prev-text="上一页"
@@ -179,7 +179,7 @@
                                     class="btnClass"
                                     style="float: right;"
                                     layout="prev,next,jumper,"
-                                    :total="50"
+                                    :total="Infinity"
                                     :page-size="per_page"
                                     background
                                     prev-text="上一页"

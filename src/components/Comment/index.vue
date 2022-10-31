@@ -89,7 +89,7 @@
             </el-table-column>
         </el-table>
         <el-pagination
-            v-model:current-page="data_1.page" style="float: right;" layout="prev,next,jumper," :total="50"
+            v-model:current-page="data_1.page" style="float: right;" layout="prev,next,jumper," :total="Infinity"
             :page-size="data_1.per_page" background prev-text="上一页" next-text="下一页" hide-on-single-page
         />
         <!-- 修改添加 -->

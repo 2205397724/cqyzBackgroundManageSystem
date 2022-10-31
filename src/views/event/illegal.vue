@@ -154,7 +154,7 @@
                 v-model:current-page="data_1.page"
                 style="float: right;"
                 layout="prev,next,jumper,"
-                :total="50"
+                :total="Infinity"
                 :page-size="data_1.per_page"
                 background
                 prev-text="上一页"
