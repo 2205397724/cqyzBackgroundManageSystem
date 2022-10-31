@@ -1130,7 +1130,6 @@ import {
     ElMessage
 } from 'element-plus'
 
-const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const activeName = ref('first')
 const props = defineProps(['tree_item'])

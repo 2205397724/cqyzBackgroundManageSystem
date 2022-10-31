@@ -956,7 +956,6 @@ const refreshFunc = () => {
     getTabListFunc()
 }
 const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
-// const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_UPLOAD )
 // 详情
 const getDetailsFunc = val => {
     data_dialog.obj = val
