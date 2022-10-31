@@ -10,15 +10,15 @@ import {
     reactive,
     ref
 } from 'vue'
+import {
+    APIgetChinaRegion
+} from '@/api/custom/custom.js'
 const tree_item = ref({
     id: '50',
     name: '测试',
     next_type: 'region',
     type: 'region'
 })
-import {
-    APIgetChinaRegion
-} from '@/api/custom/custom.js'
 const tree_item_1 = reactive({
     arr: []
 })

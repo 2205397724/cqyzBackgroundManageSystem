@@ -215,6 +215,7 @@
                                     action="***"
                                     :auto-upload="false"
                                     :file-list="file_list"
+                                    list-type="picture-card"
                                     :on-change="(file,files)=>{
                                         file_list = files
                                     }"
@@ -222,7 +223,7 @@
                                         file_list = files
                                     }"
                                 >
-                                    <el-button type="primary" plain>选择</el-button>
+                                    <!-- <el-button type="primary" plain>选择</el-button> -->
                                 </el-upload>
                             </el-form-item>
                         </el-col>
@@ -291,6 +292,7 @@
                                                     action="***"
                                                     :auto-upload="false"
                                                     :file-list="file_list_1[i]"
+                                                    list-type="picture-card"
                                                     :on-change="(file,files)=>{
                                                         file_list_1[i] = files
                                                     }"
@@ -298,7 +300,7 @@
                                                         file_list_1[i] = files
                                                     }"
                                                 >
-                                                    <el-button type="primary" plain>选择</el-button>
+                                                    <!-- <el-button type="primary" plain>选择</el-button> -->
                                                 </el-upload>
                                             </el-form-item>
                                         </el-col>
@@ -361,6 +363,20 @@
                     <div class="left">修改时间</div>
                     <div class="right">{{ data_details.item.updated_at }}</div>
                 </div>
+                <div class="item">
+                    <div class="left">附件</div>
+                    <div class="right" v-if="data_details.item.affix">
+                        <el-image
+                            v-for="item in data_details.item.affix.bdcz"
+                            :key="item"
+                            :preview-src-list="data_details.item.affix.bdcz"
+                            class="image"
+                            :src="item"
+                            lazy
+                        ></el-image>
+                    </div>
+                    <div class="right" v-else>待补充</div>
+                </div>
                 <div v-if="data_details.item.owners">
                     <el-scrollbar :height="data_details.item.owners.length >= 3 ? '300px' : ''">
                         <div class="item">
@@ -384,6 +400,21 @@
                                     </div>
                                     <div>
                                         <span>房屋面积：</span>{{ item.area }} ㎡
+                                    </div>
+                                    <div></div>
+                                    <div>
+                                        <span>附件：</span>
+                                        <div class="right" v-if="item.affix">
+                                            <el-image
+                                                v-for="picture in item.affix.sfz"
+                                                :key="picture"
+                                                :preview-src-list="item.affix.sfz"
+                                                class="image"
+                                                :src="picture"
+                                                lazy
+                                            ></el-image>
+                                        </div>
+                                        <div class="right" v-else>待补充</div>
                                     </div>
                                 </div>
                             </div>
@@ -421,6 +452,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 import { getFilesKeys } from '@/util/files.js'
 /* ----------------------------------------------------------------------------------------------------------------------- */
 const searchVisible = ref(false)
+const VITE_APP_FOLDER_SRC = import.meta.env.VITE_APP_FOLDER_SRC
 // 数据
 // 搜索
 let switch_search = ref(false)
@@ -499,7 +531,20 @@ const refreshFunc_1 = () => {
 const detailsFunc = val => {
     data_dialog.obj = val
     APIgetPropertyDetails(val.id).then(res => {
-        console.log(res)
+        // 遍历附件加上图片服务器地址前缀
+        if(res.affix) {
+            for(let i in res.affix.bdcz) {
+                res.affix.bdcz[i] = VITE_APP_FOLDER_SRC + res.affix.bdcz[i]
+            }
+        }
+        res.owners.map(item=>{
+            if(item.affix) {
+                for(let i in item.affix.sfz) {
+                    item.affix.sfz[i] = VITE_APP_FOLDER_SRC + item.affix.sfz[i]
+                }
+            }
+        })
+        // console.log('111',res)
         data_details.item = res
         switch_details.value = true
         if (res.status === 404) {
@@ -543,6 +588,7 @@ const dialogExamineCloseFunc = formEl => {
                     // affix为null
                     from_examine.item.affix = {bdcz:[]}
                     from_examine.item.affix.bdcz = arr
+                    // console.log("aaaa",files,arr)
                 })
             }
             // 遍历处理不同产权人的身份证附件信息
@@ -631,7 +677,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetPropertyList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = data_tab.arr.length
@@ -696,6 +742,18 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetPropertyDetails(val.id).then(res => {
+        file_list.value = []
+        file_list_1.value = []
+        res.affix?.bdcz.map(item=>{
+            file_list.value.push({'url':VITE_APP_FOLDER_SRC+item})
+        })
+        res.owners.map((e,i)=>{
+            file_list_1.value[i] = []
+            for(let j in e.affix?.sfz) {
+                file_list_1.value[i].push({'url':VITE_APP_FOLDER_SRC+e.affix?.sfz[j]})
+            }
+        })
+        // console.log("res",res)
         from_examine.item = res
         switch_examine.value = true
     })
