@@ -876,35 +876,6 @@
                                 />
                                 <span v-else>{{ property_form.obj.time_deal }}</span>
                             </el-form-item>
-                            <el-form-item label-width="80px" label="附件" prop="affix" :error="from_error_property.msg&&from_error_property.msg.affix?from_error_property.msg.affix[0]:''">
-                                <div v-if="!add_state && read_state">
-                                    <div v-if="property_form.obj.affix">
-                                        <el-image
-                                            v-for="item in property_form.obj.affix.bdcz"
-                                            :key="item"
-                                            :preview-src-list="property_form.obj.affix.bdcz"
-                                            class="image"
-                                            :src="item"
-                                            lazy
-                                        ></el-image>
-                                    </div>
-                                </div>
-                                <div v-else>
-                                    <el-upload
-                                        ref="uploadRef"
-                                        action="***"
-                                        :auto-upload="false"
-                                        :file-list="file_list"
-                                        list-type="picture-card"
-                                        :on-change="(file,files)=>{
-                                            file_list = files
-                                        }"
-                                        :on-remove="(file,files)=>{
-                                            file_list = files
-                                        }"
-                                    ></el-upload>
-                                </div>
-                            </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="产权人" name="second">
                             <div v-for="(item,i) in property_form.obj.owners" :key="i" class="serve-box">
@@ -962,37 +933,6 @@
                                                 placeholder=""
                                             />
                                             <span v-else>{{ item.area }}</span>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
-                                        <el-form-item label-width="80px" label="附件" :error="from_error_property.msg&&from_error_property.msg['owners.'+i+'.area']?from_error_property.msg['owners.'+i+'.area'][0]:''">
-                                            <div v-if="!add_state && read_state">
-                                                <div v-if="item.affix">
-                                                    <el-image
-                                                        v-for="picture in item.affix.sfz"
-                                                        :key="picture"
-                                                        :preview-src-list="item.affix.sfz"
-                                                        class="image"
-                                                        :src="picture"
-                                                        lazy
-                                                    ></el-image>
-                                                </div>
-                                            </div>
-                                            <div v-else>
-                                                <el-upload
-                                                    ref="uploadRef"
-                                                    action="***"
-                                                    :auto-upload="false"
-                                                    :file-list="file_list_1[i]"
-                                                    list-type="picture-card"
-                                                    :on-change="(file,files)=>{
-                                                        file_list_1[i] = files
-                                                    }"
-                                                    :on-remove="(file,files)=>{
-                                                        file_list_1[i] = files
-                                                    }"
-                                                ></el-upload>
-                                            </div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -1190,9 +1130,7 @@ import {
     ElMessage
 } from 'element-plus'
 
-const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
-// const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
-const VITE_APP_FOLDER_SRC = import.meta.env.VITE_APP_FOLDER_SRC
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const activeName = ref('first')
 const props = defineProps(['tree_item'])
 const { tree_item } = toRefs(props)
@@ -1667,23 +1605,12 @@ const showPropertyFunc = () => {
     property_obj.obj = JSON.parse(JSON.stringify(data_details.item))
     if (property_obj.obj.curr_property) {
         APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
-            // 遍历附件加上图片服务器地址前缀
-            if(res.affix) {
-                for(let i in res.affix.bdcz) {
-                    // console.log("11111",i)
-                    res.affix.bdcz[i] = VITE_APP_FOLDER_SRC + res.affix.bdcz[i]
-                }
-            }
-            res.owners.map(item=>{
-                if(item.affix) {
-                    for(let i in item.affix.sfz) {
-                        item.affix.sfz[i] = VITE_APP_FOLDER_SRC + item.affix.sfz[i]
-                    }
-                }
-            })
-            // console.log("res",res)
+            // if (property_obj.obj.curr_property) {
             property_form.obj = res
             copy_property.obj = JSON.parse(JSON.stringify(res))
+            // } else {
+
+            // }
 
         })
     } else {
@@ -1845,77 +1772,25 @@ const modifycancel = () => {
 // 同意拒绝提交
 import { APIputProperty, APIpostProperty,
     APIdeleteHouseHouse } from '@/api/custom/custom.js'
-const file_list = ref([])
-const file_list_1 = ref([])
 const postPropertyFunc = () => {
-            let files = []
-            let file_key = []
-            if (file_list.value.length > 0) {
-                for (let i in file_list.value) {
-                    if (!file_list.value[i].raw) {
-                        file_key.push(file_list.value[i].name)
-                    } else {
-                        files.push(file_list.value[i].raw)
-                    }
-                }
-            }
-            from_error.msg = {}
-            for (let key in property_form.obj) {
-                if (property_form.obj[key] !== null) {
-                    if (property_form.obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (property_form.obj[key] !== 0 || property_form.obj[key] !== false)) {
-                        delete property_form.obj[key]
-                    }
-                }
-            }
-            if (files.length > 0) {
-                getFilesKeys(files, 'property').then(arr => {
-                    property_form.obj.affix = {bdcz:[]}
-                    property_form.obj.affix.bdcz = arr
-                })
-            }
-            // 遍历处理不同产权人的身份证附件信息
-            for(let j in file_list_1.value) {
-                let files_1 = []
-                files_1[j] =[]
-                let file_key_1 = []
-                file_key_1[j] = []
-                if (file_list_1.value[j].length > 0) {
-                    for (let i in file_list_1.value[j]) {
-                        if (!file_list_1.value[j][i].raw) {
-                            file_key_1[j].push(file_list_1.value[j][i].name)
-                        } else {
-                            files_1[j].push(file_list_1.value[j][i].raw)
-                        }
-                    }
-                }
-                from_error.msg = {}
-                if (files_1[j].length > 0) {
-                    getFilesKeys(files_1[j], 'propertyOwners').then(arr => {
-                        property_form.obj.owners[j].affix = {sfz:[]}
-                        property_form.obj.owners[j].affix.sfz = arr
-                    })
-                }
-            }
     from_error_property.msg = {}
-    setTimeout(()=>{
-        if (!add_state.value) {
-            APIputProperty(property_form.obj.id, property_form.obj).then(res => {
-                refreshFunc()
-                ElMessage.success('修改成功')
-                switch_property.value = false
-            }, err => {
-                console.log(err)
-            })
-        } else {
-            APIpostProperty(property_form.obj).then(res => {
-                refreshFunc()
-                ElMessage.success('添加成功')
-                switch_property.value = false
-            }).catch(err => {
-                from_error_property.msg = err.data
-            })
-        }
-    },700)
+    if (!add_state.value) {
+        APIputProperty(property_form.obj.id, property_form.obj).then(res => {
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_property.value = false
+        }, err => {
+            console.log(err)
+        })
+    } else {
+        APIpostProperty(property_form.obj).then(res => {
+            refreshFunc()
+            ElMessage.success('添加成功')
+            switch_property.value = false
+        }).catch(err => {
+            from_error_property.msg = err.data
+        })
+    }
 }
 // 打开导入房屋from
 const openFileFunc = () => {

@@ -292,7 +292,6 @@ import {
     ElMessage
 } from 'element-plus'
 import { APIgetSurveyTopicDetail } from '@/api/custom/custom'
-const VITE_APP_UPLOAD = ref(import.meta.env.VITE_APP_UPLOAD)
 import {
     APIgetHouseBind,
     APIputHouseBind,
