@@ -580,7 +580,6 @@
     </div>
 </template>
 <script setup>
-import Cascaders from '@/components/Cascaders/index.vue'
 import House from '@/components/House/index.vue'
 const tree_item = reactive({
     arr: []

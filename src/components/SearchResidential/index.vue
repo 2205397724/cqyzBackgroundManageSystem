@@ -72,7 +72,7 @@
                 <el-pagination
                     v-model:current-page="page"
                     layout="total,prev,pager,next,jumper,"
-                    :total="total"
+                    :total="Infinity"
                     :page-size="per_page"
                     background
                     hide-on-single-page
