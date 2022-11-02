@@ -1056,6 +1056,7 @@ const type_change = val => {
 
 // 添加弹出框选择小区
 const getChinaName = () => {
+    tree_item.arr = []
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
         params = {
@@ -1071,9 +1072,9 @@ const getChinaName = () => {
     APIgetChinaRegion(params).then(res => {
         for (let i in res) {
             if (res[i].level < 5) {
-                tree_item.value.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
             } else {
-                tree_item.value.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
     })
@@ -1100,7 +1101,7 @@ const checkChangeFunc = val => {
     switch_choose_zone.value = false
 }
 const selectedZone_id = ref('')
-const tree_item = ref({
+const tree_item = reactive({
     arr: []
 })
 import { APIgetChinaRegion } from '@/api/custom/custom.js'

@@ -930,6 +930,7 @@ const dialogExamineCloseFunc_2 = () => {
     switch_apply.value = false
 }
 const fileChange = (val, i) => {
+    console.log("val",val)
     from_examine.item.affix[i].file = val.target.files[0].name
 }
 const chooseFile = i => {
@@ -944,6 +945,7 @@ const tree_item = reactive({
 const switch_choose_zone = ref(false)
 const selectedZone_id = ref('')
 const getChinaName = () => {
+    tree_item.arr = []
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
         params = {

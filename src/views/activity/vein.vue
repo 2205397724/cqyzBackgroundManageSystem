@@ -403,6 +403,7 @@ const tree_item = reactive({
 })
 import { APIgetChinaRegion } from '@/api/custom/custom.js'
 const getChinaName = () => {
+    tree_item.arr = []
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
         params = {

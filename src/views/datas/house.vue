@@ -23,6 +23,7 @@ const tree_item_1 = reactive({
     arr: []
 })
 const getChinaRegionunc = () => {
+    tree_item_1.arr = []
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
         params = {

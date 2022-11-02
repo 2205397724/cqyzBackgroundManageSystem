@@ -647,12 +647,12 @@ const active_obj = reactive({
 const china_code = ref('')
 const checkFunc = val => {
     active_obj.obj = val
-    console.log(val)
+    // console.log(val)
     china_code.value = val.id
     let cur = active_obj.obj.name || ''
     if (cur.includes('社区') || cur.includes('街道') || cur.includes('镇') || cur.includes('区') || cur.includes('县')) {
         APIgetResidentialListHouse({ page: 1, per_page: 5, china_code: active_obj.obj.id }).then(res => {
-            console.log(res)
+            // console.log(res)
             data_tab.arr = res
         })
     }
@@ -711,7 +711,7 @@ const click_add_group_zone_id = () => {
 const str_title = ref('添加')
 const from_error = reactive({ msg: {} })
 const checkFunc_1 = val => {
-    console.log(val)
+    // console.log(val)
     selectedZone_id.value = val.name
     from_examine.item.china_code = val.id
 
@@ -729,6 +729,7 @@ const tree_item_1 = reactive({
 // APIgetChinaRegion().then(res => {
 
 const getChinaRegionunc = () => {
+    tree_item_1.arr = []
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
         params = {
@@ -742,7 +743,7 @@ const getChinaRegionunc = () => {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
-        console.log(res)
+        // console.log("res",res)
         for (let i in res) {
             if (res[i].level < 5) {
                 tree_item_1.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
@@ -783,7 +784,7 @@ const detailsFunc = val => {
 
     data_dialog.obj = val
     APIgetResidentialDetailsHouse(val.id).then(res => {
-        console.log(res)
+        // console.log(res)
         data_details.item = res
         switch_details.value = true
     })
@@ -795,7 +796,7 @@ watch(page, () => {
 })
 import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
+    // console.log(to)
     if (to.meta.title == '楼栋' || to.meta.title == '单元' || to.meta.title == '房屋') {
         return true
     } else {
@@ -804,7 +805,7 @@ onBeforeRouteLeave((to, from) => {
 })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
-    console.log(from_examine.item)
+    // console.log(from_examine.item)
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
@@ -900,9 +901,9 @@ const getTabListFunc = () => {
         params.updated_at = created_str.substring(1)
     }
     loading_tab.value = true
-    console.log(params)
+    // console.log(params)
     APIgetResidentialListHouse(params).then(res => {
-        console.log(res)
+        // console.log(res)
         // if (res.status === 200) {
         loading_tab.value = false
         data_tab.arr = res
@@ -948,7 +949,7 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetResidentialDetailsHouse(val.id).then(res => {
-        console.log(res)
+        // console.log(res)
         from_examine.item = res
         switch_examine.value = true
     })

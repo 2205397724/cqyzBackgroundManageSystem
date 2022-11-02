@@ -335,6 +335,7 @@ const tree_item = reactive({
 })
 const selectedZone_id = ref('')
 const getChinaName = () => {
+    tree_item.arr = []
     let params = {}
     if (localStorage.getItem('utype') == 'pt') {
         params = {
