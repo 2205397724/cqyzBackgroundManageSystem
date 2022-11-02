@@ -735,13 +735,14 @@ const getChinaRegionunc = () => {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))) {
         params = {
-            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         }
     } else {
         params = {}
     }
+    console.log("params",params)
     APIgetChinaRegion(params).then(res => {
         // console.log("res",res)
         for (let i in res) {

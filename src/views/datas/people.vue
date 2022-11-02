@@ -626,8 +626,8 @@ const getPersonnelManageList = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
-        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')) && localStorage.getItem('utype') != 'pt') {
+        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
     }
 
     if (flag.value == true && flag_1.value == false) {

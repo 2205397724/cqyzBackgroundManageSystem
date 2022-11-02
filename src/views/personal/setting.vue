@@ -239,7 +239,7 @@ APIgetLoginUserGroup().then(res => {
     } else {
         flag_1.value = true
     }
-    console.log(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))
+    console.log(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))
     // defaultUserGroup.value = sessionStorage.getItem('groupChinaCode')
     // for (let i in res) {
     //     if (res[i].region_cc == sessionStorage.getItem('groupChinaCode')) {
@@ -247,7 +247,7 @@ APIgetLoginUserGroup().then(res => {
     //     }
     // }
     res.forEach((item, index) => {
-        if (item.region_cc == JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc) {
+        if (item.region_cc == JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code) {
             res[index].flag = true
         } else {
             res[index].flag = false
@@ -266,7 +266,7 @@ const ChangeUserGroupFunc = (val, i) => {
                 item.flag = false
             }
         })
-        localStorage.setItem(localStorage.getItem('uid') + '_groupChinaCode', JSON.stringify(val))
+        localStorage.setItem(localStorage.getItem('uid') + '_user_city', JSON.stringify(val))
         // APIgetLoginUserGroup()
         // userGroup.arr[i]
     }

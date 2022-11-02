@@ -212,7 +212,7 @@
                                 <BerZone
                                     v-model:zid="from_examine.item.zone" v-model:bid="from_examine.item.building"
                                     v-model:uid="from_examine.item.unit" v-model:name="chinaName"
-                                    :disabled="[0, 1, 2, 3, 4]" :code="''"
+                                    :disabled="[0, 1, 2, 3, 4]" :code="china_code"
                                 />
                             </el-form-item>
                         </el-col>
@@ -891,8 +891,8 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
-        params.cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')) && localStorage.getItem('utype') != 'pt') {
+        params.cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
     }
     console.log(params)
     for (let key in data_search.obj) {
@@ -1103,6 +1103,8 @@ const deleteFunc = val => {
     })
 }
 const chinaName = ref('')
+// 用户选择的区域代码，传递给组件BarZone
+const china_code = ref('')
 // 添加模板
 const addResidentialFunc = () => {
     chinaName.value = '请选择区域'
@@ -1111,6 +1113,7 @@ const addResidentialFunc = () => {
     from_examine.item = {
         extra: []
     }
+    china_code.value = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
     console.log(typeof (from_examine.item.extra))
     switch_examine.value = true
 }

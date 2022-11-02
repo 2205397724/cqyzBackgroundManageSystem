@@ -390,9 +390,9 @@ const getChinaName = () => {
         params = {
             p_code: localStorage.getItem('china_code')
         }
-    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode'))) {
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))) {
         params = {
-            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         }
     } else {
         params = {}
@@ -589,8 +589,8 @@ const getTabListFunc = () => {
     if (index.value == 0) {
         delete params.status
     }
-    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')) && localStorage.getItem('utype') != 'pt') {
-        params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_groupChinaCode')).region_cc
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')) && localStorage.getItem('utype') != 'pt') {
+        params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
     }
     console.log(window.location.hash)
     for (let key in data_search.obj) {
