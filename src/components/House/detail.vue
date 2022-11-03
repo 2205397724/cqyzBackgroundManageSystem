@@ -424,7 +424,7 @@ const showPropertyFunc = () => {
                     }
                 }
             })
-            console.log("res", res)
+            // console.log("res", res)
             property_form.obj = res
             copy_property.obj = JSON.parse(JSON.stringify(res))
 
@@ -600,7 +600,7 @@ const number_ids = reactive({
     arr: []
 })
 const handleSelectionChange = val => {
-    console.log("val", val)
+    // console.log("val", val)
     let number_id = []
     val.forEach(function (value, index, array) {
         number_id.push(value.id)
@@ -661,9 +661,8 @@ const deleteServiceFunc = index => {
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+getOpts(['gender', 'type_id_card','house_type_model', 'house_type_property', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
     opts_all.obj = res
-    console.log("opts_all.obj",opts_all.obj.type_id_card)
 })
 </script>
 

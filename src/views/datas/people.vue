@@ -626,14 +626,21 @@ const getPersonnelManageList = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')) && localStorage.getItem('utype') != 'pt') {
-        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')) && localStorage.getItem('utype') != 'pt') {
+        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     }
-
     if (flag.value == true && flag_1.value == false) {
-        search_str.obj.person_tag_and = person_tag_or.value.join(',')
+        // 有效和无效的标签
+        // search_str.obj.person_tag_or = ''
+        // search_str.obj.person_tag_and = person_tag_or.value.join(',')
+        // 有效的标签
+        search_str.obj.person_active_tag_or = ''
+        search_str.obj.person_active_tag_and = person_tag_or.value.join(',')
     } else {
-        search_str.obj.person_tag_or = person_tag_or.value.join(',')
+        // search_str.obj.person_tag_and = ''
+        // search_str.obj.person_tag_or = person_tag_or.value.join(',')
+        search_str.obj.person_active_tag_and = ''
+        search_str.obj.person_active_tag_or = person_tag_or.value.join(',')
     }
     console.log(person_tag_or.value.join(','))
     for (let key in search_str.obj) {
@@ -645,6 +652,7 @@ const getPersonnelManageList = () => {
         }
     }
     loading_tab.value = true
+    console.log("params",params)
     APIgetPersonnelManageList(params).then(res => {
         console.log(res)
         data.list = res

@@ -929,12 +929,15 @@ const dialogExamineCloseFunc_2 = () => {
     passToAuditFunc()
     switch_apply.value = false
 }
+// 监听文件变化的执行方法
 const fileChange = (val, i) => {
     console.log("val",val)
-    from_examine.item.affix[i].file = val.target.files[0].name
+    // from_examine.item.affix[i].file = val.target.files[0].name
+    from_examine.item.affix[i].file = val.target.files[0]
 }
 const chooseFile = i => {
     const file = document.getElementById('fileRef' + i)
+    // 打开文件选择器
     file.click()
 }
 // 选择公示区域
