@@ -157,7 +157,7 @@
                                             <el-option v-for="(item) in opts_all.obj.type_id_card" :key="item.key"
                                                 :label="item.val" :value="item.key" />
                                         </el-select>
-                                        <span v-else>{{ item.type_id_card }}</span>
+                                        <span v-else>{{ getOptVal(opts_all.obj.type_id_card,item.type_id_card) }}</span>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
@@ -663,6 +663,7 @@ const opts_all = reactive({
 })
 getOpts(['status_all', 'gender', 'type_id_card', 'houseable_type', 'house_has_house', 'house_has_property', 'house_type_model', 'house_type_property', 'house_type_building', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
     opts_all.obj = res
+    console.log("opts_all.obj",opts_all.obj.type_id_card)
 })
 </script>
 

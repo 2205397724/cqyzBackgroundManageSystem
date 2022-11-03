@@ -697,6 +697,9 @@ const opts = {
     type_id_card: [{
         key: 100,
         val: '证件类型一'
+    },{
+        key: 0,
+        val: '身份证'
     }],
     // china添加时候的区域等级
     china_level: [{

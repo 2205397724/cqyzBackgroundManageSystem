@@ -599,7 +599,7 @@
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
                         <el-checkbox
                             v-if="item.utype == 'gov'"
-                            :label="item.name"
+                            :label="item.desc"
                             :true-label="item.id"
                             :checked="
                                 data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
@@ -614,7 +614,7 @@
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
                         <el-checkbox
                             v-if="item.utype == 'pm'"
-                            :label="item.name"
+                            :label="item.desc"
                             :true-label="item.id"
                             :checked="
                                 data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
@@ -629,7 +629,7 @@
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
                         <el-checkbox
                             v-if="item.utype == 'mbr'"
-                            :label="item.name"
+                            :label="item.desc"
                             :true-label="item.id"
                             :checked="
                                 data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
@@ -656,50 +656,54 @@
         >
             <el-tabs>
                 <el-tab-pane label="管理端权限">
-                    <!-- <el-checkbox-group v-model="data_tab_group_perms_selected_gov.arr"> -->
-                    <div v-for="item in all_perms_list.arr" :key="item.id">
-                        <el-checkbox
-                            v-if="item.utype == 'gov'"
-                            :label="item.name"
-                            :true-label="item.id"
-                            :checked="
-                                data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
-                                    ? false
-                                    : true
-                            "
-                            @change="(val) => group_perms_selectFun_gov(val, item.id)"
-                        />
+                    <div style="display: flex;flex-wrap: wrap;">
+                        <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
+                            <el-checkbox
+                                v-if="item.utype == 'gov'"
+                                :label="item.desc"
+                                :true-label="item.id"
+                                :checked="
+                                    data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
+                                        ? false
+                                        : true
+                                "
+                                @change="(val) => group_perms_selectFun_gov(val, item.id)"
+                            />
+                        </div>
                     </div>
-                <!-- </el-checkbox-group> -->
                 </el-tab-pane>
                 <el-tab-pane label="物业端权限">
-                    <div v-for="item in all_perms_list.arr" :key="item.id">
-                        <el-checkbox
-                            v-if="item.utype == 'pm'"
-                            :label="item.name"
-                            :true-label="item.id"
-                            :checked="
-                                data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
-                                    ? false
-                                    : true
-                            "
-                            @change="(val) => group_perms_selectFun_pm(val, item.id)"
-                        />
+                    <div style="display: flex;flex-wrap: wrap;">
+                        <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
+                            <el-checkbox
+                                v-if="item.utype == 'pm'"
+                                :label="item.desc"
+                                :true-label="item.id"
+                                :checked="
+                                    data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
+                                        ? false
+                                        : true
+                                "
+                                @change="(val) => group_perms_selectFun_pm(val, item.id)"
+                            />
+                        </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="业主端权限">
-                    <div v-for="item in all_perms_list.arr" :key="item.id">
-                        <el-checkbox
-                            v-if="item.utype == 'mbr'"
-                            :label="item.name"
-                            :true-label="item.id"
-                            :checked="
-                                data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
-                                    ? false
-                                    : true
-                            "
-                            @change="(val) => group_perms_selectFun_mbr(val, item.id)"
-                        />
+                    <div style="display: flex;flex-wrap: wrap;">
+                        <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
+                            <el-checkbox
+                                v-if="item.utype == 'mbr'"
+                                :label="item.desc"
+                                :true-label="item.id"
+                                :checked="
+                                    data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
+                                        ? false
+                                        : true
+                                "
+                                @change="(val) => group_perms_selectFun_mbr(val, item.id)"
+                            />
+                        </div>
                     </div>
                 </el-tab-pane>
             </el-tabs>
@@ -916,9 +920,9 @@ const data_searchFun = () => {
         }
     }
     data_search.switch = true
-    console.log(params)
+    // console.log(params)
     APIgetGroupList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         data_tab.arr = res
         data_search.total =  res.length
     })
@@ -983,7 +987,7 @@ const post_all_group_perms = () => {
 }
 // 添加用户组成员弹框选择成员
 const group_user_check_userid = val => {
-    console.log(val)
+    // console.log(val)
     from_opt_val.obj.user_id = val.id
 }
 // 添加用户组全部权限取消弹窗
@@ -1031,7 +1035,7 @@ const group_perms_selectFun_pm = (val, id) => {
     if (val != false && data_tab_group_perms_selected_gov.arr.indexOf(id) == -1) {
         data_tab_group_perms_selected_pm.arr.push(id)
     }
-    console.log(data_tab_group_perms_selected_pm.arr)
+    // console.log(data_tab_group_perms_selected_pm.arr)
 }
 const group_perms_selectFun_mbr = (val, id) => {
     if (
@@ -1044,7 +1048,7 @@ const group_perms_selectFun_mbr = (val, id) => {
     if (val != false && data_tab_group_perms_selected_mbr.arr.indexOf(id) == -1) {
         data_tab_group_perms_selected_mbr.arr.push(id)
     }
-    console.log(data_tab_group_perms_selected_mbr.arr)
+    // console.log(data_tab_group_perms_selected_mbr.arr)
 }
 const type_change = val => {
     for (let i = 0; i < opts_all.obj.toushu_return_type.length; i++) {
@@ -1095,7 +1099,7 @@ const checkFunc = val => {
         from_examine.item.region_val = val.id
         from_examine.item.region_cc = val.china_code
     }
-    console.log(val)
+    // console.log(val)
 }
 const checkChangeFunc = val => {
     switch_choose_zone.value = false
@@ -1157,7 +1161,7 @@ const addGroup_permsFun = () => {
         ElMessage.error('请填入数据')
         return
     }
-    console.log(from_addGroup_perms.item.perm_ids[0])
+    // console.log(from_addGroup_perms.item.perm_ids[0])
     APIpostGroupPerms(current_group_perms.item.id, {
         perm_ids: [from_addGroup_perms.item.perm_ids[0]]
     }).then(res => {
@@ -1173,7 +1177,7 @@ const getGroupUser_perms = val => {
     data_tab_group_perms_selected_gov.arr = []
     data_tab_group_perms_selected_pm.arr = []
     data_tab_group_perms_selected_mbr.arr = []
-    console.log(val)
+    // console.log(val)
     current_user_perms.item.group_id = val.group_id
     current_user_perms.item.user_id = val.user_id
     switch_group_user_perms.value = true
@@ -1186,23 +1190,30 @@ const getGroupUser_perms = val => {
         for (let i = 0; i < res.length; i++) {
             if (res[i].utype == 'gov') {
                 data_tab_group_perms_selected_gov.arr.push(res[i].id)
-                console.log(data_tab_group_perms_selected_gov.arr)
+                // console.log(data_tab_group_perms_selected_gov.arr)
             }
             if (res[i].utype == 'pm') {
                 data_tab_group_perms_selected_pm.arr.push(res[i].id)
-                console.log(data_tab_group_perms_selected_pm.arr)
+                // console.log(data_tab_group_perms_selected_pm.arr)
             }
             if (res[i].utype == 'mbr') {
                 data_tab_group_perms_selected_mbr.arr.push(res[i].id)
-                console.log(data_tab_group_perms_selected_mbr.arr)
+                // console.log(data_tab_group_perms_selected_mbr.arr)
             }
         }
     })
 }
 // 获取组权限弹窗
 const getGroup_perms = val => {
+    // console.log("val",val)
     current_group_perms.item = val
-    APIgetPermsList().then(res => {
+    let params = {
+        utype:'gov',
+        page:1,
+        per_page:500
+    }
+    APIgetPermsList(params).then(res => {
+        // console.log("res",res)
         all_perms_list.arr = res
     })
     APIgetGroupPerms(val.id).then(res => {
@@ -1213,15 +1224,15 @@ const getGroup_perms = val => {
         for (let i = 0; i < res.length; i++) {
             if (res[i].utype == 'gov') {
                 data_tab_group_perms_selected_gov.arr.push(res[i].id)
-                console.log(data_tab_group_perms_selected_gov.arr)
+                // console.log(data_tab_group_perms_selected_gov.arr)
             }
             if (res[i].utype == 'pm') {
                 data_tab_group_perms_selected_pm.arr.push(res[i].id)
-                console.log(data_tab_group_perms_selected_pm.arr)
+                // console.log(data_tab_group_perms_selected_pm.arr)
             }
             if (res[i].utype == 'mbr') {
                 data_tab_group_perms_selected_mbr.arr.push(res[i].id)
-                console.log(data_tab_group_perms_selected_mbr.arr)
+                // console.log(data_tab_group_perms_selected_mbr.arr)
             }
         }
         switch_group_perms.value = true
@@ -1258,7 +1269,7 @@ const getGroupUser_permsFun = val => {
     current_user_perms.item = val
     switch_group_user_perms.value = true
     APIgetGroupUser_perms(val.group_id, val.user_id).then(res => {
-        console.log(res)
+        // console.log(res)
         data_tab_user_perms.arr = res
     })
 }
@@ -1282,7 +1293,7 @@ const groupUserRolesFun = val => {
         data_tab_roles.arr = res
     })
     APIgetGroupUser_Roles(val.group_id, val.user_id).then(res => {
-        console.log(res)
+        // console.log(res)
         data_tab_user_roles.arr = res
     })
 }
@@ -1358,10 +1369,10 @@ const getTabListFunc = () => {
             params[i] = data_search.item[i]
         }
     }
-    console.log(params)
+    // console.log(params)
     loading_tab.value = true
     APIgetGroupList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         let btnNext = document.querySelector('.btn-next')
@@ -1380,7 +1391,7 @@ const getTabListFunc = () => {
 }
 // 删除
 const deleteFunc = val => {
-    console.log(val)
+    // console.log(val)
     APIdeleteGroup(val.id).then(res => {
         refreshFunc()
         ElMessage.success('删除成功')
@@ -1399,7 +1410,7 @@ const getGroupRolesFun = val => {
 // 删除用户组角色
 const deleteGroup_roles = val => {
     let params = { data: { role_ids: [val.id] } }
-    console.log(params)
+    // console.log(params)
     APIdeleteGroupRoles(val.group_id, params).then(res => {
         ElMessage.success('删除成功')
         switch_roles.value = false
@@ -1497,7 +1508,7 @@ const hide_uid = ref(false)
 // 提交
 const dialogOptValFunc = () => {
     if (str_opt_val_title.value == '修改') {
-        console.log(item_opt)
+        // console.log(item_opt)
         APIputGroupUser(
             from_opt_val.obj.group_id,
             from_opt_val.obj.user_id,
@@ -1551,7 +1562,7 @@ const optValModifyFunc = val => {
 }
 // 删除
 const optValDeleteFunc = val => {
-    console.log(val)
+    // console.log(val)
     APIdeleteGroupUser(val.group_id, val.user_id).then(res => {
         optValRefreshFunc()
         ElMessage.success('删除成功')
@@ -1564,7 +1575,7 @@ const optValRefreshFunc = () => {
 }
 // 获取列表
 const getOptValListFunc = () => {
-    console.log(item_opt.obj)
+    // console.log(item_opt.obj)
     opt_loading.value = true
     APIgetGroupUserList(item_opt.obj.id)
         .then(res => {
@@ -1595,7 +1606,7 @@ getOpts([
     'gender'
 ]).then(res => {
     opts_all.obj = res
-    console.log(res)
+    // console.log(res)
 })
 </script>
 <style lang="scss">
