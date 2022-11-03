@@ -81,7 +81,7 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'zone':
-            APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
+            APIgetResidentialListHouse({ page: 1, per_page: 100, china_code: node.data.id }).then(res => {
                 // treeDetail.arr = res.data
                 console.log(res)
                 let tree_arr = []

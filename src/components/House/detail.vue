@@ -397,7 +397,16 @@ const property_obj = reactive({
     obj: {}
 })
 const property_form = reactive({
-    obj: {}
+    obj: {
+        affix: {
+            bdcz: []
+        },
+        owners: [{
+            affix: {
+                sfz: []
+            }
+        }]
+    }
 })
 const copy_property = reactive({
     obj: {}

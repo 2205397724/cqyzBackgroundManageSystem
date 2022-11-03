@@ -601,11 +601,7 @@
                             v-if="item.utype == 'gov'"
                             :label="item.desc"
                             :true-label="item.id"
-                            :checked="
-                                data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
-                                    ? false
-                                    : true
-                            "
+                            :checked="data_tab_group_perms_selected_gov.arr.indexOf(item.id) === -1 ? false : true"
                             @change="(val) => group_perms_selectFun_gov(val, item.id)"
                         />
                     </div>
@@ -1174,19 +1170,18 @@ const all_perms_list_userIngroup = reactive({
 })
 // 获取组成员权限弹窗
 const getGroupUser_perms = val => {
-    data_tab_group_perms_selected_gov.arr = []
-    data_tab_group_perms_selected_pm.arr = []
-    data_tab_group_perms_selected_mbr.arr = []
     // console.log(val)
     current_user_perms.item.group_id = val.group_id
     current_user_perms.item.user_id = val.user_id
-    switch_group_user_perms.value = true
     APIgetGroupPerms(val.group_id).then(res => {
         all_perms_list_userIngroup.arr = res
     })
     APIgetGroupUser_perms(val.group_id, val.user_id).then(res => {
         tab_group_all_perms.arr = res
-
+        // console.log("tab_group_all_perms.arr",tab_group_all_perms.arr)
+        data_tab_group_perms_selected_gov.arr = []
+        data_tab_group_perms_selected_pm.arr = []
+        data_tab_group_perms_selected_mbr.arr = []
         for (let i = 0; i < res.length; i++) {
             if (res[i].utype == 'gov') {
                 data_tab_group_perms_selected_gov.arr.push(res[i].id)
@@ -1201,6 +1196,7 @@ const getGroupUser_perms = val => {
                 // console.log(data_tab_group_perms_selected_mbr.arr)
             }
         }
+        switch_group_user_perms.value = true
     })
 }
 // 获取组权限弹窗
