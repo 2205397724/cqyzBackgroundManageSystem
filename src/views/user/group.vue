@@ -599,7 +599,7 @@
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
                         <el-checkbox
                             v-if="item.utype == 'gov'"
-                            :label="item.desc"
+                            :label="item.desc+' '+item.name"
                             :true-label="item.id"
                             :checked="data_tab_group_perms_selected_gov.arr.indexOf(item.id) === -1 ? false : true"
                             @change="(val) => group_perms_selectFun_gov(val, item.id)"
@@ -610,7 +610,7 @@
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
                         <el-checkbox
                             v-if="item.utype == 'pm'"
-                            :label="item.desc"
+                            :label="item.desc+' '+item.name"
                             :true-label="item.id"
                             :checked="
                                 data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
@@ -625,7 +625,7 @@
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
                         <el-checkbox
                             v-if="item.utype == 'mbr'"
-                            :label="item.desc"
+                            :label="item.desc+' '+item.name"
                             :true-label="item.id"
                             :checked="
                                 data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
@@ -656,7 +656,7 @@
                         <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
                             <el-checkbox
                                 v-if="item.utype == 'gov'"
-                                :label="item.desc"
+                                :label="item.desc+' '+item.name"
                                 :true-label="item.id"
                                 :checked="
                                     data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
@@ -673,7 +673,7 @@
                         <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
                             <el-checkbox
                                 v-if="item.utype == 'pm'"
-                                :label="item.desc"
+                                :label="item.desc+' '+item.name"
                                 :true-label="item.id"
                                 :checked="
                                     data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
@@ -690,7 +690,7 @@
                         <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
                             <el-checkbox
                                 v-if="item.utype == 'mbr'"
-                                :label="item.desc"
+                                :label="item.desc+' '+item.name"
                                 :true-label="item.id"
                                 :checked="
                                     data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
@@ -1021,7 +1021,7 @@ const group_perms_selectFun_gov = (val, id) => {
     if (val != false && data_tab_group_perms_selected_gov.arr.indexOf(id) == -1) {
         data_tab_group_perms_selected_gov.arr.push(id)
     }
-    console.log(data_tab_group_perms_selected_gov.arr)
+    // console.log(data_tab_group_perms_selected_gov.arr)
 }
 const group_perms_selectFun_pm = (val, id) => {
     if (data_tab_group_perms_selected_pm.arr.indexOf(id) !== -1 && val == false) {

@@ -412,7 +412,7 @@ const click_add_group_zone_id = () => {
 }
 const switch_choose_zone = ref(false)
 const checkFunc = val => {
-    console.log(val)
+    // console.log(val)
     selectedZone_id.value = val.name
     if (val.type == 'region') {
         from_examine.item.author_type = 1
@@ -426,7 +426,7 @@ const checkFunc = val => {
         from_examine.item.author_cc = val.china_code
         data_search.obj.author_cc = val.china_code
     }
-    console.log(val)
+    // console.log(val)
 }
 const checkChangeFunc = val => {
     // console.log(val)
@@ -483,7 +483,7 @@ watch(page, () => {
 })
 import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
+    // console.log(to)
     if (to.meta.title == '详情') {
         return true
     } else {
@@ -493,7 +493,7 @@ onBeforeRouteLeave((to, from) => {
 const surveyId = ref('')
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
-    console.log(from_examine.item)
+    // console.log(from_examine.item)
     from_error.msg = {}
     // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
     from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
@@ -503,9 +503,9 @@ const dialogExamineCloseFunc = () => {
     // formEl.validate(valid => {
     //     if (valid) {
     from_examine.item.type = 1
-    console.log(from_examine.item)
+    // console.log(from_examine.item)
     if (str_title.value == '修改') {
-        console.log(from_examine.item)
+        // console.log(from_examine.item)
         APImodifySurvey(from_examine.item.id, from_examine.item).then(res => {
             refreshFunc()
             // ElMessage.success(res.statusText)
@@ -518,7 +518,7 @@ const dialogExamineCloseFunc = () => {
         })
     } else {
         APIaddSurvey(from_examine.item).then(res => {
-            console.log(res)
+            // console.log(res)
             surveyId.value = res.id
             refreshFunc()
             // ElMessage.success(res.msg)
@@ -541,7 +541,7 @@ const next = () => {
         dialogExamineCloseFunc()
         active.value = 1
     } else if (active.value == 1) {
-        console.log(str_title.value)
+        // console.log(str_title.value)
         if (str_title.value == '添加') {
             passToAuditFunc()
         }
@@ -567,7 +567,7 @@ const passToAuditFunc = () => {
     // }
     from_pass.obj.tgt_type = 'survey'
     from_pass.obj.tgt_id = surveyId
-    console.log(from_pass.obj)
+    // console.log(from_pass.obj)
     APIpostArchiveAudit(from_pass.obj).then(res => {
         // ElMessage.success('审核成功')
         refreshFunc()
@@ -592,7 +592,7 @@ const getTabListFunc = () => {
     if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')) && localStorage.getItem('utype') != 'pt') {
         params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
     }
-    console.log(window.location.hash)
+    // console.log(window.location.hash)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
@@ -616,7 +616,7 @@ const getTabListFunc = () => {
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
-        console.log(data_tab.arr)
+        // console.log(data_tab.arr)
     }).catch(err => {
         from_error.msg = err.data
     })
@@ -645,7 +645,7 @@ const modifySurvey = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetSurveyDetails(val.id).then(res => {
-        console.log(res)
+        // console.log(res)
         from_examine.item = res
         selectedZone_id.value = res.author_cc_name
         switch_examine.value = true
