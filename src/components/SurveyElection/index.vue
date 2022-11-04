@@ -173,7 +173,7 @@ import {
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
 onMounted(() => {
-    console.log(props.id)
+    // console.log(props.id)
     topicsFunc()
 })
 // 问卷题目
@@ -205,7 +205,9 @@ const modifyServeyTopic = val => {
     str_title.value = '修改'
     // 获取问卷题目详情
     APIgetSurveyTopicDetail(val.id).then(res => {
+        console.log("Res",res)
         topic_examine.item = res
+        topic_examine.item.extra = res.extra.content
         // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
         topic_examine.item.type += ''
         topic_examine.item.score_calc += ''
@@ -215,7 +217,7 @@ const modifyServeyTopic = val => {
         res.opts.forEach(element => {
             opts.push(element)
         })
-        console.log(opts)
+        // console.log(opts)
         switch_examine.value = true
     })
 }
@@ -230,6 +232,10 @@ const deleteFunc = val => {
 // 确定提交添加修改问卷题目
 const dialogExamineCloseFunc = id => {
     topic_examine.item.opts = opts
+    let json = {
+        "content":topic_examine.item.extra
+    }
+    topic_examine.item.extra = json
     // console.log(topic_examine.item)
     if (str_title.value == '添加') {
         // console.log('qqqqqq',topic_examine.item)
@@ -261,7 +267,7 @@ const topicsFunc = () => {
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
         topic_details.item = [[], [], [], []]
-        console.log(res)
+        // console.log(res)
         // 对题目进行排序
         res.forEach(element => {
             if (element.type === 0) {
@@ -276,7 +282,7 @@ const topicsFunc = () => {
         })
         topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
     })
-    console.log('topic_details', topic_details)
+    // console.log('topic_details', topic_details)
 }
 // 增加选项
 const addopts = () => {
