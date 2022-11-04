@@ -5,8 +5,8 @@
                 <svg-icon name="pro" />
                 <span class="title">智慧物业</span>
             </span> -->
-            <span class="item" @click="$eventBus.emit('global-choose-city')">
-                <el-icon><Switch /></el-icon>
+            <span class="item cityitem" @click="$eventBus.emit('global-choose-city')">
+                <el-icon><Switch /></el-icon>{{city.name}}
             </span>
             <span v-if="settingsStore.topbar.enableNavSearch" class="item" @click="$eventBus.emit('global-search-toggle')">
                 <svg-icon name="search" />
@@ -46,13 +46,16 @@ const router = useRouter()
 import { Switch } from '@element-plus/icons-vue'
 import { useSettingsStore } from '@/store/modules/settings'
 const settingsStore = useSettingsStore()
+const { proxy } = getCurrentInstance()
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 
 import { useFullscreen } from '@vueuse/core'
 const { isFullscreen, toggle } = useFullscreen()
 const abc = ref(window.screen.height + 'px')
-const user_info = reactive(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')))
+const uid = localStorage.getItem('uid')
+const city = reactive(JSON.parse(localStorage.getItem(uid + '_user_city')))
+const user_info = reactive(JSON.parse(localStorage.getItem(uid + '_user_info')))
 
 function userCommand(command) {
     switch (command) {
@@ -78,7 +81,12 @@ function userCommand(command) {
 function pro() {
     window.open('', 'top')
 }
-
+onMounted(() => {
+    proxy.$eventBus.on('choose-city', () => {
+        let store_city = JSON.parse(localStorage.getItem(uid + '_user_city'))
+        city.name = store_city.name
+    })
+})
 </script>
 
 <style lang="scss" scoped>
@@ -89,15 +97,18 @@ function pro() {
     white-space: nowrap;
     .buttons {
         margin-right: 20px;
+        .cityitem {
+            color: #409eff;
+            font-size: 14px;
+        }
         .item {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            height: 24px;
-            width: 34px;
             cursor: pointer;
             vertical-align: middle;
             transition: all 0.3s;
+            padding: 0 8px;
         }
         .item-pro {
             display: inline-block;

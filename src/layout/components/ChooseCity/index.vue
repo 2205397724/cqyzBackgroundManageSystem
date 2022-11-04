@@ -68,6 +68,7 @@ const click_city = val => {
     let uid = localStorage.getItem('uid')
     localStorage.setItem(uid + '_user_city', JSON.stringify({ china_code: val.china_code, name: val.name }))
     ElMessage.success('选择成功')
+    proxy.$eventBus.emit('choose-city')
     reload()//重新加载页面
 }
 </script>
