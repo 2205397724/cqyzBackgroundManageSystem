@@ -12,10 +12,13 @@
 </template>
 <script setup>
 import { APIgetCityNotPm } from '@/api/custom/custom.js'
-const router = useRouter()
-const { proxy } = getCurrentInstance()
 import { useSettingsStore } from '@/store/modules/settings'
 import { ElMessage } from 'element-plus'
+import { onUnmounted } from 'vue'
+import { useUserStore } from '@/store/modules/user'
+const router = useRouter()
+const { proxy } = getCurrentInstance()
+const userStore = useUserStore()
 //已选择
 const choose = reactive({
     city : {}
@@ -57,6 +60,9 @@ const click_city = val => {
 }
 onMounted(() => {
     getCityList()
+})
+onUnmounted(() => {
+    userStore.getGroups()//拉取用户默认用户组
 })
 </script>
 

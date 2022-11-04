@@ -890,8 +890,8 @@ export function APIgetGroupPerms(gid) {
 export function APIpostGroupPerms(gid, data) {
     return api.post(`/groups/${gid}/perms`, data)
 }
-export function APIdeleteGroupPerms(gid) {
-    return api.delete(`/groups/${gid}/perms`)
+export function APIdeleteGroupPerms(gid,data) {
+    return api.delete(`/groups/${gid}/perms`,{data})
 }
 // // 获取角色拥有所有权限
 // export function getRoles_perms(role) {

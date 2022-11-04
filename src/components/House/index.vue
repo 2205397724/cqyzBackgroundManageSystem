@@ -572,6 +572,7 @@ import {
     APIgetHouseListSort,
     APIgetUnitsDetailsHouse,
     APIgetBuildDetailsHouse,
+    APIdeleteHouseHouse
 } from '@/api/custom/custom.js'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
 // 获取楼栋单元

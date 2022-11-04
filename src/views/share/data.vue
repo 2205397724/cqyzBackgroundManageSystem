@@ -243,6 +243,12 @@ const getShareDataList = () => {
     if (index.value == 0) {
         delete params.status_many
     }
+    // 判断是否为水电气公司，如果是传入对应用户组id
+    let user_group = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))
+    // console.log(user_group)
+    if(user_group.type === 8) {
+        params.gid = user_group.id
+    }
     loading_tab.value = true
     APIgetShareDataList(params).then(res => {
         // console.log(res)
@@ -308,7 +314,7 @@ const dialogExamineCloseFunc = () => {
         let type = []
         let file_key = []
         if (file_list.value.length > 0) {
-            console.log("file_list.value",file_list.value)
+            // console.log("file_list.value",file_list.value)
             for (let i in file_list.value) {
                 if (!file_list.value[i].raw) {
                     file_key.push(file_list.value[i].name)

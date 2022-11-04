@@ -597,50 +597,97 @@
             <el-tabs>
                 <el-tab-pane label="管理端权限">
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
-                        <el-checkbox
+                        <!-- <el-checkbox
                             v-if="item.utype == 'gov'"
                             :label="item.desc+' '+item.name"
                             :true-label="item.id"
                             :checked="data_tab_group_perms_selected_gov.arr.indexOf(item.id) === -1 ? false : true"
                             @change="(val) => group_perms_selectFun_gov(val, item.id)"
-                        />
+                        /> -->
+                        <div v-if="data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1 ? false : true">
+                            <el-checkbox
+                                v-if="item.utype == 'gov'"
+                                :label="item.desc+' '+item.name"
+                                :true-label="item.id"
+                                :checked="true"
+                                @change="(val) => group_perms_selectFun_gov(val, item.id)"
+                            />
+                            <el-button size="small" type="danger" @click="deleteGroupUser_perms(item)">删除</el-button>
+                        </div>
+                        <div v-else>
+                            <el-checkbox
+                                v-if="item.utype == 'gov'"
+                                :label="item.desc+' '+item.name"
+                                :true-label="item.id"
+                                :checked="false"
+                                @change="(val) => group_perms_selectFun_gov(val, item.id)"
+                            />
+                        </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="物业端权限">
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
-                        <el-checkbox
+                        <!-- <el-checkbox
                             v-if="item.utype == 'pm'"
                             :label="item.desc+' '+item.name"
                             :true-label="item.id"
-                            :checked="
-                                data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
-                                    ? false
-                                    : true
-                            "
+                            :checked="data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1 ? false : true"
                             @change="(val) => group_perms_selectFun_pm(val, item.id)"
-                        />
+                        /> -->
+                        <div v-if="data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1 ? false : true">
+                            <el-checkbox
+                                v-if="item.utype == 'pm'"
+                                :label="item.desc+' '+item.name"
+                                :true-label="item.id"
+                                :checked="true"
+                                @change="(val) => group_perms_selectFun_pm(val, item.id)"
+                            />
+                            <el-button size="small" type="danger" @click="deleteGroupUser_perms(item)">删除</el-button>
+                        </div>
+                        <div v-else>
+                            <el-checkbox
+                                v-if="item.utype == 'pm'"
+                                :label="item.desc+' '+item.name"
+                                :true-label="item.id"
+                                :checked="false"
+                                @change="(val) => group_perms_selectFun_pm(val, item.id)"
+                            />
+                        </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="业主端权限">
                     <div v-for="item in all_perms_list_userIngroup.arr" :key="item.id">
-                        <el-checkbox
+                        <!-- <el-checkbox
                             v-if="item.utype == 'mbr'"
                             :label="item.desc+' '+item.name"
                             :true-label="item.id"
-                            :checked="
-                                data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
-                                    ? false
-                                    : true
-                            "
+                            :checked="data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1 ? false : true"
                             @change="(val) => group_perms_selectFun_mbr(val, item.id)"
-                        />
+                        /> -->
+                        <div v-if="data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1 ? false : true">
+                            <el-checkbox
+                                v-if="item.utype == 'mbr'"
+                                :label="item.desc+' '+item.name"
+                                :true-label="item.id"
+                                :checked="true"
+                                @change="(val) => group_perms_selectFun_mbr(val, item.id)"
+                            />
+                            <el-button size="small" type="danger" @click="deleteGroupUser_perms(item)">删除</el-button>
+                        </div>
+                        <div v-else>
+                            <el-checkbox
+                                v-if="item.utype == 'mbr'"
+                                :label="item.desc+' '+item.name"
+                                :true-label="item.id"
+                                :checked="false"
+                                @change="(val) => group_perms_selectFun_mbr(val, item.id)"
+                            />
+                        </div>
                     </div>
                 </el-tab-pane>
             </el-tabs>
             <template #footer>
-                <el-button type="primary" @click="post_all_group_user_perms">
-                    确认
-                </el-button>
+                <el-button type="primary" @click="post_all_group_user_perms">确认</el-button>
             </template>
         </el-dialog>
         <!-- 组权限 -->
@@ -654,51 +701,97 @@
                 <el-tab-pane label="管理端权限">
                     <div style="display: flex;flex-wrap: wrap;">
                         <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
-                            <el-checkbox
+                            <div v-if="data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1 ? false : true">
+                                <el-checkbox
+                                    v-if="item.utype == 'gov'"
+                                    :label="item.desc+' '+item.name"
+                                    :true-label="item.id"
+                                    :checked="true"
+                                    @change="(val) => group_perms_selectFun_gov(val, item.id)"
+                                />
+                                <el-button size="small" type="danger" @click="deleteGroup_perms(item)">删除</el-button>
+                            </div>
+                            <div v-else>
+                                <el-checkbox
+                                    v-if="item.utype == 'gov'"
+                                    :label="item.desc+' '+item.name"
+                                    :true-label="item.id"
+                                    :checked="false"
+                                    @change="(val) => group_perms_selectFun_gov(val, item.id)"
+                                />
+                            </div>
+                            <!-- 有bug，：checked控制的选中状态第一次渲染成功后，后续不会重现渲染 -->
+                            <!-- <el-checkbox
                                 v-if="item.utype == 'gov'"
                                 :label="item.desc+' '+item.name"
                                 :true-label="item.id"
-                                :checked="
-                                    data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1
-                                        ? false
-                                        : true
-                                "
+                                :checked="data_tab_group_perms_selected_gov.arr.indexOf(item.id) == -1 ? false : true"
                                 @change="(val) => group_perms_selectFun_gov(val, item.id)"
-                            />
+                            /> -->
                         </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="物业端权限">
                     <div style="display: flex;flex-wrap: wrap;">
                         <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
-                            <el-checkbox
+                            <div v-if="data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1 ? false : true">
+                                <el-checkbox
+                                    v-if="item.utype == 'pm'"
+                                    :label="item.desc+' '+item.name"
+                                    :true-label="item.id"
+                                    :checked="true"
+                                    @change="(val) => group_perms_selectFun_pm(val, item.id)"
+                                />
+                                <el-button size="small" type="danger" @click="deleteGroup_perms(item)">删除</el-button>
+                            </div>
+                            <div v-else>
+                                <el-checkbox
+                                    v-if="item.utype == 'pm'"
+                                    :label="item.desc+' '+item.name"
+                                    :true-label="item.id"
+                                    :checked="false"
+                                    @change="(val) => group_perms_selectFun_pm(val, item.id)"
+                                />
+                            </div>
+                            <!-- <el-checkbox
                                 v-if="item.utype == 'pm'"
                                 :label="item.desc+' '+item.name"
                                 :true-label="item.id"
-                                :checked="
-                                    data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1
-                                        ? false
-                                        : true
-                                "
+                                :checked="data_tab_group_perms_selected_pm.arr.indexOf(item.id) == -1 ? false : true"
                                 @change="(val) => group_perms_selectFun_pm(val, item.id)"
-                            />
+                            /> -->
                         </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="业主端权限">
                     <div style="display: flex;flex-wrap: wrap;">
                         <div v-for="item in all_perms_list.arr" :key="item.id" style="width: 33%;">
-                            <el-checkbox
+                            <div v-if="data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1 ? false : true">
+                                <el-checkbox
+                                    v-if="item.utype == 'mbr'"
+                                    :label="item.desc+' '+item.name"
+                                    :true-label="item.id"
+                                    :checked="true"
+                                    @change="(val) => group_perms_selectFun_mbr(val, item.id)"
+                                />
+                                <el-button size="small" type="danger" @click="deleteGroup_perms(item)">删除</el-button>
+                            </div>
+                            <div v-else>
+                                <el-checkbox
+                                    v-if="item.utype == 'mbr'"
+                                    :label="item.desc+' '+item.name"
+                                    :true-label="item.id"
+                                    :checked="false"
+                                    @change="(val) => group_perms_selectFun_mbr(val, item.id)"
+                                />
+                            </div>
+                            <!-- <el-checkbox
                                 v-if="item.utype == 'mbr'"
                                 :label="item.desc+' '+item.name"
                                 :true-label="item.id"
-                                :checked="
-                                    data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1
-                                        ? false
-                                        : true
-                                "
+                                :checked="data_tab_group_perms_selected_mbr.arr.indexOf(item.id) == -1 ? false : true"
                                 @change="(val) => group_perms_selectFun_mbr(val, item.id)"
-                            />
+                            /> -->
                         </div>
                     </div>
                 </el-tab-pane>
@@ -1141,7 +1234,7 @@ const getGroupDetail = val => {
 // 删除组权限
 const deleteGroup_perms = val => {
     APIdeleteGroupPerms(current_group_perms.item.id, {
-        data: { perm_ids: [val.id] }
+        perm_ids: [val.id]
     }).then(res => {
         // if (res.status = 200) {
         ElMessage.success('删除成功')
