@@ -627,7 +627,7 @@ const getPersonnelManageList = () => {
         per_page: per_page.value
     }
     if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')) && localStorage.getItem('utype') != 'pt') {
-        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
+        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).id
     }
     if (flag.value == true && flag_1.value == false) {
         // 有效和无效的标签

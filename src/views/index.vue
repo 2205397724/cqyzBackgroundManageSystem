@@ -273,8 +273,8 @@ const count_data = reactive({
 })
 const getAggregate = () => {
     let data = { module: 'all' }
-    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))) {
-        data.gid = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).id
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))) {
+        data.gid = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).id
     }
     APIgetAggregate(data).then(res => {
         console.log(res)

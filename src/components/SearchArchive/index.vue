@@ -174,8 +174,8 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value
     }
-    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')) && localStorage.getItem('utype') != 'pt') {
-        params.tovalcan = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
+    if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')) && localStorage.getItem('utype') != 'pt') {
+        params.groupcc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     }
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {

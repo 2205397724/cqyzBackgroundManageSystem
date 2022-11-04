@@ -338,7 +338,7 @@ const getActivityViewList = () => {
         delete params.status
     }
     if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')) && localStorage.getItem('utype') != 'pt') {
-        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
+        params.group_id = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).id
     }
     loading_tab.value = true
     APIgetListArchiveAudit(params).then(res => {
