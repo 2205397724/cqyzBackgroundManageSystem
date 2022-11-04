@@ -722,6 +722,14 @@ const opts = {
         key: 2,
         val: '小区ID'
     }],
+    // 用户组状态
+    group_active: [{
+        key: 1,
+        val: '启用'
+    }, {
+        key: 0,
+        val: '禁用'
+    }],
     // 活动事件类型
     activityEvent_type: [{
         key: 0,
