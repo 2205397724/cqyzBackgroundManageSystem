@@ -84,7 +84,7 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'zone':
-            APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
+            APIgetResidentialListHouse({ page: 1, per_page: 100, china_code: node.data.id }).then(res => {
                 // treeDetail.arr = res
                 console.log(res)
                 let tree_arr = []
@@ -97,7 +97,7 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'buildings':
-            APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
+            APIgetBuildListHouse({ page: 1, per_page: 100, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
                 for (let i in res) {
                     tree_arr.push({ name: res[i].name, type: 'buildings', next_type: 'units', id: res[i].id })
@@ -106,7 +106,7 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'units':
-            APIgetUnitsListHouse({ page: 1, per_page: 7, building_id: node.data.id }).then(res => {
+            APIgetUnitsListHouse({ page: 1, per_page: 100, building_id: node.data.id }).then(res => {
                 let tree_arr = []
                 for (let i in res) {
                     tree_arr.push({ name: res[i].name, leaf: true, id: res[i].id, type: 'units', next_type: 'house' })

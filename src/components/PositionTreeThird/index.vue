@@ -116,7 +116,7 @@ const loadNode = (node, resolve) => {
         //     break
         // 小区
         case 'zone':
-            APIgetResidentialListHouse({ page: 1, per_page: 7, china_code: node.data.id }).then(res => {
+            APIgetResidentialListHouse({ page: 1, per_page: 100, china_code: node.data.id }).then(res => {
                 // treeDetail.arr = res
                 // console.log(res)
                 let tree_arr = []
@@ -130,7 +130,7 @@ const loadNode = (node, resolve) => {
             break
         // 楼栋
         case 'buildings':
-            APIgetBuildListHouse({ page: 1, per_page: 7, zone_id: node.data.id }).then(res => {
+            APIgetBuildListHouse({ page: 1, per_page: 100, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
                 res.forEach((element, i) => {
                     tree_arr.push({ name: res[i].name, type: 'buildings', next_type: 'units', id: res[i].id })
@@ -140,7 +140,7 @@ const loadNode = (node, resolve) => {
             break
         // 单元
         case 'units':
-            APIgetUnitsListHouse({ page: 1, per_page: 7, building_id: node.data.id }).then(res => {
+            APIgetUnitsListHouse({ page: 1, per_page: 100, building_id: node.data.id }).then(res => {
                 let tree_arr = []
                 res.forEach((element, i) => {
                     tree_arr.push({ name: res[i].name, id: res[i].id, type: 'units', next_type: 'houses' })
@@ -150,7 +150,7 @@ const loadNode = (node, resolve) => {
             break
         // 房屋
         case 'houses':
-            APIgetHouseListHouse({ page: 1, per_page: 7, houseable_id: node.data.id }).then(res => {
+            APIgetHouseListHouse({ page: 1, per_page: 100, houseable_id: node.data.id }).then(res => {
                 let tree_arr = []
                 res.forEach((element, i) => {
                     tree_arr.push({ name: res[i].name, id: res[i].id, type: 'houses' })
