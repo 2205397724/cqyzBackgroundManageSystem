@@ -1,6 +1,6 @@
 <template>
     <div class="vote">
-        <page-main>
+        <page-main class="hidden">
             <div class="m-b-20">
                 <el-button
                     type="primary" :icon="Plus" size="large"
