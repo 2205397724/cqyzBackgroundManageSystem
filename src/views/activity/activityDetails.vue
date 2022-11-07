@@ -156,7 +156,6 @@
                     <el-button
                         type="primary"
                         style="padding: 19px 18px;position: relative;top: 5px;"
-                        plain
                         @click="detail_set_area"
                     >
                         设置
@@ -702,7 +701,7 @@
                             </el-timeline-item>
                         </el-timeline>
                     </div>
-                    <div v-show="article_tab.arr.length <= 0" class="size-lg">此活动无审核信息</div>
+                    <div v-show="article_tab.arr.length <= 0" class="size-base font-grey">无审核信息</div>
                 </el-tab-pane>
                 <el-tab-pane label="业主评论" name="5" class="hidden">
                     <Comment :id="route.query.id" />
@@ -1574,7 +1573,7 @@ getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status'])
 }
 .set_range_box {
     height: 100%;
-    font-size: 20px;
+    font-size: 14px;
     color: #aaa;
     .region_box {
         .region_box_item {

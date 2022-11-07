@@ -1,7 +1,7 @@
 <template>
     <div class="vote">
         <page-main>
-            <div class="size-lx">{{ dataForm.item.title }}</div>
+            <div class="size-lg">{{ dataForm.item.title }}</div>
             <p class="size-sm sno">
                 受理编号：{{ dataForm.item.sno }}
                 <!-- <el-button round type="success" class="m-10 btn1" size="small">{{ getOptVal(opts_all.obj.toushu_status,dataForm.item.status) }}</el-button> -->

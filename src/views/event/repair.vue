@@ -19,7 +19,7 @@
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                报修名称：
+                                报修主题：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18" class="search_tb">
                                 <el-input v-model="data_1.search.title" class="search_tb" placeholder="报修名称" clearable />
@@ -76,19 +76,9 @@
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                 style="width: 100%;min-height: 300px;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;"
             >
-                <el-table-column label="报修名称">
+                <el-table-column label="报修主题">
                     <template #default="scope">
                         <span>{{ scope.row.title }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="所在区域">
-                    <template #default="scope">
-                        <span>{{ scope.row.cc_name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="业务编号" width="180">
-                    <template #default="scope">
-                        <span>{{ scope.row.sno }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="所在小区">
@@ -96,7 +86,17 @@
                         <span>{{ scope.row?.zone?.name }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="状态">
+                <el-table-column label="业务编号" width="150">
+                    <template #default="scope">
+                        <span>{{ scope.row.sno }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="所在区域">
+                    <template #default="scope">
+                        <span>{{ scope.row.cc_name }} </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="状态" width="100">
                     <template #default="scope">
                         <el-tag v-show="scope.row.status == 0" class="btnNone" type="danger" effect="dark">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                         <el-tag v-show="scope.row.status == 1" class="btnNone" type="success">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
@@ -109,12 +109,12 @@
                         <el-tag v-show="scope.row.status == 8" class="btnNone" type="info">{{ getOptVal(opts_all.obj.toushu_status,scope.row.status) }} </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否匿名">
+                <el-table-column label="是否匿名" width="80">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_ano,scope.row.ano) }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否公开">
+                <el-table-column label="是否公开" width="80">
                     <template #default="scope">
                         <span>{{ getOptVal(opts_all.obj.toushu_pub,scope.row.pub) }} </span>
                     </template>
