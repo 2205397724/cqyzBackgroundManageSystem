@@ -86,7 +86,7 @@
                             <el-button type="primary" size="small" @click="modifyCommitteeFunc(scope.row)">
                                 修改
                             </el-button>
-                            <el-button size="small" @click="detailsFunc(scope.row)">
+                            <el-button size="small" @click="getGroupDetail(scope.row)">
                                 详情
                             </el-button>
                             <el-popconfirm
@@ -108,14 +108,163 @@
                 :page-size="per_page" background prev-text="上一页" next-text="下一页" hide-on-single-page
             />
         </page-main>
+        <!-- 修改添加用户组 -->
+        <el-dialog v-model="switch_examine" :title="str_title" width="50%">
+            <div>
+                <el-form
+                    ref="ruleFormRef"
+                    :model="from_examine.item"
+                    label-position="left"
+                >
+                    <el-row :gutter="10">
+                        <el-col :md="24">
+                            <el-form-item
+                                label="业委会名称"
+                                prop="name"
+                                label-width="110px"
+                                :error="
+                                    from_error.msg && from_error.msg.name
+                                        ? from_error.msg.name[0]
+                                        : ''
+                                "
+                            >
+                                <el-input v-model="from_examine.item.name" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :md="24">
+                            <el-form-item
+                                label="所在小区"
+                                prop="region_val"
+                                label-width="110px"
+                                :error="
+                                    from_error.msg && from_error.msg.name
+                                        ? from_error.msg.name[0]
+                                        : ''
+                                "
+                            >
+                                <div
+                                    style="width: 100%;
+                                    height: 32px;
+                                    border: 1px solid #dcdfe6;
+                                    border-radius: 4px;"
+                                    @click="click_add_group_zone_id"
+                                >
+                                    <span v-if="!selectedZone_id" style="margin-left: 11px; color: #c0c4cc;">请选择区域</span>
+                                    <span v-else style="margin-left: 11px;">{{ selectedZone_id }}</span>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :md="24">
+                            <el-form-item
+                                label="业委会状态"
+                                prop="active"
+                                label-width="110px"
+                                :error="
+                                    from_error.msg && from_error.msg.active
+                                        ? from_error.msg.active[0]
+                                        : ''
+                                "
+                            >
+                                <el-select
+                                    v-model="from_examine.item.active" placeholder="状态"
+                                    clearable
+                                >
+                                    <el-option
+                                        v-for="(item) in opts_all.obj.group_active" :key="item.key"
+                                        :label="item.val" :value="item.key"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div
+                    style="display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    width: 100%;"
+                >
+                    <el-button @click="switch_examine = false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">
+                        确定
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <!-- 添加用户组弹窗中选择区域弹窗 -->
+        <el-dialog v-model="switch_choose_zone" title="选择小区">
+            <el-scrollbar height="250px">
+                <position-tree-fourth
+                    :tree_item="tree_item.arr"
+                    @checkChangeFunc="checkChangeFunc"
+                    @checkFunc="checkFunc"
+                />
+            </el-scrollbar>
+        </el-dialog>
+        <!-- 用户组详情 -->
+        <el-dialog v-model="switch_group_details" title="详情" width="50%">
+            <div class="details-box">
+                <div class="item">
+                    <div class="left">用户组名称</div>
+                    <div class="right">{{ data_group_details.item.name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">所在区域</div>
+                    <div class="right">{{ data_group_details.item.region_val_name || data_group_details.item.region_cc_name }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">类型</div>
+                    <div class="right">
+                        {{
+                            getOptVal(
+                                opts_all.obj.toushu_return_type,
+                                data_group_details.item.type
+                            )
+                        }}
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="left">区域类型</div>
+                    <div class="right">{{ getOptVal(opts_all.obj.group_user_region_type,data_group_details.item.region_type) }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">是否启用</div>
+                    <div class="right">
+                        <el-tag v-if="data_group_details.item.active == 1" type="success" round size="small"> 启用</el-tag>
+                        <el-tag v-if="data_group_details.item.active == 0" type="danger" round size="small"> 禁用</el-tag>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">用户组ID</div>
+                    <div class="right">{{ data_group_details.item.id }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">创建时间</div>
+                    <div class="right">{{ data_group_details.item.created_at }}</div>
+                </div>
+                <div class="item">
+                    <div class="left">更新时间</div>
+                    <div class="right">{{ data_group_details.item.updated_at }}</div>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script setup>
 import {
     APIgetGroupList,
+    APIgetGroupDetails,
     APIpostGroup,
     APIdeleteGroup,
-    APIputGroup
+    APIputGroup,
+    APIgetChinaRegion
 } from '@/api/custom/custom.js'
 import {
     reactive,
@@ -142,28 +291,81 @@ const searchFunc = () => {
 let switch_examine = ref(false)
 let from_examine = reactive({
     item: {
-        extra: []
+        name:'',
+        type:6,
+        region_type: 0,
+        region_val: '',
+        region_cc: '',
+        active: ''
     }
 })
 const str_title = ref('添加')
+const from_error = reactive({
+    msg: {}
+})
 // 添加业委会
 const addCommitteeFunc = () => {
-
+    selectedZone_id.value = ''
+    from_examine.item = {
+        type:6
+    }
+    from_error.msg = {}
+    str_title.value = '添加业委会'
+    switch_examine.value = true
+    getChinaName()
 }
 // 修改业委会
-const modifyCommitteeFunc = () => {
-
+const modifyCommitteeFunc = val => {
+    from_error.msg = {}
+    str_title.value = '修改业委会'
+    from_examine.item = {
+        ...val
+    }
+    selectedZone_id.value = from_examine.item.region_val_name
+    switch_examine.value = true
+    getChinaName()
+}
+// 同意拒绝提交
+const dialogExamineCloseFunc = () => {
+    from_error.msg = {}
+    console.log("from_examine",from_examine)
+    if (str_title.value == '修改业委会') {
+        APIputGroup(from_examine.item.id, from_examine.item).then(res => {
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_examine.value = false
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+    } else {
+        APIpostGroup(from_examine.item).then(res => {
+            refreshFunc()
+            ElMessage.success('添加成功')
+            switch_examine.value = false
+        })
+        .catch(err => {
+            from_error.msg = err.data
+        })
+    }
 }
 // 查看业委会详情
-const detailsFunc = () => {
-
+const switch_group_details = ref(false)
+const data_group_details = reactive({
+    item: {}
+})
+const getGroupDetail = val => {
+    APIgetGroupDetails(val.id).then(res => {
+        data_group_details.item = res
+        switch_group_details.value = true
+    })
 }
 // 删除业委会
 const deleteFunc = val => {
-    // APIdeleteDevice(val.id).then(res => {
-    //     refreshFunc()
-    //     ElMessage.success('删除成功')
-    // })
+    APIdeleteGroup(val.id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
+    })
 }
 // 获取列表api请求
 let data_tab = reactive({
@@ -190,6 +392,59 @@ const getTabListFunc = () => {
         data_tab.arr = res
     })
 }
+const tree_item = reactive({
+    arr: []
+})
+const selectedZone_id = ref('')
+// 添加弹出框选择小区
+const getChinaName = () => {
+    tree_item.arr = []
+    let params = {}
+    if (localStorage.getItem('utype') == 'pt') {
+        params = {
+            p_code: localStorage.getItem('china_code')
+        }
+    } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))) {
+        params = {
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
+        }
+    } else {
+        params = {}
+    }
+    APIgetChinaRegion(params).then(res => {
+        for (let i in res) {
+            if (res[i].level < 5) {
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
+            } else {
+                tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
+            }
+        }
+    })
+}
+
+// 选择所在小区
+const switch_choose_zone = ref(false)
+const click_add_group_zone_id = () => {
+    switch_choose_zone.value = true
+}
+const checkChangeFunc = val => {
+    switch_choose_zone.value = false
+}
+// 选中区域的处理事件
+const checkFunc = val => {
+    selectedZone_id.value = val.name
+    if (val.type == 'region') {
+        from_examine.item.region_type = 1
+        from_examine.item.region_val = val.china_code || val.id
+        from_examine.item.region_cc = val.china_code || val.id
+    }
+    if ((val.type == 'zone')) {
+        from_examine.item.region_type = 2
+        from_examine.item.region_val = val.id
+        from_examine.item.region_cc = val.china_code
+    }
+}
+
 // 刷新
 const refreshFunc = () => {
     switch_search.value = false
@@ -204,8 +459,9 @@ watch(page, () => {
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['group_active']).then(res => {
-    console.log(res)
+getOpts(['group_active','toushu_return_type','group_user_region_type']).then(res => {
+    // toushu_return_type包含了用户组的相关类型
+    // console.log(res)
     opts_all.obj = res
 })
 </script>
