@@ -134,7 +134,7 @@ const treeDetail = reactive({
 })
 const range = ref(0) // 活动参与范围
 watch(showabled, newVal => {
-    showabled.value = newVal.value
+    showabled.value = newVal
 })
 
 const selected_all = reactive({
