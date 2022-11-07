@@ -224,22 +224,22 @@ const userGroup = reactive({
 })
 const defaultUserGroup = ref('=')
 APIgetUserinfo().then(res => {
-    console.log(res)
+    // console.log(res)
     form.item = res
-    console.log(res.username)
+    // console.log(res.username)
     form.item.username = res.username
-    console.log(form.item.username)
+    // console.log(form.item.username)
 }).catch(error => {
     console.log(error)
 })
 APIgetLoginUserGroup().then(res => {
-    console.log(res)
+    // console.log(res)
     if (localStorage.getItem('utype') == 'pt') {
         flag_1.value = false
     } else {
         flag_1.value = true
     }
-    console.log(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))
+    // console.log(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))
     // defaultUserGroup.value = sessionStorage.getItem('groupChinaCode')
     // for (let i in res) {
     //     if (res[i].region_cc == sessionStorage.getItem('groupChinaCode')) {
@@ -247,18 +247,19 @@ APIgetLoginUserGroup().then(res => {
     //     }
     // }
     res.forEach((item, index) => {
-        if (item.region_cc == JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code) {
+        let user_group = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))
+        if (item.region_cc == user_group.region_cc && item.region_val == user_group.region_val) {
             res[index].flag = true
         } else {
             res[index].flag = false
         }
     })
-    console.log(res)
+    // console.log(res)
     userGroup.arr = res
 })
 const ChangeUserGroupFunc = (val, i) => {
-    console.log(i)
-    console.log(val.flag)
+    // console.log(i)
+    // console.log(val.flag)
     val.flag = !val.flag
     if (val.flag == true) {
         userGroup.arr.forEach((item, index) => {
@@ -266,7 +267,7 @@ const ChangeUserGroupFunc = (val, i) => {
                 item.flag = false
             }
         })
-        localStorage.setItem(localStorage.getItem('uid') + '_user_city', JSON.stringify(val))
+        localStorage.setItem(localStorage.getItem('uid') + '_user_group', JSON.stringify(val))
         // APIgetLoginUserGroup()
         // userGroup.arr[i]
     }
@@ -274,7 +275,7 @@ const ChangeUserGroupFunc = (val, i) => {
 const flag = ref(false)
 const flag_1 = ref(false)
 const modifyUserInfo = () => {
-    console.log(form.item.avatar)
+    // console.log(form.item.avatar)
     let obj = {}
     // for (let i in addArchive.item.content) {
     if (typeof form.item.avatar != 'string') {
@@ -284,7 +285,7 @@ const modifyUserInfo = () => {
     // for (let i in obj) {
     files.push(obj.raw)
     // }
-    console.log(files)
+    // console.log(files)
     if (files.length > 0) {
         getFilesKeys(files, 'avatar').then(arr => {
             // let o = 0
@@ -292,9 +293,9 @@ const modifyUserInfo = () => {
             //     addMenuForm.item.logo = arr[o]
             //     o++
             // }
-            console.log(arr)
+            // console.log(arr)
             form.item.avatar = arr[0]
-            console.log(form.item)
+            // console.log(form.item)
             if (!form.item.name) {
                 delete form.item.name
             }
