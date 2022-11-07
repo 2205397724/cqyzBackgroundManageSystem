@@ -1,6 +1,5 @@
 <template>
     <div>
-        <el-scrollbar height="400px">
             <div class="m-b-20">
                 <el-button type="primary" style="padding: 19px 18px;position: relative;top: 5px;" @click="addServeyTopic()">添加候选人</el-button>
             </div>
@@ -47,7 +46,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </el-scrollbar>
         <!-- 修改添加问卷题目 -->
         <el-dialog v-model="switch_examine" :title="str_title" width="50%">
             <div>

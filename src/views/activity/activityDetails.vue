@@ -839,11 +839,9 @@ const from_error = reactive({
 const exchangeStatus = status => {
     APImodifySurveyStatus(route.query.id, { status: status })
         .then(res => {
-            console.log(res)
             detailsFunc(route.query.id)
         })
         .catch(err => {
-            // console.log('err',err.response.data)
             ElMessage.error('修改失败' + err.response.data.message)
             // from_error.msg = err.data
         })
@@ -859,12 +857,11 @@ const checkFunc = val => {
 
 }
 const checkChangeFunc = val => {
-    console.log(val)
+
 }
 const switch_set_area = ref(false)
 const detail_set_area = () => {
     switch_set_area.value = true
-    console.log(switch_set_area.value)
 }
 // 详情
 let switch_details = ref(false)
@@ -924,10 +921,7 @@ onMounted(() => {
 // 切换tab-pane触发请求事件
 const changePane = (tab, event) => {
     // 代理
-    // console.log(tab)
     // 指针事件pointerEvent（未使用）
-    // console.log(event)
-    // console.log(tab.props.name)
     if (tab.props.name == 2) {
         rangeFunc()
     } else if (tab.props.name == 3) {
@@ -966,8 +960,6 @@ const detailsFunc = id => {
         }
         switch_details.value = true
     })
-
-    console.log(data_details.item)
 }
 const statistics = reactive({
     obj: {}
@@ -984,20 +976,18 @@ const answerCnt = ref(0)
 // 获取统计结果
 const getSurveyStatus = () => {
     APIgetSurveyStatus(route.query.id).then(res => {
-        console.log(res)
         statistics.obj = res
         countTot.value = statistics.obj.tot.ticket
         answerCnt.value = statistics.obj.answer_cnt.offline + statistics.obj.answer_cnt.online
         areaTot.value = statistics.obj.tot.area
-        console.log(topic_details.item)
         // topic_details.item.forEach((item,i)=>{
 
         //         if (item.opts) {
         //             item.opts.forEach((val,j)=>{
         //             for (let index = 0; index < statistics.obj.opt_cnt_map.length; index++) {
-        //                 console.log('c')
-        //                 // console.log(item.opts[index]?.id)
-        //                 console.log(statistics.obj.opt_cnt_map[index].oid)
+        //
+        //                 //
+        //
         //                 if (val.id) {
         //                     if (val.id == statistics.obj.opt_cnt_map[index].oid) {
         //                         opt_cnt_map.arr.push({cnt: statistics.obj.opt_cnt_map[index].cnt})
@@ -1015,7 +1005,7 @@ const getSurveyStatus = () => {
         opt_area_map.arr = []
         let opt_cnt_map_1 = {}
         let opt_area_map_1 = {}
-        console.log(topic_details.item)
+
         statistics.obj.opt_cnt_map.forEach((item, i) => {
             opt_cnt_map_1[item.oid] = item.cnt
         })
@@ -1030,8 +1020,6 @@ const getSurveyStatus = () => {
                 val.opt_area_map = opt_area_map_1[val.id] || 0
             })
         })
-        console.log(topic_details.item)
-        // console.log(opt_area_map.arr)
     })
 }
 // 获取问卷题目
@@ -1041,10 +1029,8 @@ const topicsFunc = () => {
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
-        console.log(res)
         topic_details.item = res
     })
-    console.log('topic_details', topic_details)
 }
 // 获取问卷范围
 const surverRangeWhenUnitHouse = reactive({ arr: [] })
@@ -1070,14 +1056,12 @@ const rangeFunc = () => {
                     }
                 }
             }
-            console.log(res)
             data_range.arr = res
         })
         .catch(err => {
             from_error.msg = err.data
         })
     APIgetSurverRangeWhenHouse({ sid: route.query.id, can_type: 2 }).then(res => {
-        console.log(res)
         if (res.units) {
             flag.value = true
             surverRangeWhenUnitHouse.arr = res.units
@@ -1090,7 +1074,6 @@ const rangeFunc = () => {
         } else {
             flag_1.value = false
         }
-        console.log(flag.value)
     })
     showHouses.value = false
 }
@@ -1104,7 +1087,6 @@ const getListArchiveFunc = () => {
         tgt_type: 'survey'
     }
     APIgetListArchiveAudit(params).then(res => {
-        console.log(res)
         article_tab.arr = res
     })
 }
@@ -1116,14 +1098,13 @@ const getRecordListunc = () => {
         tgt_id: route.query.id
     }
     APIRecordList(params).then(res => {
-        console.log(res)
         data_2.list = res
         data_2.total = res.length
         // let btnNext1 = document.querySelector('.btnClass')
         // let btnNext2 = btnNext1.children[1]
-        // console.log(btnNext1.children[1])
+        //
         // if (res.length < data_2.per_page) {
-        //     console.log('gouqi')
+        //
         //     btnNext2.classList.add('not_allowed')
         //     btnNext2.setAttribute('disabled', true)
         //     btnNext2.setAttribute('aria-disabled', true)
@@ -1135,8 +1116,6 @@ const getRecordListunc = () => {
     })
 }
 watch(() => data_2.page, new_val => {
-    // console.log(data_2.page)
-    // data1FnGetList()
     getRecordListunc()
 }, { immediate: true, deep: true })
 // 问卷范围点击小区事件
@@ -1200,7 +1179,6 @@ const checkFH = reactive({
 })
 const total = ref(0)
 const clickUnits = val => {
-    console.log(val)
     APIgetHouseListSort({
         houseable_id: val,
         houseable_type: 'units',
@@ -1222,7 +1200,6 @@ const clickUnits = val => {
             }
             house_num.arr = nums
             house_list.arr = list
-            console.log(house_num.arr)
             // 处理默认选择项目
             for (let i in house_num.arr) {
                 checkFH.row[house_num.arr[i]] = {
@@ -1256,12 +1233,9 @@ const clickUnits = val => {
                 return item.can_exist == 1
             }
         )
-        console.log(data_range_selected_houses.arr)
-        console.log(floors.arr)
     })
 }
 const clickUnits_1 = val => {
-    console.log(val)
     APIgetHouseListSort({
         houseable_id: val,
         houseable_type: 'buildings',
@@ -1278,8 +1252,6 @@ const clickUnits_1 = val => {
                 return item.can_exist == 1
             }
         )
-        console.log(data_range_selected_houses.arr)
-        console.log(floors.arr)
     })
 }
 // 获取问卷结果详情
@@ -1301,11 +1273,8 @@ const getAnswerDetail = id => {
             }
         }
     }
-    // console.log(id)
     APIgetSurveyAnswerDetail(id).then(res => {
-        // console.log(res)
         answer_detail.item = res
-        console.log('answer_detail.item', answer_detail.item)
     })
 }
 
@@ -1325,7 +1294,6 @@ const answerListFunc = () => {
         per_page: 15
     }
     APIgetSurveyAnswerList(route.query.id, params).then(res => {
-        // console.log(res)
         // answer_list = res[0]
         // 清空答卷列表（线上、线下、总列表）
         answer_list.length = 0
@@ -1344,14 +1312,13 @@ const answerListFunc = () => {
             }
         })
         answer_list.push(...answer_list_on, ...answer_list_off)
-    // console.log(answer_list)
+    //
     })
 }
 // 判断选项是否存在于答卷详情,取每个选项的id判断是否存在于答卷中，存在则显示该道选项内容
 const showTopic = (optid, answeropts) => {
     let isShow = false
     answeropts.forEach(element => {
-        console.log(optid, element.oid)
         if (optid === element.oid) {
             isShow = true
         }
@@ -1375,7 +1342,7 @@ const handleClick = tab => {
 const addAnswer = () => {
     switch_addAnswer.value = true
     // 根据问卷题目数量插入对象到answers中
-    // console.log('length',topic_details.item.length)
+    //
     // 先判断数组长度是否相同
     if (addticket.answers.length != topic_details.item.length) {
         addticket.answers = []
@@ -1395,17 +1362,17 @@ let notParticipateList = reactive([])
 const notParticipate = () => {
     notParticipateList.length = 0
     APIgetNotParticipate(route.query.id).then(res => {
-        // console.log('aaa',res)
+        //
         participate.notParticipateLength = res.length
         res.forEach(element => {
             notParticipateList.push(element)
         })
-    // console.log("notParticipateList",notParticipateList)
+    //
     })
 }
 // 添加问卷题目
 const addServeyTopic = () => {
-    // console.log(route.query.id)
+    //
     str_title.value = '添加'
     switch_examine.value = true
     // 清除问卷的信息
@@ -1414,7 +1381,6 @@ const addServeyTopic = () => {
 }
 // 修改问卷题目
 const modifyServeyTopic = val => {
-    console.log(val.id)
     str_title.value = '修改'
     // 获取问卷题目详情
     APIgetSurveyTopicDetail(val.id).then(res => {
@@ -1428,7 +1394,6 @@ const modifyServeyTopic = val => {
         res.opts.forEach(element => {
             opts.push(element)
         })
-        console.log(opts)
         switch_examine.value = true
     })
 }
@@ -1464,9 +1429,9 @@ const refreshFunc = () => {
 // 确定提交添加修改问卷题目
 const dialogExamineCloseFunc = id => {
     topic_examine.item.opts = opts
-    // console.log(topic_examine.item)
+    //
     if (str_title.value == '添加') {
-        // console.log('qqqqqq',topic_examine.item)
+        //
         APIaddSurveyTopic(topic_examine.item).then(res => {
             refreshFunc()
             // ElMessage.success(res.msg)
@@ -1475,7 +1440,7 @@ const dialogExamineCloseFunc = id => {
         })
     } else {
         id = topic_examine.item.id
-        // console.log(id)
+        //
         APImodifySurveyTopic(id, topic_examine.item).then(res => {
             refreshFunc()
             // ElMessage.success(res.msg)
@@ -1498,15 +1463,13 @@ let addticket = reactive({
 })
 // 点击选框事件
 const emitTickets = (tid, index) => {
-    // console.log('tid',tid,'opt',opt,'index',index)
+    //
     addticket.answers[index].tid = tid
     // addticket.answers.opt = opt
 }
 const dialogAddSurveyAnswer = () => {
-    console.log('addticket', addticket)
     APIaddSurveyAnswer(route.query.id, addticket)
         .then(res => {
-            // console.log(res)
             switch_addAnswer.value = false
             ElMessage.success('问卷提交成功')
         })
@@ -1517,11 +1480,11 @@ const dialogAddSurveyAnswer = () => {
 
 // // 调用接口设置范围
 // const submit = () => {
-//     // console.log(ArrSetRange)
+//     //
 //     // 遍历数组调用API接口添加数据
 //     ArrSetRange.forEach(element => {
 //         APIaddSurveyRange(element).then(res => {
-//             console.log(res)
+//
 //             ElMessage.success("问卷范围设置成功")
 //         }).catch(err => {
 //             from_error.msg = err.data
