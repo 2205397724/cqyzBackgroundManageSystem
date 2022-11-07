@@ -109,7 +109,7 @@
                             <span v-if="scope.row.sharefile.type === 1">{{ scope.row.content}} </span>
                             <span v-else>
                                 <block v-for="item in scope.row.file" :key="item">
-                                    <el-image :preview-src-list="scope.row.file" :src="item" lazy style="height: 60px;"></el-image>
+                                    <el-image :preview-src-list="scope.row.file" :src="item" lazy style="height: 60px; margin: 5px;"></el-image>
                                 </block>
                             </span>
                         </template>
@@ -439,5 +439,8 @@ const SwitchFunc = (e) => {
 .switchStyle.el-switch ::v-deep .el-switch__core,
 .switchStyle ::v-deep .el-switch__label {
     width: 60px !important;
+}
+.el-table ::v-deep .el-table__cell {
+    z-index: auto !important;
 }
 </style>
