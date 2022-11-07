@@ -15,45 +15,12 @@
                 </span>
                 <span>结束时间：{{ data_details.item.endat }}</span>
             </div>
-            <!-- <div class="m-t-10 m-b-20">
-            <el-button size="small" @click="exchangeStatus('1')">筹备中</el-button>
-            <el-button size="small" type="primary" @click="exchangeStatus('2')">
-                待审
-            </el-button>
-            <el-button size="small" type="info" @click="exchangeStatus('3')">
-                未开始
-            </el-button>
-            <el-button size="small" type="success" @click="exchangeStatus('4')">
-                进行中
-            </el-button>
-            <el-button size="small" type="warning" @click="exchangeStatus('5')">
-                暂停
-            </el-button>
-            <el-button size="small" type="warning" @click="exchangeStatus('6')">
-                终止
-            </el-button>
-            <el-button size="small" type="danger" @click="exchangeStatus('7')">
-                已结束
-            </el-button>
-        </div> -->
             <el-tabs v-model="activeName" @tab-click="changePane">
                 <el-tab-pane :label="activeName_1+'主题'" name="1">
                     <div>
                         <div class="details-box">
-                            <!-- <el-row>
-                            <el-col :span="8">
-
-                            </el-col>
-                        </el-row> -->
                             <div class="details-tit-sm">基础信息</div>
-
                             <el-row :gutter="20">
-                                <!-- <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">内容</div>
-                                    <span v-html="data_details.item.content " />
-                            m     </div>
-                            </el-col> -->
                                 <el-col :span="8">
                                     <div class="item">
                                         <div class="left_1 w-100">所在区域</div>
@@ -136,20 +103,6 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <!-- <div>
-                        <h3>问卷记录</h3>
-                        <div class="steps-column m-l-40 selected">
-                            <div class="steps-column-item">
-                                <div>
-                                    <text>时间:2022-07-14 12:00:00</text>
-                                </div>
-                                <div>
-                                    操作人员：街道 主任 王先生
-                                    <span class="m-l-40">事件：审核</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="参与范围" name="2">
@@ -161,36 +114,6 @@
                     >
                         设置
                     </el-button>
-                    <!-- <el-table :data="data_range.arr"
-                    :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
-                    width="100%"
-                >
-                    <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column prop="tgt_name" label="地区范围"></el-table-column>
-                    <el-table-column label="活动参与范围类型" >
-                        <template #default="scope">
-                            <span v-if="scope.row.type === 1">房屋</span>
-                            <span v-if="scope.row.type === 2">单元</span>
-                            <span v-if="scope.row.type === 3">楼栋</span>
-                            <span v-if="scope.row.type === 4">小区</span>
-                            <span v-if="scope.row.type === 5">区域</span>
-                            <span>{{scope.row.type}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed='right' width="250px" label="操作">
-                        <template #default="scope">
-                            <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
-                                @confirm="deleteRange(scope.row)">
-                                <template #reference>
-                                    <el-button type="danger" size="small" >
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
-                    </el-table-column>
-                </el-table> -->
-
                     <el-row class="m-t-30">
                         <el-col :sm="3" :md="3" :lg="5">
                             <div class="set_range_box">
@@ -226,7 +149,6 @@
                                                 class="region_box_item"
                                                 @click="closeShowHouse"
                                             >
-                                                <!-- {{ item.tgt_obj.pos_name+item.tgt_obj.name }} -->
                                                 {{ item.tgt_obj.name }}
                                                 <el-popconfirm
                                                     title="确定要删除当前项么?"
@@ -239,11 +161,6 @@
                                                 </el-popconfirm>
                                             </div>
                                         </div>
-                                    <!-- <div v-for="house in surverRangeWhenHouse.arr" :key="house.id">
-                                        <div v-if="!house.name&&!house.building?.name" class="region_box_item region_box_item_house">
-                                            {{ house.building.zone.name }}
-                                        </div>
-                                    </div> -->
                                     </div>
                                     <!-- 可参与楼栋 -->
                                     <div class="region_box btnNone">
@@ -275,20 +192,6 @@
                                     </div>
                                     <!-- 可参与单元 -->
                                     <div class="region_box btnNone">
-                                        <!-- <div v-for="item in data_range_units.arr" :key="item.id">
-                    <div class="region_box_item" @click="clickUnits(item)">
-                      {{ item.name }}
-                      <el-popconfirm
-                        title="确定要删除当前项么?"
-                        cancel-button-type="info"
-                        @confirm="deleteRange(item)"
-                      >
-                        <template #reference>
-                          <div class="region_box_item_del">✖</div>
-                        </template>
-                      </el-popconfirm>
-                    </div>
-                  </div> -->
                                         <div v-for="item in data_range.arr" :key="item.id">
                                             <div
                                                 v-if="item.type == 2"
@@ -324,39 +227,7 @@
                         <el-col :sm="11" :md="11" :lg="19">
                             <div v-if="showHouses" class="table btnNone">
                                 <div class="header" />
-                                <!-- <el-scrollbar height="500px"> -->
-                                <!-- <div>
-                                    <div
-                                        v-for="(floor, index) in floors.arr"
-                                        :key="index"
-                                        class="house_box"
-                                    >
-                                        <div class="floor">{{ floor.floor_truth }}</div>
-                                        <div class="house_item">
-                                            <div
-                                                v-for="house in floor.houses"
-                                                :key="house.id"
-                                                :class="{
-                                                    item: true,
-                                                    bg: house.can_exist == 1,
-                                                }"
-                                            >
-                                                {{ house.house_num }}
-                                                <el-popconfirm
-                                                    title="确定要删除当前项么?"
-                                                    cancel-button-type="info"
-                                                    @confirm="deleteHouse(house.id)"
-                                                >
-                                                    <template #reference>
-                                                        <div v-if="house.can_exist" class="region_box_item_del_1">✖</div>
-                                                    </template>
-                                                </el-popconfirm>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: calc(100% - 155px);">
-                                    <!-- <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;"> -->
                                     <div class="row-box row-box-title">
                                         <div class="row-item-box row-item-tit-box">
                                             <div class="row-item row-item-tit row-item-tit-bgline">
@@ -367,31 +238,21 @@
                                         <el-scrollbar style="white-space: nowrap;">
                                             <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
                                                 <div class="row-item">
-                                                    <!-- <el-checkbox
-                                                        v-model="checkFH.row[item].val"
-                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
-                                                    /> -->
                                                     <div class="row-item-check">{{ item }}#</div>
                                                 </div>
                                             </div>
                                         </el-scrollbar>
                                     </div>
                                     <div style="height: calc(100% - 45px);overflow: auto;">
-                                        <!-- <div> -->
                                         <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
                                             <div class="row-item-box row-item-tit-box">
                                                 <div class="row-item row-item-tit row-item-tit-ceng">
-                                                    <!-- <el-checkbox
-                                                        v-model="checkFH.col[child.floor_truth].val"
-                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
-                                                    /> -->
                                                     <div>{{ child.floor_truth }}层</div>
                                                 </div>
                                             </div>
                                             <el-scrollbar style="white-space: nowrap;">
                                                 <div style="display: flex;">
                                                     <div v-for="(item,i) in child.houses" :key="i" :class="{item: true,bg: item.can_exist}">
-                                                        <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
                                                         <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
                                                             <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
 
@@ -410,91 +271,10 @@
                                             </el-scrollbar>
                                         </div>
                                     </div>
-                                    <!-- <el-drawer v-model="drawer" :direction="direction">
-                                        <template #title>
-                                            <h4>房屋信息</h4>
-                                        </template>
-                                        <template #default>
-                                            <div style="box-sizing: border-box;padding: 4px;">
-                                                <div class="details-box">
-                                                    <div class="item">
-                                                        <div class="left">房屋名称</div>
-                                                        <div class="right">{{ data_details.item.name }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">地址</div>
-                                                        <div class="right">{{ data_details.item.addr }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">物理楼层</div>
-                                                        <div class="right">{{ data_details.item.floor_truth }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">名义层</div>
-                                                        <div class="right">{{ data_details.item.floor_alias }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">房号</div>
-                                                        <div class="right">{{ data_details.item.house_num }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">房屋id</div>
-                                                        <div class="right">{{ data_details.item.id }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">创建时间</div>
-                                                        <div class="right">{{ data_details.item.created_at }}</div>
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="left">更新时间</div>
-                                                        <div class="right">{{ data_details.item.updated_at }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="m-t-10 m-l-20">
-                                                <el-button type="primary" plain @click="modifyResidentialFunc">修改</el-button>
-                                                <el-button type="warning" plain @click="showPropertyFunc">产权</el-button>
-                                                <el-button type="success" plain @click="showNumbersFunc">成员</el-button>
-                                            </div>
-                                        </template>
-                                    </el-drawer> -->
                                 </div>
-                                <!-- </el-scrollbar> -->
                             </div>
                         </el-col>
                     </el-row>
-                    <!-- <el-row>
-                    <el-col :sm="3" :md="3" :lg="3">
-                        <div class="set_range_box">
-                            <div class="m-b-10">
-                                <div>已选择小区</div>
-                            </div>
-                            <el-scrollbar height="300px" />
-                        </div>
-                    </el-col>
-                </el-row> -->
-                    <!-- <el-row>
-                    <el-col :sm="3" :md="3" :lg="3">
-                        <div class="set_range_box">
-                            <div>
-                                <div>可参与楼栋</div>
-                            </div>
-                            <el-scrollbar height="300px">
-
-                            </el-scrollbar>
-                        </div>
-                    </el-col>
-                </el-row> -->
-                    <!-- <el-row>
-                    <el-col :sm="3" :md="3" :lg="3">
-                        <div class="set_range_box">
-                            <div>
-                                <div>可参与单元</div>
-                            </div>
-                            <el-scrollbar height="300px" />
-                        </div>
-                    </el-col>
-                </el-row> -->
                     <el-row />
                 </el-tab-pane>
                 <el-tab-pane :label="activeName_1 == '选举' ? activeName_1+'候选人' : activeName_1+'题目'" name="3">
@@ -512,20 +292,14 @@
                 <el-tab-pane label="统计数据" name="8">
                     <div>
                         <div class="details-box">
-                            <!-- <el-row>
-                            <el-col :span="8">
-
-                            </el-col>
-                        </el-row> -->
+                            <el-row>
+                                <el-col :span="8">
+                                    <el-button type="primary" @click="updateSurveyResult">更新统计结果</el-button>
+                                </el-col>
+                            </el-row>
                             <div class="details-tit-sm">数量</div>
 
                             <el-row :gutter="20">
-                                <!-- <el-col :span="8">
-                                <div class="item">
-                                    <div class="left w-100">内容</div>
-                                    <span v-html="data_details.item.content " />
-                                </div>
-                            </el-col> -->
                                 <el-col :span="8">
                                     <div class="item">
                                         <div class="left_1 w-100">总票数</div>
@@ -566,21 +340,8 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <!-- <div>
-                        <h3>问卷记录</h3>
-                        <div class="steps-column m-l-40 selected">
-                            <div class="steps-column-item">
-                                <div>
-                                    <text>时间:2022-07-14 12:00:00</text>
-                                </div>
-                                <div>
-                                    操作人员：街道 主任 王先生
-                                    <span class="m-l-40">事件：审核</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     </div>
+                    <!-- 总进度 -->
                     <div>
                         <div class="details-box">
                             <div class="details-tit-sm">总进度</div>
@@ -602,6 +363,7 @@
                             </el-row>
                         </div>
                     </div>
+                    <!-- 选项详情 -->
                     <div>
                         <div class="details-box">
                             <div class="details-tit-sm hidden">
@@ -628,25 +390,29 @@
                                                     <el-row>
                                                         <el-col :lg="2"> 票数 </el-col>
                                                         <el-col v-if="!flag_2&&flag_3" :lg="22" style="margin-top: 3px;">
-                                                            <!-- <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" /> -->
                                                             <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
-                                                            <el-progress v-else :percentage="(val.opt_cnt_map / countTot *100) .toFixed(2)+'('+val.opt_cnt_map +'/'+countTot+')'" :color="customColor" />
-                                                            <!-- <el-progress :percentage="20" :color="customColor" /> -->
+                                                            <el-progress v-else :percentage="(val.opt_cnt_map / countTot *100) .toFixed(2)" :color="customColor"/>
+                                                            <text>{{'('+val.opt_cnt_map +'/'+countTot+')'}}</text>
                                                         </el-col>
                                                         <el-col v-if="flag_2&&!flag_3" :lg="22" style="margin-top: 3px;">
-                                                            <!-- <el-progress v-if="opt_cnt_map.arr[j] !== 0" :percentage="(opt_cnt_map.arr[j] / countTot *100) .toFixed(2)" :color="customColor" /> -->
                                                             <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
-                                                            <el-progress v-else :percentage="(val.opt_cnt_map / answerCnt *100) .toFixed(2)+'('+val.opt_cnt_map +'/'+answerCnt+')'" :color="customColor" />
-                                                            <!-- <el-progress :percentage="20" :color="customColor" /> -->
+                                                            <el-progress v-else :percentage="(val.opt_cnt_map / answerCnt *100) .toFixed(2)" :color="customColor"/>
+                                                            <text>{{'('+val.opt_cnt_map +'/'+answerCnt+')'}}</text>
                                                         </el-col>
                                                     </el-row>
                                                 </el-col>
                                                 <el-col :lg="12" style="color: #aaa; margin-top: 10px; font-size: 14px;">
                                                     <el-row>
                                                         <el-col :lg="2"> 面积 </el-col>
-                                                        <el-col :lg="22" style="margin-top: 3px;">
-                                                            <el-progress v-if="val.opt_area_map !== 0" :percentage="(parseInt(val.opt_area_map) / areaTot * 100).toFixed(2)+'('+val.opt_area_map +'/'+areaTot+')'" :color="customColor" />
+                                                        <el-col v-if="!flag_2&&flag_3" :lg="22" style="margin-top: 3px;">
                                                             <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
+                                                            <el-progress v-else :percentage="((val.opt_area_map) / areaTot * 100).toFixed(2)" :color="customColor"/>
+                                                            <text>{{'('+val.opt_area_map +'/'+areaTot+')'}}</text>
+                                                        </el-col>
+                                                        <el-col v-if="flag_2&&!flag_3" :lg="22" style="margin-top: 3px;">
+                                                            <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
+                                                            <el-progress v-else :percentage="((val.opt_area_map) / areaCnt * 100).toFixed(2)" :color="customColor"/>
+                                                            <text>{{'('+val.opt_area_map +'/'+areaCnt+')'}}</text>
                                                         </el-col>
                                                     </el-row>
                                                 </el-col>
@@ -729,34 +495,6 @@
                                 <span>{{ scope.row.ip }} </span>
                             </template>
                         </el-table-column>
-                    <!-- <el-table-column label="评论时间" width="200">
-                                <template #default="scope">
-                                    <span>{{ scope.row.created_at }} </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column fixed="right" label="操作" width="260">
-                                <template #default="scope">
-                                    <el-button
-                                        type="primary" size="small"
-                                        @click="popup2FnModify(scope.row)"
-                                    >
-                                        修改
-                                    </el-button>
-                                    <el-button
-                                        size="small"
-                                        @click="popup3FnDetails(scope.row.id)"
-                                    >
-                                        详情
-                                    </el-button>
-                                    <el-button
-                                        type="primary"
-                                        size="small"
-                                        @click="popup2FnReply(scope.row)"
-                                    >
-                                        回复
-                                    </el-button>
-                                </template>
-                            </el-table-column> -->
                     </el-table>
                     <el-pagination
                         v-model:current-page="data_2.page"
@@ -781,6 +519,58 @@
             @checkFunc="checkFunc"
             @checkChangeFunc="checkChangeFunc"
         />
+        <!-- 更新统计结果弹窗 -->
+        <el-dialog v-model="result_switch_examine" :title="result_str_title" width="50%">
+            <el-button class="m-b-10" type="primary" @click="resultRefreshState">计算结果</el-button>
+            <div>
+                <el-row  :gutter="10">
+                    <el-col :span="12">
+                        <div class="p-10" style="background-color: #ecf5ff ;color: #4d95fc;">计算结果</div>
+                        <el-form-item label="线上参与：">{{statistics.obj.answer_cnt.online}}</el-form-item>
+                        <el-form-item label="线下参与：">{{statistics.obj.answer_cnt.offline}}</el-form-item>
+                        <el-form-item label="参与房屋总数：">{{statistics.obj.house_tot_cnt}}</el-form-item>
+                        <el-form-item label="已参与房屋数量：">{{statistics.obj.house_has_cnt}}</el-form-item>
+                        <el-form-item label="已参与房屋面积总数：">{{statistics.obj.area_has}}</el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="p-10" style="background-color: #f0f9eb ;color: #61bf33;">最终结果</div>
+                        <el-form
+                            ref="ruleFormRef"
+                            :model="from_examine.item"
+                        >
+                            <el-form-item label="线上参与">
+                                <el-input v-model="from_examine.item.answer_cnt.online" placeholder="" type="number"/>
+                            </el-form-item>
+                            <el-form-item label="线下参与">
+                                <el-input v-model="from_examine.item.answer_cnt.offline" placeholder="" type="number"/>
+                            </el-form-item>
+                            <el-form-item label="参与房屋总数">
+                                <el-input v-model="from_examine.item.house_tot_cnt" placeholder="" type="number"/>
+                            </el-form-item>
+                            <el-form-item label="已参与房屋数量">
+                                <el-input v-model="from_examine.item.house_has_cnt" placeholder="" type="number"/>
+                            </el-form-item>
+                            <el-form-item label="已参与房屋面积总数">
+                                <el-input v-model="from_examine.item.area_has" placeholder="" type="number"/>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
+            </div>
+            <template #footer>
+                <div
+                    style="display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    width: 100%;"
+                >
+                    <el-button @click="result_switch_examine = false">取消</el-button>
+                    <el-button type="primary" @click="dialogSurveyResultFunc(ruleFormRef)">
+                        确定
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -812,7 +602,9 @@ import {
     // 访问记录
     APIRecordList,
     // 统计结果
-    APIgetSurveyStatus
+    APIgetSurveyStatus,
+    APImodifySurveyResultStatus,
+    APIrefreshSurveyStatus,
 } from '@/api/custom/custom.js'
 // 导入图标
 import { ChatDotRound, Search } from '@element-plus/icons-vue'
@@ -887,16 +679,10 @@ const radio = ref('全部')
 let data_range = reactive({
     arr: []
 })
-const data_range_zone = reactive({
-    arr: []
-})
 // 添加问卷题目
 const str_title = ref('添加')
 let switch_examine = ref(false)
 let switch_addAnswer = ref(false)
-let switch_answer_detail = ref(false)
-let switch_comment = ref(false)
-let switch_comment_detail = ref(false)
 let topic_examine = reactive({
     item: {}
 })
@@ -973,34 +759,16 @@ const opt_area_map = reactive({
 const countTot = ref(0)
 const areaTot = ref(0)
 const answerCnt = ref(0)
+const areaCnt = ref(0)
 // 获取统计结果
 const getSurveyStatus = () => {
     APIgetSurveyStatus(route.query.id).then(res => {
+        from_examine.item = JSON.parse(JSON.stringify(res))//深拷贝
         statistics.obj = res
         countTot.value = statistics.obj.tot.ticket
         answerCnt.value = statistics.obj.answer_cnt.offline + statistics.obj.answer_cnt.online
         areaTot.value = statistics.obj.tot.area
-        // topic_details.item.forEach((item,i)=>{
-
-        //         if (item.opts) {
-        //             item.opts.forEach((val,j)=>{
-        //             for (let index = 0; index < statistics.obj.opt_cnt_map.length; index++) {
-        //
-        //                 //
-        //
-        //                 if (val.id) {
-        //                     if (val.id == statistics.obj.opt_cnt_map[index].oid) {
-        //                         opt_cnt_map.arr.push({cnt: statistics.obj.opt_cnt_map[index].cnt})
-        //                     }else{
-        //                         opt_cnt_map.arr.push({cnt: 0})
-        //                     }
-        //                     break
-        //                 }
-
-        //             }
-        //             })
-        //         }
-        // })
+        areaCnt.value = statistics.obj.area_has
         opt_cnt_map.arr = []
         opt_area_map.arr = []
         let opt_cnt_map_1 = {}
@@ -1254,30 +1022,6 @@ const clickUnits_1 = val => {
         )
     })
 }
-// 获取问卷结果详情
-let answer_detail = reactive({
-    item: ''
-})
-const getAnswerDetail = id => {
-    switch_answer_detail.value = true
-    // 根据问卷题目数量插入对象到answers中
-    // 先判断数组长度是否相同
-    if (addticket.answers.length != topic_details.item.length) {
-        addticket.answers = []
-        for (let i = 0; i < topic_details.item.length; i++) {
-            // 判断是选择题还是主观题
-            if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
-                addticket.answers.push({ tid: '', opt: [] })
-            } else {
-                addticket.answers.push({ tid: '', content: '' })
-            }
-        }
-    }
-    APIgetSurveyAnswerDetail(id).then(res => {
-        answer_detail.item = res
-    })
-}
-
 // 参与情况
 let participate = reactive({
     on_line: 0,
@@ -1314,16 +1058,6 @@ const answerListFunc = () => {
         answer_list.push(...answer_list_on, ...answer_list_off)
     //
     })
-}
-// 判断选项是否存在于答卷详情,取每个选项的id判断是否存在于答卷中，存在则显示该道选项内容
-const showTopic = (optid, answeropts) => {
-    let isShow = false
-    answeropts.forEach(element => {
-        if (optid === element.oid) {
-            isShow = true
-        }
-    })
-    return isShow
 }
 // 切换标签，显示不同参与情况的列表
 const handleClick = tab => {
@@ -1370,41 +1104,6 @@ const notParticipate = () => {
     //
     })
 }
-// 添加问卷题目
-const addServeyTopic = () => {
-    //
-    str_title.value = '添加'
-    switch_examine.value = true
-    // 清除问卷的信息
-    topic_examine.item = { sid: route.query.id, extra: null, sort: 5 }
-    opts.length = 0
-}
-// 修改问卷题目
-const modifyServeyTopic = val => {
-    str_title.value = '修改'
-    // 获取问卷题目详情
-    APIgetSurveyTopicDetail(val.id).then(res => {
-        topic_examine.item = res
-        // 修改为字符串类型，让选项被选中，默认为int类型，选项没有选中
-        topic_examine.item.type += ''
-        topic_examine.item.score_calc += ''
-        // 清除选项缓存数据
-        opts.length = 0
-        // 将选项数据遍历插入数组对象
-        res.opts.forEach(element => {
-            opts.push(element)
-        })
-        switch_examine.value = true
-    })
-}
-// 删除问卷题目
-const deleteFunc = val => {
-    APIdeleteSurveyTopic(val.id).then(res => {
-        refreshFunc()
-        // ElMessage.success(res.statusText)
-        ElMessage.success('删除成功')
-    })
-}
 // 删除问卷范围
 const deleteRange = val => {
     let range = { sid: val.sid, can_type: val.can_type, type: val.type, tgt: [] }
@@ -1426,30 +1125,6 @@ const refreshFunc = () => {
     topicsFunc()
     rangeFunc()
 }
-// 确定提交添加修改问卷题目
-const dialogExamineCloseFunc = id => {
-    topic_examine.item.opts = opts
-    //
-    if (str_title.value == '添加') {
-        //
-        APIaddSurveyTopic(topic_examine.item).then(res => {
-            refreshFunc()
-            // ElMessage.success(res.msg)
-            ElMessage.success('添加成功')
-            switch_examine.value = false
-        })
-    } else {
-        id = topic_examine.item.id
-        //
-        APImodifySurveyTopic(id, topic_examine.item).then(res => {
-            refreshFunc()
-            // ElMessage.success(res.msg)
-            ElMessage.success('修改成功')
-            switch_examine.value = false
-        })
-    }
-}
-
 // 确认提交添加书面票
 let addticket = reactive({
     idcard: '',
@@ -1461,36 +1136,6 @@ let addticket = reactive({
     // },
     ]
 })
-// 点击选框事件
-const emitTickets = (tid, index) => {
-    //
-    addticket.answers[index].tid = tid
-    // addticket.answers.opt = opt
-}
-const dialogAddSurveyAnswer = () => {
-    APIaddSurveyAnswer(route.query.id, addticket)
-        .then(res => {
-            switch_addAnswer.value = false
-            ElMessage.success('问卷提交成功')
-        })
-        .catch(err => {
-            from_error.msg = err.data
-        })
-}
-
-// // 调用接口设置范围
-// const submit = () => {
-//     //
-//     // 遍历数组调用API接口添加数据
-//     ArrSetRange.forEach(element => {
-//         APIaddSurveyRange(element).then(res => {
-//
-//             ElMessage.success("问卷范围设置成功")
-//         }).catch(err => {
-//             from_error.msg = err.data
-//         })
-//     })
-// }
 // 调用tree树形组件初始的请求
 APIgetChinaRegion().then(res => {
     tree_item.value.id = res[0].code
@@ -1508,13 +1153,55 @@ const getProportion_1 = () => {
     flag_2.value = true
     flag_3.value = false
 }
+// 更新统计结果
+let result_switch_examine = ref(false)
+const result_str_title = ref('更新统计结果')
+const updateSurveyResult = () => {
+    result_switch_examine.value = true
+}
+// 提交更新统计结果
+let ruleFormRef = ref('')
+let from_examine = reactive({
+    item:{
+        tot:{},
+        answer_cnt:{},
+        house_tot_cnt:'',
+        house_has_cnt:'',
+        area_has:'',
+    }
+})
+const dialogSurveyResultFunc = formEl => {
+    if (!formEl) return
+    formEl.validate(valid => {
+        if (valid) {
+            APImodifySurveyResultStatus(route.query.id, from_examine.item).then(res=>{
+                ElMessage.success('修改成功',res)
+                result_switch_examine.value = false
+                getSurveyStatus()
+            }).catch(err => {
+                ElMessage.error('修改失败')
+            })
+        }else {
+            return false
+        }
+    })
+}
+// 重现统计数据
+const resultRefreshState = () => {
+    APIrefreshSurveyStatus(route.query.id).then(res=>{
+        statistics.obj = res
+        countTot.value = statistics.obj.tot.ticket
+        answerCnt.value = statistics.obj.answer_cnt.offline + statistics.obj.answer_cnt.online
+        areaTot.value = statistics.obj.tot.area
+    })
+}
 // 配置项
 const opts_all = reactive({
     obj: {
         status_all: []
     }
 })
-getOpts(['announce_status', 'toushu_pub', 'comment_scoreper', 'comment_status']).then(res => {
+getOpts(['announce_status']).then(res => {
     opts_all.obj = res
 })
 </script>

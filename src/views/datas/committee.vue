@@ -1,5 +1,5 @@
 <template>
-    <div class="keep-on-record">
+    <div>
         <page-main class="hidden">
             <div>
                 <el-button type="primary" :icon="Plus" size="large" @click="addCommitteeFunc">
