@@ -73,6 +73,13 @@
                                     </el-button>
                                     <el-button class="head-btn" type="success"
                                         @click="() => { switch_files_list = true; refreshFilesListFunc() }">导入房屋</el-button>
+                                    <el-popconfirm title="确定要删除当前页的所有房屋吗？" cancel-button-type="info"
+                                        @confirm="deleteHouseAbleFunc">
+                                        <template #reference>
+                                            <el-button class="head-btn" type="danger">删除全部房屋
+                                            </el-button>
+                                        </template>
+                                    </el-popconfirm>
                                     <el-button :disabled="choseIDs.arr.length <= 0" type="warning" class="head-btn"
                                         @click="modifyAllFunc">批量修改</el-button>
                                     <el-button @click="refreshFunc">刷新</el-button>
@@ -572,7 +579,8 @@ import {
     APIgetHouseListSort,
     APIgetUnitsDetailsHouse,
     APIgetBuildDetailsHouse,
-    APIdeleteHouseHouse
+    APIdeleteHouseHouse,
+    APIdeleteHouseAbleHouse
 } from '@/api/custom/custom.js'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
 // 获取楼栋单元
@@ -986,7 +994,6 @@ const addResidentialFunc = () => {
     }
     switch_examine.value = true
 }
-
 // 打开导入房屋from
 const openFileFunc = () => {
     upload_str.value = '请点击此处或拖拽需要上传的文件'
@@ -1003,7 +1010,17 @@ const deleteHouse = val => {
         refreshFunc()
         ElMessage.success('删除成功')
     })
-
+}
+// 删除楼栋或单元下的房屋
+const deleteHouseAbleFunc = () => {
+    let data = {
+        houseable_type:active_obj.obj.type,
+        houseable_id:active_obj.obj.id,
+    }
+    APIdeleteHouseAbleHouse(data).then(res=>{
+        refreshFunc()
+        ElMessage.success('删除成功')
+    })
 }
 // refreshFunc()
 /* ----------------------------------------------------------------------------------------------------------------------- */

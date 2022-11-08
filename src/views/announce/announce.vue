@@ -49,6 +49,18 @@
                     </el-col>
                 </el-row>
                 <el-row>
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                公示主题：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18" class="search_tb">
+                                <el-input v-model="data_search.obj.title" class="search_tb" placeholder="公示主题" />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row>
                     <el-col :xs="0" :sm="4" :md="3" :lg="2" />
                     <el-col :xs="24" :sm="20" :md="21" :lg="22">
                         <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
@@ -610,12 +622,12 @@ const refreshFunc = () => {
 }
 // 监听分页
 watch(page, () => {
-    console.log(page)
+    // console.log(page)
     sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
 })
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
+    // console.log(to)
     if (to.meta.title == '详情') {
         return true
     } else {
@@ -641,7 +653,7 @@ const dialogExamineCloseFunc = () => {
     }
     delete from_examine.item.relid
     delete from_examine.item.taskid
-    console.log(files_arr)
+    // console.log(files_arr)
     if (files_arr.length <= 0) {
         if (str_title.value == '修改') {
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
@@ -664,7 +676,7 @@ const dialogExamineCloseFunc = () => {
         return false
     }
     getFilesKeys(files_arr, 'announce').then(files => {
-        console.log(files)
+        // console.log(files)
         for (let i in files) {
             from_examine.item.affix[i].file = files[i]
         }
@@ -685,7 +697,7 @@ const dialogExamineCloseFunc = () => {
             })
         } else {
             APIpostEventArticle(from_examine.item).then(res => {
-                console.log(res)
+                // console.log(res)
                 announce_id.value = res.id
                 refreshFunc()
                 //         announce_id.value = getNameFunc(res, from_examine.item.title)
@@ -719,10 +731,10 @@ const getTabListFunc = () => {
             params[key] = data_search.obj[key]
         }
     }
-    console.log(data_search.obj)
+    // console.log(data_search.obj)
     loading_tab.value = true
     APIgetEventArticleList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -786,7 +798,7 @@ const modifyResidentialFunc = val => {
         // }
         delete res.status
         // console.log(from_examine.item)
-        console.log(res)
+        // console.log(res)
         from_examine.item = res
         switch_examine.value = true
         userGroupName.value = res.authorgroup?.name
@@ -798,7 +810,7 @@ const switch_apply = ref(false)
 const announce_id_1 = ref('')
 const noExamineFunc = row => {
     switch_apply.value = true
-    console.log(row)
+    // console.log(row)
     announce_id_1.value = row.id
     // from_pass.obj.reply = ''
     // active.value = 0
@@ -833,7 +845,7 @@ const next = () => {
         total1.value = 0
         active.value = 1
     } else if (active.value == 1) {
-        console.log(str_title.value)
+        // console.log(str_title.value)
         if (str_title.value == '添加' || total1.value == 0) {
             passToAuditFunc()
         }
@@ -867,7 +879,7 @@ const examineListFunc = val => {
         group_id: val.groupid
     }
     APIgetListArchiveAudit(params).then(res => {
-        console.log(res)
+        // console.log(res)
         Examine_id.value = res[0].id
         // switch_pass.value = true
     })
@@ -900,7 +912,7 @@ const passAudit = val => {
     // })
 }
 const passToAuditFunc_1 = () => {
-    console.log(from_pass.obj)
+    // console.log(from_pass.obj)
     APIputArchiveAudit(Examine_id.value, from_pass.obj).then(res => {
         ElMessage.success('审核成功')
         switch_pass.value = false
@@ -914,7 +926,7 @@ const passToAuditFunc = () => {
     } else {
         from_pass.obj.tgt_id = announce_id.value
     }
-    console.log(from_pass.obj)
+    // console.log(from_pass.obj)
     APIpostArchiveAudit(from_pass.obj).then(res => {
         // ElMessage.success('审核成功')
         if (announce_id_1.value) {
@@ -931,7 +943,7 @@ const dialogExamineCloseFunc_2 = () => {
 }
 // 监听文件变化的执行方法
 const fileChange = (val, i) => {
-    console.log("val",val)
+    // console.log("val",val)
     // from_examine.item.affix[i].file = val.target.files[0].name
     from_examine.item.affix[i].file = val.target.files[0]
 }
@@ -972,7 +984,7 @@ const getChinaName = () => {
     })
 }
 const checkFunc = val => {
-    console.log(val)
+    // console.log(val)
     if (val.type == 'zone') {
         from_examine.item.toval = val.id
         data_search.obj.tovalcan = val.china_code

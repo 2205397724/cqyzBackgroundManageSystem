@@ -1196,6 +1196,10 @@ export function APIgetHouseDetailsHouse(id) {
 export function APIdeleteHouseHouse(id) {
     return api.delete('/houses/' + id)
 }
+// 删除楼栋或单元下的房屋
+export function APIdeleteHouseAbleHouse(data) {
+    return api.delete('/houses-able', {data})
+}
 // 修改
 export function APIputHouseHouse(id, data) {
     return api.put('/houses/' + id, data)
