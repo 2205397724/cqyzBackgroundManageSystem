@@ -27,6 +27,7 @@
         "fetch-file-j": "^0.0.6",
         "hotkeys-js": "^3.8.7",
         "js-cookie": "^3.0.1",
+        "kin-file-fetch": "^1.0.0",
         "mitt": "^3.0.0",
         "mockjs": "^1.1.0",
         "nprogress": "^0.2.0",

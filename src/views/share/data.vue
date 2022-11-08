@@ -86,7 +86,7 @@
             />
         </page-main>
         <el-dialog v-model="data.switch_1" title="相关材料" width="60%">
-            <el-button type="primary" @click="downLoadMaterials">下载选中业务材料</el-button>
+            <el-button type="primary" class="m-b-10" @click="downLoadMaterials">下载选中业务材料</el-button>
             <el-scrollbar height="300px">
                 <el-table
                     :data="data.arr"
@@ -133,7 +133,6 @@
                     <el-table-column fixed="right" label="操作" width="100">
                         <template #default="scope">
                             <el-button
-                                :disabled="scope.row.content !== ''"
                                 type="primary"
                                 size="small"
                                 @click="addMaterialFunc(scope.row)"
@@ -209,8 +208,8 @@ import {
 } from 'element-plus'
 import { Search, Plus, Loading } from '@element-plus/icons-vue'
 import { getFilesKeys } from '@/util/files.js'
-// 多文件打包下载：参考（https://www.npmjs.com/package/fetch-file-j）
-import { instance } from 'fetch-file-j'
+
+import { instance } from 'kin-file-fetch'
 const loading_tab = ref(false)
 const data = reactive({
     list: [],
@@ -236,6 +235,11 @@ const StatusFunk = val => {
     flag2.value = false
     // console.log(flag.value)
 }
+const details = reactive({
+    obj: {
+        materials: []
+    },
+})
 const page = ref(1)
 const per_page = ref(15)
 const getShareDataList = () => {
@@ -266,6 +270,12 @@ const getShareDataList = () => {
         }
     })
 }
+//获取详情
+const getShareDataDetail = (id)=>{
+    APIgetShareDataDetails(id).then(res => {
+        details.obj = res
+    })
+}
 // 监听分页
 watch(page, () => {
     getShareDataList()
@@ -279,10 +289,8 @@ const dataMaterialFunc = row => {
     materialId_1.value = row.id
     data.switch_1 = true
     APIgetShareDataMaterialList({ rid: row.id }).then(res => {
-        // console.log("111",res)
         res.map(item=>{
             if(item.sharefile.type != 1 && item.content != "") {
-                // console.log("aaaa")
                 item.file = []
                 item.file = item.content.split(",")
                 for(let i in item.file) {
@@ -291,8 +299,8 @@ const dataMaterialFunc = row => {
             }
         })
         data.arr = res
-        // console.log("123",data.arr)
     })
+    getShareDataDetail(row.id)
 }
 const materialId = ref('')
 const materialId_1 = ref('')
@@ -381,14 +389,14 @@ const selectionChange = (selection) => {
 // 下载业务材料
 let urls = reactive([])
 const downLoadMaterials = ()=>{
-    // console.log("123",urls)
-    instance.download(urls);
+    let username = details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username
+    let address = details.obj.house.addr
+    instance.download(urls,username +'-'+ address);
 }
 // switch 状态改变事件
 const SwitchFunc = (e) => {
     let status = e.status === 20 ? 20 : 30
     let content = e.content
-    // console.log("111",e,status)
     APIputShareDataMaterial(e.id,{content,status}).then(res => {
         ElMessage.success('修改成功')
     }).catch(() => {

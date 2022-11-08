@@ -89,8 +89,8 @@ import { ref, reactive} from 'vue'
 import { APIgetShareDataDetails} from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
-// 多文件打包下载：参考（https://www.npmjs.com/package/fetch-file-j）
-import { instance } from 'fetch-file-j'
+
+import { instance } from 'kin-file-fetch'
 const route = useRoute()
 const details = reactive({
     obj: {
@@ -111,7 +111,6 @@ const getShareDataDetail = ()=>{
             }
         })
         details.obj = res
-        // console.log("123",details.obj)
     })
 }
 // 下载业务材料
@@ -119,14 +118,14 @@ let urls = reactive([])
 const downLoadMaterials = ()=>{
     // 遍历判断材料是否有图片
     urls = []
-    console
     for(let i in details.obj.materials) {
         if(details.obj.materials[i].picture) {
             urls.push(...details.obj.materials[i].picture)
-            // console.log("123",urls)
         }
     }
-    instance.download(urls);
+    let username = details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username
+    let address = details.obj.house.addr
+    instance.download(urls,username +'-'+ address);
 }
 onMounted(() => {
     getShareDataDetail()
