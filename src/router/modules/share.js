@@ -110,6 +110,30 @@ export default {
                     }
                 }
             ]
+        },
+        {
+            path: '/share/post.share.record',
+            component: Layout,
+            redirect: '/share/post.share.record/index',
+            name: 'postShareRecord',
+            meta: {
+                title: '发起共享',
+                icon: 'el-icon-MessageBox',
+                auth: ['share.files', '*']
+            },
+            children: [
+                {
+                    path: 'index',
+                    name: 'postShareRecord',
+                    component: () => import('@/views/share/post.share.record.vue'),
+                    meta: {
+                        title: '发起共享',
+                        sidebar: false,
+                        breadcrumb: false,
+                        activeMenu: '/share/post.share.record'
+                    }
+                }
+            ]
         }
     ]
 }

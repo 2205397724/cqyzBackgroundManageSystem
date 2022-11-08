@@ -11,6 +11,7 @@
                 <!-- <el-badge :value="index == 20 ? total : ''" class="item" :hidden="flag2"> -->
                 <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">共享结束</el-button>
                 <!-- </el-badge> -->
+                <text><el-button class="m-l-40" type="primary" @click="{i}">发起共享</el-button></text>
             </el-button-group>
             <el-table
                 v-loading="loading_tab"
