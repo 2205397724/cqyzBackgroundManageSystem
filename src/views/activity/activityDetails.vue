@@ -293,11 +293,12 @@
                         <div class="details-box">
                             <el-row>
                                 <el-col :span="8">
-                                    <el-button type="primary" @click="updateSurveyResult">更新统计结果</el-button>
+                                    <el-button class="m-r-20 m-b-20" type="primary"
+                                        style="padding: 19px 18px;position: relative;top: 5px;"
+                                        @click="updateSurveyResult">更新统计结果</el-button>
                                 </el-col>
                             </el-row>
                             <div class="details-tit-sm">数量</div>
-
                             <el-row :gutter="20">
                                 <el-col :span="8">
                                     <div class="item">
@@ -530,6 +531,8 @@
                         <el-form-item label="参与房屋总数：">{{statistics.obj.house_tot_cnt}}</el-form-item>
                         <el-form-item label="已参与房屋数量：">{{statistics.obj.house_has_cnt}}</el-form-item>
                         <el-form-item label="已参与房屋面积总数：">{{statistics.obj.area_has}}</el-form-item>
+                        <el-form-item label="选票百分比：">{{statistics.obj.ticket_per}}%</el-form-item>
+                        <el-form-item label="面积百分比：">{{statistics.obj.area_per}}%</el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <div class="p-10" style="background-color: #f0f9eb ;color: #61bf33;">最终结果</div>
@@ -551,6 +554,12 @@
                             </el-form-item>
                             <el-form-item label="已参与房屋面积总数">
                                 <el-input v-model="from_examine.item.area_has" placeholder="" type="number"/>
+                            </el-form-item>
+                            <el-form-item label="选票百分比">
+                                <el-input v-model="from_examine.item.ticket_per" placeholder="" type="number"/>
+                            </el-form-item>
+                            <el-form-item label="面积百分比">
+                                <el-input v-model="from_examine.item.area_per" placeholder="" type="number"/>
                             </el-form-item>
                         </el-form>
                     </el-col>
@@ -653,6 +662,15 @@ const checkChangeFunc = val => {
 const switch_set_area = ref(false)
 const detail_set_area = () => {
     switch_set_area.value = true
+    // 调用tree树形组件初始的请求
+    let uid = localStorage.getItem('uid')
+    let region_cc = JSON.parse(localStorage.getItem(uid + '_user_group')).region_cc
+    APIgetChinaRegion({p_code:region_cc}).then(res => {
+        tree_item.value.id = res[0].code
+        tree_item.value.name = res[0].name
+        tree_item.value.type = 'region'
+        tree_item.value.next_type = 'region'
+    })
 }
 // 详情
 let switch_details = ref(false)
@@ -1135,13 +1153,6 @@ let addticket = reactive({
     // },
     ]
 })
-// 调用tree树形组件初始的请求
-APIgetChinaRegion().then(res => {
-    tree_item.value.id = res[0].code
-    tree_item.value.name = res[0].name
-    tree_item.value.type = 'region'
-    tree_item.value.next_type = 'region'
-})
 const flag_2 = ref(false)
 const flag_3 = ref(true)
 const getProportion = () => {
@@ -1167,6 +1178,8 @@ let from_examine = reactive({
         house_tot_cnt:'',
         house_has_cnt:'',
         area_has:'',
+        ticket_per:'',
+        area_per:''
     }
 })
 const dialogSurveyResultFunc = formEl => {

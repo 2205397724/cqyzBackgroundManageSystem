@@ -9,7 +9,7 @@ export default function globalProperties(app) {
     // 鉴权
     app.config.globalProperties.$auth = auth
     app.config.globalProperties.$authAll = authAll
-    dayjs.locale('zh-cn')
+    dayjs.locale('zh-cn')// 使用本地化语言
     app.config.globalProperties.$dayjs = dayjs
     app.config.globalProperties.$cookies = Cookies
     app.config.globalProperties.$hotkeys = hotkeys

@@ -18,6 +18,7 @@ import * as ElementIcons from '@element-plus/icons-vue'
 for (var key in ElementIcons) {
     app.component(`ElIcon${ElementIcons[key].name}`, ElementIcons[key])
 }
+// 将element-plus 默认的使用英语改成中文
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 app.use(ElementPlus, {
     locale: zhCn,
