@@ -1531,6 +1531,14 @@ export function APIgetNotParticipate(id, params) {
 export function APIgetSurveyStatus(survey) {
     return api.get(`/s/${survey}/stat`)
 }
+// 修改活动统计数据
+export function APImodifySurveyResultStatus(survey,props) {
+    return api.put(`/s/${survey}/stat`,props)
+}
+// 修改活动统计数据
+export function APIrefreshSurveyStatus(survey) {
+    return api.put(`/s/${survey}/stat-refresh`)
+}
 // 事件脉络
 // 事件
 // 列表

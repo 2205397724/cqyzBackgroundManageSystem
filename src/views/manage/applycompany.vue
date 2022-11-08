@@ -1,5 +1,5 @@
 <template>
-    <div class="keep-on-record">
+    <div>
         <page-main class="hidden">
             <el-button-group class="btngrop m-b-20">
                 <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
