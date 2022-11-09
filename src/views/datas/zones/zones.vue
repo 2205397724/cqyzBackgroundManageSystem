@@ -651,7 +651,7 @@ const checkFunc = val => {
     china_code.value = val.id
     let cur = active_obj.obj.name || ''
     if (cur.includes('社区') || cur.includes('街道') || cur.includes('镇') || cur.includes('区') || cur.includes('县')) {
-        APIgetResidentialListHouse({ page: 1, per_page: 5, china_code: active_obj.obj.id }).then(res => {
+        APIgetResidentialListHouse({ page: page.value, per_page: per_page.value, china_code: active_obj.obj.id }).then(res => {
             // console.log(res)
             data_tab.arr = res
         })
@@ -842,8 +842,10 @@ const dialogExamineCloseFunc = formEl => {
 const getTabListFunc = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value
+        per_page: per_page.value,
+        china_code: active_obj.obj.id
     }
+    console.log("active_obj.obj.id",active_obj.obj.id)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
