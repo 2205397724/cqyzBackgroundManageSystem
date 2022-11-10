@@ -278,7 +278,6 @@
                 </el-tab-pane>
                 <el-tab-pane :label="activeName_1 == '选举' ? activeName_1+'候选人' : activeName_1+'题目'" name="3">
                     <div v-if="activeName_1 == '选举'">
-                        <!-- <SurveyQuestions :id="route.query.id" /> -->
                         <SurveyElection :id="route.query.id" />
                     </div>
                     <div v-else>
@@ -292,10 +291,16 @@
                     <div>
                         <div class="details-box">
                             <el-row>
-                                <el-col :span="8">
+                                <el-col :span="16">
                                     <el-button class="m-r-20 m-b-20" type="primary"
+                                        v-if="!result_switch_examine"
                                         style="padding: 19px 18px;position: relative;top: 5px;"
                                         @click="updateSurveyResult">更新统计结果</el-button>
+                                    <div v-else>
+                                        <el-button @click="result_switch_examine = false">取消</el-button>
+                                        <el-button type="primary" @click="dialogSurveyResultFunc">确定提交修改</el-button>
+                                        <el-button type="primary" @click="resultRefreshState">重新计算结果</el-button>
+                                    </div>
                                 </el-col>
                             </el-row>
                             <div class="details-tit-sm">数量</div>
@@ -317,6 +322,9 @@
                                         <div class="left_1 w-100">总房屋数</div>
                                         <span>{{ statistics.obj.house_tot_cnt }}</span>
                                     </div>
+                                    <span v-if="result_switch_examine">
+                                        <el-input v-model="from_examine.item.house_tot_cnt" placeholder="参与总房屋数" type="number"/>
+                                    </span>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="20">
@@ -325,18 +333,27 @@
                                         <div class="left_1 w-100">线上参与</div>
                                         <span>{{ statistics.obj.answer_cnt?.online }}</span>
                                     </div>
+                                    <span v-if="result_switch_examine">
+                                        <el-input v-model="from_examine.item.answer_cnt.online" placeholder="线上参与" type="number"/>
+                                    </span>
                                 </el-col>
                                 <el-col :span="8">
                                     <div class="item">
                                         <div class="left_1 w-100">线下参与</div>
                                         <span>{{ statistics.obj.answer_cnt?.offline }}</span>
                                     </div>
+                                    <span v-if="result_switch_examine">
+                                        <el-input v-model="from_examine.item.answer_cnt.offline" placeholder="线下参与" type="number"/>
+                                    </span>
                                 </el-col>
                                 <el-col :span="8">
                                     <div class="item">
                                         <div class="left_1 w-100">已参与房屋</div>
                                         <span>{{ statistics.obj.house_has_cnt }}</span>
                                     </div>
+                                    <span v-if="result_switch_examine">
+                                        <el-input v-model="from_examine.item.house_has_cnt" placeholder="已参与房屋" type="number"/>
+                                    </span>
                                 </el-col>
                             </el-row>
                         </div>
@@ -350,8 +367,11 @@
                                     <el-progress type="circle" :percentage="statistics.obj.ticket_per" />
                                     <div style="font-size: 14px; color: #aaa; margin: 5px 0;">参与票/总票数</div>
                                     <div>
-                                        {{ statistics.obj.answer_cnt?.online + statistics.obj.answer_cnt?.offline }}/{{ statistics.obj.tot?.ticket }}
+                                        {{parseInt(statistics.obj.answer_cnt?.online) + parseInt(statistics.obj.answer_cnt?.offline) }}/{{ statistics.obj.tot?.ticket }}
                                     </div>
+                                    <span v-if="result_switch_examine">
+                                        <el-input v-model="from_examine.item.ticket_per" placeholder="选票百分比" type="number"/>
+                                    </span>
                                 </el-col>
                                 <el-col :lg="12" style="display: inline-block;text-align: center;">
                                     <el-progress type="circle" :percentage="statistics.obj.area_per" />
@@ -359,6 +379,10 @@
                                     <div>
                                         {{ statistics.obj.area_has }}/{{ statistics.obj.tot?.area }}
                                     </div>
+                                    <span v-if="result_switch_examine">
+                                        <el-input v-model="from_examine.item.area_per" placeholder="参与面积百分比" type="number"/>
+                                        <el-input v-model="from_examine.item.area_has" placeholder="已参与房屋面积总数" type="number"/>
+                                    </span>
                                 </el-col>
                             </el-row>
                         </div>
@@ -393,6 +417,10 @@
                                                             <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
                                                             <el-progress v-else :percentage="(val.opt_cnt_map / countTot *100) .toFixed(2)" :color="customColor"/>
                                                             <text>{{'('+val.opt_cnt_map +'/'+countTot+')'}}</text>
+                                                            <span v-if="result_switch_examine">
+                                                                <el-input v-model="topic_details.item[i].opts[j].opt_cnt_map"
+                                                                    @input="optCntInput(val.id,$event)" placeholder="选项票数" type="number"/>
+                                                            </span>
                                                         </el-col>
                                                         <el-col v-if="flag_2&&!flag_3" :lg="22" style="margin-top: 3px;">
                                                             <el-progress v-if="val.opt_cnt_map == 0" :percentage="0" :color="customColor" />
@@ -408,6 +436,10 @@
                                                             <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
                                                             <el-progress v-else :percentage="((val.opt_area_map) / areaTot * 100).toFixed(2)" :color="customColor"/>
                                                             <text>{{'('+val.opt_area_map +'/'+areaTot+')'}}</text>
+                                                            <span v-if="result_switch_examine">
+                                                                <el-input v-model="topic_details.item[i].opts[j].opt_area_map"
+                                                                    @input="optAreaInput(val.id,$event)" placeholder="选项面积" type="number"/>
+                                                            </span>
                                                         </el-col>
                                                         <el-col v-if="flag_2&&!flag_3" :lg="22" style="margin-top: 3px;">
                                                             <el-progress v-if="val.opt_area_map == 0" :percentage="0" :color="customColor" />
@@ -520,7 +552,7 @@
             @checkChangeFunc="checkChangeFunc"
         />
         <!-- 更新统计结果弹窗 -->
-        <el-dialog v-model="result_switch_examine" :title="result_str_title" width="50%">
+        <!-- <el-dialog v-model="result_switch_examine" :title="result_str_title" width="50%">
             <el-button class="m-b-10" type="primary" @click="resultRefreshState">计算结果</el-button>
             <div>
                 <el-row  :gutter="10">
@@ -578,7 +610,7 @@
                     </el-button>
                 </div>
             </template>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -789,7 +821,7 @@ const getSurveyStatus = () => {
         from_examine.item = JSON.parse(JSON.stringify(res))//深拷贝
         statistics.obj = res
         countTot.value = statistics.obj.tot.ticket
-        answerCnt.value = statistics.obj.answer_cnt.offline + statistics.obj.answer_cnt.online
+        answerCnt.value = parseInt(statistics.obj.answer_cnt.offline) + parseInt(statistics.obj.answer_cnt.online)
         areaTot.value = statistics.obj.tot.area
         areaCnt.value = statistics.obj.area_has
         opt_cnt_map.arr = []
@@ -1185,26 +1217,35 @@ let from_examine = reactive({
         house_has_cnt:'',
         area_has:'',
         ticket_per:'',
-        area_per:''
+        area_per:'',
+        opt_cnt_map:[],
+        opt_area_map:[]
     }
 })
 const dialogSurveyResultFunc = formEl => {
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            APImodifySurveyResultStatus(route.query.id, from_examine.item).then(res=>{
-                ElMessage.success('修改成功',res)
-                result_switch_examine.value = false
-                getSurveyStatus()
-            }).catch(err => {
-                ElMessage.error('修改失败')
-            })
-        }else {
-            return false
-        }
+    // if (!formEl) return
+    // formEl.validate(valid => {
+    //     if (valid) {
+    //         APImodifySurveyResultStatus(route.query.id, from_examine.item).then(res=>{
+    //             ElMessage.success('修改成功',res)
+    //             result_switch_examine.value = false
+    //             getSurveyStatus()
+    //         }).catch(err => {
+    //             ElMessage.error('修改失败')
+    //         })
+    //     }else {
+    //         return false
+    //     }
+    // })
+    APImodifySurveyResultStatus(route.query.id, from_examine.item).then(res=>{
+        ElMessage.success('修改成功',res)
+        result_switch_examine.value = false
+        getSurveyStatus()
+    }).catch(err => {
+        ElMessage.error('修改失败')
     })
 }
-// 重现统计数据
+// 重新统计数据
 const resultRefreshState = () => {
     APIrefreshSurveyStatus(route.query.id).then(res=>{
         statistics.obj = res
@@ -1212,6 +1253,31 @@ const resultRefreshState = () => {
         answerCnt.value = statistics.obj.answer_cnt.offline + statistics.obj.answer_cnt.online
         areaTot.value = statistics.obj.tot.area
     })
+}
+// 监听选项票数的修改事件
+const optCntInput = (id,e) => {
+    // 防抖
+    let timer
+    clearTimeout(timer);
+    timer = setTimeout(()=>{
+        from_examine.item.opt_cnt_map.map(item => {
+            if(item.oid == id) {
+                item.cnt = e
+            }
+        })
+    },500)
+}
+// 监听选项面积的修改事件
+const optAreaInput = (id,e) => {
+    let timer
+    clearTimeout(timer);
+    timer = setTimeout(()=>{
+        from_examine.item.opt_area_map.map(item => {
+            if(item.oid == id) {
+                item.area = e
+            }
+        })
+    },500)
 }
 // 配置项
 const opts_all = reactive({

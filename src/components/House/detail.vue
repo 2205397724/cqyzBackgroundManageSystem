@@ -154,10 +154,10 @@
                                         :error="from_error_property.msg && from_error_property.msg['owners.' + i + '.type_id_card'] ? from_error_property.msg['owners.' + i + '.type_id_card'][0] : ''">
                                         <el-select v-if="!read_state" v-model="item.type_id_card" class="head-btn"
                                             placeholder="" clearable>
-                                            <el-option v-for="(item) in opts_all.obj.type_id_card" :key="item.key"
+                                            <el-option v-for="(item) in opts_all.obj.card_type" :key="item.key"
                                                 :label="item.val" :value="item.key" />
                                         </el-select>
-                                        <span v-else>{{ getOptVal(opts_all.obj.type_id_card,item.type_id_card) }}</span>
+                                        <span v-else>{{ getOptVal(opts_all.obj.card_type,item.type_id_card) }}</span>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="p-b-10">
@@ -670,7 +670,7 @@ const deleteServiceFunc = index => {
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['gender', 'type_id_card','house_type_model', 'house_type_property', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
+getOpts(['gender', 'card_type','house_type_model', 'house_type_property', 'house_status_use', 'house_status_safe', 'house_status_plan_fact']).then(res => {
     opts_all.obj = res
 })
 </script>
