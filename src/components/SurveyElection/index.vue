@@ -264,21 +264,21 @@ const topicsFunc = () => {
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
-        topic_details.item = [[], [], [], []]
-        // console.log(res)
-        // 对题目进行排序
-        res.forEach(element => {
-            if (element.type === 0) {
-                topic_details.item[0].push(element)
-            } else if (element.type === 1) {
-                topic_details.item[1].push(element)
-            } else if (element.type === 2) {
-                topic_details.item[2].push(element)
-            } else if (element.type === 3) {
-                topic_details.item[3].push(element)
-            }
-        })
-        topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
+        // topic_details.item = [[], [], [], []]
+        // // 对题目进行排序
+        // res.forEach(element => {
+        //     if (element.type === 0) {
+        //         topic_details.item[0].push(element)
+        //     } else if (element.type === 1) {
+        //         topic_details.item[1].push(element)
+        //     } else if (element.type === 2) {
+        //         topic_details.item[2].push(element)
+        //     } else if (element.type === 3) {
+        //         topic_details.item[3].push(element)
+        //     }
+        // })
+        // topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
+        topic_details.item = res
     })
     // console.log('topic_details', topic_details)
 }

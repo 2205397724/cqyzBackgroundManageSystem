@@ -12,7 +12,8 @@
                 <el-radio-button label="全部">全部</el-radio-button>
                 <el-radio-button label="线上参与">线上参与({{ participate.on_line }})</el-radio-button>
                 <el-radio-button label="线下参与">线下参与({{ participate.off_line }})</el-radio-button>
-                <el-radio-button label="未参与">未参与的房屋({{ participate.notParticipateLength }})</el-radio-button>
+                <!-- <el-radio-button label="未参与">未参与的房屋({{ participate.notParticipateLength }})</el-radio-button> -->
+                <el-radio-button label="未参与">未参与的房屋</el-radio-button>
             </el-radio-group>
         </div>
         <!-- 未参与情况 -->
@@ -98,7 +99,8 @@
                     <div v-if="item.type === 1">
                         <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
                         <div v-for="(items,i) in item.opts" :key="i" class="m-l-40">
-                            <el-radio-group v-model="radio2">
+                            <!-- <el-radio-group v-model="radio2"> -->
+                            <el-radio-group v-model="radio2.list[index]">
                                 <el-radio :label="items.id" @change="emitTickets_1(item.id,index)">{{ items.content }}</el-radio>
                             </el-radio-group>
                         </div>
@@ -170,6 +172,18 @@
                     <div class="item">
                         <div class="left">参与时间</div>
                         <div class="right">{{ answer_detail.item.updated_at }}</div>
+                    </div>
+                    <div class="item">
+                        <div class="left">参与房屋套数</div>
+                        <div class="right">{{ answer_detail.item.answerhouses_count }}</div>
+                    </div>
+                    <div>
+                        <el-button class="m-l-20" type="primary" size="small" @click="getAnsweredHouse">获取答卷参与房屋</el-button>
+                    </div>
+                    <div v-if="answer_house.arr.length>0">
+                        <block v-for="item in answer_house.arr" :key="item">
+                            <div>{{item.house.name}}</div>
+                        </block>
                     </div>
                     <!-- 遍历题目 -->
                     <div class="details-tit-sm">题目信息</div>
@@ -322,9 +336,12 @@ import {
     // 获取问卷题目
     APIgetSurveyTopic,
     APIgetSurveyRange,
-    APIgetHouseListSort
+    APIgetHouseListSort,
+    // 获取答卷参与房屋
+    APIgetSurveyAnswerHouse
 } from '@/api/custom/custom.js'
-
+import { ElMessage } from 'element-plus'
+import { reactive } from 'vue'
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
 onMounted(() => {
@@ -436,7 +453,10 @@ let answer_detail = reactive({
     item: ''
 })
 // 查看
+const active_answer_id = ref('')//当前查看的答卷id
 const getAnswerDetail = id => {
+    answer_house.arr = []//清空答卷已参与房屋的数组
+    active_answer_id.value = id
     switch_answer_detail.value = true
     // 根据问卷题目数量插入对象到answers中
     // 先判断数组长度是否相同
@@ -458,6 +478,19 @@ const getAnswerDetail = id => {
         console.log('answer_detail.item', answer_detail.item)
     })
 }
+// 获取答卷的参与房屋
+const answer_house = reactive({
+    arr:[]
+})
+const getAnsweredHouse = () => {
+    let params = {
+        page:1,
+        per_page:50
+    }
+    APIgetSurveyAnswerHouse(active_answer_id.value,params).then(res=>{
+        answer_house.arr = res.items
+    })
+}
 const data_range = reactive({
     arr: []
 })
@@ -466,7 +499,7 @@ const tree_item = reactive({
 })
 // 打开对话框添加书面票
 const addAnswer = () => {
-    radio2.value = ''
+    // radio2.value = ''
     radio4.arr = []
     topicsFunc()
     switch_addAnswer.value = true
@@ -476,6 +509,7 @@ const addAnswer = () => {
     // if (addticket.answers.length != topic_details.item.length) {
     addticket.answers = []
     for (let i = 0;i < topic_details.item.length;i++) {
+        radio2.list[i] = ' '
         // 判断是选择题还是主观题
         if (topic_details.item[i].type == 1 || topic_details.item[i].type == 2) {
             addticket.answers.push({ 'tid': '', 'opt': [] })
@@ -483,7 +517,7 @@ const addAnswer = () => {
             addticket.answers.push({ 'tid': '', 'content': '' })
         }
     }
-    console.log(addticket.answers)
+    // console.log(addticket.answers)
     // }
     let params = {
         page: 1,
@@ -492,9 +526,7 @@ const addAnswer = () => {
         can_type: 2
         // type_many: [2, 3, 4, 5]
     }
-    APIgetSurveyRange(params)
-        .then(res => {
-
+    APIgetSurveyRange(params).then(res => {
             for (let i = 0;i < res.length;i++) {
                 for (let j = i + 1; j < res.length;j++) {
                     if (res[i].tgt == res[j].tgt) {
@@ -503,7 +535,7 @@ const addAnswer = () => {
                     }
                 }
             }
-            console.log(res)
+            // console.log(res)
             data_range.arr = res
             tree_item.arr = []
             res.forEach((item, key) => {
@@ -560,7 +592,10 @@ watch(page, () => {
     // data1FnGetList()
     notParticipate()
 })
-const radio2 = ref('')
+// const radio2 = ref('')
+const radio2 = reactive({
+    list:[]
+})
 const radio3 = ref('')
 const radio4 = reactive({
     arr: []
@@ -577,7 +612,8 @@ const emitTickets = (tid, index) => {
 const emitTickets_1 = (tid, index) => {
     addticket.answers[index].opt = []
     addticket.answers[index].tid = tid
-    addticket.answers[index].opt.push(radio2.value)
+    // addticket.answers[index].opt.push(radio2.value)
+    addticket.answers[index].opt.push(radio2.list[index])
     console.log(addticket.answers)
 }
 const emitTickets_2 = (val, index) => {
@@ -587,7 +623,6 @@ const emitTickets_2 = (val, index) => {
     addticket.answers[index].content = val.answer
     console.log(addticket.answers)
 }
-import { ElMessage } from 'element-plus'
 const dialogAddSurveyAnswer = () => {
     console.log('addticket', addticket)
     APIaddSurveyAnswer(props.id, addticket).then(res => {
@@ -608,23 +643,23 @@ const topicsFunc = () => {
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
-        topic_details.item = [[], [], [], []]
-        console.log(res)
-        // 对题目进行排序
-        res.forEach(element => {
-            if (element.type === 0) {
-                topic_details.item[0].push(element)
-            } else if (element.type === 1) {
-                topic_details.item[1].push(element)
-            } else if (element.type === 2) {
-                topic_details.item[2].push(element)
-            } else if (element.type === 3) {
-                topic_details.item[3].push(element)
-            }
-        })
-        topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
+        // topic_details.item = [[], [], [], []]
+        // // 对题目进行排序
+        // res.forEach(element => {
+        //     if (element.type === 0) {
+        //         topic_details.item[0].push(element)
+        //     } else if (element.type === 1) {
+        //         topic_details.item[1].push(element)
+        //     } else if (element.type === 2) {
+        //         topic_details.item[2].push(element)
+        //     } else if (element.type === 3) {
+        //         topic_details.item[3].push(element)
+        //     }
+        // })
+        // topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
+        topic_details.item = res
     })
-    console.log('topic_details', topic_details)
+    // console.log('topic_details', topic_details)
 }
 // 选择身份证号
 const switch_choose_zone = ref(false)
@@ -677,7 +712,7 @@ const getHouseList = () => {
         params.houseable_type = active_obj.obj.type
     }
     APIgetHouseListSort(params).then(res => {
-        console.log(res)
+        // console.log(res)
         total.value = 0
         // 处理空白格
         let nums = res.house_nums
@@ -693,7 +728,7 @@ const getHouseList = () => {
             }
             house_num.arr = nums
             house_list.arr = list
-            console.log(house_num.arr)
+            // console.log(house_num.arr)
             // 处理默认选择项目
             for (let i in house_num.arr) {
                 checkFH.row[house_num.arr[i]] = {
@@ -727,10 +762,10 @@ const house_details = reactive({
 const selectedZone_id = ref('')
 const houseName = ref('')
 const houseDetailsFunc = row => {
-    console.log(row)
+    // console.log(row)
     house_details.item = row
     houseName.value = house_details.item.pos_name + house_details.item.name
-    console.log(houseName.value)
+    // console.log(houseName.value)
     flag.value = true
 }
 const selectPropertyPeople = row => {

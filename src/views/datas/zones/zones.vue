@@ -646,6 +646,7 @@ const active_obj = reactive({
 // })
 const china_code = ref('')
 const checkFunc = val => {
+    page.value = 1
     active_obj.obj = val
     // console.log(val)
     china_code.value = val.id
