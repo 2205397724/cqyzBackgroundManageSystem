@@ -1263,12 +1263,18 @@ const optCntInput = (id,e) => {
         from_examine.item.opt_cnt_map.map(item => {
             if(item.oid == id) {
                 item.cnt = e
+                return
             }
+        })
+        from_examine.item.opt_cnt_map.push({
+            oid:id,
+            cnt:e
         })
     },500)
 }
 // 监听选项面积的修改事件
 const optAreaInput = (id,e) => {
+    // 防抖
     let timer
     clearTimeout(timer);
     timer = setTimeout(()=>{
