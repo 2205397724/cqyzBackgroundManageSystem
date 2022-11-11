@@ -3,5 +3,7 @@ node_modules
 dist*
 dist-ssr
 *.local
+.env.production
+package-lock.json
 src/assets/sprites/*.*
 

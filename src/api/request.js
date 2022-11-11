@@ -73,8 +73,7 @@ api.interceptors.request.use(
         }
         var time = new Date().getTime().toString()
         var eqtype = '2'
-        var secret = 'secret'
-        //var secret = 'ba2db4cf139d946dd914e1d5031c75320bf663cc'
+        var secret = import.meta.env.VITE_APP_SECRET
         var sign = SHA256(time + eqtype + secret)
         request.headers['X-Sign'] = [time, eqtype, sign].join('.')
         // 是否将 POST 请求参数进行字符串化处理
