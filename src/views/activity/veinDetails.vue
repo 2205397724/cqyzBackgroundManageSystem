@@ -146,7 +146,7 @@
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <el-tab-pane label="联名" name="1">
+                    <el-tab-pane label="联名" name="4">
                         <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
@@ -185,7 +185,7 @@
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <el-tab-pane label="表决" name="2">
+                    <el-tab-pane label="表决" name="3">
                         <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
@@ -224,7 +224,7 @@
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <el-tab-pane label="选举" name="3">
+                    <el-tab-pane label="选举" name="2">
                         <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
@@ -263,7 +263,7 @@
                             </el-table>
                         </el-scrollbar>
                     </el-tab-pane>
-                    <el-tab-pane label="问卷" name="4">
+                    <el-tab-pane label="问卷" name="1">
                         <el-scrollbar height="500px">
                             <el-table
                                 v-loading="loading_tab"
@@ -359,7 +359,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 const route = useRoute()
-console.log(route.query.id)
+// console.log(route.query.id)
 // console.log(route.params)
 import {
     reactive,
@@ -414,7 +414,7 @@ const currentActivity = reactive({
 })
 // 详情
 APIgetActivityEventDetails(route.query.id).then(res => {
-    console.log(res)
+    // console.log(res)
     dataForm.item = res
 })
 // 搜索
@@ -451,7 +451,7 @@ import {
     APIdeleteActivitiesEvent } from '@/api/custom/custom.js'
 const getActivitiesEventList = () => {
     APIgetActivitiesEventList(route.query.id).then(res => {
-        console.log(res)
+        // console.log(res)
         activity_tab.arr = res
     })
 }
@@ -471,7 +471,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetEventArticleList(params).then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         data_announce.arr = res
         total.value = res.length
@@ -479,7 +479,7 @@ const getTabListFunc = () => {
 }
 const getSurveyListFunc = val => {
     if (val !== '5') {
-        console.log('成功')
+        // console.log('成功')
         let params_1 = {
             page: page.value,
             per_page: per_page.value,
@@ -495,7 +495,7 @@ const getSurveyListFunc = val => {
         }
         loading_tab.value = true
         APIgetSurvey(params_1).then(res => {
-            console.log(res)
+            // console.log(res)
             loading_tab.value = false
             data_tab.arr = res
             total.value = res.length
@@ -503,7 +503,7 @@ const getSurveyListFunc = val => {
     }
 }
 const handleClick = () => {
-    console.log(activeName.value)
+    // console.log(activeName.value)
     getSurveyListFunc(activeName.value)
 }
 const name = computed(() => {
@@ -521,7 +521,7 @@ const addActiviesFunc = () => {
     switch_search.value = false
 }
 const rowClickFunc = row => {
-    console.log(row)
+    // console.log(row)
     currentActivity.item = row
     switch_sure.value = true
 }
@@ -543,7 +543,7 @@ import {
 const main_type = ref('announce')
 const getAnnounceType = () => {
     APIgetTypeList(main_type.value).then(res => {
-        console.log(res)
+        // console.log(res)
         data_1.arr = res
     })
 }
@@ -556,7 +556,7 @@ import {
 } from '@/api/custom/custom.js'
 const getUserGroupList = () => {
     APIgetGroupList().then(res => {
-        console.log(res)
+        // console.log(res)
         loading_tab.value = false
         userData.arr = res
     })

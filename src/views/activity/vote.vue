@@ -144,10 +144,16 @@
             </div>
             <!-- 修改添加 -->
             <el-dialog v-model="switch_examine" :title="str_title" width="50%" @closed="dialogClosed">
+                <el-steps v-if="str_title== '添加'" :active="active" finish-status="success" space="30%" align-center>
+                    <el-step title="填写表决信息">
+                    </el-step>
+                    <el-step v-if="str_title== '添加'" title="发起审核申请" />
+                    <el-step v-if="str_title== '添加'" title="完成" />
+                </el-steps>
                 <div>
                     <el-scrollbar>
-                        <div class="details-box p-lr-10">
-                            <el-form ref="ruleFormRef" :model="from_examine.item">
+                        <div class="details-box p-lr-10 m-t-40 m-b-20">
+                            <el-form v-if="active == 0" ref="ruleFormRef" :model="from_examine.item">
                                 <el-row :gutter="10">
                                     <el-col :md="24" :lg="12">
                                         <el-form-item label="标题" label-width="80px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
@@ -244,13 +250,35 @@
                                     </el-col>
                                 </el-row>
                             </el-form>
+                            <el-form
+                                v-if="active == 1 && str_title== '添加'"
+                                ref="ruleFormRef"
+                                :model="from_pass.obj"
+                            >
+                                <el-row :gutter="10">
+                                    <el-col :xs="12" :sm="12">
+                                        <el-form-item
+                                            label="审核部门" label-width="120px"
+                                            :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
+                                        >
+                                            <div class="wh_100">
+                                                <div class="searchUserGroup">
+                                                    <SearchUserGroup ref="V" v-model:name="userGroupName_1" @checkName="checkNameFunc_1" />
+                                                </div>
+                                            </div>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
                         </div>
                     </el-scrollbar>
                 </div>
+                <el-button v-if="active !== 2 && str_title== '添加'" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">下一步</el-button>
+                <el-button v-if="active == 2" style="position: absolute; right: 33px; bottom: 14px;" size="largr" type="primary" @click="next">完成</el-button>
                 <template #footer>
-                    <div class="footer">
+                    <div v-if="str_title== '修改'" class="footer">
                         <el-button @click="switch_examine=false">取消</el-button>
-                        <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef,id)">确定</el-button>
+                        <el-button type="primary" @click="dialogExamineCloseFunc()">确定</el-button>
                     </div>
                 </template>
             </el-dialog>
@@ -443,53 +471,31 @@ onBeforeRouteLeave((to, from) => {
         sessionStorage.removeItem('currentPage')
     }
 })
+const surveyId = ref('')
 // 同意拒绝提交
-const dialogExamineCloseFunc = (formEl, id) => {
-    from_error.msg = {}
-    id = from_examine.item.id
+const dialogExamineCloseFunc = () => {
     // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
     from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
     from_examine.item.endat = value2.value._value ? value2.value._value : from_examine.item.endat
     from_error.msg = {}
-    if (!formEl) return
-    formEl.validate(valid => {
-        if (valid) {
-            from_examine.item.type = 3
-            for (let key in from_examine.item) {
-                if (from_examine.item[key] !== null) {
-                    if (from_examine.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_examine.item[key] !== 0 || from_examine.item[key] !== false)) {
-                        delete from_examine.item[key]
-                    }
-                }
-            }
-            if (str_title.value == '修改') {
-                console.log(from_examine.item)
-                APImodifySurvey(id, from_examine.item).then(res => {
-                    refreshFunc()
-                    // ElMessage.success(res.statusText)
-                    ElMessage.success('修改成功')
-                    switch_examine.value = false
-                    // 如果传递了状态码，就修改状态信息
-                    APImodifySurveyStatus(id, { 'status': from_examine.item.status }).then(res => {
-                        refreshFunc()
-                    })
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
-            } else {
-                APIaddSurvey(from_examine.item).then(res => {
-                    refreshFunc()
-                    // ElMessage.success(res.msg)
-                    ElMessage.success('添加成功')
-                    switch_examine.value = false
-                }).catch(err => {
-                    from_error.msg = err.data
-                })
-            }
-        } else {
-            return false
-        }
-    })
+    from_examine.item.type = 3
+    if (str_title.value == '修改') {
+        APImodifySurvey(from_examine.item.id, from_examine.item).then(res => {
+            refreshFunc()
+            ElMessage.success('修改成功')
+            switch_examine.value = false
+            APImodifySurveyStatus(from_examine.item.id, { 'status': from_examine.item.status }).then(res => {
+                refreshFunc()
+            })
+        })
+    } else {
+        APIaddSurvey(from_examine.item).then(res => {
+            surveyId.value = res.id
+            refreshFunc()
+        }).catch(err => {
+            ElMessage.error('添加失败')
+        })
+    }
 }
 // 获取列表api请求
 const getTabListFunc = () => {
@@ -576,6 +582,42 @@ const searchFunc = () => {
     page.value = 1
     switch_search.value = true
     getTabListFunc()
+}
+import {
+    APIpostArchiveAudit
+} from '@/api/custom/custom.js'
+const active = ref(0)
+const next = () => {
+    if (active.value == 0) {
+        dialogExamineCloseFunc()
+        active.value = 1
+    } else if (active.value == 1) {
+        // console.log(str_title.value)
+        if (str_title.value == '添加') {
+            passToAuditFunc()
+        }
+        active.value = 2
+    } else {
+        ElMessage.success('添加成功')
+        switch_examine.value = false
+    }
+}
+const from_pass = reactive({
+    obj: {}
+})
+const userGroupName_1 = ref('')
+const checkNameFunc_1 = val => {
+    from_pass.obj.group_id = val.id
+    userGroupName_1.value = val.name
+}
+const passToAuditFunc = () => {
+    from_pass.obj.tgt_type = 'survey'
+    from_pass.obj.tgt_id = surveyId
+    APIpostArchiveAudit(from_pass.obj).then(res => {
+        refreshFunc()
+    }).catch(err => {
+        ElMessage.success('申请失败')
+    })
 }
 refreshFunc()
 // 配置项

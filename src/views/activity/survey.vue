@@ -36,18 +36,6 @@
                             </el-col>
                         </el-row>
                     </el-col>
-                    <!-- <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                        <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                状态：
-                            </el-col>
-                            <el-col :sm="20" :xs="18" :md="18">
-                                <el-select v-model="data_search.obj.status" class="search_tb" placeholder="状态">
-                                    <el-option v-for="item in opts_all.obj.announce_status" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-col>
-                        </el-row>
-                    </el-col> -->
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
@@ -149,9 +137,6 @@
             <el-dialog v-model="switch_examine" :title="str_title" width="60%" @closed="dialogClosed">
                 <el-steps v-if="str_title== '添加'" :active="active" finish-status="success" space="30%" align-center>
                     <el-step title="填写问卷信息">
-                    <!-- <div style="width: 300px; height: 300px;"> -->
-                    <!-- </div> -->
-                    <!-- <el-button style="margin-top: 12px;" @click="next">Next step</el-button> -->
                     </el-step>
                     <el-step v-if="str_title== '添加'" title="发起审核申请" />
                     <el-step v-if="str_title== '添加'" title="完成" />
@@ -260,12 +245,6 @@
                             ref="ruleFormRef"
                             :model="from_pass.obj"
                         >
-                            <!-- <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" class="m-b-20">
-                                <el-step v-for="(item,i) in buzhoutiao.arr" :key="i" :title="item.name" />
-                            </el-steps>
-                            <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" class="pass">
-                                当前公示已审核完成
-                            </div> -->
                             <el-row :gutter="10">
                                 <el-col :xs="12" :sm="12">
                                     <el-form-item
@@ -493,44 +472,28 @@ onBeforeRouteLeave((to, from) => {
 const surveyId = ref('')
 // 同意拒绝提交
 const dialogExamineCloseFunc = () => {
-    // console.log(from_examine.item)
-    from_error.msg = {}
     // 使用element UI的时间处理器，要将修改的时间传给要提交的对象，因为placeholder绑定了旧值，最新的时间数据绑定value1
     from_examine.item.startat = value1.value._value ? value1.value._value : from_examine.item.startat
     from_examine.item.endat = value2.value._value ? value2.value._value : from_examine.item.endat
     from_error.msg = {}
-    // if (!formEl) return
-    // formEl.validate(valid => {
-    //     if (valid) {
     from_examine.item.type = 1
-    // console.log(from_examine.item)
     if (str_title.value == '修改') {
-        // console.log(from_examine.item)
         APImodifySurvey(from_examine.item.id, from_examine.item).then(res => {
             refreshFunc()
-            // ElMessage.success(res.statusText)
             ElMessage.success('修改成功')
             switch_examine.value = false
-            // 如果传递了状态码，就修改状态信息
             APImodifySurveyStatus(from_examine.item.id, { 'status': from_examine.item.status }).then(res => {
                 refreshFunc()
             })
         })
     } else {
         APIaddSurvey(from_examine.item).then(res => {
-            // console.log(res)
             surveyId.value = res.id
             refreshFunc()
-            // ElMessage.success(res.msg)
-            //
         }).catch(err => {
             ElMessage.error('添加失败')
         })
     }
-    // } else {
-    //     return false
-    // }
-    // })
 }
 import {
     APIpostArchiveAudit
@@ -560,19 +523,10 @@ const checkNameFunc_1 = val => {
     userGroupName_1.value = val.name
 }
 const passToAuditFunc = () => {
-    // let data = {
-    //     'tgt_type': 'announce',
-    //     'tgt_id': gongshixiangqing.obj.id,
-    //     'group_id': gongshixiangqing.obj.groupid
-    // }
     from_pass.obj.tgt_type = 'survey'
     from_pass.obj.tgt_id = surveyId
-    // console.log(from_pass.obj)
     APIpostArchiveAudit(from_pass.obj).then(res => {
-        // ElMessage.success('审核成功')
         refreshFunc()
-        // passAudit(gongshixiangqing.obj)
-        // switch_pass.value = false
     }).catch(err => {
         ElMessage.success('申请失败')
     })
