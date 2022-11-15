@@ -1523,6 +1523,10 @@ export function APIgetSurveyAnswerList(id, params) {
 export function APIgetSurveyAnswerDetail(id) {
     return api.get('/s/answer/' + id)
 }
+// 删除答卷
+export function APIdeleteSurveyAnswerDetail(id) {
+    return api.delete('/s/answer/' + id)
+}
 // 获取答卷的参与房屋
 export function APIgetSurveyAnswerHouse(id,params) {
     return api.get('/s/answer-house/'+id, { params: params })

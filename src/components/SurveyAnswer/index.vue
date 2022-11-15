@@ -71,9 +71,19 @@
                         <span v-else>未参与</span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" width="100px" label="操作">
+                <el-table-column fixed="right" width="140px" label="操作">
                     <template #default="scope">
                         <el-button type="primary" :icon="Search" size="small" @click="getAnswerDetail(scope.row.id)">查看</el-button>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row.id)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" class="btnfix">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -332,6 +342,7 @@ import {
     APIgetSurveyAnswerList,
     APIgetSurveyAnswerDetail,
     APIaddSurveyAnswer,
+    APIdeleteSurveyAnswerDetail,
     APIgetNotParticipate,
     // 获取问卷题目
     APIgetSurveyTopic,
@@ -475,7 +486,14 @@ const getAnswerDetail = id => {
     APIgetSurveyAnswerDetail(id).then(res => {
         // console.log(res)
         answer_detail.item = res
-        console.log('answer_detail.item', answer_detail.item)
+        // console.log('answer_detail.item', answer_detail.item)
+    })
+}
+// 删除答卷
+const deleteFunc = id => {
+    APIdeleteSurveyAnswerDetail(id).then(res => {
+        ElMessage.success('删除成功')
+        answerListFunc()
     })
 }
 // 获取答卷的参与房屋
@@ -672,15 +690,6 @@ const active_obj = reactive({
 const checkFunc = val => {
     console.log(val)
     active_obj.obj = val
-    // house_num.arr = []
-    // house_list.arr = []
-    // active_obj.obj = val
-    // console.log(tree_item.value)
-    // console.log(tree_item.value.type)
-    // if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
-    //     'buildings')) {
-    //     refreshFunc()
-    // }
     if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
         'buildings')) {
         getHouseList()
