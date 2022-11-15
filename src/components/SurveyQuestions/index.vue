@@ -47,6 +47,18 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination
+                v-model:current-page="topic_details.page"
+                style="float: right;"
+                class="btnClass"
+                layout="prev,next,jumper,"
+                :total="Infinity"
+                :page-size="topic_details.per_page"
+                background
+                prev-text="上一页"
+                next-text="下一页"
+                hide-on-single-page
+            />
         </el-scrollbar>
         <!-- 修改添加问卷题目 -->
         <el-dialog v-model="switch_examine" :title="str_title" width="50%">
@@ -186,11 +198,10 @@ onMounted(() => {
     topicsFunc()
 })
 // 问卷题目
-// const topic_details = reactive({
-//     item: ''
-// })
 const topic_details = reactive({
-    item: [[], [], [], []]
+    item: [[], [], [], []],
+    page: 1,
+    per_page: 15
 })
 // 添加问卷题目
 const str_title = ref('添加')
@@ -265,28 +276,30 @@ const dialogExamineCloseFunc = id => {
 // 获取问卷题目
 const topicsFunc = () => {
     let params = {
+        page: topic_details.page,
+        per_page: topic_details.per_page,
         sid: props.id
     }
     // 问卷题目列表
     APIgetSurveyTopic(params).then(res => {
-        // topic_details.item = [[], [], [], []]
-        // // 对题目进行排序
-        // res.forEach(element => {
-        //     if (element.type === 0) {
-        //         topic_details.item[0].push(element)
-        //     } else if (element.type === 1) {
-        //         topic_details.item[1].push(element)
-        //     } else if (element.type === 2) {
-        //         topic_details.item[2].push(element)
-        //     } else if (element.type === 3) {
-        //         topic_details.item[3].push(element)
-        //     }
-        // })
-        // topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
         topic_details.item = res
+        let btnNext1 = document.querySelector('.btnClass')
+        let btnNext2 = btnNext1.children[1]
+        console.log(btnNext1.children[1])
+        if (res.length < data_2.per_page) {
+            btnNext2.classList.add('not_allowed')
+            btnNext2.setAttribute('disabled', true)
+            btnNext2.setAttribute('aria-disabled', true)
+        } else {
+            btnNext2.classList.remove('not_allowed')
+            btnNext2.removeAttribute('disabled')
+            btnNext2.setAttribute('aria-disabled', false)
+        }
     })
-    // console.log('topic_details', topic_details)
 }
+watch(() => topic_details.page, new_val => {
+    topicsFunc()
+}, { immediate: true, deep: true })
 // 增加选项
 const addopts = () => {
     opts.push(
