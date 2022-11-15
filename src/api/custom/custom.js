@@ -1652,9 +1652,17 @@ export function APIdeletePersonimptask(id) {
     return api.delete(`/personimptask/${id}`)
 }
 // 共享
-// 共享种类
+// 共享业务种类
 export function APIgetShareCategoryList(params) {
     return api.get('/share/kind', { params: params })
+}
+// 正常使用的共享业务种类
+export function APIgetShareActiveCategoryList() {
+    return api.get('/share/kind-active-all')
+}
+// 获取种类下的所有业务数据
+export function APIgetShareAllMaterialData(params) {
+    return api.get('/share/kind-all-biz-data', { params: params })
 }
 // 删除
 export function APIdeleteShareCategory(id) {
