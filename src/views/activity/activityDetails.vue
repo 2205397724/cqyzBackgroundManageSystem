@@ -54,6 +54,12 @@
                                         <span>{{ data_details.item.areaall }}</span>
                                     </div>
                                 </el-col>
+                                <el-col :span="8" v-if="data_details.item.vrule">
+                                    <div class="item">
+                                        <div class="left_1 w-100">投票数</div>
+                                        <span>{{ data_details.item.vrule[0].vmin }} - {{ data_details.item.vrule[0].vmax }}</span>
+                                    </div>
+                                </el-col>
                             </el-row>
                             <el-row :gutter="20">
                                 <div class="item">
