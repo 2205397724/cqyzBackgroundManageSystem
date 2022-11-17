@@ -44,6 +44,9 @@
                             <el-form-item label-width="120px" label="不动产单元号">
                                 <el-input  v-model="shareRecord_form.obj.bdc_uno" placeholder="请输入不动产单元号"/>
                             </el-form-item>
+                            <el-form-item label-width="120px" label="业务编号">
+                                <el-input  v-model="shareRecord_form.obj.sno" placeholder="请输入业务编号"/>
+                            </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <div class="m-10">不动产权证</div>
@@ -72,7 +75,7 @@
                     <block v-for="(item,i) in share_kind.list" :key="item.id">
                         <div v-if="checked_kind.list.indexOf(item.id) > -1">
                             <el-row :gutter="20">
-                                <el-col :span="12">
+                                <el-col :span="16">
                                     <el-form-item label-width="120px" label="业务受理单位">
                                         <el-select @change="groupOptChange(i,$event)" v-model="checked_group[i]" placeholder="受理单位" clearable>
                                             <el-option v-for="group in share_kind_group[i]" :key="group.id" :label="group.name" :value="group.id" />
@@ -84,15 +87,19 @@
                                         </el-select>
                                     </el-form-item>
                                     <block v-for="materials in material_list[i]" :key="materials.id">
-                                        <el-form-item label-width="120px" :label="materials.title">
-                                            <el-input v-if="materials.type === 1" v-model="shareRecord_form.material" @blur="inputFunc($event,materials.id)" :placeholder="'请输入'+materials.title"/>
-                                            <el-upload v-else-if="materials.type === 2 || materials.type === 4" ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list"
+                                        <el-form-item label-width="120px" :label="materials.title" v-if="materials.type === 1">
+                                            <el-input  v-model="input_content[i]" @blur="inputFunc($event,materials.id)" :placeholder="'请输入'+materials.title"/>
+                                        </el-form-item>
+                                        <el-form-item label-width="120px" :label="materials.title" v-else-if="materials.type === 2" >
+                                            <el-upload ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list[i]"
                                                 list-type="picture-card"
                                                 :on-change="(file, files) => {
-                                                    file_list = files
+                                                    file_list[i] = files
+                                                    file_list_fid[i] = materials.id
                                                 }"
                                                 :on-remove="(file, files) => {
-                                                    file_list = files
+                                                    file_list[i] = files
+                                                    file_list_fid[i] = materials.id
                                                 }"></el-upload>
                                         </el-form-item>
                                     </block>
@@ -101,8 +108,22 @@
                         </div>
                     </block>
                 </div>
+                <el-row :gutter="20">
+                    <el-col :span="16">
+                        <el-form-item label-width="120px" label="共享截止时间">
+                            <el-date-picker
+                                v-model="shareRecord_form.obj.end_at"
+                                type="date"
+                                :placeholder="截止时间"
+                                format="YYYY-MM-DD"
+                                value-format="YYYY-MM-DD"
+                                style="width: 100%;"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </page-main>
-            <div>
+            <div class="m-20" style="width: 100%;padding: 10px auto;">
                 <el-button type="primary" @click="postShareRecord">提交</el-button>
             </div>
         </el-form>
@@ -115,20 +136,19 @@ import {
     APIgetShareActiveCategoryList,
     APIgetShareServicesList,
     APIgetShareCategoryUserGroupList,
-    APIgetShareAllMaterialData
+    APIgetShareAllMaterialData,
+    APIpostShareRecord
 } from '@/api/custom/custom.js'
+import { ElMessage } from 'element-plus'
+import { getFilesKeys } from '@/util/files.js'
 import {ref,reactive, onMounted} from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-const from_error = reactive({
-    msg: {}
-})
-let from_examine = reactive({
-    item: {}
-})
+let input_content = reactive([])
 const checked_group = ref([])//选中的用户组（业务受理单位）
 const checked_biz = ref([])//选中的业务
 // 附件
 const file_list = ref([])
+const file_list_fid = ref([])
 // 挂载时获取业务
 onMounted(()=>{
     getShareList()
@@ -179,7 +199,7 @@ const handleCheckedShareKindChange = val => {
         })
     }
 }
-// 选中业务受理单位的事件,遍历出对于的业务选项
+// 选中业务受理单位的事件,遍历出对应的业务选项
 const checked_group_biz = reactive([])
 const groupOptChange = (index,val) => {
     for(let arr of share_kind_group[index]) {
@@ -198,6 +218,7 @@ const groupOptChange = (index,val) => {
 // 选中对于业务的事件，遍历出需要的业务材料
 const material_list = reactive([])
 const bizOptChange = (index,val) => {
+    shareRecord_form.obj.bids[index] = val//插入相应的业务id
     for(let arr of checked_group_biz[index]) {
         if(val === arr.id) {
             console.log(arr)
@@ -214,10 +235,10 @@ const bizOptChange = (index,val) => {
 }
 // 文本输入框失去焦点事件
 const inputFunc = (e,id) => {
-    console.log("e",e)
+    // console.log("e",e.target.value)
     shareRecord_form.obj.material.push({
         fid:id,
-        content:e.detail.value
+        content:e.target.value
     })
 }
 // 同意拒绝提交
@@ -229,13 +250,71 @@ const shareRecord_form = reactive({
         house_addr:'',
         bdc_sno:'',
         bdc_uno:'',
+        // end_at: Date.now() + 1296000000,
+        // end_at: '2022-11-30',
         end_at:'',
         bids:[],
-        material:[]
+        material:[],
     }
 })
 const postShareRecord = () => {
+    let file = []
+    let file_key = []
+    let type = []
+    for(let i in file_list.value) {
+        file[i] = []
+        file_key[i] = []
+        if(file_list.value[i].length > 0) {
+            type = []
+            for(let j in file_list.value[i]) {
+                if(!file_list.value[i][j].raw) {
+                    file_key[i].push(file_list.value[i][j].name)
+                } else {
+                    file[i].push(file_list.value[i][j].raw)
+                }
+                type.push(file_list.value[i][j].name.split(".")[1])
+            }
+            if(file[i].length > 0) {
+                // console.log(file[i])
+                getFilesKeys(file[i], 'water', type).then(arr => {
+                    console.log("arr",arr)
+                    shareRecord_form.obj.material.push({
+                        fid:file_list_fid.value[i],
+                        content:arr.join()
+                    })
+                })
+            }
+        }
+    }
     console.log("111",shareRecord_form.obj)
+    setTimeout(()=>{
+        APIpostShareRecord(shareRecord_form.obj).then(res => {
+            console.log("res",res)
+            ElMessage.success('提交成功')
+            refreshFunc()
+        })
+    },1700)
+}
+// 刷新页面数据
+const refreshFunc = () => {
+    shareRecord_form.obj = {
+        name:'',
+        id_card:'',
+        mobile:'',
+        house_addr:'',
+        bdc_sno:'',
+        bdc_uno:'',
+        end_at:'',
+        bids:[],
+        material:[],
+    }
+    // checked_kind.list = []
+    share_biz.list = []
+    input_content = []
+    checked_group.value = []
+    checked_biz.value = []
+    file_list.value = []
+    file_list_fid.value = []
 }
 </script>
 

@@ -1744,6 +1744,10 @@ export function APIgetShareDataList(params) {
 export function APIgetShareDataDetails(id) {
     return api.get(`/share/record/${id}`)
 }
+// 帮用户发起共享
+export function APIpostShareRecord(params) {
+    return api.post(`/share/record`, params)
+}
 // 共享记录下的所有材料
 export function APIgetShareDataMaterialList(params) {
     return api.get('/share/record-material', { params: params })
