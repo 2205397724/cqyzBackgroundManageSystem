@@ -131,7 +131,7 @@
                 />
             </div>
             <!-- 修改添加 -->
-            <el-dialog v-model="switch_examine" :title="str_title" width="50%" @closed="dialogClosed">
+            <el-dialog v-model="switch_examine" :title="str_title" width="70%" @closed="dialogClosed">
                 <el-steps v-if="str_title== '添加'" :active="active" finish-status="success" space="30%" align-center>
                     <el-step title="填写表决信息">
                     </el-step>
@@ -143,6 +143,9 @@
                         <div class="details-box p-lr-10 m-t-40 m-b-20">
                             <el-form v-if="active == 0" ref="ruleFormRef" :model="from_examine.item">
                                 <el-row :gutter="10">
+                                    <div class="width-100 m-b-20 p-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                                        <span class="size-base strong" style="color: #409eff;flex: 1;">基本信息</span>
+                                    </div>
                                     <el-col :md="24" :lg="12">
                                         <el-form-item label="标题" label-width="80px" prop="name" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <el-input
@@ -231,24 +234,56 @@
                                             <text>（0代表全投）</text>
                                         </el-form-item>
                                     </el-col> -->
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="至少投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-input
-                                                v-model="from_examine.item.vrule[0].vmin"
-                                                placeholder=""
-                                                type="number"
-                                            />
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :md="24" :lg="12">
-                                        <el-form-item label="至多投几项" label-width="80px" prop="areaall" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
-                                            <el-input
-                                                v-model="from_examine.item.vrule[0].vmax"
-                                                placeholder=""
-                                                type="number"
-                                            />
-                                        </el-form-item>
-                                    </el-col>
+                                    <div class="width-100 m-b-10 display flex-row flex-between" style="border-bottom: solid 1px #e4e7ed;">
+                                        <span class="size-base strong" style="color: #409eff;flex: 1;">投票规则</span>
+                                        <el-button class="m-b-10" type="primary" size="small" @click="addrules()">添加规则</el-button>
+                                    </div>
+                                    <div v-for="(rule,r) in from_examine.item.vrule" :key="r" class="width-100">
+                                        <el-row :gutter="10">
+                                            <el-col :span="8">
+                                                <el-form-item label="选项名" label-width="80px" prop="areaall">
+                                                    <el-input
+                                                        v-model="from_examine.item.vrule[r].voptext"
+                                                        placeholder=""
+                                                        type="text"
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <el-form-item label="最少投几项" label-width="90px" prop="areaall">
+                                                    <el-input
+                                                        v-model="from_examine.item.vrule[r].vmin"
+                                                        placeholder=""
+                                                        type="number"
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <el-form-item label="最多投几项" label-width="90px" prop="areaall">
+                                                    <el-input
+                                                        v-model="from_examine.item.vrule[r].vmax"
+                                                        placeholder=""
+                                                        type="number"
+                                                    />
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="4">
+                                                <el-popconfirm
+                                                    title="确定要删除当前项么?" cancel-button-type="info"
+                                                    @confirm="from_examine.item.vrule.splice(r,1)"
+                                                >
+                                                    <template #reference>
+                                                        <el-button type="danger">
+                                                            删除
+                                                        </el-button>
+                                                    </template>
+                                                </el-popconfirm>
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+                                    <div class="width-100 m-b-20 p-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                                        <span class="size-base strong" style="color: #409eff;flex: 1;">详细说明</span>
+                                    </div>
                                     <el-col :md="24" :lg="24">
                                         <el-form-item label="内容" label-width="80px" prop="content" :error="from_error.msg&&from_error.msg.name?from_error.msg.name[0]:''">
                                             <editor v-model="from_examine.item.content" class="w_100" />
@@ -409,7 +444,7 @@ const click_add_group_zone_id = () => {
 }
 const switch_choose_zone = ref(false)
 const checkFunc = val => {
-    console.log(val)
+    
     selectedZone_id.value = val.name
     if (val.type == 'region') {
         from_examine.item.author_type = 1
@@ -423,16 +458,16 @@ const checkFunc = val => {
         from_examine.item.author_cc = val.china_code
         data_search.obj.author_cc = val.china_code
     }
-    console.log(val)
+    
 }
 const checkChangeFunc = val => {
-    // console.log(val)
+    // 
     switch_choose_zone.value = false
 }
 // 详情
 const detailsFunc = val => {
     data_details.item = ''
-    console.log(val.id)
+    
     APIgetSurveyDetails(val.id).then(res => {
         data_details.item = res
         switch_details.value = true
@@ -470,7 +505,7 @@ watch(page, () => {
     getTabListFunc()
 })
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
+    
     if (to.meta.title == '详情') {
         return true
     } else {
@@ -521,7 +556,7 @@ const getTabListFunc = () => {
         // params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         params.author_cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     }
-    console.log(window.location.hash)
+    
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
@@ -532,7 +567,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetSurvey(params).then(res => {
-        // console.log("res",res)
+        // 
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -580,11 +615,12 @@ const modifySurvey = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetSurveyDetails(val.id).then(res => {
-        // console.log(res)
+        // 
         if(!res.vrule) {
             res.vrule = [{
                 vmin:'',
-                vmax:''
+                vmax:'',
+                voptext:''
             }]
         }
         from_examine.item = res
@@ -606,7 +642,7 @@ const next = () => {
         dialogExamineCloseFunc()
         // active.value = 1
     } else if (active.value == 1) {
-        // console.log(str_title.value)
+        // 
         if (str_title.value == '添加') {
             passToAuditFunc()
         }
@@ -646,6 +682,15 @@ const opts_all = reactive({
         status_all: []
     }
 })
+const addrules = () => {
+    from_examine.item.vrule.push(
+        {
+            'voptext': '',
+            'vmax':'',
+            'vmin':''
+        }
+    )
+}
 getOpts(['announce_status', 'toushu_pub']).then(res => {
     opts_all.obj = res
 })

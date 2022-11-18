@@ -61,7 +61,7 @@
             />
         </el-scrollbar>
         <!-- 修改添加问卷题目 -->
-        <el-dialog v-model="switch_examine" :title="str_title" width="50%">
+        <el-dialog v-model="switch_examine" :title="str_title" width="70%">
             <div>
                 <div class="details-box">
                     <el-form :model="topic_examine.item" label-position="left">
@@ -74,6 +74,13 @@
                                         type="textarea"
                                         :autosize="{ minRows: 2, maxRows: 4 }"
                                     />
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col>
+                                <el-form-item label="题目排序" label-width="80px">
+                                    <el-input v-model="topic_examine.item.sort" placeholder="0" />
                                 </el-form-item>
                             </el-col>
                         </el-row>
