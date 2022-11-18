@@ -43,6 +43,7 @@ watch(() => isShow.value, val => {
     }
 })
 onMounted(() => {
+    proxy.$eventBus.off('global-choose-city')
     proxy.$eventBus.on('global-choose-city', () => {
         isShow.value = !isShow.value
     })

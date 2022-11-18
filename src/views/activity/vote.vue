@@ -109,6 +109,11 @@
                             <el-tag v-show="scope.row.pub == 1" class="btnNone noDeal" type="success" size="small">开放</el-tag>
                         </template>
                     </el-table-column>
+                    <el-table-column label="通知" align="center" width="80">
+                        <template #default="scope">
+                            <el-tag class="btnNone" type="danger" size="small" @click="sentNotice(scope.row)">通知</el-tag>
+                        </template>
+                    </el-table-column>
                     <el-table-column fixed="right" width="250px" label="操作">
                         <template #default="scope">
                             <el-button type="primary" size="small" @click="modifySurvey(scope.row)">
@@ -342,6 +347,7 @@
                     />
                 </el-scrollbar>
             </el-dialog>
+            <SendNotice></SendNotice>
         </page-main>
     </div>
 </template>
@@ -364,7 +370,7 @@ import {
     ElMessage
 } from 'element-plus'
 import { Loading, Search, Plus } from '@element-plus/icons-vue'
-
+const { proxy } = getCurrentInstance()
 // 搜索
 let switch_search = ref(false)
 let data_search = reactive({
@@ -696,6 +702,9 @@ const addrules = () => {
             'vmin':''
         }
     )
+}
+const sentNotice = (item)=>{
+    proxy.$eventBus.emit('noticeData',[item,'elect'])
 }
 </script>
 <style lang="scss" scoped>

@@ -1768,3 +1768,19 @@ export function APIputShareDataMaterial(id, data) {
 // export function APIpostShareData(data) {
 //     return api.post('/share/record', data)
 // }
+//向活动参与范围内的用户发送消息
+export function postNoticeSurvey(data) {
+    return api.post(`/push/mbr/survey`, data)
+}
+//向指定区域范围内的用户发送消息
+export function postNoticeRange(data) {
+    return api.post(`/push/mbr/range`, data)
+}
+//向多个用户发送消息
+export function postNoticeMany(data) {
+    return api.post(`/push/many`, data)
+}
+//向所有用户发送信息
+export function postNoticeAll(data) {
+    return api.post(`/push/all`, data)
+}

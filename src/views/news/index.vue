@@ -296,7 +296,7 @@
         <el-dialog
             v-model="data_1.details_switch"
             title="详情"
-            width="50%"
+            width="70%"
         >
             <div class="details-box">
                 <div class="details-tit-sm">基础信息</div>
