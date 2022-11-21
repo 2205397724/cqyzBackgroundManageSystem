@@ -1784,3 +1784,20 @@ export function postNoticeMany(data) {
 export function postNoticeAll(data) {
     return api.post(`/push/all`, data)
 }
+
+//身份证识别
+export function postOrcIdcard(data) {
+    return api.post(`/ocr/id-card`, data)
+}
+//营业执照识别
+export function postOrcBusslis(data) {
+    return api.post(`/ocr/buss-lis`, data)
+}
+//通用文字识别
+export function postOrcGeneral(data) {
+    return api.post(`/ocr/general`, data)
+}
+// 查看识别结果
+export function getOrcResult(id) {
+    return api.get(`/ocr/task/${id}`)
+}

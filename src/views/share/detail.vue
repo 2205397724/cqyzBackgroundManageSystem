@@ -26,12 +26,16 @@
                             <tr>
                                 <td>申请人：</td>
                                 <td>{{ details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username }}</td>
+                            </tr>
+                            <tr>
                                 <td>联系方式：</td>
                                 <td>{{ details.obj.uinfo.mobile }}</td>
                             </tr>
                             <tr>
                                 <td>证件号码：</td>
                                 <td>{{ details.obj.uinfo.id_card || '' }}</td>
+                            </tr>
+                            <tr>
                                 <td>申请时间：</td>
                                 <td>{{ details.obj.created_at }}</td>
                             </tr>
@@ -41,18 +45,22 @@
                         <div class="p-tb-10 size-base font-grey">
                             房屋信息
                         </div>
-                        <table class="table" border="1" v-if="details.obj.house">
+                        <table class="table" border="1" v-if="details.obj.uinfo.house">
                             <tr>
-                                <td>房屋名称：</td>
-                                <td>{{ details.obj.house.name }}</td>
                                 <td>房屋坐落：</td>
-                                <td>{{ details.obj.house.addr }}</td>
+                                <td>{{ details.obj.uinfo.house.house_addr }}</td>
                             </tr>
                             <tr>
-                                <td>建筑面积：</td>
-                                <td>{{ details.obj.house.area_build || '' }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>不动产登记号：</td>
+                                <td>{{ details.obj.uinfo.house.bdc_sno || '' }}</td>
+                            </tr>
+                            <tr>
+                                <td>不动产单元号：</td>
+                                <td>{{ details.obj.uinfo.house.bdc_uno || '' }}</td>
+                            </tr>
+                            <tr>
+                                <td>业务编号：</td>
+                                <td>{{ details.obj.sno || '' }}</td>
                             </tr>
                         </table>
                     </el-col>
@@ -74,8 +82,32 @@
                     <tr v-if="item.sharefile.type === 2 || item.sharefile.type === 4">
                         <td style="width: 120px;">{{ item.sharefile.title }}</td>
                         <td>
-                            <div v-for="picture in item.picture" :key="picture">
-                                <el-image :preview-src-list="item.picture" :src="picture" lazy style="width: 100px;"></el-image>
+                            <div class="flex-row">
+                                <div class="p-10" v-for="picture in item.picture" :key="picture">
+                                    <el-image :preview-src-list="item.picture" :src="picture" lazy style="width: 100px;"></el-image>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table m-b-10" border="1">
+                    <tr>
+                        <td style="width: 120px;">身份证件</td>
+                        <td>
+                            <div class="flex-row">
+                                <div class="p-10" v-for="picture in details.obj.uinfo.card.sfz" :key="picture">
+                                    <el-image :preview-src-list="details.obj.uinfo.card.sfz" :src="picture" lazy style="width: 100px;"></el-image>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 120px;">不动产权证</td>
+                        <td>
+                            <div class="flex-row">
+                                <div class="p-10" v-for="picture in details.obj.uinfo.card.bdc" :key="picture">
+                                    <el-image :preview-src-list="details.obj.uinfo.card.bdc" :src="picture" lazy style="width: 100px;"></el-image>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -94,6 +126,10 @@ import { instance } from 'kin-file-fetch'
 const route = useRoute()
 const details = reactive({
     obj: {
+        uinfo:{
+            card:{},
+            house:{}
+        },
         materials: []
     },
 })
@@ -110,6 +146,13 @@ const getShareDataDetail = ()=>{
                 }
             }
         })
+        //组装身份证产权证
+        res.uinfo.card.sfz.map((key,i)=>{
+            res.uinfo.card.sfz[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
+        })
+        res.uinfo.card.bdc.map((key,i)=>{
+            res.uinfo.card.bdc[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
+        })
         details.obj = res
     })
 }
@@ -123,8 +166,14 @@ const downLoadMaterials = ()=>{
             urls.push(...details.obj.materials[i].picture)
         }
     }
+    details.obj.uinfo.card.sfz.map(key=>{
+        urls.push(key)
+    })
+    details.obj.uinfo.card.bdc.map(key=>{
+        urls.push(key)
+    })
     let username = details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username
-    let address = details.obj.house.addr
+    let address = details.obj.uinfo.house.house_addr
     instance.download(urls,username +'-'+ address);
 }
 onMounted(() => {

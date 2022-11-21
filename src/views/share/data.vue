@@ -1,6 +1,13 @@
 <template>
     <div>
         <page-main class="hidden">
+            <div class="m-b-20">
+                <router-link
+                    class="el-button el-button--primary p-tb-20 p-lr-30 size-base"
+                    :to="{name: 'addShare'}"
+                    style="text-decoration: inherit;border:none;background-color: #409eff;"
+                >发起共享</router-link>
+            </div>
             <el-button-group class="btn m-b-20">
                 <!-- <el-badge :value="index == 0 ? total : ''" class="item" :hidden="flag"> -->
                 <el-button :type="index == 0 ? 'primary' : ''" @click="StatusFunk(0)">全部</el-button>
@@ -12,13 +19,6 @@
                 <el-button :type="index == 20 ? 'primary' : ''" @click="StatusFunk(20)">共享结束</el-button>
                 <!-- </el-badge> -->
                 <!-- <text><el-button class="m-l-40" type="primary" @click="{i}">发起共享</el-button></text> -->
-                <text>
-                    <router-link
-                        class="el-button el-tag p-tb-20 p-lr-40 m-l-40 size-base"
-                        :to="{name: 'postShareRecord'}"
-                        style="text-decoration: inherit;"
-                    >发起共享</router-link>
-                </text>
             </el-button-group>
             <el-table
                 v-loading="loading_tab"
@@ -39,9 +39,9 @@
                 <!-- <el-table-column prop="name" label="归档内容数量" width="180">
                     <span> {{ total2 }} </span>
                 </el-table-column> -->
-                <el-table-column prop="created_at" label="房屋id">
+                <el-table-column prop="created_at" label="房屋坐落">
                     <template #default="scope">
-                        <span>{{ scope.row.hid }} </span>
+                        <span>{{ scope.row.uinfo.house.house_addr }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="updated_at" label="状态" align="center">
@@ -126,9 +126,7 @@
                         <template #default="scope">
                             <el-switch
                             v-model="scope.row.status"
-                            style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
                             active-text="有效"
                             inactive-text="失效"
                             :active-value="20"
@@ -243,6 +241,9 @@ const StatusFunk = val => {
     flag2.value = false
     // console.log(flag.value)
 }
+
+let urls = reactive([])
+
 const details = reactive({
     obj: {
         materials: []
@@ -395,10 +396,15 @@ const selectionChange = (selection) => {
     })
 }
 // 下载业务材料
-let urls = reactive([])
 const downLoadMaterials = ()=>{
+    details.obj.uinfo.card.sfz.map(key=>{
+        urls.push(import.meta.env.VITE_APP_FOLDER_SRC + key)
+    })
+    details.obj.uinfo.card.bdc.map(key=>{
+        urls.push(import.meta.env.VITE_APP_FOLDER_SRC + key)
+    })
     let username = details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username
-    let address = details.obj.house.addr
+    let address = details.obj.uinfo.house.house_addr
     instance.download(urls,username +'-'+ address);
 }
 // switch 状态改变事件

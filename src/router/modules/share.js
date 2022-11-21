@@ -35,18 +35,18 @@ export default {
                                 activeMenu: '/share/data'
                             }
                         },
-                        {
-                            path: 'postshare',
-                            name: 'postShareRecord',
-                            component: () => import('@/views/share/postShareRecord.vue'),
-                            meta: {
-                                title: '发起共享',
-                                sidebar: false,
-                                breadcrumb: false,
-                                activeMenu: '/share/data'
-                            }
-                        }
                     ]
+                },
+                {
+                    path: 'add',
+                    name: 'addShare',
+                    component: () => import('@/views/share/addShare.vue'),
+                    meta: {
+                        title: '发起共享',
+                        sidebar: false,
+                        breadcrumb: false,
+                        activeMenu: '/share/data'
+                    }
                 }
             ]
         },

@@ -12,7 +12,6 @@ export function getFilesKeys(files, folder, type) {
             'folder': folder,
             'number': files.length
         }).then(res => {
-            console.log(res)
             const atemp = []
             for (let i in files) {
                 const formData = new FormData()
@@ -22,12 +21,8 @@ export function getFilesKeys(files, folder, type) {
                 formData.append('X-Amz-Date', res.inputs['X-Amz-Date'])
                 formData.append('X-Amz-Signature', res.inputs['X-Amz-Signature'])
                 formData.append('acl', res.inputs.acl)
-                if(type) {
-                    formData.append('key', `${folder}/${res.keys[i]}.${type[i]}`)
-                }else {
-                    formData.append('key', `${folder}/${res.keys[i]}`)
-                }
-                formData.append('key', `${folder}/${res.keys[i]}`)
+                let key = files[i].name.split(".")[1]
+                formData.append('key', `${folder}/${res.keys[i]}.${key}`)
                 formData.append('Content-Type', files[i].type)
                 formData.append('file', files[i])
                 const api = axios.create({
@@ -41,11 +36,7 @@ export function getFilesKeys(files, folder, type) {
                 atemp.push(
                     new Promise((resolve2, reject) => {
                         api[res.attrs.method.toLowerCase()]('', formData).then(res2 => {
-                            if(type) {
-                                resolve2(`${folder}/${res.keys[i]}.${type[i]}`)
-                            }else {
-                                resolve2(`${folder}/${res.keys[i]}`)
-                            }
+                            resolve2(`${folder}/${res.keys[i]}.${key}`)
                         }).catch(err => {
                             reject('err')
                         })
@@ -54,6 +45,8 @@ export function getFilesKeys(files, folder, type) {
             }
             Promise.all(atemp).then(res3 => {
                 resolve(res3)
+            }).catch(err => {
+                reject('err')
             })
         })
     })

@@ -1,12 +1,29 @@
 <template>
     <div>
-        <el-form ref=“form” >
-            <page-main class="hidden">
+        <page-main class="hidden">
+            <el-form ref=“form” >
                 <div class="m-b-20">
                     发起共享
                 </div>
                 <div class="bg-color-grey p-10">共享信息</div>
                 <div>
+                    <el-row :gutter="20">
+                        <el-col :span="16">
+                            <el-form-item label-width="120px" label="共享截止时间" class="p-t-20">
+                                <el-date-picker
+                                    v-model="shareRecord_form.obj.end_at"
+                                    type="date"
+                                    format="YYYY-MM-DD"
+                                    value-format="YYYY-MM-DD"
+                                    placeholder="选择日期"
+                                    :disabled-date="pickerOptions.disabledDate"
+                                    :shortcuts="pickerOptions.shortcuts"
+                                    size="large"
+                                    >
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <div class="m-10">申请人信息</div>
@@ -21,15 +38,39 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <div class="m-10">身份证件</div>
-                            <el-upload ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list"
-                                list-type="picture-card"
-                                :on-change="(file, files) => {
-                                    file_list = files
-                                }"
-                                :on-remove="(file, files) => {
-                                    file_list = files
-                                }"></el-upload>
+                            <div class="m-tb-10">身份证件</div>
+                            <div class="flex-row">
+                                <div>
+                                    <el-upload ref="uploadRef" class="idcardBox" action="***" list-type="picture-card" limit="1"
+                                        :auto-upload="false"
+                                        :file-list="idCardFiles"
+                                        :class="{hideclass:hideFaceIcon}"
+                                        :on-preview="handlePictureCardPreview"
+                                        :on-change="(file, files) => {
+                                            ocrIdCardFiles(files,'face')
+                                        }"
+                                        :on-remove="(file, files) => {
+                                            delIdCardFiles(files,'face')
+                                        }">
+                                        <span class="font-grey size-base cardtip">正面</span>
+                                    </el-upload>
+                                </div>
+                                <div class="m-l-20">
+                                    <el-upload ref="uploadRef" class="idcardBox" action="***" list-type="picture-card" limit="1"
+                                        :auto-upload="false"
+                                        :file-list="idCardFiles"
+                                        :class="{hideclass:hideBackIcon}"
+                                        :on-preview="handlePictureCardPreview"
+                                        :on-change="(file, files) => {
+                                            ocrIdCardFiles(files,'back')
+                                        }"
+                                        :on-remove="(file, files) => {
+                                            delIdCardFiles(files,'back')
+                                        }">
+                                        <span class="font-grey size-base cardtip">反面</span>
+                                    </el-upload>
+                                </div>
+                            </div>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
@@ -49,15 +90,19 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <div class="m-10">不动产权证</div>
-                            <el-upload ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list"
-                                list-type="picture-card"
+                            <div class="m-tb-10">不动产权证</div>
+                            <el-upload ref="uploadRef" action="***" list-type="picture-card"
+                                :auto-upload="false"
+                                :file-list="bdcFiles"
+                                :on-preview="handlePictureCardPreview"
                                 :on-change="(file, files) => {
-                                    file_list = files
+                                    orcBdcFiles(files,'bdc')
                                 }"
                                 :on-remove="(file, files) => {
-                                    file_list = files
-                                }"></el-upload>
+                                    delBdcFiles(files,'bdc')
+                                }">
+                            <el-icon><Plus/></el-icon>    
+                        </el-upload>
                         </el-col>
                     </el-row>
                 </div>
@@ -81,7 +126,7 @@
                                             <el-option v-for="group in share_kind_group[i]" :key="group.id" :label="group.name" :value="group.id" />
                                         </el-select>
                                     </el-form-item>
-                                    <el-form-item label-width="120px" label="业务选项">
+                                    <el-form-item label-width="120px" label="办理业务">
                                         <el-select @change="bizOptChange(i,$event)" v-model="checked_biz[i]" placeholder="业务内容" clearable>
                                             <el-option v-for="biz in checked_group_biz[i]" :key="biz.id" :label="biz.title" :value="biz.id" />
                                         </el-select>
@@ -108,25 +153,14 @@
                         </div>
                     </block>
                 </div>
-                <el-row :gutter="20">
-                    <el-col :span="16">
-                        <el-form-item label-width="120px" label="共享截止时间">
-                            <el-date-picker
-                                v-model="shareRecord_form.obj.end_at"
-                                type="date"
-                                :placeholder="截止时间"
-                                format="YYYY-MM-DD"
-                                value-format="YYYY-MM-DD"
-                                style="width: 100%;"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </page-main>
-            <div class="m-20" style="width: 100%;padding: 10px auto;">
-                <el-button type="primary" @click="postShareRecord">提交</el-button>
-            </div>
-        </el-form>
+                <div class="p-20">
+                    <el-button type="primary" @click="postShareRecord">提交</el-button>
+                </div>
+            </el-form>
+            <el-dialog v-model="dialogVisible" width="60%">
+                <img :src="dialogImageUrl" alt="图片预览" style="width:100%"/>
+            </el-dialog>
+        </page-main>
     </div>
 </template>
 
@@ -137,18 +171,168 @@ import {
     APIgetShareServicesList,
     APIgetShareCategoryUserGroupList,
     APIgetShareAllMaterialData,
-    APIpostShareRecord
+    APIpostShareRecord,
+    postOrcIdcard,postOrcGeneral,
+    getOrcResult
 } from '@/api/custom/custom.js'
-import { ElMessage } from 'element-plus'
+import { ElMessage,ElLoading } from 'element-plus'
 import { getFilesKeys } from '@/util/files.js'
 import {ref,reactive, onMounted} from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import {Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
 let input_content = reactive([])
 const checked_group = ref([])//选中的用户组（业务受理单位）
 const checked_biz = ref([])//选中的业务
+let loading = ''
 // 附件
+const hideFaceIcon = ref(false)
+const hideBackIcon = ref(false)
+const idCardFiles = ref([])
+const bdcFiles = ref([])
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+
 const file_list = ref([])
 const file_list_fid = ref([])
+const shareRecord_form = reactive({
+    obj:{
+        name:'',
+        id_card:'',
+        card:{
+            sfz:[],
+            bdc:[]
+        },
+        mobile:'',
+        house_addr:'',
+        bdc_sno:'',
+        bdc_uno:'',
+        end_at: Date.now() + 3600 * 1000 * 24 * 7,
+        bids:[],
+        material:[],
+    }
+})
+//时间组件快捷功能配置
+const pickerOptions = {
+    disabledDate(time) {
+        return time.getTime() < Date.now();
+    },
+    shortcuts: [{
+        text: '明天',
+        value: () => {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24);
+            return date;
+        }
+    }, {
+        text: '一周',
+        value: () => {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+            return date;
+        }
+    }, {
+        text: '15天',
+        value: () =>{
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 15);
+            return date;
+        }
+    }, {
+        text: '30天',
+        value: () => {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
+            return date;
+        }
+    }]
+}
+//选择身份证照片
+const ocrIdCardFiles = (files,side)=>{
+    if(side=='face'){
+        hideFaceIcon.value = true
+    }
+    if(side=='back'){
+        hideBackIcon.value = true
+    }
+    let fileraw=[]
+    files.forEach(item=>{
+        fileraw.push(item.raw)
+    })
+    uploadFile(fileraw,side)
+}
+//删除身份证照片
+const delIdCardFiles=(files,side)=>{
+    if(side=='face'){
+        hideFaceIcon.value = false
+    }
+    if(side=='back'){
+        hideBackIcon.value = false
+    }
+}
+//选择不动产证件
+const orcBdcFiles = (files,side)=>{
+    let fileraw=[]
+    files.forEach(item=>{
+        fileraw.push(item.raw)
+    })
+    uploadFile(fileraw,side)
+}
+//删除不动产证件
+const delBdcFiles = (files,side)=>{
+    
+}
+//上传图片并识别
+const uploadFile = (files,fside)=>{
+    loading = ElLoading.service({
+        lock: true,
+        text: '上传识别中',
+        background: 'rgba(0, 0, 0, 0.7)'
+    })
+    let sideArr = ['bdc','face','back']
+    getFilesKeys(files, 'shareCard').then(res => {
+        res.forEach((key)=>{
+            let data = {
+                'file_key':key,
+            }
+            let sideli = sideArr.indexOf(fside)
+            if(sideli>0){
+                shareRecord_form.obj.card.sfz.push(key)
+                data.side = sideli == 1 ? 1: 2
+                postOrcIdcard(data).then(orc=>{
+                    getOrcResult(orc.id).then(orcre =>{
+                        console.log(orcre)
+                    }).catch(err=>{
+                        loading.close()
+                        ElMessage.error('未找到识别结果！')
+                    })
+                }).catch(err=>{
+                    loading.close()
+                    ElMessage.error('识别错误！')
+                })
+            }else if(sideli==0){
+                shareRecord_form.obj.card.bdc.push(key)
+                postOrcGeneral(data).then(orc=>{
+                    getOrcResult(orc.id).then(orcre =>{
+                        console.log(orcre)
+                    }).catch(err=>{
+                        loading.close()
+                        ElMessage.error('未找到识别结果！')
+                    })
+                }).catch(err=>{
+                    loading.close()
+                    ElMessage.error('识别错误！')
+                })
+            }
+        })
+    }).catch(err=>{
+        loading.close()
+        ElMessage.error('获取KEY失败！')
+    })
+}
+// 预览图片
+const handlePictureCardPreview = (file) => {
+    dialogImageUrl.value = file.url;
+    dialogVisible.value = true;
+};
 // 挂载时获取业务
 onMounted(()=>{
     getShareList()
@@ -191,7 +375,6 @@ const share_biz = reactive({
     list:[]
 })
 const handleCheckedShareKindChange = val => {
-    console.log("val",val)
     checked_kind.list = val
     if(share_biz.list.length < 1) {
         APIgetShareServicesList().then(res=>{
@@ -221,7 +404,6 @@ const bizOptChange = (index,val) => {
     shareRecord_form.obj.bids[index] = val//插入相应的业务id
     for(let arr of checked_group_biz[index]) {
         if(val === arr.id) {
-            console.log(arr)
             material_list[index] = arr.bizmaterials.map((item) => {
                 return {
                     id:item.sharefile.id,
@@ -235,28 +417,17 @@ const bizOptChange = (index,val) => {
 }
 // 文本输入框失去焦点事件
 const inputFunc = (e,id) => {
-    // console.log("e",e.target.value)
+    let hasFid = shareRecord_form.obj.material.filter( mat => mat.fid == id)
+    if(hasFid.length>0){
+        let fkey = shareRecord_form.obj.material.findIndex( mat => mat.fid == id)
+        shareRecord_form.obj.material.splice(fkey,1)
+    }
     shareRecord_form.obj.material.push({
         fid:id,
         content:e.target.value
     })
 }
 // 同意拒绝提交
-const shareRecord_form = reactive({
-    obj:{
-        name:'',
-        id_card:'',
-        mobile:'',
-        house_addr:'',
-        bdc_sno:'',
-        bdc_uno:'',
-        // end_at: Date.now() + 1296000000,
-        // end_at: '2022-11-30',
-        end_at:'',
-        bids:[],
-        material:[],
-    }
-})
 const postShareRecord = () => {
     let file = []
     let file_key = []
@@ -275,9 +446,7 @@ const postShareRecord = () => {
                 type.push(file_list.value[i][j].name.split(".")[1])
             }
             if(file[i].length > 0) {
-                // console.log(file[i])
                 getFilesKeys(file[i], 'water', type).then(arr => {
-                    console.log("arr",arr)
                     shareRecord_form.obj.material.push({
                         fid:file_list_fid.value[i],
                         content:arr.join()
@@ -286,20 +455,22 @@ const postShareRecord = () => {
             }
         }
     }
-    console.log("111",shareRecord_form.obj)
     setTimeout(()=>{
         APIpostShareRecord(shareRecord_form.obj).then(res => {
-            console.log("res",res)
             ElMessage.success('提交成功')
             refreshFunc()
         })
-    },1700)
+    },1000)
 }
 // 刷新页面数据
 const refreshFunc = () => {
     shareRecord_form.obj = {
         name:'',
         id_card:'',
+        card:{
+            sfz:[],
+            bdc:[]
+        },
         mobile:'',
         house_addr:'',
         bdc_sno:'',
@@ -323,5 +494,17 @@ const refreshFunc = () => {
 :deep(.el-upload-dragger) {
     width: 148px;
     height: 148px;
+}
+:deep .hideclass .el-upload--picture-card{
+    display: none;
+}
+:deep .idcardBox .el-upload--picture-card,:deep .idcardBox .el-upload-list--picture-card .el-upload-list__item{
+    width:200px;
+    height:120px;
+    position: relative;
+}
+.cardtip{
+    position: relative;
+    top :calc(50% - 10px);
 }
 </style>
