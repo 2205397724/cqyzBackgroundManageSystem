@@ -5,7 +5,7 @@
                 <router-link
                     class="el-button el-button--primary p-tb-20 p-lr-30 size-base"
                     :to="{name: 'addShare'}"
-                    style="text-decoration: inherit;border:none;background-color: #409eff;"
+                    style="text-decoration: inherit;border: none;background-color: #409eff;"
                 >发起共享</router-link>
             </div>
             <el-button-group class="btn m-b-20">
@@ -41,7 +41,7 @@
                 </el-table-column> -->
                 <el-table-column prop="created_at" label="房屋坐落">
                     <template #default="scope">
-                        <span>{{ scope.row.uinfo.house.house_addr }} </span>
+                        <span>{{ scope.row.uinfo.house?.house_addr }} </span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="updated_at" label="状态" align="center">
@@ -59,7 +59,7 @@
                         <span>{{ scope.row.end_at }} </span>
                     </template>
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="180">
+                <el-table-column fixed="right" label="操作" width="220">
                     <template #default="scope">
                         <el-button
                             size="small" type="success"
@@ -77,6 +77,17 @@
                         >
                             详情
                         </router-link>
+                        <el-popconfirm
+                            title="确定要删除当前项么?" cancel-button-type="info"
+                            @confirm="deleteFunc(scope.row)"
+                            class="m-l-20"
+                        >
+                            <template #reference>
+                                <el-button type="danger" class="btnfix m-l-10">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -126,7 +137,9 @@
                         <template #default="scope">
                             <el-switch
                             v-model="scope.row.status"
-                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
+                            style="
+
+    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
                             active-text="有效"
                             inactive-text="失效"
                             :active-value="20"
@@ -149,12 +162,34 @@
                     </el-table-column>
                 </el-table>
             </el-scrollbar>
-            <!-- <template #footer>
-                <div class="footer">
-                    <el-button @click="data.switch = false">取消</el-button>
-                    <el-button type="primary" @click="dialogExamineCloseFunc_1">确定</el-button>
-                </div>
-            </template> -->
+            <el-table
+                :data="data.list_uinfo"
+                :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
+            >
+                <el-table-column prop="" label="材料名称">
+                    <template #default="scope">
+                        <span>{{scope.row.content}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="content" label="材料">
+                    <template #default="scope">
+                        <block v-for="item in scope.row.file" :key="item">
+                            <el-image :preview-src-list="scope.row.file" :src="item" lazy style="height: 60px; margin: 5px;"></el-image>
+                        </block>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="100">
+                        <template #default="scope">
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="modifyMaterialFunc(scope.row)"
+                            >
+                                修改材料
+                            </el-button>
+                        </template>
+                    </el-table-column>
+            </el-table>
         </el-dialog>
         <!-- 补充材料弹窗 -->
         <el-dialog v-model="data.switch_2" :title="str_title" width="50%">
@@ -194,6 +229,42 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 修改材料弹窗 -->
+        <el-dialog v-model="data.switch_3" :title="str_title" width="50%">
+            <div>
+                <el-form ref="ruleFormRef" :model="data.item">
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="24">
+                            <el-form-item
+                                label-width="100px" label="材料名称"
+                            >
+                            {{record_title}}
+                            </el-form-item>
+                            <el-form-item
+                                label-width="100px" label="材料内容"
+                            >
+                                <el-upload
+                                    multiple action="***" :auto-upload="false"
+                                    :file-list="file_list" :on-change="(file, files) => {
+                                        file_list = files
+                                    }" :on-remove="(file, files) => {
+                                        file_list = files
+                                    }"
+                                >
+                                    <el-button type="primary">选择</el-button>
+                                </el-upload>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="data.switch_3 = false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFuncRecord">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup >
@@ -207,7 +278,9 @@ import {
     APIgetShareDataDetails,
     APIgetShareDataMaterialList,
     APIputShareDataMaterial,
-    APIgetShareElementsList
+    APIgetShareElementsList,
+    APIdeleteShareData,
+    APIputShareRecordData
 } from '@/api/custom/custom.js'
 import {
     ElMessage
@@ -219,14 +292,18 @@ import { instance } from 'kin-file-fetch'
 const loading_tab = ref(false)
 const data = reactive({
     list: [],
+    list_uinfo:[],
     switch: false,
     switch_1: false,
     obj: {
         material: []
     },
     arr: [],
+    // 补充材料
     switch_2: false,
-    item: {}
+    item: {},
+    //修改材料（相关证件）
+    switch_3: false,
 })
 const index = ref(0)
 const flag = ref(true)
@@ -265,7 +342,7 @@ const getShareDataList = () => {
     loading_tab.value = true
     APIgetShareDataList(params).then(res => {
         // console.log(res)
-        data.list = res
+        data.list= res
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
         if (res.length < per_page.value) {
@@ -283,6 +360,22 @@ const getShareDataList = () => {
 const getShareDataDetail = (id)=>{
     APIgetShareDataDetails(id).then(res => {
         details.obj = res
+        // 遍历出uinfo中的card相关证件图片信息(不动产、身份证)
+        data.list_uinfo = []
+        if(res.uinfo.card) {
+            if(res.uinfo.card.bdc) {
+                data.list_uinfo[0] = {rid:id,type:'bdc',content:'不动产证',file:[]}//将共享记录id存入方便后面修改,type判断是身份证还是不动产证
+                for(let i in res.uinfo.card.bdc) {
+                    data.list_uinfo[0].file[i] = (import.meta.env.VITE_APP_FOLDER_SRC + res.uinfo.card.bdc[i])
+                }
+            }
+            if(res.uinfo.card.sfz) {
+                data.list_uinfo[1] = {rid:id,type:'sfz',content:'身份证件',file:[]}
+                for(let i in res.uinfo.card.sfz) {
+                    data.list_uinfo[1].file[i] = (import.meta.env.VITE_APP_FOLDER_SRC + res.uinfo.card.sfz[i])
+                }
+            }
+        }
     })
 }
 // 监听分页
@@ -290,6 +383,9 @@ watch(page, () => {
     getShareDataList()
 })
 const refreshFunc = () => {
+    data.switch_1 = false
+    data.switch_2 = false
+    data.switch_3 = false
     getShareDataList()
 }
 refreshFunc()
@@ -321,7 +417,16 @@ const addMaterialFunc = row => {
     type.value = row.sharefile.type
     data.item = {}
     data.switch_2 = true
-
+}
+const recordlId = ref('')
+const record_title = ref('')
+// 修改相关证件图片
+const modifyMaterialFunc = row => {
+    recordlId.value = row.rid
+    record_title.value = row.content
+    type.value = row.type//bdc or sfz
+    data.switch_3 = true
+    // console.log("modifyMaterialFunc",row)
 }
 const file_list = ref([])
 const dialogExamineCloseFunc = () => {
@@ -348,8 +453,7 @@ const dialogExamineCloseFunc = () => {
                 // console.log(data.item)
                 APIputShareDataMaterial(materialId.value, data.item).then(res => {
                     ElMessage.success('补充成功')
-                    data.switch_2 = false
-                    data.switch_1 = false
+                    file_list.value = []
                     refreshFunc()
                 }).catch(() => {
                     ElMessage.error('补充失败')
@@ -358,8 +462,6 @@ const dialogExamineCloseFunc = () => {
         } else {
             APIputShareDataMaterial(materialId.value, data.item).then(res => {
                 ElMessage.success('补充成功')
-                data.switch_2 = false
-                data.switch_1 = false
                 refreshFunc()
             }).catch(() => {
                 ElMessage.error('补充失败')
@@ -368,12 +470,58 @@ const dialogExamineCloseFunc = () => {
     }else if(type.value == 1) {
         APIputShareDataMaterial(materialId.value, data.item).then(res => {
                 ElMessage.success('补充成功')
-                data.switch_2 = false
-                data.switch_1 = false
                 refreshFunc()
             }).catch(() => {
                 ElMessage.error('补充失败')
             })
+    }
+}
+// 相关证件图片修改的提交
+const dialogExamineCloseFuncRecord = () => {
+    let files = []
+    let file_key = []
+    if (file_list.value.length > 0) {
+        // console.log("file_list.value",file_list.value)
+        for (let i in file_list.value) {
+            if (!file_list.value[i].raw) {
+                file_key.push(file_list.value[i].name)
+            } else {
+                files.push(file_list.value[i].raw)
+            }
+        }
+    }
+    if (files.length > 0) {
+        getFilesKeys(files, 'material',type).then(arr => {
+            // data.item.content = file_key.concat(arr).join(',')
+            // console.log("123456",data.item)
+            // console.log("222",recordlId.value,arr)
+            let data = {
+                name:details.obj.uinfo.name,
+                end_at:details.obj.end_at.split(" ")[0],
+                bdc_sno:details.obj.uinfo.house.bdc_sno,
+                house_addr:details.obj.uinfo.house.house_addr,
+                mobile:details.obj.uinfo.mobile,
+                id_card:details.obj.uinfo.id_card,
+                bdc_uno:details.obj.uinfo.house.bdc_uno,
+                card:details.obj.uinfo.card,
+                sno:details.obj.sno,
+            }
+            if(type.value == 'bdc') {
+                data.card.bdc = arr
+                APIputShareRecordData(recordlId.value, data).then(res => {
+                    ElMessage.success('修改成功')
+                    file_list.value = []
+                    refreshFunc()
+                })
+            }else if(type.value == 'sfz') {
+                data.card.sfz = arr
+                APIputShareRecordData(recordlId.value, data).then(res => {
+                    ElMessage.success('修改成功')
+                    file_list.value = []
+                    refreshFunc()
+                })
+            }
+        })
     }
 }
 // 选择项变化时触发的事件
@@ -415,6 +563,13 @@ const SwitchFunc = (e) => {
         ElMessage.success('修改成功')
     }).catch(() => {
         ElMessage.error('修改失败')
+    })
+}
+// 删除
+const deleteFunc = val => {
+    APIdeleteShareData(val.id).then(res => {
+        refreshFunc()
+        ElMessage.success('删除成功')
     })
 }
 </script>

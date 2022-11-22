@@ -16,11 +16,11 @@
                     <span class="el-tag" type="info" v-if="details.obj.status == 40">共享已结束</span>
                     <span class="el-tag" type="danger" v-if="details.obj.status == 41">公众主动放弃共享</span>
                 </div>
-
                 <el-row :gutter="20">
                     <el-col :sm="24" :md="12" :lg="12">
                         <div class="p-tb-10 size-base font-grey">
                             申请人信息
+                            <el-button type="primary" @click="downLoadMaterials">修改申请人信息</el-button>
                         </div>
                         <table class="table" border="1" v-if="details.obj.uinfo">
                             <tr>
@@ -44,6 +44,7 @@
                     <el-col :sm="24" :md="12" :lg="12">
                         <div class="p-tb-10 size-base font-grey">
                             房屋信息
+                            <el-button type="primary" @click="downLoadMaterials">修改房屋信息</el-button>
                         </div>
                         <table class="table" border="1" v-if="details.obj.uinfo.house">
                             <tr>
@@ -114,16 +115,48 @@
                 </table>
             </div>
         </page-main>
+        <el-dialog v-model="switch_people" title="修改申请人信息">
+            <el-form
+                ref="ruleFormRef"
+                :model="from_pass.obj"
+            >
+                <el-row :gutter="10">
+                    <el-col :xs="12" :sm="12">
+                        <el-form-item
+                            label="审核部门" label-width="120px"
+                            :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
+                        >
+                            <div class="wh_100">
+                                <div class="searchUserGroup">
+                                    <SearchUserGroup ref="V" v-model:name="userGroupName_1" @checkName="checkNameFunc_1" />
+                                </div>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="footer">
+                    <el-button @click="switch_people=false">取消</el-button>
+                    <el-button type="primary" @click="dialogExamineCloseFunc()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
 import { ref, reactive} from 'vue'
-import { APIgetShareDataDetails} from '@/api/custom/custom.js'
+import {
+    APIgetShareDataDetails,
+    APIputShareRecordData
+} from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
 
 import { instance } from 'kin-file-fetch'
 const route = useRoute()
+const switch_people = ref(false)
+
 const details = reactive({
     obj: {
         uinfo:{
@@ -133,6 +166,7 @@ const details = reactive({
         materials: []
     },
 })
+// 获取共享记录详细
 const getShareDataDetail = ()=>{
     APIgetShareDataDetails(route.query.id).then(res => {
         res.materials.map(share_detail=>{

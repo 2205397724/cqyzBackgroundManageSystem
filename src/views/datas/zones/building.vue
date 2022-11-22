@@ -639,7 +639,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
+let page = ref(Number(sessionStorage.getItem('building_currentPage')) || 1)
 // 添加，修改
 let switch_examine = ref(false)
 let from_examine = reactive({
@@ -679,7 +679,7 @@ const detailsFunc = val => {
 }
 // 监听分页
 watch(page, () => {
-    sessionStorage.setItem('currentPage', page.value)
+    sessionStorage.setItem('building_currentPage', page.value)
     getTabListFunc()
 })
 import { onBeforeRouteLeave } from 'vue-router'
@@ -688,7 +688,7 @@ onBeforeRouteLeave((to, from) => {
     if (to.meta.title == '单元') {
         return true
     } else {
-        sessionStorage.removeItem('currentPage')
+        sessionStorage.removeItem('building_currentPage')
     }
 })
 // 同意拒绝提交
