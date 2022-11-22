@@ -20,7 +20,6 @@
                     <el-col :sm="24" :md="12" :lg="12">
                         <div class="p-tb-10 size-base font-grey">
                             申请人信息
-                            <el-button type="primary" @click="downLoadMaterials">修改申请人信息</el-button>
                         </div>
                         <table class="table" border="1" v-if="details.obj.uinfo">
                             <tr>
@@ -44,7 +43,6 @@
                     <el-col :sm="24" :md="12" :lg="12">
                         <div class="p-tb-10 size-base font-grey">
                             房屋信息
-                            <el-button type="primary" @click="downLoadMaterials">修改房屋信息</el-button>
                         </div>
                         <table class="table" border="1" v-if="details.obj.uinfo.house">
                             <tr>
@@ -66,6 +64,7 @@
                         </table>
                     </el-col>
                 </el-row>
+                <el-button type="primary" @click="modifyShareRecord">修改相关信息</el-button>
                 <div class="p-t-20 p-b-10 size-base font-grey">申请业务：</div>
                 <div class="el-tag m-r-10" v-for="item in details.obj.business" :key="item.id">
                     <span class="size-base" v-if="item.sharebiz.group">{{ item.sharebiz.group.name }}：</span>
@@ -115,22 +114,50 @@
                 </table>
             </div>
         </page-main>
-        <el-dialog v-model="switch_people" title="修改申请人信息">
-            <el-form
-                ref="ruleFormRef"
-                :model="from_pass.obj"
-            >
+        <el-dialog v-model="switch_people" title="修改相关信息">
+            <el-form ref="ruleFormRef">
                 <el-row :gutter="10">
-                    <el-col :xs="12" :sm="12">
-                        <el-form-item
-                            label="审核部门" label-width="120px"
-                            :error="from_error.msg && from_error.msg['extra.' + i + '.val'] ? from_error.msg['extra.' + i + '.val'][0] : ''"
-                        >
-                            <div class="wh_100">
-                                <div class="searchUserGroup">
-                                    <SearchUserGroup ref="V" v-model:name="userGroupName_1" @checkName="checkNameFunc_1" />
-                                </div>
-                            </div>
+                    <div class="width-100 m-b-20 p-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                        <span class="size-base strong" style="color: #409eff;flex: 1;">申请人信息</span>
+                    </div>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="申请人"  label-width="120px">
+                            <el-input v-model="from_examine.item.name" placeholder="" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="联系方式" label-width="120px">
+                            <el-input v-model="from_examine.item.mobile" placeholder="" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="证件号码" label-width="120px">
+                            <el-input v-model="from_examine.item.id_card" placeholder="" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                    <div class="width-100 m-b-20 p-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
+                        <span class="size-base strong" style="color: #409eff;flex: 1;">房屋信息</span>
+                    </div>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="房屋坐落" label-width="120px">
+                            <el-input v-model="from_examine.item.house_addr" placeholder="" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="不动产登记号" label-width="120px">
+                            <el-input v-model="from_examine.item.bdc_sno" placeholder="" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="不动产单元号" label-width="120px">
+                            <el-input v-model="from_examine.item.bdc_uno" placeholder="" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="业务编号" label-width="120px">
+                            <el-input v-model="from_examine.item.sno" placeholder="" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -152,11 +179,9 @@ import {
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
-
 import { instance } from 'kin-file-fetch'
 const route = useRoute()
 const switch_people = ref(false)
-
 const details = reactive({
     obj: {
         uinfo:{
@@ -166,9 +191,14 @@ const details = reactive({
         materials: []
     },
 })
+const from_examine = reactive({
+    item: {}
+})
+const card = reactive({})
 // 获取共享记录详细
 const getShareDataDetail = ()=>{
     APIgetShareDataDetails(route.query.id).then(res => {
+        card = res.uinfo.card
         res.materials.map(share_detail=>{
             if(share_detail.sharefile.type === 2 || share_detail.sharefile.type === 4) {
                 if(share_detail.content != "") {
@@ -188,6 +218,30 @@ const getShareDataDetail = ()=>{
             res.uinfo.card.bdc[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
         })
         details.obj = res
+        console.log("res",res)
+    })
+}
+//修改相关业务
+const modifyShareRecord = () => {
+    switch_people.value = true
+    from_examine.item = {
+        name:details.obj.uinfo.name,
+        end_at:details.obj.end_at.split(" ")[0],
+        bdc_sno:details.obj.uinfo.house.bdc_sno,
+        house_addr:details.obj.uinfo.house.house_addr,
+        mobile:details.obj.uinfo.mobile,
+        id_card:details.obj.uinfo.id_card,
+        bdc_uno:details.obj.uinfo.house.bdc_uno,
+        card:card,
+        // card:details.obj.uinfo.card,
+        sno:details.obj.sno,
+    }
+}
+const dialogExamineCloseFunc = () => {
+    APIputShareRecordData(details.obj.id, from_examine.item).then(res => {
+        ElMessage.success('修改成功')
+        switch_people.value = false
+        getShareDataDetail()
     })
 }
 // 下载业务材料
