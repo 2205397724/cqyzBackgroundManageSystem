@@ -1756,14 +1756,14 @@ export function APIgetShareDataMaterialList(params) {
 export function APIputShareDataMaterial(id, data) {
     return api.put(`/share/record-material/${id}`, data)
 }
-// // 删除
-// export function APIdeleteShareData(id) {
-//     return api.delete(`/share/record/${id}`)
-// }
-// // 修改
-// export function APIputShareData(id, data) {
-//     return api.put(`/share/record/${id}`, data)
-// }
+// 删除
+export function APIdeleteShareData(id) {
+    return api.delete(`/share/record/${id}`)
+}
+// 修改共享记录
+export function APIputShareRecordData(id, data) {
+    return api.put(`/share/record/${id}`, data)
+}
 // // 添加
 // export function APIpostShareData(data) {
 //     return api.post('/share/record', data)
