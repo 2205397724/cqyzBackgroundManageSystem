@@ -95,7 +95,7 @@ export default {
                     name: 'repairDetail',
                     sidebar: false,
                     breadcrumb: false,
-                    component: () => import ('@/views/event/Details.vue'),
+                    component: () => import ('@/views/event/repairDetails.vue'),
                     meta: {
                         title: '详情',
                         sidebar: false,

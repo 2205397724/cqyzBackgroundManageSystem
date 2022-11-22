@@ -32,19 +32,29 @@
             :data="data_1.list" :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
             class="tab_1" style="margin-top: 0;"
         >
-            <el-table-column label="评论内容">
-                <template #default="scope">
-                    <span>{{ scope.row.content }} </span>
-                </template>
+            <el-table-column label="评论内容" prop="content">
             </el-table-column>
-            <el-table-column v-if="data_1.list.uname">
+            <el-table-column label="用户">
                 <template #default="scope">
                     <span>{{ scope.row.uname|| 'null' }} </span>
+                </template>
+            </el-table-column>
+            <el-table-column label="点赞">
+                <template #default="scope">
+                    <div class="flex-row font-grey size-sm">
+                        <span>赞:{{ scope.row.zan }} </span>
+                        <span class="p-l-10">踩:{{ scope.row.cai }} </span>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column label="评分" width="80">
                 <template #default="scope">
                     <span>{{ scope.row.score }} </span>
+                </template>
+            </el-table-column>
+            <el-table-column label="回复" width="80">
+                <template #default="scope">
+                    <span>{{ scope.row.reply.length }} </span>
                 </template>
             </el-table-column>
             <el-table-column label="状态" align="center">
@@ -192,34 +202,46 @@
         </el-dialog>
         <!-- 详情 -->
         <el-dialog v-model="popup3.switch" title="详情" width="50%" :append-to-body="true">
-            <div class="details-box">
-                <div v-if="popup3.details.uname" class="item">
-                    <div class="left">评论人</div>
-                    <div class="right">{{ popup3.details.uname }}</div>
+            <div class="flex-row p-10">
+                <div>
+                    <el-avatar :size="50" src="https://app.cqyezhuapp.com/appdown/logo.png" />
                 </div>
-                <div class="item">
-                    <div class="left">评论内容</div>
-                    <div class="right">{{ popup3.details.content }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论状态</div>
-                    <div class="right">
+                <div class="p-l-10">
+                    <div class="flex-row">
+                        <span>{{ popup3.details.uname }}</span>
+                        <span class="p-l-20">用户ID：{{ popup3.details.uid }}</span>
                         <el-tag v-if="popup3.details.status == 10" type="waring" roung>未审核</el-tag>
                         <el-tag v-if="popup3.details.status == 20" type="success" round>已审核</el-tag>
                         <el-tag v-if="popup3.details.status == 30" type="danger" round>审核失败</el-tag>
                     </div>
+                    <div class="size-base p-tb-10">{{ popup3.details.content }}</div>
+                    <div class="font-grey size-sm">
+                        <span>时间：{{ popup3.details.created_at }}</span>
+                        <span class="p-l-20">区域：{{ popup3.details.loc }}</span>
+                        <span class="p-l-20">IP：{{ popup3.details.ip }}</span>
+                    </div>
                 </div>
-                <div class="item">
-                    <div class="left">所在地址</div>
-                    <div class="right">{{ popup3.details.loc }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论人IP</div>
-                    <div class="right">{{ popup3.details.ip }}</div>
-                </div>
-                <div class="item">
-                    <div class="left">评论时间</div>
-                    <div class="right">{{ popup3.details.created_at }}</div>
+            </div>
+            <div class="details-box p-l-30">
+                <div class="flex-row p-10" v-for="(reply,i) in popup3.details.reply" :key="i">
+                    <div>
+                        <el-avatar :size="50" src="https://app.cqyezhuapp.com/appdown/logo.png" />
+                    </div>
+                    <div class="p-l-10">
+                        <div class="flex-row">
+                            <span class="size-sm">{{reply.uname }}</span>
+                            <span class="p-l-20 size-sm">用户ID：{{ reply.uid }}</span>
+                            <el-tag v-if="reply.status == 10" type="waring" roung>未审核</el-tag>
+                            <el-tag v-if="reply.status == 20" type="success" round>已审核</el-tag>
+                            <el-tag v-if="reply.status == 30" type="danger" round>审核失败</el-tag>
+                        </div>
+                        <div class="size-base p-tb-10">{{ reply.content }}</div>
+                        <div class="font-grey size-sm">
+                            <span>时间：{{ reply.created_at }}</span>
+                            <span class="p-l-20">区域：{{ reply.loc }}</span>
+                            <span class="p-l-20">IP：{{ reply.ip }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <template #footer>
@@ -379,7 +401,7 @@ const popup2FnAdd = () => {
         }
     }
     if (popup2.title == '添加' || popup2.title == '回复') {
-        APIpostComment(props.id, popup2.form).then(res => {
+        APIpostComment(popup2.form.tagid, popup2.form).then(res => {
             ElMessage.success('添加成功')
             popup2.switch = false
             data1FnGetList()
@@ -423,12 +445,22 @@ const popup2FnReply = val => {
 }
 const popup3 = reactive({
     switch: false,
-    details: {}
+    details: {
+        reply:[]
+    }
 })
 const popup3FnDetails = id => {
     APIgetCommentDetails(id).then(res => {
         popup3.details = res
         popup3.switch = true
+        let data = {
+            page: data_1.page,
+            per_page: data_1.per_page,
+            tgtid: res.id
+        }
+        APIgetCommentList(data).then(rep => {
+            popup3.details.reply = rep
+        })
     })
 }
 const data_1 = reactive({

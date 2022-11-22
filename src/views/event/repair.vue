@@ -164,7 +164,7 @@
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                         <el-form-item
                             label-width="100px"
-                            label="报修名称"
+                            label="报修主题"
                             :error="data_1.add_error&&data_1.add_error.title?data_1.add_error.title[0]:''"
                         >
                             <el-input
@@ -208,36 +208,32 @@
                             </div>
                         </el-form-item>
                     </el-col>
-                    <template v-if="data_1.add_title=='修改'">
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <el-form-item
-                                label-width="100px"
-                                label="问题分类"
-                                :error="data_1.add_error&&data_1.add_error.catpro?data_1.add_error.catpro[0]:''"
-                            >
-                                <el-cascader
-                                    v-model="data_1.add_form.catpro"
-                                    placeholder=""
-                                    :options="opts_all.obj.problem_type"
-                                    :props="{
-                                        multiple: false,
-                                        emitPath: false,
-                                        lazy: false,
-                                        value: 'id',
-                                        label: 'name',
-                                        checkStrictly: true
-                                    }"
-                                    collapse-tags
-                                    collapse-tags-tooltip
-                                    :show-all-levels="false"
-                                    clearable
-                                />
-                            </el-form-item>
-                            <!-- <el-icon :size="15" color="#F56C6C" class="icon">
-                                <StarFilled />
-                            </el-icon> -->
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                        <el-form-item
+                            label-width="100px"
+                            label="问题分类"
+                            :error="data_1.add_error&&data_1.add_error.catpro?data_1.add_error.catpro[0]:''"
+                        >
+                            <el-cascader
+                                v-model="data_1.add_form.catpro"
+                                placeholder=""
+                                :options="opts_all.obj.problem_type"
+                                :props="{
+                                    multiple: false,
+                                    emitPath: false,
+                                    lazy: false,
+                                    value: 'id',
+                                    label: 'name',
+                                    checkStrictly: true
+                                }"
+                                collapse-tags
+                                collapse-tags-tooltip
+                                :show-all-levels="false"
+                                clearable
+                            />
+                        </el-form-item>
+                    </el-col>
+                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
                                 label-width="100px"
                                 label="投诉对象"
@@ -262,11 +258,10 @@
                                     clearable
                                 />
                             </el-form-item>
-                            <!-- <el-icon :size="15" color="#F56C6C" class="icon_1">
+                            <el-icon :size="15" color="#F56C6C" class="icon_1">
                                 <StarFilled />
-                            </el-icon> -->
-                        </el-col>
-                    </template>
+                            </el-icon>
+                        </el-col> -->
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item
                             label-width="100px"
@@ -383,7 +378,6 @@ const getFuncVoteList = () => {
         }
     }
     APIgetComplaintList(data).then(res => {
-        console.log(res)
         data_1.total = res.length
         data_1.list = res
         let btnNext = document.querySelector('.btn-next')
@@ -553,15 +547,14 @@ const opts_all = reactive({
 import {
     APIgetTypeList
 } from '@/api/custom/custom.js'
-getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user']).then(res => {
+getOpts(['toushu_status', 'toushu_ano', 'toushu_pub', 'toushu_return_type']).then(res => {
     opts_all.obj = res
-    APIgetTypeList(opts_all.obj.kind[1].key).then(res => {
-        console.log(res)
+    APIgetTypeList('repair-pro').then(res => {
         opts_all.obj.problem_type = res
     })
-    APIgetTypeList(opts_all.obj.kind[2].key).then(res => {
-        opts_all.obj.toushu_user_type = res
-    })
+    // APIgetTypeList(opts_all.obj.kind[2].key).then(res => {
+    //     opts_all.obj.toushu_user_type = res
+    // })
 })
 
 </script>

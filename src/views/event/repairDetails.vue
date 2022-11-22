@@ -46,66 +46,49 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="基础信息" name="1">
                         <div class="details-box">
-                            <el-row :gutter="20">
-                                <el-col :span="8">
-                                    <div class="item">
-                                        <div class="left">所在小区</div>
-                                        <div class="right">{{ dataForm.item?.zone?.name }}</div>
-                                    </div>
-                                </el-col>
-                                <el-col :span="8">
-                                    <div class="item">
-                                        <div class="left">是否公开</div>
-                                        <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
-                                    </div>
-                                </el-col>
-                                <el-col :span="8">
-                                    <div class="item">
-                                        <div class="left">是否匿名</div>
-                                        <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,dataForm.item.ano) }}</div>
-                                    </div>
-                                </el-col>
-                            </el-row>
-                            <el-row :gutter="20">
-                                <el-col :span="8">
-                                    <div class="item">
-                                        <div class="left">分类</div>
-                                        <div class="right">{{ getOptVal(opts_all.obj.tousu_type_kind,dataForm.item.kind) }}</div>
-                                    </div>
-                                </el-col>
-                                <el-col :span="8">
-                                    <div v-if="dataForm.item.catpro" class="item">
-                                        <div class="left">问题分类</div>
-                                        <div class="right">{{ newcatpro.item.name }}</div>
-                                    </div>
-                                </el-col>
-                                <el-col :span="8">
-                                    <div v-if="dataForm.item.catob" class="item">
-                                        <div class="left">投诉对象</div>
-                                        <div class="right">{{ newcatob.item.name }}</div>
-                                    </div>
-                                </el-col>
-                            </el-row>
-                            <el-row :gutter="20">
-                                <el-col :span="8">
-                                    <div v-if="dataForm.item.kind == 1" class="item">
-                                        <div class="left">涉事位置</div>
-                                        <div class="right">
-                                            <el-tag v-for="(item,i) in illegalList.arr" :key="i" type="success" class="m-r-10">{{ item.tgt_able?.name }}</el-tag>
+                            <div class="bg-color-grey">
+                                <el-row :gutter="20">
+                                    <el-col :span="6">
+                                        <div class="item">
+                                            <div class="left">所在小区</div>
+                                            <div class="right">{{ dataForm.item?.zone?.name }}</div>
                                         </div>
-                                    </div>
-                                </el-col>
-                            </el-row>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <div class="item">
+                                            <div class="left">问题分类</div>
+                                            <div class="right">{{ getOptVal(opts_all.obj.problem_type,dataForm.item.catpro)}}</div>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <div class="item">
+                                            <div class="left">是否公开</div>
+                                            <div class="right">{{ getOptVal(opts_all.obj.toushu_pub,dataForm.item.pub) }}</div>
+                                        </div>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <div class="item">
+                                            <div class="left">是否匿名</div>
+                                            <div class="right">{{ getOptVal(opts_all.obj.toushu_ano,dataForm.item.ano) }}</div>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                                <el-row :gutter="20">
+                                    <el-col :span="24">
+                                        <div v-if="dataForm.item.kind == 1" class="item">
+                                            <div class="left">涉事位置</div>
+                                            <div class="right">
+                                                <el-tag v-for="(item,i) in illegalList.arr" :key="i" type="success" class="m-r-10">{{ item.tgt_able?.name }}</el-tag>
+                                            </div>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                            <div class="line-height-170 p-tb-10">
+                                <div v-html="dataForm.item.content" />
+                            </div>
                             <el-row :gutter="20">
-                                <el-col :span="8">
-                                    <div class="item">
-                                        <div class="left">内容</div>
-                                        <div class="right" v-html="dataForm.item.content" />
-                                    </div>
-                                </el-col>
-                            </el-row>
-                            <el-row :gutter="20">
-                                <el-col :span="8">
+                                <el-col :span="24">
                                     <div v-if="dataForm.item.affix&&dataForm.item.affix.length>0" class="item">
                                         <div class="left">附件</div>
                                         <div class="right">
@@ -125,7 +108,6 @@
                         <div>
                             <el-timeline>
                                 <el-timeline-item v-for="(item,index) in dataForm.item.totlogs" :key="index" :timestamp="item.created_at" placement="top" :type="index == 0 ? 'primary' : ''">
-                                    <el-card>
                                         <div>
                                             <div>
                                                 <div class="sno m-b-10">
@@ -140,7 +122,6 @@
                                                 <img v-for="(j,i) in item.logable.affixs" :key="i" :preview-src-list="item.logable.affixs" class="image" :src="j" fit="cover">
                                             </div>
                                         </div>
-                                    </el-card>
                                 </el-timeline-item>
                             </el-timeline>
                         </div>
@@ -305,7 +286,7 @@
                 <el-row :gutter="10">
                     <el-col :xs="24" :sm="24" :md="24">
                         <el-form-item
-                            label="投诉转办对象" prop="name"
+                            label="转办部门" prop="name"
                             :error="popup_1.msg&&popup_1.msg.type?popup_1.msg.type[0]:''"
                         >
                             <el-select v-model="popup_1.form.type" class="head-btn" clearable>
@@ -445,7 +426,7 @@
         <!-- 确认 -->
         <el-dialog
             v-model="examine_switch_1"
-            title="确认投诉信息"
+            title="确认信息"
             width="50%"
         >
             <el-form
@@ -489,32 +470,7 @@
                             />
                         </el-form-item>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="100px"
-                            label="投诉对象"
-                            :error="data_1.add_error&&data_1.add_error.catob?data_1.add_error.catob[0]:''"
-                        >
-                            <el-cascader
-                                v-model="dataForm.item.catob"
-                                style="width: 100%;"
-                                placeholder=""
-                                :options="opts_all.obj.toushu_user_type"
-                                :props="{
-                                    multiple: false,
-                                    emitPath: false,
-                                    lazy: false,
-                                    value: 'id',
-                                    label: 'name',
-                                    checkStrictly: true
-                                }"
-                                collapse-tags
-                                collapse-tags-tooltip
-                                :show-all-levels="false"
-                                clearable
-                            />
-                        </el-form-item>
-                    </el-col>
+
                 </el-row>
             </el-form>
             <template #footer>
@@ -949,23 +905,8 @@ const getOptsFunc = () => {
     getOpts(['flg_type', 'tousu_type_kind', 'toushu_status', 'toushu_ano', 'toushu_pub', 'kind', 'toushu_return_type', 'toushu_illegal', 'illegal_type', 'illegal_user', 'comment_status', 'comment_scoreper']).then(res => {
         opts_all.obj = res
         console.log(res)
-        APIgetTypeList(opts_all.obj.kind[1].key).then(res1 => {
+        APIgetTypeList('repair-pro').then(res1 => {
             opts_all.obj.problem_type = res1
-            // let newArray = []
-
-            opts_all.obj.problem_type.forEach(item => {
-                if (item.id == dataForm.item.catpro) {
-                    newcatpro.item = item
-                }
-            })
-        })
-        APIgetTypeList(opts_all.obj.kind[2].key).then(res2 => {
-            opts_all.obj.toushu_user_type = res2
-            opts_all.obj.toushu_user_type.forEach(item => {
-                if (item.id == dataForm.item.catob) {
-                    newcatob.item = item
-                }
-            })
         })
     })
 }
