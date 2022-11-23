@@ -194,11 +194,9 @@ const details = reactive({
 const from_examine = reactive({
     item: {}
 })
-const card = reactive({})
 // 获取共享记录详细
 const getShareDataDetail = ()=>{
     APIgetShareDataDetails(route.query.id).then(res => {
-        card = res.uinfo.card
         res.materials.map(share_detail=>{
             if(share_detail.sharefile.type === 2 || share_detail.sharefile.type === 4) {
                 if(share_detail.content != "") {
@@ -212,13 +210,16 @@ const getShareDataDetail = ()=>{
         })
         //组装身份证产权证
         res.uinfo.card.sfz.map((key,i)=>{
-            res.uinfo.card.sfz[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
+            if(key.indexOf(import.meta.env.VITE_APP_FOLDER_SRC) == -1 ) {
+                res.uinfo.card.sfz[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
+            }
         })
         res.uinfo.card.bdc.map((key,i)=>{
-            res.uinfo.card.bdc[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
+            if(key.indexOf(import.meta.env.VITE_APP_FOLDER_SRC) == -1 ) {
+                res.uinfo.card.bdc[i] = (import.meta.env.VITE_APP_FOLDER_SRC + key)
+            }
         })
         details.obj = res
-        console.log("res",res)
     })
 }
 //修改相关业务
@@ -232,8 +233,7 @@ const modifyShareRecord = () => {
         mobile:details.obj.uinfo.mobile,
         id_card:details.obj.uinfo.id_card,
         bdc_uno:details.obj.uinfo.house.bdc_uno,
-        card:card,
-        // card:details.obj.uinfo.card,
+        card:details.obj.uinfo.card,
         sno:details.obj.sno,
     }
 }
