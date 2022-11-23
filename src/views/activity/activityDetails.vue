@@ -111,7 +111,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="参与范围" name="2">
+                <el-tab-pane label="参与范围" name="2" lazy>
                     <el-button
                         type="primary"
                         style="padding: 19px 18px;position: relative;top: 5px;"
@@ -282,7 +282,7 @@
                     </el-row>
                     <el-row />
                 </el-tab-pane>
-                <el-tab-pane :label="activeName_1 == '选举' ? activeName_1+'候选人' : activeName_1+'题目'" name="3">
+                <el-tab-pane :label="activeName_1 == '选举' ? activeName_1+'候选人' : activeName_1+'题目'" name="3" lazy>
                     <div v-if="activeName_1 == '选举'">
                         <SurveyElection :id="route.query.id" />
                     </div>
@@ -290,10 +290,10 @@
                         <SurveyQuestions :id="route.query.id" />
                     </div>
                 </el-tab-pane>
-                <el-tab-pane :label=" activeName_1 + '参与详情'" name="4">
+                <el-tab-pane :label=" activeName_1 + '参与详情'" name="4" lazy>
                     <SurveyAnswer :id="route.query.id" />
                 </el-tab-pane>
-                <el-tab-pane label="统计数据" name="8">
+                <el-tab-pane label="统计数据" name="8" lazy>
                     <div>
                         <div class="details-box">
                             <el-row>
@@ -462,7 +462,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="审核记录" name="7">
+                <el-tab-pane label="审核记录" name="7" lazy>
                     <div style="margin-top: 7px;">
                         <el-timeline>
                             <el-timeline-item
@@ -508,10 +508,10 @@
                     </div>
                     <div v-show="article_tab.arr.length <= 0" class="size-base font-grey">无审核信息</div>
                 </el-tab-pane>
-                <el-tab-pane label="业主评论" name="5" class="hidden">
+                <el-tab-pane label="业主评论" name="5" class="hidden" lazy>
                     <Comment :id="route.query.id" />
                 </el-tab-pane>
-                <el-tab-pane label="访问记录" name="6">
+                <el-tab-pane label="访问记录" name="6" lazy>
                     <el-table
                         :data="data_2.list"
                         :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"

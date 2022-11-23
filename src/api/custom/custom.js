@@ -24,10 +24,10 @@ export function APIgetCommentList(params) {
 export function APIgetCommentDetails(id) {
     return api.get(`comment/${id}`)
 }
-// // 删除
-// export function APIdeleteAdComment(id) {
-//     return api.delete(`comment/${id}`)
-// }
+// 删除
+export function APIdeleteAdComment(id) {
+    return api.delete(`comment/${id}`)
+}
 // 修改
 export function APIputComment(id, data) {
     return api.put(`comment/${id}`, data)
