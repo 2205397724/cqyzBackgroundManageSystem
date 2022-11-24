@@ -846,7 +846,6 @@ const getTabListFunc = () => {
         per_page: per_page.value,
         china_code: active_obj.obj.id
     }
-    console.log("active_obj.obj.id",active_obj.obj.id)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {

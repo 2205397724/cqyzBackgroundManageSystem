@@ -73,6 +73,7 @@
                 <div class="p-t-20 p-b-10 size-base font-grey">
                     业务材料：
                     <el-button type="primary" @click="downLoadMaterials">下载业务材料</el-button>
+                    <el-button type="primary" @click="getDownloadRecordList">查看下载记录</el-button>
                 </div>
                 <table class="table m-b-10" border="1" v-for="item in details.obj.materials" :key="item.id">
                     <tr v-if="item.sharefile.type === 1">
@@ -114,7 +115,7 @@
                 </table>
             </div>
         </page-main>
-        <el-dialog v-model="switch_people" title="修改相关信息">
+        <el-dialog v-model="switch_message" title="修改相关信息">
             <el-form ref="ruleFormRef">
                 <el-row :gutter="10">
                     <div class="width-100 m-b-20 p-b-10 display" style="border-bottom: solid 1px #e4e7ed;">
@@ -164,24 +165,70 @@
             </el-form>
             <template #footer>
                 <div class="footer">
-                    <el-button @click="switch_people=false">取消</el-button>
+                    <el-button @click="switch_message=false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc()">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="switch_download_record" title="下载记录">
+            <page-main>
+                <el-table
+                    :data="download_record.list"
+                    class="tab_1"
+                >
+                    <el-table-column label="头像" width="100">
+                        <template #default="scope">
+                            <el-image :src="VITE_APP_FOLDER_SRC+scope.row.stub.avatar" alt="" style="width: 50px; height: 50px;" />
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="姓名" width="100">
+                        <template #default="scope">
+                            <text>{{scope.row.stub.name || scope.row.stub.nickname || scope.row.stub.username}}</text>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="手机号" prop="stub.mobile"></el-table-column>
+                    <el-table-column label="身份证" width="200" prop="stub.id_card"></el-table-column>
+                    <el-table-column label="用户组" prop="stub.group_name"></el-table-column>
+                    <el-table-column label="用户组职位" prop="stub.group_post"></el-table-column>
+                </el-table>
+                <el-pagination
+                    v-model:current-page="page"
+                    style="float: right;"
+                    layout="prev,next,jumper,"
+                    :total="Infinity"
+                    :page-size="per_page"
+                    background
+                    prev-text="上一页"
+                    next-text="下一页"
+                    hide-on-single-page
+                />
+            </page-main>
+            <template #footer>
+                <div class="footer">
+                    <el-button type="danger" @click="switch_download_record=false">关闭</el-button>
                 </div>
             </template>
         </el-dialog>
     </div>
 </template>
 <script setup>
-import { ref, reactive} from 'vue'
+import { ref, reactive, watch} from 'vue'
 import {
     APIgetShareDataDetails,
-    APIputShareRecordData
+    APIputShareRecordData,
+    APIpostShareRecordDownload,
+    APIgetShareRecordDownloadList
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { instance } from 'kin-file-fetch'
+const uid = localStorage.getItem('uid')
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const route = useRoute()
-const switch_people = ref(false)
+//控制修改信息的弹窗
+const switch_message = ref(false)
+//控制下载记录的弹窗
+const switch_download_record = ref(false)
 const details = reactive({
     obj: {
         uinfo:{
@@ -194,6 +241,8 @@ const details = reactive({
 const from_examine = reactive({
     item: {}
 })
+let per_page = ref(10)
+let page = ref(1)
 // 获取共享记录详细
 const getShareDataDetail = ()=>{
     APIgetShareDataDetails(route.query.id).then(res => {
@@ -224,7 +273,7 @@ const getShareDataDetail = ()=>{
 }
 //修改相关业务
 const modifyShareRecord = () => {
-    switch_people.value = true
+    switch_message.value = true
     from_examine.item = {
         name:details.obj.uinfo.name,
         end_at:details.obj.end_at.split(" ")[0],
@@ -240,7 +289,7 @@ const modifyShareRecord = () => {
 const dialogExamineCloseFunc = () => {
     APIputShareRecordData(details.obj.id, from_examine.item).then(res => {
         ElMessage.success('修改成功')
-        switch_people.value = false
+        switch_message.value = false
         getShareDataDetail()
     })
 }
@@ -263,12 +312,50 @@ const downLoadMaterials = ()=>{
     let username = details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username
     let address = details.obj.uinfo.house.house_addr
     instance.download(urls,username +'-'+ address);
+    let data = {
+        rid:details.obj.id,
+        gid:JSON.parse(localStorage.getItem(uid + '_user_group')).id
+    }
+    APIpostShareRecordDownload(data).then(res => {
+        ElMessage.success('下载成功')
+    })
+}
+// 获取下载记录
+const download_record = reactive({
+    list:[]
+})
+const getDownloadRecordList = () => {
+    switch_download_record.value = true
+    let params = {
+        page: page.value,
+        per_page: per_page.value,
+        rid:details.obj.id
+    }
+    APIgetShareRecordDownloadList(params).then(res => {
+        download_record.list = res
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
+    })
 }
 onMounted(() => {
     getShareDataDetail()
 })
+watch(page, () => {
+    getDownloadRecordList()
+})
 </script>
 <style lang="scss" scoped>
+/* 修改el-pagination翻页的样式 */
+@import "@/assets/styles/resources/variables.scss";
+@include pageStyle;
 table tr td {
     padding: 10px;
 }
