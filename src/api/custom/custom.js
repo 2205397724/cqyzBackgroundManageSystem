@@ -1772,6 +1772,14 @@ export function APIputShareRecordData(id, data) {
 // export function APIpostShareData(data) {
 //     return api.post('/share/record', data)
 // }
+// 添加下载记录
+export function APIpostShareRecordDownload(data) {
+    return api.post(`/share/record-dl`, data)
+}
+// 获取下载记录
+export function APIgetShareRecordDownloadList(params) {
+    return api.get(`/share/record-dl`, { params: params })
+}
 //向活动参与范围内的用户发送消息
 export function postNoticeSurvey(data) {
     return api.post(`/push/mbr/survey`, data)

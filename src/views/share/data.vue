@@ -316,7 +316,6 @@ const StatusFunk = val => {
     flag.value = false
     flag1.value = false
     flag2.value = false
-    // console.log(flag.value)
 }
 
 let urls = reactive([])
@@ -341,7 +340,6 @@ const getShareDataList = () => {
     }
     loading_tab.value = true
     APIgetShareDataList(params).then(res => {
-        // console.log(res)
         data.list= res
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
@@ -426,7 +424,6 @@ const modifyMaterialFunc = row => {
     record_title.value = row.content
     type.value = row.type//bdc or sfz
     data.switch_3 = true
-    // console.log("modifyMaterialFunc",row)
 }
 const file_list = ref([])
 const dialogExamineCloseFunc = () => {
@@ -436,7 +433,6 @@ const dialogExamineCloseFunc = () => {
         let type = []
         let file_key = []
         if (file_list.value.length > 0) {
-            // console.log("file_list.value",file_list.value)
             for (let i in file_list.value) {
                 if (!file_list.value[i].raw) {
                     file_key.push(file_list.value[i].name)
@@ -481,7 +477,6 @@ const dialogExamineCloseFuncRecord = () => {
     let files = []
     let file_key = []
     if (file_list.value.length > 0) {
-        // console.log("file_list.value",file_list.value)
         for (let i in file_list.value) {
             if (!file_list.value[i].raw) {
                 file_key.push(file_list.value[i].name)
@@ -493,8 +488,6 @@ const dialogExamineCloseFuncRecord = () => {
     if (files.length > 0) {
         getFilesKeys(files, 'material',type).then(arr => {
             // data.item.content = file_key.concat(arr).join(',')
-            // console.log("123456",data.item)
-            // console.log("222",recordlId.value,arr)
             let data = {
                 name:details.obj.uinfo.name,
                 end_at:details.obj.end_at.split(" ")[0],
@@ -526,7 +519,6 @@ const dialogExamineCloseFuncRecord = () => {
 }
 // 选择项变化时触发的事件
 const selectionChange = (selection) => {
-    // console.log("aaa",selection)
     urls = []
     // 遍历提取出图片材料的urls地址
     selection.map(item=>{
@@ -534,13 +526,11 @@ const selectionChange = (selection) => {
             if(item.content != "") {
                 let arr = []
                 arr = item.content.split(",")
-                // console.log("arr",arr)
                 for(let i in arr) {
                     urls.push(import.meta.env.VITE_APP_FOLDER_SRC + arr[i])
                 }
             }
         }
-        // console.log("urls",urls)
     })
 }
 // 下载业务材料
