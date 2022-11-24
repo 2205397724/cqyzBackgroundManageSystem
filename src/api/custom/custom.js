@@ -53,6 +53,10 @@ export function APIputCommentOpinions(id, data) {
 export function APIpostCommentStatistic(data) {
     return api.post('/comment-tag-stat', data)
 }
+// 删除评论观点
+export function APIdelCommentStatistic(id) {
+    return api.delete(`/comment-tag/${id}`)
+}
 /* --------------------------------------------------------------------------------------------------------------------- */
 // 设备维修
 // 列表

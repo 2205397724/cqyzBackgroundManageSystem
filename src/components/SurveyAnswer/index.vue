@@ -265,9 +265,7 @@
                         </div>
                     </el-radio-group>
                 </el-scrollbar> -->
-                    <div
-                        style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 400px;"
-                    >
+                    <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 450px;">
                         <div class="row-box row-box-title">
                             <div class="row-item-box row-item-tit-box">
                                 <div class="row-item row-item-tit row-item-tit-bgline">
@@ -313,18 +311,18 @@
                     </div>
                     <div v-if="flag" style="background-color: #f0f2f5; padding: 20px; margin-top: 20px;">
                         <el-row :span="10" class="m-b-10">
-                            <el-col :lg="5" style="line-height: 32px; text-align: right;">
+                            <el-col :lg="4" style="line-height: 32px; text-align: right;">
                                 <span>选择的房屋：</span>
                             </el-col>
-                            <el-col :lg="19">
+                            <el-col :lg="20">
                                 <el-input v-model="houseName" />
                             </el-col>
                         </el-row>
                         <el-row :lg="5">
-                            <el-col :lg="5" style="line-height: 32px; text-align: right;">
+                            <el-col :lg="4" style="line-height: 32px; text-align: right;">
                                 <span>产权人：</span>
                             </el-col>
-                            <el-col :lg="19">
+                            <el-col :lg="20">
                                 <template v-if="house_details.item.curr_property&&house_details.item.curr_property.owners">
                                     <el-button v-for="(item,i) in house_details.item.curr_property.owners" :key="i" type="primary" plain @click="selectPropertyPeople(item)">{{ item.name }}</el-button>
                                 </template>
@@ -339,6 +337,7 @@
 
 <script setup name="SurveyAnswer">
 import {
+    APIgetHouseDetailsHouse,
     APIgetSurveyAnswerList,
     APIgetSurveyAnswerDetail,
     APIaddSurveyAnswer,
@@ -356,7 +355,7 @@ import { reactive } from 'vue'
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
 onMounted(() => {
-    console.log(props.id)
+
     // 未参与房屋
     notParticipate()
     // 问卷调查结果
@@ -399,7 +398,7 @@ const showTopic = (tid, optid, answertopics) => {
     answertopics.forEach(item => {
         if (tid == item.tid) {
             if (item.content) {
-                // console.log(item.content)
+                //
                 isShow = item.content
             } else if (item.type === 3) {
                 isShow = null
@@ -436,7 +435,7 @@ const answerListFunc = () => {
         per_page: 15
     }
     APIgetSurveyAnswerList(props.id, params).then(res => {
-        // console.log(res)
+        //
         // answer_list = res[0]
         // 清空答卷列表（线上、线下、总列表）
         answer_list.length = 0
@@ -455,7 +454,7 @@ const answerListFunc = () => {
             }
         })
         answer_list.push(...answer_list_on, ...answer_list_off)
-        // console.log(answer_list)
+        //
     })
 
 }
@@ -482,11 +481,11 @@ const getAnswerDetail = id => {
             }
         }
     }
-    // console.log(id)
+    //
     APIgetSurveyAnswerDetail(id).then(res => {
-        // console.log(res)
+        //
         answer_detail.item = res
-        // console.log('answer_detail.item', answer_detail.item)
+        //
     })
 }
 // 删除答卷
@@ -522,7 +521,7 @@ const addAnswer = () => {
     topicsFunc()
     switch_addAnswer.value = true
     // 根据问卷题目数量插入对象到answers中
-    // console.log('length',topic_details.item.length)
+    //
     // 先判断数组长度是否相同
     // if (addticket.answers.length != topic_details.item.length) {
     addticket.answers = []
@@ -535,7 +534,7 @@ const addAnswer = () => {
             addticket.answers.push({ 'tid': '', 'content': '' })
         }
     }
-    // console.log(addticket.answers)
+    //
     // }
     let params = {
         page: 1,
@@ -553,7 +552,7 @@ const addAnswer = () => {
                     }
                 }
             }
-            // console.log(res)
+            //
             data_range.arr = res
             tree_item.arr = []
             res.forEach((item, key) => {
@@ -573,7 +572,7 @@ const addAnswer = () => {
             })
         })
 
-    // console.log('aaaa',addticket)
+    //
 }
 const page = ref(1)
 const per_page = ref(15)
@@ -587,7 +586,7 @@ const notParticipate = () => {
         per_page: per_page.value
     }
     APIgetNotParticipate(props.id, params).then(res => {
-        // console.log('aaa',res)
+        //
         participate.notParticipateLength = res.length
         res.forEach(element => {
             notParticipateList.push(element)
@@ -602,11 +601,11 @@ const notParticipate = () => {
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
-        // console.log("notParticipateList",notParticipateList)
+        //
     })
 }
 watch(page, () => {
-    // console.log(data_2.page)
+    //
     // data1FnGetList()
     notParticipate()
 })
@@ -623,28 +622,28 @@ const radio5 = ref([])
 const emitTickets = (tid, index) => {
     // addticket.answers[index].opt = []
     addticket.answers[index].tid = tid
-    // console.log(radio4.arr)
+    //
     // addticket.answers[index].opt.push(radio4.arr)
-    console.log(addticket.answers)
+
 }
 const emitTickets_1 = (tid, index) => {
     addticket.answers[index].opt = []
     addticket.answers[index].tid = tid
     // addticket.answers[index].opt.push(radio2.value)
     addticket.answers[index].opt.push(radio2.list[index])
-    console.log(addticket.answers)
+
 }
 const emitTickets_2 = (val, index) => {
     addticket.answers[index].content = ''
     addticket.answers[index].tid = val.id
-    // console.log(radio3.value)
+    //
     addticket.answers[index].content = val.answer
-    console.log(addticket.answers)
+
 }
 const dialogAddSurveyAnswer = () => {
-    console.log('addticket', addticket)
+
     APIaddSurveyAnswer(props.id, addticket).then(res => {
-        // console.log(res)
+        //
         switch_addAnswer.value = false
         ElMessage.success('问卷提交成功')
     }).catch(err => {
@@ -677,7 +676,7 @@ const topicsFunc = () => {
         // topic_details.item = [...topic_details.item[1], ...topic_details.item[2], ...topic_details.item[3], ...topic_details.item[0]]
         topic_details.item = res
     })
-    // console.log('topic_details', topic_details)
+    //
 }
 // 选择身份证号
 const switch_choose_zone = ref(false)
@@ -688,7 +687,7 @@ const active_obj = reactive({
     obj: {}
 })
 const checkFunc = val => {
-    console.log(val)
+
     active_obj.obj = val
     if (active_obj.obj.id && active_obj.obj.name && (active_obj.obj.type == 'units' || active_obj.obj.type ==
         'buildings')) {
@@ -721,7 +720,7 @@ const getHouseList = () => {
         params.houseable_type = active_obj.obj.type
     }
     APIgetHouseListSort(params).then(res => {
-        // console.log(res)
+        //
         total.value = 0
         // 处理空白格
         let nums = res.house_nums
@@ -737,7 +736,7 @@ const getHouseList = () => {
             }
             house_num.arr = nums
             house_list.arr = list
-            // console.log(house_num.arr)
+            //
             // 处理默认选择项目
             for (let i in house_num.arr) {
                 checkFH.row[house_num.arr[i]] = {
@@ -771,10 +770,10 @@ const house_details = reactive({
 const selectedZone_id = ref('')
 const houseName = ref('')
 const houseDetailsFunc = row => {
-    // console.log(row)
-    house_details.item = row
-    houseName.value = house_details.item.pos_name + house_details.item.name
-    // console.log(houseName.value)
+    APIgetHouseDetailsHouse(row.id).then(res => {
+        house_details.item = res
+        houseName.value = house_details.item.pos_name + house_details.item.name
+    })
     flag.value = true
 }
 const selectPropertyPeople = row => {
