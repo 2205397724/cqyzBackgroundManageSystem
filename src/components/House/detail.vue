@@ -416,32 +416,36 @@ const read_state = ref(true)
 const add_state = ref(false)
 // 显示产权信息
 const showPropertyFunc = () => {
-    from_error_property.msg = {}
-    property_obj.obj = JSON.parse(JSON.stringify(data_details.item))
-    if (property_obj.obj.curr_property) {
-        APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
-            // 遍历附件加上图片服务器地址前缀
-            if (res.affix) {
-                for (let i in res.affix.bdcz) {
-                    res.affix.bdcz[i] = VITE_APP_FOLDER_SRC + res.affix.bdcz[i]
+    APIgetHouseDetailsHouse(data_details.item.id).then(res => {
+        // 遍历附件加上图片服务器地址前缀
+        if (res.curr_property.affix) {
+            for (let i in res.curr_property.affix.bdcz) {
+                res.curr_property.affix.bdcz[i] = VITE_APP_FOLDER_SRC + res.curr_property.affix.bdcz[i]
+            }
+        }
+        res.curr_property.owners.map(item => {
+            if (item.affix) {
+                for (let i in item.affix.sfz) {
+                    item.affix.sfz[i] = VITE_APP_FOLDER_SRC + item.affix.sfz[i]
                 }
             }
-            res.owners.map(item => {
-                if (item.affix) {
-                    for (let i in item.affix.sfz) {
-                        item.affix.sfz[i] = VITE_APP_FOLDER_SRC + item.affix.sfz[i]
-                    }
-                }
-            })
-            // console.log("res", res)
-            property_form.obj = res
-            copy_property.obj = JSON.parse(JSON.stringify(res))
-
         })
-    } else {
-        property_form.obj = { house_id: property_obj.obj.id }
-        copy_property.obj = { house_id: property_obj.obj.id }
-    }
+        property_obj.obj = res.curr_property
+        property_form.obj = res.curr_property
+    })
+    from_error_property.msg = {}
+    // if (property_obj.obj.curr_property) {
+    //     APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
+
+    //         // console.log("res", res)
+
+    //         copy_property.obj = JSON.parse(JSON.stringify(res))
+
+    //     })
+    // } else {
+    //     property_form.obj = { house_id: property_obj.obj.id }
+    //     copy_property.obj = { house_id: property_obj.obj.id }
+    // }
     read_state.value = true
     switch_property.value = true
 }

@@ -5,7 +5,6 @@
 </template>
 <script setup>
 import House from '@/components/House/index.vue'
-// 如果你想修改这个页面，不，你不想！┗( ▔, ▔ )┛
 import {
     reactive,
     ref
@@ -13,12 +12,6 @@ import {
 import {
     APIgetChinaRegion
 } from '@/api/custom/custom.js'
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
-})
 const tree_item_1 = reactive({
     arr: []
 })
@@ -36,9 +29,7 @@ const getChinaRegionunc = () => {
     } else {
         params = {}
     }
-    console.log("params",params)
     APIgetChinaRegion(params).then(res => {
-        console.log(res)
         for (let i in res) {
             if (res[i].level < 5) {
                 tree_item_1.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
@@ -46,7 +37,6 @@ const getChinaRegionunc = () => {
                 tree_item_1.arr.push({ name: res[i].name, type: 'region', next_type: 'zone', id: res[i].code })
             }
         }
-        console.log(tree_item_1.arr)
     })
 }
 getChinaRegionunc()
