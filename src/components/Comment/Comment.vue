@@ -1,9 +1,10 @@
 <template>
     <div>
-        <div class="m-tb-5">
+        <div class="m-t-5 m-b-20">
             <el-button type="primary" :icon="Setting" size="large" @click="()=>{ settingPopup.switch=true }">评论设置</el-button>
             <el-button type="primary" :icon="Plus" size="large"
-                 @click="()=>{
+                :disabled="settingPopup.using ? false:true"
+                @click="()=>{
                     editaddPopup.form = {};
                     editaddPopup.error = {};
                     editaddPopup.title = '添加';
@@ -11,16 +12,16 @@
                 }"
             > 添加 </el-button>
         </div>
-        <!-- <div class="m-b-20">
+        <div class="m-b-20" v-if="settingPopup.tagarr.length>0">
             <el-row :gutter="20">
                 <el-col v-for="(item,i) in settingPopup.tagarr" :key="i" :span="4">
-                    <div style="border-radius: 20px; height: 60px;display: flex; flex-direction: column;">
-                        <div style="background-color: #d1fadb;flex: 50%;text-align: center;line-height: 30px; border-top-left-radius: 20px;border-top-right-radius: 20px;">{{ item.cnt }}</div>
-                        <div style="background-color: #96df93; flex: 50%; text-align: center;line-height: 30px; border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">{{ item.title }}</div>
+                    <div style="height: 60px;display: flex; flex-direction: column;">
+                        <div style="background-color: #edfaf0;color: #59a34d;flex: 50%;text-align: center;line-height: 30px; border-top-left-radius: 8px;border-top-right-radius: 8px;">{{ item.cnt }}</div>
+                        <div style="background-color: #cce9d8;font-size: 14px; color: #599d5d;flex: 50%; text-align: center;line-height: 30px; border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;">{{ item.title }}</div>
                     </div>
                 </el-col>
             </el-row>
-        </div> -->
+        </div>
         <el-table :data="commentData.list" :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1">
             <el-table-column label="评论内容" prop="content"></el-table-column>
             <el-table-column label="用户" prop="uname"></el-table-column>
@@ -51,13 +52,13 @@
                     <el-button type="primary" size="small" @click="editaddPopupModifyOpen(scope.row)">
                         修改
                     </el-button>
-                    <el-button size="small" @click="popup3FnDetails(scope.row.id)">
+                    <el-button size="small" @click="getCommentDetails(scope.row.id)">
                         详情
                     </el-button>
                     <el-popconfirm
                         title="确定要删除当前项么?"
                         cancel-button-type="info"
-                        @confirm="popup3FnDelete(scope.row)"
+                        @confirm="delCommentDetails(scope.row)"
                     >
                         <template #reference>
                             <el-button
@@ -74,10 +75,10 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination v-model:current-page="commentData.page" style="float: right;margin-top: 15px;"
+        <el-pagination v-model:current-page="page" style="float: right;margin-top: 15px;"
             layout="prev,next,jumper,"
             :total="Infinity"
-            :page-size="commentData.per_page"
+            :page-size="per_page"
             prev-text="上一页"
             next-text="下一页"
             background
@@ -88,8 +89,7 @@
             <el-form :model="editaddPopup.form">
                 <el-row :gutter="10">
                     <el-col v-if="editaddPopup.title == '修改'" :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                        <el-form-item
-                            label-width="70px" label="状态"
+                        <el-form-item label-width="70px" label="状态"
                             :error="editaddPopup.error&&editaddPopup.error.status?editaddPopup.error.status[0]:''"
                         >
                             <el-radio-group v-model="editaddPopup.form.status">
@@ -131,7 +131,7 @@
                 <el-switch v-model="settingPopup.using" inline-prompt active-text="开" inactive-text="关" @change="switchFnUse"/>
                 <div style="margin-left: 20px;display: inline-block;">
                     <el-radio-group v-model="settingPopup.scoreper" :disabled="!settingPopup.using" @change="switchFnUse(true)">
-                        <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="item.key" :label="i" size="large">
+                        <el-radio v-for="(item,i) in opts_all.obj.comment_scoreper" :key="i" :label="item.key" size="large">
                             {{ item.val }}
                         </el-radio>
                     </el-radio-group>
@@ -158,7 +158,7 @@
                         <el-button type="primary" @click="addSureFunc(item,i)">确定</el-button>
                     </el-col>
                     <el-col :span="3">
-                        <el-button type="danger" @click="deleteFunc(item,i)">删除</el-button>
+                        <el-button type="danger" @click="deletetagFunc(item,i)">删除</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -169,22 +169,22 @@
             </template>
         </el-dialog>
         <!-- 详情 -->
-        <el-dialog v-model="popup3.switch" title="详情" width="50%" :append-to-body="true">
+        <el-dialog v-model="commentDetails.switch" title="详情" width="50%" :append-to-body="true">
             <div class="flex-row p-10">
                 <div>
-                    <el-avatar :size="50" :src="popup3.details.uavatar" />
+                    <el-avatar :size="50" :src="commentDetails.details.uavatar" />
                 </div>
                 <div class="p-l-10">
                     <div class="flex-row">
-                        <span>{{ popup3.details.uname }}</span>
-                        <span class="p-l-20">用户ID：{{ popup3.details.uid }}</span>
-                        <el-tag v-if="popup3.details.status == 10" type="waring" roung>未审核</el-tag>
-                        <el-tag v-if="popup3.details.status == 20" type="success" round>已审核</el-tag>
-                        <el-tag v-if="popup3.details.status == 30" type="danger" round>审核失败</el-tag>
+                        <span>{{ commentDetails.details.uname }}</span>
+                        <span class="p-l-20">用户ID：{{ commentDetails.details.uid }}</span>
+                        <el-tag v-if="commentDetails.details.status == 10" type="waring" roung>未审核</el-tag>
+                        <el-tag v-if="commentDetails.details.status == 20" type="success" round>已审核</el-tag>
+                        <el-tag v-if="commentDetails.details.status == 30" type="danger" round>审核失败</el-tag>
                         <el-popconfirm
                             title="确定要删除当前项么?"
                             cancel-button-type="info"
-                            @confirm="popup3FnDelete(popup3.details)"
+                            @confirm="delCommentDetails(commentDetails.details)"
                         >
                             <template #reference>
                                 <el-button class="m-l-10"
@@ -196,16 +196,16 @@
                             </template>
                         </el-popconfirm>
                     </div>
-                    <div class="size-base p-tb-10">{{ popup3.details.content }}</div>
+                    <div class="size-base p-tb-10">{{ commentDetails.details.content }}</div>
                     <div class="font-grey size-sm">
-                        <span>时间：{{ popup3.details.created_at }}</span>
-                        <span class="p-l-20">区域：{{ popup3.details.loc }}</span>
-                        <span class="p-l-20">IP：{{ popup3.details.ip }}</span>
+                        <span>时间：{{ commentDetails.details.created_at }}</span>
+                        <span class="p-l-20">区域：{{ commentDetails.details.loc }}</span>
+                        <span class="p-l-20">IP：{{ commentDetails.details.ip }}</span>
                     </div>
                 </div>
             </div>
             <div class="details-box p-l-30">
-                <div class="flex-row p-10" v-for="(reply,i) in popup3.details.reply" :key="i">
+                <div class="flex-row p-10" v-for="(reply,i) in commentDetails.details.reply" :key="i">
                     <div>
                         <el-avatar :size="50" :src="reply.uavatar" />
                     </div>
@@ -219,7 +219,7 @@
                             <el-popconfirm
                                 title="确定要删除当前项么?"
                                 cancel-button-type="info"
-                                @confirm="popup3FnDelete(reply)"
+                                @confirm="delCommentDetails(reply)"
                             >
                                 <template #reference>
                                     <el-button class="m-l-10"
@@ -242,7 +242,7 @@
             </div>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="popup3.switch = false">取消</el-button>
+                    <el-button @click="commentDetails.switch = false">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -258,8 +258,10 @@ import {
     APIpostCommentOpinions,
     APIputCommentOpinions,
     APIpostCommentStatistic,
+    APIdelCommentStatistic,
     APIdeleteAdComment,
     APIpostComment,
+    APIgetCommentconfig,
     APIpostCommentconfig,
     APIdeleteCommentconfig
 } from '@/api/custom/custom.js'
@@ -268,6 +270,8 @@ import { Plus,Setting } from '@element-plus/icons-vue'
 import { getOpts, getOptVal } from '@/util/opts.js'
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 const props = defineProps(['id'])
+const page = ref(1)
+const per_page = ref(15)
 const opts_all = reactive({
     obj: {
         status_all: []
@@ -275,8 +279,6 @@ const opts_all = reactive({
 })
 const commentData = reactive({
     list: [],
-    page: 1,
-    per_page: 15
 })
 const editaddPopup = reactive({
     switch: false,
@@ -294,6 +296,13 @@ const settingPopup = reactive({
         title: ''
     }]
 })
+const commentDetails = reactive({
+    switch: false,
+    details: {
+        reply:[]
+    }
+})
+
 //拉取配置
 const getOptions = ()=>{
     getOpts(['comment_scoreper', 'comment_status']).then(res => {
@@ -303,12 +312,22 @@ const getOptions = ()=>{
 //拉取评论列表
 const getList = () => {
     let data = {
-        page: commentData.page,
-        per_page: commentData.per_page,
+        page: page.value,
+        per_page: per_page.value,
         tgtid: props.id
     }
     APIgetCommentList(data).then(res => {
         commentData.list = res
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
     })
 }
 //添加修改回复提交方法
@@ -347,14 +366,29 @@ const editaddSubmit = () => {
         })
     }
 }
+//排序算法
+const compare = attr => {
+    return function(a, b) {
+        var value1 = a[attr]
+        var value2 = b[attr]
+        return value1 - value2
+    }
+}
 //拉取评论设置
 const getCommentOpinions = () => {
+    APIgetCommentconfig(props.id).then(res => {
+        if(res.tgtid == props.id){
+            settingPopup.using = true
+            settingPopup.scoreper = res.scoreper
+        }
+    })
     APIgetCommentOpinions(props.id).then(res => {
-        console.log(res)
+        if(res.length>0){
+            settingPopup.tag = true
+        }
         settingPopup.tagarr = res.sort(compare('sort'))
     })
     APIpostCommentStatistic({ tgt_id: props.id }).then(res => {
-        console.log(res)
         let comStatstic = {}
         res.forEach((item, i) => {
             comStatstic[item.tagid] = item.cnt
@@ -391,7 +425,7 @@ const editaddPopupReplyOpen = val => {
     }
     editaddPopup.switch = true
 }
-//评论开关触发方法
+//评论开关
 const switchFnUse = val => {
     if (val) {
         APIpostCommentconfig(props.id, { scoreper: settingPopup.scoreper }).then(res => {
@@ -403,6 +437,12 @@ const switchFnUse = val => {
         // ElMessage.success('已开启')
     })
 }
+//观点开关
+const switchFnUse_1 = () => {
+    if (settingPopup.using == false) {
+        settingPopup.tagarr = []
+    }
+}
 //添加观点标签按钮
 const addOpinionsTag = () => {
     let data = {
@@ -411,109 +451,77 @@ const addOpinionsTag = () => {
     }
     settingPopup.tagarr.push(data)
 }
-
-onMounted(() => {
-    getOptions()
-    getList()
-    getCommentOpinions()
-})
-const popup1 = reactive({
-    switch: false,
-    using: false,
-    scoreper: 0
-})
-
-
-
-
-
-
-
-const popup3 = reactive({
-    switch: false,
-    details: {
-        reply:[]
-    }
-})
-const popup3FnDetails = id => {
+//添加或修改观点
+const addSureFunc = (item, index) => {
+    APIgetCommentOpinions(props.id).then(res => {
+        if (res.length > 0) {
+            if (res.some(items => items.id == settingPopup.tagarr[index].id)) {
+                APIputCommentOpinions(settingPopup.tagarr[index].id, settingPopup.tagarr[index]).then(res => {
+                    ElMessage.success('修改成功')
+                })
+            } else {
+                APIpostCommentOpinions(props.id, item).then(res => {
+                    settingPopup.tagarr[index] = res
+                    ElMessage.success('添加成功')
+                }).catch(() => {
+                    ElMessage.error('添加失败')
+                })
+            }
+        } else {
+            APIpostCommentOpinions(props.id, item).then(res => {
+                settingPopup.tagarr[index] = res
+                ElMessage.success('添加成功')
+            }).catch(() => {
+                ElMessage.error('添加失败')
+            })
+        }
+    })
+}
+//删除观点
+const deletetagFunc = (item,index) =>{
+    APIdelCommentStatistic(item.id).then(res=>{
+        settingPopup.tagarr.splice(index,1)
+    })
+}
+//获取评论详情
+const getCommentDetails = id => {
     APIgetCommentDetails(id).then(res => {
-        popup3.details = res
-        popup3.details.uavatar = res.uavatar ? import.meta.env.VITE_APP_FOLDER_SRC + res.uavatar : 'https://app.cqyezhuapp.com/appdown/logo.png'
-        popup3.switch = true
+        commentDetails.details = res
+        commentDetails.details.uavatar = res.uavatar ? import.meta.env.VITE_APP_FOLDER_SRC + res.uavatar : 'https://app.cqyezhuapp.com/appdown/logo.png'
+        commentDetails.switch = true
         let data = {
-            page: commentData.page,
-            per_page: commentData.per_page,
+            page: page.value,
+            per_page: per_page.value,
             tgtid: res.id
         }
         APIgetCommentList(data).then(rep => {
             rep.map(item=>{
                 item.uavatar = item.uavatar ? import.meta.env.VITE_APP_FOLDER_SRC + item.uavatar : 'https://app.cqyezhuapp.com/appdown/logo.png'
             })
-            popup3.details.reply = rep
+            commentDetails.details.reply = rep
         })
     })
 }
 //删除评论
-const popup3FnDelete = (item)=>{
+const delCommentDetails = (item)=>{
     APIdeleteAdComment(item.id).then(res=>{
         getList()
-        if(popup3.switch){
-           popup3FnDetails(item.tgtid)
+        if(commentDetails.switch){
+           getCommentDetails(item.tgtid)
         }
     })
 }
-
-
-
-const compare = attr => {
-    return function(a, b) {
-        var value1 = a[attr]
-        var value2 = b[attr]
-        return value1 - value2
+// 监听分页
+watch(page, () => {
+    if(page.value>0){
+        getList()
     }
-}
-
-const switchFnUse_1 = () => {
-    if (settingPopup.using == false) {
-        settingPopup.tagarr = []
-    }
-}
-
-const addSureFunc = (item, index) => {
-    APIgetCommentOpinions(props.id).then(res => {
-        if (res.length > 0) {
-            if (res.some(items => items.id == settingPopup.tagarr[index].id)) {
-                APIputCommentOpinions(settingPopup.tagarr[index].id, settingPopup.tagarr[index]).then(res => {
-
-                    ElMessage.success('修改成功')
-                })
-            } else {
-                APIpostCommentOpinions(props.id, item).then(res => {
-
-                    settingPopup.tagarr[index] = res
-
-                    ElMessage.success('添加成功')
-                }).catch(() => {
-                    ElMessage.error('添加失败')
-                })
-            }
-
-        } else {
-
-            APIpostCommentOpinions(props.id, item).then(res => {
-
-                settingPopup.tagarr[index] = res
-
-                ElMessage.success('添加成功')
-            }).catch(() => {
-                ElMessage.error('添加失败')
-            })
-        }
-
-    })
-
-}
-
+})
+onMounted(() => {
+    getOptions()
+    getList()
+    getCommentOpinions()
+})
 </script>
 <style lang="scss" scoped>
 .isComment {
