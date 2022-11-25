@@ -21,7 +21,11 @@ export function getFilesKeys(files, folder, type) {
                 formData.append('X-Amz-Date', res.inputs['X-Amz-Date'])
                 formData.append('X-Amz-Signature', res.inputs['X-Amz-Signature'])
                 formData.append('acl', res.inputs.acl)
-                let key = files[i].name.split(".")[1]
+                let key = ''
+                // 公示的附件没有name属性
+                if(files[i].name) {
+                    key = files[i].name.split(".")[1]
+                }
                 formData.append('key', `${folder}/${res.keys[i]}.${key}`)
                 formData.append('Content-Type', files[i].type)
                 formData.append('file', files[i])

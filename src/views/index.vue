@@ -21,7 +21,7 @@
                             <div style="color: #666;font-weight: 400;">
                                 <div style="font-size: 14px;">{{ user_info.address }} {{ user_info.department }} {{ user_info.job }}</div>
                                 <div style="font-size: 12px;">
-                                    手机号码：{{ user_info.mobile }} &nbsp;&nbsp;&nbsp; 最后登录：{{ user_info.updated_at }}
+                                    手机号码：{{ user_info.mobile }} &nbsp;&nbsp;&nbsp; 最后更新：{{ user_info.updated_at }}
                                 </div>
                             </div>
                         </el-col>
@@ -43,11 +43,10 @@
         <el-row :gutter="20" style="margin: -10px 10px;" class="icontitbox">
             <!-- 小区 -->
             <el-col v-if="count_data.obj.zone_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
-                <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
-                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
-                            <svg-icon v-if="i==1" class="svg" name="u726" />
+                            <svg-icon class="svg" name="u719" />
+                            <!-- <svg-icon v-if="i==1" class="svg" name="u726" />
                             <svg-icon v-if="i==2" class="svg" name="u731" />
                             <svg-icon v-if="i==3" class="svg" name="u736" />
                             <svg-icon v-if="i==4" class="svg" name="u741" /> -->
@@ -62,13 +61,13 @@
                             今日：<span class="num">{{ count_data.obj.zone_stat?.z_today_cnt }}</span>
                         </div>
                     </div>
-                </page-main>
+                <!-- </page-main> -->
             </el-col>
             <!-- 楼栋 -->
             <el-col v-if="count_data.obj.building_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
-                <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
+                            <svg-icon class="svg" name="u726" />
                             <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
                             <svg-icon v-if="i==1" class="svg" name="u726" />
                             <svg-icon v-if="i==2" class="svg" name="u731" />
@@ -85,13 +84,12 @@
                             今日：<span class="num">{{ count_data.obj.building_stat?.b_today_cnt }}</span>
                         </div>
                     </div>
-                </page-main>
             </el-col>
             <!-- 单元 -->
             <el-col v-if="count_data.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
-                <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
+                            <svg-icon  class="svg" name="u731" />
                             <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
                             <svg-icon v-if="i==1" class="svg" name="u726" />
                             <svg-icon v-if="i==2" class="svg" name="u731" />
@@ -108,13 +106,12 @@
                             今日：<span class="num">{{ count_data.obj.unit_stat?.u_today_cnt }}</span>
                         </div>
                     </div>
-                </page-main>
             </el-col>
             <!-- 房屋 -->
             <el-col v-if="count_data.obj.house_stat" class="icontitcolbox" :sm="12" :md="8" :lg="6" :xl="{span:'4-8'}">
-                <page-main style="margin: 10px 0;">
                     <div class="icontit">
                         <div class="img">
+                            <svg-icon class="svg" name="u736" />
                             <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
                             <svg-icon v-if="i==1" class="svg" name="u726" />
                             <svg-icon v-if="i==2" class="svg" name="u731" />
@@ -131,7 +128,6 @@
                             今日：<span class="num">{{ count_data.obj.house_stat?.h_today_cnt }}</span>
                         </div>
                     </div>
-                </page-main>
             </el-col>
         </el-row>
         <el-row :gutter="20" style="margin: 10px 10px -10px;">
@@ -239,7 +235,7 @@ const { proxy } = getCurrentInstance()
 const user_info = ref(JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_info')))
 
 onMounted(() => {
-
+    getAggregate()
 })
 
 // 数据
@@ -327,6 +323,7 @@ APIgetEchartsHome().then(res => {
     }
     .item-bottom {
         display: flex;
+        flex-direction: row;
         color: #999;
         font-size: 14px;
         text-align: center;
@@ -336,18 +333,23 @@ APIgetEchartsHome().then(res => {
             .tit {
                 font-size: 18px;
                 color: #333;
+                font-weight: 600;
             }
             .num {
                 font-size: 18px;
                 color: #ea2929;
+                font-weight: 600;
             }
+        }
+        div {
+            margin: 0 10px;
         }
     }
     .icontitbox .icontit {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: 20px 0;
         >.img {
             >.svg {
                 width: 40px;
@@ -355,6 +357,14 @@ APIgetEchartsHome().then(res => {
                 margin: 0 10px;
             }
         }
+    }
+    .icontitbox .icontitcolbox {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        margin: 10px;
+        padding: 30px;
     }
     .icontitbox .icontitcolbox:nth-child(1) .icontit {
         color: #42c493;

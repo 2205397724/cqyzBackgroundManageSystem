@@ -101,7 +101,7 @@
                                 :on-remove="(file, files) => {
                                     delBdcFiles(files,'bdc')
                                 }">
-                            <el-icon><Plus/></el-icon>    
+                            <el-icon><Plus/></el-icon>
                         </el-upload>
                         </el-col>
                     </el-row>
@@ -158,7 +158,7 @@
                 </div>
             </el-form>
             <el-dialog v-model="dialogVisible" width="60%">
-                <img :src="dialogImageUrl" alt="图片预览" style="width:100%"/>
+                <img :src="dialogImageUrl" alt="图片预览" style="width: 100%;"/>
             </el-dialog>
         </page-main>
     </div>
@@ -278,7 +278,7 @@ const orcBdcFiles = (files,side)=>{
 }
 //删除不动产证件
 const delBdcFiles = (files,side)=>{
-    
+
 }
 //上传图片并识别
 const uploadFile = (files,fside)=>{
@@ -429,38 +429,41 @@ const inputFunc = (e,id) => {
 }
 // 同意拒绝提交
 const postShareRecord = () => {
-    let file = []
-    let file_key = []
-    let type = []
-    for(let i in file_list.value) {
-        file[i] = []
-        file_key[i] = []
-        if(file_list.value[i].length > 0) {
-            type = []
-            for(let j in file_list.value[i]) {
-                if(!file_list.value[i][j].raw) {
-                    file_key[i].push(file_list.value[i][j].name)
-                } else {
-                    file[i].push(file_list.value[i][j].raw)
+    new Promise((resolve,reject) => {
+        let file = []
+        let file_key = []
+        let type = []
+        for(let i in file_list.value) {
+            file[i] = []
+            file_key[i] = []
+            if(file_list.value[i].length > 0) {
+                type = []
+                for(let j in file_list.value[i]) {
+                    if(!file_list.value[i][j].raw) {
+                        file_key[i].push(file_list.value[i][j].name)
+                    } else {
+                        file[i].push(file_list.value[i][j].raw)
+                    }
+                    type.push(file_list.value[i][j].name.split(".")[1])
                 }
-                type.push(file_list.value[i][j].name.split(".")[1])
-            }
-            if(file[i].length > 0) {
-                getFilesKeys(file[i], 'water', type).then(arr => {
-                    shareRecord_form.obj.material.push({
-                        fid:file_list_fid.value[i],
-                        content:arr.join()
+                if(file[i].length > 0) {
+                    getFilesKeys(file[i], 'water', type).then(arr => {
+                        shareRecord_form.obj.material.push({
+                            fid:file_list_fid.value[i],
+                            content:arr.join()
+                        })
                     })
-                })
+                }
             }
+            resolve(shareRecord_form.obj)
         }
-    }
-    setTimeout(()=>{
+    }).then(res => {
+        console.log(shareRecord_form.obj)
         APIpostShareRecord(shareRecord_form.obj).then(res => {
             ElMessage.success('提交成功')
             refreshFunc()
         })
-    },1000)
+    })
 }
 // 刷新页面数据
 const refreshFunc = () => {
@@ -495,16 +498,17 @@ const refreshFunc = () => {
     width: 148px;
     height: 148px;
 }
-:deep .hideclass .el-upload--picture-card{
+:deep .hideclass .el-upload--picture-card {
     display: none;
 }
-:deep .idcardBox .el-upload--picture-card,:deep .idcardBox .el-upload-list--picture-card .el-upload-list__item{
-    width:200px;
-    height:120px;
+:deep .idcardBox .el-upload--picture-card,
+:deep .idcardBox .el-upload-list--picture-card .el-upload-list__item {
+    width: 200px;
+    height: 120px;
     position: relative;
 }
-.cardtip{
+.cardtip {
     position: relative;
-    top :calc(50% - 10px);
+    top: calc(50% - 10px);
 }
 </style>
