@@ -90,12 +90,9 @@
         </div>
         <!-- 添加书面票 -->
         <el-dialog v-model="switch_addAnswer" title="添加书面票">
-            <div>
-                <el-row style="width: 400px; line-height: 32px;" class="m-b-20">
-                    <el-col :lg="4">
-                        参与人：
-                    </el-col>
-                    <!-- <el-input v-model="addticket.idcard" /> -->
+            <div class="bg-color-grey p-10 m-b-10">
+                <el-row style="width: 400px; line-height: 32px;">
+                    <el-col :lg="4">参与人：</el-col>
                     <el-col :lg="20" class="selecZone" @click="click_add_group_zone_id">
                         <span v-if="!selectedZone_id" class="selecChina">请选择</span>
                         <span style="margin-left: 11px;">{{ selectedZone_id }}</span>
@@ -107,8 +104,8 @@
                 <div v-for="(item,index) in topic_details.item" :key="item.id">
                     <!-- 单选题 -->
                     <div v-if="item.type === 1">
-                        <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
-                        <div v-for="(items,i) in item.opts" :key="i" class="m-l-40">
+                        <div><span class="strong">{{ index+1 }}、{{ item.title }}</span> <span class="font-red">(单选)</span></div>
+                        <div v-for="(items,i) in item.opts" :key="i">
                             <!-- <el-radio-group v-model="radio2"> -->
                             <el-radio-group v-model="radio2.list[index]">
                                 <el-radio :label="items.id" @change="emitTickets_1(item.id,index)">{{ items.content }}</el-radio>
@@ -117,8 +114,8 @@
                     </div>
                     <!-- 多选题 -->
                     <div v-else-if="item.type === 2">
-                        <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
-                        <div v-for="items in item.opts" :key="items.id" class="m-l-40">
+                        <div><span class="strong">{{ index+1 }}、{{ item.title }}</span>  <span class="font-red">(多选)</span></div>
+                        <div v-for="items in item.opts" :key="items.id">
                             <el-checkbox-group v-model="addticket.answers[index].opt">
                                 <el-checkbox :label="items.id" @click="emitTickets(item.id,index)">{{ items.content }}</el-checkbox>
                             </el-checkbox-group>
@@ -126,8 +123,8 @@
                     </div>
                     <!-- 主观填空 -->
                     <div v-else-if="item.type === 3">
-                        <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
-                        <div class="m-l-40 m-tb-10">
+                        <div><span class="strong">{{ index+1 }}、{{ item.title }}</span>  <span class="font-red">(主观)</span></div>
+                        <div class="m-tb-10">
                             <el-input v-model="item.answer" placeholder="请输入内容" @blur="emitTickets_2(item,index)" />
                         </div>
                     </div>
@@ -146,62 +143,76 @@
             </template>
         </el-dialog>
         <!-- 查看答卷详情 -->
-        <el-dialog v-model="switch_answer_detail" title="用户答卷详情">
+        <el-dialog v-model="switch_answer_detail" title="用户参与详情">
             <el-scrollbar height="600px">
                 <div class="details-box">
                     <div class="details-tit-sm">基础信息</div>
-                    <div class="item">
-                        <div class="left">用户端类型</div>
-                        <div class="right">
-                            <span v-if="answer_detail.item.uinfo?.auth_type === 'pt'">总平台端</span>
-                            <span v-else-if="answer_detail.item.uinfo?.auth_type === 'ptr'">区域平台端</span>
-                            <span v-else-if="answer_detail.item.uinfo?.auth_type === 'gov'">管理端</span>
-                            <span v-else-if="answer_detail.item.uinfo?.auth_type === 'pm'">物业端</span>
-                            <span v-else>业主端</span>
+                    <el-row>
+                        <el-col :span="12">
+                            <div class="item">
+                                <div class="left">参与人</div>
+                                <div class="right">{{ answer_detail.item.uinfo?.name || answer_detail.item.uinfo?.nickname || answer_detail.item.uinfo?.username }}</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="item">
+                                <div class="left">用户端类型</div>
+                                <div class="right">
+                                    <span v-if="answer_detail.item.uinfo?.auth_type === 'pt'">总平台端</span>
+                                    <span v-else-if="answer_detail.item.uinfo?.auth_type === 'ptr'">区域平台端</span>
+                                    <span v-else-if="answer_detail.item.uinfo?.auth_type === 'gov'">管理端</span>
+                                    <span v-else-if="answer_detail.item.uinfo?.auth_type === 'pm'">物业端</span>
+                                    <span v-else>业主端</span>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <div class="item">
+                                <div class="left">证件号码</div>
+                                <div class="right">{{ answer_detail.item.idcard }}</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="item">
+                                <div class="left">电话</div>
+                                <div class="right">{{ answer_detail.item.uinfo?.mobile }}</div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <div class="item">
+                                <div class="left">参与时间</div>
+                                <div class="right">{{ answer_detail.item.updated_at }}</div>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="item">
+                                <div class="left">参与途径</div>
+                                <div class="right">
+                                    <span v-if="answer_detail.item.source == 1">线上参与</span>
+                                    <span v-if="answer_detail.item.source == 2">线下参与</span>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <div class="flex-row p-t-10">
+                        <el-button type="primary" size="small" @click="getAnsweredHouse">获取参与房屋</el-button>
+                        <div v-if="answer_house.arr.length>0" class="m-l-10">
+                            <block v-for="item in answer_house.arr" :key="item">
+                                <div>{{item.house.name}}</div>
+                            </block>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">答题人</div>
-                        <div class="right">{{ answer_detail.item.uinfo?.name || answer_detail.item.uinfo?.nickname || answer_detail.item.uinfo?.username }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">证件号码</div>
-                        <div class="right">{{ answer_detail.item.idcard }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">电话</div>
-                        <div class="right">{{ answer_detail.item.uinfo?.mobile }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">参与途径</div>
-                        <div class="right">
-                            <span v-if="answer_detail.item.source == 1">线上参与</span>
-                            <span v-if="answer_detail.item.source == 2">线下参与</span>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="left">参与时间</div>
-                        <div class="right">{{ answer_detail.item.updated_at }}</div>
-                    </div>
-                    <div class="item">
-                        <div class="left">参与房屋套数</div>
-                        <div class="right">{{ answer_detail.item.answerhouses_count }}</div>
-                    </div>
-                    <div>
-                        <el-button class="m-l-20" type="primary" size="small" @click="getAnsweredHouse">获取答卷参与房屋</el-button>
-                    </div>
-                    <div v-if="answer_house.arr.length>0">
-                        <block v-for="item in answer_house.arr" :key="item">
-                            <div>{{item.house.name}}</div>
-                        </block>
                     </div>
                     <!-- 遍历题目 -->
-                    <div class="details-tit-sm">题目信息</div>
-                    <div v-for="(item,index) in topic_details.item" :key="item.id" class="m-t-10" style="margin-left: 60px;">
+                    <div class="details-tit-sm m-t-20">参与详情</div>
+                    <div v-for="(item,index) in topic_details.item" :key="item.id" class="m-t-10">
                         <!-- 单选题 -->
                         <div v-if="item.type === 1">
-                            <div>题号(单选题){{ index+1 }}、{{ item.title }}</div>
-                            <div v-for="items in item.opts" :key="items.id" class="m-l-40">
+                            <div><span class="strong">{{ index+1 }}、{{ item.title }}</span> (单选)</div>
+                            <div v-for="items in item.opts" :key="items.id">
                                 <el-radio-group v-if="answer_detail.item" v-model="ischecked">
                                     <el-radio :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-radio>
                                 </el-radio-group>
@@ -209,8 +220,8 @@
                         </div>
                         <!-- 多选题 -->
                         <div v-else-if="item.type === 2">
-                            <div>题号(多选题){{ index+1 }}、{{ item.title }}</div>
-                            <div v-for="items in item.opts" :key="items.id" class="m-l-40">
+                            <div><span class="strong">{{ index+1 }}、{{ item.title }}</span> (多选)</div>
+                            <div v-for="items in item.opts" :key="items.id">
                                 <el-checkbox-group v-model="checkList">
                                     <el-checkbox v-if="answer_detail.item" :label="showTopic(item.id,items.id,answer_detail.item.answertopics) ? '1' : '0'" disabled>{{ items.content }}</el-checkbox>
                                 </el-checkbox-group>
@@ -218,8 +229,8 @@
                         </div>
                         <!-- 主观填空 -->
                         <div v-else-if="item.type === 3">
-                            <div>题号(主观题){{ index+1 }}、{{ item.title }}</div>
-                            <div v-if="answer_detail.item" class="m-l-40 m-tb-10">
+                            <div><span class="strong">{{ index+1 }}、{{ item.title }}</span> (主观)</div>
+                            <div v-if="answer_detail.item" class="m-tb-10">
                                 <!-- 问卷提交后，若新增填空题，此处会报错，content为空 -->
                                 <el-input v-if="answer_detail.item.answertopics" :placeholder="showTopic(item.id,null,answer_detail.item.answertopics)" />
                             </div>
