@@ -38,96 +38,105 @@
                 </el-col>
             </el-row>
         </page-main>
-        <el-row :gutter="20" style="margin: -10px 10px;" class="icontitbox">
-            <!-- 小区 -->
-            <div v-if="count_data.obj.zone_stat" class="icontitcolbox">
-                <div class="icontit">
-                    <div class="img">
-                        <svg-icon class="svg" name="u719" />
-                        <!-- <svg-icon v-if="i==1" class="svg" name="u726" />
-                            <svg-icon v-if="i==2" class="svg" name="u731" />
-                            <svg-icon v-if="i==3" class="svg" name="u736" />
-                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+        <div class="m-lr-20">
+        <el-row :gutter="20" class="icontitbox">
+            <el-col :xs="24" :sm="12" :md="6">
+                <!-- 小区 -->
+                <div v-if="count_data.obj.zone_stat" class="icontitcolbox">
+                    <div class="icontit">
+                        <div class="img">
+                            <svg-icon class="svg" name="u719" />
+                            <!-- <svg-icon v-if="i==1" class="svg" name="u726" />
+                                <svg-icon v-if="i==2" class="svg" name="u731" />
+                                <svg-icon v-if="i==3" class="svg" name="u736" />
+                                <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>小区</div>
                     </div>
-                    <div>小区</div>
-                </div>
-                <div class="item-bottom">
-                    <div>
-                        总数：<span class="tit">{{ count_data.obj.zone_stat?.z_tot }}</span>
-                    </div>
-                    <div>
-                        今日：<span class="num">{{ count_data.obj.zone_stat?.z_today_cnt }}</span>
-                    </div>
-                </div>
-                <!-- </page-main> -->
-            </div>
-            <!-- 楼栋 -->
-            <div v-if="count_data.obj.building_stat" class="icontitcolbox" >
-                <div class="icontit">
-                    <div class="img">
-                        <svg-icon class="svg" name="u726" />
-                        <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
-                            <svg-icon v-if="i==1" class="svg" name="u726" />
-                            <svg-icon v-if="i==2" class="svg" name="u731" />
-                            <svg-icon v-if="i==3" class="svg" name="u736" />
-                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
-                    </div>
-                    <div>楼栋</div>
-                </div>
-                <div class="item-bottom">
-                    <div>
-                        总数：<span class="tit">{{ count_data.obj.building_stat?.b_tot }}</span>
-                    </div>
-                    <div>
-                        今日：<span class="num">{{ count_data.obj.building_stat?.b_today_cnt }}</span>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ count_data.obj.zone_stat?.z_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ count_data.obj.zone_stat?.z_today_cnt }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- 单元 -->
-            <div v-if="count_data.obj.house_stat" class="icontitcolbox">
-                <div class="icontit">
-                    <div class="img">
-                        <svg-icon class="svg" name="u731" />
-                        <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
-                            <svg-icon v-if="i==1" class="svg" name="u726" />
-                            <svg-icon v-if="i==2" class="svg" name="u731" />
-                            <svg-icon v-if="i==3" class="svg" name="u736" />
-                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="6">
+                <!-- 楼栋 -->
+                <div v-if="count_data.obj.building_stat" class="icontitcolbox" >
+                    <div class="icontit">
+                        <div class="img">
+                            <svg-icon class="svg" name="u726" />
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                                <svg-icon v-if="i==1" class="svg" name="u726" />
+                                <svg-icon v-if="i==2" class="svg" name="u731" />
+                                <svg-icon v-if="i==3" class="svg" name="u736" />
+                                <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>楼栋</div>
                     </div>
-                    <div>单元</div>
-                </div>
-                <div class="item-bottom">
-                    <div>
-                        总数：<span class="tit">{{ count_data.obj.unit_stat?.u_tot }}</span>
-                    </div>
-                    <div>
-                        今日：<span class="num">{{ count_data.obj.unit_stat?.u_today_cnt }}</span>
-                    </div>
-                </div>
-            </div>
-            <!-- 房屋 -->
-            <div v-if="count_data.obj.house_stat" class="icontitcolbox">
-                <div class="icontit">
-                    <div class="img">
-                        <svg-icon class="svg" name="u736" />
-                        <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
-                            <svg-icon v-if="i==1" class="svg" name="u726" />
-                            <svg-icon v-if="i==2" class="svg" name="u731" />
-                            <svg-icon v-if="i==3" class="svg" name="u736" />
-                            <svg-icon v-if="i==4" class="svg" name="u741" /> -->
-                    </div>
-                    <div>房屋</div>
-                </div>
-                <div class="item-bottom">
-                    <div>
-                        总数：<span class="tit">{{ count_data.obj.house_stat?.h_tot }}</span>
-                    </div>
-                    <div>
-                        今日：<span class="num">{{ count_data.obj.house_stat?.h_today_cnt }}</span>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ count_data.obj.building_stat?.b_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ count_data.obj.building_stat?.b_today_cnt }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="6">
+                <!-- 单元 -->
+                <div v-if="count_data.obj.house_stat" class="icontitcolbox">
+                    <div class="icontit">
+                        <div class="img">
+                            <svg-icon class="svg" name="u731" />
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                                <svg-icon v-if="i==1" class="svg" name="u726" />
+                                <svg-icon v-if="i==2" class="svg" name="u731" />
+                                <svg-icon v-if="i==3" class="svg" name="u736" />
+                                <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>单元</div>
+                    </div>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ count_data.obj.unit_stat?.u_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ count_data.obj.unit_stat?.u_today_cnt }}</span>
+                        </div>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="6">
+                <!-- 房屋 -->
+                <div v-if="count_data.obj.house_stat" class="icontitcolbox">
+                    <div class="icontit">
+                        <div class="img">
+                            <svg-icon class="svg" name="u736" />
+                            <!-- <svg-icon v-if="i==0" class="svg" name="u719" />
+                                <svg-icon v-if="i==1" class="svg" name="u726" />
+                                <svg-icon v-if="i==2" class="svg" name="u731" />
+                                <svg-icon v-if="i==3" class="svg" name="u736" />
+                                <svg-icon v-if="i==4" class="svg" name="u741" /> -->
+                        </div>
+                        <div>房屋</div>
+                    </div>
+                    <div class="item-bottom">
+                        <div>
+                            总数：<span class="tit">{{ count_data.obj.house_stat?.h_tot }}</span>
+                        </div>
+                        <div>
+                            今日：<span class="num">{{ count_data.obj.house_stat?.h_today_cnt }}</span>
+                        </div>
+                    </div>
+                </div>
+            </el-col>
         </el-row>
+        </div>
         <el-row :gutter="20" style="margin: 10px 10px -10px;">
             <!-- 公示 -->
             <el-col :sm="12" :md="12" :lg="8" :xl="8">
@@ -606,7 +615,6 @@ watch(page, () => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-right: 30px;
     >.img {
         >.svg {
             width: 40px;
@@ -620,8 +628,7 @@ watch(page, () => {
     justify-content: space-between;
     align-items: center;
     background-color: #fff;
-    margin: 10px;
-    padding: 30px 50px;
+    padding: 30px 20px;
 }
 .icontitbox .icontitcolbox:nth-child(1) .icontit {
     color: #42c493;
