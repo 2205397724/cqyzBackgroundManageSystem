@@ -326,7 +326,7 @@ const StatusFunk = val => {
     flag1.value = false
     flag2.value = false
     flag3.value = false
-    console.log(flag.value)
+    // console.log(flag.value)
 }
 const getActivityViewList = () => {
     let params = {
@@ -342,7 +342,6 @@ const getActivityViewList = () => {
     }
     loading_tab.value = true
     APIgetListArchiveAudit(params).then(res => {
-        // console.log("111",res)
         data.list = res
         let btnNext = document.querySelector('.btn-next')
         if (res.length < per_page.value) {
@@ -354,9 +353,7 @@ const getActivityViewList = () => {
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
-        // console.log('aaaaa')
         loading_tab.value = false
-        // console.log('bbbbb')
 
     })
 }
@@ -379,7 +376,7 @@ const refreshFunc = () => {
     getActivityViewList()
 }
 const passToAuditFunc = () => {
-    console.log(from_pass.obj)
+    // console.log(from_pass.obj)
     APIputArchiveAudit(examine_id.value, from_pass.obj).then(res => {
         ElMessage.success('审核成功')
         refreshFunc()
@@ -393,7 +390,7 @@ const data_details = reactive({
 const switch_details = ref(false)
 const detailsFunc = row => {
     APIgetDetailsArchiveAudit(row.id).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.auditable) {
             for (let i in res.auditable.affix) {
                 res.auditable.affixs = []

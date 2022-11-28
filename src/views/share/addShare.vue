@@ -429,34 +429,65 @@ const inputFunc = (e,id) => {
 }
 // 同意拒绝提交
 const postShareRecord = () => {
+    // new Promise((resolve,reject) => {
+    //     let file = []
+    //     let file_key = []
+    //     let type = []
+    //     for(let i in file_list.value) {
+    //         file[i] = []
+    //         file_key[i] = []
+    //         if(file_list.value[i].length > 0) {
+    //             type = []
+    //             for(let j in file_list.value[i]) {
+    //                 if(!file_list.value[i][j].raw) {
+    //                     file_key[i].push(file_list.value[i][j].name)
+    //                 } else {
+    //                     file[i].push(file_list.value[i][j].raw)
+    //                 }
+    //                 type.push(file_list.value[i][j].name.split(".")[1])
+    //             }
+    //             if(file[i].length > 0) {
+    //                 getFilesKeys(file[i], 'water', type).then(arr => {
+    //                     shareRecord_form.obj.material.push({
+    //                         fid:file_list_fid.value[i],
+    //                         content:arr.join()
+    //                     })
+    //                 })
+    //             }
+    //         }
+    //         resolve(shareRecord_form.obj)
+    //     }
+    // }).then(res => {
+    //     console.log(shareRecord_form.obj)
+    //     APIpostShareRecord(shareRecord_form.obj).then(res => {
+    //         ElMessage.success('提交成功')
+    //         refreshFunc()
+    //     })
+    // })
     new Promise((resolve,reject) => {
         let file = []
         let file_key = []
-        let type = []
         for(let i in file_list.value) {
-            file[i] = []
-            file_key[i] = []
             if(file_list.value[i].length > 0) {
-                type = []
                 for(let j in file_list.value[i]) {
                     if(!file_list.value[i][j].raw) {
-                        file_key[i].push(file_list.value[i][j].name)
+                        file_key.push(file_list.value[i][j].name)
                     } else {
-                        file[i].push(file_list.value[i][j].raw)
+                        file.push(file_list.value[i][j].raw)
                     }
-                    type.push(file_list.value[i][j].name.split(".")[1])
                 }
-                if(file[i].length > 0) {
-                    getFilesKeys(file[i], 'water', type).then(arr => {
-                        shareRecord_form.obj.material.push({
-                            fid:file_list_fid.value[i],
-                            content:arr.join()
-                        })
-                    })
-                }
+
             }
-            resolve(shareRecord_form.obj)
         }
+        if(file.length > 0) {
+            getFilesKeys(file, 'water', type).then(arr => {
+                shareRecord_form.obj.material.push({
+                    fid:file_list_fid.value[i],
+                    content:arr.join()
+                })
+            })
+        }
+        resolve(shareRecord_form.obj)
     }).then(res => {
         console.log(shareRecord_form.obj)
         APIpostShareRecord(shareRecord_form.obj).then(res => {
