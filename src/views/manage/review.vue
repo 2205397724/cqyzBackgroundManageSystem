@@ -30,25 +30,25 @@
                             </router-link>
                         </div>
                         <div v-if="scope.row.tgt_type=='survey'">
-                            <div v-if="scope.row.auditable.type===1">
+                            <div v-if="scope.row.auditable?.type===1">
                                 <span class="el-tag m-r-10" size="small">问卷</span>
                                 <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'surveyDetail',query:{ id : scope.row.tgt_id }}">
                                     <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
                                 </router-link>
                             </div>
-                            <div v-else-if="scope.row.auditable.type===2">
+                            <div v-else-if="scope.row.auditable?.type===2">
                                 <span class="el-tag m-r-10" size="small">选举</span>
                                 <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'electDetail',query:{ id : scope.row.tgt_id }}">
                                     <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
                                 </router-link>
                             </div>
-                            <div v-else-if="scope.row.auditable.type===3">
+                            <div v-else-if="scope.row.auditable?.type===3">
                                 <span class="el-tag m-r-10" size="small">表决</span>
                                 <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'voteDetail',query:{ id : scope.row.tgt_id }}">
                                     <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
                                 </router-link>
                             </div>
-                            <div v-else-if="scope.row.auditable.type===4">
+                            <div v-else-if="scope.row.auditable?.type===4">
                                 <span class="el-tag m-r-10" size="small">联名</span>
                                 <router-link v-if="scope.row.auditable" style="text-decoration: none;" :to="{name: 'jointlyDetail',query:{ id : scope.row.tgt_id }}">
                                     <el-link :underline="false" type="primary">{{ scope.row.auditable.name }}</el-link>
