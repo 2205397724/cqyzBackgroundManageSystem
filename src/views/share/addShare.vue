@@ -52,10 +52,11 @@
                                         :on-remove="(file, files) => {
                                             delIdCardFiles(files,'face')
                                         }">
-                                        <span class="font-grey size-base cardtip">正面</span>
+                                        <el-icon class="font-grey size-base cardtip"><Plus/></el-icon>
+                                        <!-- <span class="font-grey size-base cardtip">正面</span> -->
                                     </el-upload>
                                 </div>
-                                <div class="m-l-20">
+                                <!-- <div class="m-l-20">
                                     <el-upload ref="uploadRef" class="idcardBox" action="***" list-type="picture-card" limit="1"
                                         :auto-upload="false"
                                         :file-list="idCardFiles"
@@ -69,7 +70,7 @@
                                         }">
                                         <span class="font-grey size-base cardtip">反面</span>
                                     </el-upload>
-                                </div>
+                                </div> -->
                             </div>
                         </el-col>
                     </el-row>
@@ -101,8 +102,9 @@
                                 :on-remove="(file, files) => {
                                     delBdcFiles(files,'bdc')
                                 }">
-                            <el-icon><Plus/></el-icon>
-                        </el-upload>
+                                <el-icon><Plus/></el-icon>
+                            </el-upload>
+                            <el-button plain @click="openNotification">产看不动产证信息</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -175,7 +177,7 @@ import {
     postOrcIdcard,postOrcGeneral,
     getOrcResult
 } from '@/api/custom/custom.js'
-import { ElMessage,ElLoading } from 'element-plus'
+import { ElMessage,ElLoading,ElNotification } from 'element-plus'
 import { getFilesKeys } from '@/util/files.js'
 import {ref,reactive, onMounted} from 'vue'
 import {Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
@@ -298,12 +300,23 @@ const uploadFile = (files,fside)=>{
                 shareRecord_form.obj.card.sfz.push(key)
                 data.side = sideli == 1 ? 1: 2
                 postOrcIdcard(data).then(orc=>{
-                    getOrcResult(orc.id).then(orcre =>{
-                        console.log(orcre)
-                    }).catch(err=>{
-                        loading.close()
-                        ElMessage.error('未找到识别结果！')
-                    })
+                    let i = 0
+                    let timeout = setInterval(()=>{
+                        console.log("111",i)
+                        getOrcResult(orc.id).then(orcre =>{
+                            i++
+                            if(i>4 || orcre.status === 20) {
+                                clearInterval(timeout)
+                            }
+                            if(orcre.content.id_card) {
+                                shareRecord_form.obj.name = orcre.content.name
+                                shareRecord_form.obj.id_card = orcre.content.id_card
+                            }
+                        }).catch(err=>{
+                            loading.close()
+                            ElMessage.error('未找到识别结果！')
+                        })
+                    },4000)
                 }).catch(err=>{
                     loading.close()
                     ElMessage.error('识别错误！')
@@ -311,12 +324,17 @@ const uploadFile = (files,fside)=>{
             }else if(sideli==0){
                 shareRecord_form.obj.card.bdc.push(key)
                 postOrcGeneral(data).then(orc=>{
-                    getOrcResult(orc.id).then(orcre =>{
-                        console.log(orcre)
-                    }).catch(err=>{
-                        loading.close()
-                        ElMessage.error('未找到识别结果！')
-                    })
+                    let i = 0
+                    let timeout = setInterval(()=>{
+                        getOrcResult(orc.id).then(orcre =>{
+                            i++
+                            if(i>4) clearInterval(timeout)
+                            console.log(orcre)
+                        }).catch(err=>{
+                            loading.close()
+                            ElMessage.error('未找到识别结果！')
+                        })
+                    },4000)
                 }).catch(err=>{
                     loading.close()
                     ElMessage.error('识别错误！')
@@ -429,41 +447,6 @@ const inputFunc = (e,id) => {
 }
 // 同意拒绝提交
 const postShareRecord = () => {
-    // new Promise((resolve,reject) => {
-    //     let file = []
-    //     let file_key = []
-    //     let type = []
-    //     for(let i in file_list.value) {
-    //         file[i] = []
-    //         file_key[i] = []
-    //         if(file_list.value[i].length > 0) {
-    //             type = []
-    //             for(let j in file_list.value[i]) {
-    //                 if(!file_list.value[i][j].raw) {
-    //                     file_key[i].push(file_list.value[i][j].name)
-    //                 } else {
-    //                     file[i].push(file_list.value[i][j].raw)
-    //                 }
-    //                 type.push(file_list.value[i][j].name.split(".")[1])
-    //             }
-    //             if(file[i].length > 0) {
-    //                 getFilesKeys(file[i], 'water', type).then(arr => {
-    //                     shareRecord_form.obj.material.push({
-    //                         fid:file_list_fid.value[i],
-    //                         content:arr.join()
-    //                     })
-    //                 })
-    //             }
-    //         }
-    //         resolve(shareRecord_form.obj)
-    //     }
-    // }).then(res => {
-    //     console.log(shareRecord_form.obj)
-    //     APIpostShareRecord(shareRecord_form.obj).then(res => {
-    //         ElMessage.success('提交成功')
-    //         refreshFunc()
-    //     })
-    // })
     new Promise((resolve,reject) => {
         let file = []
         let file_key = []
@@ -480,10 +463,13 @@ const postShareRecord = () => {
             }
         }
         if(file.length > 0) {
-            getFilesKeys(file, 'water', type).then(arr => {
-                shareRecord_form.obj.material.push({
-                    fid:file_list_fid.value[i],
-                    content:arr.join()
+            getFilesKeys(file, 'water').then(arr => {
+                arr.map((item,i) => {
+                    console.log(item,file_list_fid.value[i],i)
+                    shareRecord_form.obj.material.push({
+                        fid:file_list_fid.value[i],
+                        content:item
+                    })
                 })
             })
         }
@@ -491,6 +477,7 @@ const postShareRecord = () => {
     }).then(res => {
         console.log(shareRecord_form.obj)
         APIpostShareRecord(shareRecord_form.obj).then(res => {
+            console.log(shareRecord_form.obj)
             ElMessage.success('提交成功')
             refreshFunc()
         })
@@ -521,6 +508,14 @@ const refreshFunc = () => {
     file_list.value = []
     file_list_fid.value = []
 }
+// 查看房屋产权信息
+const openNotification = () => {
+    ElNotification({
+        title: 'Prompt',
+        message: 'This is a message that does not automatically close',
+        duration: 0,
+    })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -540,6 +535,6 @@ const refreshFunc = () => {
 }
 .cardtip {
     position: relative;
-    top: calc(50% - 10px);
+    top: calc(50% - 70px);
 }
 </style>

@@ -441,6 +441,8 @@ const loadNode = (node, resolve) => {
             break
         case 'zone':
             APIgetResidentialListHouse({
+                page:1,
+                per_page:200,
                 china_code: node.data.id,
                 sid: props.surveyid,
                 can_type: 2
@@ -470,6 +472,8 @@ const loadNode = (node, resolve) => {
             break
         case 'building':
             APIgetBuildListHouse({
+                page:1,
+                per_page:200,
                 zone_id: node.data.id,
                 sid: props.surveyid,
                 can_type: 2
@@ -497,6 +501,8 @@ const loadNode = (node, resolve) => {
             break
         case 'units':
             APIgetUnitsListHouse({
+                page:1,
+                per_page:200,
                 building_id: node.data.id,
                 sid: props.surveyid,
                 can_type: 2

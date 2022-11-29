@@ -314,11 +314,11 @@ const str_title = ref('添加业务')
 const getShareServicesList = () => {
     let params = {
         page: page.value,
-        per_page: per_page.value
+        per_page: per_page.value,
+        gid:JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).id
     }
     loading_tab.value = true
     APIgetShareServicesList(params).then(res => {
-        console.log(res)
         data.list = res
         loading_tab.value = false
         let btnNext = document.querySelector('.btn-next')
@@ -333,7 +333,6 @@ const getShareServicesList = () => {
         }
     })
     APIgetShareCategoryList({ page: 1, per_page: 500 }).then(res => {
-        console.log(res)
         data.arr = res
         loading_tab.value = false
     })
@@ -348,7 +347,6 @@ const dialogClosed = () => {
     V.value.clearFunc()
 }
 const checkNameFunc = val => {
-    console.log(val)
     data.obj.gid = val.id
 }
 const refreshFunc = () => {
@@ -376,7 +374,6 @@ const postFunc = () => {
         }
     }
     if (str_title.value == '修改业务') {
-        console.log(data.obj)
         APIputShareServices(data.obj.id, data.obj).then(res => {
             refreshFunc()
             ElMessage.success('修改成功')
@@ -406,9 +403,7 @@ const examineListFunc = val => {
     if (val.desc == null) {
         val.desc = ''
     }
-    console.log(data.obj)
     APIgetGroupDetails(val.gid).then(res => {
-        console.log(res)
         userGroupName.value = res.name
     })
 }
@@ -436,10 +431,8 @@ import {
 } from '@/api/custom/custom.js'
 const materialId = ref('')
 const addRelatedMaterialFunc = id => {
-    console.log(id)
     materialId.value = id
     APIgetShareMaterialList({ bid: id }).then(res => {
-        console.log(res)
         data_1.arr = res
         data_1.switch = true
     })
@@ -467,7 +460,6 @@ const postFunc_1 = () => {
         }
     }
     if (str_title_1.value == '修改材料') {
-        console.log(data_1.obj)
         APIputShareMaterial(data_1.obj.id, data_1.obj).then(res => {
             addRelatedMaterialFunc(materialId.value)
             ElMessage.success('修改成功')
@@ -506,7 +498,6 @@ const addMaterialFunc = () => {
     }
     loading_tab.value = true
     APIgetShareElementsList(params).then(res => {
-        console.log(res)
         data_1.list = res
         loading_tab.value = false
     })
