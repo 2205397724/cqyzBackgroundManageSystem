@@ -4,16 +4,13 @@
             <el-row>
                 <el-col :xs="24" :sm="24" :lg="18">
                     <el-row>
-                        <el-col :xs="24" :sm="24" :lg="4"
-                            style="display: flex;justify-content: center;align-items: center;box-sizing: border-box;padding-right: 20px;min-width: 135px;">
-                            <image-preview :src="VITE_APP_FOLDER_SRC + user_info.avatar" width="90px" height="90px"
-                                style="border-radius: 50%;height: 90px;width: 90px;" />
+                        <el-col :xs="24" :sm="24" :lg="4" class="flex-row flex-center">
+                            <image-preview :src="VITE_APP_FOLDER_SRC + user_info.avatar" style="border-radius: 50%;height: 90px;width: 90px;" />
                         </el-col>
-                        <el-col :xs="24" :sm="24" :lg="18"
-                            style="display: flex;flex-direction: column;justify-content: space-between;">
-                            <div style="color: #333;font-weight: 650;font-size: 24px;">欢迎你 {{ user_info.name ||
-                                    user_info.nickname || user_info.username
-                            }}</div>
+                        <el-col :xs="24" :sm="24" :lg="18" class="flex-column flex-around">
+                            <div class="size-ls strong">
+                                欢迎你 {{ user_info.name || user_info.nickname || user_info.username }}
+                            </div>
                             <div style="color: #666;font-weight: 400;">
                                 <div style="font-size: 14px;">{{ user_info.address }} {{ user_info.department }} {{
                                         user_info.job
@@ -51,7 +48,7 @@
                                 <svg-icon v-if="i==3" class="svg" name="u736" />
                                 <svg-icon v-if="i==4" class="svg" name="u741" /> -->
                         </div>
-                        <div>小区</div>
+                        <div class="font-grey">小区</div>
                     </div>
                     <div class="item-bottom">
                         <div>
@@ -75,7 +72,7 @@
                                 <svg-icon v-if="i==3" class="svg" name="u736" />
                                 <svg-icon v-if="i==4" class="svg" name="u741" /> -->
                         </div>
-                        <div>楼栋</div>
+                        <div class="font-grey">楼栋</div>
                     </div>
                     <div class="item-bottom">
                         <div>
@@ -99,7 +96,7 @@
                                 <svg-icon v-if="i==3" class="svg" name="u736" />
                                 <svg-icon v-if="i==4" class="svg" name="u741" /> -->
                         </div>
-                        <div>单元</div>
+                        <div class="font-grey">单元</div>
                     </div>
                     <div class="item-bottom">
                         <div>
@@ -123,7 +120,7 @@
                                 <svg-icon v-if="i==3" class="svg" name="u736" />
                                 <svg-icon v-if="i==4" class="svg" name="u741" /> -->
                         </div>
-                        <div>房屋</div>
+                        <div class="font-grey">房屋</div>
                     </div>
                     <div class="item-bottom">
                         <div>
@@ -141,14 +138,15 @@
             <!-- 公示 -->
             <el-col :sm="12" :md="12" :lg="8" :xl="8">
                 <div class="comStatus" style="margin: 10px 0;">
-                    <div class="title-container">
-                        公示
-                        <router-link style="text-decoration: none;" :to="{name: 'announceIndex'}">
-                            <el-link :underline="false" type="primary">查看公示</el-link>
-                        </router-link>
+                    <div class="flex-row flex-between">
+                        <div>
+                            <router-link style="text-decoration: none;" :to="{name: 'announceIndex'}">
+                                <el-link :underline="false" class="size-lg font-primary strong">公示</el-link>
+                            </router-link>
+                        </div>
+                        <div class="size-base font-grey">总数({{ count_data.obj.announce_stat?.a_tot }})</div>
                     </div>
-                    <div class="title-container-1 size-base">总数({{ count_data.obj.announce_stat?.a_tot }})</div>
-                    <div class="numname">
+                    <div class="numname p-t-20">
                         <div v-for="(child, j) in count_data.obj.announce_stat?.a_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 1" class="name">审核失败</div>
@@ -162,34 +160,30 @@
             <el-col v-for="(item, i) in count_data.obj.survey_stat" :key="'eventnum' + i" :sm="12" :md="12" :lg="8"
                 :xl="8">
                 <div class="comStatus" style="margin: 10px 0;">
-                    <div class="title-container">
+                    <div class="flex-row flex-between">
                         <text v-if="item.type == 1">
-                            问卷
                             <router-link style="text-decoration: none;" :to="{name: 'surveyIndex'}">
-                                <el-link :underline="false" type="primary">查看问卷活动</el-link>
+                                <el-link :underline="false" class="size-lg font-primary strong">问卷</el-link>
                             </router-link>
                         </text>
                         <text v-if="item.type == 2">
-                            选举
                             <router-link style="text-decoration: none;" :to="{name: 'electIndex'}">
-                                <el-link :underline="false" type="primary">查看选举活动</el-link>
+                                <el-link :underline="false" class="size-lg font-primary strong">选举</el-link>
                             </router-link>
                         </text>
                         <text v-if="item.type == 3">
-                            表决
                             <router-link style="text-decoration: none;" :to="{name: 'voteIndex'}">
-                                <el-link :underline="false" type="primary">查看表决活动</el-link>
+                                <el-link :underline="false" class="size-lg font-primary strong">表决</el-link>
                             </router-link>
                         </text>
                         <text v-if="item.type == 4">
-                            联名
                             <router-link style="text-decoration: none;" :to="{name: 'jointlyIndex'}">
-                                <el-link :underline="false" type="primary">查看联名活动</el-link>
+                                <el-link :underline="false" class="size-lg font-primary strong">联名</el-link>
                             </router-link>
                         </text>
+                        <div class="size-base font-grey">总数({{ item.stat.s_audit_tot }})</div>
                     </div>
-                    <div class="title-container-1 size-base">总数({{ item.stat.s_audit_tot }})</div>
-                    <div class="numname">
+                    <div class="numname p-t-20">
                         <div v-for="(child, j) in item.stat.s_audit_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 10" class="name">未处理</div>
@@ -202,14 +196,13 @@
             <!-- 设施设备 -->
             <el-col :sm="12" :md="12" :lg="8" :xl="8">
                 <div class="comStatus" style="margin: 10px 0;">
-                    <div class="title-container">
-                        设施设备
+                    <div class="flex-row flex-between">
                         <router-link style="text-decoration: none;" :to="{name: 'deviceIndex'}">
-                            <el-link :underline="false" type="primary">查看设施设备</el-link>
+                            <el-link :underline="false" class="size-lg font-primary strong">设施设备</el-link>
                         </router-link>
+                        <div class="size-base font-grey">总数({{ count_data.obj.device_stat?.d_tot }})</div>
                     </div>
-                    <div class="title-container-1 size-base">总数({{ count_data.obj.device_stat?.d_tot }})</div>
-                    <div class="numname">
+                    <div class="numname p-t-20">
                         <div v-for="(child, j) in count_data.obj.device_stat?.d_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 1" class="name">正常</div>
@@ -220,17 +213,16 @@
                 </div>
             </el-col>
             <!-- 民生投诉 -->
-            <el-col v-for="(item, i) in count_data.obj.complaint_stat" :key="'eventnum' + i" :sm="12" :md="12" :lg="8"
-                :xl="8">
-                <div v-if="item.kind == 1" class="comStatus" style="margin: 10px 0;">
-                    <div v-if="item.kind == 1" class="title-container">
-                        违建
+            <el-col v-for="(item, i) in count_data.obj.complaint_stat" :key="'eventnum' + i" :sm="12" :md="12" :lg="8" :xl="8">
+                <div v-if="item.kind == 1" class="comStatus m-tb-10">
+                    <div v-if="item.kind == 1" class="flex-row flex-between">
                         <router-link style="text-decoration: none;" :to="{name: 'illegalIndex'}">
-                            <el-link :underline="false" type="primary">查看违建</el-link>
+                            <el-link :underline="false" class="size-lg font-primary strong">违建</el-link>
                         </router-link>
+                        <div class="size-base font-red" v-if="item.stat.c_allot_tot">待审({{ item.stat.c_allot_tot }})</div>
+                        <div class="size-base font-grey">总数({{ item.stat.c_tot }})</div>
                     </div>
-                    <div class="title-container-1 size-base">总数({{ item.stat.c_tot }})</div>
-                    <div class="numname">
+                    <div class="numname p-t-20">
                         <div v-for="(child, j) in item.stat.c_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 0" class="name">未处理</div>
@@ -244,25 +236,23 @@
                             <div v-if="child.status == 99" class="name">已结案</div>
                         </div>
                     </div>
-                    <div class="title-container-1 size-base" style="margin-top: 10px;">审核状态({{ item.stat.c_allot_tot }})
-                    </div>
-                    <div class="numname">
+                    <!-- <div class="numname">
                         <div v-for="(child, j) in item.stat.c_allot_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 0" class="name">未审核</div>
                             <div v-if="child.status == 1" class="name">已审核</div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-                <div v-if="item.kind == 2" class="comStatus" style="margin: 10px 0;" title="投诉">
-                    <div v-if="item.kind == 2" class="title-container">
-                        投诉
+                <div v-if="item.kind == 2" class="comStatus m-tb-10" title="投诉">
+                    <div v-if="item.kind == 2" class="flex-row flex-between">
                         <router-link style="text-decoration: none;" :to="{name: 'complaintIndex'}">
-                            <el-link :underline="false" type="primary">查看投诉</el-link>
+                            <el-link :underline="false" class="size-lg font-primary strong">投诉</el-link>
                         </router-link>
+                        <div class="size-base font-red" v-if="item.stat.c_allot_tot">待审({{ item.stat.c_allot_tot }})</div>
+                        <div class="size-base font-grey">总数({{ item.stat.c_tot }})</div>
                     </div>
-                    <div class="title-container-1 size-base">总数({{ item.stat.c_tot }})</div>
-                    <div class="numname">
+                    <div class="numname p-t-20">
                         <div v-for="(child, j) in item.stat.c_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 0" class="name">未处理</div>
@@ -276,25 +266,23 @@
                             <div v-if="child.status == 99" class="name">已结案</div>
                         </div>
                     </div>
-                    <div class="title-container-1 size-base" style="margin-top: 10px;">审核状态({{ item.stat.c_allot_tot }})
-                    </div>
-                    <div class="numname">
+                    <!-- <div class="numname p-t-20">
                         <div v-for="(child, j) in item.stat.c_allot_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 0" class="name">未审核</div>
                             <div v-if="child.status == 1" class="name">已审核</div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-                <div v-if="item.kind == 3" class="comStatus" style="margin: 10px 0;">
-                    <div v-if="item.kind == 3" class="title-container">
-                        报修
+                <div v-if="item.kind == 3" class="comStatus m-tb-10">
+                    <div v-if="item.kind == 3" class="flex-row flex-between">
                         <router-link style="text-decoration: none;" :to="{name: 'repairIndex'}">
-                            <el-link :underline="false" type="primary">查看报修</el-link>
+                            <el-link :underline="false" class="size-lg font-primary strong">报修</el-link>
                         </router-link>
+                        <div class="size-base font-red" v-if="item.stat.c_allot_tot">待审({{ item.stat.c_allot_tot }})</div>
+                        <div class="size-base font-grey">总数({{ item.stat.c_tot }})</div>
                     </div>
-                    <div class="title-container-1 size-base">总数({{ item.stat.c_tot }})</div>
-                    <div class="numname">
+                    <div class="numname p-t-20">
                         <div v-for="(child, j) in item.stat.c_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 0" class="name">未处理</div>
@@ -308,15 +296,13 @@
                             <div v-if="child.status == 99" class="name">已结案</div>
                         </div>
                     </div>
-                    <div class="title-container-1 size-base" style="margin-top: 10px;">审核状态({{ item.stat.c_allot_tot }})
-                    </div>
-                    <div class="numname">
+                    <!-- <div class="numname">
                         <div v-for="(child, j) in item.stat.c_allot_status_cnt" :key="j">
                             <div class="num">{{ child.cnt }}</div>
                             <div v-if="child.status == 0" class="name">未审核</div>
                             <div v-if="child.status == 1" class="name">已审核</div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </el-col>
         </el-row>
@@ -327,9 +313,11 @@
                 </el-col>
             </el-row>
         </page-main> -->
-        <page-main>
-            <el-button type="primary" @click="modifyCommentStatusList(20)">批量通过</el-button>
-            <el-button type="danger" @click="modifyCommentStatusList(30)">批量拒绝</el-button>
+        <page-main v-if="comment_list.arr.length>0">
+            <div class="m-b-20">
+                <el-button type="primary" @click="modifyCommentStatusList(20)">批量通过</el-button>
+                <el-button type="danger" @click="modifyCommentStatusList(30)">批量拒绝</el-button>
+            </div>
             <el-table
                 :data="comment_list.arr"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
@@ -367,7 +355,7 @@
             </el-table>
             <el-pagination
                 v-model:current-page="page"
-                style="float: right;"
+                style="text-align: right;"
                 layout="prev,next,jumper,"
                 :total="Infinity"
                 :page-size="per_page"
@@ -631,19 +619,7 @@ watch(page, () => {
     padding: 30px 20px;
 }
 .icontitbox .icontitcolbox:nth-child(1) .icontit {
-    color: #42c493;
-}
-.icontitbox .icontitcolbox:nth-child(2) .icontit {
-    color: #48b9fd;
-}
-.icontitbox .icontitcolbox:nth-child(3) .icontit {
-    color: #5cced4;
-}
-.icontitbox .icontitcolbox:nth-child(4) .icontit {
-    color: #bf5cd4;
-}
-.icontitbox .icontitcolbox:nth-child(5) .icontit {
-    color: #d79a25;
+    color: #fff;
 }
 .numname {
     display: flex;
@@ -715,6 +691,7 @@ watch(page, () => {
     position: relative;
     padding: 20px;
     background-color: #fff;
+    height: 150px;
 }
 .title-container {
     width: calc(100% + 40px);
