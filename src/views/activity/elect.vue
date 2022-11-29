@@ -392,7 +392,7 @@ const data_details = reactive({
 // 分页
 let total = ref(100)
 let per_page = ref(15)
-let page = ref(Number(sessionStorage.getItem('currentPage')) || 1)
+let page = ref(Number(sessionStorage.getItem('elect_currentPage')) || 1)
 // 详情
 let switch_details = ref(false)
 // 添加 修改
@@ -450,7 +450,7 @@ const click_add_group_zone_id = () => {
 }
 const switch_choose_zone = ref(false)
 const checkFunc = val => {
-    
+
     selectedZone_id.value = val.name
     if (val.type == 'region') {
         from_examine.item.author_type = 1
@@ -464,16 +464,16 @@ const checkFunc = val => {
         from_examine.item.author_cc = val.china_code
         data_search.obj.author_cc = val.china_code
     }
-    
+
 }
 const checkChangeFunc = val => {
-    // 
+    //
     switch_choose_zone.value = false
 }
 // 详情
 const detailsFunc = val => {
     data_details.item = ''
-    
+
     APIgetSurveyDetails(val.id).then(res => {
         data_details.item = res
         switch_details.value = true
@@ -507,15 +507,15 @@ const handleClick = tab => {
 }
 // 监听分页
 watch(page, () => {
-    sessionStorage.setItem('currentPage', page.value)
+    sessionStorage.setItem('elect_currentPage', page.value)
     getTabListFunc()
 })
 onBeforeRouteLeave((to, from) => {
-    
-    if (to.meta.title == '详情') {
+
+    if (to.meta.title == '选举详情') {
         return true
     } else {
-        sessionStorage.removeItem('currentPage')
+        sessionStorage.removeItem('elect_currentPage')
     }
 })
 const surveyId = ref('')
@@ -562,7 +562,7 @@ const getTabListFunc = () => {
         // params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         params.author_cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     }
-    
+
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
@@ -573,7 +573,7 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetSurvey(params).then(res => {
-        // 
+        //
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -621,7 +621,7 @@ const modifySurvey = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetSurveyDetails(val.id).then(res => {
-        // 
+        //
         if(!res.vrule) {
             res.vrule = [{
                 vmin:'',
@@ -648,7 +648,7 @@ const next = () => {
         dialogExamineCloseFunc()
         // active.value = 1
     } else if (active.value == 1) {
-        // 
+        //
         if (str_title.value == '添加') {
             passToAuditFunc()
         }

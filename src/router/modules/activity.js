@@ -97,7 +97,7 @@ export default {
                         breadcrumb: false,
                         component: () => import ('@/views/activity/activityDetails.vue'),
                         meta: {
-                            title: '详情',
+                            title: '选举详情',
                             sidebar: false,
                             activeMenu: '/activity/elect'
                         }
@@ -133,7 +133,7 @@ export default {
                         breadcrumb: false,
                         component: () => import ('@/views/activity/activityDetails.vue'),
                         meta: {
-                            title: '详情',
+                            title: '问卷详情',
                             sidebar: false,
                             activeMenu: '/activity/survey'
                         }
@@ -168,7 +168,7 @@ export default {
                         breadcrumb: false,
                         component: () => import ('@/views/activity/activityDetails.vue'),
                         meta: {
-                            title: '详情',
+                            title: '联名详情',
                             sidebar: false,
                             activeMenu: '/activity/jointly'
                         }

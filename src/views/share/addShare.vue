@@ -104,7 +104,7 @@
                                 }">
                                 <el-icon><Plus/></el-icon>
                             </el-upload>
-                            <el-button plain @click="openNotification">产看不动产证信息</el-button>
+                            <el-button v-show="switch_notification" plain @click="openNotification">产看不动产证信息</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -283,6 +283,7 @@ const delBdcFiles = (files,side)=>{
 
 }
 //上传图片并识别
+const bdc_message = ref('')
 const uploadFile = (files,fside)=>{
     loading = ElLoading.service({
         lock: true,
@@ -296,18 +297,17 @@ const uploadFile = (files,fside)=>{
                 'file_key':key,
             }
             let sideli = sideArr.indexOf(fside)
+            // 身份证信息
             if(sideli>0){
                 shareRecord_form.obj.card.sfz.push(key)
                 data.side = sideli == 1 ? 1: 2
-                postOrcIdcard(data).then(orc=>{
+                postOrcGeneral(data).then(orc=>{
                     let i = 0
                     let timeout = setInterval(()=>{
-                        console.log("111",i)
                         getOrcResult(orc.id).then(orcre =>{
                             i++
-                            if(i>4 || orcre.status === 20) {
-                                clearInterval(timeout)
-                            }
+                           if(i>4) clearInterval(timeout)
+                            console.log(orcre)
                             if(orcre.content.id_card) {
                                 shareRecord_form.obj.name = orcre.content.name
                                 shareRecord_form.obj.id_card = orcre.content.id_card
@@ -315,6 +315,7 @@ const uploadFile = (files,fside)=>{
                         }).catch(err=>{
                             loading.close()
                             ElMessage.error('未找到识别结果！')
+                            // clearInterval(timeout)
                         })
                     },4000)
                 }).catch(err=>{
@@ -322,6 +323,7 @@ const uploadFile = (files,fside)=>{
                     ElMessage.error('识别错误！')
                 })
             }else if(sideli==0){
+                // 不动产权证信息
                 shareRecord_form.obj.card.bdc.push(key)
                 postOrcGeneral(data).then(orc=>{
                     let i = 0
@@ -330,9 +332,12 @@ const uploadFile = (files,fside)=>{
                             i++
                             if(i>4) clearInterval(timeout)
                             console.log(orcre)
+                            bdc_message.value = orcre
+                            switch_notification.value = true
                         }).catch(err=>{
                             loading.close()
                             ElMessage.error('未找到识别结果！')
+                            // clearInterval(timeout)
                         })
                     },4000)
                 }).catch(err=>{
@@ -507,12 +512,24 @@ const refreshFunc = () => {
     checked_biz.value = []
     file_list.value = []
     file_list_fid.value = []
+    switch_notification.value = false
+    ElNotification.closeAll()
+    this.$refs.uploadRef.clearFiles()
 }
 // 查看房屋产权信息
+const switch_notification = ref(false)
 const openNotification = () => {
     ElNotification({
-        title: 'Prompt',
-        message: 'This is a message that does not automatically close',
+        title: '不动产证信息',
+        dangerouslyUseHTMLString: true,
+        message: `<view>
+            ${
+                bdc_message.value.content.words_result.map(item => {
+                    return `<view>${item.words}</view>
+                            <br >`
+                }).join('')
+            }
+            </view>`,
         duration: 0,
     })
 }
