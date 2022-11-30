@@ -41,7 +41,7 @@
                             <div class="m-tb-10">身份证件</div>
                             <div class="flex-row">
                                 <div>
-                                    <el-upload ref="uploadRef" class="idcardBox" action="***" list-type="picture-card" limit="1"
+                                    <el-upload ref="uploadRefSfz" class="idcardBox" action="***" list-type="picture-card" limit="1"
                                         :auto-upload="false"
                                         :file-list="idCardFiles"
                                         :class="{hideclass:hideFaceIcon}"
@@ -55,22 +55,8 @@
                                         <el-icon class="font-grey size-base cardtip"><Plus/></el-icon>
                                         <!-- <span class="font-grey size-base cardtip">正面</span> -->
                                     </el-upload>
+                                    <el-button v-show="switch_sfz_notification" plain @click="openNotification(0)">查看身份证信息</el-button>
                                 </div>
-                                <!-- <div class="m-l-20">
-                                    <el-upload ref="uploadRef" class="idcardBox" action="***" list-type="picture-card" limit="1"
-                                        :auto-upload="false"
-                                        :file-list="idCardFiles"
-                                        :class="{hideclass:hideBackIcon}"
-                                        :on-preview="handlePictureCardPreview"
-                                        :on-change="(file, files) => {
-                                            ocrIdCardFiles(files,'back')
-                                        }"
-                                        :on-remove="(file, files) => {
-                                            delIdCardFiles(files,'back')
-                                        }">
-                                        <span class="font-grey size-base cardtip">反面</span>
-                                    </el-upload>
-                                </div> -->
                             </div>
                         </el-col>
                     </el-row>
@@ -92,7 +78,7 @@
                         </el-col>
                         <el-col :span="12">
                             <div class="m-tb-10">不动产权证</div>
-                            <el-upload ref="uploadRef" action="***" list-type="picture-card"
+                            <el-upload ref="uploadRefBdc" action="***" list-type="picture-card"
                                 :auto-upload="false"
                                 :file-list="bdcFiles"
                                 :on-preview="handlePictureCardPreview"
@@ -104,7 +90,7 @@
                                 }">
                                 <el-icon><Plus/></el-icon>
                             </el-upload>
-                            <el-button v-show="switch_notification" plain @click="openNotification">产看不动产证信息</el-button>
+                            <el-button v-show="switch_bdc_notification" plain @click="openNotification(1)">查看不动产证信息</el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -249,6 +235,11 @@ const pickerOptions = {
 }
 //选择身份证照片
 const ocrIdCardFiles = (files,side)=>{
+    const p_size = files[0].size / 1024 / 1024
+    if(p_size > 4) {
+        ElMessage.error('上传文件大小不能超过4MB')
+        return
+    }
     if(side=='face'){
         hideFaceIcon.value = true
     }
@@ -259,7 +250,7 @@ const ocrIdCardFiles = (files,side)=>{
     files.forEach(item=>{
         fileraw.push(item.raw)
     })
-    uploadFile(fileraw,side)
+    // uploadFile(fileraw,side)
 }
 //删除身份证照片
 const delIdCardFiles=(files,side)=>{
@@ -272,6 +263,11 @@ const delIdCardFiles=(files,side)=>{
 }
 //选择不动产证件
 const orcBdcFiles = (files,side)=>{
+    const p_size = files[0].size / 1024 / 1024
+    if(p_size > 4) {
+        ElMessage.error('上传文件大小不能超过4MB')
+        return
+    }
     let fileraw=[]
     files.forEach(item=>{
         fileraw.push(item.raw)
@@ -283,7 +279,7 @@ const delBdcFiles = (files,side)=>{
 
 }
 //上传图片并识别
-const bdc_message = ref('')
+const identity_message = ref([])
 const uploadFile = (files,fside)=>{
     loading = ElLoading.service({
         lock: true,
@@ -306,12 +302,10 @@ const uploadFile = (files,fside)=>{
                     let timeout = setInterval(()=>{
                         getOrcResult(orc.id).then(orcre =>{
                             i++
-                           if(i>4) clearInterval(timeout)
+                           if(i>4 || orcre.status === 20) clearInterval(timeout)
                             console.log(orcre)
-                            if(orcre.content.id_card) {
-                                shareRecord_form.obj.name = orcre.content.name
-                                shareRecord_form.obj.id_card = orcre.content.id_card
-                            }
+                            identity_message.value[0] = orcre
+                            switch_sfz_notification.value = true
                         }).catch(err=>{
                             loading.close()
                             ElMessage.error('未找到识别结果！')
@@ -330,10 +324,10 @@ const uploadFile = (files,fside)=>{
                     let timeout = setInterval(()=>{
                         getOrcResult(orc.id).then(orcre =>{
                             i++
-                            if(i>4) clearInterval(timeout)
+                            if(i>4 || orcre.status === 20) clearInterval(timeout)
                             console.log(orcre)
-                            bdc_message.value = orcre
-                            switch_notification.value = true
+                            identity_message.value[1] = orcre
+                            switch_bdc_notification.value = true
                         }).catch(err=>{
                             loading.close()
                             ElMessage.error('未找到识别结果！')
@@ -512,19 +506,21 @@ const refreshFunc = () => {
     checked_biz.value = []
     file_list.value = []
     file_list_fid.value = []
-    switch_notification.value = false
+    switch_bdc_notification.value = false
+    switch_sfz_notification.value = false
     ElNotification.closeAll()
-    this.$refs.uploadRef.clearFiles()
 }
 // 查看房屋产权信息
-const switch_notification = ref(false)
-const openNotification = () => {
+const switch_bdc_notification = ref(false)
+const switch_sfz_notification = ref(false)
+const openNotification = (index) => {
+    ElNotification.closeAll()
     ElNotification({
         title: '不动产证信息',
         dangerouslyUseHTMLString: true,
         message: `<view>
             ${
-                bdc_message.value.content.words_result.map(item => {
+                identity_message.value[index].content.words_result.map(item => {
                     return `<view>${item.words}</view>
                             <br >`
                 }).join('')

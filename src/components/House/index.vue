@@ -61,9 +61,9 @@
                                         <el-button type="primary" :icon="Search" @click="searchFunc">筛选</el-button>
                                         <el-button v-show="switch_search == true" class="m-l-20 m-r-10" :icon="Loading"
                                             @click="refreshFunc">重置</el-button>
-                                        <span v-show="switch_search == true" class="size-base">
+                                        <!-- <span v-show="switch_search == true" class="size-base">
                                             *共搜索到{{ total }}条。
-                                        </span>
+                                        </span> -->
                                     </el-col>
                                 </el-row>
                             </div>
@@ -100,7 +100,7 @@
                                         <div class="row-item">
                                             <el-checkbox v-model="checkFH.row[item].val"
                                                 @change="(val) => { checkFH.row[item].val = val; rowClickFunc(item, val) }" />
-                                            <div class="row-item-check">{{ item }}#</div>
+                                            <div class="row-item-check">{{ item }}</div>
                                         </div>
                                     </div>
                                 </el-scrollbar>
@@ -124,7 +124,7 @@
                                                         v-model="checkFH.all[child.floor_truth][item.house_num].val"
                                                         @change="(val) => { checkFH.all[child.floor_truth][item.house_num].val = val; allClickFunc(child.floor_truth, item.house_num, val) }"
                                                         @click.stop="" />
-                                                    <div class="row-item-check">{{ item.house_num }}#</div>
+                                                    <div class="row-item-check">{{ item.house_num }}</div>
                                                     <el-popconfirm title="确定要删除当前项么?" cancel-button-type="info"
                                                         @confirm="deleteHouse(item)">
                                                         <template #reference>
