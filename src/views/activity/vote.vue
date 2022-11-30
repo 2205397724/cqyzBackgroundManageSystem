@@ -514,7 +514,6 @@ watch(page, () => {
 })
 import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
     if (to.meta.title == '表决详情') {
         return true
     } else {

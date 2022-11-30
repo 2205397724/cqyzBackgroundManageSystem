@@ -685,12 +685,7 @@ const exchangeStatus = status => {
         })
 }
 // 详情设置范围
-const tree_item = ref({
-    id: '50',
-    name: '测试',
-    next_type: 'region',
-    type: 'region'
-})
+const tree_item = ref([])
 const checkFunc = val => {
 
 }
@@ -703,17 +698,15 @@ const detail_set_area = () => {
     // 调用tree树形组件初始的请求
     let uid = localStorage.getItem('uid')
     let region_cc = JSON.parse(localStorage.getItem(uid + '_user_group')).region_cc
-    // APIgetChinaRegion({p_code:region_cc}).then(res => {
-    //     tree_item.value.id = res[0].code
-    //     tree_item.value.name = res[0].name
-    //     tree_item.value.type = 'region'
-    //     tree_item.value.next_type = 'region'
-    // })
-    APIgetChinaRegion().then(res => {
-        tree_item.value.id = res[0].code
-        tree_item.value.name = res[0].name
-        tree_item.value.type = 'region'
-        tree_item.value.next_type = 'region'
+    APIgetChinaRegion({p_code:region_cc}).then(res => {
+        res.map((item,i) => {
+            tree_item.value.push({
+                id:item.code,
+                name:item.name,
+                type:'region',
+                next_type:'region'
+            })
+        })
     })
 }
 // 详情

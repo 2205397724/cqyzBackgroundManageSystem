@@ -13,6 +13,7 @@
                         ref="treeRef"
                         class="el-tree-box"
                         node-key="code"
+                        :data="tree_item"
                         :default-checked-keys="defaultChecked.arr"
                         :props="tree_props"
                         :load="loadNode"
@@ -221,14 +222,12 @@ const selectedHouseFun = houseid => {
     } else {
         selected_house.arr.push(houseid)
     }
-    console.log(selected_house.arr)
 }
 // 默认选择地区数组
 const defaultChecked = reactive({ arr: [] })
 // 提交选择
 const submit = () => {
     let all = treeRef.value.getCheckedNodes()
-    console.log(all)
     all.forEach(item => {
         switch (item.type) {
             case 'region':
@@ -245,7 +244,6 @@ const submit = () => {
                 break
         }
     })
-    console.log(selected_region.arr)
     let promiseAll = []
     if (selected_region.arr.length > 0) {
         promiseAll.push(
@@ -317,7 +315,6 @@ const checkFH = reactive({
 const total = ref(0)
 // 点击节点触发
 const nodeClick = (node, treenode, event) => {
-    console.log(node)
     if (node.type == 'units' || node.type == 'building') {
         let name = node.name
         unitsDetail.item.name = name
@@ -328,7 +325,6 @@ const nodeClick = (node, treenode, event) => {
             sid: props.surveyid,
             can_type: 2
         }).then(res => {
-            console.log(res)
             let nums = res.house_nums
             let list = res.floors
             for (let i in list) {
@@ -342,7 +338,6 @@ const nodeClick = (node, treenode, event) => {
                 }
                 house_num.arr = nums
                 house_list.arr = list
-                console.log(house_num.arr)
                 // 处理默认选择项目
                 for (let i in house_num.arr) {
                     checkFH.row[house_num.arr[i]] = {
@@ -392,18 +387,18 @@ const loadNode = (node, resolve) => {
     switch (node.data.next_type) {
         case 'region':
             APIgetChinaRegion({
+                page:1,
+                per_page:200,
                 p_code: node.data.id,
                 sid: props.surveyid,
                 can_type: 2
             }).then(res => {
                 treeDetail.arr = res
-                console.log(res)
                 let tree_arr = []
                 if (res.length > 0) {
                     for (let i in res) {
                         if (res[i].level < 5) {
                             if (res[i].can_exist) {
-                                console.log(res[i])
                                 defaultChecked.arr.push(res[i].code)
                                 selected_all.arr.push(res[i].code)
                                 treeRef.value.setCheckedKeys(selected_all.arr)
@@ -434,7 +429,6 @@ const loadNode = (node, resolve) => {
                         }
                     }
                 }
-                console.log(defaultChecked.arr)
                 resolve(tree_arr)
                 emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
             })
@@ -447,7 +441,6 @@ const loadNode = (node, resolve) => {
                 sid: props.surveyid,
                 can_type: 2
             }).then(res => {
-                console.log(res)
                 let tree_arr = []
                 for (let i in res) {
                     if (res[i].can_exist) {
@@ -545,13 +538,11 @@ watch(
 const handleCheck = (data, checked) => {
     // 点击复选框触发
     let currentNode = treeRef.value.getNode(data.code)
-    console.log(currentNode)
     if (currentNode.checked) {
         cancelChildNode(currentNode)
     }
     function cancelChildNode(parentNode) {
         for (let i = 0;i < parentNode.childNodes.length;i++) {
-            console.log(i)
             parentNode.childNodes[i].checked = false
             // parentNode.childNodes[i].data.isDisabled=true
             cancelChildNode(parentNode.childNodes[i])
