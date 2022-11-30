@@ -15,10 +15,10 @@
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                用户名：
+                                姓名：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
-                                <el-input v-model="data_search.obj.username" class="search_tb" placeholder="用户名" clearable />
+                                <el-input v-model="data_search.obj.name" class="search_tb" placeholder="真实姓名" clearable />
                             </el-col>
                         </el-row>
                     </el-col>
@@ -35,6 +35,18 @@
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
+                                用户名：
+                            </el-col>
+                            <el-col :sm="20" :xs="18" :md="18">
+                                <el-input v-model="data_search.obj.username" class="search_tb" placeholder="用户名" clearable />
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row v-if="btnClick == true">
+                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
+                        <el-row>
+                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
                                 身份证号：
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
@@ -42,8 +54,6 @@
                             </el-col>
                         </el-row>
                     </el-col>
-                </el-row>
-                <el-row v-if="btnClick == true">
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
@@ -63,19 +73,7 @@
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
                                 <el-select v-model="data_search.obj.status_cert" class="search_tb" placeholder="认证状态" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.status_all" :key="item.key" :label="item.val" :value="item.key" />
-                                </el-select>
-                            </el-col>
-                        </el-row>
-                    </el-col>
-                    <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                        <el-row>
-                            <el-col :sm="4" :xs="6" :md="6" class="search_th">
-                                终端类型：
-                            </el-col>
-                            <el-col :sm="20" :xs="18" :md="18">
-                                <el-select v-model="data_search.obj.auth_type" class="search_tb" placeholder="终端类型" clearable>
-                                    <el-option v-for="(item,i) in opts_all.obj.terminal" :key="item.key" :label="item.val" :value="item.key" />
+                                    <el-option v-for="(item,i) in opts_all.obj.verify_status" :key="item.key" :label="item.val" :value="item.key" />
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -106,34 +104,24 @@
                     :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}"
                     style="width: 100%;min-height: 300px;"
                 >
-                    <el-table-column prop="username" label="用户名">
-                        <template #default="scope">
-                            <span>{{ scope.row.username }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="mobile" label="手机号" width="150">
-                        <template #default="scope">
-                            <span>{{ scope.row.mobile }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="id_card" label="身份证号" width="200">
-                        <template #default="scope">
-                            <span>{{ scope.row.id_card }} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="gender" label="性别">
+                    <el-table-column prop="username" label="用户名"></el-table-column>
+                    <el-table-column prop="name" label="姓名" width="200"></el-table-column>
+                    <el-table-column prop="id_card" label="身份证号" width="200"></el-table-column>
+                    <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
+                    <el-table-column prop="gender" label="性别" width="60">
                         <template #default="scope">
                             <span>{{ getOptVal(opts_all.obj.gender,scope.row.gender) }} </span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="status_cert" label="认证状态">
                         <template #default="scope">
-                            <el-tag v-if="scope.row.status_cert==10" type="warning" round size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }}</el-tag>
-                            <el-tag v-if="scope.row.status_cert==15" type="primary" round size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }}</el-tag>
-                            <el-tag v-if="scope.row.status_cert==20" type="success" round size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }}</el-tag>
-                            <el-tag v-if="scope.row.status_cert==30" type="danger" round size="small">{{ getOptVal(opts_all.obj.status_all,scope.row.status_cert) }}</el-tag>
+                            <el-tag v-if="scope.row.status_cert==10" type="warning" round size="small">{{ getOptVal(opts_all.obj.verify_status,scope.row.status_cert) }}</el-tag>
+                            <el-tag v-if="scope.row.status_cert==15" type="primary" round size="small">{{ getOptVal(opts_all.obj.verify_status,scope.row.status_cert) }}</el-tag>
+                            <el-tag v-if="scope.row.status_cert==20" type="success" round size="small">{{ getOptVal(opts_all.obj.verify_status,scope.row.status_cert) }}</el-tag>
+                            <el-tag v-if="scope.row.status_cert==30" type="danger" round size="small">{{ getOptVal(opts_all.obj.verify_status,scope.row.status_cert) }}</el-tag>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="created_at" label="注册时间" width="200"></el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
                         <template #default="scope">
                             <el-button
@@ -166,7 +154,7 @@
                     style="float: right;"
                     layout="prev,next,jumper"
                     :page-size="per_page"
-                    :total="150"
+                    :total="Infinity"
                     background
                     prev-text="上一页"
                     next-text="下一页"
@@ -311,10 +299,10 @@
                 <div class="item">
                     <div class="left">认证状态</div>
                     <div class="right">
-                        <el-tag v-if="data_details.item.status_cert==10" type="warning" round size="small">{{ getOptVal(opts_all.obj.status_all,data_details.item.status_cert) }}</el-tag>
-                        <el-tag v-if="data_details.item.status_cert==15" type="primary" round size="small">{{ getOptVal(opts_all.obj.status_all,data_details.item.status_cert) }}</el-tag>
-                        <el-tag v-if="data_details.item.status_cert==20" type="success" round size="small">{{ getOptVal(opts_all.obj.status_all,data_details.item.status_cert) }}</el-tag>
-                        <el-tag v-if="data_details.item.status_cert==30" type="danger" round size="small">{{ getOptVal(opts_all.obj.status_all,data_details.item.status_cert) }}</el-tag>
+                        <el-tag v-if="data_details.item.status_cert==10" type="warning" round size="small">{{ getOptVal(opts_all.obj.verify_status,data_details.item.status_cert) }}</el-tag>
+                        <el-tag v-if="data_details.item.status_cert==15" type="primary" round size="small">{{ getOptVal(opts_all.obj.verify_status,data_details.item.status_cert) }}</el-tag>
+                        <el-tag v-if="data_details.item.status_cert==20" type="success" round size="small">{{ getOptVal(opts_all.obj.verify_status,data_details.item.status_cert) }}</el-tag>
+                        <el-tag v-if="data_details.item.status_cert==30" type="danger" round size="small">{{ getOptVal(opts_all.obj.verify_status,data_details.item.status_cert) }}</el-tag>
                     </div>
                 </div>
                 <div class="item">
@@ -577,7 +565,7 @@ import { getOpts, getOptVal } from '@/util/opts.js'
 const opts_all = reactive({
     obj: {}
 })
-getOpts(['status_all', 'other_auth', 'gender', 'terminal', 'login_type']).then(res => {
+getOpts(['verify_status', 'other_auth', 'gender', 'terminal', 'login_type']).then(res => {
     opts_all.obj = res
 })
 </script>

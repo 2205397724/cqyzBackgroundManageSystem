@@ -358,7 +358,7 @@ const opts = {
     // 性别
     gender: [{
         key: 'U',
-        val: '未设置'
+        val: '-'
     }, {
         key: 'M',
         val: '男'
@@ -404,6 +404,20 @@ const opts = {
     }, {
         key: 30,
         val: '处理失败'
+    }],
+    // 通用处理状态
+    verify_status: [{
+        key: 10,
+        val: '未认证'
+    }, {
+        key: 15,
+        val: '处理中'
+    }, {
+        key: 20,
+        val: '已认证'
+    }, {
+        key: 30,
+        val: '失败'
     }],
     // 用户端类型
     terminal: [{

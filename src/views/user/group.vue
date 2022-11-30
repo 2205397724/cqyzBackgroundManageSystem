@@ -2,27 +2,12 @@
     <div class="usergroup">
         <page-main>
             <div class="m-b-20">
-                <el-button
-                    size="large"
-                    type="primary"
-                    :icon="Plus"
-                    @click="addResidentialFunc"
-                >
+                <el-button size="large" type="primary" :icon="Plus" @click="addResidentialFunc">
                     添加用户组
                 </el-button>
             </div>
             <div class="search">
                 <el-row>
-                    <!-- <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
-                        <el-row>
-                            <el-col :sm="4" :xs="6" :md="8" class="search_th">
-                                用户组名称：
-                            </el-col>
-                            <el-col :sm="20" :xs="18" :md="16">
-                                <el-input v-model="data_search.item.name" class="search_tb" placeholder="用户组名称" />
-                            </el-col>
-                        </el-row>
-                    </el-col> -->
                     <el-col :xs="24" :md="12" :lg="8" class="m-b-20">
                         <el-row>
                             <el-col :sm="4" :xs="6" :md="6" class="search_th">
@@ -83,37 +68,14 @@
                     </el-col>
                 </el-row>
             </div>
-            <div
-                style="
-                                                                                width: 100%;
-                                                                                overflow: auto;
-                                                                                border: 1px solid #ebeef4;
-                                                                                box-sizing: border-box;
-"
-            >
-                <el-table
-                    v-loading="loading_tab"
-                    :data="data_tab.arr"
-                    :header-cell-style="{
-                        background: '#fbfbfb',
-                        color: '#999999',
-                        'font-size': '12px',
-                    }"
+            <div style="width: 100%;overflow: auto;border: 1px solid #ebeef4;box-sizing: border-box;">
+                <el-table v-loading="loading_tab" :data="data_tab.arr" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px'}"
                     default-expand-all
                     row-key="id"
                     :tree-props="{ children: 'children' }"
                     style="width: 100%; min-height: 300px;"
                 >
-                    <el-table-column prop="name" label="用户组名称">
-                        <template #default="scope">
-                            <span>{{ scope.row.name }} </span>
-                        </template>
-                    </el-table-column>
-                    <!-- <el-table-column prop="id" label="用户组ID" width="300">
-            <template #default="scope">
-              <span style="margin-left: 10px">{{ scope.row.id }} </span>
-            </template>
-          </el-table-column> -->
+                    <el-table-column prop="name" label="用户组名称"></el-table-column>
                     <el-table-column prop="type" label="类型">
                         <template #default="scope">
                             <span>{{
@@ -201,23 +163,10 @@
         <!-- 修改添加用户组 -->
         <el-dialog v-model="switch_examine" :title="str_title" width="50%">
             <div>
-                <el-form
-                    ref="ruleFormRef"
-                    :model="from_examine.item"
-                    label-position="left"
-                >
+                <el-form ref="ruleFormRef" :model="from_examine.item" label-position="left">
                     <el-row :gutter="10">
                         <el-col :md="24">
-                            <el-form-item
-                                label="用户组名称"
-                                prop="name"
-                                label-width="110px"
-                                :error="
-                                    from_error.msg && from_error.msg.name
-                                        ? from_error.msg.name[0]
-                                        : ''
-                                "
-                            >
+                            <el-form-item label="用户组名称" prop="name" label-width="110px" :error=" from_error.msg && from_error.msg.name ? from_error.msg.ame[0] : '' ">
                                 <el-input v-model="from_examine.item.name" placeholder="" />
                             </el-form-item>
                         </el-col>
@@ -251,19 +200,7 @@
                                         : ''
                                 "
                             >
-                                <!-- <el-input
-                                    v-model="from_examine.item.region_val"
-                                    placeholder=""
-                                /> -->
-                                <div
-                                    style="
-                                                                                                                                                                width: 100%;
-                                                                                                                                                                height: 32px;
-                                                                                                                                                                border: 1px solid #dcdfe6;
-                                                                                                                                                                border-radius: 4px;
-"
-                                    @click="click_add_group_zone_id"
-                                >
+                                <div style="width: 100%;height: 32px;border: 1px solid #dcdfe6;border-radius: 4px;" @click="click_add_group_zone_id">
                                     <span v-if="!selectedZone_id" style="margin-left: 11px; color: #c0c4cc;">请选择区域</span>
                                     <span v-else style="margin-left: 11px;">{{ selectedZone_id }}</span>
                                 </div>
@@ -273,14 +210,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div
-                    style="
-                                                                                                display: flex;
-                                                                                                justify-content: flex-end;
-                                                                                                align-items: center;
-                                                                                                width: 100%;
-"
-                >
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button @click="switch_examine = false">取消</el-button>
                     <el-button type="primary" @click="dialogExamineCloseFunc(ruleFormRef)">
                         确定
@@ -320,28 +250,19 @@
                     color: '#999999',
                     'font-size': '12px',
                 }"
-                style="
-                                                                                width: 100%;
-                                                                                min-height: 300px;
-                                                                                margin-bottom: 10px;
-                                                                                border: 1px solid #ebeef5;
-                                                                                border-radius: 6px;
-"
+                style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
                 max-height="400"
             >
-                <el-table-column prop="name" label="姓名">
-                    <template #default="scope">
-                        <span>{{ scope.row.username }} </span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="name" label="姓名"></el-table-column>
+                <el-table-column prop="mobile" label="电话"></el-table-column>
                 <el-table-column prop="gender" label="性别">
                     <template #default="scope">
                         <span>{{
                             getOptVal(
                                 [
-                                    { val: "男", key: "F" },
-                                    { val: "女", key: "M" },
-                                    { val: "未设置", key: "U" },
+                                    { val: "女", key: "F" },
+                                    { val: "男", key: "M" },
+                                    { val: "-", key: "U" },
                                 ],
                                 scope.row.gender
                             )
@@ -349,16 +270,7 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="mobile" label="电话">
-                    <template #default="scope">
-                        <span>{{ scope.row.mobile }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="post" label="职位描述">
-                    <template #default="scope">
-                        <span>{{ scope.row.post }} </span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="post" label="职位描述"></el-table-column>
                 <el-table-column label="角色">
                     <template #default="scope">
                         <el-button
@@ -456,14 +368,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div
-                    style="
-                                                                                                display: flex;
-                                                                                                justify-content: flex-end;
-                                                                                                align-items: center;
-                                                                                                width: 100%;
-"
-                >
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button type="primary" @click="dialogOptValFunc">确定</el-button>
                 </div>
             </template>
@@ -477,22 +382,9 @@
                 <template #prepend>角色ID集</template>
             </el-input> -->
             <el-table v-loading="loading_tab" :data="data_tab_roles.arr" class="tab_1">
-                <el-table-column label="角色名称" prop="name">
-                    <template #default="scope">
-                        <span>{{ scope.row.name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="标识" prop="spec">
-                    <template #default="scope">
-                        <span>{{ scope.row.spec }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="角色ID" prop="id" width="250px">
-                    <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-
+                <el-table-column label="角色名称" prop="name"></el-table-column>
+                <el-table-column label="标识" prop="spec"></el-table-column>
+                <el-table-column label="角色ID" prop="id" width="250px"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="80">
                     <template #default="scope">
                         <el-popconfirm
@@ -531,14 +423,7 @@
                 </el-form>
             </div>
             <template #footer>
-                <div
-                    style="
-                                                                                                display: flex;
-                                                                                                justify-content: flex-end;
-                                                                                                align-items: center;
-                                                                                                width: 100%;
-"
-                >
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
                     <el-button type="primary" @click="post_group_role_submit">确定</el-button>
                 </div>
             </template>
@@ -561,22 +446,9 @@
                 />
             </el-select>
             <el-table v-loading="loading_tab" :data="data_tab_user_roles.arr" class="tab_1">
-                <el-table-column label="角色名称" prop="name">
-                    <template #default="scope">
-                        <span>{{ scope.row.name }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="标识" prop="spec">
-                    <template #default="scope">
-                        <span>{{ scope.row.spec }} </span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="角色ID" prop="id" width="250px">
-                    <template #default="scope">
-                        <span>{{ scope.row.id }} </span>
-                    </template>
-                </el-table-column>
-
+                <el-table-column label="角色名称" prop="name"></el-table-column>
+                <el-table-column label="标识" prop="spec"></el-table-column>
+                <el-table-column label="角色ID" prop="id" width="250px"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="80">
                     <template #default="scope">
                         <el-popconfirm
