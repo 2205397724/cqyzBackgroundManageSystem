@@ -1113,7 +1113,7 @@ const addResidentialFunc = () => {
     from_examine.item = {
         extra: []
     }
-    china_code.value = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
+    china_code.value = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     console.log(typeof (from_examine.item.extra))
     switch_examine.value = true
 }

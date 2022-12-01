@@ -554,13 +554,13 @@ const getTabListFunc = () => {
         page: page.value,
         per_page: per_page.value,
         type: 2,
-        status: index.value
+        status: index.value,
+        w:3
     }
     if (index.value == 0) {
         delete params.status
     }
     if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')) && localStorage.getItem('utype') != 'pt') {
-        // params.author_tgt = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         params.author_cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     }
 
