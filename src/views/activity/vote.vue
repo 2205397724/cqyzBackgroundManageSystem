@@ -432,7 +432,8 @@ const getChinaName = () => {
         }
     } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))) {
         params = {
-            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code,
+            w:3
         }
     } else {
         params = {}

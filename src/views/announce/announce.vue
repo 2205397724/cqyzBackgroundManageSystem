@@ -223,8 +223,6 @@
                                 label-width="120px"
                                 :error="from_error.msg&&from_error.msg.toval?from_error.msg.toval[0]:''"
                             >
-                                <!-- <CascaderTypeAndID v-model:totype="from_examine.item.totype" v-model:toval="from_examine.item.toval" :disableds="[]" :zone="true" :tips="''" /> -->
-                                <!-- <Cascaders v-model="from_examine.item.toval" /> -->
                                 <div
                                     class="selecZone"
                                     @click="switch_choose_zone = true"
@@ -387,42 +385,6 @@
                                 </div>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            <el-form-item
-                                label="审核申请"
-                                label-width="100px"
-                                :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
-                            >
-                                <el-switch
-                                    v-model="from_pass.obj.status"
-
-                                    style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                    active-text="通过"
-                                    inactive-text="失败"
-                                    :active-value="10"
-                                    :inactive-value="0"
-                                    class="switchStyle"
-                                    :disabled="total1>= 1 ? true: false"
-                                />
-                            </el-form-item>
-                        </el-col> -->
-                        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            <el-form-item
-                                label-width="100px"
-                                label="审核回执内容"
-                                :error="err_msg.obj&&err_msg.obj.reply?err_msg.obj.reply[0]:''"
-                            >
-                                <el-input
-                                    v-model="from_pass.obj.reply"
-                                    :autosize="{ minRows: 2, maxRows: 10 }"
-                                    type="textarea"
-                                    placeholder="审核回执内容"
-                                    :disabled="total1>=1 ? true: false"
-                                />
-                            </el-form-item>
-                        </el-col> -->
                     </el-row>
                 </el-form>
             </div>
@@ -436,66 +398,6 @@
                 </div>
             </template>
         </el-dialog>
-        <!-- 审核 -->
-        <!-- <el-dialog
-            v-model="switch_pass"
-            title="审核"
-            width="600px"
-        >
-            <el-form
-                ref="ruleFormRef"
-                :model="from_pass.obj"
-            >
-                <el-steps :active="gongshixiangqing.obj.status == opts_all.obj.status_all[1]?99:active_bzt" finish-status="success" :align-center="true" class="m-b-20">
-                    <el-step v-for="(item,i) in buzhoutiao.arr" :key="i" :title="item.name" />
-                </el-steps>
-                <div v-if="gongshixiangqing.obj.status == opts_all.obj.status_all[1]" class="pass">
-                    当前公示已审核完成
-                </div>
-                <el-row v-else :gutter="10">
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label="审核状态"
-                            label-width="100px"
-                            :error="err_msg.obj&&err_msg.obj.pass?err_msg.obj.pass[0]:''"
-                        >
-                            <el-switch
-                                v-model="from_pass.obj.status"
-
-                                style="
-
-    --el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949;"
-                                active-text="通过"
-                                inactive-text="失败"
-                                :active-value="20"
-                                :inactive-value="30"
-                                class="switchStyle"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item
-                            label-width="100px"
-                            label="审核回执内容"
-                            :error="err_msg.obj&&err_msg.obj.reply?err_msg.obj.reply[0]:''"
-                        >
-                            <el-input
-                                v-model="from_pass.obj.reply"
-                                :autosize="{ minRows: 3, maxRows: 10 }"
-                                type="textarea"
-                                placeholder="审核回执内容"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <template #footer>
-                <div class="footer">
-                    <el-button @click="switch_pass=false">取消</el-button>
-                    <el-button type="primary" @click="passToAuditFunc_1">确定</el-button>
-                </div>
-            </template>
-        </el-dialog> -->
         <!-- 选择公示区域 -->
         <el-dialog v-model="switch_choose_zone" title="选择公示区域">
             <el-scrollbar height="250px">
@@ -622,12 +524,10 @@ const refreshFunc = () => {
 }
 // 监听分页
 watch(page, () => {
-    // console.log(page)
     sessionStorage.setItem('currentPage', page.value)
     getTabListFunc()
 })
 onBeforeRouteLeave((to, from) => {
-    // console.log(to)
     if (to.meta.title == '详情') {
         return true
     } else {
@@ -653,7 +553,6 @@ const dialogExamineCloseFunc = () => {
     }
     delete from_examine.item.relid
     delete from_examine.item.taskid
-    // console.log(files_arr)
     if (files_arr.length <= 0) {
         if (str_title.value == '修改') {
             APIputEventArticle(from_examine.item.id, from_examine.item).then(res => {
@@ -676,7 +575,6 @@ const dialogExamineCloseFunc = () => {
         return false
     }
     getFilesKeys(files_arr, 'announce').then(files => {
-        // console.log(files)
         for (let i in files) {
             from_examine.item.affix[i].file = files[i]
         }
@@ -697,7 +595,6 @@ const dialogExamineCloseFunc = () => {
             })
         } else {
             APIpostEventArticle(from_examine.item).then(res => {
-                // console.log(res)
                 announce_id.value = res.id
                 refreshFunc()
                 //         announce_id.value = getNameFunc(res, from_examine.item.title)
@@ -731,10 +628,8 @@ const getTabListFunc = () => {
             params[key] = data_search.obj[key]
         }
     }
-    // console.log(data_search.obj)
     loading_tab.value = true
     APIgetEventArticleList(params).then(res => {
-        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -790,27 +685,22 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改'
     switch_examine.value = true
     APIgetEventArticleDetails(val.id).then(res => {
-        // console.log(res)
         // for (let key in res) {
         //     // if (key !== 'status') {
         //     from_examine.item[key] = val[key]
         //     // }
         // }
         delete res.status
-        // console.log(from_examine.item)
-        // console.log(res)
         from_examine.item = res
         switch_examine.value = true
         userGroupName.value = res.authorgroup?.name
         selectedZone_id.value = res.toval_name
     })
-
 }
 const switch_apply = ref(false)
 const announce_id_1 = ref('')
 const noExamineFunc = row => {
     switch_apply.value = true
-    // console.log(row)
     announce_id_1.value = row.id
     // from_pass.obj.reply = ''
     // active.value = 0
@@ -845,7 +735,6 @@ const next = () => {
         total1.value = 0
         active.value = 1
     } else if (active.value == 1) {
-        // console.log(str_title.value)
         if (str_title.value == '添加' || total1.value == 0) {
             passToAuditFunc()
         }
@@ -879,7 +768,6 @@ const examineListFunc = val => {
         group_id: val.groupid
     }
     APIgetListArchiveAudit(params).then(res => {
-        // console.log(res)
         Examine_id.value = res[0].id
         // switch_pass.value = true
     })
@@ -912,7 +800,6 @@ const passAudit = val => {
     // })
 }
 const passToAuditFunc_1 = () => {
-    // console.log(from_pass.obj)
     APIputArchiveAudit(Examine_id.value, from_pass.obj).then(res => {
         ElMessage.success('审核成功')
         switch_pass.value = false
@@ -926,7 +813,6 @@ const passToAuditFunc = () => {
     } else {
         from_pass.obj.tgt_id = announce_id.value
     }
-    // console.log(from_pass.obj)
     APIpostArchiveAudit(from_pass.obj).then(res => {
         // ElMessage.success('审核成功')
         if (announce_id_1.value) {
@@ -943,7 +829,6 @@ const dialogExamineCloseFunc_2 = () => {
 }
 // 监听文件变化的执行方法
 const fileChange = (val, i) => {
-    // console.log("val",val)
     // from_examine.item.affix[i].file = val.target.files[0].name
     from_examine.item.affix[i].file = val.target.files[0]
 }
@@ -968,7 +853,8 @@ const getChinaName = () => {
         }
     } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city'))) {
         params = {
-            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code,
+            w:3//获取code(获取本级信息及父级信息)
         }
     } else {
         params = {}
@@ -984,7 +870,6 @@ const getChinaName = () => {
     })
 }
 const checkFunc = val => {
-    // console.log(val)
     if (val.type == 'zone') {
         from_examine.item.toval = val.id
         data_search.obj.tovalcan = val.china_code
@@ -1010,7 +895,6 @@ const userData = reactive({
     arr: []
 })
 const checkNameFunc = val => {
-    // console.log(val)
     from_examine.item.groupid = val.id
     userGroupName.value = ''
     from_examine.item.groupcc = val.region_cc

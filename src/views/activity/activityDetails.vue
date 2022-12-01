@@ -698,7 +698,8 @@ const detail_set_area = () => {
     // 调用tree树形组件初始的请求
     let uid = localStorage.getItem('uid')
     let region_cc = JSON.parse(localStorage.getItem(uid + '_user_group')).region_cc
-    APIgetChinaRegion({p_code:region_cc}).then(res => {
+    APIgetChinaRegion({p_code:region_cc,w:3}).then(res => {
+        tree_item.value = []
         res.map((item,i) => {
             tree_item.value.push({
                 id:item.code,

@@ -415,13 +415,10 @@ const getFuncManageList = () => {
             params[key] = item
         }
     }
-    // console.log(params)
     APIgetInforManageList(params).then(res => {
-        // console.log(res)
         data_1.total = res.length
         nextTick(() => {
             data_1.list = res
-            // console.log(data_1.list[0].cate.name)
         })
 
     })
@@ -453,9 +450,7 @@ const clickFuncCategory = () => {
         getFilesKeys(files, 'folder').then(arr => {
             data_1.add_form.affix = file_key.concat(arr)
             if (data_1.add_title == '添加') {
-                // console.log(data_1.add_form.cate_id)
                 APIpostInforManage(data_1.add_form).then(res => {
-                    // console.log(res)
                     refreshFunc()
                     ElMessage.success('添加成功')
                     data_1.add_switch = false
@@ -465,7 +460,6 @@ const clickFuncCategory = () => {
             } else {
                 // data_1.add_form.setting = []
                 // data_1.add_form.thumb = ''
-                // console.log(data_1.add_form)
                 APIputInforManage(data_1.add_form.id, data_1.add_form).then(res => {
                     refreshFunc()
                     ElMessage.success('修改成功')
@@ -480,7 +474,6 @@ const clickFuncCategory = () => {
     data_1.add_form.affix = file_key
     if (data_1.add_title == '添加') {
         APIpostInforManage(data_1.add_form).then(res => {
-            // console.log(res)
             refreshFunc()
             ElMessage.success('添加成功')
             data_1.add_switch = false
@@ -489,7 +482,6 @@ const clickFuncCategory = () => {
         })
     } else {
         // data_1.add_form.thumb = ''
-        // console.log(data_1.add_form)
         APIputInforManage(data_1.add_form.id, data_1.add_form).then(res => {
             refreshFunc()
             ElMessage.success('修改成功')
@@ -517,10 +509,8 @@ let params = {
 }
 const getCategoryList = () => {
     APIgetInforCategoryList(params).then(res => {
-        // console.log(res)
         data_tab.arr = res
     // NewArr.arr = data_tab.arr.map(item => { return Object.assign({}, { 'id': item.id, 'name': item.name }) })
-    // console.log(NewArr.arr)
     })
 }
 const props = { multiple: false, emitPath: false, checkStrictly: true, value: 'id', label: 'name' }
@@ -617,7 +607,6 @@ const clickFuncModify = row => {
     getZoneListFunc()
     getCategoryList()
     data_1.add_title = '修改'
-    // console.log(row)
     APIgetInforManageDetails(row.id).then(res => {
         data_1.add_form = res
         let arr = []
@@ -644,7 +633,6 @@ const clickFuncDetails = val => {
         data_1.details_data = res
         data_1.details_switch = true
         AudioContext.value = data_1.details_data.content.replace(/<[^>]+>|&[^>]+;/g, '').trim()
-        // console.log(AudioContext.value)
     })
 }
 // 删除
@@ -656,7 +644,6 @@ const clickFuncDelete = id => {
 }
 // switch 状态改变事件
 const SwitchFunc = row => {
-    // console.log(row)
     data_1.add_form = row
     APIputInforManage(data_1.add_form.id, data_1.add_form)
 }
