@@ -205,6 +205,17 @@
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
                             <el-form-item
+                                label="热线电话" prop="extra" label-width="80px"
+                                :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
+                            >
+                                <el-input
+                                    v-model="from_examine.item.extra"
+                                    placeholder=""
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+                            <el-form-item
                                 label="启用授权" prop="active" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.base_url?from_error.msg.base_url[0]:''"
                             >
@@ -260,6 +271,10 @@
                 <div class="item">
                     <div class="left">授权密钥</div>
                     <div class="right">{{ data_details.item.auth_sk }} </div>
+                </div>
+                <div class="item">
+                    <div class="left">热线电话</div>
+                    <div class="right">{{ data_details.item.extra }} </div>
                 </div>
                 <div class="item">
                     <div class="left">启用授权</div>
@@ -333,33 +348,8 @@ let per_page = ref(5)
 let page = ref(1)
 // 添加，修改
 let switch_examine = ref(false)
-// let from_examine = reactive({
-//     item: {
-//         'building_id': '17',
-//         'addr': '浙江省 杭州市 江干区',
-//         'cnt_floor': 21,
-//         'cnt_house': 15,
-//         'time_build_end': '1980-04-26',
-//         'name': '不片原济须',
-//         'remark': '速',
-//         'addition': {
-//             'desc': '例火科准知根天且上了那他不。七社政于知克始术志线二计规在如。全认圆金值速权当二五且解平土办。话划西总确起该极叫可美原间不然生发四。'
-//         }
-//     }
-// })
 let from_examine = reactive({
-    item: {
-        'active': 1,
-        'auth_sk': 'secret',
-        'china_code': '50',
-        'created_at': '2022-06-28T04:10:27.000000Z',
-        'time_build_end': '1980-04-26',
-        'id': '1',
-        'ip': '192.168.110.37',
-        'name': '重庆',
-        'rpc_port': 30032,
-        'updated_at': '2022-07-09T01:39:09.000000Z'
-    }
+    item: {}
 })
 
 const str_title = ref('添加')
@@ -381,6 +371,9 @@ const detailsFunc = val => {
     data_dialog.obj = val
     APIgetCityDetails(val.id).then(res => {
         data_details.item = res
+        if(res.extra) {
+            data_details.item.extra = res.extra.hotline
+        }
         switch_details.value = true
     })
 }
@@ -389,7 +382,6 @@ const switchRecordFun = (status, val) => {
     let params = {}
     for (let key in val) {
         if (val[key] !== null) {
-            console.log(key)
             params[key] = val[key]
         }
     }
@@ -403,11 +395,8 @@ const switchFunk = row => {
     //     showClose: true,
     //     message: `已${status}此接口状态`
     // })
-    console.log(row)
     from_examine.item.active = row
-    console.log(from_examine.item.active)
     // APIputCity(from_examine.item.id, from_examine.item).then(res => {
-    //                 // console.log(res)
     //                 if (res.status === 200) {
     //                     ElMessage.success(res.statusText)
     //                     switch_examine.value = false
@@ -416,7 +405,6 @@ const switchFunk = row => {
     //                 from_error.msg = err.data
     //             })
     // APIputCity(row.id, row).then(res => {
-    //     // console.log(res)
     //     if (res.status === 200) {
     //         refreshFunc()
     //     }
@@ -433,11 +421,14 @@ const dialogExamineCloseFunc = formEl => {
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
+        let json = {
+            'hotline':from_examine.item.extra
+        }
+        from_examine.item.extra = json
         if (valid) {
             if (str_title.value == '修改') {
                 switchFunk(from_examine.item.active)
                 APIputCity(from_examine.item.id, from_examine.item).then(res => {
-                    // console.log(res)
                     refreshFunc()
                     ElMessage.success('修改成功')
                     switch_examine.value = false
@@ -446,9 +437,7 @@ const dialogExamineCloseFunc = formEl => {
                 })
             } else {
                 switchFunk(from_examine.item.active)
-                console.log(from_examine.item)
                 APIpostCity(from_examine.item).then(res => {
-                    // console.log(from_examine.item)
                     refreshFunc()
                     ElMessage.success('添加成功')
                     switch_examine.value = false
@@ -477,7 +466,6 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetCityList(params).then(res => {
-        // console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -513,22 +501,9 @@ const modifyResidentialFunc = val => {
     from_error.msg = {}
     str_title.value = '修改'
     APIgetCityDetails(val.id).then(res => {
-        console.log(res)
         from_examine.item = res
-        console.log(from_examine.item.addition)
-        if (!from_examine.item.addition) {
-            from_examine.item.addition = {
-                created_at:
-                    '2022-07-21 15:36:37',
-                desc:
-                    '闺女的风格',
-                extra:
-                    { geo: { lat: 57, lon: 79 }, convenience: [{ phone: '19862282424', title: '部分' }] },
-                id:
-                    '62d90205615d750a917fe688',
-                updated_at:
-                    '2022-09-17 16:42:30'
-            }
+        if(res.extra) {
+            from_examine.item.extra = res.extra.hotline
         }
         switch_examine.value = true
     })
