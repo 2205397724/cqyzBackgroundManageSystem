@@ -1,7 +1,7 @@
 <template>
     <div>
         <page-main class="hidden">
-            <div class="m-b-20" v-if="user_group.type == 8">
+            <div class="m-b-20" v-if="(user_group.type == 3)">
                 <router-link
                     class="el-button el-button--primary p-tb-20 p-lr-30 size-base"
                     :to="{name: 'addShare'}"
