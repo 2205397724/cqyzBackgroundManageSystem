@@ -17,102 +17,106 @@
                     <span class="el-tag" type="danger" v-if="details.obj.status == 41">公众主动放弃共享</span>
                 </div>
                 <el-row :gutter="20">
-                    <el-col :sm="24" :md="12" :lg="12">
-                        <div class="p-tb-10 size-base font-grey">
-                            申请人信息
+                    <el-col :sm="24">
+                        <div class="p-tb-10 size-base font-grey flex-row" style="align-items: center;">
+                            <div class="m-r-20">
+                                申请人信息
+                            </div>
+                            <el-button type="primary" @click="modifyShareRecord">修改相关信息</el-button>
                         </div>
                         <table class="table" border="1" v-if="details.obj.uinfo">
                             <tr>
-                                <td>申请人：</td>
-                                <td>{{ details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username }}</td>
+                                <td style="width: 120px;">申请人：</td>
+                                <td style="width: 50%;">{{ details.obj.uinfo.name || details.obj.uinfo.nickname || details.obj.uinfo.username }}</td>
+                                <td>身份证件</td>
                             </tr>
                             <tr>
-                                <td>联系方式：</td>
+                                <td style="width: 120px;">联系方式：</td>
                                 <td>{{ details.obj.uinfo.mobile }}</td>
+                                <td rowspan="3">
+                                    <div class="flex-row">
+                                        <div class="p-10" v-for="picture in details.obj.uinfo.card.sfz" :key="picture">
+                                            <el-image :preview-src-list="details.obj.uinfo.card.sfz" :src="picture" lazy style="width: 100px;"></el-image>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
-                                <td>证件号码：</td>
+                                <td style="width: 120px;">证件号码：</td>
                                 <td>{{ details.obj.uinfo.id_card || '' }}</td>
                             </tr>
                             <tr>
-                                <td>申请时间：</td>
+                                <td style="width: 120px;">申请时间：</td>
                                 <td>{{ details.obj.created_at }}</td>
                             </tr>
                         </table>
                     </el-col>
-                    <el-col :sm="24" :md="12" :lg="12">
+                    <el-col :sm="24">
                         <div class="p-tb-10 size-base font-grey">
                             房屋信息
                         </div>
                         <table class="table" border="1" v-if="details.obj.uinfo.house">
                             <tr>
-                                <td>房屋坐落：</td>
-                                <td>{{ details.obj.uinfo.house.house_addr }}</td>
+                                <td style="width: 120px;">房屋坐落：</td>
+                                <td style="width: 50%;">{{ details.obj.uinfo.house.house_addr }}</td>
+                                <td>不动产权证</td>
                             </tr>
                             <tr>
-                                <td>不动产登记号：</td>
+                                <td style="width: 120px;">不动产登记号：</td>
                                 <td>{{ details.obj.uinfo.house.bdc_sno || '' }}</td>
+                                <td rowspan="3">
+                                    <div class="flex-row">
+                                        <div class="p-10" v-for="picture in details.obj.uinfo.card.bdc" :key="picture">
+                                            <el-image :preview-src-list="details.obj.uinfo.card.bdc" :src="picture" lazy style="width: 100px;"></el-image>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
-                                <td>不动产单元号：</td>
+                                <td style="width: 120px;">不动产单元号：</td>
                                 <td>{{ details.obj.uinfo.house.bdc_uno || '' }}</td>
                             </tr>
                             <tr>
-                                <td>业务编号：</td>
+                                <td style="width: 120px;">业务编号：</td>
                                 <td>{{ details.obj.sno || '' }}</td>
                             </tr>
                         </table>
                     </el-col>
                 </el-row>
-                <el-button type="primary" @click="modifyShareRecord">修改相关信息</el-button>
-                <div class="p-t-20 p-b-10 size-base font-grey">申请业务：</div>
-                <div class="el-tag m-r-10" v-for="item in details.obj.business" :key="item.id">
-                    <span class="size-base" v-if="item.sharebiz.group">{{ item.sharebiz.group.name }}：</span>
-                    <span class="size-base" v-if="item.sharebiz">{{ item.sharebiz.title }}</span>
-                </div>
-                <div class="p-t-20 p-b-10 size-base font-grey">
-                    业务材料：
-                    <el-button type="primary" @click="downLoadMaterials">下载业务材料</el-button>
+                <div class="p-tb-10 size-base font-grey flex-row" style="align-items: center;">
+                    <div class="m-r-20">
+                        申办业务：
+                    </div>
                     <el-button type="primary" @click="getDownloadRecordList">查看下载记录</el-button>
                 </div>
-                <table class="table m-b-10" border="1" v-for="item in details.obj.materials" :key="item.id">
-                    <tr v-if="item.sharefile.type === 1">
-                        <td style="width: 120px;">{{ item.sharefile.title }}</td>
-                        <td>{{ item.content }}</td>
-                    </tr>
-                    <tr v-if="item.sharefile.type === 2 || item.sharefile.type === 4">
-                        <td style="width: 120px;">{{ item.sharefile.title }}</td>
-                        <td>
-                            <div class="flex-row">
-                                <div class="p-10" v-for="picture in item.picture" :key="picture">
-                                    <el-image :preview-src-list="item.picture" :src="picture" lazy style="width: 100px;"></el-image>
-                                </div>
+                <div class="m-b-20" v-for="item in details.obj.business" :key="item.id">
+                    <div class="flex-row bg-color-grey p-20">
+                        <div class="m-r-30">
+                            <div class="size-base strong" v-if="item.sharebiz.group">{{ item.sharebiz.group.name }}</div>
+                            <div class="p-t-10">
+                                <span class="size-base">申办业务：</span>
+                                <span class="size-base" v-if="item.sharebiz">{{ item.sharebiz.title }}</span>
                             </div>
-                        </td>
-                    </tr>
-                </table>
-                <table class="table m-b-10" border="1">
-                    <tr>
-                        <td style="width: 120px;">身份证件</td>
-                        <td>
-                            <div class="flex-row">
-                                <div class="p-10" v-for="picture in details.obj.uinfo.card.sfz" :key="picture">
-                                    <el-image :preview-src-list="details.obj.uinfo.card.sfz" :src="picture" lazy style="width: 100px;"></el-image>
+                        </div>
+                        <el-button type="success" @click="downLoadMaterials(item.sharebiz.bizmaterials)">下载业务材料</el-button>
+                    </div>
+                    <table class="table" style="background: #fff;" v-for="materials in item.sharebiz.bizmaterials" :key="materials.id">
+                        <tr v-if="materials.filetype === 1">
+                            <td style="width: 120px;">{{ materials.cpt.sharefile.title }}</td>
+                            <td>{{ materials.filecontent }}</td>
+                        </tr>
+                        <tr v-if="materials.filetype === 2 || materials.filetype  === 4">
+                            <td style="width: 120px;">{{ materials.cpt.sharefile.title }}</td>
+                            <td>
+                                <div class="flex-row">
+                                    <div class="p-10" v-for="picture in materials.filecontent" :key="picture">
+                                        <el-image :preview-src-list="materials.filecontent" :src="picture" lazy style="width: 100px;"></el-image>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 120px;">不动产权证</td>
-                        <td>
-                            <div class="flex-row">
-                                <div class="p-10" v-for="picture in details.obj.uinfo.card.bdc" :key="picture">
-                                    <el-image :preview-src-list="details.obj.uinfo.card.bdc" :src="picture" lazy style="width: 100px;"></el-image>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </page-main>
         <el-dialog v-model="switch_message" title="修改相关信息">
@@ -171,11 +175,7 @@
             </template>
         </el-dialog>
         <el-dialog v-model="switch_download_record" title="下载记录">
-            <page-main>
-                <el-table
-                    :data="download_record.list"
-                    class="tab_1"
-                >
+                <el-table :data="download_record.list" class="tab_1">
                     <el-table-column label="头像" width="100">
                         <template #default="scope">
                             <el-image :src="VITE_APP_FOLDER_SRC+scope.row.stub.avatar" alt="" style="width: 50px; height: 50px;" />
@@ -187,9 +187,9 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="手机号" prop="stub.mobile"></el-table-column>
-                    <el-table-column label="身份证" width="200" prop="stub.id_card"></el-table-column>
                     <el-table-column label="用户组" prop="stub.group_name"></el-table-column>
-                    <el-table-column label="用户组职位" prop="stub.group_post"></el-table-column>
+                    <el-table-column label="职位描述" prop="stub.group_post"></el-table-column>
+                    <el-table-column label="下载时间" width="200" prop="created_at"></el-table-column>
                 </el-table>
                 <el-pagination
                     v-model:current-page="page"
@@ -202,7 +202,6 @@
                     next-text="下一页"
                     hide-on-single-page
                 />
-            </page-main>
             <template #footer>
                 <div class="footer">
                     <el-button type="danger" @click="switch_download_record=false">关闭</el-button>
@@ -246,16 +245,18 @@ let page = ref(1)
 // 获取共享记录详细
 const getShareDataDetail = ()=>{
     APIgetShareDataDetails(route.query.id).then(res => {
-        res.materials.map(share_detail=>{
-            if(share_detail.sharefile.type === 2 || share_detail.sharefile.type === 4) {
-                if(share_detail.content != "") {
-                    share_detail.picture = []
-                    share_detail.picture = share_detail.content.split(",")
-                    for(let i in share_detail.picture) {
-                        share_detail.picture[i] =(import.meta.env.VITE_APP_FOLDER_SRC + share_detail.picture[i])
+        res.business.map(bus=>{
+            bus.sharebiz?.bizmaterials?.map(files=>{
+                files.filetype = files.cpt.sharefile.type
+                if(files.cpt.sharefile.type==1){
+                    files.filecontent =files.cpt?.content
+                }else if(files.cpt.sharefile.type==2 || files.cpt.sharefile.type==4){
+                    files.filecontent = files.cpt.content.split(",")
+                    for(let i in files.filecontent) {
+                        files.filecontent[i] =(import.meta.env.VITE_APP_FOLDER_SRC + files.filecontent[i])
                     }
                 }
-            }
+            })
         })
         //组装身份证产权证
         res.uinfo.card.sfz.map((key,i)=>{
@@ -269,6 +270,7 @@ const getShareDataDetail = ()=>{
             }
         })
         details.obj = res
+        console.log(res)
     })
 }
 //修改相关业务
@@ -295,14 +297,14 @@ const dialogExamineCloseFunc = () => {
 }
 // 下载业务材料
 let urls = reactive([])
-const downLoadMaterials = ()=>{
+const downLoadMaterials = (mates)=>{
     // 遍历判断材料是否有图片
     urls = []
-    for(let i in details.obj.materials) {
-        if(details.obj.materials[i].picture) {
-            urls.push(...details.obj.materials[i].picture)
+    mates.map(item=>{
+        if(item.filetype ==2 || item.filetype==4){
+            urls.push(...item.filecontent)
         }
-    }
+    })
     details.obj.uinfo.card.sfz.map(key=>{
         urls.push(key)
     })

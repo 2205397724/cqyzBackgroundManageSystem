@@ -105,7 +105,7 @@
             />
         </page-main>
         <el-dialog v-model="data.switch_1" title="相关材料" width="60%">
-            <el-button type="primary" class="m-b-10" @click="downLoadMaterials">下载选中业务材料</el-button>
+            <!-- <el-button type="primary" class="m-b-10" @click="downLoadMaterials">下载选中业务材料</el-button> -->
             <el-scrollbar height="300px">
                 <el-table
                     :data="data.arr"
@@ -113,7 +113,7 @@
                     @selection-change="selectionChange"
                 >
                     <el-table-column type="selection" width="55" />
-                    <el-table-column prop="id" label="材料名称">
+                    <el-table-column prop="id" label="业务材料">
                         <template #default="scope">
                             <span>{{ scope.row.sharefile.title }} </span>
                         </template>
@@ -166,7 +166,7 @@
                 :data="data.list_uinfo"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
             >
-                <el-table-column prop="" label="材料名称">
+                <el-table-column prop="" label="共用材料">
                     <template #default="scope">
                         <span>{{scope.row.content}}</span>
                     </template>
