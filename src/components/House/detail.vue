@@ -416,38 +416,45 @@ const read_state = ref(true)
 const add_state = ref(false)
 // 显示产权信息
 const showPropertyFunc = () => {
-    APIgetHouseDetailsHouse(data_details.item.id).then(res => {
-        // 遍历附件加上图片服务器地址前缀
-        if (res.curr_property.affix) {
-            for (let i in res.curr_property.affix.bdcz) {
-                res.curr_property.affix.bdcz[i] = VITE_APP_FOLDER_SRC + res.curr_property.affix.bdcz[i]
-            }
-        }
-        res.curr_property.owners.map(item => {
-            if (item.affix) {
-                for (let i in item.affix.sfz) {
-                    item.affix.sfz[i] = VITE_APP_FOLDER_SRC + item.affix.sfz[i]
+    property_obj.obj = {}
+    property_form.obj = {}
+    copy_property.obj = {}
+    new Promise((resolve,reject)=>{
+        APIgetHouseDetailsHouse(data_details.item.id).then(res => {
+            if (res.curr_property) {
+                // 遍历附件加上图片服务器地址前缀
+                if(res.curr_property.affix) {
+                    for (let i in res.curr_property.affix.bdcz) {
+                        res.curr_property.affix.bdcz[i] = VITE_APP_FOLDER_SRC + res.curr_property.affix.bdcz[i]
+                    }
                 }
+                if(res.curr_property.owners.length>0) {
+                    res.curr_property.owners.map(item => {
+                        if (item.affix) {
+                            for (let i in item.affix.sfz) {
+                                item.affix.sfz[i] = VITE_APP_FOLDER_SRC + item.affix.sfz[i]
+                            }
+                        }
+                    })
+                }
+                property_obj.obj = res.curr_property
+                property_form.obj = res.curr_property
             }
+            resolve(property_obj.obj)
         })
-        property_obj.obj = res.curr_property
-        property_form.obj = res.curr_property
+    }).then(res => {
+        from_error_property.msg = {}
+        if (property_obj.obj.id) {
+            APIgetPropertyDetails(property_obj.obj.id).then(res => {
+                copy_property.obj = JSON.parse(JSON.stringify(res))
+            })
+        } else {
+            property_form.obj = { house_id: data_details.item.id }
+            copy_property.obj = { house_id: data_details.item.id }
+        }
+        read_state.value = true
+        switch_property.value = true
     })
-    from_error_property.msg = {}
-    // if (property_obj.obj.curr_property) {
-    //     APIgetPropertyDetails(property_obj.obj.curr_property.id).then(res => {
-
-    //         // console.log("res", res)
-
-    //         copy_property.obj = JSON.parse(JSON.stringify(res))
-
-    //     })
-    // } else {
-    //     property_form.obj = { house_id: property_obj.obj.id }
-    //     copy_property.obj = { house_id: property_obj.obj.id }
-    // }
-    read_state.value = true
-    switch_property.value = true
 }
 
 const house_id = ref('')
@@ -480,6 +487,7 @@ const getHouseNumbersFunc = () => {
 // 变更产权
 const modifyPropertyFunc = val => {
     if (val) {
+        // 添加变更产权
         from_error_property.msg = {}
         property_form.obj = {
             owners: [],
@@ -489,6 +497,7 @@ const modifyPropertyFunc = val => {
         read_state.value = false
         add_state.value = true
     } else {
+        // 修改产权
         from_error_property.msg = {}
         property_form.obj = JSON.parse(JSON.stringify(copy_property.obj))
         read_state.value = false
@@ -529,7 +538,6 @@ const postPropertyFunc = () => {
             // affix为null
             property_form.obj.affix = { bdcz: [] }
             property_form.obj.affix.bdcz = arr
-            // console.log("aaaa",files,arr)
         })
     }
     // 遍历处理不同产权人的身份证附件信息
@@ -613,7 +621,6 @@ const number_ids = reactive({
     arr: []
 })
 const handleSelectionChange = val => {
-    // console.log("val", val)
     let number_id = []
     val.forEach(function (value, index, array) {
         number_id.push(value.id)
