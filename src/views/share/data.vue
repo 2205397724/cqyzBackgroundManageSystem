@@ -1,7 +1,7 @@
 <template>
     <div>
         <page-main class="hidden">
-            <div class="m-b-20">
+            <div class="m-b-20" v-if="user_group.type == 8">
                 <router-link
                     class="el-button el-button--primary p-tb-20 p-lr-30 size-base"
                     :to="{name: 'addShare'}"
@@ -317,7 +317,7 @@ const StatusFunk = val => {
     flag1.value = false
     flag2.value = false
 }
-
+const user_group = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))
 let urls = reactive([])
 
 const details = reactive({
@@ -333,9 +333,9 @@ const getShareDataList = () => {
         delete params.status_many
     }
     // 判断是否为水电气公司，如果是传入对应用户组id
-    let user_group = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))
+
     // console.log(user_group)
-    if(user_group.type === 8) {
+    if(user_group.type == 8) {
         params.gid = user_group.id
     }
     loading_tab.value = true

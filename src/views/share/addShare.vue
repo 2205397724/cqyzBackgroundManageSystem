@@ -103,25 +103,24 @@
                         <el-checkbox v-for="item in share_kind.list" :key="item.id" :label="item.id">{{item.title}}</el-checkbox>
                     </el-checkbox-group>
                 </div>
-                <div class="bg-color-grey p-10">业务详情</div>
-                <div class="m-10">
-                    <block v-for="(item,i) in share_kind.list" :key="item.id">
+                <div v-for="(item,i) in share_kind.list" :key="item.id" class="m-tb-20" >
+                    <div class="m-tb-10">
                         <div v-if="checked_kind.list.indexOf(item.id) > -1">
                             <el-row :gutter="20">
-                                <el-col :span="16">
-                                    <el-form-item label-width="120px" label="业务受理单位">
-                                        <el-select @change="groupOptChange(i,$event)" v-model="checked_group[i]" placeholder="受理单位" clearable>
+                                <el-col>
+                                    <el-form-item label-width="120px" label="业务受理单位" class="bg-color-grey p-10 ">
+                                        <el-select @change="groupOptChange(i,$event)" style="width: 300px;" v-model="checked_group[i]" placeholder="受理单位" clearable>
                                             <el-option v-for="group in share_kind_group[i]" :key="group.id" :label="group.name" :value="group.id" />
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label-width="120px" label="办理业务">
-                                        <el-select @change="bizOptChange(i,$event)" v-model="checked_biz[i]" placeholder="业务内容" clearable>
+                                        <el-select @change="bizOptChange(i,$event)" style="width: 300px;" v-model="checked_biz[i]" placeholder="业务内容" clearable>
                                             <el-option v-for="biz in checked_group_biz[i]" :key="biz.id" :label="biz.title" :value="biz.id" />
                                         </el-select>
                                     </el-form-item>
                                     <block v-for="materials in material_list[i]" :key="materials.id">
                                         <el-form-item label-width="120px" :label="materials.title" v-if="materials.type === 1">
-                                            <el-input  v-model="input_content[i]" @blur="inputFunc($event,materials.id)" :placeholder="'请输入'+materials.title"/>
+                                            <el-input  v-model="input_content[i]" style="width: 300px;" @blur="inputFunc($event,materials.id)" :placeholder="'请输入'+materials.title"/>
                                         </el-form-item>
                                         <el-form-item label-width="120px" :label="materials.title" v-else-if="materials.type === 2" >
                                             <el-upload ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list[i]"
@@ -133,14 +132,17 @@
                                                 :on-remove="(file, files) => {
                                                     file_list[i] = files
                                                     file_list_fid[i] = materials.id
-                                                }"></el-upload>
+                                                }">
+                                                <el-icon><Plus/></el-icon>
+                                            </el-upload>
                                         </el-form-item>
                                     </block>
                                 </el-col>
                             </el-row>
                         </div>
-                    </block>
+                    </div>
                 </div>
+
                 <div class="p-20">
                     <el-button type="primary" @click="postShareRecord">提交</el-button>
                 </div>
@@ -181,6 +183,16 @@ const dialogVisible = ref(false)
 
 const file_list = ref([])
 const file_list_fid = ref([])
+let date = Date.now() + 3600 * 1000 * 24 * 7;
+const timestampToTime = (timestamp)=>{
+    var date = new Date(timestamp);
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    var D = date.getDate();
+    D = D<10 ? '0'+D : D
+    return Y+M+D;
+}
+console.log(timestampToTime(date))
 const shareRecord_form = reactive({
     obj:{
         name:'',
@@ -193,7 +205,7 @@ const shareRecord_form = reactive({
         house_addr:'',
         bdc_sno:'',
         bdc_uno:'',
-        end_at: Date.now() + 3600 * 1000 * 24 * 7,
+        end_at : timestampToTime(date) ,//,
         bids:[],
         material:[],
     }
