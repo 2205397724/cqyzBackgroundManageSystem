@@ -270,7 +270,6 @@ const getShareDataDetail = ()=>{
             }
         })
         details.obj = res
-        console.log(res)
     })
 }
 //修改相关业务
