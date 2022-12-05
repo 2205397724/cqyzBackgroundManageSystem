@@ -769,12 +769,6 @@ const changePane = (tab, event) => {
         // 问卷题目
         topicsFunc()
     } else if (tab.props.name == 4) {
-        // 未参与房屋
-        notParticipate()
-        // 问卷调查结果
-        answerListFunc()
-        topicsFunc()
-
     } else if (tab.props.name == 7) {
         // 审核记录
         getListArchiveFunc()
@@ -1083,50 +1077,7 @@ let participate = reactive({
     off_line: 0,
     notParticipateLength: 0
 })
-// 获取问卷结果列表
-let answer_list = reactive([])
-let answer_list_on = reactive([])
-let answer_list_off = reactive([])
-const answerListFunc = () => {
-    let params = {
-        page: 1,
-        per_page: 15
-    }
-    APIgetSurveyAnswerList(route.query.id, params).then(res => {
-        // answer_list = res[0]
-        // 清空答卷列表（线上、线下、总列表）
-        answer_list.length = 0
-        answer_list_on.length = 0
-        answer_list_off.length = 0
-        // 线上线下参与数量
-        participate.on_line = 0
-        participate.off_line = 0
-        res.forEach(element => {
-            if (element.source === 1) {
-                participate.on_line++
-                answer_list_on.push(element)
-            } else {
-                participate.off_line++
-                answer_list_off.push(element)
-            }
-        })
-        answer_list.push(...answer_list_on, ...answer_list_off)
-    //
-    })
-}
-// 切换标签，显示不同参与情况的列表
-const handleClick = tab => {
-    if (tab === '线上参与') {
-        answer_list.length = 0
-        answer_list.push(...answer_list_on)
-    } else if (tab === '线下参与') {
-        answer_list.length = 0
-        answer_list.push(...answer_list_off)
-    } else if (tab === '全部') {
-        answer_list.length = 0
-        answer_list.push(...answer_list_on, ...answer_list_off)
-    }
-}
+
 // 打开对话框添加书面票
 const addAnswer = () => {
     switch_addAnswer.value = true

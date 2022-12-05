@@ -9,10 +9,8 @@
                 添加书面票
             </el-button>
             <el-radio-group v-model="radio" size="large" @change="handleClick">
-                <el-radio-button label="全部">全部</el-radio-button>
                 <el-radio-button label="线上参与">线上参与({{ participate.on_line }})</el-radio-button>
                 <el-radio-button label="线下参与">线下参与({{ participate.off_line }})</el-radio-button>
-                <!-- <el-radio-button label="未参与">未参与的房屋({{ participate.notParticipateLength }})</el-radio-button> -->
                 <el-radio-button label="未参与">未参与的房屋</el-radio-button>
             </el-radio-group>
         </div>
@@ -20,13 +18,8 @@
         <div v-if="radio == '未参与'">
             <el-table v-if="radio == '未参与'" :data="notParticipateList" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
                 <el-table-column prop="name" label="房屋" />
-                <el-table-column prop="addr" label="地址" />
-                <el-table-column prop="houseable_type" label="类型">
-                    <template #default="scope">
-                        <span v-if="scope.row.houseable_type == 'buildings'">楼栋</span>
-                        <span v-if="scope.row.houseable_type == 'units'">单元</span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="addr" label="坐落" />
+                <el-table-column prop="area_build" label="建筑面积" />
                 <el-table-column prop="updated_at" label="更新时间" />
             </el-table>
             <el-pagination
@@ -47,7 +40,7 @@
                         <span v-else>业主端</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="答题人">
+                <el-table-column label="参与人">
                     <template #default="scope">
                         <span>{{ scope.row.uinfo?.name || scope.row.uinfo?.nickname || scope.row.uinfo?.username }}</span>
                     </template>
@@ -57,16 +50,16 @@
                         <span>{{ scope.row.uinfo?. mobile }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="身份证号" width="190px">
+                <!-- <el-table-column label="身份证号" width="190px">
                     <template #default="scope">
                         <span>{{ scope.row.idcard }}</span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="updated_at" label="参与时间" width="180px" />
                 <el-table-column label="参与途径">
                     <template #default="scope">
-                        <span v-if="scope.row.source === 1">线上参与</span>
-                        <span v-else-if="scope.row.source === 2">线下参与</span>
+                        <span v-if="scope.row.source === 1">线上</span>
+                        <span v-else-if="scope.row.source === 2">线下</span>
                         <!-- <span v-else>未设置</span> -->
                         <span v-else>未参与</span>
                     </template>
@@ -87,6 +80,11 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination
+                v-model:current-page="page" style="float: right;"
+                layout="prev,next,jumper," :total="Infinity" :page-size="per_page" background
+                prev-text="上一页" next-text="下一页" hide-on-single-page
+            />
         </div>
         <!-- 添加书面票 -->
         <el-dialog v-model="switch_addAnswer" title="添加书面票">
@@ -365,13 +363,76 @@ import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
-onMounted(() => {
+let answer_list = reactive([])// 参与列表
+let notParticipateList = reactive([])//未参与的房屋列表
+let source = ref(1)//参与方式 默认线上参与
+const page = ref(1)
+const per_page = ref(15)
+// 切换标签，显示不同参与情况的列表
+const handleClick = tab => {
+    if (tab === '线上参与') {
+        source.value =1
+        answerListFunc()
+    } else if (tab === '线下参与') {
+        source.value =2
+        answerListFunc()
+    }else if(tab =='未参与'){
+        notParticipate()
+    }
+}
 
-    // 未参与房屋
-    notParticipate()
+// 获取参与列表
+const answerListFunc = () => {
+    let params = {
+        page: 1,
+        per_page: 15,
+        source:source.value
+    }
+    APIgetSurveyAnswerList(props.id, params).then(res => {
+        answer_list = res
+        // 线上线下参与数量
+        participate.on_line = 0
+        participate.off_line = 0
+        res.forEach(element => {
+            if (element.source === 1) {
+                participate.on_line++
+                answer_list_on.push(element)
+            } else {
+                participate.off_line++
+                answer_list_off.push(element)
+            }
+        })
+    })
+}
+// 获取未参与的房屋列表
+const notParticipate = () => {
+    notParticipateList.length = 0
+    let params = {
+        page: page.value,
+        per_page: per_page.value
+    }
+    APIgetNotParticipate(props.id, params).then(res => {
+        //
+        participate.notParticipateLength = res.length
+        res.forEach(element => {
+            notParticipateList.push(element)
+        })
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < per_page.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
+        //
+    })
+}
+onMounted(() => {
     // 问卷调查结果
     answerListFunc()
-    topicsFunc()
 })
 // 问卷题目
 const topic_details = reactive({
@@ -423,52 +484,10 @@ const showTopic = (tid, optid, answertopics) => {
     })
     return isShow
 }
-// 切换标签，显示不同参与情况的列表
-const handleClick = tab => {
-    if (tab === '线上参与') {
-        answer_list.length = 0
-        answer_list.push(...answer_list_on)
-    } else if (tab === '线下参与') {
-        answer_list.length = 0
-        answer_list.push(...answer_list_off)
-    } else if (tab === '全部') {
-        answer_list.length = 0
-        answer_list.push(...answer_list_on, ...answer_list_off)
-    }
-}
-// 获取问卷结果列表
-let answer_list = reactive([])
+
 let answer_list_on = reactive([])
 let answer_list_off = reactive([])
-const answerListFunc = () => {
-    let params = {
-        page: 1,
-        per_page: 15
-    }
-    APIgetSurveyAnswerList(props.id, params).then(res => {
-        //
-        // answer_list = res[0]
-        // 清空答卷列表（线上、线下、总列表）
-        answer_list.length = 0
-        answer_list_on.length = 0
-        answer_list_off.length = 0
-        // 线上线下参与数量
-        participate.on_line = 0
-        participate.off_line = 0
-        res.forEach(element => {
-            if (element.source === 1) {
-                participate.on_line++
-                answer_list_on.push(element)
-            } else {
-                participate.off_line++
-                answer_list_off.push(element)
-            }
-        })
-        answer_list.push(...answer_list_on, ...answer_list_off)
-        //
-    })
 
-}
 // 获取问卷结果详情
 let answer_detail = reactive({
     item: ''
@@ -513,7 +532,7 @@ const answer_house = reactive({
 const getAnsweredHouse = () => {
     let params = {
         page:1,
-        per_page:50
+        per_page:150
     }
     APIgetSurveyAnswerHouse(active_answer_id.value,params).then(res=>{
         answer_house.arr = res.items
@@ -585,36 +604,7 @@ const addAnswer = () => {
 
     //
 }
-const page = ref(1)
-const per_page = ref(15)
-// 获取未参与答卷的房屋作为未参与用户的数量
-let notParticipateLength = 0
-let notParticipateList = reactive([])
-const notParticipate = () => {
-    notParticipateList.length = 0
-    let params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    APIgetNotParticipate(props.id, params).then(res => {
-        //
-        participate.notParticipateLength = res.length
-        res.forEach(element => {
-            notParticipateList.push(element)
-        })
-        let btnNext = document.querySelector('.btn-next')
-        if (res.length < per_page.value) {
-            btnNext.classList.add('not_allowed')
-            btnNext.setAttribute('disabled', true)
-            btnNext.setAttribute('aria-disabled', true)
-        } else {
-            btnNext.classList.remove('not_allowed')
-            btnNext.removeAttribute('disabled')
-            btnNext.setAttribute('aria-disabled', false)
-        }
-        //
-    })
-}
+
 watch(page, () => {
     //
     // data1FnGetList()
