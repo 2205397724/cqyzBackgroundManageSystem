@@ -15,7 +15,7 @@
                             </el-col>
                             <el-col :sm="20" :xs="18" :md="18">
                                 <el-input
-                                    v-model="data_search.obj.name" class="search_tb" placeholder="设备名称"
+                                    v-model="data_search.obj.name" class="search_tb" placeholder="业委会名称"
                                     clearable
                                 />
                             </el-col>

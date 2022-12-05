@@ -125,7 +125,7 @@
                             <div v-if="!add_state && read_state">
                                 <div v-if="property_form.obj.affix">
                                     <el-image v-for="item in property_form.obj.affix.bdcz" :key="item"
-                                        :preview-src-list="property_form.obj.affix.bdcz" class="image" :src="item" lazy>
+                                        :preview-src-list="property_form.obj.affix.bdcz" class="image" :src="item">
                                     </el-image>
                                 </div>
                             </div>
@@ -188,7 +188,7 @@
                                             <div v-if="item.affix">
                                                 <el-image v-for="picture in item.affix.sfz" :key="picture"
                                                     :preview-src-list="item.affix.sfz" class="image" :src="picture"
-                                                    lazy></el-image>
+                                                    ></el-image>
                                             </div>
                                         </div>
                                         <div v-else>

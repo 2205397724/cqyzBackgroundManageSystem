@@ -24,7 +24,8 @@ const getChinaRegionunc = () => {
         }
     } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))) {
         params = {
-            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc,
+            w:3
         }
     } else {
         params = {}

@@ -41,7 +41,7 @@
                             <div class="m-tb-10">身份证件</div>
                             <div class="flex-row">
                                 <div>
-                                    <el-upload ref="uploadRefSfz" class="idcardBox" action="***" list-type="picture-card" limit="1"
+                                    <el-upload ref="uploadRef" class="idcardBox" action="***" list-type="picture-card" limit="1"
                                         :auto-upload="false"
                                         :file-list="idCardFiles"
                                         :class="{hideclass:hideFaceIcon}"
@@ -78,7 +78,7 @@
                         </el-col>
                         <el-col :span="12">
                             <div class="m-tb-10">不动产权证</div>
-                            <el-upload ref="uploadRefBdc" action="***" list-type="picture-card"
+                            <el-upload ref="uploadRef" action="***" list-type="picture-card"
                                 :auto-upload="false"
                                 :file-list="bdcFiles"
                                 :on-preview="handlePictureCardPreview"
@@ -123,15 +123,15 @@
                                             <el-input  v-model="input_content[i]" style="width: 300px;" @blur="inputFunc($event,materials.id)" :placeholder="'请输入'+materials.title"/>
                                         </el-form-item>
                                         <el-form-item label-width="120px" :label="materials.title" v-else-if="materials.type === 2" >
-                                            <el-upload ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list[i]"
+                                            <el-upload ref="uploadRef" action="***" :auto-upload="false" :file-list="file_list[materials.id]"
                                                 list-type="picture-card"
                                                 :on-change="(file, files) => {
-                                                    file_list[i] = files
-                                                    file_list_fid[i] = materials.id
+                                                    file_list[materials.id] = files
+                                                    file_list_fid[materials.id] = materials.id
                                                 }"
                                                 :on-remove="(file, files) => {
-                                                    file_list[i] = files
-                                                    file_list_fid[i] = materials.id
+                                                    file_list[materials.id] = files
+                                                    file_list_fid[materials.id] = materials.id
                                                 }">
                                                 <el-icon><Plus/></el-icon>
                                             </el-upload>
@@ -192,7 +192,7 @@ const timestampToTime = (timestamp)=>{
     D = D<10 ? '0'+D : D
     return Y+M+D;
 }
-console.log(timestampToTime(date))
+// console.log(timestampToTime(date))
 const shareRecord_form = reactive({
     obj:{
         name:'',
@@ -262,7 +262,7 @@ const ocrIdCardFiles = (files,side)=>{
     files.forEach(item=>{
         fileraw.push(item.raw)
     })
-    // uploadFile(fileraw,side)
+    uploadFile(fileraw,side)
 }
 //删除身份证照片
 const delIdCardFiles=(files,side)=>{
@@ -315,7 +315,7 @@ const uploadFile = (files,fside)=>{
                         getOrcResult(orc.id).then(orcre =>{
                             i++
                            if(i>4 || orcre.status === 20) clearInterval(timeout)
-                            console.log(orcre)
+                            // console.log(orcre)
                             identity_message.value[0] = orcre
                             switch_sfz_notification.value = true
                         }).catch(err=>{
@@ -337,7 +337,7 @@ const uploadFile = (files,fside)=>{
                         getOrcResult(orc.id).then(orcre =>{
                             i++
                             if(i>4 || orcre.status === 20) clearInterval(timeout)
-                            console.log(orcre)
+                            // console.log(orcre)
                             identity_message.value[1] = orcre
                             switch_bdc_notification.value = true
                         }).catch(err=>{
@@ -427,13 +427,17 @@ const groupOptChange = (index,val) => {
         }
     }
 }
-// 选中对于业务的事件，遍历出需要的业务材料
+// 选中对应业务的事件，遍历出需要的业务材料
 const material_list = reactive([])
+const all_fid_material = reactive({})//公共存储需要的材料（要件id、要件内容）
 const bizOptChange = (index,val) => {
     shareRecord_form.obj.bids[index] = val//插入相应的业务id
     for(let arr of checked_group_biz[index]) {
         if(val === arr.id) {
             material_list[index] = arr.bizmaterials.map((item) => {
+                if(!all_fid_material.hasOwnProperty(item.sharefile.id)) {
+                    all_fid_material[item.sharefile.id] = ''
+                }
                 return {
                     id:item.sharefile.id,
                     title:item.sharefile.title,
@@ -446,49 +450,52 @@ const bizOptChange = (index,val) => {
 }
 // 文本输入框失去焦点事件
 const inputFunc = (e,id) => {
-    let hasFid = shareRecord_form.obj.material.filter( mat => mat.fid == id)
-    if(hasFid.length>0){
-        let fkey = shareRecord_form.obj.material.findIndex( mat => mat.fid == id)
-        shareRecord_form.obj.material.splice(fkey,1)
+    for(let i in all_fid_material) {
+        if(i===id) {
+            all_fid_material[id] = e.target.value
+            return
+        }
     }
-    shareRecord_form.obj.material.push({
-        fid:id,
-        content:e.target.value
-    })
 }
 // 同意拒绝提交
 const postShareRecord = () => {
     new Promise((resolve,reject) => {
         let file = []
-        let file_key = []
+        // let file_key = []
+        let file_fid = []
         for(let i in file_list.value) {
+            file_fid.push(i)
             if(file_list.value[i].length > 0) {
                 for(let j in file_list.value[i]) {
                     if(!file_list.value[i][j].raw) {
-                        file_key.push(file_list.value[i][j].name)
+                        // file_key.push(file_list.value[i][j].name)
                     } else {
                         file.push(file_list.value[i][j].raw)
                     }
                 }
-
             }
         }
         if(file.length > 0) {
             getFilesKeys(file, 'water').then(arr => {
                 arr.map((item,i) => {
-                    console.log(item,file_list_fid.value[i],i)
-                    shareRecord_form.obj.material.push({
-                        fid:file_list_fid.value[i],
-                        content:item
-                    })
+                    all_fid_material[file_fid[i]] = item
                 })
             })
         }
+        setTimeout(()=>{
+            shareRecord_form.obj.material = []
+            for(let i in all_fid_material) {
+                if(all_fid_material[i]) {
+                    shareRecord_form.obj.material.push({
+                        fid:i,
+                        content:all_fid_material[i]
+                    })
+                }
+            }
         resolve(shareRecord_form.obj)
+        },200)
     }).then(res => {
-        console.log(shareRecord_form.obj)
         APIpostShareRecord(shareRecord_form.obj).then(res => {
-            console.log(shareRecord_form.obj)
             ElMessage.success('提交成功')
             refreshFunc()
         })

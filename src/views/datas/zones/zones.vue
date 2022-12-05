@@ -639,7 +639,9 @@ const activeName = ref('1')
 const edit_house = ref(false)
 
 const active_obj = reactive({
-    obj: {}
+    obj: {
+        id:JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc//默认使用用户组的区域code拉取数据
+    }
 })
 // const treeDetail = reactive({
 //     arr: {}
@@ -735,7 +737,8 @@ const getChinaRegionunc = () => {
         }
     } else if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group'))) {
         params = {
-            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
+            p_code: JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc,
+            w:3
         }
     } else {
         params = {}
