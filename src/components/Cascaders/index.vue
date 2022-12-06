@@ -55,7 +55,7 @@ const cascader_props = {
             // 没数据时，获取用户选中的城市的代码开始拉取
             data.code = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         }
-        APIgetChinaRegion({ 'p_code': data.code }).then(res => {
+        APIgetChinaRegion({ 'p_code': data.code,'w':3 }).then(res => {
             // console.log("123456789",res,data.code)
             resolve(res)
         })
