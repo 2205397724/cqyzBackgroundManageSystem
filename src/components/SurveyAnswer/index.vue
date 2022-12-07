@@ -9,28 +9,28 @@
                 添加书面票
             </el-button>
             <el-radio-group v-model="radio" size="large" @change="handleClick">
-                <el-radio-button label="线上参与">线上参与({{ participate.on_line }})</el-radio-button>
-                <el-radio-button label="线下参与">线下参与({{ participate.off_line }})</el-radio-button>
-                <el-radio-button label="未参与">未参与的房屋</el-radio-button>
+                <el-radio-button label="线上参与">线上参与({{ status.online }}票)</el-radio-button>
+                <el-radio-button label="线下参与">线下参与({{ status.offline }}票)</el-radio-button>
+                <el-radio-button label="未参与">未参与的房屋({{ status.notParticipateHouse}}套)</el-radio-button>
             </el-radio-group>
         </div>
         <!-- 未参与情况 -->
         <div v-if="radio == '未参与'">
-            <el-table v-if="radio == '未参与'" :data="notParticipateList" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
+            <el-table v-if="radio == '未参与'" :data="notParticipateList.arr" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
                 <el-table-column prop="name" label="房屋" />
                 <el-table-column prop="addr" label="坐落" />
                 <el-table-column prop="area_build" label="建筑面积" />
                 <el-table-column prop="updated_at" label="更新时间" />
             </el-table>
             <el-pagination
-                v-model:current-page="page" style="float: right;"
-                layout="prev,next,jumper," :total="Infinity" :page-size="per_page" background
+                v-model:current-page="notParticipatePage" style="float: right;"
+                layout="prev,next,jumper," :total="Infinity" :page-size="notParticipatePerPage" background
                 prev-text="上一页" next-text="下一页" hide-on-single-page
             />
         </div>
         <!-- 参与情况 -->
         <div v-else>
-            <el-table :data="answer_list" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
+            <el-table :data="answer_list.arr" :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }" class="tab_1">
                 <el-table-column label="用户端类型">
                     <template #default="scope">
                         <span v-if="scope.row.uinfo?.auth_type === 'pt'">总平台端</span>
@@ -50,11 +50,6 @@
                         <span>{{ scope.row.uinfo?. mobile }}</span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="身份证号" width="190px">
-                    <template #default="scope">
-                        <span>{{ scope.row.idcard }}</span>
-                    </template>
-                </el-table-column> -->
                 <el-table-column prop="updated_at" label="参与时间" width="180px" />
                 <el-table-column label="参与途径">
                     <template #default="scope">
@@ -81,8 +76,8 @@
                 </el-table-column>
             </el-table>
             <el-pagination
-                v-model:current-page="page" style="float: right;"
-                layout="prev,next,jumper," :total="Infinity" :page-size="per_page" background
+                v-model:current-page="answerPage" style="float: right;"
+                layout="prev,next,jumper," :total="Infinity" :page-size="answerPerPage" background
                 prev-text="上一页" next-text="下一页" hide-on-single-page
             />
         </div>
@@ -258,57 +253,24 @@
                 </div>
 
                 <div style="width: 70%; display: inline-block;">
-                    <!-- <el-scrollbar height="600px">
-                    <el-radio-group v-model="radio1" class="ml-4">
-                        <div v-for="(item,i) in house_list.arr" :key="i" style="margin-left: 80px;">
-                            <div v-for="(row,j) in item.houses" :key="j" class="m-b-20">
-                                <template v-if="row.curr_property && row.curr_property.owners.length >0">
-                                    <div v-for="(val,index) in row.curr_property.owners" :key="index">
-                                        <el-radio :label="val.id">
-                                            <span>产权人：{{ val.name }} {{ val.id_card }} {{ val.mobile }}</span>
-                                        </el-radio>
-                                    </div>
-                                    <div> 房屋： {{ row.name }}</div>
-                                </template>
-                            </div>
-                        </div>
-                    </el-radio-group>
-                </el-scrollbar> -->
                     <div style="padding: 20px;box-sizing: border-box;background-color: #f0f2f5;height: 450px;">
-                        <div class="row-box row-box-title">
+                        <div class="row-box">
                             <div class="row-item-box row-item-tit-box">
-                                <div class="row-item row-item-tit row-item-tit-bgline">
-                                    <div class="tit-fh">楼层</div>
-                                    <div class="tit-lc">房号</div>
+                                <div class="row-item row-item-tit row-item-tit-ceng">
+                                    <div class="">楼层</div>
                                 </div>
                             </div>
-                            <el-scrollbar style="white-space: nowrap;">
-                                <div v-for="(item,i) in house_num.arr" :key="i" class="row-item-box ">
-                                    <div class="row-item">
-                                        <!-- <el-checkbox
-                                                        v-model="checkFH.row[item].val"
-                                                        @change="(val)=>{checkFH.row[item].val= val;rowClickFunc(item,val)}"
-                                                    /> -->
-                                        <div class="row-item-check">{{ item }}#</div>
-                                    </div>
-                                </div>
-                            </el-scrollbar>
                         </div>
                         <div style="height: calc(100% - 45px);overflow: auto;">
                             <div v-for="(child,i) in house_list.arr" :key="i" class="row-box">
                                 <div class="row-item-box row-item-tit-box">
                                     <div class="row-item row-item-tit row-item-tit-ceng">
-                                        <!-- <el-checkbox
-                                                        v-model="checkFH.col[child.floor_truth].val"
-                                                        @change="(val)=>{checkFH.col[child.floor_truth].val= val;colClickFunc(child.floor_truth,val)}"
-                                                    /> -->
                                         <div>{{ child.floor_truth }}层</div>
                                     </div>
                                 </div>
                                 <el-scrollbar style="white-space: nowrap;">
                                     <div style="display: flex;">
                                         <div v-for="(item,j) in child.houses" :key="j" :class="{item: true,bg: item.can_exist}">
-                                            <!-- <div v-for="(item,i) in house_list.arr" :key="i" class="row-item-box"> -->
                                             <div v-show="item.house_num?true:false" class="row-item" style="position: relative;">
                                                 <div class="row-item-check" @click="houseDetailsFunc(item)">{{ item.house_num }}#</div>
                                             </div>
@@ -357,17 +319,48 @@ import {
     APIgetSurveyRange,
     APIgetHouseListSort,
     // 获取答卷参与房屋
-    APIgetSurveyAnswerHouse
+    APIgetSurveyAnswerHouse,
+    // 统计结果
+    APIgetSurveyStatus,
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
 // 接收父组件传递过来的id
 const props = defineProps(['id'])
-let answer_list = reactive([])// 参与列表
-let notParticipateList = reactive([])//未参与的房屋列表
+let answer_list = reactive({arr:[]})// 参与列表
+let notParticipateList = reactive({arr:[]})//未参与的房屋列表
+// 问卷题目
+const topic_details = reactive({
+    item: [[], [], [], []]
+})
+const radio = ref('全部')// 标签切换
 let source = ref(1)//参与方式 默认线上参与
-const page = ref(1)
-const per_page = ref(15)
+// 参与情况
+let participate = reactive({
+    'on_line': 0,
+    'off_line': 0,
+    'notParticipateLength': 0
+})
+const notParticipatePage = ref(1)
+const notParticipatePerPage = ref(15)
+const answerPage = ref(1)
+const answerPerPage = ref(15)
+const status = reactive({})
+onMounted(() => {
+    // 参与列表
+    answerListFunc()
+    // 统计详细
+    getSurveyStatus()
+})
+
+watch([notParticipatePage,answerPage], (val,oldVal) => {
+    if(val[0] != oldVal[0]){
+        notParticipate()
+    }
+    if(val[1] != oldVal[1]){
+        answerListFunc()
+    }
+})
 // 切换标签，显示不同参与情况的列表
 const handleClick = tab => {
     if (tab === '线上参与') {
@@ -384,41 +377,14 @@ const handleClick = tab => {
 // 获取参与列表
 const answerListFunc = () => {
     let params = {
-        page: 1,
-        per_page: 15,
+        page:answerPage.value,
+        per_page: answerPerPage.value,
         source:source.value
     }
     APIgetSurveyAnswerList(props.id, params).then(res => {
-        answer_list = res
-        // 线上线下参与数量
-        participate.on_line = 0
-        participate.off_line = 0
-        res.forEach(element => {
-            if (element.source === 1) {
-                participate.on_line++
-                answer_list_on.push(element)
-            } else {
-                participate.off_line++
-                answer_list_off.push(element)
-            }
-        })
-    })
-}
-// 获取未参与的房屋列表
-const notParticipate = () => {
-    notParticipateList.length = 0
-    let params = {
-        page: page.value,
-        per_page: per_page.value
-    }
-    APIgetNotParticipate(props.id, params).then(res => {
-        //
-        participate.notParticipateLength = res.length
-        res.forEach(element => {
-            notParticipateList.push(element)
-        })
+        answer_list.arr = res
         let btnNext = document.querySelector('.btn-next')
-        if (res.length < per_page.value) {
+        if (res.length < answerPerPage.value) {
             btnNext.classList.add('not_allowed')
             btnNext.setAttribute('disabled', true)
             btnNext.setAttribute('aria-disabled', true)
@@ -427,26 +393,37 @@ const notParticipate = () => {
             btnNext.removeAttribute('disabled')
             btnNext.setAttribute('aria-disabled', false)
         }
-        //
     })
 }
-onMounted(() => {
-    // 问卷调查结果
-    answerListFunc()
-})
-// 问卷题目
-const topic_details = reactive({
-    item: [[], [], [], []]
-})
-const radio1 = ref('')
-// 参与详情
-const radio = ref('全部')
-// 参与情况
-let participate = reactive({
-    'on_line': 0,
-    'off_line': 0,
-    'notParticipateLength': 0
-})
+// 获取未参与的房屋列表
+const notParticipate = () => {
+    let params = {
+        page: notParticipatePage.value,
+        per_page: notParticipatePerPage.value
+    }
+    APIgetNotParticipate(props.id, params).then(res => {
+        notParticipateList.arr = res
+        let btnNext = document.querySelector('.btn-next')
+        if (res.length < notParticipatePerPage.value) {
+            btnNext.classList.add('not_allowed')
+            btnNext.setAttribute('disabled', true)
+            btnNext.setAttribute('aria-disabled', true)
+        } else {
+            btnNext.classList.remove('not_allowed')
+            btnNext.removeAttribute('disabled')
+            btnNext.setAttribute('aria-disabled', false)
+        }
+    })
+}
+// 获取统计结果
+const getSurveyStatus = () => {
+    APIgetSurveyStatus(props.id).then(res => {
+        status.online = res.answer_cnt.online
+        status.offline = res.answer_cnt.offline
+        status.notParticipateHouse = res.house_tot_cnt - res.house_has_cnt
+    })
+}
+
 // 控制书面票弹窗
 let switch_addAnswer = ref(false)
 let switch_answer_detail = ref(false)
@@ -605,11 +582,6 @@ const addAnswer = () => {
     //
 }
 
-watch(page, () => {
-    //
-    // data1FnGetList()
-    notParticipate()
-})
 // const radio2 = ref('')
 const radio2 = reactive({
     list:[]
@@ -796,7 +768,7 @@ const selectPropertyPeople = row => {
         display: inline-block;
         box-sizing: border-box;
         padding: 6px;
-        min-width: 84px;
+        min-width: 54px;
         height: 44px;
         .row-item {
             width: 100%;
@@ -821,7 +793,7 @@ const selectPropertyPeople = row => {
         display: inline-block;
         box-sizing: border-box;
         padding: 6px;
-        min-width: 84px;
+        min-width: 54px;
         height: 44px;
         &.bg {
             background-color: #409eff;
@@ -837,7 +809,7 @@ const selectPropertyPeople = row => {
             box-sizing: border-box;
             padding: 6px;
             cursor: pointer;
-
+            border: 1px solid #e9e9e9;
             // justify-content: space-between;
         }
         .row-item-tit-ceng {
@@ -861,7 +833,7 @@ const selectPropertyPeople = row => {
     }
     .row-item-tit-box {
         border-right: 1px solid #e9e9e9;
-        width: 84px;
+        width: 54px;
         .row-item-tit {
             border: 0 solid #e9e9e9 !important;
             font-size: 12px;
