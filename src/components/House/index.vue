@@ -82,7 +82,8 @@
                                     </el-popconfirm>
                                     <el-button :disabled="choseIDs.arr.length <= 0" type="warning" class="head-btn"
                                         @click="modifyAllFunc">批量修改</el-button>
-                                    <el-button @click="refreshFunc">刷新</el-button>
+                                    <el-button class="head-btn" @click="refreshFunc">刷新</el-button>
+                                    <el-button class="head-btn" type="info" @click="() => { switch_files_list_house = !switch_files_list_house;}">导出房屋</el-button>
                                 </el-col>
                             </el-row>
                         </div>
@@ -526,6 +527,14 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 导出房屋 -->
+        <ExportHouse
+            v-if="switch_files_list_house"
+            :switch_files_list_house="switch_files_list_house"
+            :type="1"
+            :tgt_id="tgt_id"
+            :tgt_type="tgt_type"
+            />
     </div>
 </template>
 <script setup>
@@ -545,7 +554,17 @@ const { tree_item } = toRefs(props)
 const active_obj = reactive({
     obj: {}
 })
+const tgt_id = ref('')
+const tgt_type = ref('')
 const checkFunc = val => {
+    if(val.type === 'zone' || val.type === 'buildings' || val.type === 'units' ) {
+        tgt_id.value = val.id
+        if(val.type === 'zone') {
+            tgt_id.value = 'zones'
+            return
+        }
+        tgt_type.value = val.type
+    }
     house_num.arr = []
     house_list.arr = []
     active_obj.obj = val
@@ -881,6 +900,7 @@ const filesUpFunc = () => {
 
 }
 const switch_files_list = ref(false)
+const switch_files_list_house = ref(false)
 const files_loading = ref(true)
 const files_tab = reactive({
     arr: []
@@ -901,7 +921,6 @@ const getFilesFunc = () => {
     APIgetHouseimptpl().then(res => {
         Record_key.value = res.key
     })
-
 }
 const fileChangeFunc = (file, fileList) => {
     if (fileList.length > 1) {
