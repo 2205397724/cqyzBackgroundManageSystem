@@ -26,7 +26,6 @@ watch(props, new_val => {
     code.value = new_val.modelValue
 }, { immediate: true, deep: true })
 watch(code, new_val => {
-    console.log(new_val)
     emits('update:modelValue', new_val)
 })
 import {
@@ -44,19 +43,24 @@ const cascader_props = {
         const {
             data
         } = node
-        // console.log(node)
         if (data.level == 5) {
-            APIgetResidentialListHouse({ 'china_code': data.code }).then(res => {
-                console.log(res)
-                resolve(res)
-            })
+            resolve()
+            return
+            // APIgetResidentialListHouse({ 'china_code': data.code }).then(res => {
+            //     resolve(res)
+            // })
         }
         if(!data.code) {
             // 没数据时，获取用户选中的城市的代码开始拉取
             data.code = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         }
-        APIgetChinaRegion({ 'p_code': data.code,'w':3 }).then(res => {
-            // console.log("123456789",res,data.code)
+        let params = {
+            p_code:data.code,
+        }
+        if(Object.keys(data).length === 1) {
+            params.w = 3
+        }
+        APIgetChinaRegion(params).then(res => {
             resolve(res)
         })
 
