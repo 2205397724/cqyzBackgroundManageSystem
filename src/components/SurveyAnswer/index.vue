@@ -13,6 +13,11 @@
                 <el-radio-button label="线下参与">线下参与({{ status.offline }}票)</el-radio-button>
                 <el-radio-button label="未参与">未参与的房屋({{ status.notParticipateHouse}}套)</el-radio-button>
             </el-radio-group>
+            <el-button
+                class="m-r-20" type="primary"
+                style="padding: 19px 18px;position: relative;top: 5px;"
+                @click="exportHouse"
+            >导出未参与房屋</el-button>
         </div>
         <!-- 未参与情况 -->
         <div v-if="radio == '未参与'">
@@ -303,6 +308,78 @@
                 </div>
             </div>
         </el-dialog>
+        <!-- 导出列表 -->
+        <el-dialog v-model="switch_files_list" title="导出" width="70%">
+            <div style="display: flex; flex-wrap: wrap;">
+                <el-button class="head-btn" @click="refreshFilesListFunc">刷新</el-button>
+                <el-button class="head-btn" type="success" @click="switch_files = true">生成未参与房屋</el-button>
+            </div>
+            <el-table :data="files_tab.arr"
+                :header-cell-style="{ background: '#fbfbfb', color: '#999999', 'font-size': '12px' }"
+                style="width: 100%;min-height: 300px;margin-bottom: 10px;border: 1px solid #ebeef5;border-radius: 6px;"
+                max-height="400">
+                <el-table-column prop="title" label="任务名称" />
+                <el-table-column prop="uid" label="用户id" />
+                <el-table-column prop="status" label="状态" width="100">
+                    <template #default="scope">
+                        <el-tag v-show="scope.row.status == 10" class="btnNone" type="warning" size="small">{{
+                                getOptVal(opts_all.obj.status_all, scope.row.status)
+                        }} </el-tag>
+                        <el-tag v-show="scope.row.status == 15" class="btnNone" type="primary" size="small">{{
+                                getOptVal(opts_all.obj.status_all, scope.row.status)
+                        }} </el-tag>
+                        <el-tag v-show="scope.row.status == 20" class="btnNone" type="success" size="small">{{
+                                getOptVal(opts_all.obj.status_all, scope.row.status)
+                        }} </el-tag>
+                        <el-tag v-show="scope.row.status == 30" class="btnNone" type="danger" size="small">{{
+                                getOptVal(opts_all.obj.status_all, scope.row.status)
+                        }} </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="created_at" label="导出时间" width="170" />
+                <el-table-column prop="updated_at" label="更新时间" width="170" />
+                <el-table-column fixed="right" label="操作" width="160">
+                    <template #default="scope">
+                        <el-button
+                            type="primary" class="btnfix"
+                            @click="downloadFile(scope.row.content)"
+                        >
+                            下载
+                        </el-button>
+                        <el-popconfirm
+                            title="确定要删除当前导出任务么?"
+                            @confirm="deleteTaskFunc(scope.row.id)"
+                        >
+                            <template #reference>
+                                <el-button type="danger" class="btnfix">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+        <!-- 导出表单 -->
+        <el-dialog v-model="switch_files" title="生成未参与房屋" width="50%">
+            <div>
+                <el-form :model="files_obj.obj">
+                    <el-row :gutter="10">
+                        <el-col :md="24" :lg="12">
+                            <el-form-item label="任务名称" prop="title" label-width="120px">
+                                <el-input v-model="files_obj.obj.title" placeholder="" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
+            <template #footer>
+                <div style="display: flex;justify-content: flex-end;align-items: center;width: 100%;">
+                    <el-button @click="switch_files = false">取消</el-button>
+                    <el-button type="primary" @click="filesUpFunc">确定</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -322,6 +399,9 @@ import {
     APIgetSurveyAnswerHouse,
     // 统计结果
     APIgetSurveyStatus,
+    APIgetExportTask,
+    APIdeleteExportTask,
+    APIpostTaskSurvey
 } from '@/api/custom/custom.js'
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
@@ -578,11 +658,52 @@ const addAnswer = () => {
                 }
             })
         })
-
-    //
 }
-
-// const radio2 = ref('')
+// 导出未参与房屋
+const switch_files_list = ref(false)
+const files_tab = reactive({
+    arr: []
+})
+const exportHouse = () => {
+    switch_files_list.value = true
+    refreshFilesListFunc()
+}
+const refreshFilesListFunc = () => {
+    let params = {
+        type:2,
+        // uid:''
+    }
+    APIgetExportTask(params).then(res=>{
+        files_tab.arr = res
+    })
+}
+// 打开导出未参与房屋from
+const switch_files = ref(false)
+const files_obj = reactive({
+    obj: {
+        title:'',
+        sid:props.id
+    }
+})
+// 提交执行导出任务
+const filesUpFunc = () => {
+    APIpostTaskSurvey(files_obj.obj).then(res=>{
+        ElMessage.success('导出成功')
+        switch_files.value = false
+        refreshFilesListFunc()
+    })
+}
+// 下载未参与房屋数据
+const downloadFile = (content) => {
+    window.location.href = import.meta.env.VITE_APP_FOLDER_SRC + content
+}
+// 删除下载任务
+const deleteTaskFunc = (id) => {
+    APIdeleteExportTask(id).then(res=>{
+        ElMessage.success('删除成功')
+        refreshFilesListFunc()
+    })
+}
 const radio2 = reactive({
     list:[]
 })
@@ -754,6 +875,15 @@ const selectPropertyPeople = row => {
     addticket.idcard = row.id_card
     switch_choose_zone.value = false
 }
+/* ----------------------------------------------------------------------------------------------------------------------- */
+// 配置项
+import { getOpts, getOptVal } from '@/util/opts.js'
+const opts_all = reactive({
+    obj: {}
+})
+getOpts(['status_all']).then(res => {
+    opts_all.obj = res
+})
 </script>
 
 <style lang="scss" scoped>

@@ -688,6 +688,26 @@ export function APIgetFilesList(params) {
 export function APIpostFilesList(data) {
     return api.post('/houseimptask', data)
 }
+// 发起活动未参与的房屋的导出任务
+export function APIpostTaskSurvey(data) {
+    return api.post('/export/task/survey-nth', data)
+}
+// 导出任务列表
+export function APIgetExportTask(params) {
+    return api.get('/export/task', {params:params})
+}
+// 导出任务详细
+export function APIgetExportTaskDetail(id) {
+    return api.get(`/export/task/${id}`)
+}
+// 删除导出任务
+export function APIdeleteExportTask(id) {
+    return api.delete(`/export/task/${id}`)
+}
+// 通用房屋导出任务
+export function APIpostTastGenHouse(data) {
+    return api.post('/export/task/generic-house', data)
+}
 // 资讯
 // 资讯类别管理列表
 export function APIgetInforCategoryList(params) {
