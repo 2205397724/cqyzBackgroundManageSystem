@@ -83,13 +83,23 @@
                         >
                             重置
                         </el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="0" :sm="4" :md="3" :lg="2" />
+                    <el-col :xs="24" :sm="20" :md="21" :lg="22">
                         <span v-show="switch_search == true" class="size-base">
-                            *共搜索到{{ total }}条。
+                            搜索结果
+                            <block v-for="item in tag_number.arr" :key="item">
+                                <!-- <text class="p-lr-10">{{item.tag+':'+ item.cnt}}条</text> -->
+                                <el-badge :value="item.cnt" class="item m-l-20 m-t-10" type="primary">
+                                    <el-tag class="mx-1">{{item.tag}}</el-tag>
+                                </el-badge>
+                            </block>
                         </span>
                     </el-col>
                 </el-row>
             </div>
-
             <el-table
                 v-loading="loading_tab" :data="data.list"
                 :header-cell-style="{background:'#fbfbfb',color:'#999999','font-size':'12px'}" class="tab_1"
@@ -580,13 +590,14 @@ import {
     APIgetPersonnelLabels,
     APIpostPersonnelTag,
     APIgetPersonnelTag,
-    APIgetPersonnelTaglog
+    APIgetPersonnelTaglog,
+    APIpostTagNumber
 } from '@/api/custom/custom.js'
 import {
     ElMessage
 } from 'element-plus'
-const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 import { Download, Search, Plus, Loading } from '@element-plus/icons-vue'
+const VITE_APP_FOLDER_SRC = ref(import.meta.env.VITE_APP_FOLDER_SRC)
 const data = reactive({
     list: []
 })
@@ -602,10 +613,20 @@ const switch_search = ref(false)
 watch(page, () => {
     getPersonnelManageList()
 })
+const tag_number = reactive({
+    arr:[]
+})
 const searchFunc = () => {
     page.value = 1
     switch_search.value = true
     getPersonnelManageList()
+    APIpostTagNumber({
+        type:1,
+        only_active:1,
+        tags:person_tag_or.value
+    }).then(res=>{
+        tag_number.arr = res
+    })
 }
 const refreshFunc = () => {
     person_tag_or.value = []
@@ -617,9 +638,7 @@ const refreshFunc = () => {
 }
 const person_tag_or = ref([])
 const getPersonnelManageList = () => {
-    console.log(document.getElementsByClassName('el-select-dropdown__list'))
     let val = document.getElementsByClassName('el-select-dropdown__list')[0]
-    console.log(val)
     // val.style.diaplay = 'flex'
     // val.style.diaplay = 'flex'
     let params = {
@@ -642,7 +661,6 @@ const getPersonnelManageList = () => {
         search_str.obj.person_active_tag_and = ''
         search_str.obj.person_active_tag_or = person_tag_or.value.join(',')
     }
-    console.log(person_tag_or.value.join(','))
     for (let key in search_str.obj) {
         if (search_str.obj[key] || search_str.obj[key] === 0) {
             if (search_str.obj[key] instanceof Array && search_str.obj[key].length <= 0) {
@@ -652,9 +670,7 @@ const getPersonnelManageList = () => {
         }
     }
     loading_tab.value = true
-    console.log("params",params)
     APIgetPersonnelManageList(params).then(res => {
-        console.log(res)
         data.list = res
         total.value = res.length
         let btnNext = document.querySelector('.btn-next')
@@ -670,7 +686,6 @@ const getPersonnelManageList = () => {
         loading_tab.value = false
     })
     APIgetPersonnelLabels({ type: 1 }).then(res => {
-        console.log(res)
         personnelLabels.list = res
     })
 }
@@ -701,7 +716,6 @@ const personnelLabels = reactive({
 })
 const detailsFunc = row => {
     APIgetPersonnelManageDetails(row.id).then(res => {
-        console.log(res)
         data_details.item = res
         switch_details.value = true
     })
@@ -713,7 +727,6 @@ const postFunc = formEl => {
     // if (!formEl) return
     // formEl.validate(valid => {
     //     if (valid) {
-    console.log(from_add.obj)
     for (let key in from_add.obj) {
         if (from_add.obj[key] !== null) {
             if (from_add.obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_add.obj[key] !== 0 || from_add.obj[key] !== false)) {
@@ -723,7 +736,6 @@ const postFunc = formEl => {
 
     }
     if (str_title.value == '修改') {
-        console.log(from_add.obj)
         APIputPersonnelManage(from_add.obj.id, from_add.obj).then(res => {
             refreshFunc()
             ElMessage.success('修改成功')
@@ -784,11 +796,9 @@ const modifyFeatureFunc = val => {
     from_examine.item = {}
     file_list.value = []
     APIgetPersonnelLabels({ type: 1 }).then(res => {
-        console.log(res)
         personnelLabels.list = res
     })
     APIgetPersonnelTag({ tgt_id: tag.value }).then(res => {
-        console.log(res)
         tags.arr = res
     })
     switch_feature.value = true
@@ -796,10 +806,8 @@ const modifyFeatureFunc = val => {
 const file_list = ref([])
 import { getFilesKeys } from '@/util/files.js'
 const addFeature = () => {
-    console.log(from_examine.item)
     let files = []
     let file_key = []
-    console.log(file_list.value)
     if (file_list.value.length > 0) {
         for (let i in file_list.value) {
             if (!file_list.value[i].raw) {
@@ -812,12 +820,10 @@ const addFeature = () => {
     // files.push(from_examine.item.affix.raw)
     if (files.length > 0) {
         getFilesKeys(files, 'tag').then(arr => {
-            console.log(arr)
             from_examine.item.affix = arr
             from_examine.item.tgt_type = 1
             from_examine.item.tgt_id = tag.value
             APIpostPersonnelTag(from_examine.item).then(res => {
-                console.log(res)
                 ElMessage.success('添加成功')
                 switch_feature.value = false
             }).catch(error => {
@@ -828,7 +834,6 @@ const addFeature = () => {
         from_examine.item.tgt_type = 1
         from_examine.item.tgt_id = tag.value
         APIpostPersonnelTag(from_examine.item).then(res => {
-            console.log(res)
             ElMessage.success('添加成功')
             switch_feature.value = false
         }).catch(error => {
@@ -842,8 +847,6 @@ const taglog = reactive({
 })
 const tagClick = val => {
     APIgetPersonnelTaglog({ page: 1, per_page: 500, tag_id: val.id }).then(res => {
-        console.log(res)
-
         res.forEach((item, key) => {
             res[key].affixs = []
             for (let i in item.affix)
@@ -867,13 +870,11 @@ const Record_key = ref('')
 const getFilesFunc = () => {
     files_loading.value = true
     APIgetPersonimptask({ page: 1, per_page: 15 }).then(res => {
-        console.log(res)
         files_tab.arr = res
         files_loading.value = false
         switch_files_list.value = true
     })
     APIgetPersonimptpl_1().then(res => {
-        console.log(res)
         Record_key.value = res.key
     })
 

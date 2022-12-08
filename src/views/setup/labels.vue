@@ -242,7 +242,6 @@ const getPersonnelManageList = () => {
     }
     loading_tab.value = true
     APIgetPersonnelLabels(params).then(res => {
-        console.log(res)
         data.list = res
         loading_tab.value = false
     })
@@ -261,7 +260,6 @@ const str_title = ref('')
 const switch_details = ref(false)
 const detailsFunc = row => {
     APIgetPersonnelManageDetails(row.id).then(res => {
-        console.log(res)
         data_details.item = res
         switch_details.value = true
     })
@@ -272,7 +270,6 @@ const postFunc = formEl => {
     // if (!formEl) return
     // formEl.validate(valid => {
     //     if (valid) {
-    console.log(from_add.obj)
     for (let key in from_add.obj) {
         if (from_add.obj[key] !== null) {
             if (from_add.obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (from_add.obj[key] !== 0 || from_add.obj[key] !== false)) {
@@ -282,7 +279,6 @@ const postFunc = formEl => {
 
     }
     if (str_title.value == '修改') {
-        console.log(from_add.obj)
         APIputPersonnelManage(from_add.obj.id, from_add.obj).then(res => {
             refreshFunc()
             ElMessage.success('修改成功')

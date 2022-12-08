@@ -1661,6 +1661,10 @@ export function APIgetPersonnelTag(params) {
 export function APIgetPersonnelTaglog(params) {
     return api.get('/taglog', { params: params })
 }
+// 标签云统计
+export function APIpostTagNumber(data) {
+    return api.post('/tagstats', data)
+}
 // 人员导入
 export function APIgetPersonimptask(params) {
     return api.get('/personimptask', { params: params })
