@@ -129,7 +129,7 @@
                             label="所在区域"
                             :error="data_1.add_error&&data_1.add_error.ano?data_1.add_error.ano[0]:''"
                         >
-                            <Cascaders v-model="data_1.add_form.china_code" />
+                            <Cascaders v-model="data_1.add_form.china_code" :showall="true"/>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
@@ -237,16 +237,13 @@ const getFuncCategoryList = () => {
             data[key] = item
         }
     }
-    console.log(data)
     APIgetInforCategoryList(data).then(res => {
-        console.log(res)
         data_1.total = res.length
         data_1.list = res
     })
 }
 // 添加修改 同意拒绝提交
 const clickFuncCategory = () => {
-    console.log(data_1.add_form)
     for (let key in data_1.add_form) {
         if (data_1.add_form[key] !== null) {
             if (data_1.add_form[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (data_1.add_form[key] !== 0 || data_1.add_form[key] !== false)) {
@@ -256,7 +253,6 @@ const clickFuncCategory = () => {
     }
     if (data_1.add_title == '添加') {
         APIpostInforCategory(data_1.add_form).then(res => {
-            // console.log(res)
             refreshFunc()
             ElMessage.success('添加成功')
             data_1.add_switch = false
@@ -266,7 +262,6 @@ const clickFuncCategory = () => {
     } else if (data_1.add_title == '修改') {
         data_1.add_form.setting = []
         data_1.add_form.thumb = 'dfr'
-        console.log(data_1.add_form)
         APIputInforCategory(data_1.add_form.id, data_1.add_form).then(res => {
             refreshFunc()
             ElMessage.success('修改成功')
@@ -276,9 +271,7 @@ const clickFuncCategory = () => {
         })
     } else {
         data_1.add_form.pid = parseInt(data_1.add_form.pid)
-        console.log(data_1.add_form.pid)
         APIpostInforCategory(data_1.add_form).then(res => {
-            // console.log(res)
             refreshFunc()
             ElMessage.success('添加成功')
             data_1.add_switch = false
@@ -292,7 +285,6 @@ const clickFuncCategory = () => {
 // 修改
 const clickFuncModify = row => {
     data_1.add_title = '修改'
-    console.log(row)
     data_1.add_form = row
     data_1.add_switch = true
 }
@@ -314,12 +306,10 @@ const clickFuncDelete = id => {
 // const getChildrens = (tree, resolve) => {
 //     if(tree.)
 //     APIgetInforCategoryList({ id: tree.id }).then(res => {
-//         console.log(res)
 //     })
 // }
 // switch 状态改变事件
 const SwitchFunc = row => {
-    // console.log(row)
     data_1.add_form.setting = []
     data_1.add_form = row
     APIputInforCategory(data_1.add_form.id, data_1.add_form)

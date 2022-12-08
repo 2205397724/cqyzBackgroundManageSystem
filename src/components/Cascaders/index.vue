@@ -19,7 +19,11 @@ import {
     watch,
     ref
 } from 'vue'
-const props = defineProps({ modelValue: { type: [String, Array], default: '' }, checkbox: { type: Boolean, default: false } })
+const props = defineProps({
+    modelValue: { type: [String, Array], default: '' },
+    checkbox: { type: Boolean, default: false },
+    showall: {type: Boolean, default: false},//控制是否从顶层“重庆”开始拉取数据
+})
 const emits = defineEmits(['update:modelValue'])
 const code = ref('')
 watch(props, new_val => {
@@ -50,7 +54,9 @@ const cascader_props = {
             //     resolve(res)
             // })
         }
-        if(!data.code) {
+        if(!data.code && props.showall) {
+            data.code = 50
+        }else if(!data.code) {
             // 没数据时，获取用户选中的城市的代码开始拉取
             data.code = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_city')).china_code
         }

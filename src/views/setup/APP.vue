@@ -118,7 +118,7 @@
                                 />
                             </el-form-item> -->
                                     <el-form-item label="服务区域" label-width="80px" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
-                                        <Cascaders v-model="addMenuForm.item.china_code" />
+                                        <Cascaders v-model="addMenuForm.item.china_code" :showall="true"/>
                                     </el-form-item>
                                 </el-col>
                                 <el-col v-show="str_title == '修改'" :md="24" :lg="12">
@@ -326,7 +326,6 @@ watch(page, () => {
 })
 import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
-    console.log(to)
     if (to.meta.title == 'APP菜单管理' || to.meta.title == 'APP版本管理') {
         return true
     } else {
@@ -349,14 +348,12 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetAPPList(params).then(res => {
-        console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
     })
 }
 const switchFunk = row => {
-    console.log(row)
 
 }
 // switch开关
@@ -364,7 +361,6 @@ const switchRecordFun = (status, val) => {
     let params = {}
     for (let key in val) {
         if (val[key] !== null) {
-            console.log(key)
             params[key] = val[key]
         }
     }
@@ -389,13 +385,10 @@ const dialogExamineCloseFunc = ()  => {
     if (typeof addMenuForm.item.logo != 'string') {
         obj = addMenuForm.item.logo
     }
-    console.log(addMenuForm.item.logo)
-    console.log(obj)
     let files = []
     // for (let i in obj) {
     files.push(obj.raw)
     // }
-    console.log(files)
     for (let key in addMenuForm.item) {
         if (addMenuForm.item[key] !== null) {
             if (addMenuForm.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (addMenuForm.item[key] !== 0 || addMenuForm.item[key] !== false)) {
@@ -410,13 +403,11 @@ const dialogExamineCloseFunc = ()  => {
             //     addMenuForm.item.logo = arr[o]
             //     o++
             // }
-            console.log(arr)
             addMenuForm.item.logo = arr[0]
 
             if (str_title.value == '修改') {
                 switchFunk(addMenuForm.item.status)
                 APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
-                    console.log(res)
                     refreshFunc()
                     ElMessage.success('修改成功')
                     switch_examine.value = false
@@ -425,9 +416,7 @@ const dialogExamineCloseFunc = ()  => {
                 })
             } else {
                 switchFunk()
-                console.log(addMenuForm.item)
                 APIpostAPP(addMenuForm.item).then(res => {
-                    // console.log(from_examine.item)
                     refreshFunc()
                     ElMessage.success('添加成功')
                     switch_examine.value = false
@@ -441,7 +430,6 @@ const dialogExamineCloseFunc = ()  => {
     if (str_title.value == '修改') {
         switchFunk(addMenuForm.item.status)
         APIputAPP(addMenuForm.item.id, addMenuForm.item).then(res => {
-            console.log(res)
             refreshFunc()
             ElMessage.success('修改成功')
             switch_examine.value = false
@@ -450,9 +438,7 @@ const dialogExamineCloseFunc = ()  => {
         })
     } else {
         switchFunk()
-        console.log(addMenuForm.item)
         APIpostAPP(addMenuForm.item).then(res => {
-            // console.log(from_examine.item)
             refreshFunc()
             ElMessage.success('添加成功')
             switch_examine.value = false
@@ -473,15 +459,12 @@ const modifyResidentialFunc = val => {
     str_title.value = '修改'
     APIgetAPPListDetails(val.id).then(res => {
         addMenuForm.item = res
-
-        console.log(logoName.value)
         switch_examine.value = true
     })
     switch_examine.value = true
 }
 const logoName = ref('')
 const fileListFn = val => {
-    console.log(val)
     if (str_title.value == '修改' && typeof val == 'string') {
         logoName.value = VITE_APP_FOLDER_SRC.value + val
     } else {
@@ -500,7 +483,6 @@ const fileListFn = val => {
 const addResidentialFunc = val => {
     switch_details.value = true
     APIgetAPPListDetails(val.id).then(res => {
-        console.log(res)
         data_details.item = res
         switch_details.value = true
     })

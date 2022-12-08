@@ -166,7 +166,7 @@
                                 label="区域代码" prop="china_code" label-width="80px"
                                 :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''"
                             >
-                                <Cascaders v-model="from_examine.item.china_code" />
+                                <Cascaders v-model="from_examine.item.china_code" :showall="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">

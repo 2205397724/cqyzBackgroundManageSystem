@@ -84,7 +84,7 @@
                                 </el-col>
                                 <el-col :md="24" :lg="12">
                                     <el-form-item label="服务区域" label-width="120px" prop="china_code" :error="from_error.msg&&from_error.msg.china_code?from_error.msg.china_code[0]:''">
-                                        <Cascaders v-model="addMenuForm.item.china_code" />
+                                        <Cascaders v-model="addMenuForm.item.china_code" :showall="true"/>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :md="24" :lg="12">

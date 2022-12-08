@@ -570,7 +570,6 @@ const dialogExamineCloseFunc = formEl => {
                 }
             }
             if (str_title.value == '修改') {
-                console.log(from_examine.item)
                 APIputTask(from_examine.item.id, from_examine.item).then(res => {
                     refreshFunc()
                     ElMessage.success('修改成功')
@@ -579,7 +578,6 @@ const dialogExamineCloseFunc = formEl => {
                     ElMessage.error('修改失败')
                 })
             } else {
-                // console.log(str_father)
                 APIpostTask(from_examine.item).then(res => {
                     refreshFunc()
                     ElMessage.success('添加成功')
@@ -609,7 +607,6 @@ const getTabListFunc = () => {
     }
     loading_tab.value = true
     APIgetTaskList(params).then(res => {
-        console.log(res)
         loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -681,7 +678,6 @@ const getChinaName = () => {
     })
 }
 const checkFunc = val => {
-    console.log(val)
     if (val.type == 'zone') {
         announce.item.toval = val.china_code
         announce.item.totype = 6
@@ -812,7 +808,6 @@ const checkNameFunc_2 = val => {
 const checkNameFunc = val => {
 
     from_examine.item.from = val.id
-    console.log(from_examine.item.from)
 }
 const V_3 = ref(null)
 const dialogClosed = () => {
@@ -821,7 +816,6 @@ const dialogClosed = () => {
 }
 const checkNameFunc_1 = val => {
     from_examine.item.to = val.id
-    console.log(from_examine.item.to)
 }
 /* ----------------------------------------------------------------------------------------------------------------------- */
 // 执行

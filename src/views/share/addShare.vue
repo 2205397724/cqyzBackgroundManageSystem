@@ -537,14 +537,14 @@ const openNotification = (index) => {
     ElNotification({
         title: '不动产证信息',
         dangerouslyUseHTMLString: true,
-        message: `<view>
+        message: `<div>
             ${
                 identity_message.value[index].content.words_result.map(item => {
-                    return `<view>${item.words}</view>
-                            <br >`
+                    return `<div>${item.words}</div>
+                        <br >`
                 }).join('')
             }
-            </view>`,
+            </div>`,
         duration: 0,
     })
 }
