@@ -1,25 +1,42 @@
 <template>
     <div class="main-box">
         <el-scrollbar max-height="100%">
-            <el-tree
-                ref="treeRef"
-                class="el-tree-box"
-                node-key="id"
-                :props="tree_props"
-                :load="loadNode"
-                lazy
-                :check-strictly="true"
-                :default-checked-keys="[tree_item.id]"
-                :filter-node-method="filterNode"
-                :highlight-current="true"
-                @node-click="handleCheck"
-            />
+            <div v-if="check_type">
+                <!-- 可点击选中的树形组件 -->
+                <el-tree
+                    ref="treeRef"
+                    class="el-tree-box"
+                    node-key="id"
+                    :props="tree_props"
+                    :load="loadNode"
+                    lazy
+                    show-checkbox
+                    :check-strictly="true"
+                    :filter-node-method="filterNode"
+                    @check="handleCheck"
+                    @check-change="handleCheckChange"
+                />
+            </div>
+            <div v-else>
+                <el-tree
+                    ref="treeRef"
+                    class="el-tree-box"
+                    node-key="id"
+                    :props="tree_props"
+                    :load="loadNode"
+                    lazy
+                    :check-strictly="true"
+                    :default-checked-keys="[tree_item.id]"
+                    :filter-node-method="filterNode"
+                    :highlight-current="true"
+                    @node-click="handleCheck"
+                />
+            </div>
         </el-scrollbar>
     </div>
 </template>
 
 <script setup>
-// {id:500101,name:'总title',type:'region'}
 import {
     ref,
     toRefs,
@@ -27,10 +44,9 @@ import {
     defineProps,
     defineEmits
 } from 'vue'
-const props = defineProps(['tree_item', 'type'])
-const type = ref(props.type)
-const emit = defineEmits(['checkFunc'])
-const { tree_item } = toRefs(props)
+const props = defineProps(['tree_item', 'no_zone', 'no_buildings', 'check_type'])
+const emit = defineEmits(['checkFunc', 'checkFuncDate', 'checkChangeFunc'])
+const { tree_item, no_zone, no_buildings, check_type } = toRefs(props)
 const treeDetail = reactive({
     arr: {}
 })
@@ -68,7 +84,6 @@ const loadNode = (node, resolve) => {
         case 'region':
             APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
                 treeDetail.arr = res
-                console.log(res)
                 let tree_arr = []
                 if (res.length > 0) {
                     for (let i in res) {
@@ -84,12 +99,21 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'zone':
+            if(no_zone.value) {
+                // 控制是否展示拉取小区数据
+                resolve([])
+                break
+            }
             APIgetResidentialListHouse({ page: 1, per_page: 100, china_code: node.data.id }).then(res => {
                 // treeDetail.arr = res
-                console.log(res)
                 let tree_arr = []
                 for (let i in res) {
-                    tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'buildings', id: res[i].id })
+                    if(check_type.value) {
+                    tree_arr.push({ name: res[i].name, type: 'zone', leaf: true, id: res[i].id, china_code: res[i].china_code })
+
+                    }else {
+                        tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'buildings', id: res[i].id })
+                    }
                 }
                 resolve(tree_arr)
                 // emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
@@ -97,6 +121,11 @@ const loadNode = (node, resolve) => {
             })
             break
         case 'buildings':
+            if(no_buildings.value) {
+                // 控制是否展示拉取小区楼栋数据
+                resolve([])
+                break
+            }
             APIgetBuildListHouse({ page: 1, per_page: 100, zone_id: node.data.id }).then(res => {
                 let tree_arr = []
                 for (let i in res) {
@@ -126,12 +155,27 @@ watch(tree_item, new_val => {
     }
 }, { immediate: true, deep: true })
 const handleCheck = (data, checked) => {
-    console.log(data)
-    if (data) {
-        emit('checkFunc', data)
-        return false
+    if(check_type.value) {
+        // 可选择的树形组件
+        if (checked.checkedKeys.length > 0) {
+            treeRef.value.setCheckedNodes([data])
+            emit('checkFuncDate', data)
+            emit('checkFunc', data)
+            return false
+        }
+        emit('checkFuncDate', '')
+    }else {
+        if (data) {
+            emit('checkFunc', data)
+            return false
+        }
     }
     emit('checkFunc', '')
+}
+const handleCheckChange = (data, selfSelected, childrenSelected) => {
+    if (selfSelected) {
+        emit('checkChangeFunc', data)
+    }
 }
 </script>
 <style lang="scss">

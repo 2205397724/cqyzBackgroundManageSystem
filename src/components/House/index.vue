@@ -3,7 +3,7 @@
         <div class="tree-box" style="height: 100%;">
             <div class="tree-item">
                 <div style="height: calc(100% - 60px);">
-                    <position-tree :tree_item="tree_item" :type="no_zone" @checkFunc="checkFunc" />
+                    <position-tree :tree_item="tree_item" @checkFunc="checkFunc" />
                 </div>
             </div>
             <div class="tree-details" style="display: flex; flex-direction: column;">
@@ -583,7 +583,6 @@ const data_search = reactive({
 })
 
 // 搜索
-let no_zone = ref(true)
 const searchFunc = () => {
     switch_search.value = true
     getHouseListFunc()

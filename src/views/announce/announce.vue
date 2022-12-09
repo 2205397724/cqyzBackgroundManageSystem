@@ -401,7 +401,13 @@
         <!-- 选择公示区域 -->
         <el-dialog v-model="switch_choose_zone" title="选择公示区域">
             <el-scrollbar height="250px">
-                <position-tree-fourth :tree_item="tree_item.arr" @checkFuncDate="checkFunc" @checkChangeFunc="checkChangeFunc" />
+                <position-tree
+                    :tree_item="tree_item.arr"
+                    :check_type="true"
+                    :no_buildings="true"
+                    @checkChangeFunc="checkChangeFunc"
+                    @checkFuncDate="checkFunc"
+                />
             </el-scrollbar>
         </el-dialog>
         <el-dialog v-model="switch_apply" title="公示申请">

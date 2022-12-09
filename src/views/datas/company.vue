@@ -804,10 +804,12 @@
         <!-- 添加项目部弹窗中选择区域弹窗 -->
         <el-dialog v-model="switch_choose_zone" title="选择区域">
             <el-scrollbar height="250px">
-                <position-tree-fourth
+                <position-tree
                     :tree_item="tree_item.arr"
+                    :check_type="true"
+                    :no_buildings="true"
                     @checkChangeFunc="checkChangeFunc"
-                    @checkFunc="checkFunc"
+                    @checkFuncDate="checkFunc"
                 />
             </el-scrollbar>
         </el-dialog>

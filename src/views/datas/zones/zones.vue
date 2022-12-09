@@ -3,9 +3,9 @@
         <div class="tree-box" style="height: 100%;">
             <div class="tree-item" style="background-color: white;">
                 <div style="height: calc(100%);">
-                    <position-tree-second
+                    <position-tree
                         :tree_item="tree_item_1.arr"
-                        :type="no_zone"
+                        :no_zone="true"
                         @checkFunc="checkFunc"
                     />
                 </div>
@@ -604,10 +604,12 @@
         </el-dialog>
         <el-dialog v-model="switch_choose_zone" title="选择区域">
             <el-scrollbar height="250px">
-                <position-tree-fourth
+                <position-tree
                     :tree_item="tree_item_1.arr"
+                    :check_type="true"
+                    :no_buildings="true"
                     @checkChangeFunc="checkChangeFunc"
-                    @checkFunc="checkFunc_1"
+                    @checkFuncDate="checkFunc_1"
                 />
             </el-scrollbar>
         </el-dialog>
@@ -660,7 +662,6 @@ const checkFunc = val => {
 
 }
 // 搜索
-let no_zone = ref(false)
 let switch_search = ref(false)
 let data_search = reactive({
     obj: ''

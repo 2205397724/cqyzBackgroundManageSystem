@@ -370,7 +370,12 @@
         </el-dialog>
         <el-dialog v-model="switch_choose_zone" title="选择小区">
             <el-scrollbar height="350px">
-                <position-tree-fourth :tree_item="tree_item.arr" @checkFunc="checkFunc" />
+                <position-tree
+                    :tree_item="tree_item.arr"
+                    :check_type="true"
+                    :no_buildings="true"
+                    @checkFunc="checkFunc"
+                />
             </el-scrollbar>
         </el-dialog>
     </div>
