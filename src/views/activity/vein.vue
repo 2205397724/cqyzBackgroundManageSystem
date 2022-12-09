@@ -97,12 +97,6 @@
                             >
                                 修改
                             </el-button>
-                            <!-- <el-button
-                                size="small"
-                                @click="detailsFunc(scope.row)"
-                            >
-                                详情
-                            </el-button> -->
                             <el-link :underline="false" type="primary">
                                 <router-link class="el-button details" :to="{name: 'veinDetail',query:{ id : scope.row.id }}" style="width: 53px;height: 25px;">详情</router-link>
                             </el-link>
@@ -469,18 +463,6 @@ const refreshFunc = () => {
 }
 const dialogClosed = () => {
     selectedZone_id.value = ''
-}
-// 详情
-const detailsFunc = val => {
-    data_dialog.obj = val
-    APIgetActivityEventDetails(val.id).then(res => {
-        // console.log(res)
-        data_details.item = res
-        switch_details.value = true
-        if (res.status === 404) {
-            ElMessage.error('改产权信息不存在')
-        }
-    })
 }
 // 事件活动
 const page2 = ref(1)

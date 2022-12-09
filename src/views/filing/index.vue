@@ -453,7 +453,6 @@ const recordKindList = reactive({ arr: [] })
 const getRecordKindList = () => {
     APIgetKindList('filing').then(res => {
         recordKindList.arr = res
-        // console.log(res)
     })
 }
 
@@ -499,7 +498,6 @@ const put_record_switch = status => {
 const tab_group_list = reactive({ arr: [] })
 const getGroupList = () => {
     APIgetGroupList().then(res => {
-        // console.log(res)
         tab_group_list.arr = res
     })
 }
@@ -533,7 +531,6 @@ const deleteRecordDialog_arr = i => {
 }
 // 添加备案选择用户组Tabs事件
 const group_tab_click = item => {
-    // console.log(item)
 }
 // 备案列表详情
 const getFunRecordList = () => {
@@ -547,9 +544,7 @@ const getFunRecordList = () => {
             data[key] = item
         }
     }
-    // console.log(data)
     APIgetRecordList(data).then(res => {
-        // console.log(res)
         data_1.total = res.length
         data_1.list = res
         recordList.arr = res
@@ -590,13 +585,10 @@ const record_dialog_close = () => {
 const add_record_zone_id_compited = reactive({ item: '' })
 // 提那家备案选择类型级联选择器
 const add_recode_type_change = val => {
-    // console.log(val)
     from_record.item.type = val[val.length - 1]
-    // console.log(from_record.item.type)
 }
 // 添加备案选择备案小区事件
 const checkFunc = val => {
-    // console.log("val",val)
     if (val.leaf) {
         from_record.item.zone_id = val.id
         from_record.item.china_code = val.china_code
@@ -653,6 +645,7 @@ const getChinaName = () => {
         params = {}
     }
     APIgetChinaRegion(params).then(res => {
+        tree_item.arr = []
         for (let i in res) {
             if (res[i].level < 5) {
                 tree_item.arr.push({ name: res[i].name, type: 'region', next_type: 'region', id: res[i].code })
@@ -667,7 +660,6 @@ const switchRecordFun = (status, val) => {
     let params = {}
     for (let key in val) {
         if (val[key] !== null) {
-            // console.log(key)
             params[key] = val[key]
         }
     }
@@ -697,7 +689,6 @@ watch(
 )
 import { onBeforeRouteLeave } from 'vue-router'
 onBeforeRouteLeave((to, from) => {
-    // console.log(to)
     if (to.meta.title == '详情') {
         return true
     } else {
@@ -707,7 +698,6 @@ onBeforeRouteLeave((to, from) => {
 // 得到备案列表
 const getRecordList = () => {
     APIgetRecordList().then(res => {
-        // console.log(res)
         recordList.arr = res
     })
 }
@@ -718,7 +708,6 @@ const putRecord = val => {
     getChinaName()
     current_record.item = val
     APIgetRecordDetail(val.id).then(res => {
-        // console.log(res)
         for (let i in res.affix) {
             res.affix[i].arr = []
             if (res.affix[i]) {

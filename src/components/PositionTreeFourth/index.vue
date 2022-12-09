@@ -56,7 +56,6 @@ const filterNode = (value, data, node) => {
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
         nodeCopy = node
-        console.log(node)
         // resolve([tree_item.value])
         emit('checkFunc', { 0: tree_item.value, 1: treeDetail.arr })
         return resolve(tree_item.value)
@@ -65,7 +64,6 @@ const loadNode = (node, resolve) => {
         case 'region':
             APIgetChinaRegion({ 'p_code': node.data.id }).then(res => {
                 treeDetail.arr = res
-                // console.log(res)
                 let tree_arr = []
                 if (res.length > 0) {
                     for (let i in res) {
@@ -83,7 +81,6 @@ const loadNode = (node, resolve) => {
         case 'zone':
             APIgetResidentialListHouse({ page: 1, per_page: 100, china_code: node.data.id }).then(res => {
                 // treeDetail.arr = res.data
-                console.log(res)
                 let tree_arr = []
                 for (let i in res) {
                     tree_arr.push({ name: res[i].name, type: 'zone', leaf: true, id: res[i].id, china_code: res[i].china_code })

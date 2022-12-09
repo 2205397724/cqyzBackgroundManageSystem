@@ -107,9 +107,6 @@
                             <el-button type="primary" size="small" @click="modifySurvey(scope.row)">
                                 修改
                             </el-button>
-                            <!-- <el-button size="small" @click="detailsFunc(scope.row)">
-                                详情
-                            </el-button> -->
                             <el-link :underline="false" type="primary">
                                 <router-link class="el-button details" :to="{name: 'surveyDetail',query:{ id : scope.row.id }}">详情</router-link>
                             </el-link>
@@ -461,15 +458,6 @@ const checkFunc = val => {
 const checkChangeFunc = val => {
     //
     switch_choose_zone.value = false
-}
-// 详情
-const detailsFunc = val => {
-    data_details.item = ''
-    APIgetSurveyDetails(val.id).then(res => {
-        data_details.item = res
-        switch_details.value = true
-    })
-    // switch_details.value = true
 }
 // Tabs标签页点击切换事件,切换显示不同状态的问卷
 // 切换标签后，根据label的值进行if判断，切换不同状态问卷

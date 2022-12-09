@@ -864,7 +864,6 @@ const opts_all = reactive({
     obj: {}
 })
 getOpts(['illegal_user', ' device_repair_money_src', 'illegal_type', 'device_status', 'device_type', 'device_show', 'kind', 'repair_type', 'device_show']).then(res => {
-    console.log(res)
     opts_all.obj = res
 })
 import {
@@ -894,7 +893,6 @@ const getTabListFunc = () => {
     if (JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')) && localStorage.getItem('utype') != 'pt') {
         params.cc = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
     }
-    console.log(params)
     for (let key in data_search.obj) {
         if (data_search.obj[key] || data_search.obj[key] === 0) {
             if (data_search.obj[key] instanceof Array && data_search.obj[key].length <= 0) {
@@ -926,7 +924,6 @@ const getTabListFunc = () => {
     }
     // loading_tab.value = true
     APIgetDeviceList(params).then(res => {
-        console.log(res)
         // loading_tab.value = false
         data_tab.arr = res
         total.value = res.length
@@ -962,7 +959,6 @@ const getDetailsFunc = val => {
     APIgetDeviceDetails(val.id).then(res => {
         data_details.item = res
         switch_details.value = true
-        console.log(data_details.item)
         zoneName.value = data_details.item.zoneinfo
         buildingName.value = data_details.item.buildinginfo
         unitName.value = data_details.item.unitinfo
@@ -974,7 +970,6 @@ const getDetailsFunc = val => {
 
     }
     APIgetDeviceArchiveList(params).then(res => {
-        console.log(res)
         if (res.length == 0) {
             data_archive.arr = []
         }
@@ -1007,7 +1002,6 @@ const getDetailsFunc = val => {
             }
         }
         data_repair.arr = res
-        console.log(res)
         switch_details.value = true
     })
 
@@ -1017,7 +1011,6 @@ const detailsFunc = val => {
     getDetailsFunc(val)
 }
 // const handleClick = () => {
-//     console.log('成功')
 //     let params = {
 //         page: page.value,
 //         per_page: per_page.value,
@@ -1025,7 +1018,6 @@ const detailsFunc = val => {
 
 //     }
 //     APIgetDeviceArchiveList(params).then(res => {
-//         console.log(res)
 //         for (let x in res) {
 //             for (let y in res[x].content) {
 //                 res[x].content[y].keys = []
@@ -1061,7 +1053,6 @@ watch(page, () => {
 }, { immediate: true, deep: true })
 // 同意拒绝提交
 const dialogExamineCloseFunc = formEl => {
-    // console.log(formEl);
     from_error.msg = {}
     if (!formEl) return
     formEl.validate(valid => {
@@ -1114,7 +1105,6 @@ const addResidentialFunc = () => {
         extra: []
     }
     china_code.value = JSON.parse(localStorage.getItem(localStorage.getItem('uid') + '_user_group')).region_cc
-    console.log(typeof (from_examine.item.extra))
     switch_examine.value = true
 }
 // 修改
@@ -1143,7 +1133,6 @@ const addServiceFunc = index => {
         'lab': '',
         'val': ''
     }
-    console.log(typeof (from_examine.item.extra))
     from_examine.item.extra.push(data)
 }
 // 维保
@@ -1185,7 +1174,6 @@ const modifyRepairFunc = val => {
                 })
             }
         }
-        console.log(arr)
         file_list.value = arr
         addRepair.switch = true
     })
@@ -1223,7 +1211,6 @@ const dialogExamineCloseFunc_1 = () => {
     from_error.msg = {}
     let files = []
     let file_key = []
-    console.log(file_list.value)
     if (file_list.value.length > 0) {
         for (let i in file_list.value) {
             if (!file_list.value[i].raw) {
@@ -1300,7 +1287,6 @@ const modifyArchiveFunc = val => {
             }
         }
         addArchive.item = res
-        console.log(addArchive.item)
         addArchive.item.did = data_details.item.id
         addArchive.switch = true
     })
@@ -1315,7 +1301,6 @@ const addServiceFunc_1 = () => {
 }
 // 同意拒绝提交
 const formFnUpload_1 = () => {
-    console.log(addArchive.item)
     for (let key in addArchive.item) {
         if (addArchive.item[key] !== null) {
             if (addArchive.item[key].toString().replace(/(^\s*)|(\s*$)/g, '') == '' && (addArchive.item[key] !== 0 || addArchive.item[key] !== false)) {

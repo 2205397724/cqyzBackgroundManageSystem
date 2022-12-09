@@ -127,7 +127,7 @@ import {
 } from '@/api/custom/custom.js'
 const loadNode = (node, resolve) => {
     if (node.level == 0) {
-        APIgetChinaRegion({ 'p_code': code.value }).then(res => {
+        APIgetChinaRegion({ 'p_code': code.value, w:3 }).then(res => {
             console.log(res)
 
             let tree_arr = []
