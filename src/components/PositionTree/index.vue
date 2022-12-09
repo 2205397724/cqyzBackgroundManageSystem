@@ -109,8 +109,7 @@ const loadNode = (node, resolve) => {
                 let tree_arr = []
                 for (let i in res) {
                     if(check_type.value) {
-                    tree_arr.push({ name: res[i].name, type: 'zone', leaf: true, id: res[i].id, china_code: res[i].china_code })
-
+                        tree_arr.push({ name: res[i].name, type: 'zone', leaf: true, id: res[i].id, china_code: res[i].china_code })
                     }else {
                         tree_arr.push({ name: res[i].name, type: 'zone', next_type: 'buildings', id: res[i].id })
                     }

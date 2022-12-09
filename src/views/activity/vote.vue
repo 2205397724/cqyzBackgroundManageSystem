@@ -455,7 +455,7 @@ const click_add_group_zone_id = () => {
 }
 const switch_choose_zone = ref(false)
 const checkFunc = val => {
-
+    data_search.obj = {}
     selectedZone_id.value = val.name
     if (val.type == 'region') {
         from_examine.item.author_type = 1
@@ -464,12 +464,10 @@ const checkFunc = val => {
         from_examine.item.author_cc = val.china_code || val.id
     }
     if (val.type == 'zone') {
-        from_examine.item.author_type = 2
-        from_examine.item.author_tgt = val.id
-        from_examine.item.author_cc = val.china_code
+        data_search.obj.author_type = 2
+        data_search.obj.author_tgt = val.id
         data_search.obj.author_cc = val.china_code
     }
-
 }
 const checkChangeFunc = val => {
     //
@@ -648,12 +646,12 @@ const next = () => {
         dialogExamineCloseFunc()
         // active.value = 1
     } else if (active.value == 1) {
-        //
         if (str_title.value == '添加') {
             passToAuditFunc()
         }
         active.value = 2
     } else {
+        active.value = 0
         ElMessage.success('添加成功')
         switch_examine.value = false
     }
